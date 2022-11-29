@@ -42,6 +42,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -202,14 +203,20 @@ public class StatScrollWidget extends ScrollPanel{
 			case BLOCKS: {
 				populateBlocks(
 						ForgeRegistries.BLOCKS.getValues(),
-						type == null ? EventType.ITEM_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
+						type == null ? EventType.BLOCK_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
 						reqs, false, skill);
 				break;}
 			case ENTITY: {
 				populateEntity(
 						ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(Minecraft.getInstance().level)).filter(entity -> entity != null).toList(),
-						type == null ? EventType.ITEM_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
+						type == null ? EventType.ENTITY_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
 						reqs, false, skill);
+				break;}
+			case EFFECTS: {
+				populateEffects(
+						ForgeRegistries.MOB_EFFECTS.getValues(),
+						new EventType[] {EventType.EFFECT},
+						reqs, skill);
 				break;}
 			default:{}
 			}
@@ -358,6 +365,31 @@ public class StatScrollWidget extends ScrollPanel{
 			addReqSection((reqType -> core.getReqMap(reqType, entity)), new ArrayList<>(), reqs, skillFilter);
 			if (isPlayer)
 				addPlayerSection(entity);
+			if (lengthBeforeProcessing == content.size())
+				content.remove(content.size()-1);
+		}
+	}
+	
+	private void populateEffects(Collection<MobEffect> effects, EventType[] events, ReqType[] reqs, String skillFilter) {
+		for (MobEffect effect : effects) {
+			int lengthBeforeProcessing = content.size() + 1;
+			if (effects.size() > 1)
+				content.add(new TextElement(effect.getDisplayName(), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+			List<TextElement> holder = new ArrayList<>();
+			for (int lvl = 0; lvl <= core.getXpUtils().getEffectHighestConfiguration(effect); lvl++) {
+				Map<String, Long> xpMap = core.getXpUtils().getEffectExperienceMap(new MobEffectInstance(effect, 30, lvl));
+				if (!xpMap.isEmpty() && !xpMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
+					holder.add(new TextElement(Component.literal(String.valueOf(lvl)), 1, 0xFFFFFF, false, 0));
+					for (Map.Entry<String, Long> map : xpMap.entrySet()) {
+						if (map.getValue() == 0) continue;
+						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
+					}
+				}
+			}
+			if (holder.size() > 0) {
+				content.add(new TextElement(LangProvider.EVENT_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.addAll(holder);
+			}
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		}

@@ -1,5 +1,6 @@
 package harmonised.pmmo.core;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import com.google.common.base.Preconditions;
@@ -14,6 +15,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 
@@ -50,6 +52,10 @@ public class XpUtils {
 	public Map<String, Long> getEffectExperienceMap(MobEffectInstance mei) {
 		return effectGainData.computeIfAbsent(RegistryUtil.getId(mei.getEffect()), rl -> new HashMap<>())
 				.getOrDefault(mei.getAmplifier()+1, new HashMap<>());
+	}
+	
+	public int getEffectHighestConfiguration(MobEffect effect) {
+		return effectGainData.getOrDefault(RegistryUtil.getId(effect), new HashMap<>()).keySet().stream().max(Comparator.naturalOrder()).orElse(-1);
 	}
 	
 	public void setObjectXpGainMap(EventType eventType, ResourceLocation objectID, Map<String, Long> xpMap) {

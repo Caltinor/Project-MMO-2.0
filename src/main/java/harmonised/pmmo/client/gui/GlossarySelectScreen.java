@@ -183,7 +183,7 @@ public class GlossarySelectScreen extends Screen{
 		REQS(LangProvider.GLOSSARY_SECTION_REQ.asComponent(), 
 				Arrays.stream(OBJECT.values()).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
 		XP(LangProvider.GLOSSARY_SECTION_XP.asComponent(), 
-				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.BLOCKS, OBJECT.ENTITY}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
+				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.BLOCKS, OBJECT.ENTITY, OBJECT.EFFECTS}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
 		BONUS(LangProvider.GLOSSARY_SECTION_BONUS.asComponent(), 
 				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
 		SALVAGE(LangProvider.GLOSSARY_SECTION_SALVAGE.asComponent(), 
@@ -209,6 +209,7 @@ public class GlossarySelectScreen extends Screen{
 		DIMENSIONS(LangProvider.GLOSSARY_OBJECT_DIMENSIONS.asComponent()),
 		BIOMES(LangProvider.GLOSSARY_OBJECT_BIOMES.asComponent()),
 		ENCHANTS(LangProvider.GLOSSARY_OBJECT_ENCHANTS.asComponent()),
+		EFFECTS(LangProvider.GLOSSARY_OBJECT_EFFECTS.asComponent()),
 		PERKS(LangProvider.GLOSSARY_OBJECT_PERKS.asComponent());
 		
 		MutableComponent text;

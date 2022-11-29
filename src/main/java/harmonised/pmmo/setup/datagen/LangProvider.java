@@ -455,6 +455,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Biomes").build();
 	public static final Translation GLOSSARY_OBJECT_ENCHANTS = Translation.Builder.start("pmmo.gui.glossary.object.enchantments")
 			.addLocale(Locale.EN_US, "Enchantments").build();
+	public static final Translation GLOSSARY_OBJECT_EFFECTS = Translation.Builder.start("pmmo.gui.glossary.object.effects")
+			.addLocale(Locale.EN_US, "Effects").build();
 	public static final Translation GLOSSARY_OBJECT_PERKS = Translation.Builder.start("pmmo.gui.glossary.object.perks")
 			.addLocale(Locale.EN_US, "Perks").build();
 	
