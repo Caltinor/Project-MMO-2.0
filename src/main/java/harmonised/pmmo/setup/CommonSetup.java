@@ -86,6 +86,7 @@ public class CommonSetup {
 		event.addListener(CoreParser.DIMENSION_LOADER);
 		event.addListener(CoreParser.PLAYER_LOADER);
 		event.addListener(CoreParser.ENCHANTMENT_LOADER);
+		event.addListener(CoreParser.EFFECT_LOADER);
 		event.addListener(CoreParser.OVERRIDE_CONFIG);
 	}
 	

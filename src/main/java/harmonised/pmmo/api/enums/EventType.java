@@ -11,60 +11,61 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 
 public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
-	ANVIL_REPAIR(true, false, false, "smithing"),  			//IMPLEMENTED
-	BLOCK_BREAK(false, true, false, "mining"),				//IMPLEMENTED
-		BREAK_SPEED(false, true, false, "mining"),			//IMPLEMENTED
-	BLOCK_PLACE(true, true, false, "building"),				//IMPLEMENTED
-	BREATH_CHANGE(false, false, true, "swimming"),			//IMPLEMENTED	PLAYERTICK
-	BREED(false, false, true, "taming"),					//IMPLEMENTED
-	BREW(true, false, false, "alchemy"),					//PARTIAL		MIXIN NEEDED FOR OTHER EVENTS
-	CONSUME(true, false, false, "cooking"),					//IMPLEMENTED
-	CRAFT(true, false, false, "crafting"),					//IMPLEMENTED
-	RECEIVE_DAMAGE(false, false, true, "endurance"),		//IMPLEMENTED
-		FROM_MOBS(false, false, true, "endurance"),			//IMPLEMENTED
-		FROM_PLAYERS(false, false, true, "endurance"),		//IMPLEMENTED
-		FROM_ANIMALS(false, false, true, "endurance"),		//IMPLEMENTED
-		FROM_PROJECTILES(false, false, true, "endurance"),	//IMPLEMENTED
-		FROM_MAGIC(false, false, true, "endurance"),		//IMPLEMENTED
-		FROM_ENVIRONMENT(false, false, true, "endurance"),	//IMPLEMENTED
-		FROM_IMPACT(false, false, true, "endurance"),		//IMPLEMENTED
-	DEAL_MELEE_DAMAGE(true, false, true, "combat"),			//IMPLEMENTED
-		MELEE_TO_MOBS(true, false, true, "combat"),			//IMPLEMENTED
-		MELEE_TO_PLAYERS(true, false, true, "combat"),		//IMPLEMENTED
-		MELEE_TO_ANIMALS(true, false, true, "combat"),		//IMPLEMENTED
-	DEAL_RANGED_DAMAGE(true, false, true, "archery"),		//IMPLEMENTED
-		RANGED_TO_MOBS(true, false, true, "archery"),		//IMPLEMENTED
-		RANGED_TO_PLAYERS(true, false, true, "archery"),	//IMPLEMENTED
-		RANGED_TO_ANIMALS(true, false, true, "archery"),	//IMPLEMENTED
-	DEATH(false, false, true, "endurance"),					//IMPLEMENTED
-	ENCHANT(true, false, false, "magic"),					//IMPLEMENTED	MIXIN (probably)
-	FISH(true, false, false, "fishing"),					//IMPLEMENTED
-	SMELT(true, false, false, "smithing"),					//IMPLEMENTED	MIXIN
-	GROW(false, true, false, "farming"),					//IMPLEMENTED
-	HEALTH_CHANGE(false, false, false, ""),					//IMPLEMENTED	PLAYER TICK
-	JUMP(false, false, true, "agility"),					//IMPLEMENTED
-		SPRINT_JUMP(false, false, true, "agility"),			//IMPLEMENTED
-		CROUCH_JUMP(false, false, true, "agility"),			//IMPLEMENTED
-	WORLD_CONNECT(false, false, false, ""),					//IMPLEMENTED
-	WORLD_DISCONNECT(false, false, false, ""),				//IMPLEMENTED
-	HIT_BLOCK(false, true, false, "dexterity"),				//IMPLEMENTED
-	ACTIVATE_BLOCK(false, true, false, "dexterity"),		//IMPLEMENTED
-	ACTIVATE_ITEM(true, false, false, "dexterity"),			//IMPLEMENTED
-	ENTITY(false, false, true, "charisma"),					//IMPLEMENTED
-	RESPAWN(false, false, false, ""),						//IMPLEMENTED
-	RIDING(false, false, true, "taming"),					//IMPLEMENTED	PLAYER TICK
-	SHIELD_BLOCK(false, false, true, "combat"),				//IMPLEMENTED
-	SKILL_UP(false, false, false, ""),						//IMPLEMENTED
-	SLEEP(false, false, true, "endurance"),					//IMPLEMENTED
-	SPRINTING(false, false, true, "agility"),				//IMPLEMENTED	PLAYER TICK
-	SUBMERGED(false, false, true, "swimming"),				//IMPLEMENTED	PLAYER TICK
-		SWIMMING(false, false, true, "swimming"),			//IMPLEMENTED	PLAYER TICK
-		DIVING(false, false, true, "swimming"),				//IMPLEMENTED	PLAYER TICK
-		SURFACING(false, false, true, "swimming"),			//IMPLEMENTED	PLAYER TICK
-		SWIM_SPRINTING(false, false, true, "swimming"),		//IMPLEMENTED	PLAYER TICK
-	TAMING(false, false, true, "taming"),					//IMPLEMENTED
-	VEIN_MINE(false, false, false, ""),						//				CUSTOM TRIGGER NO XP LOGIC
-	DISABLE_PERK(false, false, false, "");					//IMPLEMENTED
+	ANVIL_REPAIR(true, false, false, "smithing"),  			
+	BLOCK_BREAK(false, true, false, "mining"),				
+		BREAK_SPEED(false, true, false, "mining"),			
+	BLOCK_PLACE(true, true, false, "building"),				
+	BREATH_CHANGE(false, false, true, "swimming"),
+	BREED(false, false, true, "taming"),					
+	BREW(true, false, false, "alchemy"),
+	CONSUME(true, false, false, "cooking"),					
+	CRAFT(true, false, false, "crafting"),					
+	RECEIVE_DAMAGE(false, false, true, "endurance"),		
+		FROM_MOBS(false, false, true, "endurance"),			
+		FROM_PLAYERS(false, false, true, "endurance"),		
+		FROM_ANIMALS(false, false, true, "endurance"),		
+		FROM_PROJECTILES(false, false, true, "endurance"),	
+		FROM_MAGIC(false, false, true, "endurance"),		
+		FROM_ENVIRONMENT(false, false, true, "endurance"),	
+		FROM_IMPACT(false, false, true, "endurance"),		
+	DEAL_MELEE_DAMAGE(true, false, true, "combat"),			
+		MELEE_TO_MOBS(true, false, true, "combat"),			
+		MELEE_TO_PLAYERS(true, false, true, "combat"),		
+		MELEE_TO_ANIMALS(true, false, true, "combat"),		
+	DEAL_RANGED_DAMAGE(true, false, true, "archery"),		
+		RANGED_TO_MOBS(true, false, true, "archery"),		
+		RANGED_TO_PLAYERS(true, false, true, "archery"),	
+		RANGED_TO_ANIMALS(true, false, true, "archery"),	
+	DEATH(false, false, true, "endurance"),					
+	ENCHANT(true, false, false, "magic"),
+	EFFECT(false, false, true, "magic"),
+	FISH(true, false, false, "fishing"),					
+	SMELT(true, false, false, "smithing"),
+	GROW(false, true, false, "farming"),					
+	HEALTH_CHANGE(false, false, false, ""),						
+	JUMP(false, false, true, "agility"),					
+		SPRINT_JUMP(false, false, true, "agility"),			
+		CROUCH_JUMP(false, false, true, "agility"),			
+	WORLD_CONNECT(false, false, false, ""),					
+	WORLD_DISCONNECT(false, false, false, ""),				
+	HIT_BLOCK(false, true, false, "dexterity"),				
+	ACTIVATE_BLOCK(false, true, false, "dexterity"),		
+	ACTIVATE_ITEM(true, false, false, "dexterity"),			
+	ENTITY(false, false, true, "charisma"),					
+	RESPAWN(false, false, false, ""),						
+	RIDING(false, false, true, "taming"),						
+	SHIELD_BLOCK(false, false, true, "combat"),				
+	SKILL_UP(false, false, false, ""),						
+	SLEEP(false, false, true, "endurance"),					
+	SPRINTING(false, false, true, "agility"),					
+	SUBMERGED(false, false, true, "swimming"),					
+		SWIMMING(false, false, true, "swimming"),				
+		DIVING(false, false, true, "swimming"),					
+		SURFACING(false, false, true, "swimming"),				
+		SWIM_SPRINTING(false, false, true, "swimming"),			
+	TAMING(false, false, true, "taming"),					
+	VEIN_MINE(false, false, false, ""),
+	DISABLE_PERK(false, false, false, "");					
 	
 	public final boolean itemApplicable;
 	public final boolean blockApplicable;
