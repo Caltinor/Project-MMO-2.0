@@ -12,29 +12,19 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.util.Functions;
 
-public record CodecMapEnchantment(
+public record CodecMapEnhancements(
 		boolean override,
 		List<Map<String, Integer>> skillArray) {
 	
-	public static final Codec<CodecMapEnchantment> CODEC = RecordCodecBuilder.create(instance -> instance.group( 
+	public static final Codec<CodecMapEnhancements> CODEC = RecordCodecBuilder.create(instance -> instance.group( 
 			Codec.BOOL.optionalFieldOf("override").forGetter(cme -> Optional.of(cme.override())),
-			CodecTypes.INTEGER_CODEC.listOf().fieldOf("levels").forGetter(CodecMapEnchantment::skillArray)
-		).apply(instance, (o, map) -> new CodecMapEnchantment(o.orElse(false), map)));
+			CodecTypes.INTEGER_CODEC.listOf().fieldOf("levels").forGetter(CodecMapEnhancements::skillArray)
+		).apply(instance, (o, map) -> new CodecMapEnhancements(o.orElse(false), map)));
 	
-	public static class Builder {
-		boolean override = false;
-		List<Map<String, Integer>> skillArray = new ArrayList<>();
-		private Builder() {}
-		public static Builder start() {return new Builder();}
-		public Builder override(boolean bool) {this.override = bool; return this;}
-		public Builder skillArray(List<Map<String, Integer>> arr) {this.skillArray = arr; return this;}
-		public CodecMapEnchantment build() {return new CodecMapEnchantment(override, skillArray);}
-	}
-	
-	public static CodecMapEnchantment combine(CodecMapEnchantment one, CodecMapEnchantment two) {
+	public static CodecMapEnhancements combine(CodecMapEnhancements one, CodecMapEnhancements two) {
 		List<Map<String, Integer>> skillArray = new ArrayList<>();
 		
-		BiConsumer<CodecMapEnchantment, CodecMapEnchantment> bothOrNeither = (o, t) -> {
+		BiConsumer<CodecMapEnhancements, CodecMapEnhancements> bothOrNeither = (o, t) -> {
 			int largerList = o.skillArray.size() > t.skillArray.size() ? o.skillArray.size() : t.skillArray.size();
 			for (int i = 0; i < largerList; i++) {
 				Map<String, Integer> thisMap = new HashMap<>();
@@ -55,6 +45,6 @@ public record CodecMapEnchantment(
 				bothOrNeither, 
 				bothOrNeither);
 		
-		return new CodecMapEnchantment(one.override() || two.override(), skillArray);
+		return new CodecMapEnhancements(one.override() || two.override(), skillArray);
 	}
 }

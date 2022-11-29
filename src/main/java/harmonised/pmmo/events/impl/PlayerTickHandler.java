@@ -16,6 +16,7 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
@@ -51,6 +52,8 @@ public class PlayerTickHandler {
 			processEvent(EventType.HEALTH_CHANGE, core, event);
 		if (player.isPassenger())
 			processEvent(EventType.RIDING, core, event);
+		if (!player.getActiveEffects().isEmpty())
+			processEvent(EventType.EFFECT, core, event);
 		
 		if (player.isUnderWater()) {
 			Vec3 vec = player.getDeltaMovement();
@@ -84,39 +87,41 @@ public class PlayerTickHandler {
 		if (serverSide){			
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
 		}
-		//Process perks
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.player, eventHookOutput, core.getSide()));
 		if (serverSide) {
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? core.getXpUtils().deserializeAwardMap(perkOutput.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
 			switch (type) {
-			//TODO make these config derived XP calculations into a Core method and use that here and in the damage dealt/received events
-			case BREATH_CHANGE: {
+			case BREATH_CHANGE -> {
 				int diff = Math.abs(airLast.getOrDefault(event.player.getUUID(), 0) - event.player.getAirSupply());
 				Map<String, Double> ratio = Config.BREATH_CHANGE_XP.get();
 				ratio.keySet().forEach((skill) -> {
 					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
-				break;
 			}
-			case HEALTH_CHANGE: {
+			case HEALTH_CHANGE -> {
 				float diff = Math.abs(healthLast.getOrDefault(event.player.getUUID(), 0f) - event.player.getHealth());
 				Map<String, Double> ratio = Config.HEALTH_CHANGE_XP.get();
 				ratio.keySet().forEach((skill) -> {
 					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
-				break;
 			}
-			case RIDING: {
+			case RIDING -> {
 				core.getExperienceAwards(type, event.player.getVehicle(), event.player, perkOutput).forEach((skill, value) -> {
 					xpAward.put(skill, value);
 				});;
-				break;
 			}
-			case SPRINTING: {
+			case EFFECT -> {
+				for (MobEffectInstance mei : event.player.getActiveEffects()) {	
+					core.getExperienceAwards(mei, event.player, perkOutput).forEach((skill, value) -> {
+						xpAward.put(skill, value);
+					});
+				}
+			}
+			case SPRINTING -> {
 				Vec3 vec = event.player.getDeltaMovement();
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.SPRINTING_XP.get();
@@ -124,16 +129,14 @@ public class PlayerTickHandler {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});;
-				break;
 			}
-			case SUBMERGED: {
+			case SUBMERGED -> {
 				Map<String, Double> ratio = Config.SUBMERGED_XP.get();
 				ratio.keySet().forEach((skill) -> {
 					xpAward.put(skill, ratio.getOrDefault(skill, 0d).longValue());
 				});
-				break;
 			}
-			case SWIMMING: {
+			case SWIMMING -> {
 				Vec3 vec = event.player.getDeltaMovement();
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.SWIMMING_XP.get();
@@ -141,9 +144,8 @@ public class PlayerTickHandler {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
-				break;
 			}
-			case DIVING: {
+			case DIVING -> {
 				Vec3 vec = event.player.getDeltaMovement();
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.DIVING_XP.get();
@@ -151,9 +153,8 @@ public class PlayerTickHandler {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
-				break;
 			}
-			case SURFACING: {
+			case SURFACING -> {
 				Vec3 vec = event.player.getDeltaMovement();
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.SURFACING_XP.get();
@@ -161,9 +162,8 @@ public class PlayerTickHandler {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
-				break;
 			}
-			case SWIM_SPRINTING: {
+			case SWIM_SPRINTING -> {
 				Vec3 vec = event.player.getDeltaMovement();
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.SWIM_SPRINTING_XP.get();
@@ -171,9 +171,8 @@ public class PlayerTickHandler {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
-				break;
 			}
-			default:{}
+			default -> {}
 			}
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.player);
 			core.awardXP(partyMembersInRange, xpAward);	

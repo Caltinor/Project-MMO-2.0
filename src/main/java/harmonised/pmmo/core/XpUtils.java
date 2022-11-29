@@ -9,33 +9,47 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 
 public class XpUtils {
 	public XpUtils() {}
 	
-	private  Map<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainData = new HashMap<>();
-	private  Map<ModifierDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
+	/**Event Type, Object ID, Skillname, xpValue*/
+	private Map<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainData = new HashMap<>();
+	/**Effect ID, Effect Level, Skillname, xpValue*/
+	private Map<ResourceLocation, Map<Integer, Map<String, Long>>> effectGainData = new HashMap<>();
+	/**Bonus Type, Object ID, Skillname, bonusValue*/
+	private Map<ModifierDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
 	
 	public void reset() {
 		xpGainData = new HashMap<>();
+		effectGainData= new HashMap<>();
 		xpModifierData = new HashMap<>();
 	}
 	
 	//===================XP INTERACTION METHODS=======================================
 	
 	public boolean hasXpGainObjectEntry(EventType eventType, ResourceLocation objectID) {
+		if (eventType == EventType.EFFECT)
+			return effectGainData.containsKey(objectID);
 		if (!xpGainData.containsKey(eventType))
 			return false;
 		return xpGainData.get(eventType).containsKey(objectID);
 	}
 	
-	public Map<String, Long> getObjectExperienceMap(EventType EventType, ResourceLocation objectID) {
-		return xpGainData.computeIfAbsent(EventType, s -> new HashMap<>()).getOrDefault(objectID, new HashMap<>());
+	public Map<String, Long> getObjectExperienceMap(EventType eventType, ResourceLocation objectID) {
+		return xpGainData.computeIfAbsent(eventType, s -> new HashMap<>()).getOrDefault(objectID, new HashMap<>());
+	}
+	
+	public Map<String, Long> getEffectExperienceMap(MobEffectInstance mei) {
+		return effectGainData.computeIfAbsent(RegistryUtil.getId(mei.getEffect()), rl -> new HashMap<>())
+				.getOrDefault(mei.getAmplifier()+1, new HashMap<>());
 	}
 	
 	public void setObjectXpGainMap(EventType eventType, ResourceLocation objectID, Map<String, Long> xpMap) {
@@ -50,6 +64,26 @@ public class XpUtils {
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(xpMap);
 		xpModifierData.computeIfAbsent(XpValueDataType, s -> new HashMap<>()).put(objectID, xpMap);
+	}
+	
+	public void setEffectMap(ResourceLocation effectID, Map<Integer, Map<String, Integer>> data) {
+		Preconditions.checkNotNull(effectID);
+		Preconditions.checkNotNull(data);
+		Map<Integer, Map<String, Long>> finalMap = new HashMap<>();
+		data.forEach((lvl, map) -> {
+			Map<String, Long> remappedMap = new HashMap<>();
+			map.forEach((skill, value) -> {
+				remappedMap.put(skill, value.longValue());
+			});
+			finalMap.put(lvl, remappedMap);
+		});
+		effectGainData.put(effectID, finalMap);
+	}
+	
+	public void setRawEffectMap(ResourceLocation effectID, Map<Integer, Map<String, Long>> data) {
+		Preconditions.checkNotNull(effectID);
+		Preconditions.checkNotNull(data);
+		effectGainData.put(effectID, data);
 	}
 	
 	public boolean hasModifierObjectEntry(ModifierDataType type, ResourceLocation objectID) {

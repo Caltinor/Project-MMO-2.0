@@ -98,6 +98,22 @@ public class CTUtils implements IRuntimeAction{
 		case ENTITY -> {CoreParser.ENTITY_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).xpValues().put(type, award);}
 		default -> {}}
 	}
+	/**Registers a configuration setting for xp gained from active effects
+	 * 
+	 * @param effectID the key for the effect
+	 * @param effectLevel the level of the effect
+	 * @param xpGains a map of the skills and xp awarded when this effect is active
+	 * 
+	 * @docParam effectID <resource:namespace:path>
+	 * @docParam enchantLevel 1
+	 * @docParam xpGains {skillname: 00 as int?, otherskillname: 00 as int?}
+	 */
+	@ZenCodeType.Method
+	public static void setEffectXp(ResourceLocation effectID, int effectLevel, Map<String, Integer> xpGains) {
+		var data = CoreParser.EFFECT_LOADER.getData().computeIfAbsent(effectID, rl -> new HashMap<>());
+		data.clear();
+		data.put(effectLevel, xpGains);
+	}
 	/**registers a configuration setting for bonuses to xp gains.
 	 * 
 	 * @param objectType a value of [item, block, entity, dimension, or biome]

@@ -18,7 +18,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.codecs.CodecMapEnchantment;
+import harmonised.pmmo.config.codecs.CodecMapEnhancements;
 import harmonised.pmmo.config.codecs.CodecMapLocation;
 import harmonised.pmmo.config.codecs.CodecMapObject;
 import harmonised.pmmo.config.codecs.CodecMapPlayer;
@@ -201,12 +201,16 @@ public class CoreParser {
 		});
 	}
 	
-	public static final MergeableCodecDataManager<CodecMapEnchantment, Map<Integer, Map<String, Integer>>> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/enchantments", DATA_LOGGER, CodecMapEnchantment.CODEC, raws -> mergeEnchantmentTags(raws), processed -> finalizeEnchantmentMaps(processed));
-	private static Map<Integer, Map<String, Integer>> mergeEnchantmentTags(final List<CodecMapEnchantment> raws) {
-		CodecMapEnchantment mergedObject = new CodecMapEnchantment(false, new ArrayList<>());
-		for (CodecMapEnchantment entry : raws) {
-			mergedObject = CodecMapEnchantment.combine(mergedObject, entry);
+	public static final MergeableCodecDataManager<CodecMapEnhancements, Map<Integer, Map<String, Integer>>> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/enchantments", DATA_LOGGER, CodecMapEnhancements.CODEC, CoreParser::mergeEnhancementTags, CoreParser::finalizeEnchantmentMaps);
+	public static final MergeableCodecDataManager<CodecMapEnhancements, Map<Integer, Map<String, Integer>>> EFFECT_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/effects", DATA_LOGGER, CodecMapEnhancements.CODEC, CoreParser::mergeEnhancementTags, CoreParser::finalizeEffectMaps);
+	
+	
+	private static Map<Integer, Map<String, Integer>> mergeEnhancementTags(final List<CodecMapEnhancements> raws) {
+		CodecMapEnhancements mergedObject = new CodecMapEnhancements(false, new ArrayList<>());
+		for (CodecMapEnhancements entry : raws) {
+			mergedObject = CodecMapEnhancements.combine(mergedObject, entry);
 		}
 		
 		Map<Integer, Map<String, Integer>> outMap = new HashMap<>();
@@ -221,6 +225,14 @@ public class CoreParser {
 				return;
 			map.forEach((k, v) -> MsLoggy.INFO.log(LOG_CODE.DATA, "ENCHANTMENT:"+rl.toString()+" Level:"+k+MsLoggy.mapToString(v)));
 			Core.get(LogicalSide.SERVER).getSkillGates().setEnchantmentReqs(rl, map);
+		});
+	}
+	private static void finalizeEffectMaps(Map<ResourceLocation, Map<Integer, Map<String, Integer>>> data) {
+		data.forEach((rl, map) -> {
+			if (!ModList.get().isLoaded(rl.getNamespace()))
+				return;
+			map.forEach((k, v) -> MsLoggy.INFO.log(LOG_CODE.DATA, "EFFECT:"+rl.toString()+" Level:"+k+MsLoggy.mapToString(v)));
+			Core.get(LogicalSide.SERVER).getXpUtils().setEffectMap(rl, map);
 		});
 	}
 }

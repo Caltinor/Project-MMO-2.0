@@ -204,6 +204,10 @@ public class PackGenerator {
 		ENCHANTMENTS("pmmo/enchantments", server -> ForgeRegistries.ENCHANTMENTS.getKeys(), 
 				List.of("{",
 						"\"levels\":[]",
+						"}")),
+		EFFECTS("pmmo/effects", server -> ForgeRegistries.MOB_EFFECTS.getKeys(), 
+				List.of("{",
+						"\"levels\":[]",
 						"}"));
 		
 		public String route;

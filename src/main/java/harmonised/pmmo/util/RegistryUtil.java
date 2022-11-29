@@ -2,6 +2,7 @@ package harmonised.pmmo.util;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -47,5 +48,9 @@ public class RegistryUtil {
 	
 	public static ResourceLocation getId(Enchantment enchant) {
 		return ForgeRegistries.ENCHANTMENTS.getKey(enchant);
+	}
+
+	public static ResourceLocation getId(MobEffect effect) {
+		return ForgeRegistries.MOB_EFFECTS.getKey(effect);
 	}
 }

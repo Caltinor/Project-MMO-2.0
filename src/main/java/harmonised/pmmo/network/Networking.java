@@ -9,7 +9,7 @@ import harmonised.pmmo.network.clientpackets.CP_RegisterNBT;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Enchantments;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_Enhancements;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Players;
@@ -62,10 +62,10 @@ public class Networking {
 			.decoder(CP_SyncData_Locations::decode)
 			.consumer(CP_SyncData_Locations::handle)
 			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Enchantments.class, ID++)
-			.encoder(CP_SyncData_Enchantments::encode)
-			.decoder(CP_SyncData_Enchantments::decode)
-			.consumer(CP_SyncData_Enchantments::handle)
+		INSTANCE.messageBuilder(CP_SyncData_Enhancements.class, ID++)
+			.encoder(CP_SyncData_Enhancements::encode)
+			.decoder(CP_SyncData_Enhancements::decode)
+			.consumer(CP_SyncData_Enhancements::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_Players.class, ID++)
 			.encoder(CP_SyncData_Players::encode)
@@ -139,7 +139,8 @@ public class Networking {
 		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o)));
 		CoreParser.BIOME_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Locations::new);
 		CoreParser.DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Locations::new);
-		CoreParser.ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Enchantments::new);
+		CoreParser.ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(true, o));
+		CoreParser.EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(false, o));
 		CoreParser.PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
 		ConfigurationRegistry.addSyncPacket(INSTANCE, true);
 		MinecraftForge.EVENT_BUS.addListener(NBTUtils.onDataReload(INSTANCE));
