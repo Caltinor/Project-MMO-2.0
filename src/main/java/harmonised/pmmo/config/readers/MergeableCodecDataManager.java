@@ -190,7 +190,11 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	{
 		final Map<Key,Out> newMap = new HashMap<>();
 		
-		inputs.forEach((key, input) -> newMap.put(key, mapper.apply(input)));
+		inputs.forEach((key, input) -> {
+			Out output = mapper.apply(input);
+			if (output != null)
+				newMap.put(key, output);
+		});
 		
 		return newMap;
 	}

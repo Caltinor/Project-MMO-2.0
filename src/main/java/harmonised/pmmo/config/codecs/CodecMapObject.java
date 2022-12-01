@@ -142,6 +142,18 @@ public record CodecMapObject (
 			this(false, new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new NBTReqData(), new HashMap<>(), new NBTXpGainData(), new NBTBonusData(), new HashMap<>(), VeinData.EMPTY);
 		}
 		
+		public boolean isUnconfigured() {
+			return xpValues.values().stream().allMatch(map -> map.isEmpty()) 
+					&& nbtXpGains.logic().values().stream().allMatch(map -> map.isEmpty())
+					&& reqs.values().stream().allMatch(map -> map.isEmpty())
+					&& nbtReqs.logic().values().stream().allMatch(map -> map.isEmpty())
+					&& modifiers.values().stream().allMatch(map -> map.isEmpty()) 
+					&& nbtBonuses.logic().values().stream().allMatch(map -> map.isEmpty())
+					&& reqNegativeEffect.isEmpty()
+					&& salvage.keySet().stream().allMatch(rl -> rl.equals(new ResourceLocation("item")))
+					&& veinData.isUnconfigured();
+		}
+		
 		public static final Codec<ObjectMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.BOOL.fieldOf("override").forGetter(ObjectMapContainer::override),
 				ResourceLocation.CODEC.listOf().fieldOf("tagValues").forGetter(ObjectMapContainer::tagValues),
