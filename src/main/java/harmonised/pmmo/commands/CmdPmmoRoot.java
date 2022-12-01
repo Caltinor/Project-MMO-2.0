@@ -31,7 +31,7 @@ public class CmdPmmoRoot {
 									PackGenerator.generateDisablingPack(ctx.getSource().getServer());
 									return 0;
 								})))
-				.then(Commands.literal("checkbiome"))
+				.then(CmdNodeStore.register(dispatcher))
 				.then(Commands.literal("debug"))
 				.then(Commands.literal("help")
 						.executes(ctx -> help(ctx)))
