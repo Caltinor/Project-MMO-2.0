@@ -40,6 +40,12 @@ public class VeinDataManager {
 					this.chargeRate().orElse(0d) > other.chargeRate().orElse(0d) ? this.chargeRate() : other.chargeRate(),
 					this.consumeAmount().orElse(0) > other.consumeAmount().orElse(0) ? this.consumeAmount() : other.consumeAmount());
 		}
+		
+		public boolean isUnconfigured() {
+			return (chargeCap.isEmpty() || chargeCap.get() == 0)
+					&& (chargeRate.isEmpty() || chargeCap.get() == 0d)
+					&& (consumeAmount.isEmpty() || consumeAmount.get() == 1);
+		}
 	}
 	//===================DATA MANAGEMENT====================================
 	public void setVeinData(ResourceLocation objectID, VeinData veinData) {

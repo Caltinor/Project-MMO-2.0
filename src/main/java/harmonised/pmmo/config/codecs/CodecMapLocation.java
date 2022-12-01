@@ -144,7 +144,12 @@ public record CodecMapLocation (
 			return new LocationMapContainer(one.override() || two.override(), tagValues, bonusMap, positive, negative, veinBlacklist, travelReq, mobModifiers);
 		}
 		
-		
+		public boolean isUnconfigured() {
+			return bonusMap.values().stream().allMatch(map -> map.isEmpty())
+					&& positive.isEmpty() && negative.isEmpty()
+					&& veinBlacklist.isEmpty() && travelReq.isEmpty()
+					&& mobModifiers.isEmpty();
+		}
 		
 		public static final Codec<LocationMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.BOOL.fieldOf("override").forGetter(LocationMapContainer::override),

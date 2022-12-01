@@ -67,7 +67,7 @@ public class CoreParser {
 		for (int i = 0; i < raws.size(); i++) {
 			outObject = CodecMapObject.ObjectMapContainer.combine(outObject, new CodecMapObject.ObjectMapContainer(raws.get(i)));			
 		}
-		return outObject;
+		return outObject.isUnconfigured() ? null : outObject;
 	}	
 	private static void finalizeObjectMaps(ObjectType type, Map<ResourceLocation, CodecMapObject.ObjectMapContainer> data) {
 		data.forEach((rl, omc) -> {
@@ -155,7 +155,7 @@ public class CoreParser {
 		for (int i = 0; i < raws.size(); i++) {
 			outObject = CodecMapLocation.LocationMapContainer.combine(outObject, new CodecMapLocation.LocationMapContainer(raws.get(i)));
 		}
-		return outObject;
+		return outObject.isUnconfigured() ? null : outObject;
 	}
 	private static void finalizeLocationMaps(Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data) {
 		data.forEach((rl, lmc) -> {
