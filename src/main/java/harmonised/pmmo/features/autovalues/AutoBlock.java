@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.autovalues;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import harmonised.pmmo.api.enums.EventType;
@@ -19,8 +20,9 @@ public class AutoBlock {
 	public static final EventType[] EVENTTYPES = {EventType.BLOCK_BREAK, EventType.BLOCK_PLACE, EventType.GROW};
 	
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation blockID) {
+
 		//exit early if the type is not valid for a block
-		if (!type.blockApplicable)
+		if (!type.blockApplicable || isWorldSensitive(blockID))
 			return new HashMap<>();
 		
 		Block block = ForgeRegistries.BLOCKS.getValue(blockID);
@@ -39,7 +41,7 @@ public class AutoBlock {
 	
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation blockID) {
 		//exit early if the type is not valid for a block
-		if (!type.blockApplicable)
+		if (!type.blockApplicable || isWorldSensitive(blockID))
 			return new HashMap<>();
 		
 		Block block = ForgeRegistries.BLOCKS.getValue(blockID);
@@ -72,5 +74,18 @@ public class AutoBlock {
 		}
 		default: }
 		return outMap;	
+	}
+	
+	private static final List<String> WORLD_SENSITIVE_MOD_IDS = List.of("dynamictrees", "dtbop");
+	
+	/**This checker exists to prevent mods which rely on world context
+	 * to evaluate break speed from having their blocks checked against
+	 * AutoValues.
+	 * 
+	 * @param id the object ID being checked
+	 * @return whether the namespace exists in the known incompatibility list
+	 */
+	private static boolean isWorldSensitive(ResourceLocation id) {
+		return WORLD_SENSITIVE_MOD_IDS.contains(id.getNamespace());
 	}
 }
