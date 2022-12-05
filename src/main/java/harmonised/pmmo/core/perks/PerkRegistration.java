@@ -30,6 +30,12 @@ public class PerkRegistration {
 				NONE, 
 				PerkSide.SERVER);
 		//Attribute Perks
+		APIUtils.registerPerk(rl("attribute"), 
+				TagBuilder.start().withDouble(APIUtils.MAX_BOOST, 0d).withDouble(APIUtils.PER_LEVEL, 0d).build(), 
+				PASS_TRUE, 
+				FeaturePerks.ATTRIBUTE, 
+				FeaturePerks.ATTRIBUTE_TERM, 
+				PerkSide.SERVER);
 		APIUtils.registerPerk(rl("reach"),
 				TagBuilder.start().withDouble(APIUtils.MAX_BOOST, 10d).withDouble(APIUtils.PER_LEVEL, 0.1).build(),
 				PASS_TRUE,

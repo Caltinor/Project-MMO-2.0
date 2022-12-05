@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,6 +32,32 @@ public class FeaturePerks {
 
 	private static Map<UUID, Long> regen_cooldown = new HashMap<>();
 	private static Map<UUID, Long> breathe_cooldown = new HashMap<>();
+	
+	private static final UUID ATTRIBUTE_ID = UUID.fromString("b902b6aa-8393-4bdc-8f0d-b937268ef5af");
+	private static final Map<String, Attribute> attributeCache = new HashMap<>();
+	
+	private static Attribute getAttribute(CompoundTag nbt) {
+		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
+				name -> ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(name)));
+	}
+	
+	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> ATTRIBUTE = (player, nbt, level) -> {
+		double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
+		double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
+		AttributeInstance instance = player.getAttribute(getAttribute(nbt));
+		double boost = Math.min(perLevel * level, maxBoost);
+		
+		AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "PMMO-modifier based on user skill", boost, AttributeModifier.Operation.ADDITION);
+		instance.removeModifier(ATTRIBUTE_ID);
+		instance.addPermanentModifier(modifier);
+		return NONE;
+	};
+	
+	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> ATTRIBUTE_TERM = (player, nbt, level) -> {
+		AttributeInstance instance = player.getAttribute(getAttribute(nbt));
+		instance.removeModifier(ATTRIBUTE_ID);
+		return NONE;
+	};
 	
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");	
 	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> SPEED = (player, nbt, level) -> {
