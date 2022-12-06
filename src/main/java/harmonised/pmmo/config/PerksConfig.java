@@ -57,19 +57,35 @@ public class PerksConfig {
 		//====================SKILL_UP DEFAULTS==========================
 		bodyMap.put("mining", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "mining").build()));
 		bodyMap.put("building", List.of(
-				TagBuilder.start().withString("perk", "pmmo:reach").build(),
+				TagBuilder.start()
+					.withString("perk", "pmmo:attribute")
+					.withString(APIUtils.ATTRIBUTE, "forge:reach_distance")
+					.withDouble(APIUtils.PER_LEVEL, 0.05)
+					.withDouble(APIUtils.MAX_BOOST, 10d).build(),
 				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "building").build()));
 		bodyMap.put("excavation", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "excavation").build()));
 		bodyMap.put("woodcutting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "woodcutting").build()));
 		bodyMap.put("farming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "farming").build()));
 		bodyMap.put("agility", List.of(
-				TagBuilder.start().withString("perk", "pmmo:speed").build(),
+				TagBuilder.start()
+					.withString("perk", "pmmo:attribute")
+					.withString(APIUtils.ATTRIBUTE, "minecraft:generic.movement_speed")
+					.withDouble(APIUtils.PER_LEVEL, 0.000035)
+					.withDouble(APIUtils.MAX_BOOST, 1d).build(),
 				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "agility").build()));
 		bodyMap.put("endurance", List.of(
-				TagBuilder.start().withString("perk", "pmmo:health").build(),
+				TagBuilder.start()
+					.withString("perk", "pmmo:attribute")
+					.withString(APIUtils.ATTRIBUTE, "minecraft:generic.max_health")
+					.withDouble(APIUtils.PER_LEVEL, 0.05)
+					.withDouble(APIUtils.MAX_BOOST, 10d).build(),
 				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "endurance").build()));
 		bodyMap.put("combat", List.of(
-				TagBuilder.start().withString("perk", "pmmo:damage").build(),
+				TagBuilder.start()
+				.withString("perk", "pmmo:attribute")
+				.withString(APIUtils.ATTRIBUTE, "minecraft:generic.attack_damage")
+				.withDouble(APIUtils.PER_LEVEL, 0.005)
+				.withDouble(APIUtils.MAX_BOOST, 1d).build(),
 				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "combat").build()));
 		bodyMap.put("gunslinging", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "gunslinging").build()));
 		bodyMap.put("archery", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "archery").build()));
