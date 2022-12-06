@@ -70,7 +70,7 @@ public class PerkRegistry {
 			int skillLevel = Core.get(side).getData().getPlayerSkillLevel(skill, player.getUUID());
 			list.forEach(src -> {
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				src = getProperties(perkID).merge(src.merge(dataIn));
+				src = getProperties(perkID).merge(src.copy().merge(dataIn.copy()));
 				CompoundTag executionOutput = new CompoundTag();
 				
 				if (isValidContext(perkID, player, src, skillLevel))
