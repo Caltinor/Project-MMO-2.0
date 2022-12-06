@@ -17,7 +17,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.Objective;
@@ -52,7 +52,7 @@ public class CmdNodeStore {
 	private static Objective getOrCreate(MinecraftServer server, String objective) {
 		Objective obtainedObjective = server.getScoreboard().getObjective(objective);
 		if (obtainedObjective == null)
-			obtainedObjective = server.getScoreboard().addObjective(objective, ObjectiveCriteria.DUMMY, Component.translatable("pmmo."+objective), ObjectiveCriteria.RenderType.INTEGER);
+			obtainedObjective = server.getScoreboard().addObjective(objective, ObjectiveCriteria.DUMMY, new TranslatableComponent("pmmo."+objective), ObjectiveCriteria.RenderType.INTEGER);
 		return obtainedObjective;
 	}
 	

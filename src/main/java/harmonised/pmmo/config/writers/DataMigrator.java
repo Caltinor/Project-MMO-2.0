@@ -29,7 +29,7 @@ import com.mojang.serialization.JsonOps;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.codecs.CodecMapEnchantment;
+import harmonised.pmmo.config.codecs.CodecMapEnhancements;
 import harmonised.pmmo.config.codecs.CodecMapLocation;
 import harmonised.pmmo.config.codecs.CodecMapLocation.LocationMapContainer;
 import harmonised.pmmo.config.codecs.CodecMapObject;
@@ -63,7 +63,7 @@ public class DataMigrator {
     private static final Type mapType2 = new TypeToken<Map<String, Map<String, Map<String, Double>>>>(){}.getType();
 	private static final Map<ObjectType, Map<ResourceLocation, ObjectMapContainer>> objects = new HashMap<>();
 	private static final Map<ObjectType, Map<ResourceLocation, LocationMapContainer>> locations = new HashMap<>();
-	private static final Map<ResourceLocation, CodecMapEnchantment> enchants = new HashMap<>();
+	private static final Map<ResourceLocation, CodecMapEnhancements> enchants = new HashMap<>();
 	
 	private static enum JType {
 	    REQ_WEAR(DataMigrator.mapType, ObjectType.ITEM),
@@ -335,8 +335,8 @@ public class DataMigrator {
 		ENCHANTMENT("/pmmo/enchantments/", (type, rl, data) -> {
 			switch (type) {
 			case REQ_USE_ENCHANTMENT -> {
-				CodecMapEnchantment raw = CodecMapEnchantment.Builder.start().skillArray(remapEnchant(data)).build();
-				enchants.merge(new ResourceLocation(rl), raw, (og, ng) -> CodecMapEnchantment.combine(og, ng));
+				CodecMapEnhancements raw = CodecMapEnhancements.Builder.start().skillArray(remapEnchant(data)).build();
+				enchants.merge(new ResourceLocation(rl), raw, (og, ng) -> CodecMapEnhancements.combine(og, ng));
 			}
 			default -> {}}
 		});
@@ -409,8 +409,8 @@ public class DataMigrator {
 			}
 		}
 		System.out.println("Migration State: Enchants Serialized"+enchants.size());
-		for (Map.Entry<ResourceLocation, CodecMapEnchantment> value : enchants.entrySet()) {			
-			JsonElement data = CodecMapEnchantment.CODEC.encodeStart(JsonOps.INSTANCE, value.getValue())
+		for (Map.Entry<ResourceLocation, CodecMapEnhancements> value : enchants.entrySet()) {			
+			JsonElement data = CodecMapEnhancements.CODEC.encodeStart(JsonOps.INSTANCE, value.getValue())
 					.resultOrPartial(str -> System.out.println(str))
 					.get();
 			write(value.getKey(), data, ObjectType.ENCHANTMENT, filepath);

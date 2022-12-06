@@ -16,6 +16,16 @@ public record CodecMapEnhancements(
 		boolean override,
 		List<Map<String, Integer>> skillArray) {
 	
+	public static class Builder {
+		boolean override = false;
+		List<Map<String, Integer>> skillArray = new ArrayList<>();
+		private Builder() {}
+		public static Builder start() {return new Builder();}
+		public Builder override(boolean bool) {this.override = bool; return this;}
+		public Builder skillArray(List<Map<String, Integer>> arr) {this.skillArray = arr; return this;}
+		public CodecMapEnhancements build() {return new CodecMapEnhancements(override, skillArray);}
+	}
+	
 	public static final Codec<CodecMapEnhancements> CODEC = RecordCodecBuilder.create(instance -> instance.group( 
 			Codec.BOOL.optionalFieldOf("override").forGetter(cme -> Optional.of(cme.override())),
 			CodecTypes.INTEGER_CODEC.listOf().fieldOf("levels").forGetter(CodecMapEnhancements::skillArray)

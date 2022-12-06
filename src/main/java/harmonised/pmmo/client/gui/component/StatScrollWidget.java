@@ -381,7 +381,7 @@ public class StatScrollWidget extends ScrollPanel{
 			for (int lvl = 0; lvl <= core.getXpUtils().getEffectHighestConfiguration(effect); lvl++) {
 				Map<String, Long> xpMap = core.getXpUtils().getEffectExperienceMap(new MobEffectInstance(effect, 30, lvl));
 				if (!xpMap.isEmpty() && !xpMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
-					holder.add(new TextElement(Component.literal(String.valueOf(lvl)), 1, 0xFFFFFF, false, 0));
+					holder.add(new TextElement(new TextComponent(String.valueOf(lvl)), 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Long> map : xpMap.entrySet()) {
 						if (map.getValue() == 0) continue;
 						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
