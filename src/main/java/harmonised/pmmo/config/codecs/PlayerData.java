@@ -16,6 +16,8 @@ public record PlayerData(
 		boolean ignoreReq,
 		Map<String, Double> bonuses) implements DataSource<PlayerData>{
 	
+	public PlayerData() {this(false, false, new HashMap<>());}
+	
 	public static final Codec<PlayerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(pd -> Optional.of(pd.override())),
 			Codec.BOOL.optionalFieldOf("ignoreReq").forGetter(pd -> Optional.of(pd.ignoreReq())),

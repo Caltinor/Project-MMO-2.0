@@ -23,8 +23,8 @@ import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.PerksConfig;
-import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -599,9 +599,9 @@ public class StatScrollWidget extends ScrollPanel{
 		content.add(new TextElement(LangProvider.PLAYER_HEADER.asComponent(), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 		PlayerData data = core.getDataConfig().getPlayerData(entity.getUUID());
 		content.add(new TextElement(LangProvider.PLAYER_IGNORE_REQ.asComponent(data.ignoreReq()), step(2), 0xFFFFFF, false, 0));
-		if (!data.bonus().isEmpty()) {
+		if (!data.bonuses().isEmpty()) {
 			content.add(new TextElement(LangProvider.PLAYER_BONUSES.asComponent(), step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
-			for (Map.Entry<String, Double> bonus : data.bonus().entrySet()) {
+			for (Map.Entry<String, Double> bonus : data.bonuses().entrySet()) {
 				content.add(new TextElement(bonus.getKey(), bonus.getValue(), step(3), core.getDataConfig().getSkillColor(bonus.getKey())));
 			}
 		}

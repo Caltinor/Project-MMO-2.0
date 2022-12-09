@@ -24,13 +24,13 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.DEDICATED_SERVER)
-public class CoreParser {
+public class CoreLoader {
 	private static final Logger DATA_LOGGER = LogManager.getLogger();	
 	
 	@SubscribeEvent
 	public static void onTagLoad(TagsUpdatedEvent event) {
 		if (event.shouldUpdateStaticData()) {
-			
+			//TODO parse Tags into objects
 		}
 	}
 	
@@ -47,6 +47,19 @@ public class CoreParser {
 		case EFFECT -> {EFFECT_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends EnhancementsData>) data);}
 		default -> {}}
 		printData((Map<ResourceLocation, ? extends Record>) data);
+	}
+	
+	public MergeableCodecDataManager<?> getLoader(ObjectType type) {
+		return switch (type) {
+		case ITEM -> ITEM_LOADER;
+		case BLOCK -> BLOCK_LOADER;
+		case ENTITY -> ENTITY_LOADER;
+		case BIOME -> BIOME_LOADER;
+		case DIMENSION -> DIMENSION_LOADER;
+		case ENCHANTMENT -> ENCHANTMENT_LOADER;
+		case EFFECT -> EFFECT_LOADER;
+		case PLAYER -> PLAYER_LOADER;
+		default -> null;};
 	}
 	
 	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {

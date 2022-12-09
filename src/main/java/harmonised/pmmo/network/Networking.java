@@ -1,7 +1,7 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.api.enums.ObjectType;
-import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.NBTUtils;
 import harmonised.pmmo.network.clientpackets.CP_ApplyConfigRegistry;
@@ -134,7 +134,7 @@ public class Networking {
 	}
 	
 	public static void registerDataSyncPackets() {
-		CoreParser.RELOADER.subscribeAsSyncable(INSTANCE, () -> new CP_ClearData());
+		CoreLoader.RELOADER.subscribeAsSyncable(INSTANCE, () -> new CP_ClearData());
 		ConfigurationRegistry.addSyncPacket(INSTANCE, false);
 		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.ITEM, o));
 		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.BLOCK, o));

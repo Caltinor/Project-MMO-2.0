@@ -9,8 +9,7 @@ import java.util.UUID;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
-import harmonised.pmmo.config.codecs.CodecMapPlayer;
-import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
+import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import net.minecraft.network.chat.Style;
@@ -66,7 +65,7 @@ public class DataConfig {
 		veinBlacklistData.putAll(locationID, blockIDs);
 	}
 	
-	public void setPlayerSpecificData(UUID playerID, CodecMapPlayer.PlayerData data) {
+	public void setPlayerSpecificData(UUID playerID, PlayerData data) {
 		Preconditions.checkNotNull(playerID);
 		Preconditions.checkNotNull(data);
 		playerSpecificSettings.put(playerID, data);
@@ -92,7 +91,7 @@ public class DataConfig {
 	}
 	
 	public PlayerData getPlayerData(UUID playerID) {
-		return playerSpecificSettings.getOrDefault(playerID, PlayerData.getDefault());
+		return playerSpecificSettings.getOrDefault(playerID, new PlayerData());
 	}
 	
 	public List<MobEffectInstance> getLocationEffect(boolean isPositive, ResourceLocation biomeID) {

@@ -3,7 +3,7 @@ package harmonised.pmmo.setup;
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
-import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.autovalues.AutoValues;
@@ -77,8 +77,8 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(CoreParser.RELOADER);
-		event.addListener(CoreParser.DEFAULT_CONFIG);
+		event.addListener(CoreLoader.RELOADER);
+		event.addListener(CoreLoader.DEFAULT_CONFIG);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
@@ -87,7 +87,7 @@ public class CommonSetup {
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
-		event.addListener(CoreParser.OVERRIDE_CONFIG);
+		event.addListener(CoreLoader.OVERRIDE_CONFIG);
 	}
 	
 	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {
