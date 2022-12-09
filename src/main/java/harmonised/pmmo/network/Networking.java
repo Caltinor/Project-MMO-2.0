@@ -2,6 +2,7 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.NBTUtils;
 import harmonised.pmmo.network.clientpackets.CP_ApplyConfigRegistry;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
@@ -27,6 +28,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -132,16 +134,16 @@ public class Networking {
 	}
 	
 	public static void registerDataSyncPackets() {
-		CoreParser.RELOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_ClearData());
+		CoreParser.RELOADER.subscribeAsSyncable(INSTANCE, () -> new CP_ClearData());
 		ConfigurationRegistry.addSyncPacket(INSTANCE, false);
-		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ITEM, o)));
-		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.BLOCK, o)));
-		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o)));
-		CoreParser.BIOME_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Locations::new);
-		CoreParser.DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Locations::new);
-		CoreParser.ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(true, o));
-		CoreParser.EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(false, o));
-		CoreParser.PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
+		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.ITEM, o));
+		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.BLOCK, o));
+		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.ENTITY, o));
+		Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(ObjectType.BIOME, o));
+		Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(ObjectType.DIMENSION, o));
+		Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(ObjectType.ENCHANTMENT, o));
+		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(ObjectType.EFFECT, o));
+		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
 		ConfigurationRegistry.addSyncPacket(INSTANCE, true);
 		MinecraftForge.EVENT_BUS.addListener(NBTUtils.onDataReload(INSTANCE));
 	}

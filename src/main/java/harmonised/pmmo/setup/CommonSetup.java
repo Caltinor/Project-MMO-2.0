@@ -79,14 +79,14 @@ public class CommonSetup {
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
 		event.addListener(CoreParser.RELOADER);
 		event.addListener(CoreParser.DEFAULT_CONFIG);
-		event.addListener(CoreParser.ITEM_LOADER);
-		event.addListener(CoreParser.BLOCK_LOADER);
-		event.addListener(CoreParser.ENTITY_LOADER);
-		event.addListener(CoreParser.BIOME_LOADER);
-		event.addListener(CoreParser.DIMENSION_LOADER);
-		event.addListener(CoreParser.PLAYER_LOADER);
-		event.addListener(CoreParser.ENCHANTMENT_LOADER);
-		event.addListener(CoreParser.EFFECT_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
 		event.addListener(CoreParser.OVERRIDE_CONFIG);
 	}
 	

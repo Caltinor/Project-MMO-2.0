@@ -1,15 +1,14 @@
 package harmonised.pmmo.network.clientpackets;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import harmonised.pmmo.api.enums.ModifierDataType;
-import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.codecs.CodecMapLocation;
+import harmonised.pmmo.api.enums.ObjectType;
+import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -21,49 +20,24 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 
-public class CP_SyncData_Locations {
-	private final Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data;
+public record CP_SyncData_Locations(ObjectType type, Map<ResourceLocation, LocationData> data) {
 	
-	private static final Codec<Map<ResourceLocation, CodecMapLocation.LocationMapContainer>> MAPPER = 
-			Codec.unboundedMap(ResourceLocation.CODEC, CodecMapLocation.LocationMapContainer.CODEC);
-	
-	public CP_SyncData_Locations(Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data) {this.data = data;}
+	private static final Codec<CP_SyncData_Locations> MAPPER = RecordCodecBuilder.create(instance -> instance.group(
+			ObjectType.CODEC.fieldOf("type").forGetter(CP_SyncData_Locations::type),
+			Codec.unboundedMap(ResourceLocation.CODEC, LocationData.CODEC).fieldOf("data").forGetter(CP_SyncData_Locations::data)
+			).apply(instance, CP_SyncData_Locations::new));
+
 	public static CP_SyncData_Locations decode(FriendlyByteBuf buf) {
-		return new CP_SyncData_Locations(MAPPER.parse(NbtOps.INSTANCE, buf.readNbt(NbtAccounter.UNLIMITED)).result().orElse(new HashMap<>()));
+		return MAPPER.parse(NbtOps.INSTANCE, buf.readNbt(NbtAccounter.UNLIMITED)).result().orElse(new CP_SyncData_Locations(ObjectType.DIMENSION, new HashMap<>()));
 	}
 	public void encode(FriendlyByteBuf buf) {
-		buf.writeNbt((CompoundTag)(MAPPER.encodeStart(NbtOps.INSTANCE, data).result().orElse(new CompoundTag())));
-		MsLoggy.DEBUG.log(LOG_CODE.NETWORK, "Payload for {} is {}", this.getClass().getSimpleName(), buf.readableBytes());
+		buf.writeNbt((CompoundTag)(MAPPER.encodeStart(NbtOps.INSTANCE, this).result().orElse(new CompoundTag())));
+		MsLoggy.DEBUG.log(LOG_CODE.NETWORK, "Payload for {}/{} is {}", this.getClass().getSimpleName(), this.type().name(), buf.readableBytes());
 	}
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
-			finalizeLocationMaps(data);
+			Core.get(LogicalSide.CLIENT).getLoader().applyData(this.type(), this.data());
 		});
 		ctx.get().setPacketHandled(true);
-	}
-	
-	private static void finalizeLocationMaps(Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data) {
-		data.forEach((rl, lmc) -> {
-			List<ResourceLocation> tagValues = List.of(rl);
-			if (lmc.tagValues().size() > 0) tagValues = lmc.tagValues();
-			for (ResourceLocation tag : tagValues) {
-				for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : lmc.bonusMap().entrySet()) {
-					MsLoggy.INFO.log(LOG_CODE.DATA, "BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
-					Core.get(LogicalSide.CLIENT).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
-				}
-				for (Map.Entry<ResourceLocation, Map<String, Double>> mobMods : lmc.mobModifiers().entrySet()) {
-					MsLoggy.INFO.log(LOG_CODE.DATA, "MOB MODIFIERS: "+tag.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
-					Core.get(LogicalSide.CLIENT).getDataConfig().setMobModifierData(tag, mobMods.getKey(), mobMods.getValue());
-				}
-				MsLoggy.INFO.log(LOG_CODE.DATA, "POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
-				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(true, tag, lmc.positive());
-				MsLoggy.INFO.log(LOG_CODE.DATA, "NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
-				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(false, tag, lmc.negative());
-				MsLoggy.INFO.log(LOG_CODE.DATA, "VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
-				Core.get(LogicalSide.CLIENT).getDataConfig().setArrayData(tag, lmc.veinBlacklist());
-				MsLoggy.INFO.log(LOG_CODE.DATA, "TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
-				Core.get(LogicalSide.CLIENT).getSkillGates().setObjectSkillMap(ReqType.TRAVEL, tag, lmc.travelReq());
-			}
-		});
 	}
 }

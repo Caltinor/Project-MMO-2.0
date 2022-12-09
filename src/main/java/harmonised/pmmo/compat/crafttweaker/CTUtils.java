@@ -14,11 +14,13 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.codecs.CodecMapLocation.LocationMapContainer;
-import harmonised.pmmo.config.codecs.CodecMapObject.ObjectMapContainer;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
-import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.config.codecs.EnhancementsData;
+import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.ObjectData;
+import harmonised.pmmo.core.Core;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.LogicalSide;
 
 @ZenRegister
 @Document("mods/pmmo/CTUtils")
@@ -45,16 +47,16 @@ public class CTUtils implements IRuntimeAction{
 	@ZenCodeType.Method
 	public static void setReq(ObjectType objectType, ResourceLocation objectID, ReqType type, Map<String, Integer> requirements) {
 		switch (objectType) {
-		case ITEM -> {CoreParser.ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).reqs().put(type, requirements);}
-		case BLOCK -> {CoreParser.BLOCK_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).reqs().put(type, requirements);}
-		case ENTITY -> {CoreParser.ENTITY_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).reqs().put(type, requirements);}
+		case ITEM -> {Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).reqs().put(type, requirements);}
+		case BLOCK -> {Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).reqs().put(type, requirements);}
+		case ENTITY -> {Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).reqs().put(type, requirements);}
 		case DIMENSION -> {
-			var data = CoreParser.DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer());
+			var data = Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData());
 			data.travelReq().clear();
 			data.travelReq().putAll(requirements);
 		}
 		case BIOME -> {
-			var data = CoreParser.BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer());
+			var data = Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData());
 			data.travelReq().clear();
 			data.travelReq().putAll(requirements);
 		}
@@ -73,9 +75,9 @@ public class CTUtils implements IRuntimeAction{
 	 */
 	@ZenCodeType.Method
 	public static void setEnchantment(ResourceLocation enchantID, int enchantLevel, Map<String, Integer> reqs) {
-		var data = CoreParser.ENCHANTMENT_LOADER.getData().computeIfAbsent(enchantID, rl -> new HashMap<>());
-		data.clear();
-		data.put(enchantLevel, reqs);
+		var data = Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.getData().computeIfAbsent(enchantID, rl -> new EnhancementsData());
+		data.skillArray().clear();
+		data.skillArray().put(enchantLevel, reqs);
 	}
 	/**registers a configuration setting for experience that should be awarded
 	 * to a player for performing an action with/on a specific object.
@@ -93,9 +95,9 @@ public class CTUtils implements IRuntimeAction{
 	@ZenCodeType.Method
 	public static void setXpAward(ObjectType objectType, ResourceLocation objectID, EventType type, Map<String, Long> award) {
 		switch (objectType) {
-		case ITEM -> {CoreParser.ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).xpValues().put(type, award);}
-		case BLOCK -> {CoreParser.BLOCK_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).xpValues().put(type, award);}
-		case ENTITY -> {CoreParser.ENTITY_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).xpValues().put(type, award);}
+		case ITEM -> {Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).xpValues().put(type, award);}
+		case BLOCK -> {Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).xpValues().put(type, award);}
+		case ENTITY -> {Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).xpValues().put(type, award);}
 		default -> {}}
 	}
 	/**Registers a configuration setting for xp gained from active effects
@@ -110,9 +112,9 @@ public class CTUtils implements IRuntimeAction{
 	 */
 	@ZenCodeType.Method
 	public static void setEffectXp(ResourceLocation effectID, int effectLevel, Map<String, Integer> xpGains) {
-		var data = CoreParser.EFFECT_LOADER.getData().computeIfAbsent(effectID, rl -> new HashMap<>());
-		data.clear();
-		data.put(effectLevel, xpGains);
+		var data = Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.getData().computeIfAbsent(effectID, rl -> new EnhancementsData());
+		data.skillArray().clear();
+		data.skillArray().put(effectLevel, xpGains);
 	}
 	/**registers a configuration setting for bonuses to xp gains.
 	 * 
@@ -129,9 +131,9 @@ public class CTUtils implements IRuntimeAction{
 	@ZenCodeType.Method
 	public static void setBonus(ObjectType objectType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus) {
 		switch (objectType) {
-		case ITEM -> {CoreParser.ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).modifiers().put(type, bonus);}
-		case DIMENSION -> {CoreParser.DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer()).bonusMap().put(type, bonus);}
-		case BIOME -> {CoreParser.BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer()).bonusMap().put(type, bonus);}
+		case ITEM -> {Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).bonuses().put(type, bonus);}
+		case DIMENSION -> {Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData()).bonusMap().put(type, bonus);}
+		case BIOME -> {Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData()).bonusMap().put(type, bonus);}
 		default -> {}}
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
@@ -149,17 +151,17 @@ public class CTUtils implements IRuntimeAction{
 	public static void setNegativeEffect(ObjectType objectType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects) {
 		switch (objectType) {
 		case ITEM -> {
-			var data = CoreParser.ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer());
-			data.reqNegativeEffect().clear();
-			data.reqNegativeEffect().putAll(effects.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().toString(), entry -> entry.getValue())));
+			var data = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData());
+			data.negativeEffects().clear();
+			data.negativeEffects().putAll(effects.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().toString(), entry -> entry.getValue())));
 		}
 		case DIMENSION -> {
-			var data = CoreParser.DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer());
+			var data = Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData());
 			data.negative().clear();
 			data.negative().putAll(effects);
 		}
 		case BIOME -> {
-			var data = CoreParser.BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer());
+			var data = Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData());
 			data.negative().clear();
 			data.negative().putAll(effects);
 		}
@@ -181,12 +183,12 @@ public class CTUtils implements IRuntimeAction{
 	public static void setPositiveEffect(ObjectType objectType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects) {
 		switch (objectType) {
 		case DIMENSION -> {
-			var data = CoreParser.DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer());
+			var data = Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData());
 			data.positive().clear();
 			data.positive().putAll(effects);
 		}
 		case BIOME -> {
-			var data = CoreParser.BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer());
+			var data = Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData());
 			data.positive().clear();
 			data.positive().putAll(effects);
 		}
@@ -205,7 +207,7 @@ public class CTUtils implements IRuntimeAction{
 	 */
 	@ZenCodeType.Method
 	public static void setSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage) {
-		var data = CoreParser.ITEM_LOADER.getData().computeIfAbsent(item, rl -> new ObjectMapContainer());
+		var data = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(item, rl -> new ObjectData());
 		data.salvage().clear();
 		data.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().build())));
 	}
@@ -232,12 +234,12 @@ public class CTUtils implements IRuntimeAction{
 	public static void setMobModifier(ObjectType objectType, ResourceLocation locationID, ResourceLocation mobID, Map<String, Double> modifiers) {
 		switch (objectType) {
 		case DIMENSION -> {
-			var data = CoreParser.DIMENSION_LOADER.getData().computeIfAbsent(locationID, rl -> new LocationMapContainer()).mobModifiers();
+			var data = Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(locationID, rl -> new LocationData()).mobModifiers();
 			data.clear();
 			data.put(mobID, modifiers);
 		}
 		case BIOME -> {
-			var data = CoreParser.BIOME_LOADER.getData().computeIfAbsent(locationID, rl -> new LocationMapContainer()).mobModifiers();
+			var data = Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.getData().computeIfAbsent(locationID, rl -> new LocationData()).mobModifiers();
 			data.clear();
 			data.put(mobID, modifiers);
 		}

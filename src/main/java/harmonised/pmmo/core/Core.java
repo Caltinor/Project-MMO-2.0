@@ -20,6 +20,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
@@ -70,6 +71,7 @@ import net.minecraftforge.fml.LogicalSide;
  */
 public class Core {
 	private static final Map<LogicalSide, Function<LogicalSide, Core>> INSTANCES = Map.of(LogicalSide.CLIENT, Functions.memoize(Core::new), LogicalSide.SERVER, Functions.memoize(Core::new));
+	private final CoreParser loader;
 	private final XpUtils xp;
 	private final SkillGates gates;
 	private final DataConfig config;
@@ -85,6 +87,7 @@ public class Core {
 	private final LogicalSide side;
 	  
 	private Core(LogicalSide side) {
+		this.loader = new CoreParser();
 		this.xp = new XpUtils();
 	    this.gates = new SkillGates();
 	    this.config = new DataConfig();
@@ -124,6 +127,7 @@ public class Core {
 		}
 	}
 	  
+	public CoreParser getLoader() {return loader;}
 	public XpUtils getXpUtils() {return xp;}
 	public SkillGates getSkillGates() {return gates;}
 	public DataConfig getDataConfig() {return config;}
