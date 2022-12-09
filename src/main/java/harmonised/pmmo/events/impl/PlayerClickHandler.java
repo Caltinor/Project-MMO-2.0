@@ -9,6 +9,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -68,7 +69,10 @@ public class PlayerClickHandler {
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
 			event.setUseItem(Result.DENY);
 		}
-		if (event.getUseBlock().equals(Result.DENY)) return;
+		if (event.getUseBlock().equals(Result.DENY)) {
+			Messenger.sendDenialMsg(ReqType.INTERACT, player, event.getItemStack());
+			return;
+		}
 		
 		CompoundTag hookOutput = new CompoundTag();
 		if (serverSide) {
@@ -100,6 +104,7 @@ public class PlayerClickHandler {
 		if (!core.isActionPermitted(ReqType.USE, event.getItemStack(), player)) {
 			event.setCancellationResult(InteractionResult.FAIL);
 			event.setCanceled(true);
+			Messenger.sendDenialMsg(ReqType.USE, player, event.getItemStack());
 			return;
 		}
 		CompoundTag hookOutput = new CompoundTag();
