@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.DataSource;
@@ -62,7 +63,16 @@ public class CoreLoader {
 		default -> null;};
 	}
 	
+	public MergeableCodecDataManager<?> getLoader(ModifierDataType type) {
+		return switch(type) {
+		case WORN, HELD -> ITEM_LOADER;
+		case DIMENSION -> DIMENSION_LOADER;
+		case BIOME -> BIOME_LOADER;
+		default -> null;};
+	}
+	
 	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {
+		//TODO change this to reset locally
 		Core.get(LogicalSide.SERVER).resetDataForReload();
 	});
 	public static final ExecutableListener DEFAULT_CONFIG = new ExecutableListener(() -> {
@@ -75,21 +85,21 @@ public class CoreLoader {
 	});
 	
 	public final MergeableCodecDataManager<ObjectData> ITEM_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/items", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData);
+			"pmmo/items", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new);
 	public final MergeableCodecDataManager<ObjectData> BLOCK_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/blocks", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData);
+			"pmmo/blocks", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new);
 	public final MergeableCodecDataManager<ObjectData> ENTITY_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/entities", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData);
+			"pmmo/entities", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new);
 	public final MergeableCodecDataManager<LocationData> BIOME_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/biomes", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData);
+			"pmmo/biomes", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new);
 	public final MergeableCodecDataManager<LocationData> DIMENSION_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/dimensions", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData);
+			"pmmo/dimensions", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new);
 	public final MergeableCodecDataManager<PlayerData> PLAYER_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/players", DATA_LOGGER, PlayerData.CODEC, this::mergeLoaderData, this::printData);
+			"pmmo/players", DATA_LOGGER, PlayerData.CODEC, this::mergeLoaderData, this::printData, PlayerData::new);
 	public final MergeableCodecDataManager<EnhancementsData> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/enchantments", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData);
+			"pmmo/enchantments", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new);
 	public final MergeableCodecDataManager<EnhancementsData> EFFECT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/effects", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData);
+			"pmmo/effects", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new);
 	
 	
 	private <T extends DataSource<T>> T mergeLoaderData(final List<T> raws) {

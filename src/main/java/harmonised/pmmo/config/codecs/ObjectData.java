@@ -16,10 +16,12 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.core.NBTUtils;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.util.Functions;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 
@@ -39,6 +41,27 @@ public record ObjectData(
 		public ObjectData() {
 			this(false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), 
 					new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY);
+		}
+		
+		@Override
+		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
+			return nbtXpValues().get(type) == null
+					? xpValues().getOrDefault(type, new HashMap<>())
+					: NBTUtils.getExperienceAward(nbtXpValues().get(type), nbt);
+		}
+		@Override
+		public void setXpValues(EventType type, Map<String, Long> award) {
+			xpValues().put(type, award);
+		}
+		@Override
+		public Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt) {
+			return nbtBonuses().get(type) == null
+					? bonuses().getOrDefault(type, new HashMap<>())
+					: NBTUtils.getBonuses(nbtBonuses().get(type), nbt);
+			}
+		@Override
+		public void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {
+			bonuses().put(type, bonuses);
 		}
 
 		public static final Codec<ObjectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(

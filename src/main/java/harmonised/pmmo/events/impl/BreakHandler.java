@@ -72,7 +72,7 @@ public class BreakHandler {
 	}
 	
 	private static Map<String, Long> calculateXpAward(Core core, BreakEvent event, CompoundTag dataIn) {
-		Map<String, Long> outMap = core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getLevel(), event.getPlayer(), dataIn); 
+		Map<String, Long> outMap = core.getExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getLevel(), event.getPlayer(), dataIn); 
 		LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
 		IChunkData cap = chunk.getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
 		if (cap.playerMatchesPos(event.getPlayer(), event.getPos())) {

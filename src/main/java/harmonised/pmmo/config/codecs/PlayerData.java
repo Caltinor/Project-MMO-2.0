@@ -9,7 +9,10 @@ import java.util.function.BiConsumer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.util.Functions;
+import net.minecraft.nbt.CompoundTag;
 
 public record PlayerData(
 		boolean override,
@@ -17,6 +20,22 @@ public record PlayerData(
 		Map<String, Double> bonuses) implements DataSource<PlayerData>{
 	
 	public PlayerData() {this(false, false, new HashMap<>());}
+	
+	@Override
+	public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
+		return new HashMap<>();
+	}
+	@Override
+	public void setXpValues(EventType type, Map<String, Long> award) {}
+	@Override
+	public Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt) {
+		return bonuses();
+	}
+	@Override
+	public void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {
+		bonuses().clear();
+		bonuses().putAll(bonuses);
+	}
 	
 	public static final Codec<PlayerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(pd -> Optional.of(pd.override())),

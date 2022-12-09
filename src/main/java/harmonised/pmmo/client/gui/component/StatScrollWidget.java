@@ -17,6 +17,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
@@ -24,12 +25,15 @@ import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.config.codecs.DataSource;
+import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -314,7 +318,7 @@ public class StatScrollWidget extends ScrollPanel{
 				}),	core.getDataConfig().getItemEffect(RegistryUtil.getId(stack)), reqs, skillFilter);
 			addModifierSection((mod -> core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(stack), mod) ?
 						core.getTooltipRegistry().getBonusTooltipData(RegistryUtil.getId(stack), mod, stack) :
-						core.getXpUtils().getObjectModifierMap(mod, RegistryUtil.getId(stack))
+						core.getObjectModifierMap(ObjectType.ITEM, RegistryUtil.getId(stack), mod, TagUtils.stackTag(stack))
 				), modifiers, skillFilter);
 			if (includeSalvage)
 				addSalvageSection(core.getSalvageLogic().getSalvageData(RegistryUtil.getId(stack)));
@@ -327,7 +331,7 @@ public class StatScrollWidget extends ScrollPanel{
 	
 	@SuppressWarnings("resource")
 	private void populateBlockFromWorld(BlockPos block, EventType[] events, ReqType[] reqs) {
-		addEventSection((event -> core.getBlockExperienceAwards(event, block, Minecraft.getInstance().level, null, new CompoundTag())), events, "");
+		addEventSection((event -> core.getExperienceAwards(event, block, Minecraft.getInstance().level, null, new CompoundTag())), events, "");
 		addReqSection((reqType -> core.getReqMap(reqType, block, Minecraft.getInstance().level)), new ArrayList<>(), reqs, "");
 		addBlockVeinSection(core.getVeinData().getData(new ItemStack(Minecraft.getInstance().level.getBlockState(block).getBlock().asItem())));
 	}
@@ -342,7 +346,7 @@ public class StatScrollWidget extends ScrollPanel{
 			content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color.getColor(), Config.SECTION_HEADER_COLOR.get(), block));
 			addEventSection((event -> core.getTooltipRegistry().xpGainTooltipExists(id, event)
 					? Collections.singletonMap(PREDICATE_KEY, 0l)
-					: core.getXpUtils().getObjectExperienceMap(event, id))
+					: core.getObjectExperienceMap(ObjectType.BLOCK, id, event, new CompoundTag()))
 				, events, skillFilter);
 			addReqSection((reqType -> core.getPredicateRegistry().predicateExists(id, reqType)
 					? Collections.singletonMap(PREDICATE_KEY, 0)
@@ -376,8 +380,8 @@ public class StatScrollWidget extends ScrollPanel{
 			if (effects.size() > 1)
 				content.add(new TextElement(effect.getDisplayName(), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
-			for (int lvl = 0; lvl <= core.getXpUtils().getEffectHighestConfiguration(effect); lvl++) {
-				Map<String, Long> xpMap = core.getXpUtils().getEffectExperienceMap(new MobEffectInstance(effect, 30, lvl));
+			for (int lvl = 0; lvl <= getEffectHighestConfiguration(effect); lvl++) {
+				Map<String, Long> xpMap = core.getExperienceAwards(new MobEffectInstance(effect, 30, lvl), null, new CompoundTag());
 				if (!xpMap.isEmpty() && !xpMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 					holder.add(new TextElement(Component.literal(String.valueOf(lvl)), 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Long> map : xpMap.entrySet()) {
@@ -395,6 +399,11 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 	}
 	
+	private int getEffectHighestConfiguration(MobEffect effect) {
+		DataSource<?> data = core.getLoader().getLoader(ObjectType.EFFECT).getData().get(RegistryUtil.getId(effect));
+		return data == null ? 0 : ((EnhancementsData)data).skillArray().keySet().stream().max(Comparator.naturalOrder()).orElse(-1);
+	}
+	
 	private void populateLocation(List<ResourceLocation> locations, ReqType[] reqs, ModifierDataType[] modifiers, String skillFilter, boolean isBiome, boolean includeVein, boolean includeScaling) {
 		locations.forEach(loc -> {
 			int lengthBeforeProcessing = content.size() + 1;
@@ -403,7 +412,7 @@ public class StatScrollWidget extends ScrollPanel{
 			addReqSection((reqType -> core.getSkillGates().getObjectSkillMap(reqType, loc)), isBiome ? core.getDataConfig().getLocationEffect(false, loc) : new ArrayList<>(), reqs, skillFilter);
 			if (reqs.length > 0 && isBiome)
 				addReqEffectSection(core.getDataConfig().getLocationEffect(true, loc), false);
-			addModifierSection((mod -> core.getXpUtils().getObjectModifierMap(mod, loc)), modifiers, skillFilter);
+			addModifierSection((mod -> core.getObjectModifierMap(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, loc, mod, new CompoundTag())), modifiers, skillFilter);
 			if (includeVein)
 				addVeinBlacklistSection(loc);
 			if (includeScaling)

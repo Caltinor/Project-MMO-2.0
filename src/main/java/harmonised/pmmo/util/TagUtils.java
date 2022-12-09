@@ -9,6 +9,7 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.ShortTag;
+import net.minecraft.world.item.ItemStack;
 
 public class TagUtils {
 
@@ -45,5 +46,9 @@ public class TagUtils {
 				output.put(key, tag2.get(key));				
 		}
 		return output;
+	}
+	
+	public static CompoundTag stackTag(ItemStack stack) {
+		return stack.getTag() == null ? new CompoundTag() : stack.getTag();
 	}
 }

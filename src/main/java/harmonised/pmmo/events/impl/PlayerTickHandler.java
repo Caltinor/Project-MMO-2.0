@@ -9,12 +9,12 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.features.penalties.EffectManager;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -90,7 +90,7 @@ public class PlayerTickHandler {
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.player, eventHookOutput, core.getSide()));
 		if (serverSide) {
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
-					? core.getXpUtils().deserializeAwardMap(perkOutput.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
+					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
 					: new HashMap<>();
 			switch (type) {
 			case BREATH_CHANGE -> {

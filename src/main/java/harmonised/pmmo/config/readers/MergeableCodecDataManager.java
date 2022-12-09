@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
@@ -85,6 +86,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 	private final Function<List<T>, T> merger;
 	private final Consumer<Map<ResourceLocation, T>> finalizer;
 	private final Gson gson;
+	private final Supplier<T> defaultImpl;
 	
 	/**
 	 * Initialize a data manager with the given folder name, codec, and merger
@@ -100,9 +102,10 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
 	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
 	 */
-	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger, final Consumer<Map<ResourceLocation, T>> finalizer)
+	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
+			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl)
 	{
-		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON);
+		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON, defaultImpl);
 	}
 
 	
@@ -122,7 +125,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 	 * @param gson A GSON instance, allowing for user-defined deserializers. General not needed as the gson is only used to convert
 	 * raw json to a JsonElement, which the Codec then parses into a proper java object.
 	 */
-	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson)
+	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
+			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl)
 	{
 		this.folderName = folderName;
 		this.logger = logger;
@@ -130,11 +134,18 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 		this.merger = merger;
 		this.finalizer = finalizer;
 		this.gson = gson;
+		this.defaultImpl = defaultImpl;
 	}
 	
 	//TODO Add a method that scans the data for tags and then parses the tags for applying them to their respective final objects.
 	
 	public Map<ResourceLocation, T> getData() {return data;}
+	
+	public T getData(ResourceLocation id) {
+		return data.computeIfAbsent(id, res -> getGenericTypeInstance());
+	}
+	
+	public T getGenericTypeInstance() {return defaultImpl.get();}
 
 	/** Off-thread processing (can include reading files from hard drive) **/
 	@Override

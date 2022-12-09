@@ -51,7 +51,7 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.HIT_BLOCK, player, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.HIT_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.HIT_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
@@ -86,7 +86,7 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_BLOCK, player, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.ACTIVATE_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ACTIVATE_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}

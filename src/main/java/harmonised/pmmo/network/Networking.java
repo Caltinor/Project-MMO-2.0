@@ -3,7 +3,7 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.core.NBTUtils;
+import harmonised.pmmo.core.NBTUtilsLegacy;
 import harmonised.pmmo.network.clientpackets.CP_ApplyConfigRegistry;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.network.clientpackets.CP_RegisterNBT;
@@ -145,7 +145,7 @@ public class Networking {
 		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(ObjectType.EFFECT, o));
 		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
 		ConfigurationRegistry.addSyncPacket(INSTANCE, true);
-		MinecraftForge.EVENT_BUS.addListener(NBTUtils.onDataReload(INSTANCE));
+		MinecraftForge.EVENT_BUS.addListener(NBTUtilsLegacy.onDataReload(INSTANCE));
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {

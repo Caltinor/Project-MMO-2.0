@@ -10,13 +10,29 @@ import java.util.function.BiConsumer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.util.Functions;
+import net.minecraft.nbt.CompoundTag;
 
 public record EnhancementsData(
 		boolean override,
 		Map<Integer, Map<String, Integer>> skillArray) implements DataSource<EnhancementsData>{
 	
 	public EnhancementsData() {this(false, new HashMap<>());}
+	
+	@Override
+	public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
+		return new HashMap<>();
+	}
+	@Override
+	public void setXpValues(EventType type, Map<String, Long> award) {}
+	@Override
+	public Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt) {
+		return new HashMap<>();
+		}
+	@Override
+	public void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {}
 	
 	public static final Codec<EnhancementsData> CODEC = RecordCodecBuilder.create(instance -> instance.group( 
 			Codec.BOOL.optionalFieldOf("override").forGetter(cme -> Optional.of(cme.override())),
@@ -65,4 +81,9 @@ public record EnhancementsData(
 	public boolean isUnconfigured() {
 		return skillArray().isEmpty();
 	}
+
+
+	
+
+	
 }

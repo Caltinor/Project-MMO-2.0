@@ -19,6 +19,8 @@ import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.codecs.DataSource;
+import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.nbt.LogicEntry;
@@ -41,7 +43,6 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,7 +73,6 @@ import net.minecraftforge.fml.LogicalSide;
 public class Core {
 	private static final Map<LogicalSide, Function<LogicalSide, Core>> INSTANCES = Map.of(LogicalSide.CLIENT, Functions.memoize(Core::new), LogicalSide.SERVER, Functions.memoize(Core::new));
 	private final CoreLoader loader;
-	private final XpUtils xp;
 	private final SkillGates gates;
 	private final DataConfig config;
 	private final PredicateRegistry predicates;
@@ -81,14 +81,13 @@ public class Core {
 	private final PerkRegistry perks;
 	private final LevelRegistry lvlProvider;
 	private final SalvageLogic salvageLogic;
-	private final NBTUtils nbt;
+	private final NBTUtilsLegacy nbt;
 	private final VeinDataManager vein;
 	private final IDataStorage data;
 	private final LogicalSide side;
 	  
 	private Core(LogicalSide side) {
 		this.loader = new CoreLoader();
-		this.xp = new XpUtils();
 	    this.gates = new SkillGates();
 	    this.config = new DataConfig();
 	    this.predicates = new PredicateRegistry();
@@ -97,7 +96,7 @@ public class Core {
 	    this.perks = new PerkRegistry();
 	    this.lvlProvider = new LevelRegistry();
 	    this.salvageLogic = new SalvageLogic();
-	    this.nbt = new NBTUtils();
+	    this.nbt = new NBTUtilsLegacy();
 	    this.vein = new VeinDataManager();
 	    data = side.equals(LogicalSide.SERVER) ? new PmmoSavedData() : new DataMirror();
 	    this.side = side;
@@ -111,7 +110,6 @@ public class Core {
 	}
 	
 	public void resetDataForReload() {
-		xp.reset();
 		gates.reset();
 		config.reset();
 		salvageLogic.reset();
@@ -128,7 +126,6 @@ public class Core {
 	}
 	  
 	public CoreLoader getLoader() {return loader;}
-	public XpUtils getXpUtils() {return xp;}
 	public SkillGates getSkillGates() {return gates;}
 	public DataConfig getDataConfig() {return config;}
 	public PredicateRegistry getPredicateRegistry() {return predicates;}
@@ -137,12 +134,188 @@ public class Core {
 	public PerkRegistry getPerkRegistry() {return perks;}
 	public LevelRegistry getLevelProvider() {return lvlProvider;}
 	public SalvageLogic getSalvageLogic() {return salvageLogic;}
-	public NBTUtils getNBTUtils() {return nbt;}
+	public NBTUtilsLegacy getNBTUtils() {return nbt;}
 	public VeinDataManager getVeinData() {return vein;}
 	public IDataStorage getData() {return data.get();}
 	public IDataStorage getData(MinecraftServer server) {return data.get(server);}
 	public LogicalSide getSide() {return side;}
+	
+	//============================================================================================
+	/*			EXPERIENCE GAINING LOGIC
+	 * 
+	 * 		This section contains methods and logic for how players gain experience
+	*/
+	//============================================================================================
+	
+	public Map<String, Long> getObjectExperienceMap(ObjectType type, ResourceLocation objectID, EventType eventType, CompoundTag tag) {
+		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
+		return data != null ? data.getXpValues(eventType, tag) : new HashMap<>();
+	}
+	public Map<String, Double> getObjectModifierMap(ObjectType type, ResourceLocation objectID, ModifierDataType modifierType, CompoundTag tag) {
+		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
+		return data != null ? data.getBonuses(modifierType, tag) : new HashMap<>();
+	}
+	
+	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
+		ResourceLocation itemID = RegistryUtil.getId(stack);
+  
+		if (stack.getTag() != null)
+			dataIn.merge(stack.getTag());
+  
+		Map<String, Long> xpGains = new HashMap<>();
+		if (tooltips.xpGainTooltipExists(itemID, type))
+			xpGains = CoreUtils.mergeXpMapsWithSummateCondition(xpGains, tooltips.getItemXpGainTooltipData(itemID, type, stack));
+  
+		return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, dataIn);
+	}
+	public Map<String, Long> getExperienceAwards(MobEffectInstance mei, Player player, CompoundTag dataIn) {
+		ResourceLocation effectID = RegistryUtil.getId(mei.getEffect());
+		EnhancementsData data = (EnhancementsData) loader.getLoader(ObjectType.EFFECT).getData().get(effectID);
+		Map<String, Long> xpGains = new HashMap<>();
+		if (data != null) {
+			data.skillArray().getOrDefault(mei.getAmplifier()+1, new HashMap<>()).forEach((skill, value) -> {
+				xpGains.put(skill, value.longValue());
+			});
+		}			
+		return getCommonXpAwardData(xpGains, EventType.EFFECT, effectID, player, ObjectType.EFFECT, dataIn);
+	}
+	public Map<String, Long> getExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
+		ResourceLocation res = RegistryUtil.getId(level.getBlockState(pos));
+		BlockEntity tile = level.getBlockEntity(pos);
+		if (tile.getPersistentData() != null)
+			dataIn.merge(tile.getPersistentData());
+
+		Map<String, Long> xpGains = new HashMap<>();
+		if (tile != null && tooltips.xpGainTooltipExists(res, type))
+			xpGains = tooltips.getBlockXpGainTooltipData(res, type, tile);
+		return getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, dataIn);
+	}
+	public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
+		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
+		  
+		if (entity.getPersistentData() != null)
+			dataIn.merge(entity.getPersistentData());
+		  
+		Map<String, Long> xpGains = new HashMap<>();
+		if (tooltips.xpGainTooltipExists(entityID, type))
+			xpGains = tooltips.getEntityXpGainTooltipData(entityID, type, entity);
+		return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, dataIn);
+	}
+	
+	private Map<String, Long> getCommonXpAwardData(Map<String, Long> xpGains, EventType type, ResourceLocation objectID, Player player, ObjectType oType, CompoundTag tag) {
+		if (xpGains.isEmpty()) {
+			xpGains = CoreUtils.mergeXpMapsWithSummateCondition(				
+					tag.contains(APIUtils.SERIALIZED_AWARD_MAP) 
+						? CoreUtils.deserializeAwardMap(tag.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
+						: new HashMap<>(),
+					getObjectExperienceMap(oType, objectID, type, tag));
+			if (AutoValueConfig.ENABLE_AUTO_VALUES.get() && xpGains.isEmpty()) 
+				xpGains = AutoValues.getExperienceAward(type, objectID, oType);
+		}
+		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains: "+MsLoggy.mapToString(xpGains));
+		
+		if (player != null && !(player instanceof FakePlayer))
+			CoreUtils.applyXpModifiers(xpGains, getConsolidatedModifierMap(player));
+		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterMod): "+MsLoggy.mapToString(xpGains));
+		
+		CheeseTracker.applyAntiCheese(xpGains);
+		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(xpGains));
+		
+		CoreUtils.processSkillGroupXP(xpGains);
+		return xpGains;
+	}
+
+	public Map<String, Double> getConsolidatedModifierMap(Player player) {
+			Map<String, Double> mapOut = new HashMap<>();
+			if (player instanceof FakePlayer) return mapOut;
+			for (ModifierDataType type : ModifierDataType.values()) {
+				Map<String, Double> modifiers = new HashMap<>();
+				switch (type) {
+				case BIOME: {
+					ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
+					modifiers = getObjectModifierMap(ObjectType.BIOME, biomeID, type, new CompoundTag());
+					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+					}
+					break;
+				}
+				case HELD: {
+					ItemStack offhandStack = player.getOffhandItem();
+					ItemStack mainhandStack = player.getMainHandItem();
+					ResourceLocation offhandID = RegistryUtil.getId(offhandStack);
+					modifiers = tooltips.bonusTooltipExists(offhandID, type) 
+							? tooltips.getBonusTooltipData(offhandID, type, offhandStack) 
+							: getObjectModifierMap(ObjectType.ITEM, offhandID, type
+									, offhandStack.getTag() == null 
+										? new CompoundTag()
+										: offhandStack.getTag());
+					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+					}				
+					ResourceLocation mainhandID = RegistryUtil.getId(mainhandStack);				
+					modifiers = tooltips.bonusTooltipExists(mainhandID, type) ?
+							tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
+							getObjectModifierMap(ObjectType.ITEM, mainhandID, type
+									, mainhandStack.getTag() == null
+										? new CompoundTag()
+										: mainhandStack.getTag());
+					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+					}				
+					break;
+				}
+				case WORN: {
+					player.getArmorSlots().forEach((stack) -> {
+						ResourceLocation itemID = RegistryUtil.getId(stack);
+						Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, type) ?
+								tooltips.getBonusTooltipData(itemID, type, stack):
+								getObjectModifierMap(ObjectType.ITEM, itemID, type
+										, stack.getTag() == null
+											? new CompoundTag()
+											: stack.getTag());
+						for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
+							mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+						}
+					});
+					break;
+				}
+				case DIMENSION: {
+					ResourceLocation dimensionID = player.level.dimension().location();
+					modifiers = getObjectModifierMap(ObjectType.DIMENSION, dimensionID, type, new CompoundTag());
+					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+					}
+					break;
+				}
+				default: {}
+				}
+				
+			}
+			return config.getPlayerData(player.getUUID())
+					.mergeWithPlayerBonuses(processSkillGroupBonus(mapOut));
+		}
 	  
+	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i) instanceof FakePlayer) continue;
+			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
+				double modifier = Config.SKILL_MODIFIERS.get().containsKey(award.getKey()) 
+						? Config.SKILL_MODIFIERS.get().getOrDefault(award.getKey(), 1d) 
+						: Config.GLOBAL_MODIFIER.get();
+				long xpAward = (long)((double)award.getValue() * modifier);
+				if (players.size() > 1)
+					xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
+				getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
+			}
+		}
+	  }
+	
+	//============================================================================================
+	/*			REQUIREMENTS LOGIC
+	 * 
+	 * 		This section contains methods and logic for limiting player actions
+	*/
+	//============================================================================================
   	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
   		if (!Config.reqEnabled(reqType).get()) return true;
 		Map<String, Integer> requirements = gates.getObjectSkillMap(reqType, objectID);
@@ -251,19 +424,8 @@ public class Core {
 			}
 		});
 		return mapClone;
-	}
-	
-	public Map<String, Long> processSkillGroupXP(Map<String, Long> map) {
-		Map<String, Long> mapClone = new HashMap<>(map);
-		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillData.Builder.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
-				mapClone.remove(skill);
-				mapClone.putAll(data.getGroupXP(level));																					
-			}
-		});
-		return mapClone;
-	}
+	}	
+
 	
 	public Map<String, Double> processSkillGroupBonus(Map<String, Double> map) {
 		Map<String, Double> mapClone = new HashMap<>(map);
@@ -324,142 +486,7 @@ public class Core {
 			return new HashMap<>();
 	}
 	
-	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
-		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
-					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
-					: new HashMap<>();
-		  boolean tooltipsUsed = false;
-		  ResourceLocation itemID = RegistryUtil.getId(stack);
-		  if (tooltipsUsed = tooltips.xpGainTooltipExists(itemID, type))
-			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getItemXpGainTooltipData(itemID, type, stack));
-		  return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, tooltipsUsed);
-	  }
-	public Map<String, Long> getExperienceAwards(MobEffectInstance mei, Player player, CompoundTag dataIn) {
-		Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
-				? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
-				: new HashMap<>();
-		ResourceLocation effectID = RegistryUtil.getId(mei.getEffect());
-		xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, xp.getEffectExperienceMap(mei));
-		return getCommonXpAwardData(xpGains, EventType.EFFECT, effectID, player, ObjectType.EFFECT, true);
-	}
-	public Map<String, Long> getBlockExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
-		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
-					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
-					: new HashMap<>();
-		  BlockEntity tile = level.getBlockEntity(pos);
-		  ResourceLocation res = RegistryUtil.getId(level.getBlockState(pos));
-		  return tile == null ?
-				  xp.mergeXpMapsWithSummateCondition(xpGains, getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, false)) :
-				  xp.mergeXpMapsWithSummateCondition(xpGains, getExperienceAwards(xpGains, type, tile, player));
-	  }
-	private Map<String, Long> getExperienceAwards(Map<String, Long> xpGains, EventType type, BlockEntity tile, Player player) {		  
-			ResourceLocation blockID = RegistryUtil.getId(tile.getBlockState());
-			boolean tooltipsUsed = false;
-			if (tooltipsUsed = tooltips.xpGainTooltipExists(blockID, type)) 
-				xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getBlockXpGainTooltipData(blockID, type, tile));
-		  return getCommonXpAwardData(xpGains, type, blockID, player, ObjectType.BLOCK, tooltipsUsed);
-	  }	  
-	public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
-		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
-					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
-					: new HashMap<>();
-		  boolean tooltipsUsed = false;
-		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
-		  if (tooltipsUsed = tooltips.xpGainTooltipExists(entityID, type))
-			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getEntityXpGainTooltipData(entityID, type, entity));
-		  return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, tooltipsUsed);
-	  }
-	private Map<String, Long> getCommonXpAwardData(Map<String, Long> inMap, EventType type, ResourceLocation objectID, Player player, ObjectType oType, boolean predicateUsed) {
-		if (!predicateUsed) {
-			if (xp.hasXpGainObjectEntry(type, objectID)) 
-				inMap = xp.mergeXpMapsWithSummateCondition(inMap, xp.getObjectExperienceMap(type, objectID));
-			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) 
-				inMap = xp.mergeXpMapsWithSummateCondition(inMap, AutoValues.getExperienceAward(type, objectID, oType));
-		}
-		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains: "+MsLoggy.mapToString(inMap));
-		if (player != null && !(player instanceof FakePlayer))
-			inMap = xp.applyXpModifiers(player, inMap);
-		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterMod): "+MsLoggy.mapToString(inMap));
-		inMap = CheeseTracker.applyAntiCheese(inMap);
-		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(inMap));			
-		return processSkillGroupXP(inMap);
-	}
 
-	public Map<String, Double> getConsolidatedModifierMap(Player player) {
-			Map<String, Double> mapOut = new HashMap<>();
-			if (player instanceof FakePlayer) return mapOut;
-			for (ModifierDataType type : ModifierDataType.values()) {
-				Map<String, Double> modifiers = new HashMap<>();
-				switch (type) {
-				case BIOME: {
-					ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
-					modifiers = xp.getObjectModifierMap(type, biomeID);
-					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-					}
-					break;
-				}
-				case HELD: {
-					ItemStack offhandStack = player.getOffhandItem();
-					ItemStack mainhandStack = player.getMainHandItem();
-					ResourceLocation offhandID = RegistryUtil.getId(offhandStack);
-					modifiers = tooltips.bonusTooltipExists(offhandID, type) ?
-							tooltips.getBonusTooltipData(offhandID, type, offhandStack) :
-							xp.getObjectModifierMap(type, offhandID);
-					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-					}				
-					ResourceLocation mainhandID = RegistryUtil.getId(mainhandStack);				
-					modifiers = tooltips.bonusTooltipExists(mainhandID, type) ?
-							tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
-							xp.getObjectModifierMap(type, mainhandID);
-					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-					}				
-					break;
-				}
-				case WORN: {
-					player.getArmorSlots().forEach((stack) -> {
-						ResourceLocation itemID = RegistryUtil.getId(stack);
-						Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, type) ?
-								tooltips.getBonusTooltipData(itemID, type, stack):
-								xp.getObjectModifierMap(type, itemID);
-						for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
-							mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-						}
-					});
-					break;
-				}
-				case DIMENSION: {
-					ResourceLocation dimensionID = player.level.dimension().location();
-					modifiers = xp.getObjectModifierMap(type, dimensionID);
-					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-					}
-					break;
-				}
-				default: {}
-				}
-				
-			}
-			return config.getPlayerData(player.getUUID())
-					.mergeWithPlayerBonuses(processSkillGroupBonus(mapOut));
-		}
-	  
-	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i) instanceof FakePlayer) continue;
-			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
-				double modifier = Config.SKILL_MODIFIERS.get().containsKey(award.getKey()) 
-						? Config.SKILL_MODIFIERS.get().getOrDefault(award.getKey(), 1d) 
-						: Config.GLOBAL_MODIFIER.get();
-				long xpAward = (long)((double)award.getValue() * modifier);
-				if (players.size() > 1)
-					xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
-				getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
-			}
-		}
-	  }
 	  
 	/** This method registers applies PMMO's NBT logic to the values that are 
 	   *  configured.  This should be fired after data is loaded or else it will

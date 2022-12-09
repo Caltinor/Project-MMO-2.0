@@ -12,8 +12,10 @@ import java.util.function.BiConsumer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.util.Functions;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 
@@ -31,6 +33,21 @@ public record LocationData(
 			false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
 			new ArrayList<>(), new HashMap<>(), new HashMap<>());}
 
+	@Override
+	public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
+		return new HashMap<>();
+	}
+	@Override
+	public void setXpValues(EventType type, Map<String, Long> award) {}
+	@Override
+	public Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt) {
+		return bonusMap().getOrDefault(type, new HashMap<>());
+	}
+	@Override
+	public void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {
+		bonusMap().put(type, bonuses);
+	}
+	
 	public static final Codec<LocationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(ld -> Optional.of(ld.override())),
 			Codec.list(Codec.STRING).optionalFieldOf("isTagFor").forGetter(ld -> Optional.of(new ArrayList<>(ld.tagValues()))),
@@ -52,7 +69,7 @@ public record LocationData(
 						vein.orElse(new ArrayList<>()),
 						req.orElse(new HashMap<>()),
 						mobs.orElse(new HashMap<>()))
-			));
+			));	
 	
 	@Override
 	public LocationData combine(LocationData two) {

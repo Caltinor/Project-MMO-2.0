@@ -14,18 +14,19 @@ import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -158,7 +159,7 @@ public class APIUtils {
 		Preconditions.checkNotNull(level);
 		Preconditions.checkNotNull(pos);
 		Preconditions.checkNotNull(type);
-		return Core.get(level).getBlockExperienceAwards(type, pos, level, null, new CompoundTag());
+		return Core.get(level).getExperienceAwards(type, pos, level, null, new CompoundTag());
 	}
 	
 	/**Obtians a map of the skills and experience amount that would be awarded for the provided
@@ -255,8 +256,8 @@ public class APIUtils {
 	 * @param award a map of skills and experience values to be awarded
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerXpAward(ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getXpUtils().setObjectXpGainMap(type, objectID, award));
+	public static void registerXpAward(ObjectType oType, ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
+		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setXpValues(type, award));
 	}
 	/**registers a configuration setting for bonuses to xp gains.
 	 * 
@@ -265,8 +266,8 @@ public class APIUtils {
 	 * @param bonus a map of skills and multipliers (1.0 = no bonus)
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerBonus(ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getXpUtils().setObjectXpModifierMap(type, objectID, bonus));
+	public static void registerBonus(ObjectType oType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
+		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setBonuses(type, bonus));
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
 	 * if they attempt to wear/hold and item they are not skilled enough to use.
@@ -680,14 +681,10 @@ public class APIUtils {
 	 * @param awardMap a map of skillnames and xp values to be provided to the xp award logic 
 	 * @return a serialized {@link net.minecraft.nbt.ListTag ListTag} that can be deserialized consistently 
 	 */
-	public static ListTag serializeAwardMap(Map<String, Long> awardMap) {
-		ListTag out = new ListTag();
-		for (Map.Entry<String, Long> entry : awardMap.entrySet()) {
-			CompoundTag nbt = new CompoundTag();
-			nbt.putString(Reference.API_MAP_SERIALIZER_KEY, entry.getKey());
-			nbt.putLong(Reference.API_MAP_SERIALIZER_VALUE, entry.getValue());
-			out.add(nbt);
-		}
-		return out;
+	public static CompoundTag serializeAwardMap(Map<String, Long> awardMap) {
+		return (CompoundTag)CodecTypes.LONG_CODEC
+				.encodeStart(NbtOps.INSTANCE, awardMap)
+				.resultOrPartial(str -> MsLoggy.ERROR.log(LOG_CODE.API, "Error Serializing Award Map Via API: {}",str))
+				.orElse(new CompoundTag());
 	}
 }
