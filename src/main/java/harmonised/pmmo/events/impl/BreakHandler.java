@@ -31,7 +31,7 @@ public class BreakHandler {
 	public static void handle(BreakEvent event) {
 		Core core = Core.get(event.getPlayer().getLevel());
 		boolean serverSide = !event.getPlayer().level.isClientSide;
-		if (!core.isBlockActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
+		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.BREAK, event.getPlayer(), event.getState().getBlock().getName());
 			return;

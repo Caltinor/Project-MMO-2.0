@@ -46,7 +46,7 @@ public class BreakSpeedHandler {
 					new DetailsCache(event.getEntity().getMainHandItem(), event.getPosition().orElse(new BlockPos(0,0,0)), event.getState(), true, event.getNewSpeed()));
 			return;
 		}
-		if (!core.isBlockActionPermitted(ReqType.BREAK, event.getPosition().orElse(new BlockPos(0,0,0)), event.getEntity())) {
+		if (!core.isActionPermitted(ReqType.BREAK, event.getPosition().orElse(new BlockPos(0,0,0)), event.getEntity())) {
 			event.setCanceled(true);
 			event.getEntity().displayClientMessage(Component.literal("Unable to break this block"), false);
 			Messenger.sendDenialMsg(ReqType.BREAK, event.getEntity(), event.getState().getBlock().getName());

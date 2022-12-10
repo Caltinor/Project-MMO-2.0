@@ -29,6 +29,7 @@ public class ConfigurationRegistry {
 	 */
 	public static ConfigurationRegistry get() {return INSTANCE;}
 	
+	//TODO move default settings to the loader it corresponds to and skip the consumer
 	private Set<Consumer<Core>> defaultSettings = new HashSet<>();
 	private Set<Consumer<Core>> overrideSettings = new HashSet<>();
 	

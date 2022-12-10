@@ -242,10 +242,10 @@ public class APIUtils {
 	 * @param requirements a map of skills and levels needed to perform the action
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerRequirement(ResourceLocation objectID, ReqType type, Map<String, Integer> requirements, boolean asOverride) {
+	public static void registerRequirement(ObjectType oType, ResourceLocation objectID, ReqType type, Map<String, Integer> requirements, boolean asOverride) {
 		registerConfiguration(asOverride, core -> {
 				MsLoggy.INFO.log(LOG_CODE.DATA, "{} Requirement Configuration Applied: {}: {} {}", asOverride ? "Override": "Default", objectID.toString(), type.name(), MsLoggy.mapToString(requirements));
-				core.getSkillGates().setObjectSkillMap(type, objectID, requirements);
+				core.getLoader().getLoader(oType).getData(objectID).setReqs(type, requirements);
 			});
 	}
 	/**registers a configuration setting for experience that should be awarded

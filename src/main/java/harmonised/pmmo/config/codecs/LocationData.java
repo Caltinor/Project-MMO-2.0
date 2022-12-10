@@ -14,6 +14,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -47,6 +48,16 @@ public record LocationData(
 	public void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {
 		bonusMap().put(type, bonuses);
 	}
+	@Override
+	public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
+		return travelReq();
+	}
+
+	@Override
+	public void setReqs(ReqType type, Map<String, Integer> reqs) {
+		travelReq().clear();
+		travelReq().putAll(reqs);
+	}
 	
 	public static final Codec<LocationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(ld -> Optional.of(ld.override())),
@@ -63,12 +74,12 @@ public record LocationData(
 				new LocationData(
 						override.orElse(false),
 						new HashSet<>(tags.orElse(List.of())),
-						bonus.orElse(new HashMap<>()),
-						pos.orElse(new HashMap<>()),
-						neg.orElse(new HashMap<>()),
-						vein.orElse(new ArrayList<>()),
-						req.orElse(new HashMap<>()),
-						mobs.orElse(new HashMap<>()))
+						new HashMap<>(bonus.orElse(new HashMap<>())),
+						new HashMap<>(pos.orElse(new HashMap<>())),
+						new HashMap<>(neg.orElse(new HashMap<>())),
+						new ArrayList<>(vein.orElse(new ArrayList<>())),
+						new HashMap<>(req.orElse(new HashMap<>())),
+						new HashMap<>(mobs.orElse(new HashMap<>())))
 			));	
 	
 	@Override

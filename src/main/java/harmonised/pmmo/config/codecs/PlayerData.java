@@ -11,6 +11,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.nbt.CompoundTag;
 
@@ -36,6 +37,13 @@ public record PlayerData(
 		bonuses().clear();
 		bonuses().putAll(bonuses);
 	}
+	@Override
+	public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
+		return new HashMap<>();
+	}
+
+	@Override
+	public void setReqs(ReqType type, Map<String, Integer> reqs) {}
 	
 	public static final Codec<PlayerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(pd -> Optional.of(pd.override())),
@@ -45,7 +53,7 @@ public record PlayerData(
 				new PlayerData(
 						override.orElse(false),
 						reqIgnore.orElse(false),
-						bonus.orElse(new HashMap<>()))
+						new HashMap<>(bonus.orElse(new HashMap<>())))
 			));
 
 	@Override

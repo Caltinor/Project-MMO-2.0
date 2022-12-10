@@ -219,7 +219,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 	{
 		MsLoggy.INFO.log(LOG_CODE.DATA, "Beginning loading of data for data loader: {}", this.folderName);
 		// now that we're on the main thread, we can finalize the data
-		this.data = processedData;
+		//TODO data = defaultSettings.get();
+		this.data.putAll(processedData);
 		finalizer.accept(processedData);
 	}
 

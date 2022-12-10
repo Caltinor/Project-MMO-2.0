@@ -8,7 +8,6 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
@@ -41,8 +40,10 @@ import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,6 +55,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.LogicalSide;
@@ -73,7 +75,6 @@ import net.minecraftforge.fml.LogicalSide;
 public class Core {
 	private static final Map<LogicalSide, Function<LogicalSide, Core>> INSTANCES = Map.of(LogicalSide.CLIENT, Functions.memoize(Core::new), LogicalSide.SERVER, Functions.memoize(Core::new));
 	private final CoreLoader loader;
-	private final SkillGates gates;
 	private final DataConfig config;
 	private final PredicateRegistry predicates;
 	private final EventTriggerRegistry eventReg;
@@ -88,7 +89,6 @@ public class Core {
 	  
 	private Core(LogicalSide side) {
 		this.loader = new CoreLoader();
-	    this.gates = new SkillGates();
 	    this.config = new DataConfig();
 	    this.predicates = new PredicateRegistry();
 	    this.eventReg = new EventTriggerRegistry();
@@ -110,7 +110,6 @@ public class Core {
 	}
 	
 	public void resetDataForReload() {
-		gates.reset();
 		config.reset();
 		salvageLogic.reset();
 		tooltips.clearRegistry();
@@ -126,7 +125,6 @@ public class Core {
 	}
 	  
 	public CoreLoader getLoader() {return loader;}
-	public SkillGates getSkillGates() {return gates;}
 	public DataConfig getDataConfig() {return config;}
 	public PredicateRegistry getPredicateRegistry() {return predicates;}
 	public EventTriggerRegistry getEventTriggerRegistry() {return eventReg;}
@@ -147,24 +145,39 @@ public class Core {
 	*/
 	//============================================================================================
 	
-	public Map<String, Long> getObjectExperienceMap(ObjectType type, ResourceLocation objectID, EventType eventType, CompoundTag tag) {
-		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
-		return data != null ? data.getXpValues(eventType, tag) : new HashMap<>();
-	}
-	public Map<String, Double> getObjectModifierMap(ObjectType type, ResourceLocation objectID, ModifierDataType modifierType, CompoundTag tag) {
-		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
-		return data != null ? data.getBonuses(modifierType, tag) : new HashMap<>();
-	}
-	
+	/**<p>provides the supplied players the xp from the supplied map.  Global
+	 * modifiers are applied to the map at this stage.
+	 * <p>NOTE: internally, multiple players passed into the player argument
+	 * are assumed to be in a party.  As such the xp is divided among party
+	 * members according to the configuration</p>
+	 * 
+	 * 
+	 * @param players all party members
+	 * @param xpValues the map of pre-global-modifier xp awards
+	 */
+	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
+		new HashMap<>(xpValues).forEach((skill, value) -> {
+			xpValues.put(skill, (long)((double)value * Config.SKILL_MODIFIERS.get().getOrDefault(skill, Config.GLOBAL_MODIFIER.get())));
+		});
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i) instanceof FakePlayer) continue;
+			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
+				long xpAward = award.getValue();
+				if (players.size() > 1)
+					xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
+				getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
+			}
+		}
+	  }
+
+	//======DATA OBTAINING METHODS======
 	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
 		ResourceLocation itemID = RegistryUtil.getId(stack);
+		dataIn.merge(TagUtils.stackTag(stack));
   
-		if (stack.getTag() != null)
-			dataIn.merge(stack.getTag());
-  
-		Map<String, Long> xpGains = new HashMap<>();
-		if (tooltips.xpGainTooltipExists(itemID, type))
-			xpGains = CoreUtils.mergeXpMapsWithSummateCondition(xpGains, tooltips.getItemXpGainTooltipData(itemID, type, stack));
+		Map<String, Long> xpGains = tooltips.xpGainTooltipExists(itemID, type)
+			? tooltips.getItemXpGainTooltipData(itemID, type, stack)
+			: new HashMap<>();
   
 		return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, dataIn);
 	}
@@ -182,23 +195,22 @@ public class Core {
 	public Map<String, Long> getExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
 		ResourceLocation res = RegistryUtil.getId(level.getBlockState(pos));
 		BlockEntity tile = level.getBlockEntity(pos);
-		if (tile.getPersistentData() != null)
-			dataIn.merge(tile.getPersistentData());
+		dataIn.merge(TagUtils.tileTag(tile));
 
-		Map<String, Long> xpGains = new HashMap<>();
-		if (tile != null && tooltips.xpGainTooltipExists(res, type))
-			xpGains = tooltips.getBlockXpGainTooltipData(res, type, tile);
+		Map<String, Long> xpGains = (tile != null && tooltips.xpGainTooltipExists(res, type))
+			? tooltips.getBlockXpGainTooltipData(res, type, tile)
+			: new HashMap<>();
+		
 		return getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, dataIn);
 	}
 	public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
 		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
+		dataIn.merge(TagUtils.entityTag(entity));
 		  
-		if (entity.getPersistentData() != null)
-			dataIn.merge(entity.getPersistentData());
-		  
-		Map<String, Long> xpGains = new HashMap<>();
-		if (tooltips.xpGainTooltipExists(entityID, type))
-			xpGains = tooltips.getEntityXpGainTooltipData(entityID, type, entity);
+		Map<String, Long> xpGains = tooltips.xpGainTooltipExists(entityID, type)
+			? tooltips.getEntityXpGainTooltipData(entityID, type, entity)
+			: new HashMap<>();
+		
 		return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, dataIn);
 	}
 	
@@ -209,8 +221,10 @@ public class Core {
 						? CoreUtils.deserializeAwardMap(tag.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
 						: new HashMap<>(),
 					getObjectExperienceMap(oType, objectID, type, tag));
+			
 			if (AutoValueConfig.ENABLE_AUTO_VALUES.get() && xpGains.isEmpty()) 
 				xpGains = AutoValues.getExperienceAward(type, objectID, oType);
+			
 		}
 		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains: "+MsLoggy.mapToString(xpGains));
 		
@@ -223,92 +237,86 @@ public class Core {
 		
 		CoreUtils.processSkillGroupXP(xpGains);
 		return xpGains;
+	}	
+	
+	//======DATA OBTAINING UTILITY METHODS=======
+	public Map<String, Long> getObjectExperienceMap(ObjectType type, ResourceLocation objectID, EventType eventType, CompoundTag tag) {
+		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
+		return new HashMap<>(data != null ? data.getXpValues(eventType, tag) : new HashMap<>());
 	}
-
+	public Map<String, Double> getObjectModifierMap(ObjectType type, ResourceLocation objectID, ModifierDataType modifierType, CompoundTag tag) {
+		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
+		return new HashMap<>(data != null ? data.getBonuses(modifierType, tag) : new HashMap<>());
+	}
 	public Map<String, Double> getConsolidatedModifierMap(Player player) {
-			Map<String, Double> mapOut = new HashMap<>();
-			if (player instanceof FakePlayer) return mapOut;
-			for (ModifierDataType type : ModifierDataType.values()) {
-				Map<String, Double> modifiers = new HashMap<>();
-				switch (type) {
-				case BIOME: {
-					ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
-					modifiers = getObjectModifierMap(ObjectType.BIOME, biomeID, type, new CompoundTag());
-					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+		Map<String, Double> mapOut = new HashMap<>();
+		if (player instanceof FakePlayer) return mapOut;
+		for (ModifierDataType type : ModifierDataType.values()) {
+			Map<String, Double> modifiers = new HashMap<>();
+			switch (type) {
+			case BIOME: {
+				ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
+				modifiers = getObjectModifierMap(ObjectType.BIOME, biomeID, type, new CompoundTag());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+				}
+				break;
+			}
+			case HELD: {
+				ItemStack offhandStack = player.getOffhandItem();
+				ItemStack mainhandStack = player.getMainHandItem();
+				ResourceLocation offhandID = RegistryUtil.getId(offhandStack);
+				modifiers = tooltips.bonusTooltipExists(offhandID, type) 
+						? tooltips.getBonusTooltipData(offhandID, type, offhandStack) 
+						: getObjectModifierMap(ObjectType.ITEM, offhandID, type
+								, offhandStack.getTag() == null 
+									? new CompoundTag()
+									: offhandStack.getTag());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+				}				
+				ResourceLocation mainhandID = RegistryUtil.getId(mainhandStack);				
+				modifiers = tooltips.bonusTooltipExists(mainhandID, type) ?
+						tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
+						getObjectModifierMap(ObjectType.ITEM, mainhandID, type
+								, mainhandStack.getTag() == null
+									? new CompoundTag()
+									: mainhandStack.getTag());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+				}				
+				break;
+			}
+			case WORN: {
+				player.getArmorSlots().forEach((stack) -> {
+					ResourceLocation itemID = RegistryUtil.getId(stack);
+					Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, type) ?
+							tooltips.getBonusTooltipData(itemID, type, stack):
+							getObjectModifierMap(ObjectType.ITEM, itemID, type
+									, stack.getTag() == null
+										? new CompoundTag()
+										: stack.getTag());
+					for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
 						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 					}
-					break;
-				}
-				case HELD: {
-					ItemStack offhandStack = player.getOffhandItem();
-					ItemStack mainhandStack = player.getMainHandItem();
-					ResourceLocation offhandID = RegistryUtil.getId(offhandStack);
-					modifiers = tooltips.bonusTooltipExists(offhandID, type) 
-							? tooltips.getBonusTooltipData(offhandID, type, offhandStack) 
-							: getObjectModifierMap(ObjectType.ITEM, offhandID, type
-									, offhandStack.getTag() == null 
-										? new CompoundTag()
-										: offhandStack.getTag());
-					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-					}				
-					ResourceLocation mainhandID = RegistryUtil.getId(mainhandStack);				
-					modifiers = tooltips.bonusTooltipExists(mainhandID, type) ?
-							tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
-							getObjectModifierMap(ObjectType.ITEM, mainhandID, type
-									, mainhandStack.getTag() == null
-										? new CompoundTag()
-										: mainhandStack.getTag());
-					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-					}				
-					break;
-				}
-				case WORN: {
-					player.getArmorSlots().forEach((stack) -> {
-						ResourceLocation itemID = RegistryUtil.getId(stack);
-						Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, type) ?
-								tooltips.getBonusTooltipData(itemID, type, stack):
-								getObjectModifierMap(ObjectType.ITEM, itemID, type
-										, stack.getTag() == null
-											? new CompoundTag()
-											: stack.getTag());
-						for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
-							mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-						}
-					});
-					break;
-				}
-				case DIMENSION: {
-					ResourceLocation dimensionID = player.level.dimension().location();
-					modifiers = getObjectModifierMap(ObjectType.DIMENSION, dimensionID, type, new CompoundTag());
-					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-					}
-					break;
-				}
-				default: {}
-				}
-				
+				});
+				break;
 			}
-			return config.getPlayerData(player.getUUID())
-					.mergeWithPlayerBonuses(processSkillGroupBonus(mapOut));
-		}
-	  
-	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i) instanceof FakePlayer) continue;
-			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
-				double modifier = Config.SKILL_MODIFIERS.get().containsKey(award.getKey()) 
-						? Config.SKILL_MODIFIERS.get().getOrDefault(award.getKey(), 1d) 
-						: Config.GLOBAL_MODIFIER.get();
-				long xpAward = (long)((double)award.getValue() * modifier);
-				if (players.size() > 1)
-					xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
-				getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
+			case DIMENSION: {
+				ResourceLocation dimensionID = player.level.dimension().location();
+				modifiers = getObjectModifierMap(ObjectType.DIMENSION, dimensionID, type, new CompoundTag());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+				}
+				break;
 			}
+			default: {}
+			}
+			
 		}
-	  }
+		return config.getPlayerData(player.getUUID())
+				.mergeWithPlayerBonuses(CoreUtils.processSkillGroupBonus(mapOut));
+	}
 	
 	//============================================================================================
 	/*			REQUIREMENTS LOGIC
@@ -316,19 +324,49 @@ public class Core {
 	 * 		This section contains methods and logic for limiting player actions
 	*/
 	//============================================================================================
-  	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
-  		if (!Config.reqEnabled(reqType).get()) return true;
-		Map<String, Integer> requirements = gates.getObjectSkillMap(reqType, objectID);
-		return doesPlayerMeetReq(playerID, requirements);	
-	}	
+  	
+	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
+		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
+		ResourceLocation itemID = RegistryUtil.getId(stack.getItem());
+		
+		return (predicates.predicateExists(itemID, type)) 
+			? predicates.checkPredicateReq(player, stack, type)
+			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, stack));
+	}
+	public boolean isActionPermitted(ReqType type, BlockPos pos, Player player) {
+		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
+		BlockEntity tile = player.getLevel().getBlockEntity(pos);
+		ResourceLocation res = RegistryUtil.getId(player.getLevel().getBlockState(pos));
+		return tile != null && predicates.predicateExists(res, type)
+			? predicates.checkPredicateReq(player, tile, type)
+			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, pos, player.level));
+	}
+	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
+		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
+		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
+		return (predicates.predicateExists(entityID, type))
+			? predicates.checkPredicateReq(player, entity, type)
+			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, entity));
+	}
+	public boolean isActionPermitted(ReqType type, Biome biome, Player player) {
+		if (type != ReqType.TRAVEL) return false;
+		return doesPlayerMeetReq(player.getUUID(), 
+				getObjectSkillMap(ObjectType.BIOME, RegistryUtil.getId(biome), type, new CompoundTag()));
+	}
+	public boolean isActionPermitted(ReqType type, ResourceKey<Level> dimension, Player player) {
+		if (type != ReqType.TRAVEL) return false;
+		return doesPlayerMeetReq(player.getUUID(),
+				getObjectSkillMap(ObjectType.DIMENSION, dimension.location(), type, new CompoundTag()));
+	}
+	
 	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Integer> requirements) {
-		//convert skill group ids into raw skills 
-		processSkillGroupReqs(requirements);
+		//convert skill groups which do not use total levels into constituent skills
+		CoreUtils.processSkillGroupReqs(requirements);
 		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
 			int skillLevel = getData().getPlayerSkillLevel(req.getKey(), playerID);
-			if (SkillsConfig.SKILLS.get().getOrDefault(req.getKey(), SkillData.Builder.getDefault()).isSkillGroup()) {
+			if (SkillsConfig.SKILLS.get().getOrDefault(req.getKey(), SkillData.Builder.getDefault()).isSkillGroup()) {	
 				SkillData skillData = SkillsConfig.SKILLS.get().get(req.getKey());
-				if (skillData.useTotalLevels().orElse(false)) {
+				if (skillData.getUseTotalLevels()) {
 					int total = skillData.getGroup().keySet().stream().map(skill-> getData().getPlayerSkillLevel(skill, playerID)).collect(Collectors.summingInt(Integer::intValue));
 					if (req.getValue() > total) {
 						return false;
@@ -339,154 +377,71 @@ public class Core {
 				return false;
 		}
 		return true;
-	}	
-	public boolean doesPlayerMeetEnchantmentReq(ItemStack stack, UUID playerID) {
-		if (!Config.reqEnabled(ReqType.USE_ENCHANTMENT).get()) return true;
-		for (Map.Entry<Enchantment, Integer> enchantment : EnchantmentHelper.getEnchantments(stack).entrySet()) {
-			if (!doesPlayerMeetReq(playerID, gates.getEnchantmentReqs(RegistryUtil.getId(enchantment.getKey()), enchantment.getValue())))
-				return false;
-		}	
-		return true;
 	}
-	  
-	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
-		  if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
-		  ResourceLocation itemID = RegistryUtil.getId(stack.getItem());
-		  	if (Config.reqEnabled(ReqType.USE_ENCHANTMENT).get())
-		  		if (!doesPlayerMeetEnchantmentReq(stack, player.getUUID()))
-		  			return false;
-		  	if (predicates.predicateExists(itemID, type)) 
-				return predicates.checkPredicateReq(player, stack, type);
-			else if (gates.doesObjectReqExist(type, itemID))
-				return doesPlayerMeetReq(type, itemID, player.getUUID());
-			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
-				Map<String, Integer> requirements = AutoValues.getRequirements(type, itemID, ObjectType.ITEM);
-				return doesPlayerMeetReq(player.getUUID(), requirements);
-			}
-		  return true;
-	  }
-
-	public boolean isBlockActionPermitted(ReqType type, BlockPos pos, Player player) {
-		  if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
-		  BlockEntity tile = player.getLevel().getBlockEntity(pos);
-		  ResourceLocation res = RegistryUtil.getId(player.getLevel().getBlockState(pos));
-		  return tile == null ?
-				  isActionPermitted_BypassPredicates(type, res, player, ObjectType.BLOCK) :
-				  isActionPermitted(type, tile, player);
-	  }
-	private boolean isActionPermitted_BypassPredicates(ReqType type, ResourceLocation res, Player player, ObjectType oType) {
-		  if (gates.doesObjectReqExist(type, res))
-				return doesPlayerMeetReq(type, res, player.getUUID());
-		  else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
-			  Map<String, Integer> requirements = AutoValues.getRequirements(type, res, oType);
-			  return doesPlayerMeetReq(player.getUUID(), requirements);
-		  }
-		  return true;
-	  }
-
-	private boolean isActionPermitted(ReqType type, BlockEntity tile, Player player) {
-		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
-		  Preconditions.checkNotNull(tile);
-		  ResourceLocation blockID = RegistryUtil.getId(tile.getBlockState());
-			if (predicates.predicateExists(blockID, type)) {
-				return predicates.checkPredicateReq(player, tile, type);
-			}
-			else if (gates.doesObjectReqExist(type, blockID))
-				return doesPlayerMeetReq(type, blockID, player.getUUID());
-			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
-				Map<String, Integer> requirements = AutoValues.getRequirements(type, blockID, ObjectType.BLOCK);
-				return doesPlayerMeetReq(player.getUUID(), requirements);
-			}
-		  return true;
-	  }
-	private ResourceLocation playerID = new ResourceLocation("player");
-	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
-		  if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
-		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
-			if (predicates.predicateExists(entityID, type)) 
-				return predicates.checkPredicateReq(player, entity, type);
-			else if (gates.doesObjectReqExist(type, entityID))
-				return doesPlayerMeetReq(type, entityID, player.getUUID());
-			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
-				Map<String, Integer> requirements = AutoValues.getRequirements(type, entityID, ObjectType.ENTITY);
-				return doesPlayerMeetReq(player.getUUID(), requirements);
-			}
-		  return true;
-	  }
+	//======DATA OBTAINING METHODS=======
 	
-	private Map<String, Integer> processSkillGroupReqs(Map<String, Integer> map) {
-		Map<String, Integer> mapClone = new HashMap<>(map);
-		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillData.Builder.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup() && !data.getUseTotalLevels()) {
-				mapClone.remove(skill);
-				mapClone.putAll(data.getGroupReq(level));																					
-			}
-		});
-		return mapClone;
-	}	
-
-	
-	public Map<String, Double> processSkillGroupBonus(Map<String, Double> map) {
-		Map<String, Double> mapClone = new HashMap<>(map);
-		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillData.Builder.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
-				mapClone.remove(skill);
-				mapClone.putAll(data.getGroupBonus(level));																					
-			}
-		});
-		return mapClone;
+	//======DATA OBTAINING METHODS=======
+	public Map<String, Integer> getObjectSkillMap(ObjectType type, ResourceLocation objectID, ReqType reqType, CompoundTag nbt) {
+		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
+		return new HashMap<>(data != null ? data.getReqs(reqType, nbt) : new HashMap<>()); 
 	}
-	
+	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
+		ResourceLocation itemID = RegistryUtil.getId(stack);
+		Map<String, Integer> reqMap = (reqType == ReqType.USE_ENCHANTMENT)
+			? getEnchantReqs(stack)
+			: new HashMap<>();
+		if (tooltips.requirementTooltipExists(itemID, reqType)) 
+			tooltips.getItemRequirementTooltipData(itemID, reqType, stack).forEach((skill, lvl) -> {
+				reqMap.merge(skill, lvl, (o, n) -> o > n ? o : n);
+			});;
+		return getCommonReqData(reqMap, ObjectType.ITEM, itemID, reqType, TagUtils.stackTag(stack));
+	}
 	public Map<String, Integer> getEnchantReqs(ItemStack stack) {
 		Map<String, Integer> outMap = new HashMap<>();
-		if (!stack.isEnchanted()) return outMap;
-		for (Map.Entry<Enchantment, Integer> enchant : EnchantmentHelper.getEnchantments(stack).entrySet()) {
-			gates.getEnchantmentReqs(RegistryUtil.getId(enchant.getKey()), enchant.getValue()).forEach((skill, level) -> {
+		if (!stack.isEnchanted() || !Config.reqEnabled(ReqType.USE_ENCHANTMENT).get()) return outMap;
+		for (Map.Entry<Enchantment, Integer> enchant : EnchantmentHelper.getEnchantments(stack).entrySet()) {			
+			getEnchantmentReqs(RegistryUtil.getId(enchant.getKey()), enchant.getValue()).forEach((skill, level) -> {
 				outMap.merge(skill, level, (o, n) -> o > n ? o : n);
 			});
 		}
 		return outMap;
 	}
-	
-	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
-		ResourceLocation itemID = RegistryUtil.getId(stack);
-		if (tooltips.requirementTooltipExists(itemID, reqType)) 
-			return processSkillGroupReqs(tooltips.getItemRequirementTooltipData(itemID, reqType, stack));
-		else if (gates.doesObjectReqExist(reqType, itemID))
-			return processSkillGroupReqs(gates.getObjectSkillMap(reqType, itemID));
-		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
-			return processSkillGroupReqs(AutoValues.getRequirements(reqType, itemID, ObjectType.ITEM));
-		else
-			return new HashMap<>();
-	}	
 	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
 		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? new ResourceLocation("minecraft:player") : RegistryUtil.getId(entity);
-		if (tooltips.requirementTooltipExists(entityID, reqType))
-			return processSkillGroupReqs(tooltips.getEntityRequirementTooltipData(entityID, reqType, entity));
-		else if (gates.doesObjectReqExist(reqType, entityID))
-			return processSkillGroupReqs(gates.getObjectSkillMap(reqType, entityID));
-		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
-			return processSkillGroupReqs(AutoValues.getRequirements(reqType, entityID, ObjectType.ENTITY));
-		else
-			return new HashMap<>();
+		Map<String, Integer> reqMap = tooltips.requirementTooltipExists(entityID, reqType)
+			? tooltips.getEntityRequirementTooltipData(entityID, reqType, entity)
+			: new HashMap<>();
+		return getCommonReqData(reqMap, ObjectType.ENTITY, entityID, reqType, TagUtils.entityTag(entity));
 	}	
-
 	public Map<String, Integer> getReqMap(ReqType reqType, BlockPos pos, Level level) {
 		BlockEntity tile = level.getBlockEntity(pos);
 		ResourceLocation blockID = RegistryUtil.getId(level.getBlockState(pos));
-		if (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
-			return processSkillGroupReqs(tooltips.getBlockRequirementTooltipData(blockID, reqType, tile));
-		else if (gates.doesObjectReqExist(reqType, blockID))
-			return processSkillGroupReqs(gates.getObjectSkillMap(reqType, blockID));
-		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
-			return processSkillGroupReqs(AutoValues.getRequirements(reqType, blockID, ObjectType.BLOCK));
-		else
-			return new HashMap<>();
+		Map<String, Integer> reqMap = (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
+			? tooltips.getBlockRequirementTooltipData(blockID, reqType, tile)
+			: new HashMap<>();
+		return getCommonReqData(reqMap, ObjectType.BLOCK, blockID, reqType, TagUtils.tileTag(tile));
+	}
+	
+	private Map<String, Integer> getCommonReqData(Map<String, Integer> reqsIn, ObjectType oType, ResourceLocation objectID, ReqType type, CompoundTag tag) {
+		if (reqsIn.isEmpty()) {
+			reqsIn = getObjectSkillMap(oType, objectID, type, tag);
+			if (AutoValueConfig.ENABLE_AUTO_VALUES.get() && reqsIn.isEmpty())
+				reqsIn = AutoValues.getRequirements(type, objectID, oType);
+		}
+		return CoreUtils.processSkillGroupReqs(reqsIn);
+	}
+	//======DATA OBTAINING UTILITY METHODS======
+	private ResourceLocation playerID = new ResourceLocation("player");
+	
+	public Map<String, Integer> getEnchantmentReqs(ResourceLocation enchantID, int enchantLvl) {
+		return ((EnhancementsData) loader.getLoader(ObjectType.ENCHANTMENT).getData(enchantID)).skillArray().getOrDefault(enchantLvl, new HashMap<>());
 	}
 	
 
+
+	
+
+	
 	  
 	/** This method registers applies PMMO's NBT logic to the values that are 
 	   *  configured.  This should be fired after data is loaded or else it will

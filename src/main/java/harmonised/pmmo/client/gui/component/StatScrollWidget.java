@@ -350,7 +350,7 @@ public class StatScrollWidget extends ScrollPanel{
 				, events, skillFilter);
 			addReqSection((reqType -> core.getPredicateRegistry().predicateExists(id, reqType)
 					? Collections.singletonMap(PREDICATE_KEY, 0)
-					: core.getSkillGates().getObjectSkillMap(reqType, id))
+					: core.getObjectSkillMap(ObjectType.BLOCK, id, reqType, new CompoundTag()))
 				, new ArrayList<>()
 				, reqs, skillFilter);
 			if (includeVein)
@@ -409,7 +409,7 @@ public class StatScrollWidget extends ScrollPanel{
 			int lengthBeforeProcessing = content.size() + 1;
 			if (locations.size() > 1)
 				content.add(new TextElement(Component.literal(loc.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-			addReqSection((reqType -> core.getSkillGates().getObjectSkillMap(reqType, loc)), isBiome ? core.getDataConfig().getLocationEffect(false, loc) : new ArrayList<>(), reqs, skillFilter);
+			addReqSection((reqType -> core.getObjectSkillMap(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, loc, reqType, new CompoundTag())), isBiome ? core.getDataConfig().getLocationEffect(false, loc) : new ArrayList<>(), reqs, skillFilter);
 			if (reqs.length > 0 && isBiome)
 				addReqEffectSection(core.getDataConfig().getLocationEffect(true, loc), false);
 			addModifierSection((mod -> core.getObjectModifierMap(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, loc, mod, new CompoundTag())), modifiers, skillFilter);
@@ -429,7 +429,7 @@ public class StatScrollWidget extends ScrollPanel{
 				content.add(new TextElement(Component.literal(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
 			for (int i = 0; i <= ForgeRegistries.ENCHANTMENTS.getValue(ench).getMaxLevel(); i++) {
-				Map<String, Integer> reqMap = core.getSkillGates().getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
+				Map<String, Integer> reqMap = core.getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 					holder.add(new TextElement(Component.literal(String.valueOf(i)), 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {

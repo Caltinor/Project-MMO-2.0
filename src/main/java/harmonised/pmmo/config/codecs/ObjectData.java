@@ -63,6 +63,17 @@ public record ObjectData(
 		public void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {
 			bonuses().put(type, bonuses);
 		}
+		@Override
+		public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
+			return nbtReqs().get(type) == null
+					? reqs().getOrDefault(type, new HashMap<>())
+					: NBTUtils.getRequirement(nbtReqs().get(type), nbt);
+		}
+
+		@Override
+		public void setReqs(ReqType type, Map<String, Integer> reqs) {
+			reqs().put(type, reqs);
+		}
 
 		public static final Codec<ObjectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),
@@ -94,14 +105,14 @@ public record ObjectData(
 					new ObjectData(
 						override.orElse(false),
 						new HashSet<>(tags.orElse(List.of())),
-						reqs.orElse(new HashMap<>()),
-						nbtreqs.orElse(new HashMap<>()),
-						effects.orElse(new HashMap<>()),
-						xp.orElse(new HashMap<>()),
-						nbtXp.orElse(new HashMap<>()),
-						bonus.orElse(new HashMap<>()),
-						nbtbonus.orElse(new HashMap<>()),
-						salvage.orElse(new HashMap<>()),
+						new HashMap<>(reqs.orElse(new HashMap<>())),
+						new HashMap<>(nbtreqs.orElse(new HashMap<>())),
+						new HashMap<>(effects.orElse(new HashMap<>())),
+						new HashMap<>(xp.orElse(new HashMap<>())),
+						new HashMap<>(nbtXp.orElse(new HashMap<>())),
+						new HashMap<>(bonus.orElse(new HashMap<>())),
+						new HashMap<>(nbtbonus.orElse(new HashMap<>())),
+						new HashMap<>(salvage.orElse(new HashMap<>())),
 						vein.orElse(VeinData.EMPTY))
 				));
 		

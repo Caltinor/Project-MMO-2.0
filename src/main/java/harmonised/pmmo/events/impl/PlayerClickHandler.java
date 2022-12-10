@@ -28,7 +28,7 @@ public class PlayerClickHandler {
 		Core core = Core.get(player.level);
 		boolean serverSide = !player.level.isClientSide;
 		
-		if (!core.isBlockActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
+		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
 			event.setUseBlock(Result.DENY);
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
@@ -62,7 +62,7 @@ public class PlayerClickHandler {
 		Core core = Core.get(player.level);
 		boolean serverSide = !player.level.isClientSide;
 		
-		if (!core.isBlockActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
+		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
 			event.setUseBlock(Result.DENY);
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {

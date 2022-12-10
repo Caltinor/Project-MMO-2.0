@@ -7,19 +7,19 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.RegistryUtil;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biome;
 
 public class EffectManager {
 
 	public static void applyEffects(Core core, Player player) {
 		//BIOME/DIM Efects
-		ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).unwrapKey().get().location();
-		boolean meetsReq = core.doesPlayerMeetReq(ReqType.TRAVEL, biomeID, player.getUUID());
-		for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(meetsReq, biomeID)) {
+		Biome biome = player.level.getBiome(player.blockPosition()).get();
+		boolean meetsReq = core.isActionPermitted(ReqType.TRAVEL, biome, player);
+		for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(meetsReq, RegistryUtil.getId(biome))) {
 			if (!player.hasEffect(mei.getEffect()) || player.getEffect(mei.getEffect()).getDuration() < 10)
 				player.addEffect(mei);
 		}

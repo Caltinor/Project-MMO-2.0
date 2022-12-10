@@ -22,10 +22,10 @@ public class CoreUtils {
 	 * @return a deserialized map
 	 */
 	public static Map<String, Long> deserializeAwardMap(CompoundTag nbt) {
-		return CodecTypes.LONG_CODEC
+		return new HashMap<>(CodecTypes.LONG_CODEC
 				.parse(NbtOps.INSTANCE, nbt)
 				.resultOrPartial(str -> MsLoggy.ERROR.log(LOG_CODE.API, "Error Deserializing Award Map from API: {}",str))
-				.orElse(new HashMap<>());
+				.orElse(new HashMap<>()));
 	}
 	
 	/**If the configuration to summate maps is true, this function will combine
@@ -48,11 +48,13 @@ public class CoreUtils {
 	 * 
 	 * @param mapIn the original award map
 	 * @param modifiers the bonuses
+	 * @return the modified map (optional usage)
 	 */
-	public static void applyXpModifiers(Map<String, Long> mapIn, Map<String, Double> modifiers) {
+	public static Map<String, Long> applyXpModifiers(Map<String, Long> mapIn, Map<String, Double> modifiers) {
 		modifiers.forEach((skill, modifier) -> {
 			mapIn.computeIfPresent(skill, (key, xp) -> (long)(xp * modifier));
 		});
+		return mapIn;
 	}
 	
 	/**converts any skills in the map which are skill groups
@@ -60,8 +62,9 @@ public class CoreUtils {
 	 * with the existing map members
 	 * 
 	 * @param map the base xp map to be modified
+	 * @return the modified map (optional usage)
 	 */
-	public static void processSkillGroupXP(Map<String, Long> map) {
+	public static Map<String, Long> processSkillGroupXP(Map<String, Long> map) {
 		new HashMap<>(map).forEach((skill, level) -> {
 			SkillData data = SkillData.Builder.getDefault();
 			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
@@ -71,5 +74,44 @@ public class CoreUtils {
 				});																					
 			}
 		});
+		return  map;
+	}
+	
+	/**converts any skills in the map which are skill groups
+	 * into their respective member skills and merges the values
+	 * with the existing map members
+	 * 
+	 * @param map the base req map to be modified
+	 * @return the modified map (optional usage)
+	 */
+	public static Map<String, Integer> processSkillGroupReqs(Map<String, Integer> map) {
+		new HashMap<>(map).forEach((skill, level) -> {
+			SkillData data;
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup() && !data.getUseTotalLevels()) {
+				map.remove(skill);
+				data.getGroupReq(level).forEach((member, xp) -> {
+					map.merge(member, level, (o, n) -> o + n);
+				});																						
+			}
+		});
+		return map;
+	}
+	
+/**converts any skills in the map which are skill groups
+	 * into their respective member skills and merges the values
+	 * with the existing map members
+	 * 
+	 * @param map the base bonus map to be modified
+	 * @return the base req map to be modified
+	 */
+	public static Map<String, Double> processSkillGroupBonus(Map<String, Double> map) {
+		new HashMap<>(map).forEach((skill, level) -> {
+			SkillData data = SkillData.Builder.getDefault();
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
+				map.remove(skill);
+				map.putAll(data.getGroupBonus(level));																					
+			}
+		});
+		return map;
 	}
 }

@@ -23,7 +23,7 @@ public class PlaceHandler {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		Core core = Core.get(event.getEntity().getLevel());
-		if (!core.isBlockActionPermitted(ReqType.PLACE, event.getPos(), player)) {
+		if (!core.isActionPermitted(ReqType.PLACE, event.getPos(), player)) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.PLACE, player, event.getPlacedBlock().getBlock().getName());
 			return;

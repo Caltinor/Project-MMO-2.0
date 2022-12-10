@@ -2,7 +2,7 @@ package harmonised.pmmo.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,22 +24,22 @@ import net.minecraft.nbt.CompoundTag;
 public class NBTUtils {
 	
 	public static Map<String, Long> getExperienceAward(List<LogicEntry> logic, CompoundTag nbt) {
-		return translateToLong(evaluateEntries(nbt, new HashSet<>(logic)));
+		return translateToLong(evaluateEntries(nbt, new LinkedHashSet<>(logic)));
 	}
 	
 	public static Map<String, Integer> getRequirement(List<LogicEntry> logic, CompoundTag nbt) {
-		return translateToInt(evaluateEntries(nbt, new HashSet<>(logic)));
+		return translateToInt(evaluateEntries(nbt, new LinkedHashSet<>(logic)));
 	}
 	
 	public static Map<String, Double> getBonuses(List<LogicEntry> logic, CompoundTag nbt) {
-		return evaluateEntries(nbt, new HashSet<>(logic));
+		return evaluateEntries(nbt, new LinkedHashSet<>(logic));
 	}
 	
 	private static record LogicTier (BehaviorToPrevious behavior, boolean isSummative, List<Result> results) {}
 	
 	private static final Map<Pair<CompoundTag, Set<LogicEntry>>, Map<String, Double>> cache = new HashMap<>();
 	
-	private static Map<String, Double> evaluateEntries(CompoundTag nbt, Set<LogicEntry> logic) {		
+	private static Map<String, Double> evaluateEntries(CompoundTag nbt, LinkedHashSet<LogicEntry> logic) {		
 		Map<String, Double> output = new HashMap<>();
 		//cancels the evaluation if NBT has no data or never existed
 		if (nbt == null || nbt.isEmpty()) return output;
@@ -71,33 +71,28 @@ public class NBTUtils {
 		//this section iterates through the logical tiers and processes the relational attribute
 		for (int i = 0; i < logicSequence.size(); i++) {
 			switch (logicSequence.get(i).behavior()) {
-			case SUB_FROM: {
+			case SUB_FROM -> {
 				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
 					if (output.getOrDefault(value.getKey(), 0d) - value.getValue() <= 0) output.remove(value.getKey());
 					else 
 						output.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue - newValue);
 				}
-				break;
 			}
-			case HIGHEST: {
+			case HIGHEST -> {
 				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
 					output.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue > newValue ? oldValue : newValue);
 				}
-				break;
 			}
-			case REPLACE: {
+			case REPLACE -> {
 				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
 					output.put(value.getKey(), value.getValue());
 				}
-				break;
 			}
-			case ADD_TO: default:{
+			default -> { //Includes ADD_TO by default
 				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
 					output.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue + newValue);
 				}
-				break;
-			}
-			}
+			}}
 		}
 		cache.put(Pair.of(nbt, logic), output);
 		return output;

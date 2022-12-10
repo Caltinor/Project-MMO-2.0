@@ -12,6 +12,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.nbt.CompoundTag;
 
@@ -33,6 +34,12 @@ public record EnhancementsData(
 		}
 	@Override
 	public void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {}
+	@Override
+	public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
+		return new HashMap<>();
+	}
+	@Override
+	public void setReqs(ReqType type, Map<String, Integer> reqs) {}
 	
 	public static final Codec<EnhancementsData> CODEC = RecordCodecBuilder.create(instance -> instance.group( 
 			Codec.BOOL.optionalFieldOf("override").forGetter(cme -> Optional.of(cme.override())),
@@ -49,7 +56,7 @@ public record EnhancementsData(
 				}
 				return dataOut;
 			}).fieldOf("levels").forGetter(EnhancementsData::skillArray)
-		).apply(instance, (o, map) -> new EnhancementsData(o.orElse(false), map)));
+		).apply(instance, (o, map) -> new EnhancementsData(o.orElse(false), new HashMap<>(map))));
 	
 	@Override
 	public EnhancementsData combine(EnhancementsData two) {
