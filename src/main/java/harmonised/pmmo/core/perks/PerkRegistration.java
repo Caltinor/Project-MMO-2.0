@@ -75,7 +75,7 @@ public class PerkRegistration {
 				PerkSide.SERVER);
 		
 		APIUtils.registerPerk(rl("breath"),
-				TagBuilder.start().withLong(APIUtils.COOLDOWN, 300l).withDouble(APIUtils.PER_LEVEL, 1d).build(),
+				TagBuilder.start().withLong(APIUtils.COOLDOWN, 30000l).withDouble(APIUtils.PER_LEVEL, 1d).build(),
 				FeaturePerks.BREATH_CHECK,
 				FeaturePerks.BREATH, 
 				NONE, 
@@ -108,7 +108,7 @@ public class PerkRegistration {
 				PerkSide.SERVER);
 		APIUtils.registerPerk(rl("regen"),
 				TagBuilder.start()
-					.withLong(APIUtils.COOLDOWN, 300l)
+					.withLong(APIUtils.COOLDOWN, 30000l)
 					.withInt(APIUtils.DURATION, 1)
 					.withDouble(APIUtils.PER_LEVEL, 0.02).build(),
 				PASS_TRUE,
