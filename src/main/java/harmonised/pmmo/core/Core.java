@@ -27,7 +27,6 @@ import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.party.PartyUtils;
-import harmonised.pmmo.features.veinmining.VeinDataManager;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.registry.EventTriggerRegistry;
@@ -56,6 +55,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.LogicalSide;
@@ -82,7 +82,6 @@ public class Core {
 	private final PerkRegistry perks;
 	private final LevelRegistry lvlProvider;
 	private final NBTUtilsLegacy nbt;
-	private final VeinDataManager vein;
 	private final IDataStorage data;
 	private final LogicalSide side;
 	  
@@ -94,7 +93,6 @@ public class Core {
 	    this.perks = new PerkRegistry();
 	    this.lvlProvider = new LevelRegistry();
 	    this.nbt = new NBTUtilsLegacy();
-	    this.vein = new VeinDataManager();
 	    data = side.equals(LogicalSide.SERVER) ? new PmmoSavedData() : new DataMirror();
 	    this.side = side;
 	}
@@ -109,7 +107,6 @@ public class Core {
 	public void resetDataForReload() {
 		tooltips.clearRegistry();
 		nbt.reset();
-		vein.reset();
 		if (side.equals(LogicalSide.SERVER)) {
 			PmmoSavedData dataBackend = (PmmoSavedData) data;
 			if (dataBackend.getServer() == null) return;
@@ -126,7 +123,6 @@ public class Core {
 	public PerkRegistry getPerkRegistry() {return perks;}
 	public LevelRegistry getLevelProvider() {return lvlProvider;}
 	public NBTUtilsLegacy getNBTUtils() {return nbt;}
-	public VeinDataManager getVeinData() {return vein;}
 	public IDataStorage getData() {return data.get();}
 	public IDataStorage getData(MinecraftServer server) {return data.get(server);}
 	public LogicalSide getSide() {return side;}
@@ -431,9 +427,9 @@ public class Core {
 	}
 	
 	//============================================================================================
-	/*			SALVAGE LOGIC
+	/*			FEATURE LOGIC
 	 * 
-	 * 		This section contains methods for interacting with salvage data
+	 * 		This section contains methods for interacting with various features
 	*/ 
 	//============================================================================================
 	public void getSalvage(ServerPlayer player) {
@@ -479,7 +475,24 @@ public class Core {
 		awardXP(party, xpAwards);
 	}
 	
+	/**stores the designated block marked for each player*/
+	private final Map<UUID, BlockPos> markers = new HashMap<>();
+	
+	public void setMarkedPos(UUID playerID, BlockPos pos) {
+		BlockPos finalPos = pos.equals(getMarkedPos(playerID)) ? BlockPos.ZERO : pos;
+		markers.put(playerID, finalPos);
+		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Player "+playerID.toString()+" Marked Pos: "+finalPos.toString());
+	}
+	
+	public BlockPos getMarkedPos(UUID playerID) {
+		return markers.getOrDefault(playerID, BlockPos.ZERO);
+	}
 
+	public int getBlockConsume(Block block) {
+		return loader.BLOCK_LOADER.getData(RegistryUtil.getId(block)).veinData().consumeAmount.orElseGet(() -> {
+			return Config.REQUIRE_SETTING.get() ? -1 : Config.DEFAULT_CONSUME.get();
+		});
+	}
 	
 	  
 	/** This method registers applies PMMO's NBT logic to the values that are 

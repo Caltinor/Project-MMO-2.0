@@ -10,49 +10,13 @@ import java.util.function.BiConsumer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.api.enums.ModifierDataType;
-import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Functions;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 
 public record EnhancementsData(
 		boolean override,
 		Map<Integer, Map<String, Integer>> skillArray) implements DataSource<EnhancementsData>{
 	
 	public EnhancementsData() {this(false, new HashMap<>());}
-	
-	@Override
-	public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
-		return new HashMap<>();
-	}
-	@Override
-	public void setXpValues(EventType type, Map<String, Long> award) {}
-	@Override
-	public Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt) {
-		return new HashMap<>();
-		}
-	@Override
-	public void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {}
-	@Override
-	public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
-		return new HashMap<>();
-	}
-	@Override
-	public void setReqs(ReqType type, Map<String, Integer> reqs) {}
-	@Override
-	public Map<ResourceLocation, Integer> getNegativeEffect() {
-		return new HashMap<>();
-	}
-	@Override
-	public void setNegativeEffects(Map<ResourceLocation, Integer> neg) {}
-	@Override
-	public Map<ResourceLocation, Integer> getPositiveEffect() {
-		return new HashMap<>();
-	}
-	@Override
-	public void setPositiveEffects(Map<ResourceLocation, Integer> pos) {}
 	
 	public static final Codec<EnhancementsData> CODEC = RecordCodecBuilder.create(instance -> instance.group( 
 			Codec.BOOL.optionalFieldOf("override").forGetter(cme -> Optional.of(cme.override())),

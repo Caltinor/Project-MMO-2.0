@@ -1,5 +1,6 @@
 package harmonised.pmmo.config.codecs;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import harmonised.pmmo.api.enums.EventType;
@@ -28,14 +29,24 @@ public interface DataSource<T> {
 	public boolean isUnconfigured();
 	
 	//======SHARED METHODS=========================
-	public Map<String, Long> getXpValues(EventType type, CompoundTag nbt);
-	public void setXpValues(EventType type, Map<String, Long> award);
-	public Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt);
-	public void setBonuses(ModifierDataType type, Map<String, Double> bonuses);
-	public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt);
-	public void setReqs(ReqType type, Map<String, Integer> reqs);
-	public Map<ResourceLocation, Integer> getNegativeEffect();
-	public void setNegativeEffects(Map<ResourceLocation, Integer> neg);
-	public Map<ResourceLocation, Integer> getPositiveEffect();
-	public void setPositiveEffects(Map<ResourceLocation, Integer> pos);
+	public default Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
+		return new HashMap<>();
+	};
+	public default void setXpValues(EventType type, Map<String, Long> award) {}
+	public default Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt) {
+		return new HashMap<>();
+	};
+	public default void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {}
+	public default Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
+		return new HashMap<>();
+	};
+	public default void setReqs(ReqType type, Map<String, Integer> reqs) {}
+	public default Map<ResourceLocation, Integer> getNegativeEffect() {
+		return new HashMap<>();
+	};
+	public default void setNegativeEffects(Map<ResourceLocation, Integer> neg) {}
+	public default Map<ResourceLocation, Integer> getPositiveEffect() {
+		return new HashMap<>();
+	};
+	public default void setPositiveEffects(Map<ResourceLocation, Integer> pos) {}
 }

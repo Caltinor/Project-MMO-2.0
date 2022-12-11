@@ -61,7 +61,7 @@ public class BreakHandler {
 			chunk.setUnsaved(true);
 		}
 		//==============Process Vein Miner Logic==================
-		if (core.getVeinData().getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
+		if (core.getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			if (event.getPlayer().getMainHandItem().getItem() instanceof TieredItem) {
 				TieredItem item = (TieredItem) event.getPlayer().getMainHandItem().getItem();

@@ -21,8 +21,9 @@ import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.config.codecs.ObjectData;
+import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -320,9 +321,14 @@ public class APIUtils {
 	 * @param consumeAmount optional value (only used on blocks) for vein consumed when broken
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerVeinData(ResourceLocation objectID, Optional<Integer> chargeCap, Optional<Double> chargeRate, Optional<Integer> consumeAmount, boolean asOverride) {
+	public static void registerVeinData(ObjectType oType, ResourceLocation objectID, Optional<Integer> chargeCap, Optional<Double> chargeRate, Optional<Integer> consumeAmount, boolean asOverride) {
+		if (oType != ObjectType.ITEM && oType != ObjectType.BLOCK)
+			return;
 		VeinData data = new VeinData(chargeCap, chargeRate, consumeAmount);
-		registerConfiguration(asOverride, core -> core.getVeinData().setVeinData(objectID, data));
+		registerConfiguration(asOverride, core -> {
+			ObjectData loader = (ObjectData) core.getLoader().getLoader(oType).getData(objectID);
+			loader.veinData().replaceWith(data);
+		});
 	}
 	
 	public static final String MOB_HEALTH = "health";

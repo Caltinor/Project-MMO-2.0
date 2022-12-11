@@ -12,7 +12,6 @@ import java.util.function.BiConsumer;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Functions;
@@ -34,12 +33,6 @@ public record LocationData(
 			false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
 			new ArrayList<>(), new HashMap<>(), new HashMap<>());}
 
-	@Override
-	public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
-		return new HashMap<>();
-	}
-	@Override
-	public void setXpValues(EventType type, Map<String, Long> award) {}
 	@Override
 	public Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt) {
 		return bonusMap().getOrDefault(type, new HashMap<>());

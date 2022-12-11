@@ -19,7 +19,6 @@ import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.core.NBTUtils;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
-import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -83,12 +82,6 @@ public record ObjectData(
 			negativeEffects().clear();
 			negativeEffects().putAll(neg);
 		}
-		@Override
-		public Map<ResourceLocation, Integer> getPositiveEffect() {
-			return new HashMap<>();
-		}
-		@Override
-		public void setPositiveEffects(Map<ResourceLocation, Integer> pos) {}
 
 		public static final Codec<ObjectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),
@@ -182,7 +175,7 @@ public record ObjectData(
 					});
 				});
 				
-				combinedVein[0] = combinedVein[0].combineWith(t.veinData());
+				combinedVein[0] = combinedVein[0].combine(t.veinData());
 			};
 			Functions.biPermutation(this, two, this.override(), two.override(), (o, t) -> {
 				tagValues.addAll(o.tagValues().isEmpty() ? t.tagValues() : o.tagValues());

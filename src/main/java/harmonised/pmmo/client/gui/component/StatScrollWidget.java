@@ -29,9 +29,9 @@ import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.PlayerData;
+import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
-import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
@@ -327,7 +327,7 @@ public class StatScrollWidget extends ScrollPanel{
 			if (includeSalvage)
 				addSalvageSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).salvage());
 			if (includeVein)
-				addItemVeinSection(core.getVeinData().getData(stack), stack.getItem() instanceof BlockItem);
+				addItemVeinSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData(), stack.getItem() instanceof BlockItem);
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		}
@@ -337,7 +337,7 @@ public class StatScrollWidget extends ScrollPanel{
 	private void populateBlockFromWorld(BlockPos block, EventType[] events, ReqType[] reqs) {
 		addEventSection((event -> core.getExperienceAwards(event, block, Minecraft.getInstance().level, null, new CompoundTag())), events, "");
 		addReqSection((reqType -> core.getReqMap(reqType, block, Minecraft.getInstance().level)), new ArrayList<>(), reqs, "");
-		addBlockVeinSection(core.getVeinData().getData(new ItemStack(Minecraft.getInstance().level.getBlockState(block).getBlock().asItem())));
+		addBlockVeinSection(core.getLoader().BLOCK_LOADER.getData(RegistryUtil.getId(Minecraft.getInstance().level.getBlockState(block))).veinData());
 	}
 	
 	private static final String PREDICATE_KEY = "usesPredicate";
@@ -358,7 +358,7 @@ public class StatScrollWidget extends ScrollPanel{
 				, new ArrayList<>()
 				, reqs, skillFilter);
 			if (includeVein)
-				addBlockVeinSection(core.getVeinData().getData(stack));
+				addBlockVeinSection(core.getLoader().BLOCK_LOADER.getData(RegistryUtil.getId(block)).veinData());
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		}
@@ -600,17 +600,17 @@ public class StatScrollWidget extends ScrollPanel{
 	private void addItemVeinSection(VeinData veinData, boolean isBlockItem) {
 		if (!veinData.equals(VeinData.EMPTY)) {
 			content.add(new TextElement(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-			content.add(new TextElement(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate().orElse(0d)), step(1), 0xFFFFFF, false, 0));
-			content.add(new TextElement(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap().orElse(0)), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate.orElse(0d)), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap.orElse(0)), step(1), 0xFFFFFF, false, 0));
 			if (isBlockItem)
-				content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+				content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.get()), step(1), 0xFFFFFF, false, 0));
 		}
 	}
 	
 	private void addBlockVeinSection(VeinData veinData) {
-		if (veinData.consumeAmount() != VeinData.EMPTY.consumeAmount()) {
+		if (veinData.consumeAmount != VeinData.EMPTY.consumeAmount) {
 			content.add(new TextElement(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-			content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.get()), step(1), 0xFFFFFF, false, 0));
 		}
 	}
 	

@@ -13,9 +13,9 @@ import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
-import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.setup.datagen.LangProvider.Translation;
@@ -77,8 +77,8 @@ public class TooltipHandler {
             Map<String, Double> wornItemXpBoost = core.getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN, TagUtils.stackTag(stack));
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
             VeinData veinData = VeinData.EMPTY;
-            if (core.getVeinData().hasData(stack)) {
-            	veinData = core.getVeinData().getData(stack);
+            if (!core.getLoader().ITEM_LOADER.getData(itemID).veinData().isUnconfigured()) {
+            	veinData = core.getLoader().ITEM_LOADER.getData(itemID).veinData();
             }
             
             //=====================REQUIREMENTS=========================
@@ -128,11 +128,11 @@ public class TooltipHandler {
 	private static void addVeinTooltip(Translation header, ItemTooltipEvent event, VeinData data, boolean isBlockItem) {
 		event.getToolTip().add(header.asComponent());
 		event.getToolTip().add(LangProvider.VEIN_DATA.asComponent(
-				data.chargeCap().orElse(0),
-				DP.dp(data.chargeRate().orElse(0d) * 20d)));
+				data.chargeCap.orElse(0),
+				DP.dp(data.chargeRate.orElse(0d) * 20d)));
 		if (isBlockItem) {
 			event.getToolTip().add(LangProvider.VEIN_BREAK.asComponent(
-					data.consumeAmount().orElse(0)));
+					data.consumeAmount.orElse(0)));
 		}
 	}
 	
