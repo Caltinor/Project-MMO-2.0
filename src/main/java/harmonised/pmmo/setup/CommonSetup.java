@@ -55,8 +55,6 @@ public class CommonSetup {
 		Core.get(LogicalSide.SERVER).getData(event.getServer());
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Computing data for cache");
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
-		MsLoggy.INFO.log(LOG_CODE.LOADING, "Executing Default Registrations");
-		Core.get(LogicalSide.SERVER).registerNBT();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
 	}
 	

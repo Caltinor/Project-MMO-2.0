@@ -3,10 +3,8 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.core.NBTUtilsLegacy;
 import harmonised.pmmo.network.clientpackets.CP_ApplyConfigRegistry;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
-import harmonised.pmmo.network.clientpackets.CP_RegisterNBT;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
@@ -27,7 +25,6 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -104,11 +101,6 @@ public class Networking {
 			.decoder(CP_ApplyConfigRegistry::new)
 			.consumerNetworkThread(CP_ApplyConfigRegistry::handle)
 			.add();
-		INSTANCE.messageBuilder(CP_RegisterNBT.class, ID++)
-			.encoder((packet, buf) -> {})
-			.decoder(buf -> new CP_RegisterNBT())
-			.consumerNetworkThread(CP_RegisterNBT::handle)
-			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
 			.encoder(SP_UpdateVeinTarget::toBytes)
@@ -145,7 +137,6 @@ public class Networking {
 		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(ObjectType.EFFECT, o));
 		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
 		ConfigurationRegistry.addSyncPacket(INSTANCE, true);
-		MinecraftForge.EVENT_BUS.addListener(NBTUtilsLegacy.onDataReload(INSTANCE));
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {
