@@ -20,12 +20,13 @@ import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
-import harmonised.pmmo.features.salvaging.SalvageLogic;
+import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.features.veinmining.VeinDataManager;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
@@ -58,6 +59,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**<p>This class bridges the gap between various systems within Project MMO.
  * Methods within this class connect these distinct systems without 
@@ -79,7 +81,6 @@ public class Core {
 	private final TooltipRegistry tooltips;
 	private final PerkRegistry perks;
 	private final LevelRegistry lvlProvider;
-	private final SalvageLogic salvageLogic;
 	private final NBTUtilsLegacy nbt;
 	private final VeinDataManager vein;
 	private final IDataStorage data;
@@ -92,7 +93,6 @@ public class Core {
 	    this.tooltips = new TooltipRegistry();
 	    this.perks = new PerkRegistry();
 	    this.lvlProvider = new LevelRegistry();
-	    this.salvageLogic = new SalvageLogic();
 	    this.nbt = new NBTUtilsLegacy();
 	    this.vein = new VeinDataManager();
 	    data = side.equals(LogicalSide.SERVER) ? new PmmoSavedData() : new DataMirror();
@@ -107,7 +107,6 @@ public class Core {
 	}
 	
 	public void resetDataForReload() {
-		salvageLogic.reset();
 		tooltips.clearRegistry();
 		nbt.reset();
 		vein.reset();
@@ -126,7 +125,6 @@ public class Core {
 	public TooltipRegistry getTooltipRegistry() {return tooltips;}
 	public PerkRegistry getPerkRegistry() {return perks;}
 	public LevelRegistry getLevelProvider() {return lvlProvider;}
-	public SalvageLogic getSalvageLogic() {return salvageLogic;}
 	public NBTUtilsLegacy getNBTUtils() {return nbt;}
 	public VeinDataManager getVeinData() {return vein;}
 	public IDataStorage getData() {return data.get();}
@@ -432,8 +430,54 @@ public class Core {
 		return ((EnhancementsData) loader.getLoader(ObjectType.ENCHANTMENT).getData(enchantID)).skillArray().getOrDefault(enchantLvl, new HashMap<>());
 	}
 	
-
-
+	//============================================================================================
+	/*			SALVAGE LOGIC
+	 * 
+	 * 		This section contains methods for interacting with salvage data
+	*/ 
+	//============================================================================================
+	public void getSalvage(ServerPlayer player) {
+		ItemStack salvageItem = player.getMainHandItem().isEmpty() 
+				? player.getOffhandItem().isEmpty() 
+						? ItemStack.EMPTY 
+						: player.getOffhandItem()
+				: player.getMainHandItem();
+		boolean salvageMainHand = !player.getMainHandItem().isEmpty();
+		boolean salvageOffHand = !salvageMainHand && !player.getOffhandItem().isEmpty();
+		if (!loader.ITEM_LOADER.getData().containsKey(RegistryUtil.getId(salvageItem))) return;
+		Map<String, Long> playerXp = getData().getXpMap(player.getUUID());
+		
+		Map<String, Long> xpAwards = new HashMap<>();
+		for (Map.Entry<ResourceLocation, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(salvageItem)).salvage().entrySet()) {
+			//First look for any skills that do not meet the req and continue to the next output 
+			//item if the req is not met. 
+			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {
+				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l))) continue;
+			}
+			
+			//get the base calculation values including the bonuses from skills
+			double base = result.getValue().baseChance();
+			double max = result.getValue().maxChance();
+			double bonus = 0d;
+			for (Map.Entry<String, Double> skill : result.getValue().chancePerLevel().entrySet()) {
+				bonus += skill.getValue() * Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l));
+			}
+			
+			//conduct random check for the total count possible and add each succcess to the output
+			for (int i = 0; i < result.getValue().salvageMax(); i++) {
+				if (player.getRandom().nextDouble() < Math.min(max, base + bonus)) {
+					player.drop(new ItemStack(ForgeRegistries.ITEMS.getValue(result.getKey())), false, true);
+					for (Map.Entry<String, Long> award : result.getValue().xpAward().entrySet()) {
+						xpAwards.merge(award.getKey(), award.getValue(), (o, n) -> o + n);
+					}
+				}
+			}
+		}
+		if (salvageMainHand) player.getMainHandItem().shrink(1);
+		if (salvageOffHand) player.getOffhandItem().shrink(1);
+		List<ServerPlayer> party = PartyUtils.getPartyMembersInRange(player);
+		awardXP(party, xpAwards);
+	}
 	
 
 	

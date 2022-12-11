@@ -325,7 +325,7 @@ public class StatScrollWidget extends ScrollPanel{
 						core.getObjectModifierMap(ObjectType.ITEM, RegistryUtil.getId(stack), mod, TagUtils.stackTag(stack))
 				), modifiers, skillFilter);
 			if (includeSalvage)
-				addSalvageSection(core.getSalvageLogic().getSalvageData(RegistryUtil.getId(stack)));
+				addSalvageSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).salvage());
 			if (includeVein)
 				addItemVeinSection(core.getVeinData().getData(stack), stack.getItem() instanceof BlockItem);
 			if (lengthBeforeProcessing == content.size())

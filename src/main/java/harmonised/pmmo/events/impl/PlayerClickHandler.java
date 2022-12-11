@@ -79,7 +79,7 @@ public class PlayerClickHandler {
 			}
 			//======================SALVAGE DROP LOGIC=======================================
 			if (player.isCrouching() && RegistryUtil.getId(event.getLevel().getBlockState(event.getPos()).getBlock()).equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
-				core.getSalvageLogic().getSalvage((ServerPlayer) player, core);
+				core.getSalvage((ServerPlayer) player);
 			}
 			//=======================END SALVAGE============================================
 		}		

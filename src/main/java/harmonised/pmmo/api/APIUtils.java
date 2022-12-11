@@ -7,6 +7,8 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.function.TriFunction;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -302,7 +304,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage, boolean asOverride) {
-		registerConfiguration(asOverride, core -> salvage.forEach((id, data) ->core.getSalvageLogic().setSalvageData(item, id, data.build())));
+		registerConfiguration(asOverride, core -> {
+			core.getLoader().ITEM_LOADER.getData(item).salvage().clear();
+			core.getLoader().ITEM_LOADER.getData(item).salvage().putAll(salvage.entrySet().stream()
+					.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().build())));
+		});
 	}
 	/**registers vein information for the specified block or item.  Items 
 	 * give the player ability charge rate and capacity.  blocks use the 
