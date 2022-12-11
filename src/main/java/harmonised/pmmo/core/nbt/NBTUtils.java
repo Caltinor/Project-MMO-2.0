@@ -1,4 +1,4 @@
-package harmonised.pmmo.core;
+package harmonised.pmmo.core.nbt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,11 +10,6 @@ import java.util.Set;
 import com.mojang.datafixers.util.Pair;
 
 import harmonised.pmmo.config.GlobalsConfig;
-import harmonised.pmmo.core.nbt.BehaviorToPrevious;
-import harmonised.pmmo.core.nbt.LogicEntry;
-import harmonised.pmmo.core.nbt.Operator;
-import harmonised.pmmo.core.nbt.PathReader;
-import harmonised.pmmo.core.nbt.Result;
 import harmonised.pmmo.core.nbt.LogicEntry.Case;
 import harmonised.pmmo.core.nbt.LogicEntry.Criteria;
 import harmonised.pmmo.util.MsLoggy;

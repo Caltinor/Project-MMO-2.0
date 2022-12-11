@@ -11,6 +11,7 @@ import harmonised.pmmo.features.autovalues.AutoValueConfig.UtensilTypes;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.WearableTypes;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -123,7 +124,6 @@ public class AutoItem {
 		return outMap;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
 		if (!type.itemApplicable)
@@ -142,7 +142,7 @@ public class AutoItem {
 		}
 		case BLOCK_PLACE: case BLOCK_BREAK:{
 			if (stack.getItem() instanceof BlockItem) {
-				outMap.putAll(AutoBlock.processXpGains(type, ((BlockItem)stack.getItem()).getBlock().builtInRegistryHolder().unwrapKey().get().location()));
+				outMap.putAll(AutoBlock.processXpGains(type, RegistryUtil.getId(((BlockItem)stack.getItem()).getBlock())));
 			}
 			break;
 		}
@@ -170,6 +170,7 @@ public class AutoItem {
 		case CONSUME: {
 			if (stack.isEdible()) {
 				AutoValueConfig.getItemXpAward(type).forEach((skill, xp) -> {
+					@SuppressWarnings("deprecation")
 					FoodProperties properties = stack.getItem().getFoodProperties();
 					Float nutritionScale = (float)properties.getNutrition() * properties.getSaturationModifier();
 					outMap.put(skill, xp * nutritionScale.longValue());

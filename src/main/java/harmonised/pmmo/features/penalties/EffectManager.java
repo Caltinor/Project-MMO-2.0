@@ -23,11 +23,11 @@ public class EffectManager {
 		//BIOME/DIM Efects
 		Biome biome = player.level.getBiome(player.blockPosition()).get();
 		ResourceKey<Level> dimension = player.level.dimension();
-		List<MobEffectInstance> effects = CoreUtils.getEffects(core.isActionPermitted(ReqType.TRAVEL, biome, player)
-				? core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getPositiveEffect()
-				: core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getNegativeEffect());
+		List<MobEffectInstance> effects = core.isActionPermitted(ReqType.TRAVEL, biome, player)
+				? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getPositiveEffect(), false)
+				: CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getNegativeEffect(), true);
 		if (core.isActionPermitted(ReqType.TRAVEL, dimension, player))
-			effects.addAll(CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.DIMENSION).getData(dimension.location()).getPositiveEffect()));
+			effects.addAll(CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.DIMENSION).getData(dimension.location()).getPositiveEffect(), false));
 		
 		for (MobEffectInstance mei : effects) {
 			if (!player.hasEffect(mei.getEffect()) || player.getEffect(mei.getEffect()).getDuration() < 10)
@@ -45,7 +45,7 @@ public class EffectManager {
 		//================================
 		for (ItemStack stack : items) {
 			if (!stack.isEmpty() && !core.isActionPermitted(ReqType.WEAR, stack, player)) {
-				for (MobEffectInstance mei : CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect())) {
+				for (MobEffectInstance mei : CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect(), true)) {
 					if (!player.hasEffect(mei.getEffect()) || player.getEffect(mei.getEffect()).getDuration() < 10)
 						player.addEffect(mei);
 				}

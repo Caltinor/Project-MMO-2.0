@@ -147,9 +147,9 @@ public class CoreUtils {
 	 * @param config the settings
 	 * @return a list of applicable effects
 	 */
-	public static List<MobEffectInstance> getEffects(Map<ResourceLocation, Integer> config) {
+	public static List<MobEffectInstance> getEffects(Map<ResourceLocation, Integer> config, boolean applyDefaultNegatives) {
 		List<MobEffectInstance> effects = new ArrayList<>();
-		if (config.isEmpty())
+		if (applyDefaultNegatives && config.isEmpty())
 			config = AutoValueConfig.ITEM_PENALTIES.get();
 		for (Map.Entry<ResourceLocation, Integer> effect : config.entrySet()) {
 			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());

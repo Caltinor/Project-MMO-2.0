@@ -318,7 +318,7 @@ public class StatScrollWidget extends ScrollPanel{
 					core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
 				return reqMap;
 				}),	
-				CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect()), 
+				CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect(), true), 
 				reqs, skillFilter);
 			addModifierSection((mod -> core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(stack), mod) ?
 						core.getTooltipRegistry().getBonusTooltipData(RegistryUtil.getId(stack), mod, stack) :
@@ -416,13 +416,13 @@ public class StatScrollWidget extends ScrollPanel{
 			addReqSection((reqType -> core.getObjectSkillMap(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, 
 					loc, reqType, new CompoundTag())), 
 					isBiome 
-						? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(loc).getNegativeEffect()) 
+						? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(loc).getNegativeEffect(), true) 
 						: new ArrayList<>(), 
 					reqs, skillFilter);
 			if (reqs.length > 0 && isBiome)
 				addReqEffectSection(CoreUtils.getEffects(isBiome 
 						? core.getLoader().getLoader(ObjectType.BIOME).getData(loc).getPositiveEffect()
-						: core.getLoader().getLoader(ObjectType.DIMENSION).getData(loc).getPositiveEffect()), false);
+						: core.getLoader().getLoader(ObjectType.DIMENSION).getData(loc).getPositiveEffect(), false), false);
 			addModifierSection((mod -> core.getObjectModifierMap(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, loc, mod, new CompoundTag())), modifiers, skillFilter);
 			if (includeVein)
 				addVeinBlacklistSection(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, loc);
