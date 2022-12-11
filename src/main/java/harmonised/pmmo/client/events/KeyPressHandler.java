@@ -12,6 +12,7 @@ import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
@@ -34,8 +35,12 @@ public class KeyPressHandler {
             if(ClientSetup.VEIN_KEY.isDown() && mc.hitResult != null && mc.hitResult.getType().equals(Type.BLOCK)) {
             	BlockHitResult bhr = (BlockHitResult) mc.hitResult;
             	Block block = mc.player.level.getBlockState(bhr.getBlockPos()).getBlock();
-            	if (!Core.get(LogicalSide.CLIENT).getDataConfig().isBlockVeinBlacklisted(mc.player.level.dimension().location(), block)
-            		&& !Core.get(LogicalSide.CLIENT).getDataConfig().isBlockVeinBlacklisted(mc.player.level.getBiome(mc.player.blockPosition()).unwrapKey().get().location(), block)) {
+            	if (!Core.get(LogicalSide.CLIENT).getLoader().DIMENSION_LOADER
+            			.getData(mc.player.level.dimension().location())
+            			.veinBlacklist().contains(RegistryUtil.getId(block))
+            		&& !Core.get(LogicalSide.CLIENT).getLoader().BIOME_LOADER
+            			.getData(RegistryUtil.getId(mc.player.level.getBiome(mc.player.blockPosition()).get()))
+            			.veinBlacklist().contains(RegistryUtil.getId(block))) {
 	            	VeinTracker.setTarget(bhr.getBlockPos());
 	            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));
             	}

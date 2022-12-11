@@ -15,6 +15,7 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 
 public record EnhancementsData(
 		boolean override,
@@ -40,6 +41,18 @@ public record EnhancementsData(
 	}
 	@Override
 	public void setReqs(ReqType type, Map<String, Integer> reqs) {}
+	@Override
+	public Map<ResourceLocation, Integer> getNegativeEffect() {
+		return new HashMap<>();
+	}
+	@Override
+	public void setNegativeEffects(Map<ResourceLocation, Integer> neg) {}
+	@Override
+	public Map<ResourceLocation, Integer> getPositiveEffect() {
+		return new HashMap<>();
+	}
+	@Override
+	public void setPositiveEffects(Map<ResourceLocation, Integer> pos) {}
 	
 	public static final Codec<EnhancementsData> CODEC = RecordCodecBuilder.create(instance -> instance.group( 
 			Codec.BOOL.optionalFieldOf("override").forGetter(cme -> Optional.of(cme.override())),

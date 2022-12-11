@@ -6,6 +6,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 
 public interface DataSource<T> {
 	public T combine(T two);
@@ -16,4 +17,8 @@ public interface DataSource<T> {
 	public void setBonuses(ModifierDataType type, Map<String, Double> bonuses);
 	public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt);
 	public void setReqs(ReqType type, Map<String, Integer> reqs);
+	public Map<ResourceLocation, Integer> getNegativeEffect();
+	public void setNegativeEffects(Map<ResourceLocation, Integer> neg);
+	public Map<ResourceLocation, Integer> getPositiveEffect();
+	public void setPositiveEffects(Map<ResourceLocation, Integer> pos);
 }

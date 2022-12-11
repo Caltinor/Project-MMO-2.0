@@ -93,11 +93,8 @@ public class MobAttributeHandler {
 		AttributeInstance attributeInstance = mob.getAttribute(attribute);
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, modifID.name()+" isNull:"+(attributeInstance==null));
 		if (attributeInstance != null) {
-			bonus *= Core.get(mob.level).getDataConfig()
-					.getMobModifier(
-							mob.level.dimension().location(), 
-							RegistryUtil.getId(mob), 
-							modifID.configID);
+			bonus *= Core.get(mob.level).getLoader().DIMENSION_LOADER.getData(mob.level.dimension().location()).mobModifiers().getOrDefault(RegistryUtil.getId(mob), new HashMap<>()).getOrDefault(modifID.configID, 0d)
+					 + Core.get(mob.level).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(mob.level.getBiome(mob.blockPosition()).get())).mobModifiers().getOrDefault(RegistryUtil.getId(mob), new HashMap<>()).getOrDefault(modifID.configID, 0d);
 			AttributeModifier modifier = new AttributeModifier(modifID.id, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
 			attributeInstance.removeModifier(modifID.id);
 			attributeInstance.addPermanentModifier(modifier);

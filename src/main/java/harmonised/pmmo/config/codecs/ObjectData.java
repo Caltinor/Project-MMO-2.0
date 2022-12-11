@@ -30,7 +30,7 @@ public record ObjectData(
 		Set<String> tagValues,
 		Map<ReqType, Map<String, Integer>> reqs,		
 		Map<ReqType, List<LogicEntry>> nbtReqs,
-		Map<String, Integer> negativeEffects,
+		Map<ResourceLocation, Integer> negativeEffects,
 		Map<EventType, Map<String, Long>> xpValues,
 		Map<EventType, List<LogicEntry>> nbtXpValues,
 		Map<ModifierDataType, Map<String, Double>> bonuses,
@@ -74,6 +74,21 @@ public record ObjectData(
 		public void setReqs(ReqType type, Map<String, Integer> reqs) {
 			reqs().put(type, reqs);
 		}
+		@Override
+		public Map<ResourceLocation, Integer> getNegativeEffect() {
+			return negativeEffects();
+		}
+		@Override
+		public void setNegativeEffects(Map<ResourceLocation, Integer> neg) {
+			negativeEffects().clear();
+			negativeEffects().putAll(neg);
+		}
+		@Override
+		public Map<ResourceLocation, Integer> getPositiveEffect() {
+			return new HashMap<>();
+		}
+		@Override
+		public void setPositiveEffects(Map<ResourceLocation, Integer> pos) {}
 
 		public static final Codec<ObjectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),
@@ -84,8 +99,8 @@ public record ObjectData(
 				Codec.optionalField("nbt_requirements",
 					Codec.simpleMap(ReqType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ReqType.values())).codec())
 					.forGetter(od -> Optional.of(od.nbtReqs())),
-				Codec.optionalField("negative_effect",
-					CodecTypes.INTEGER_CODEC)
+				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
+					.optionalFieldOf("negative_effect")					
 					.forGetter(od -> Optional.of(od.negativeEffects())),
 				Codec.optionalField("xp_values",
 					Codec.simpleMap(EventType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(EventType.values())).codec())
@@ -122,7 +137,7 @@ public record ObjectData(
 			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
 			Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
 			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
-			Map<String, Integer> reqEffects = new HashMap<>();
+			Map<ResourceLocation, Integer> reqEffects = new HashMap<>();
 			Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
 			VeinData[] combinedVein = {this.veinData()};
 			

@@ -52,11 +52,28 @@ public record LocationData(
 	public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
 		return travelReq();
 	}
-
 	@Override
 	public void setReqs(ReqType type, Map<String, Integer> reqs) {
 		travelReq().clear();
 		travelReq().putAll(reqs);
+	}
+	@Override
+	public Map<ResourceLocation, Integer> getNegativeEffect() {
+		return negative();
+	}
+	@Override
+	public void setNegativeEffects(Map<ResourceLocation, Integer> neg) {
+		negative().clear();
+		negative().putAll(neg);
+	}
+	@Override
+	public Map<ResourceLocation, Integer> getPositiveEffect() {
+		return positive();
+	}
+	@Override
+	public void setPositiveEffects(Map<ResourceLocation, Integer> pos) {
+		positive().clear();
+		positive().putAll(pos);
 	}
 	
 	public static final Codec<LocationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(

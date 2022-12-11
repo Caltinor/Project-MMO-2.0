@@ -1,16 +1,25 @@
 package harmonised.pmmo.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class CoreUtils {
 
@@ -97,7 +106,7 @@ public class CoreUtils {
 		return map;
 	}
 	
-/**converts any skills in the map which are skill groups
+	/**converts any skills in the map which are skill groups
 	 * into their respective member skills and merges the values
 	 * with the existing map members
 	 * 
@@ -114,4 +123,41 @@ public class CoreUtils {
 		});
 		return map;
 	}
+	
+	/**Obtain the integer value for the skill color supplied.
+	 * 
+	 * @param skill the skill name whose color is being obtained
+	 * @return the integer skill value
+	 */
+	public static int getSkillColor(String skill) {
+		return SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getColor();
+	}
+	
+	/**Obtain a Component Style for the skill supplied
+	 * 
+	 * @param skill the skill being 
+	 * @return
+	 */
+	public static Style getSkillStyle(String skill) {
+		return Style.EMPTY.withColor(TextColor.fromRgb(getSkillColor(skill)));
+	}
+	
+	/**Converts a configuration setting for effects into an effect instance list
+	 * 
+	 * @param config the settings
+	 * @return a list of applicable effects
+	 */
+	public static List<MobEffectInstance> getEffects(Map<ResourceLocation, Integer> config) {
+		List<MobEffectInstance> effects = new ArrayList<>();
+		if (config.isEmpty())
+			config = AutoValueConfig.ITEM_PENALTIES.get();
+		for (Map.Entry<ResourceLocation, Integer> effect : config.entrySet()) {
+			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());
+			if (effectRoot != null)
+				effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue(), true, true));
+		}
+		return effects;
+	}
+	
+	
 }

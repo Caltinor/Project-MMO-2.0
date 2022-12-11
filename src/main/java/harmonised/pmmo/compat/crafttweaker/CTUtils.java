@@ -153,7 +153,7 @@ public class CTUtils implements IRuntimeAction{
 		case ITEM -> {
 			var data = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData());
 			data.negativeEffects().clear();
-			data.negativeEffects().putAll(effects.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().toString(), entry -> entry.getValue())));
+			data.negativeEffects().putAll(effects.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue())));
 		}
 		case DIMENSION -> {
 			var data = Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData());

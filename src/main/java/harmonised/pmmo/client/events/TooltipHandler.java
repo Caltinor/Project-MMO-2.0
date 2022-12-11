@@ -14,6 +14,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -106,21 +107,21 @@ public class TooltipHandler {
 	private static void addRequirementTooltip(Translation header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
-			event.getToolTip().add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(" "+String.valueOf(req.getValue()))).setStyle(core.getDataConfig().getSkillStyle(req.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(" "+String.valueOf(req.getValue()))).setStyle(CoreUtils.getSkillStyle(req.getKey())));
 		}
 	}
 	
 	private static void addXpValueTooltip(Translation header, ItemTooltipEvent event, Map<String, Long> values, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Long> value : values.entrySet()) {
-			event.getToolTip().add(Component.translatable("pmmo."+value.getKey()).append(Component.literal(" "+String.valueOf(value.getValue()))).setStyle(core.getDataConfig().getSkillStyle(value.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+value.getKey()).append(Component.literal(" "+String.valueOf(value.getValue()))).setStyle(CoreUtils.getSkillStyle(value.getKey())));
 		}
 	}
 	
 	private static void addModifierTooltip(Translation header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Double> modifier: values.entrySet()) {
-			event.getToolTip().add(Component.translatable("pmmo."+modifier.getKey()).append(Component.literal(" "+modifierPercent(modifier.getValue()))).setStyle(core.getDataConfig().getSkillStyle(modifier.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+modifier.getKey()).append(Component.literal(" "+modifierPercent(modifier.getValue()))).setStyle(CoreUtils.getSkillStyle(modifier.getKey())));
 		}
 	}
 	

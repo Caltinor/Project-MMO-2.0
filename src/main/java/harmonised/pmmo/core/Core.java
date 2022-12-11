@@ -16,7 +16,6 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.EnhancementsData;
@@ -75,7 +74,6 @@ import net.minecraftforge.fml.LogicalSide;
 public class Core {
 	private static final Map<LogicalSide, Function<LogicalSide, Core>> INSTANCES = Map.of(LogicalSide.CLIENT, Functions.memoize(Core::new), LogicalSide.SERVER, Functions.memoize(Core::new));
 	private final CoreLoader loader;
-	private final DataConfig config;
 	private final PredicateRegistry predicates;
 	private final EventTriggerRegistry eventReg;
 	private final TooltipRegistry tooltips;
@@ -89,7 +87,6 @@ public class Core {
 	  
 	private Core(LogicalSide side) {
 		this.loader = new CoreLoader();
-	    this.config = new DataConfig();
 	    this.predicates = new PredicateRegistry();
 	    this.eventReg = new EventTriggerRegistry();
 	    this.tooltips = new TooltipRegistry();
@@ -110,7 +107,6 @@ public class Core {
 	}
 	
 	public void resetDataForReload() {
-		config.reset();
 		salvageLogic.reset();
 		tooltips.clearRegistry();
 		nbt.reset();
@@ -125,7 +121,6 @@ public class Core {
 	}
 	  
 	public CoreLoader getLoader() {return loader;}
-	public DataConfig getDataConfig() {return config;}
 	public PredicateRegistry getPredicateRegistry() {return predicates;}
 	public EventTriggerRegistry getEventTriggerRegistry() {return eventReg;}
 	public TooltipRegistry getTooltipRegistry() {return tooltips;}
@@ -314,7 +309,7 @@ public class Core {
 			}
 			
 		}
-		return config.getPlayerData(player.getUUID())
+		return loader.PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString()))
 				.mergeWithPlayerBonuses(CoreUtils.processSkillGroupBonus(mapOut));
 	}
 	

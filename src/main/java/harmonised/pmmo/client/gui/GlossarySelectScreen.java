@@ -14,7 +14,7 @@ import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import harmonised.pmmo.client.gui.component.SelectionWidget;
 import harmonised.pmmo.client.gui.component.SelectionWidget.SelectionEntry;
 import harmonised.pmmo.config.SkillsConfig;
-import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
 
 public class GlossarySelectScreen extends Screen{
 	private static final ResourceLocation GUI_BG = new ResourceLocation(Reference.MOD_ID, "textures/gui/screenboxy.png");
@@ -64,7 +63,7 @@ public class GlossarySelectScreen extends Screen{
 		selectSkills.setEntries(SkillsConfig.SKILLS.get().keySet().stream()
 				.sorted()
 				.map(skill -> new SelectionEntry<>(
-						Component.translatable("pmmo."+skill).setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(skill)), 
+						Component.translatable("pmmo."+skill).setStyle(CoreUtils.getSkillStyle(skill)), 
 						skill))
 				.toList()
 		);

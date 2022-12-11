@@ -3,7 +3,7 @@ package harmonised.pmmo.features.fireworks;
 import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.CoreUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -34,7 +34,7 @@ public class FireworkHandler {
 		ListTag explosion = new ListTag();
 		CompoundTag l = new CompoundTag();
 
-		int[] colors = new int[] {Core.get(world).getDataConfig().getSkillColor(skill)};
+		int[] colors = new int[] {CoreUtils.getSkillColor(skill)};
 
 		l.putInt("Flicker", 1);
 		l.putInt("Trail", 0);

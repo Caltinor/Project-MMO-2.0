@@ -270,31 +270,33 @@ public class APIUtils {
 		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setBonuses(type, bonus));
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
-	 * if they attempt to wear/hold and item they are not skilled enough to use.
+	 * if they attempt to wear/hold/travel and they are not skilled enough to do so.
 	 * 
-	 * @param item the key for the item being configured
+	 * @param oType the object type this effect is being stored on
+	 * @param objectID the key for the item being configured
 	 * @param effects a map of effect ids and levels
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerNegativeEffect(ResourceLocation item, Map<ResourceLocation, Integer> effects, boolean asOverride) {
-		registerConfiguration(asOverride, core -> effects.forEach((id, level) -> core.getDataConfig().setReqEffectData(item, id, level)));
+	public static void registerNegativeEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
+		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setNegativeEffects(effects));
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
 	 * based on their meeting or not meeting the requirements for the specified location.
 	 * <p>Note: a "negative" effect on a dimension will have no use in-game</p>
 	 * 
-	 * @param locationID the key for the dimension or biome being configured
+	 * @param oType the object type this effect is being stored on
+	 * @param objectID the key for the dimension or biome being configured
 	 * @param effects a map of effect ids and levels
-	 * @param isPositive is this for when a player gets a bonus (true) or as a penalty (false)
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerLocationEffect(ResourceLocation locationID, Map<ResourceLocation, Integer> effects, boolean isPositive, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getDataConfig().setLocationEffectData(isPositive, locationID, effects));
+	public static void registerPositiveEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
+		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setPositiveEffects(effects));
 	}
 	/**registers a configuration setting for items which can be obtained 
 	 * via salvage from the item supplied.
 	 * <p>This class provides {@link SalvageBuilder} as a means to construct
 	 * the salvage settings for each output object</p>
+	 * 
 	 * @param item a key for the item to be consumed by the salvage operation
 	 * @param salvage a map of output item keys and the conditions for salvage
 	 * @param asOverride should this apply after datapacks as an override
@@ -329,8 +331,16 @@ public class APIUtils {
 	 * @param mob_modifiers a map of mob keys with a value map of attribute types and values
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerMobModifier(ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
-		registerConfiguration(asOverride, core -> mob_modifiers.forEach((id, map) -> core.getDataConfig().setMobModifierData(locationID, id, map)));		
+	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
+		registerConfiguration(asOverride, core -> {switch (oType) {
+			case BIOME -> {
+				core.getLoader().BIOME_LOADER.getData(locationID).mobModifiers().clear(); 
+				core.getLoader().BIOME_LOADER.getData(locationID).mobModifiers().putAll(mob_modifiers);}
+			case DIMENSION -> {
+				core.getLoader().DIMENSION_LOADER.getData(locationID).mobModifiers().clear(); 
+				core.getLoader().DIMENSION_LOADER.getData(locationID).mobModifiers().putAll(mob_modifiers);}
+			default -> {}
+		}});		
 	}
 
 	/**<b>INTERNAL USE ONLY.</b> Utility method for registering custom configurations
