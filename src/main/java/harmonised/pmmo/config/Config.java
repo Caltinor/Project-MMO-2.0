@@ -91,7 +91,7 @@ public class Config {
 		SECTION_HEADER_COLOR = builder.comment("what color should the background be for the section header lines in the glossary")
 				.define("Section Header Color", 0x1504B520);
 		SALVAGE_ITEM_COLOR = builder.comment("What color should the background be for the salvage item lines in the glossary")
-				.define("Salage Item Color", 0x15D2A319);
+				.define("Salvage Item Color", 0x15D2A319);
 		GAIN_LIST_SIZE = builder.comment("how much xp gain hisory should display")
 				.define("Gain List Size", 3);
 		GAIN_LIST_LINGER_DURATION = builder.comment("How long, in ticks, items on the gain list should stay on screen before disappearing")
