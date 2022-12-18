@@ -48,6 +48,7 @@ public class Config {
 		buildGUI(builder);
 		buildTooltips(builder);
 		buildVein(builder);
+		buildTutorial(builder);
 		
 		builder.pop();
 	}
@@ -152,6 +153,23 @@ public class Config {
 		
 		VEIN_LIMIT = builder.comment("The max blocks a vein activation should consume regardless of charge")
 				.defineInRange("Vein_Limit", 64, 0, Integer.MAX_VALUE);
+		
+		builder.pop();
+	}
+	
+	public static BooleanValue BREAK_NERF_HIGHLIGHTS;
+	public static BooleanValue BLOCK_OWNER_HIGHLIGHTS;
+	public static BooleanValue SALVAGE_HIGHLIGHTS;
+	
+	private static void buildTutorial(ForgeConfigSpec.Builder builder) {
+		builder.comment("Toggles for helpful features related to mechanics").push("Tutorial");
+		
+		BREAK_NERF_HIGHLIGHTS = builder.comment("Should blocks affected by Reuse Penalty show a red outline?")
+				.define("Enable Reuse Penalty Highlights", true);
+		BLOCK_OWNER_HIGHLIGHTS = builder.comment("Should the owner of a block show when hovering?")
+				.define("Enable Owner Hightlights", true);
+		SALVAGE_HIGHLIGHTS = builder.comment("Should hovering over a salvage block show helpful tips?")
+				.define("Enable Salvage Tips", true);
 		
 		builder.pop();
 	}
