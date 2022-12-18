@@ -544,6 +544,12 @@ public class LangProvider extends LanguageProvider{
 	public static final Translation DENIAL_ENTITY_INTERACT = Translation.Builder.start("pmmo.msg.denial.entity_interact")
 			.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
 	
+	//==========TUTORIAL TEXT======================
+	public static final Translation SALVAGE_TUTORIAL_HEADER = Translation.Builder.start("pmmo.client.tutorial.salvage.header")
+			.addLocale(Locale.EN_US, "Salvage Block").build();
+	public static final Translation SALVAGE_TUTORIAL_USAGE = Translation.Builder.start("pmmo.client.tutorial.salvage.usage")
+			.addLocale(Locale.EN_US, "While crouching, right click this block to salvage the items in your hand.").build();
+	
 	@Override
 	protected void addTranslations() {
 		for (Field entry : this.getClass().getDeclaredFields()) {
