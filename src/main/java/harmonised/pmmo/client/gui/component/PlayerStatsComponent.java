@@ -170,7 +170,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         
         @Override
         protected int getContentHeight() {
-            return (int) (abilities.size() * (StatComponent.BASE_HEIGHT / 1.34));
+            return (int) (abilities.size() * StatComponent.BASE_HEIGHT);
         }
         
         @Override @NotNull public NarrationPriority narrationPriority() { return NarrationPriority.NONE; }
