@@ -161,7 +161,7 @@ public class TutorialOverlayGUI implements IGuiOverlay{
 	
 	private List<MutableComponent> gatherSalvageData(ItemStack stack) {
 		List<MutableComponent> outList = new ArrayList<>();
-		for (Map.Entry<ResourceLocation, SalvageData> entry : Core.get(LogicalSide.CLIENT).getSalvageLogic().getSalvageData(RegistryUtil.getId(stack)).entrySet()) {
+		for (Map.Entry<ResourceLocation, SalvageData> entry : Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).salvage().entrySet()) {
 			outList.add(MutableComponent.create(new ItemStack(ForgeRegistries.ITEMS.getValue(entry.getKey())).getDisplayName().getContents()));
 			SalvageData data = entry.getValue();
 			if (!data.levelReq().isEmpty()) {
