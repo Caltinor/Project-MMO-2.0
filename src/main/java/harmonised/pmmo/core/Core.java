@@ -232,70 +232,60 @@ public class Core {
 	}
 	public Map<String, Double> getConsolidatedModifierMap(Player player) {
 		Map<String, Double> mapOut = new HashMap<>();
-		if (player instanceof FakePlayer) return mapOut;
-		for (ModifierDataType type : ModifierDataType.values()) {
-			Map<String, Double> modifiers = new HashMap<>();
-			switch (type) {
-			case BIOME: {
-				ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
-				modifiers = getObjectModifierMap(ObjectType.BIOME, biomeID, type, new CompoundTag());
-				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-					mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-				}
-				break;
-			}
-			case HELD: {
-				ItemStack offhandStack = player.getOffhandItem();
-				ItemStack mainhandStack = player.getMainHandItem();
-				ResourceLocation offhandID = RegistryUtil.getId(offhandStack);
-				modifiers = tooltips.bonusTooltipExists(offhandID, type) 
-						? tooltips.getBonusTooltipData(offhandID, type, offhandStack) 
-						: getObjectModifierMap(ObjectType.ITEM, offhandID, type
-								, offhandStack.getTag() == null 
-									? new CompoundTag()
-									: offhandStack.getTag());
-				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-					mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-				}				
-				ResourceLocation mainhandID = RegistryUtil.getId(mainhandStack);				
-				modifiers = tooltips.bonusTooltipExists(mainhandID, type) ?
-						tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
-						getObjectModifierMap(ObjectType.ITEM, mainhandID, type
-								, mainhandStack.getTag() == null
-									? new CompoundTag()
-									: mainhandStack.getTag());
-				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-					mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-				}				
-				break;
-			}
-			case WORN: {
-				player.getArmorSlots().forEach((stack) -> {
-					ResourceLocation itemID = RegistryUtil.getId(stack);
-					Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, type) ?
-							tooltips.getBonusTooltipData(itemID, type, stack):
-							getObjectModifierMap(ObjectType.ITEM, itemID, type
-									, stack.getTag() == null
-										? new CompoundTag()
-										: stack.getTag());
-					for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-					}
-				});
-				break;
-			}
-			case DIMENSION: {
-				ResourceLocation dimensionID = player.level.dimension().location();
-				modifiers = getObjectModifierMap(ObjectType.DIMENSION, dimensionID, type, new CompoundTag());
-				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-					mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-				}
-				break;
-			}
-			default: {}
-			}
-			
+		if (player instanceof FakePlayer) return mapOut;		
+		
+		//BIOME Modification
+		ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
+		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {
+			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 		}
+		
+		//DIMENSION Modification
+		ResourceLocation dimensionID = player.level.dimension().location();
+		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.DIMENSION, dimensionID, ModifierDataType.DIMENSION, new CompoundTag()).entrySet()) {
+			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+		}
+				
+		Map<String, Double> modifiers = new HashMap<>();
+		//HELD Modification
+		ItemStack offhandStack = player.getOffhandItem();
+		ItemStack mainhandStack = player.getMainHandItem();
+		ResourceLocation offhandID = RegistryUtil.getId(offhandStack);
+		modifiers = tooltips.bonusTooltipExists(offhandID, ModifierDataType.HELD) 
+				? tooltips.getBonusTooltipData(offhandID, ModifierDataType.HELD, offhandStack) 
+				: getObjectModifierMap(ObjectType.ITEM, offhandID, ModifierDataType.HELD
+						, offhandStack.getTag() == null 
+							? new CompoundTag()
+							: offhandStack.getTag());
+		for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+		}				
+		ResourceLocation mainhandID = RegistryUtil.getId(mainhandStack);				
+		modifiers = tooltips.bonusTooltipExists(mainhandID, ModifierDataType.HELD) ?
+				tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
+				getObjectModifierMap(ObjectType.ITEM, mainhandID, ModifierDataType.HELD
+						, mainhandStack.getTag() == null
+							? new CompoundTag()
+							: mainhandStack.getTag());
+		for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+		}
+		
+		//WORN Modification
+		player.getArmorSlots().forEach((stack) -> {
+			ResourceLocation itemID = RegistryUtil.getId(stack);
+			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?
+					tooltips.getBonusTooltipData(itemID, ModifierDataType.WORN, stack):
+					getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN
+							, stack.getTag() == null
+								? new CompoundTag()
+								: stack.getTag());
+			for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
+				mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+			}
+		});
+		
+		MsLoggy.DEBUG.log(LOG_CODE.XP, "Modifier Map: {}", MsLoggy.mapToString(mapOut));
 		return loader.PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString()))
 				.mergeWithPlayerBonuses(CoreUtils.processSkillGroupBonus(mapOut));
 	}
