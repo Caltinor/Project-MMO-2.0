@@ -2,6 +2,7 @@ package harmonised.pmmo.setup;
 
 import org.lwjgl.glfw.GLFW;
 
+import harmonised.pmmo.client.gui.TutorialOverlayGUI;
 import harmonised.pmmo.client.gui.XPOverlayGUI;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
@@ -20,13 +21,9 @@ public class ClientSetup {
 	public static final KeyMapping SUB_VEIN = new KeyMapping(LangProvider.KEYBIND_SUBVEIN.key(), GLFW.GLFW_KEY_RIGHT_BRACKET, LangProvider.KEYBIND_CATEGORY.key());
 	public static final KeyMapping CYCLE_VEIN = new KeyMapping(LangProvider.KEYBIND_VEINCYCLE.key(), GLFW.GLFW_KEY_APOSTROPHE, LangProvider.KEYBIND_CATEGORY.key());
     public static final KeyMapping SHOW_LIST = new KeyMapping(LangProvider.KEYBIND_SHOWLIST.key(), GLFW.GLFW_KEY_LEFT_ALT, LangProvider.KEYBIND_CATEGORY.key());
-    //public static final KeyMapping TOGGLE_TOOLTIP = new KeyMapping("key.pmmo.toggleTooltip", GLFW.GLFW_KEY_F6, LangProvider.KEYBIND_CATEGORY.key());
     public static final KeyMapping VEIN_KEY = new KeyMapping(LangProvider.KEYBIND_VEIN.key(), GLFW.GLFW_KEY_GRAVE_ACCENT, LangProvider.KEYBIND_CATEGORY.key());
     public static final KeyMapping OPEN_MENU = new KeyMapping(LangProvider.KEYBIND_OPENMENU.key(), GLFW.GLFW_KEY_P, LangProvider.KEYBIND_CATEGORY.key());
-    //public static final KeyMapping OPEN_SETTINGS = new KeyMapping("key.pmmo.openSettings", GLFW.GLFW_KEY_UNKNOWN, LangProvider.KEYBIND_CATEGORY.key());
-    //public static final KeyMapping OPEN_SKILLS = new KeyMapping("key.pmmo.openSkills", GLFW.GLFW_KEY_UNKNOWN, LangProvider.KEYBIND_CATEGORY.key());
-    //public static final KeyMapping OPEN_GLOSSARY = new KeyMapping("key.pmmo.openGlossary", GLFW.GLFW_KEY_UNKNOWN, LangProvider.KEYBIND_CATEGORY.key());
-    
+
     @SubscribeEvent
     public static void init(RegisterKeyMappingsEvent event) {
     	event.register(SHOW_VEIN);
@@ -41,5 +38,6 @@ public class ClientSetup {
     @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
     	event.registerAboveAll("stats_overlay", new XPOverlayGUI());
+    	event.registerAboveAll("tutorial", new TutorialOverlayGUI());
     }
 }
