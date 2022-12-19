@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.codecs.EnhancementsData;
@@ -18,11 +17,21 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.event.TagsUpdatedEvent.UpdateCause;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.DEDICATED_SERVER)
 public class CoreLoader {
@@ -30,8 +39,13 @@ public class CoreLoader {
 	
 	@SubscribeEvent
 	public static void onTagLoad(TagsUpdatedEvent event) {
+		Core core = Core.get(event.getUpdateCause() == UpdateCause.CLIENT_PACKET_RECEIVED ? LogicalSide.CLIENT : LogicalSide.SERVER);
 		if (event.shouldUpdateStaticData()) {
-			//TODO parse Tags into objects
+			core.getLoader().ITEM_LOADER.postProcess();
+			core.getLoader().BLOCK_LOADER.postProcess();
+			core.getLoader().ENTITY_LOADER.postProcess();
+			//core.getLoader().DIMENSION_LOADER.postProcess();
+			core.getLoader().BIOME_LOADER.postProcess();
 		}
 	}
 	
@@ -50,7 +64,7 @@ public class CoreLoader {
 		printData((Map<ResourceLocation, ? extends Record>) data);
 	}
 	
-	public MergeableCodecDataManager<?> getLoader(ObjectType type) {
+	public MergeableCodecDataManager<?, ?> getLoader(ObjectType type) {
 		return switch (type) {
 		case ITEM -> ITEM_LOADER;
 		case BLOCK -> BLOCK_LOADER;
@@ -63,7 +77,7 @@ public class CoreLoader {
 		default -> null;};
 	}
 	
-	public MergeableCodecDataManager<?> getLoader(ModifierDataType type) {
+	public MergeableCodecDataManager<?, ?> getLoader(ModifierDataType type) {
 		return switch(type) {
 		case WORN, HELD -> ITEM_LOADER;
 		case DIMENSION -> DIMENSION_LOADER;
@@ -84,22 +98,22 @@ public class CoreLoader {
 		ConfigurationRegistry.get().applyOverrides(Core.get(LogicalSide.SERVER));
 	});
 	
-	public final MergeableCodecDataManager<ObjectData> ITEM_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/items", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new);
-	public final MergeableCodecDataManager<ObjectData> BLOCK_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/blocks", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new);
-	public final MergeableCodecDataManager<ObjectData> ENTITY_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/entities", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new);
-	public final MergeableCodecDataManager<LocationData> BIOME_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/biomes", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new);
-	public final MergeableCodecDataManager<LocationData> DIMENSION_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/dimensions", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new);
-	public final MergeableCodecDataManager<PlayerData> PLAYER_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/players", DATA_LOGGER, PlayerData.CODEC, this::mergeLoaderData, this::printData, PlayerData::new);
-	public final MergeableCodecDataManager<EnhancementsData> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/enchantments", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new);
-	public final MergeableCodecDataManager<EnhancementsData> EFFECT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/effects", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new);
+	public final MergeableCodecDataManager<ObjectData, Item> ITEM_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/items", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, ForgeRegistries.ITEMS);
+	public final MergeableCodecDataManager<ObjectData, Block> BLOCK_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/blocks", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, ForgeRegistries.BLOCKS);
+	public final MergeableCodecDataManager<ObjectData, EntityType<?>> ENTITY_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/entities", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, ForgeRegistries.ENTITY_TYPES);
+	public final MergeableCodecDataManager<LocationData, Biome> BIOME_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/biomes", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new, ForgeRegistries.BIOMES);
+	public final MergeableCodecDataManager<LocationData, Level> DIMENSION_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/dimensions", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new, null);
+	public final MergeableCodecDataManager<PlayerData, Player> PLAYER_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/players", DATA_LOGGER, PlayerData.CODEC, this::mergeLoaderData, this::printData, PlayerData::new, null);
+	public final MergeableCodecDataManager<EnhancementsData, Enchantment> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/enchantments", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, ForgeRegistries.ENCHANTMENTS);
+	public final MergeableCodecDataManager<EnhancementsData, MobEffect> EFFECT_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/effects", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, ForgeRegistries.MOB_EFFECTS);
 	
 	
 	private <T extends DataSource<T>> T mergeLoaderData(final List<T> raws) {

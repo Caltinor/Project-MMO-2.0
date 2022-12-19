@@ -2,6 +2,7 @@ package harmonised.pmmo.config.codecs;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -29,6 +30,7 @@ public interface DataSource<T> {
 	public boolean isUnconfigured();
 	
 	//======SHARED METHODS=========================
+	public default Set<String> getTagValues() {return Set.of();}
 	public default Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
 		return new HashMap<>();
 	};

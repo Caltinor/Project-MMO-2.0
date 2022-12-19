@@ -68,6 +68,8 @@ public record LocationData(
 		positive().clear();
 		positive().putAll(pos);
 	}
+	@Override
+	public Set<String> getTagValues() {return tagValues();}
 	
 	public static final Codec<LocationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(ld -> Optional.of(ld.override())),

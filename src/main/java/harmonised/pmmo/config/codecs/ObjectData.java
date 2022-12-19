@@ -82,6 +82,8 @@ public record ObjectData(
 			negativeEffects().clear();
 			negativeEffects().putAll(neg);
 		}
+		@Override
+		public Set<String> getTagValues() {return tagValues();}
 
 		public static final Codec<ObjectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),

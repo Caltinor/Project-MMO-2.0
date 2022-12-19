@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -48,6 +49,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 
 import harmonised.pmmo.config.codecs.DataSource;
+import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
@@ -55,6 +57,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.common.MinecraftForge;
@@ -62,6 +65,8 @@ import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.PacketDistributor.PacketTarget;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 
 /**
  * Generic data loader for Codec-parsable data.
@@ -70,8 +75,9 @@ import net.minecraftforge.network.simple.SimpleChannel;
  * to the forge events necessary for syncing datapack data to clients.
  * @param <T> The type of the objects that the codec is parsing jsons as
  * @param <T> The type of the object we get after merging the parsed objects. Can be the same as RAW
+ * @param <V>
  */
-public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePreparableReloadListener<Map<ResourceLocation, T>>
+public class MergeableCodecDataManager<T extends DataSource<T>, V> extends SimplePreparableReloadListener<Map<ResourceLocation, T>>
 {
 	protected static final String JSON_EXTENSION = ".json";
 	protected static final int JSON_EXTENSION_LENGTH = JSON_EXTENSION.length();
@@ -87,6 +93,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 	private final Consumer<Map<ResourceLocation, T>> finalizer;
 	private final Gson gson;
 	private final Supplier<T> defaultImpl;
+	private final IForgeRegistry<V> registry;
 	
 	/**
 	 * Initialize a data manager with the given folder name, codec, and merger
@@ -103,9 +110,9 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
 	 */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
-			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl)
+			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, IForgeRegistry<V> registry)
 	{
-		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON, defaultImpl);
+		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON, defaultImpl, registry);
 	}
 
 	
@@ -126,7 +133,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 	 * raw json to a JsonElement, which the Codec then parses into a proper java object.
 	 */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
-			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl)
+			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, IForgeRegistry<V> registry)
 	{
 		this.folderName = folderName;
 		this.logger = logger;
@@ -135,6 +142,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 		this.finalizer = finalizer;
 		this.gson = gson;
 		this.defaultImpl = defaultImpl;
+		this.registry = registry;
 	}
 	
 	//TODO Add a method that scans the data for tags and then parses the tags for applying them to their respective final objects.
@@ -223,6 +231,32 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 		this.data.putAll(processedData);
 		finalizer.accept(processedData);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void postProcess() {
+		for (DataSource<T>dataValue : new ArrayList<>(this.data.values())) {
+			if (dataValue.getTagValues().isEmpty()) continue;
+			List<ResourceLocation> tags = new ArrayList<>();
+			for (String str : dataValue.getTagValues()) {
+				if (str.startsWith("#")) {
+					tags.addAll(registry.tags()
+							.getTag(TagKey.create(registry.getRegistryKey(), new ResourceLocation(str.substring(1))))
+							.stream()
+							.map(item -> registry.getKey(item))
+							.toList());
+				}
+				else if (str.endsWith(":*")) {
+					tags.addAll(registry.getKeys()
+							.stream()
+							.filter(key -> key.getNamespace().equals(str.replace(":*", "")))
+							.toList());
+				}
+				else
+					tags.add(new ResourceLocation(str));
+			}
+			tags.forEach(rl -> {this.data.put(rl, (T) data);});
+		}
+	}
 
 	/**
 	 * This should be called at most once, during construction of your mod (static init of your main mod class is fine)
@@ -233,7 +267,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>> extends SimplePr
 	 * @param packetFactory  A packet constructor or factory method that converts the given map to a packet object to send on the given channel
 	 * @return this manager object
 	 */
-	public <PACKET> MergeableCodecDataManager<T> subscribeAsSyncable(final SimpleChannel channel,
+	public <PACKET> MergeableCodecDataManager<T, V> subscribeAsSyncable(final SimpleChannel channel,
 		final Function<Map<ResourceLocation, T>, PACKET> packetFactory)
 	{
 		MinecraftForge.EVENT_BUS.addListener(this.getDatapackSyncListener(channel, packetFactory));
