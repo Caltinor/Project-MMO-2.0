@@ -52,7 +52,7 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onServerStartup(ServerStartingEvent event) {
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Loading PMMO Saved Data");
-		Core.get(LogicalSide.SERVER).getData(event.getServer());
+		Core.get(LogicalSide.SERVER).getData();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Computing data for cache");
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
@@ -76,7 +76,6 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
 		event.addListener(CoreLoader.RELOADER);
-		event.addListener(CoreLoader.DEFAULT_CONFIG);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
@@ -85,7 +84,6 @@ public class CommonSetup {
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
-		event.addListener(CoreLoader.OVERRIDE_CONFIG);
 	}
 	
 	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {

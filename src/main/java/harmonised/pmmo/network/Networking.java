@@ -3,7 +3,6 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.network.clientpackets.CP_ApplyConfigRegistry;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
@@ -19,7 +18,6 @@ import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
-import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -96,11 +94,6 @@ public class Networking {
 			.decoder(CP_SyncVein::new)
 			.consumerNetworkThread(CP_SyncVein::handle)
 			.add();
-		INSTANCE.messageBuilder(CP_ApplyConfigRegistry.class, ID++)
-			.encoder(CP_ApplyConfigRegistry::encode)
-			.decoder(CP_ApplyConfigRegistry::new)
-			.consumerNetworkThread(CP_ApplyConfigRegistry::handle)
-			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
 			.encoder(SP_UpdateVeinTarget::toBytes)
@@ -127,7 +120,6 @@ public class Networking {
 	
 	public static void registerDataSyncPackets() {
 		CoreLoader.RELOADER.subscribeAsSyncable(INSTANCE, () -> new CP_ClearData());
-		ConfigurationRegistry.addSyncPacket(INSTANCE, false);
 		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.ITEM, o));
 		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.BLOCK, o));
 		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.ENTITY, o));
@@ -136,7 +128,6 @@ public class Networking {
 		Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(ObjectType.ENCHANTMENT, o));
 		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(ObjectType.EFFECT, o));
 		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
-		ConfigurationRegistry.addSyncPacket(INSTANCE, true);
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {

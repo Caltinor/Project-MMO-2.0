@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,10 +20,12 @@ import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.config.codecs.DataSource;
+import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
+import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
@@ -246,10 +247,13 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerRequirement(ObjectType oType, ResourceLocation objectID, ReqType type, Map<String, Integer> requirements, boolean asOverride) {
-		registerConfiguration(asOverride, core -> {
-				MsLoggy.INFO.log(LOG_CODE.DATA, "{} Requirement Configuration Applied: {}: {} {}", asOverride ? "Override": "Default", objectID.toString(), type.name(), MsLoggy.mapToString(requirements));
-				core.getLoader().getLoader(oType).getData(objectID).setReqs(type, requirements);
-			});
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
+		default -> {}}
+		raw.setReqs(type, requirements);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for experience that should be awarded
 	 * to a player for performing an action with/on a specific object.
@@ -260,7 +264,13 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerXpAward(ObjectType oType, ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setXpValues(type, award));
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
+		default -> {}}
+		raw.setXpValues(type, award);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for bonuses to xp gains.
 	 * 
@@ -270,7 +280,14 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerBonus(ObjectType oType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setBonuses(type, bonus));
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM -> {raw = new ObjectData();}
+		case PLAYER -> {raw = new PlayerData();}
+		default -> {}}
+		raw.setBonuses(type, bonus);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
 	 * if they attempt to wear/hold/travel and they are not skilled enough to do so.
@@ -281,7 +298,13 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerNegativeEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setNegativeEffects(effects));
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM -> {raw = new ObjectData();}
+		default -> {}}
+		raw.setNegativeEffects(effects);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
 	 * based on their meeting or not meeting the requirements for the specified location.
@@ -293,7 +316,13 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerPositiveEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getLoader().getLoader(oType).getData(objectID).setPositiveEffects(effects));
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM -> {raw = new ObjectData();}
+		default -> {}}
+		raw.setPositiveEffects(effects);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for items which can be obtained 
 	 * via salvage from the item supplied.
@@ -305,11 +334,9 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage, boolean asOverride) {
-		registerConfiguration(asOverride, core -> {
-			core.getLoader().ITEM_LOADER.getData(item).salvage().clear();
-			core.getLoader().ITEM_LOADER.getData(item).salvage().putAll(salvage.entrySet().stream()
-					.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().build())));
-		});
+		ObjectData raw = new ObjectData();
+		raw.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().build())));
+		registerConfiguration(asOverride, ObjectType.ITEM, item, raw);
 	}
 	/**registers vein information for the specified block or item.  Items 
 	 * give the player ability charge rate and capacity.  blocks use the 
@@ -325,10 +352,9 @@ public class APIUtils {
 		if (oType != ObjectType.ITEM && oType != ObjectType.BLOCK)
 			return;
 		VeinData data = new VeinData(chargeCap, chargeRate, consumeAmount);
-		registerConfiguration(asOverride, core -> {
-			ObjectData loader = (ObjectData) core.getLoader().getLoader(oType).getData(objectID);
-			loader.veinData().replaceWith(data);
-		});
+		ObjectData raw = new ObjectData();
+		raw.veinData().combine(data);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	
 	public static final String MOB_HEALTH = "health";
@@ -344,15 +370,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
-		registerConfiguration(asOverride, core -> {switch (oType) {
-			case BIOME -> {
-				core.getLoader().BIOME_LOADER.getData(locationID).mobModifiers().clear(); 
-				core.getLoader().BIOME_LOADER.getData(locationID).mobModifiers().putAll(mob_modifiers);}
-			case DIMENSION -> {
-				core.getLoader().DIMENSION_LOADER.getData(locationID).mobModifiers().clear(); 
-				core.getLoader().DIMENSION_LOADER.getData(locationID).mobModifiers().putAll(mob_modifiers);}
-			default -> {}
-		}});		
+		if (oType != ObjectType.BIOME && oType != ObjectType.DIMENSION) 
+			return;
+		LocationData raw = new LocationData();
+		raw.mobModifiers().putAll(mob_modifiers);
+		registerConfiguration(asOverride, oType, locationID, raw);	
 	}
 
 	/**<b>INTERNAL USE ONLY.</b> Utility method for registering custom configurations
@@ -360,11 +382,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 * @param consumer execution for applying the configuration
 	 */
-	private static void registerConfiguration(boolean asOverride, Consumer<Core> consumer) {
+	private static void registerConfiguration(boolean asOverride, ObjectType oType, ResourceLocation objectID, DataSource<?> data) {
 		if (asOverride)
-			ConfigurationRegistry.get().registerOverride(consumer);
+			Core.get(LogicalSide.SERVER).getLoader().getLoader(oType).registerOverride(objectID, data);
 		else
-			ConfigurationRegistry.get().registerDefault(consumer);
+			Core.get(LogicalSide.SERVER).getLoader().getLoader(oType).registerDefault(objectID, data);
 	}
 	
 	/**A builder class used to create a {@link harmonised.pmmo.config.codecs.CodecTypes SalvageData}

@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -41,7 +40,6 @@ import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
@@ -49,7 +47,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 
 import harmonised.pmmo.config.codecs.DataSource;
-import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
@@ -65,7 +62,6 @@ import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.PacketDistributor.PacketTarget;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 /**
@@ -94,6 +90,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	private final Gson gson;
 	private final Supplier<T> defaultImpl;
 	private final IForgeRegistry<V> registry;
+	private Map<ResourceLocation, T> defaultSettings = new HashMap<>();
+	private Map<ResourceLocation, T> overrideSettings = new HashMap<>();
 	
 	/**
 	 * Initialize a data manager with the given folder name, codec, and merger
@@ -154,12 +152,48 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	}
 	
 	public T getGenericTypeInstance() {return defaultImpl.get();}
+	
+	/**Adds default data to loader. This data is placed first in
+	 * the load order before any data from file is read.  This
+	 * data is intended to be overwritten by datapacks.
+	 * <p><i>Note: this does not check for duplicates.
+	 * Any registrations should be done during mod construction
+	 * and never called again. The purpose of this registration
+	 * is to cache the processor for repeated use at a
+	 * later point, such as data reloads.
+	 * 
+	 * @param id the object registry ID
+	 * @param data the object containing the specific data
+	 */
+	@SuppressWarnings("unchecked")
+	public void registerDefault(ResourceLocation id, DataSource<?> data) {
+		defaultSettings.merge(id, (T) data, (currID, currData) -> currData.combine((T) data));
+	}
+	
+	/**Adds override data to the loader.  This data is applied on
+	 * top of any other data.  This is a code-based hard overwrite.
+	 * Unlike datapacks, this does not merge data. It hard overwrites
+	 * the preceding data/configurations.
+	 * <p><i>Note: this does not check for duplicates.
+	 * Any registrations should be done during mod construction
+	 * and never called again. The purpose of this registration
+	 * is to cache the processor for repeated use at a
+	 * later point, such as data reloads.
+	 * 
+	 * @param id the object registry ID
+	 * @param data the object containing the specific data
+	 */
+	@SuppressWarnings("unchecked")
+	public void registerOverride(ResourceLocation id, DataSource<?> data) {
+		overrideSettings.merge(id, (T) data, (currID, currData) -> currData.combine((T) data));
+	}
 
 	/** Off-thread processing (can include reading files from hard drive) **/
 	@Override
 	protected Map<ResourceLocation, T> prepare(final ResourceManager resourceManager, final ProfilerFiller profiler)
 	{
-		final Map<ResourceLocation, List<T>> map = Maps.newHashMap();
+		final Map<ResourceLocation, List<T>> map = new HashMap<>();
+		defaultSettings.forEach((id, data) -> {map.put(id, new ArrayList<>(List.of(data)));});
 
 		for (ResourceLocation resourceLocation : resourceManager.listResources(this.folderName, MergeableCodecDataManager::isStringJsonFile).keySet())
 		{
@@ -227,9 +261,11 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	{
 		MsLoggy.INFO.log(LOG_CODE.DATA, "Beginning loading of data for data loader: {}", this.folderName);
 		// now that we're on the main thread, we can finalize the data
-		//TODO data = defaultSettings.get();
 		this.data.putAll(processedData);
-		finalizer.accept(processedData);
+		//Apply overrides
+		this.data.putAll(overrideSettings);
+		//Execute post-processing behavior (mostly logging at this point).
+		finalizer.accept(this.data);
 	}
 	
 	@SuppressWarnings("unchecked")

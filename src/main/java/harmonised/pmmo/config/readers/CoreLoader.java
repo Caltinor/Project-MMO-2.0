@@ -12,7 +12,6 @@ import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -88,14 +87,6 @@ public class CoreLoader {
 	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {
 		//TODO change this to reset locally
 		Core.get(LogicalSide.SERVER).resetDataForReload();
-	});
-	public static final ExecutableListener DEFAULT_CONFIG = new ExecutableListener(() -> {
-		MsLoggy.INFO.log(LOG_CODE.DATA, "Configuration Defaults from API Applied");
-		ConfigurationRegistry.get().applyDefaults(Core.get(LogicalSide.SERVER));
-	});
-	public static final ExecutableListener OVERRIDE_CONFIG = new ExecutableListener(() -> {
-		MsLoggy.INFO.log(LOG_CODE.DATA, "Configuration Overrides from API Applied");
-		ConfigurationRegistry.get().applyOverrides(Core.get(LogicalSide.SERVER));
 	});
 	
 	public final MergeableCodecDataManager<ObjectData, Item> ITEM_LOADER = new MergeableCodecDataManager<>(

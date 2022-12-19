@@ -41,7 +41,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -57,6 +56,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 /**<p>This class bridges the gap between various systems within Project MMO.
  * Methods within this class connect these distinct systems without 
@@ -102,9 +102,8 @@ public class Core {
 	public void resetDataForReload() {
 		tooltips.clearRegistry();
 		if (side.equals(LogicalSide.SERVER)) {
-			PmmoSavedData dataBackend = (PmmoSavedData) data;
-			if (dataBackend.getServer() == null) return;
-			for (ServerPlayer player : dataBackend.getServer().getPlayerList().getPlayers()) {
+			if (ServerLifecycleHooks.getCurrentServer() == null) return;
+			for (ServerPlayer player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
 				Networking.sendToClient(new CP_ClearData(), player);
 			}
 		}
@@ -117,7 +116,6 @@ public class Core {
 	public PerkRegistry getPerkRegistry() {return perks;}
 	public LevelRegistry getLevelProvider() {return lvlProvider;}
 	public IDataStorage getData() {return data.get();}
-	public IDataStorage getData(MinecraftServer server) {return data.get(server);}
 	public LogicalSide getSide() {return side;}
 	
 	//============================================================================================
