@@ -6,11 +6,8 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
+import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Enhancements;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Players;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
@@ -49,25 +46,10 @@ public class Networking {
 			.decoder(CP_UpdateExperience::new)
 			.consumerNetworkThread(CP_UpdateExperience::handle)
 			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Objects.class, ID++)
-			.encoder(CP_SyncData_Objects::encode)
-			.decoder(CP_SyncData_Objects::decode)
-			.consumerNetworkThread(CP_SyncData_Objects::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Locations.class, ID++)
-			.encoder(CP_SyncData_Locations::encode)
-			.decoder(CP_SyncData_Locations::decode)
-			.consumerNetworkThread(CP_SyncData_Locations::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Enhancements.class, ID++)
-			.encoder(CP_SyncData_Enhancements::encode)
-			.decoder(CP_SyncData_Enhancements::decode)
-			.consumerNetworkThread(CP_SyncData_Enhancements::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Players.class, ID++)
-			.encoder(CP_SyncData_Players::encode)
-			.decoder(CP_SyncData_Players::decode)
-			.consumerNetworkThread(CP_SyncData_Players::handle)
+		INSTANCE.messageBuilder(CP_SyncData.class, ID++)
+			.encoder(CP_SyncData::encode)
+			.decoder(CP_SyncData::decode)
+			.consumerNetworkThread(CP_SyncData::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
 			.encoder((packet, buf) -> {})
@@ -120,14 +102,14 @@ public class Networking {
 	
 	public static void registerDataSyncPackets() {
 		CoreLoader.RELOADER.subscribeAsSyncable(INSTANCE, () -> new CP_ClearData());
-		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.ITEM, o));
-		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.BLOCK, o));
-		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(ObjectType.ENTITY, o));
-		Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(ObjectType.BIOME, o));
-		Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(ObjectType.DIMENSION, o));
-		Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(ObjectType.ENCHANTMENT, o));
-		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(ObjectType.EFFECT, o));
-		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
+		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.ITEM, o));
+		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.BLOCK, o));
+		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.ENTITY, o));
+		Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.BIOME, o));
+		Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.DIMENSION, o));
+		Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.ENCHANTMENT, o));
+		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.EFFECT, o));
+		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.PLAYER, o));
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {
