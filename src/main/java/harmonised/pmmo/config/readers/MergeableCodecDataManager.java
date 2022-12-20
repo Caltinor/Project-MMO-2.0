@@ -147,6 +147,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	
 	public Map<ResourceLocation, T> getData() {return data;}
 	
+	public void clearData() {this.data = new HashMap<>();}
+	
 	public T getData(ResourceLocation id) {
 		return data.computeIfAbsent(id, res -> getGenericTypeInstance());
 	}
@@ -264,8 +266,6 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 		this.data.putAll(processedData);
 		//Apply overrides
 		this.data.putAll(overrideSettings);
-		//Execute post-processing behavior (mostly logging at this point).
-		finalizer.accept(this.data);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -292,6 +292,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			}
 			tags.forEach(rl -> {this.data.put(rl, (T) data);});
 		}
+		//Execute post-processing behavior (mostly logging at this point).
+		finalizer.accept(this.data);
 	}
 
 	/**
@@ -317,10 +319,11 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 		return event -> {
 			ServerPlayer player = event.getPlayer();
 			List<PACKET> packets = new ArrayList<>();
-			for (Map.Entry<ResourceLocation, T> entry : this.data.entrySet()) {
+			for (Map.Entry<ResourceLocation, T> entry : new HashMap<>(this.data).entrySet()) {
+				if (entry.getKey() == null) continue;
 				packets.add(packetFactory.apply(Map.of(entry.getKey(), entry.getValue())));
 			}
-			//packetFactory.apply(this.data);
+
 			PacketTarget target = player == null
 				? PacketDistributor.ALL.noArg()
 				: PacketDistributor.PLAYER.with(() -> player);

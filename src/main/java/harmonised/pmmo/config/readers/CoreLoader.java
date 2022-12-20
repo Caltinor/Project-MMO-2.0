@@ -85,9 +85,19 @@ public class CoreLoader {
 	}
 	
 	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {
-		//TODO change this to reset locally
-		Core.get(LogicalSide.SERVER).resetDataForReload();
+		Core.get(LogicalSide.SERVER).getLoader().resetData();
 	});
+	
+	public void resetData() {
+		ITEM_LOADER.clearData();
+		BLOCK_LOADER.clearData();
+		ENTITY_LOADER.clearData();
+		BIOME_LOADER.clearData();
+		DIMENSION_LOADER.clearData();
+		PLAYER_LOADER.clearData();
+		ENCHANTMENT_LOADER.clearData();
+		EFFECT_LOADER.clearData();
+	}
 	
 	public final MergeableCodecDataManager<ObjectData, Item> ITEM_LOADER = new MergeableCodecDataManager<>(
 			"pmmo/items", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, ForgeRegistries.ITEMS);
@@ -113,6 +123,9 @@ public class CoreLoader {
 	}
 	
 	private void printData(Map<ResourceLocation, ? extends Record> data) {
-		data.forEach((id, value) -> {MsLoggy.INFO.log(LOG_CODE.DATA, "Object: {} with Data: {}", id.toString(), value.toString());});
+		data.forEach((id, value) -> {
+			if (id == null || value == null) return;
+			MsLoggy.INFO.log(LOG_CODE.DATA, "Object: {} with Data: {}", id.toString(), value.toString());
+		});
 	}
 }
