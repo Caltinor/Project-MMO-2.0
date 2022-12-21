@@ -3,7 +3,7 @@ package harmonised.pmmo.setup;
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
-import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.autovalues.AutoValues;
@@ -52,11 +52,9 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onServerStartup(ServerStartingEvent event) {
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Loading PMMO Saved Data");
-		Core.get(LogicalSide.SERVER).getData(event.getServer());
+		Core.get(LogicalSide.SERVER).getData();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Computing data for cache");
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
-		MsLoggy.INFO.log(LOG_CODE.LOADING, "Executing Default Registrations");
-		Core.get(LogicalSide.SERVER).registerNBT();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
 	}
 	
@@ -77,17 +75,15 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(CoreParser.RELOADER);
-		event.addListener(CoreParser.DEFAULT_CONFIG);
-		event.addListener(CoreParser.ITEM_LOADER);
-		event.addListener(CoreParser.BLOCK_LOADER);
-		event.addListener(CoreParser.ENTITY_LOADER);
-		event.addListener(CoreParser.BIOME_LOADER);
-		event.addListener(CoreParser.DIMENSION_LOADER);
-		event.addListener(CoreParser.PLAYER_LOADER);
-		event.addListener(CoreParser.ENCHANTMENT_LOADER);
-		event.addListener(CoreParser.EFFECT_LOADER);
-		event.addListener(CoreParser.OVERRIDE_CONFIG);
+		event.addListener(CoreLoader.RELOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
 	}
 	
 	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {

@@ -23,7 +23,7 @@ public class PlaceHandler {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		Core core = Core.get(event.getEntity().getLevel());
-		if (!core.isBlockActionPermitted(ReqType.PLACE, event.getPos(), player)) {
+		if (!core.isActionPermitted(ReqType.PLACE, event.getPos(), player)) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.PLACE, player, event.getPlacedBlock().getBlock().getName());
 			return;
@@ -39,7 +39,7 @@ public class PlaceHandler {
 		}
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_PLACE, player, eventHookOutput, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.BLOCK_PLACE, event.getPos(),(Level) event.getLevel(), (Player) event.getEntity(), perkOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.BLOCK_PLACE, event.getPos(),(Level) event.getLevel(), (Player) event.getEntity(), perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 			core.awardXP(partyMembersInRange, xpAward);
 			//Add the newly placed block to the ChunkDataHandler

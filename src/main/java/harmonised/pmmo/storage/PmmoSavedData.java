@@ -25,15 +25,14 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class PmmoSavedData extends SavedData implements IDataStorage{
 	
-	private static MinecraftServer server;
 	private static String NAME = Reference.MOD_ID;
 	
 	private Map<UUID, Map<String, Long>> xp = new HashMap<>();
@@ -52,7 +51,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	@Override
 	public boolean setXpDiff(UUID playerID, String skillName, long change) {
 		long oldValue = getXpRaw(playerID, skillName);
-		ServerPlayer player = server.getPlayerList().getPlayer(playerID);
+		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
 		
 		//if player is not online, schedule the XP for player join.
 		if (player == null) {
@@ -73,7 +72,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		xp.computeIfAbsent(playerID, s -> new HashMap<>()).put(skillName, value);
 		this.setDirty();
 		ServerPlayer player;
-		if ((player = server.getPlayerList().getPlayer(playerID)) != null) {
+		if ((player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID)) != null) {
 			Networking.sendToClient(new CP_UpdateExperience(skillName, value), player);
 			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
 			//capture command cases for XP gain which should prompt a skillup event
@@ -108,7 +107,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		int currentLevel = getPlayerSkillLevel(skill, playerID);
 		long oldXp = getXpRaw(playerID, skill);
 		long newXp = (currentLevel - 1 + change) > 0 ? levelCache.get(currentLevel + change - 1) : 0l;
-		ServerPlayer player = server.getPlayerList().getPlayer(playerID);	
+		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);	
 			
 		if (player != null) {
 			XpEvent gainXpEvent = new XpEvent(player, skill, oldXp, newXp - oldXp, TagBuilder.start().build());
@@ -145,23 +144,14 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		nbt.put(SCHEDULED_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, scheduledXP).result().orElse(new CompoundTag()))));
 		return nbt;
 	}
-	@Override
-	public IDataStorage get(MinecraftServer server) {
-        PmmoSavedData.server = server;
-        return get();
-    }
 	
 	@Override
 	public IDataStorage get() { 
-		if (server != null)
-			return server.overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
+		if (ServerLifecycleHooks.getCurrentServer() != null)
+			return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
 		else
 			return new PmmoSavedData();
     }
-	
-	public MinecraftServer getServer() {
-		return server;
-	}
 
 	//============================UTILITY METHODS===========================
 	@Override
@@ -217,7 +207,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			}
 			levelCache.add(current);
 		}
-		for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+		for (ServerPlayer player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
 			Networking.sendToClient(new CP_UpdateLevelCache(levelCache), player);
 		}
 	}

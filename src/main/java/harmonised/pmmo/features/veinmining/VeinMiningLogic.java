@@ -8,12 +8,14 @@ import java.util.UUID;
 
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinShapeData.ShapeType;
 import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -38,12 +40,12 @@ public class VeinMiningLogic {
 	public static void applyVein(ServerPlayer player, BlockPos pos) {
 		if (!Config.VEIN_ENABLED.get()) return;
 		ServerLevel level = player.getLevel();
-		int cost = Core.get(level).getVeinData().getBlockConsume(level.getBlockState(pos).getBlock());
+		Block block = level.getBlockState(pos).getBlock();
+		int cost = Core.get(level).getBlockConsume(block);
 		if (cost == -1) return; 
 		int charge = getCurrentCharge(player);
-		int consumed = 0;	
-		Block block = level.getBlockState(pos).getBlock();
-		int maxBlocks = Math.min(charge/Core.get(level).getVeinData().getBlockConsume(block), maxBlocksPerPlayer.computeIfAbsent(player.getUUID(), id -> 64));
+		int consumed = 0;			
+		int maxBlocks = Math.min(charge/cost, maxBlocksPerPlayer.computeIfAbsent(player.getUUID(), id -> 64));
 		ShapeType mode = shapePerPlayer.computeIfAbsent(player.getUUID(), id -> ShapeType.AOE);
 		VeinShapeData veinData = new VeinShapeData(level, pos, maxBlocks, mode, player.getDirection());
 		for (BlockPos veinable : veinData.getVein()) {
@@ -72,9 +74,10 @@ public class VeinMiningLogic {
 		int chargeCap = 0;
 		double chargeRate = 0d;
 		for (ItemStack stack : items) {
-			if (core.getVeinData().hasChargeData(stack)) {
-				chargeCap += core.getVeinData().getItemChargeCapSetting(stack);
-				chargeRate += core.getVeinData().getItemRechargeRateSetting(stack);
+			VeinData data;
+			if ((data = core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData()).chargeRate.isPresent()) {
+				chargeCap += data.chargeCap.orElse(0);
+				chargeRate += data.chargeRate.orElse(0d);
 			}
 		}
 		if (chargeRate == 0 || chargeCap == 0 || currentCharge >= chargeCap) 
@@ -117,7 +120,7 @@ public class VeinMiningLogic {
 		//================================
 		int totalCapacity = 0;
 		for (ItemStack stack : items) {
-			totalCapacity += Core.get(player.level).getVeinData().getItemChargeCapSetting(stack);
+			totalCapacity += Core.get(player.level).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0);
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
 		return totalCapacity; 

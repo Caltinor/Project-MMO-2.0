@@ -29,7 +29,7 @@ public class PlayerClickHandler {
 		Core core = Core.get(player.level);
 		boolean serverSide = !player.level.isClientSide;
 		
-		if (!core.isBlockActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
+		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
 			event.setUseBlock(Result.DENY);
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
@@ -52,7 +52,7 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.HIT_BLOCK, player, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.HIT_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.HIT_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
@@ -63,7 +63,7 @@ public class PlayerClickHandler {
 		Core core = Core.get(player.level);
 		boolean serverSide = !player.level.isClientSide;
 		
-		if (!core.isBlockActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
+		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
 			event.setUseBlock(Result.DENY);
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
@@ -83,14 +83,14 @@ public class PlayerClickHandler {
 			}
 			//======================SALVAGE DROP LOGIC=======================================
 			if (player.isCrouching() && RegistryUtil.getId(event.getLevel().getBlockState(event.getPos()).getBlock()).equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
-				core.getSalvageLogic().getSalvage((ServerPlayer) player, core);
+				core.getSalvage((ServerPlayer) player);
 			}
 			//=======================END SALVAGE============================================
 		}		
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_BLOCK, player, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.ACTIVATE_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ACTIVATE_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}

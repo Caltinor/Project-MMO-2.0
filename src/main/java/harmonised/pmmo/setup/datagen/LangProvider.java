@@ -4,13 +4,12 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.fml.LogicalSide;
 
 public class LangProvider extends LanguageProvider{
 	private String locale;
@@ -566,7 +565,7 @@ public class LangProvider extends LanguageProvider{
 	}
 	
 	public static MutableComponent skill(String skill) {
-		return Component.translatable("pmmo."+skill).withStyle(style -> style.withColor(Core.get(LogicalSide.SERVER).getDataConfig().getSkillColor(skill)));
+		return Component.translatable("pmmo."+skill).withStyle(style -> style.withColor(CoreUtils.getSkillColor(skill)));
 	}
 	
 	public static record Translation(String key, Map<String, String> localeMap) {

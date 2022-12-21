@@ -31,7 +31,7 @@ public class BreakHandler {
 	public static void handle(BreakEvent event) {
 		Core core = Core.get(event.getPlayer().getLevel());
 		boolean serverSide = !event.getPlayer().level.isClientSide;
-		if (!core.isBlockActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
+		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.BREAK, event.getPlayer(), event.getState().getBlock().getName());
 			return;
@@ -61,7 +61,7 @@ public class BreakHandler {
 			chunk.setUnsaved(true);
 		}
 		//==============Process Vein Miner Logic==================
-		if (core.getVeinData().getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
+		if (core.getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			if (event.getPlayer().getMainHandItem().getItem() instanceof TieredItem) {
 				TieredItem item = (TieredItem) event.getPlayer().getMainHandItem().getItem();
@@ -72,7 +72,7 @@ public class BreakHandler {
 	}
 	
 	private static Map<String, Long> calculateXpAward(Core core, BreakEvent event, CompoundTag dataIn) {
-		Map<String, Long> outMap = core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getLevel(), event.getPlayer(), dataIn); 
+		Map<String, Long> outMap = core.getExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getLevel(), event.getPlayer(), dataIn); 
 		LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
 		IChunkData cap = chunk.getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
 		if (cap.playerMatchesPos(event.getPlayer(), event.getPos())) {

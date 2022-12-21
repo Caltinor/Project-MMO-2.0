@@ -34,18 +34,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 
+import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
@@ -53,6 +54,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.common.MinecraftForge;
@@ -60,30 +62,36 @@ import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.PacketDistributor.PacketTarget;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.IForgeRegistry;
 
 /**
  * Generic data loader for Codec-parsable data.
  * This works best if initialized during your mod's construction.
  * After creating the manager, subscribeAsSyncable can optionally be called on it to subscribe the manager
  * to the forge events necessary for syncing datapack data to clients.
- * @param <RAW> The type of the objects that the codec is parsing jsons as
- * @param <FINE> The type of the object we get after merging the parsed objects. Can be the same as RAW
+ * @param <T> The type of the objects that the codec is parsing jsons as
+ * @param <T> The type of the object we get after merging the parsed objects. Can be the same as RAW
+ * @param <V>
  */
-public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReloadListener<Map<ResourceLocation, FINE>>
+public class MergeableCodecDataManager<T extends DataSource<T>, V> extends SimplePreparableReloadListener<Map<ResourceLocation, T>>
 {
 	protected static final String JSON_EXTENSION = ".json";
 	protected static final int JSON_EXTENSION_LENGTH = JSON_EXTENSION.length();
 	protected static final Gson STANDARD_GSON = new Gson();
 	@Nonnull
 	/** Mutable, non-null map containing whatever data was loaded last time server datapacks were loaded **/ 
-	protected Map<ResourceLocation, FINE> data = new HashMap<>();
+	protected Map<ResourceLocation, T> data = new HashMap<>();
 	
 	private final String folderName;
 	private final Logger logger;
-	private final Codec<RAW> codec;
-	private final Function<List<RAW>, FINE> merger;
-	private final Consumer<Map<ResourceLocation, FINE>> finalizer;
+	private final Codec<T> codec;
+	private final Function<List<T>, T> merger;
+	private final Consumer<Map<ResourceLocation, T>> finalizer;
 	private final Gson gson;
+	private final Supplier<T> defaultImpl;
+	private final IForgeRegistry<V> registry;
+	private Map<ResourceLocation, T> defaultSettings = new HashMap<>();
+	private Map<ResourceLocation, T> overrideSettings = new HashMap<>();
 	
 	/**
 	 * Initialize a data manager with the given folder name, codec, and merger
@@ -99,9 +107,10 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
 	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
 	 */
-	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<RAW> codec, final Function<List<RAW>, FINE> merger, final Consumer<Map<ResourceLocation, FINE>> finalizer)
+	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
+			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, IForgeRegistry<V> registry)
 	{
-		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON);
+		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON, defaultImpl, registry);
 	}
 
 	
@@ -121,7 +130,8 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	 * @param gson A GSON instance, allowing for user-defined deserializers. General not needed as the gson is only used to convert
 	 * raw json to a JsonElement, which the Codec then parses into a proper java object.
 	 */
-	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<RAW> codec, final Function<List<RAW>, FINE> merger, final Consumer<Map<ResourceLocation, FINE>> finalizer, final Gson gson)
+	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
+			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, IForgeRegistry<V> registry)
 	{
 		this.folderName = folderName;
 		this.logger = logger;
@@ -129,15 +139,63 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 		this.merger = merger;
 		this.finalizer = finalizer;
 		this.gson = gson;
+		this.defaultImpl = defaultImpl;
+		this.registry = registry;
 	}
 	
-	public Map<ResourceLocation, FINE> getData() {return data;}
+	//TODO Add a method that scans the data for tags and then parses the tags for applying them to their respective final objects.
+	
+	public Map<ResourceLocation, T> getData() {return data;}
+	
+	public void clearData() {this.data = new HashMap<>();}
+	
+	public T getData(ResourceLocation id) {
+		return data.computeIfAbsent(id, res -> getGenericTypeInstance());
+	}
+	
+	public T getGenericTypeInstance() {return defaultImpl.get();}
+	
+	/**Adds default data to loader. This data is placed first in
+	 * the load order before any data from file is read.  This
+	 * data is intended to be overwritten by datapacks.
+	 * <p><i>Note: this does not check for duplicates.
+	 * Any registrations should be done during mod construction
+	 * and never called again. The purpose of this registration
+	 * is to cache the processor for repeated use at a
+	 * later point, such as data reloads.
+	 * 
+	 * @param id the object registry ID
+	 * @param data the object containing the specific data
+	 */
+	@SuppressWarnings("unchecked")
+	public void registerDefault(ResourceLocation id, DataSource<?> data) {
+		defaultSettings.merge(id, (T) data, (currID, currData) -> currData.combine((T) data));
+	}
+	
+	/**Adds override data to the loader.  This data is applied on
+	 * top of any other data.  This is a code-based hard overwrite.
+	 * Unlike datapacks, this does not merge data. It hard overwrites
+	 * the preceding data/configurations.
+	 * <p><i>Note: this does not check for duplicates.
+	 * Any registrations should be done during mod construction
+	 * and never called again. The purpose of this registration
+	 * is to cache the processor for repeated use at a
+	 * later point, such as data reloads.
+	 * 
+	 * @param id the object registry ID
+	 * @param data the object containing the specific data
+	 */
+	@SuppressWarnings("unchecked")
+	public void registerOverride(ResourceLocation id, DataSource<?> data) {
+		overrideSettings.merge(id, (T) data, (currID, currData) -> currData.combine((T) data));
+	}
 
 	/** Off-thread processing (can include reading files from hard drive) **/
 	@Override
-	protected Map<ResourceLocation, FINE> prepare(final ResourceManager resourceManager, final ProfilerFiller profiler)
+	protected Map<ResourceLocation, T> prepare(final ResourceManager resourceManager, final ProfilerFiller profiler)
 	{
-		final Map<ResourceLocation, List<RAW>> map = Maps.newHashMap();
+		final Map<ResourceLocation, List<T>> map = new HashMap<>();
+		defaultSettings.forEach((id, data) -> {map.put(id, new ArrayList<>(List.of(data)));});
 
 		for (ResourceLocation resourceLocation : resourceManager.listResources(this.folderName, MergeableCodecDataManager::isStringJsonFile).keySet())
 		{
@@ -148,7 +206,7 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 			// this is a json with identifier "somemodid:somedata"
 			final ResourceLocation jsonIdentifier = new ResourceLocation(namespace, dataPath);
 			// this is the list of all json objects with the given resource location (i.e. in multiple datapacks)
-			final List<RAW> unmergedRaws = new ArrayList<>();
+			final List<T> unmergedRaws = new ArrayList<>();
 			// it's entirely possible that there are multiple jsons with this identifier,
 			// we can query the resource manager for these
 			for (Resource resource : resourceManager.getResourceStack(resourceLocation))
@@ -201,12 +259,41 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	
 	/** Main-thread processing, runs after prepare concludes **/
 	@Override
-	protected void apply(final Map<ResourceLocation, FINE> processedData, final ResourceManager resourceManager, final ProfilerFiller profiler)
+	protected void apply(final Map<ResourceLocation, T> processedData, final ResourceManager resourceManager, final ProfilerFiller profiler)
 	{
 		MsLoggy.INFO.log(LOG_CODE.DATA, "Beginning loading of data for data loader: {}", this.folderName);
 		// now that we're on the main thread, we can finalize the data
-		this.data = processedData;
-		finalizer.accept(processedData);
+		this.data.putAll(processedData);
+		//Apply overrides
+		this.data.putAll(overrideSettings);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void postProcess() {
+		for (DataSource<T>dataValue : new ArrayList<>(this.data.values())) {
+			if (dataValue.getTagValues().isEmpty()) continue;
+			List<ResourceLocation> tags = new ArrayList<>();
+			for (String str : dataValue.getTagValues()) {
+				if (str.startsWith("#")) {
+					tags.addAll(registry.tags()
+							.getTag(TagKey.create(registry.getRegistryKey(), new ResourceLocation(str.substring(1))))
+							.stream()
+							.map(item -> registry.getKey(item))
+							.toList());
+				}
+				else if (str.endsWith(":*")) {
+					tags.addAll(registry.getKeys()
+							.stream()
+							.filter(key -> key.getNamespace().equals(str.replace(":*", "")))
+							.toList());
+				}
+				else
+					tags.add(new ResourceLocation(str));
+			}
+			tags.forEach(rl -> {this.data.put(rl, (T) data);});
+		}
+		//Execute post-processing behavior (mostly logging at this point).
+		finalizer.accept(this.data);
 	}
 
 	/**
@@ -218,8 +305,8 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	 * @param packetFactory  A packet constructor or factory method that converts the given map to a packet object to send on the given channel
 	 * @return this manager object
 	 */
-	public <PACKET> MergeableCodecDataManager<RAW, FINE> subscribeAsSyncable(final SimpleChannel channel,
-		final Function<Map<ResourceLocation, FINE>, PACKET> packetFactory)
+	public <PACKET> MergeableCodecDataManager<T, V> subscribeAsSyncable(final SimpleChannel channel,
+		final Function<Map<ResourceLocation, T>, PACKET> packetFactory)
 	{
 		MinecraftForge.EVENT_BUS.addListener(this.getDatapackSyncListener(channel, packetFactory));
 		return this;
@@ -227,15 +314,16 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	
 	/** Generate an event listener function for the on-datapack-sync event **/
 	private <PACKET> Consumer<OnDatapackSyncEvent> getDatapackSyncListener(final SimpleChannel channel,
-		final Function<Map<ResourceLocation, FINE>, PACKET> packetFactory)
+		final Function<Map<ResourceLocation, T>, PACKET> packetFactory)
 	{
 		return event -> {
 			ServerPlayer player = event.getPlayer();
 			List<PACKET> packets = new ArrayList<>();
-			for (Map.Entry<ResourceLocation, FINE> entry : this.data.entrySet()) {
+			for (Map.Entry<ResourceLocation, T> entry : new HashMap<>(this.data).entrySet()) {
+				if (entry.getKey() == null) continue;
 				packets.add(packetFactory.apply(Map.of(entry.getKey(), entry.getValue())));
 			}
-			//packetFactory.apply(this.data);
+
 			PacketTarget target = player == null
 				? PacketDistributor.ALL.noArg()
 				: PacketDistributor.PLAYER.with(() -> player);

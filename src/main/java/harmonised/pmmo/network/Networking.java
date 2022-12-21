@@ -1,18 +1,13 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.api.enums.ObjectType;
-import harmonised.pmmo.config.readers.CoreParser;
-import harmonised.pmmo.core.NBTUtils;
-import harmonised.pmmo.network.clientpackets.CP_ApplyConfigRegistry;
+import harmonised.pmmo.config.readers.CoreLoader;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
-import harmonised.pmmo.network.clientpackets.CP_RegisterNBT;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
+import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Enhancements;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_Players;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
@@ -20,13 +15,12 @@ import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
-import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -52,25 +46,10 @@ public class Networking {
 			.decoder(CP_UpdateExperience::new)
 			.consumerNetworkThread(CP_UpdateExperience::handle)
 			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Objects.class, ID++)
-			.encoder(CP_SyncData_Objects::encode)
-			.decoder(CP_SyncData_Objects::decode)
-			.consumerNetworkThread(CP_SyncData_Objects::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Locations.class, ID++)
-			.encoder(CP_SyncData_Locations::encode)
-			.decoder(CP_SyncData_Locations::decode)
-			.consumerNetworkThread(CP_SyncData_Locations::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Enhancements.class, ID++)
-			.encoder(CP_SyncData_Enhancements::encode)
-			.decoder(CP_SyncData_Enhancements::decode)
-			.consumerNetworkThread(CP_SyncData_Enhancements::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData_Players.class, ID++)
-			.encoder(CP_SyncData_Players::encode)
-			.decoder(CP_SyncData_Players::decode)
-			.consumerNetworkThread(CP_SyncData_Players::handle)
+		INSTANCE.messageBuilder(CP_SyncData.class, ID++)
+			.encoder(CP_SyncData::encode)
+			.decoder(CP_SyncData::decode)
+			.consumerNetworkThread(CP_SyncData::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
 			.encoder((packet, buf) -> {})
@@ -97,16 +76,6 @@ public class Networking {
 			.decoder(CP_SyncVein::new)
 			.consumerNetworkThread(CP_SyncVein::handle)
 			.add();
-		INSTANCE.messageBuilder(CP_ApplyConfigRegistry.class, ID++)
-			.encoder(CP_ApplyConfigRegistry::encode)
-			.decoder(CP_ApplyConfigRegistry::new)
-			.consumerNetworkThread(CP_ApplyConfigRegistry::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_RegisterNBT.class, ID++)
-			.encoder((packet, buf) -> {})
-			.decoder(buf -> new CP_RegisterNBT())
-			.consumerNetworkThread(CP_RegisterNBT::handle)
-			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
 			.encoder(SP_UpdateVeinTarget::toBytes)
@@ -132,18 +101,15 @@ public class Networking {
 	}
 	
 	public static void registerDataSyncPackets() {
-		CoreParser.RELOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_ClearData());
-		ConfigurationRegistry.addSyncPacket(INSTANCE, false);
-		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ITEM, o)));
-		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.BLOCK, o)));
-		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o)));
-		CoreParser.BIOME_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Locations::new);
-		CoreParser.DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Locations::new);
-		CoreParser.ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(true, o));
-		CoreParser.EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData_Enhancements(false, o));
-		CoreParser.PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
-		ConfigurationRegistry.addSyncPacket(INSTANCE, true);
-		MinecraftForge.EVENT_BUS.addListener(NBTUtils.onDataReload(INSTANCE));
+		CoreLoader.RELOADER.subscribeAsSyncable(INSTANCE, () -> new CP_ClearData());
+		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.ITEM, o));
+		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.BLOCK, o));
+		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.ENTITY, o));
+		Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.BIOME, o));
+		Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.DIMENSION, o));
+		Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.ENCHANTMENT, o));
+		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.EFFECT, o));
+		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.PLAYER, o));
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {

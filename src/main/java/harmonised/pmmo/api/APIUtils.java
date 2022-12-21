@@ -5,8 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.function.TriFunction;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -14,18 +15,22 @@ import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.config.codecs.DataSource;
+import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.ObjectData;
+import harmonised.pmmo.config.codecs.PlayerData;
+import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
-import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -158,7 +163,7 @@ public class APIUtils {
 		Preconditions.checkNotNull(level);
 		Preconditions.checkNotNull(pos);
 		Preconditions.checkNotNull(type);
-		return Core.get(level).getBlockExperienceAwards(type, pos, level, null, new CompoundTag());
+		return Core.get(level).getExperienceAwards(type, pos, level, null, new CompoundTag());
 	}
 	
 	/**Obtians a map of the skills and experience amount that would be awarded for the provided
@@ -241,11 +246,14 @@ public class APIUtils {
 	 * @param requirements a map of skills and levels needed to perform the action
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerRequirement(ResourceLocation objectID, ReqType type, Map<String, Integer> requirements, boolean asOverride) {
-		registerConfiguration(asOverride, core -> {
-				MsLoggy.INFO.log(LOG_CODE.DATA, "{} Requirement Configuration Applied: {}: {} {}", asOverride ? "Override": "Default", objectID.toString(), type.name(), MsLoggy.mapToString(requirements));
-				core.getSkillGates().setObjectSkillMap(type, objectID, requirements);
-			});
+	public static void registerRequirement(ObjectType oType, ResourceLocation objectID, ReqType type, Map<String, Integer> requirements, boolean asOverride) {
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
+		default -> {}}
+		raw.setReqs(type, requirements);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for experience that should be awarded
 	 * to a player for performing an action with/on a specific object.
@@ -255,8 +263,14 @@ public class APIUtils {
 	 * @param award a map of skills and experience values to be awarded
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerXpAward(ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getXpUtils().setObjectXpGainMap(type, objectID, award));
+	public static void registerXpAward(ObjectType oType, ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
+		default -> {}}
+		raw.setXpValues(type, award);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for bonuses to xp gains.
 	 * 
@@ -265,41 +279,64 @@ public class APIUtils {
 	 * @param bonus a map of skills and multipliers (1.0 = no bonus)
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerBonus(ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getXpUtils().setObjectXpModifierMap(type, objectID, bonus));
+	public static void registerBonus(ObjectType oType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM -> {raw = new ObjectData();}
+		case PLAYER -> {raw = new PlayerData();}
+		default -> {}}
+		raw.setBonuses(type, bonus);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
-	 * if they attempt to wear/hold and item they are not skilled enough to use.
+	 * if they attempt to wear/hold/travel and they are not skilled enough to do so.
 	 * 
-	 * @param item the key for the item being configured
+	 * @param oType the object type this effect is being stored on
+	 * @param objectID the key for the item being configured
 	 * @param effects a map of effect ids and levels
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerNegativeEffect(ResourceLocation item, Map<ResourceLocation, Integer> effects, boolean asOverride) {
-		registerConfiguration(asOverride, core -> effects.forEach((id, level) -> core.getDataConfig().setReqEffectData(item, id, level)));
+	public static void registerNegativeEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM -> {raw = new ObjectData();}
+		default -> {}}
+		raw.setNegativeEffects(effects);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
 	 * based on their meeting or not meeting the requirements for the specified location.
 	 * <p>Note: a "negative" effect on a dimension will have no use in-game</p>
 	 * 
-	 * @param locationID the key for the dimension or biome being configured
+	 * @param oType the object type this effect is being stored on
+	 * @param objectID the key for the dimension or biome being configured
 	 * @param effects a map of effect ids and levels
-	 * @param isPositive is this for when a player gets a bonus (true) or as a penalty (false)
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerLocationEffect(ResourceLocation locationID, Map<ResourceLocation, Integer> effects, boolean isPositive, boolean asOverride) {
-		registerConfiguration(asOverride, core -> core.getDataConfig().setLocationEffectData(isPositive, locationID, effects));
+	public static void registerPositiveEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
+		DataSource<?> raw = null;
+		switch (oType) {
+		case BIOME, DIMENSION -> {raw = new LocationData();}
+		case ITEM -> {raw = new ObjectData();}
+		default -> {}}
+		raw.setPositiveEffects(effects);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for items which can be obtained 
 	 * via salvage from the item supplied.
 	 * <p>This class provides {@link SalvageBuilder} as a means to construct
 	 * the salvage settings for each output object</p>
+	 * 
 	 * @param item a key for the item to be consumed by the salvage operation
 	 * @param salvage a map of output item keys and the conditions for salvage
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage, boolean asOverride) {
-		registerConfiguration(asOverride, core -> salvage.forEach((id, data) ->core.getSalvageLogic().setSalvageData(item, id, data.build())));
+		ObjectData raw = new ObjectData();
+		raw.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().build())));
+		registerConfiguration(asOverride, ObjectType.ITEM, item, raw);
 	}
 	/**registers vein information for the specified block or item.  Items 
 	 * give the player ability charge rate and capacity.  blocks use the 
@@ -311,9 +348,13 @@ public class APIUtils {
 	 * @param consumeAmount optional value (only used on blocks) for vein consumed when broken
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerVeinData(ResourceLocation objectID, Optional<Integer> chargeCap, Optional<Double> chargeRate, Optional<Integer> consumeAmount, boolean asOverride) {
+	public static void registerVeinData(ObjectType oType, ResourceLocation objectID, Optional<Integer> chargeCap, Optional<Double> chargeRate, Optional<Integer> consumeAmount, boolean asOverride) {
+		if (oType != ObjectType.ITEM && oType != ObjectType.BLOCK)
+			return;
 		VeinData data = new VeinData(chargeCap, chargeRate, consumeAmount);
-		registerConfiguration(asOverride, core -> core.getVeinData().setVeinData(objectID, data));
+		ObjectData raw = new ObjectData();
+		raw.veinData().combine(data);
+		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	
 	public static final String MOB_HEALTH = "health";
@@ -328,8 +369,12 @@ public class APIUtils {
 	 * @param mob_modifiers a map of mob keys with a value map of attribute types and values
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerMobModifier(ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
-		registerConfiguration(asOverride, core -> mob_modifiers.forEach((id, map) -> core.getDataConfig().setMobModifierData(locationID, id, map)));		
+	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
+		if (oType != ObjectType.BIOME && oType != ObjectType.DIMENSION) 
+			return;
+		LocationData raw = new LocationData();
+		raw.mobModifiers().putAll(mob_modifiers);
+		registerConfiguration(asOverride, oType, locationID, raw);	
 	}
 
 	/**<b>INTERNAL USE ONLY.</b> Utility method for registering custom configurations
@@ -337,11 +382,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 * @param consumer execution for applying the configuration
 	 */
-	private static void registerConfiguration(boolean asOverride, Consumer<Core> consumer) {
+	private static void registerConfiguration(boolean asOverride, ObjectType oType, ResourceLocation objectID, DataSource<?> data) {
 		if (asOverride)
-			ConfigurationRegistry.get().registerOverride(consumer);
+			Core.get(LogicalSide.SERVER).getLoader().getLoader(oType).registerOverride(objectID, data);
 		else
-			ConfigurationRegistry.get().registerDefault(consumer);
+			Core.get(LogicalSide.SERVER).getLoader().getLoader(oType).registerDefault(objectID, data);
 	}
 	
 	/**A builder class used to create a {@link harmonised.pmmo.config.codecs.CodecTypes SalvageData}
@@ -680,14 +725,10 @@ public class APIUtils {
 	 * @param awardMap a map of skillnames and xp values to be provided to the xp award logic 
 	 * @return a serialized {@link net.minecraft.nbt.ListTag ListTag} that can be deserialized consistently 
 	 */
-	public static ListTag serializeAwardMap(Map<String, Long> awardMap) {
-		ListTag out = new ListTag();
-		for (Map.Entry<String, Long> entry : awardMap.entrySet()) {
-			CompoundTag nbt = new CompoundTag();
-			nbt.putString(Reference.API_MAP_SERIALIZER_KEY, entry.getKey());
-			nbt.putLong(Reference.API_MAP_SERIALIZER_VALUE, entry.getValue());
-			out.add(nbt);
-		}
-		return out;
+	public static CompoundTag serializeAwardMap(Map<String, Long> awardMap) {
+		return (CompoundTag)CodecTypes.LONG_CODEC
+				.encodeStart(NbtOps.INSTANCE, awardMap)
+				.resultOrPartial(str -> MsLoggy.ERROR.log(LOG_CODE.API, "Error Serializing Award Map Via API: {}",str))
+				.orElse(new CompoundTag());
 	}
 }
