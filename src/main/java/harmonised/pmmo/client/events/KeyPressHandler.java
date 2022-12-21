@@ -12,6 +12,7 @@ import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
@@ -26,7 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 public class KeyPressHandler {
 
 	@SubscribeEvent
-    public static void keyPressEvent(net.minecraftforge.client.event.InputEvent.KeyInputEvent event)
+    public static void keyPressEvent(net.minecraftforge.client.event.InputEvent.Key event)
     {
 		Minecraft mc = Minecraft.getInstance();
         if(mc.player != null)
@@ -34,13 +35,17 @@ public class KeyPressHandler {
             if(ClientSetup.VEIN_KEY.isDown() && mc.hitResult != null && mc.hitResult.getType().equals(Type.BLOCK)) {
             	BlockHitResult bhr = (BlockHitResult) mc.hitResult;
             	Block block = mc.player.level.getBlockState(bhr.getBlockPos()).getBlock();
-            	if (!Core.get(LogicalSide.CLIENT).getDataConfig().isBlockVeinBlacklisted(mc.player.level.dimension().getRegistryName(), block)
-            		&& !Core.get(LogicalSide.CLIENT).getDataConfig().isBlockVeinBlacklisted(mc.player.level.getBiome(mc.player.blockPosition()).value().getRegistryName(), block)) {
+            	if (!Core.get(LogicalSide.CLIENT).getLoader().DIMENSION_LOADER
+            			.getData(mc.player.level.dimension().location())
+            			.veinBlacklist().contains(RegistryUtil.getId(block))
+            		&& !Core.get(LogicalSide.CLIENT).getLoader().BIOME_LOADER
+            			.getData(RegistryUtil.getId(mc.player.level.getBiome(mc.player.blockPosition()).get()))
+            			.veinBlacklist().contains(RegistryUtil.getId(block))) {
 	            	VeinTracker.setTarget(bhr.getBlockPos());
 	            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));
             	}
             	else
-            		mc.player.sendMessage(LangProvider.VEIN_BLACKLIST.asComponent(), mc.player.getUUID());
+            		mc.player.sendSystemMessage(LangProvider.VEIN_BLACKLIST.asComponent());
             }
             if (ClientSetup.SHOW_LIST.isDown()) {
             	Config.SKILL_LIST_DISPLAY.set(!Config.SKILL_LIST_DISPLAY.get());

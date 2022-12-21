@@ -45,7 +45,7 @@ public class CropGrowHandler {
 			hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.GROW, player, core.getSide()));
 
 			//Apply experience gains
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.GROW, event.getPos(), level, player, hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.GROW, event.getPos(), level, player, hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);
 			core.awardXP(partyMembersInRange, xpAward);
 		}

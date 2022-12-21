@@ -24,7 +24,5 @@ import java.util.Map;
  */
 public class CheeseTracker {
 
-	public static Map<String, Long> applyAntiCheese(Map<String, Long> awardIn) {
-		return awardIn;
-	}
+	public static void applyAntiCheese(Map<String, Long> awardIn) {}
 }

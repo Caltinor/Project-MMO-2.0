@@ -6,17 +6,14 @@ import java.util.List;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
-import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
@@ -57,9 +54,9 @@ public class ClientTickHandler {
 		public GainEntry(String skill, long value) {
 			this.duration = MsLoggy.DEBUG.logAndReturn(Config.GAIN_LIST_LINGER_DURATION.get()
 								, LOG_CODE.GUI, "Gain Duration Set as: {}");
-			display = new TextComponent("+"+value+" ")
-					.append(new TranslatableComponent("pmmo."+skill))
-					.setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(skill));
+			display = Component.literal("+"+value+" ")
+					.append(Component.translatable("pmmo."+skill))
+					.setStyle(CoreUtils.getSkillStyle(skill));
 		}
 		public void downTick() {
 			duration--;

@@ -13,6 +13,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.setup.datagen.LangProvider;
 
@@ -119,7 +120,7 @@ public class XPOverlayGUI implements IIngameOverlay
 				new TranslatableComponent("pmmo."+skillName), 
 				bonusLine(bonus), 
 				xpValue,
-				Core.get(LogicalSide.CLIENT).getDataConfig().getSkillColor(skillName),
+				CoreUtils.getSkillColor(skillName),
 				yOffset * 9,
 				skillGap);
 		}

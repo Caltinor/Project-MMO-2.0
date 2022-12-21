@@ -20,7 +20,7 @@ public class SP_UpdateVeinTarget {
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Target sent to Server for pos: "+pos.toString());
-			Core.get(LogicalSide.SERVER).getVeinData().setMarkedPos(ctx.get().getSender().getUUID(), pos);
+			Core.get(LogicalSide.SERVER).setMarkedPos(ctx.get().getSender().getUUID(), pos);
 		});
 		ctx.get().setPacketHandled(true);
 	}

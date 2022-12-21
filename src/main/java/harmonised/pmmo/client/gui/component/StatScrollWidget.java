@@ -17,19 +17,25 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.PerksConfig;
-import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.config.codecs.DataSource;
+import harmonised.pmmo.config.codecs.EnhancementsData;
+import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.PlayerData;
+import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -41,8 +47,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -52,7 +56,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.gui.ScrollPanel;
+import net.minecraftforge.client.gui.widget.ScrollPanel;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -61,16 +65,16 @@ public class StatScrollWidget extends ScrollPanel{
 	
 	private static record TextElement(Component text, int xOffset, int color, boolean isHeader, int headerColor) implements Element{
 		public TextElement(String key, int value, int xOffset, int color) {
-			this(new TranslatableComponent("pmmo."+key).append(new TextComponent(": "+value)), xOffset, color, false, 0);
+			this(Component.translatable("pmmo."+key).append(Component.literal(": "+value)), xOffset, color, false, 0);
 		}
 		public TextElement(String key, long value, int xOffset, int color) {
-			this(new TranslatableComponent("pmmo."+key).append(new TextComponent(": "+value)), xOffset, color, false, 0);
+			this(Component.translatable("pmmo."+key).append(Component.literal(": "+value)), xOffset, color, false, 0);
 		}
 		public TextElement(String key, double value, int xOffset, int color) {
-			this(new TranslatableComponent("pmmo."+key).append(new TextComponent(": "+DP.dp(value*100)+"%")), xOffset, color, false, 0);
+			this(Component.translatable("pmmo."+key).append(Component.literal(": "+DP.dp(value*100)+"%")), xOffset, color, false, 0);
 		}
 		public TextElement(Enum<?> type, int xOffset, int color, boolean isHeader, int headerColor) {
-			this(new TranslatableComponent("pmmo.enum."+type.name()), xOffset, color, isHeader, headerColor);
+			this(Component.translatable("pmmo.enum."+type.name()), xOffset, color, isHeader, headerColor);
 		}
 		@SuppressWarnings("resource")
 		@Override
@@ -120,7 +124,7 @@ public class StatScrollWidget extends ScrollPanel{
 	public StatScrollWidget(int width, int height, int top, int left, int pointless) {
 		this(width, height, top, left);
 		populateLocation(List.of(mc.level.dimension().location()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.DIMENSION}, "", false, true, true);
-		populateLocation(List.of(mc.level.getBiome(mc.player.blockPosition()).value().getRegistryName()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.BIOME}, "", true, true, true);
+		populateLocation(List.of(mc.level.getBiome(mc.player.blockPosition()).unwrapKey().get().location()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.BIOME}, "", true, true, true);
 	}
 	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack, ItemRenderer itemRenderer) {
 		this(width, height, top, left);
@@ -171,7 +175,7 @@ public class StatScrollWidget extends ScrollPanel{
 				break;}
 			case ENTITY: {
 				populateEntity(
-					ForgeRegistries.ENTITIES.getValues().stream().map(entityType -> entityType.create(mc.level)).filter(entity -> entity != null).toList(),
+					ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(mc.level)).filter(entity -> entity != null).toList(),
 					events,
 					type == null ? ReqType.ENTITY_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
 					false,
@@ -210,8 +214,8 @@ public class StatScrollWidget extends ScrollPanel{
 				break;}
 			case ENTITY: {
 				populateEntity(
-						ForgeRegistries.ENTITIES.getValues().stream().map(entityType -> entityType.create(Minecraft.getInstance().level)).filter(entity -> entity != null).toList(),
-						type == null ? EventType.ITEM_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
+						ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(Minecraft.getInstance().level)).filter(entity -> entity != null).toList(),
+						type == null ? EventType.ENTITY_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
 						reqs, false, skill);
 				break;}
 			case EFFECTS: {
@@ -313,15 +317,17 @@ public class StatScrollWidget extends ScrollPanel{
 				if (reqType == ReqType.USE_ENCHANTMENT)
 					core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
 				return reqMap;
-				}),	core.getDataConfig().getItemEffect(RegistryUtil.getId(stack)), reqs, skillFilter);
+				}),	
+				CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect(), true), 
+				reqs, skillFilter);
 			addModifierSection((mod -> core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(stack), mod) ?
 						core.getTooltipRegistry().getBonusTooltipData(RegistryUtil.getId(stack), mod, stack) :
-						core.getXpUtils().getObjectModifierMap(mod, RegistryUtil.getId(stack))
+						core.getObjectModifierMap(ObjectType.ITEM, RegistryUtil.getId(stack), mod, TagUtils.stackTag(stack))
 				), modifiers, skillFilter);
 			if (includeSalvage)
-				addSalvageSection(core.getSalvageLogic().getSalvageData(RegistryUtil.getId(stack)));
+				addSalvageSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).salvage());
 			if (includeVein)
-				addItemVeinSection(core.getVeinData().getData(stack), stack.getItem() instanceof BlockItem);
+				addItemVeinSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData(), stack.getItem() instanceof BlockItem);
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		}
@@ -329,9 +335,9 @@ public class StatScrollWidget extends ScrollPanel{
 	
 	@SuppressWarnings("resource")
 	private void populateBlockFromWorld(BlockPos block, EventType[] events, ReqType[] reqs) {
-		addEventSection((event -> core.getBlockExperienceAwards(event, block, Minecraft.getInstance().level, null, new CompoundTag())), events, "");
+		addEventSection((event -> core.getExperienceAwards(event, block, Minecraft.getInstance().level, null, new CompoundTag())), events, "");
 		addReqSection((reqType -> core.getReqMap(reqType, block, Minecraft.getInstance().level)), new ArrayList<>(), reqs, "");
-		addBlockVeinSection(core.getVeinData().getData(new ItemStack(Minecraft.getInstance().level.getBlockState(block).getBlock().asItem())));
+		addBlockVeinSection(core.getLoader().BLOCK_LOADER.getData(RegistryUtil.getId(Minecraft.getInstance().level.getBlockState(block))).veinData());
 	}
 	
 	private static final String PREDICATE_KEY = "usesPredicate";
@@ -344,15 +350,15 @@ public class StatScrollWidget extends ScrollPanel{
 			content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color.getColor(), Config.SECTION_HEADER_COLOR.get(), block));
 			addEventSection((event -> core.getTooltipRegistry().xpGainTooltipExists(id, event)
 					? Collections.singletonMap(PREDICATE_KEY, 0l)
-					: core.getXpUtils().getObjectExperienceMap(event, id))
+					: core.getObjectExperienceMap(ObjectType.BLOCK, id, event, new CompoundTag()))
 				, events, skillFilter);
 			addReqSection((reqType -> core.getPredicateRegistry().predicateExists(id, reqType)
 					? Collections.singletonMap(PREDICATE_KEY, 0)
-					: core.getSkillGates().getObjectSkillMap(reqType, id))
+					: core.getObjectSkillMap(ObjectType.BLOCK, id, reqType, new CompoundTag()))
 				, new ArrayList<>()
 				, reqs, skillFilter);
 			if (includeVein)
-				addBlockVeinSection(core.getVeinData().getData(stack));
+				addBlockVeinSection(core.getLoader().BLOCK_LOADER.getData(RegistryUtil.getId(block)).veinData());
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		}
@@ -378,13 +384,13 @@ public class StatScrollWidget extends ScrollPanel{
 			if (effects.size() > 1)
 				content.add(new TextElement(effect.getDisplayName(), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
-			for (int lvl = 0; lvl <= core.getXpUtils().getEffectHighestConfiguration(effect); lvl++) {
-				Map<String, Long> xpMap = core.getXpUtils().getEffectExperienceMap(new MobEffectInstance(effect, 30, lvl));
+			for (int lvl = 0; lvl <= getEffectHighestConfiguration(effect); lvl++) {
+				Map<String, Long> xpMap = core.getExperienceAwards(new MobEffectInstance(effect, 30, lvl), null, new CompoundTag());
 				if (!xpMap.isEmpty() && !xpMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
-					holder.add(new TextElement(new TextComponent(String.valueOf(lvl)), 1, 0xFFFFFF, false, 0));
+					holder.add(new TextElement(Component.literal(String.valueOf(lvl)), 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Long> map : xpMap.entrySet()) {
 						if (map.getValue() == 0) continue;
-						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
+						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), CoreUtils.getSkillColor(map.getKey())));
 					}
 				}
 			}
@@ -397,19 +403,31 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 	}
 	
+	private int getEffectHighestConfiguration(MobEffect effect) {
+		DataSource<?> data = core.getLoader().getLoader(ObjectType.EFFECT).getData().get(RegistryUtil.getId(effect));
+		return data == null ? 0 : ((EnhancementsData)data).skillArray().keySet().stream().max(Comparator.naturalOrder()).orElse(-1);
+	}
+	
 	private void populateLocation(List<ResourceLocation> locations, ReqType[] reqs, ModifierDataType[] modifiers, String skillFilter, boolean isBiome, boolean includeVein, boolean includeScaling) {
 		locations.forEach(loc -> {
 			int lengthBeforeProcessing = content.size() + 1;
 			if (locations.size() > 1)
-				content.add(new TextElement(new TextComponent(loc.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-			addReqSection((reqType -> core.getSkillGates().getObjectSkillMap(reqType, loc)), isBiome ? core.getDataConfig().getLocationEffect(false, loc) : new ArrayList<>(), reqs, skillFilter);
+				content.add(new TextElement(Component.literal(loc.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+			addReqSection((reqType -> core.getObjectSkillMap(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, 
+					loc, reqType, new CompoundTag())), 
+					isBiome 
+						? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(loc).getNegativeEffect(), true) 
+						: new ArrayList<>(), 
+					reqs, skillFilter);
 			if (reqs.length > 0 && isBiome)
-				addReqEffectSection(core.getDataConfig().getLocationEffect(true, loc), false);
-			addModifierSection((mod -> core.getXpUtils().getObjectModifierMap(mod, loc)), modifiers, skillFilter);
+				addReqEffectSection(CoreUtils.getEffects(isBiome 
+						? core.getLoader().getLoader(ObjectType.BIOME).getData(loc).getPositiveEffect()
+						: core.getLoader().getLoader(ObjectType.DIMENSION).getData(loc).getPositiveEffect(), false), false);
+			addModifierSection((mod -> core.getObjectModifierMap(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, loc, mod, new CompoundTag())), modifiers, skillFilter);
 			if (includeVein)
-				addVeinBlacklistSection(loc);
+				addVeinBlacklistSection(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, loc);
 			if (includeScaling)
-				addMobModifierSection(loc);
+				addMobModifierSection(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, loc);
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		});
@@ -419,15 +437,15 @@ public class StatScrollWidget extends ScrollPanel{
 		enchants.forEach(ench -> {
 			int lengthBeforeProcessing = content.size() + 1;
 			if (enchants.size() > 1)
-				content.add(new TextElement(new TextComponent(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new TextElement(Component.literal(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
 			for (int i = 0; i <= ForgeRegistries.ENCHANTMENTS.getValue(ench).getMaxLevel(); i++) {
-				Map<String, Integer> reqMap = core.getSkillGates().getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
+				Map<String, Integer> reqMap = core.getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
-					holder.add(new TextElement(new TextComponent(String.valueOf(i)), 1, 0xFFFFFF, false, 0));
+					holder.add(new TextElement(Component.literal(String.valueOf(i)), 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
 						if (map.getValue() == 0) continue;
-						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
+						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), CoreUtils.getSkillColor(map.getKey())));
 					}
 				}
 			}
@@ -448,11 +466,11 @@ public class StatScrollWidget extends ScrollPanel{
 			PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>()).forEach((skill, list) -> {
 				if (!skill.contains(skillFilter)) 
 					return;
-				holder.add(new TextElement(new TranslatableComponent("pmmo."+skill).withStyle(ChatFormatting.UNDERLINE),
-						step(1), core.getDataConfig().getSkillStyle(skill).getColor().getValue(), false, 0));
+				holder.add(new TextElement(Component.translatable("pmmo."+skill).withStyle(ChatFormatting.UNDERLINE),
+						step(1), CoreUtils.getSkillStyle(skill).getColor().getValue(), false, 0));
 				list.forEach(src -> {
 					ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-					holder.add(new TextElement(new TranslatableComponent("pmmo."+perkID.getNamespace()+"."+perkID.getPath()), 
+					holder.add(new TextElement(Component.translatable("pmmo."+perkID.getNamespace()+"."+perkID.getPath()), 
 							step(1), 0xFFFFFF, false, 0));
 					CompoundTag newsrc = internalDefaults.copy().merge(core.getPerkRegistry().getProperties(perkID).merge(src));
 					newsrc.getAllKeys().forEach(key -> {
@@ -460,13 +478,13 @@ public class StatScrollWidget extends ScrollPanel{
 							return;
 						if (newsrc.get(key) instanceof ListTag) {
 							ListTag innerList = newsrc.getList(key, ((ListTag)newsrc.get(key)).getElementType());
-							holder.add(new TextElement(new TextComponent(key +" = "), step(2), 0xAAFFFF, false, 0));
+							holder.add(new TextElement(Component.literal(key +" = "), step(2), 0xAAFFFF, false, 0));
 							innerList.forEach(tag -> {
-								holder.add(new TextElement(new TextComponent(tag.getAsString()), step(3), 0x7C83BC, false, 0));
+								holder.add(new TextElement(Component.literal(tag.getAsString()), step(3), 0x7C83BC, false, 0));
 							});
 						}
 						else 
-							holder.add(new TextElement(new TextComponent(key +" = " + newsrc.get(key).getAsString()), 
+							holder.add(new TextElement(Component.literal(key +" = " + newsrc.get(key).getAsString()), 
 									step(2), 0xAAFFFF, false, 0));
 						
 					});
@@ -489,7 +507,7 @@ public class StatScrollWidget extends ScrollPanel{
 				else if (!xpAwards.isEmpty()) {
 					holder.add(new TextElement(event, 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Long> map : xpAwards.entrySet()) {
-						holder.add(new TextElement(map.getKey(), map.getValue(), 5, core.getDataConfig().getSkillColor(map.getKey())));
+						holder.add(new TextElement(map.getKey(), map.getValue(), 5, CoreUtils.getSkillColor(map.getKey())));
 					}
 				}
 			}
@@ -509,7 +527,7 @@ public class StatScrollWidget extends ScrollPanel{
 					holder.add(new TextElement(reqType, 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
 						if (map.getValue() == 0) continue;
-						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
+						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), CoreUtils.getSkillColor(map.getKey())));
 					}
 				}
 			}
@@ -538,7 +556,7 @@ public class StatScrollWidget extends ScrollPanel{
 				if (!modifiers.isEmpty()) {
 					content.add(new TextElement(mod, 1, 0xFFFFFF, false, 0));
 					modifiers.forEach((key, value) 
-							-> content.add(new TextElement(key, value, step(1), core.getDataConfig().getSkillColor(key))));
+							-> content.add(new TextElement(key, value, step(1), CoreUtils.getSkillColor(key))));
 				}
 			}
 			if (holder.size() > 0) {
@@ -558,7 +576,7 @@ public class StatScrollWidget extends ScrollPanel{
 				if (!data.levelReq().isEmpty()) {
 					content.add(new TextElement(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Integer> req : data.levelReq().entrySet()) {
-						content.add(new TextElement(req.getKey(), req.getValue(), step(2), core.getDataConfig().getSkillColor(req.getKey())));
+						content.add(new TextElement(req.getKey(), req.getValue(), step(2), CoreUtils.getSkillColor(req.getKey())));
 					}
 				}
 				content.add(new TextElement(LangProvider.SALVAGE_CHANCE.asComponent(data.baseChance(), data.maxChance()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
@@ -566,13 +584,13 @@ public class StatScrollWidget extends ScrollPanel{
 				if (!data.chancePerLevel().isEmpty()) {
 					content.add(new TextElement(LangProvider.SALVAGE_CHANCE_MOD.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Double> perLevel : data.chancePerLevel().entrySet()) {
-						content.add(new TextElement(perLevel.getKey(), perLevel.getValue(), step(2), core.getDataConfig().getSkillColor(perLevel.getKey())));
+						content.add(new TextElement(perLevel.getKey(), perLevel.getValue(), step(2), CoreUtils.getSkillColor(perLevel.getKey())));
 					}
 				}
 				if (!data.xpAward().isEmpty()) {
 					content.add(new TextElement(LangProvider.SALVAGE_XP_AWARD.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Long> award : data.xpAward().entrySet()) {
-						content.add(new TextElement(award.getKey(), award.getValue(), step(2), core.getDataConfig().getSkillColor(award.getKey())));
+						content.add(new TextElement(award.getKey(), award.getValue(), step(2), CoreUtils.getSkillColor(award.getKey())));
 					}
 				}
 			}
@@ -582,29 +600,29 @@ public class StatScrollWidget extends ScrollPanel{
 	private void addItemVeinSection(VeinData veinData, boolean isBlockItem) {
 		if (!veinData.equals(VeinData.EMPTY)) {
 			content.add(new TextElement(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-			content.add(new TextElement(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate().orElse(0d)), step(1), 0xFFFFFF, false, 0));
-			content.add(new TextElement(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap().orElse(0)), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate.orElse(0d)), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap.orElse(0)), step(1), 0xFFFFFF, false, 0));
 			if (isBlockItem)
-				content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+				content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.get()), step(1), 0xFFFFFF, false, 0));
 		}
 	}
 	
 	private void addBlockVeinSection(VeinData veinData) {
-		if (veinData.consumeAmount() != VeinData.EMPTY.consumeAmount()) {
+		if (veinData.consumeAmount != VeinData.EMPTY.consumeAmount) {
 			content.add(new TextElement(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-			content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.get()), step(1), 0xFFFFFF, false, 0));
 		}
 	}
 	
 	private void addPlayerSection(Entity entity) {
 		//Section for player-specific data as it expands
 		content.add(new TextElement(LangProvider.PLAYER_HEADER.asComponent(), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-		PlayerData data = core.getDataConfig().getPlayerData(entity.getUUID());
+		PlayerData data = core.getLoader().PLAYER_LOADER.getData(new ResourceLocation(entity.getUUID().toString()));
 		content.add(new TextElement(LangProvider.PLAYER_IGNORE_REQ.asComponent(data.ignoreReq()), step(2), 0xFFFFFF, false, 0));
-		if (!data.bonus().isEmpty()) {
+		if (!data.bonuses().isEmpty()) {
 			content.add(new TextElement(LangProvider.PLAYER_BONUSES.asComponent(), step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
-			for (Map.Entry<String, Double> bonus : data.bonus().entrySet()) {
-				content.add(new TextElement(bonus.getKey(), bonus.getValue(), step(3), core.getDataConfig().getSkillColor(bonus.getKey())));
+			for (Map.Entry<String, Double> bonus : data.bonuses().entrySet()) {
+				content.add(new TextElement(bonus.getKey(), bonus.getValue(), step(3), CoreUtils.getSkillColor(bonus.getKey())));
 			}
 		}
 		
@@ -618,24 +636,28 @@ public class StatScrollWidget extends ScrollPanel{
 		});
 		content.add(new TextElement(LangProvider.SKILL_LIST_HEADER.asComponent(), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 		for (Map.Entry<String, Integer> rawMap : orderedMap.entrySet()) {
-			content.add(new TextElement(rawMap.getKey(), rawMap.getValue(), step(2), core.getDataConfig().getSkillColor(rawMap.getKey())));
+			content.add(new TextElement(rawMap.getKey(), rawMap.getValue(), step(2), CoreUtils.getSkillColor(rawMap.getKey())));
 		}
 	}
 	
-	private void addVeinBlacklistSection(ResourceLocation location) {
-		if (!core.getDataConfig().getVeinBlacklist(location).isEmpty()) {
+	private void addVeinBlacklistSection(ObjectType type, ResourceLocation location) {
+		LocationData loader = (LocationData) core.getLoader().getLoader(type).getData(location);
+		if (!loader.veinBlacklist().isEmpty()) {
 			content.add(new TextElement(LangProvider.VEIN_BLACKLIST_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
-			for (ResourceLocation blockID : core.getDataConfig().getVeinBlacklist(location)) {
-				content.add(new TextElement(new TextComponent(blockID.toString()), step(2), 0xEEEEEE, false, 0));
+			for (ResourceLocation blockID : loader.veinBlacklist()) {
+				content.add(new TextElement(Component.literal(blockID.toString()), step(2), 0xEEEEEE, false, 0));
 			}
 		}
 	}
 	
-	private void addMobModifierSection(ResourceLocation location) {
-		if (!core.getDataConfig().getMobModifierMap(location).isEmpty()) {
+	private void addMobModifierSection(ObjectType type, ResourceLocation location) {
+		if (type != ObjectType.BIOME && type != ObjectType.DIMENSION) 
+			return;
+		LocationData loader = (LocationData) core.getLoader().getLoader(type).getData(location);
+		if (!loader.mobModifiers().isEmpty()) {
 			content.add(new TextElement(LangProvider.MOB_MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(location).entrySet()) {
-				Entity entity = ForgeRegistries.ENTITIES.getValue(mobMap.getKey()).create(mc.level);
+			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : loader.mobModifiers().entrySet()) {
+				Entity entity = ForgeRegistries.ENTITY_TYPES.getValue(mobMap.getKey()).create(mc.level);
 				content.add(new RenderableElement(entity.getName(), step(1), 0xFFFFFF, Config.SALVAGE_ITEM_COLOR.get(), entity));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
 					content.add(new TextElement(map.getKey(), map.getValue(), step(2), 0xFFFFFF));

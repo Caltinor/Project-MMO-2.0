@@ -14,7 +14,6 @@ import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.LogicalSide;
 
 /**This class serves as a run-time cache of data that
@@ -69,10 +68,8 @@ public class DataMirror implements IDataStorage{
 	
 	@Override
 	public long getXpRaw(UUID playerID, String skillName) {
-		return me(playerID) ? mySkills.getOrDefault(skillName, 0l) : otherSkills.getOrDefault(skillName, 0l);}
-	@Deprecated
-	@Override
-	public boolean setXpDiff(UUID playerID, String skillName, long change) {return false;}
+		return me(playerID) ? mySkills.getOrDefault(skillName, 0l) : otherSkills.getOrDefault(skillName, 0l);
+	}
 	@Override
 	public void setXpRaw(UUID playerID, String skillName, long value) {
 		if (!me(playerID)) return;
@@ -99,20 +96,8 @@ public class DataMirror implements IDataStorage{
 		int skillMax = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
 		return rawLevel > skillMax ? skillMax : rawLevel;
 	}
-	@Deprecated
-	@Override
-	public void setPlayerSkillLevel(String skill, UUID player, int level) {}
-	@Deprecated
-	@Override
-	public boolean changePlayerSkillLevel(String skill, UUID playerID, int change) {return false;}
-	@Deprecated
-	@Override
-	public IDataStorage get(MinecraftServer server) {return this;}
 	@Override
 	public IDataStorage get() {return this;}
-	@Deprecated
-	@Override
-	public void computeLevelsForCache() {}
 	@Override
 	public long getBaseXpForLevel(int level) {return level > 0 ? levelCache.get(level - 1) : 0l;}
 }

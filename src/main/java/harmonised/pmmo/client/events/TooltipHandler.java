@@ -13,18 +13,17 @@ import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.features.autovalues.AutoValueConfig;
-import harmonised.pmmo.features.autovalues.AutoValues;
-import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.setup.datagen.LangProvider.Translation;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -44,7 +43,7 @@ public class TooltipHandler {
 		if(!tooltipOn)
             return;
 
-        Player player = (Player) event.getEntity();
+        Player player = event.getEntity();
 
         if(player != null) {
         	Core core = Core.get(LogicalSide.CLIENT);
@@ -66,20 +65,20 @@ public class TooltipHandler {
             Map<String, Integer> useEnchantmentReq = getReqData(core, ReqType.USE_ENCHANTMENT, stack);
             Map<String, Integer> placeReq = getReqData(core, ReqType.PLACE, stack);
             Map<String, Integer> breakReq = getReqData(core, ReqType.BREAK, stack);
-            Map<String, Long> xpValueBreaking = getXpGainData(core, itemID,EventType.BLOCK_BREAK, stack);
-            Map<String, Long> xpValueCrafting = getXpGainData(core, itemID,EventType.CRAFT, stack);
-            Map<String, Long> xpValueSmelting = getXpGainData(core, itemID,EventType.SMELT, stack);
-            Map<String, Long> xpValueBrewing = getXpGainData(core, itemID,EventType.BREW, stack);
-            Map<String, Long> xpValueGrowing = getXpGainData(core, itemID ,EventType.GROW, stack);
-            Map<String, Long> xpValuePlacing = getXpGainData(core, itemID,EventType.BLOCK_PLACE, stack);
+            Map<String, Long> xpValueBreaking = core.getExperienceAwards(EventType.BLOCK_BREAK, stack, player, TagUtils.stackTag(stack));
+            Map<String, Long> xpValueCrafting = core.getExperienceAwards(EventType.CRAFT, stack, player, TagUtils.stackTag(stack));
+            Map<String, Long> xpValueSmelting = core.getExperienceAwards(EventType.SMELT, stack, player, TagUtils.stackTag(stack));
+            Map<String, Long> xpValueBrewing = core.getExperienceAwards(EventType.BREW, stack, player, TagUtils.stackTag(stack));
+            Map<String, Long> xpValueGrowing = core.getExperienceAwards(EventType.GROW, stack, player, TagUtils.stackTag(stack));
+            Map<String, Long> xpValuePlacing = core.getExperienceAwards(EventType.BLOCK_PLACE, stack, player, TagUtils.stackTag(stack));
             //Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
             //Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
-            Map<String, Double> heldItemXpBoost = getBonusData(core, itemID, ModifierDataType.HELD, stack);
-            Map<String, Double> wornItemXpBoost = getBonusData(core, itemID, ModifierDataType.WORN, stack);
+            Map<String, Double> heldItemXpBoost = core.getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack));
+            Map<String, Double> wornItemXpBoost = core.getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN, TagUtils.stackTag(stack));
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
             VeinData veinData = VeinData.EMPTY;
-            if (core.getVeinData().hasData(stack)) {
-            	veinData = core.getVeinData().getData(stack);
+            if (!core.getLoader().ITEM_LOADER.getData(itemID).veinData().isUnconfigured()) {
+            	veinData = core.getLoader().ITEM_LOADER.getData(itemID).veinData();
             }
             
             //=====================REQUIREMENTS=========================
@@ -108,32 +107,32 @@ public class TooltipHandler {
 	private static void addRequirementTooltip(Translation header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+req.getKey()).append(new TextComponent(" "+String.valueOf(req.getValue()))).setStyle(core.getDataConfig().getSkillStyle(req.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(" "+String.valueOf(req.getValue()))).setStyle(CoreUtils.getSkillStyle(req.getKey())));
 		}
 	}
 	
 	private static void addXpValueTooltip(Translation header, ItemTooltipEvent event, Map<String, Long> values, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Long> value : values.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+value.getKey()).append(new TextComponent(" "+String.valueOf(value.getValue()))).setStyle(core.getDataConfig().getSkillStyle(value.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+value.getKey()).append(Component.literal(" "+String.valueOf(value.getValue()))).setStyle(CoreUtils.getSkillStyle(value.getKey())));
 		}
 	}
 	
 	private static void addModifierTooltip(Translation header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Double> modifier: values.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+modifier.getKey()).append(new TextComponent(" "+modifierPercent(modifier.getValue()))).setStyle(core.getDataConfig().getSkillStyle(modifier.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+modifier.getKey()).append(Component.literal(" "+modifierPercent(modifier.getValue()))).setStyle(CoreUtils.getSkillStyle(modifier.getKey())));
 		}
 	}
 	
 	private static void addVeinTooltip(Translation header, ItemTooltipEvent event, VeinData data, boolean isBlockItem) {
 		event.getToolTip().add(header.asComponent());
 		event.getToolTip().add(LangProvider.VEIN_DATA.asComponent(
-				data.chargeCap().orElse(0),
-				DP.dp(data.chargeRate().orElse(0d) * 20d)));
+				data.chargeCap.orElse(0),
+				DP.dp(data.chargeRate.orElse(0d) * 20d)));
 		if (isBlockItem) {
 			event.getToolTip().add(LangProvider.VEIN_BREAK.asComponent(
-					data.consumeAmount().orElse(0)));
+					data.consumeAmount.orElse(0)));
 		}
 	}
 	
@@ -169,21 +168,5 @@ public class TooltipHandler {
 		});
 		
 		return map;
-	}
-	
-	private static Map<String, Long> getXpGainData(Core core, ResourceLocation itemID, EventType type, ItemStack stack) {
-		Map<String, Long> map = core.getTooltipRegistry().getItemXpGainTooltipData(itemID, type, stack);
-		if (map.isEmpty() && core.getXpUtils().hasXpGainObjectEntry(type, itemID))
-			map = core.getXpUtils().getObjectExperienceMap(type, itemID);
-		if (map.isEmpty() && AutoValueConfig.ENABLE_AUTO_VALUES.get())
-			map = AutoValues.getExperienceAward(type, itemID, ObjectType.ITEM);
-		return core.processSkillGroupXP(map);
-	}
-	
-	private static Map<String, Double> getBonusData(Core core, ResourceLocation itemID, ModifierDataType type, ItemStack stack) {
-		Map<String, Double> map = core.getTooltipRegistry().getBonusTooltipData(itemID, type, stack);
-		if (map.isEmpty() && core.getXpUtils().hasModifierObjectEntry(type, itemID))
-			map = core.getXpUtils().getObjectModifierMap(type, itemID);
-		return core.processSkillGroupBonus(map);
 	}
 }

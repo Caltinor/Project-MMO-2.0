@@ -9,9 +9,19 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.ShortTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class TagUtils {
 
+	/**an enhanced version of {@link net.minecraft.nbt.CompoundTag#merge(CompoundTag) CompoundTag.merge}
+	 * which is adds values for shared keys instead of complete replacement
+	 * 
+	 * @param tag1 a CompoundTag instance
+	 * @param tag2 a different CompoundTag instance
+	 * @return a merged tag
+	 */
 	public static CompoundTag mergeTags(CompoundTag tag1, CompoundTag tag2) {
 		CompoundTag output = new CompoundTag();
 		List<String> allKeys = new ArrayList<>(); 
@@ -45,5 +55,37 @@ public class TagUtils {
 				output.put(key, tag2.get(key));				
 		}
 		return output;
+	}
+	
+	/**safely obtain the NBT tag or get a new instance
+	 * 
+	 * @param stack the item whose NBT is being obtained
+	 * @return an associated tag or new instance
+	 */
+	public static CompoundTag stackTag(ItemStack stack) {
+		return stack == null || stack.getTag() == null 
+				? new CompoundTag() 
+				: stack.getTag();
+	}
+	 /**safely obtain the NBT tag or get a new instance
+	  * 
+	  * @param entity the entity whose NBT is being obtained
+	  * @return an associated tag or new instance
+	  */
+	public static CompoundTag entityTag(Entity entity) {		
+		return entity == null || entity.getPersistentData() == null 
+				? new CompoundTag() 
+				: entity.getPersistentData();
+	}
+	
+	/**safely obtain the NBT tag or get a new instance
+	 * 
+	 * @param tile the BlockEntity whose NBT is being obtained
+	 * @return an associated tag or new instance
+	 */
+	public static CompoundTag tileTag(BlockEntity tile) {
+		return tile == null || tile.getPersistentData() == null 
+				? new CompoundTag() 
+				: tile.getPersistentData();
 	}
 }

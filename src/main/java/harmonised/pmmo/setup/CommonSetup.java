@@ -3,8 +3,7 @@ package harmonised.pmmo.setup;
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
-import harmonised.pmmo.config.readers.CoreParser;
-import harmonised.pmmo.config.writers.DataMigrator;
+import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.autovalues.AutoValues;
@@ -23,6 +22,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -34,7 +34,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonSetup {
@@ -53,16 +52,10 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onServerStartup(ServerStartingEvent event) {
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Loading PMMO Saved Data");
-		Core.get(LogicalSide.SERVER).getData(event.getServer());
+		Core.get(LogicalSide.SERVER).getData();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Computing data for cache");
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
-		MsLoggy.INFO.log(LOG_CODE.LOADING, "Executing Default Registrations");
-		Core.get(LogicalSide.SERVER).registerNBT();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
-		
-		//Migration Logic
-		if (DataMigrator.shouldMigrate(event.getServer()))
-			DataMigrator.generateMigrationPack(event.getServer());
 	}
 	
 	@SubscribeEvent
@@ -82,17 +75,15 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(CoreParser.RELOADER);
-		event.addListener(CoreParser.DEFAULT_CONFIG);
-		event.addListener(CoreParser.ITEM_LOADER);
-		event.addListener(CoreParser.BLOCK_LOADER);
-		event.addListener(CoreParser.ENTITY_LOADER);
-		event.addListener(CoreParser.BIOME_LOADER);
-		event.addListener(CoreParser.DIMENSION_LOADER);
-		event.addListener(CoreParser.PLAYER_LOADER);
-		event.addListener(CoreParser.ENCHANTMENT_LOADER);
-		event.addListener(CoreParser.EFFECT_LOADER);
-		event.addListener(CoreParser.OVERRIDE_CONFIG);
+		event.addListener(CoreLoader.RELOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
 	}
 	
 	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {
@@ -114,11 +105,10 @@ public class CommonSetup {
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
 		if (event.includeClient()) {
-			generator.addProvider(new LangProvider(generator, "en_us"));
-			//generator.addProvider(new GLMProvider(generator));
+			generator.addProvider(true, new LangProvider(generator, "en_us"));
 		}
 		if (event.includeServer()) {
-			generator.addProvider(new GLMProvider(generator));
+			generator.addProvider(true, new GLMProvider(generator));
 		}
 	}
 }

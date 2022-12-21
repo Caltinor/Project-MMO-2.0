@@ -38,7 +38,7 @@ public class AutoValues {
 		}
 		//Check the cache for an existing calculation
 		if (reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).containsKey(objectID))
-			return reqValues.get(reqType).get(objectID);
+			return new HashMap<>(reqValues.get(reqType).get(objectID));
 		
 		Map<String, Integer> requirements = new HashMap<>();
 		switch (autoValueType) {
@@ -73,7 +73,7 @@ public class AutoValues {
 		}
 		//Check the cache for an existing calculation
 		if (xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).containsKey(objectID))
-			return xpGainValues.get(eventType).get(objectID);
+			return new HashMap<>(xpGainValues.get(eventType).get(objectID));
 
 		Map<String, Long> awards = new HashMap<>();
 		switch (autoValueType) {
