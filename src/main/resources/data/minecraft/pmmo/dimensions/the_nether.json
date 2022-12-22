@@ -14,48 +14,48 @@
     "vein_blacklist":["minecraft:bedrock"],
     "mob_multiplier": {
         "minecraft:skeleton": {
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:blaze":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:enderman":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:endermite":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:ghast":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:hoglin":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:magma_cube":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:piglin":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:piglin_brute":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:wither":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         },
 	    "minecraft:zombified_piglin":{
-            "health": 1.5,
-            "damage": 1.5
+            "minecraft:generic.max_health": 1.5,
+            "minecraft:generic.attack_damage": 1.5
         }
     }
 }
