@@ -6,20 +6,27 @@ import java.util.stream.Collectors;
 
 import com.blamejared.crafttweaker.api.action.base.IRuntimeAction;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.data.MapData;
+import com.blamejared.crafttweaker.api.data.converter.tag.TagToDataConverter;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 
+import org.apache.commons.lang3.function.TriFunction;
 import org.openzen.zencode.java.ZenCodeType;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
+import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.core.Core;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.fml.LogicalSide;
 
 @ZenRegister
@@ -347,5 +354,24 @@ public class CTUtils implements IRuntimeAction{
 		public SalvageData build() {
 			return new SalvageData(chancePerLevel, levelReq, xpAward, salvageMax, baseChance, maxChance);
 		}
+	}
+	
+	@ZenCodeType.Method
+	public static void registerPerk(
+			ResourceLocation perkID, 
+			MapData holder, 
+			CTPerkPredicate customConditions,
+			CTPerkFunction onExecute,
+			CTPerkFunction onConclude,
+			int side) {
+		TriPredicate<Player, CompoundTag, Integer> conditions = (p,c,i) -> customConditions.test(p, compoundToData(c), i);
+		TriFunction<Player, CompoundTag, Integer, CompoundTag> execute = (p,c,i) -> onExecute.apply(p,compoundToData(c),i).getInternal();
+		TriFunction<Player, CompoundTag, Integer, CompoundTag> conclude = (p,c,i) -> onConclude.apply(p,compoundToData(c),i).getInternal();
+		PerkSide perkSide = PerkSide.values()[side > 2 ? 2 : side];
+		APIUtils.registerPerk(perkID, holder.getInternal(), conditions, execute, conclude, perkSide);
+	}
+	
+	private static MapData compoundToData(CompoundTag nbt) {
+		return (MapData) TagToDataConverter.convert(nbt);
 	}
 }
