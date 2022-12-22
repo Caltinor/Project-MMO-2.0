@@ -461,6 +461,7 @@ public class Config {
 	public static ConfigObject<Map<String, Double>> MOB_SCALE_HP;
 	public static ConfigObject<Map<String, Double>> MOB_SCALE_SPEED;
 	public static ConfigObject<Map<String, Double>> MOB_SCALE_DAMAGE;
+	public static ConfigObject<Map<String, Map<String, Double>>> MOB_SCALING;
 	
 	private static void buildMobScalingSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("settings related to how strong mobs get based on player level.").push("Mob_Scaling");
@@ -468,7 +469,7 @@ public class Config {
 		MOB_SCALING_ENABLED = builder.comment("Should mob scaling be turned on.")
 				.define("Enable Mob Scaling", true);
 		MOB_SCALING_AOE = builder.comment("How far should players be from spawning mobs to affect scaling?")
-				.defineInRange("Scaling AOE", 50, 0, Integer.MAX_VALUE);
+				.defineInRange("Scaling AOE", 150, 0, Integer.MAX_VALUE);
 		MOB_SCALING_BASE_LEVEL = builder.comment("what is the minimum level for scaling to kick in")
 				.defineInRange("Base Level", 0, 0, Integer.MAX_VALUE);
 		
@@ -490,9 +491,9 @@ public class Config {
 				builder.pop();
 			builder.pop(); //Formula
 			builder.comment("These settings control which skills affect scaling and the ratio for each skill"
-					, "HP Scale: 1 = half a heart, or 1 hitpoint"
-					, "SPD Scale: 0.7 is base for most mobs.  this is added to that. so 0.7 from scaling is double speed"
-					, "DMG Scale: is a multiplier of their base damage.  1 = no change, 2 = double damage"
+					, "minecraft:generic.max_health: 1 = half a heart, or 1 hitpoint"
+					, "minecraft:generic.movement_speed: 0.7 is base for most mobs.  this is added to that. so 0.7 from scaling is double speed"
+					, "minecraft:generic.attack_damage: is a multiplier of their base damage.  1 = no change, 2 = double damage"
 					, "negative values are possible and you can use this to create counterbalance skills").push("Scaling_Settings");
 				MOB_SCALE_HP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
 						"HP Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.01));
@@ -500,6 +501,12 @@ public class Config {
 						"Speed Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.001));
 				MOB_SCALE_DAMAGE = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
 						"Damage Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.001));
+				MOB_SCALING = TomlConfigHelper.<Map<String, Map<String, Double>>>defineObject(builder,
+						"Mob Scaling IDs and Ratios", Codec.unboundedMap(Codec.STRING, CodecTypes.DOUBLE_CODEC), Map.of(
+								"minecraft:generic.max_health", Map.of("combat", 0.01),
+								"minecraft:generic.movement_speed", Map.of("combat", 0.001),
+								"minecraft:generic.attack_damage", Map.of("combat", 0.001)
+						));
 			builder.pop(); //Scaling Settings
 		builder.pop(); //Mob_Scaling
 	}

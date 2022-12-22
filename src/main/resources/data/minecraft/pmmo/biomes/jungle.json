@@ -19,24 +19,24 @@
     },
     "mob_multiplier":{
         "minecraft:zombie" :{
-            "speed": 1.5,
-		    "health": 1.25
+            "minecraft:generic.movement_speed": 1.5,
+		    "minecraft:generic.max_health": 1.25
         },
         "minecraft:skeleton" :{
-            "speed": 1.5,
-		    "health": 1.25
+            "minecraft:generic.movement_speed": 1.5,
+		    "minecraft:generic.max_health": 1.25
         },
         "minecraft:creeper" :{
-            "speed": 1.5,
-		    "health": 1.25
+            "minecraft:generic.movement_speed": 1.5,
+		    "minecraft:generic.max_health": 1.25
         },
         "minecraft:spider" :{
-            "speed": 1.5,
-		    "health": 1.25
+            "minecraft:generic.movement_speed": 1.5,
+		    "minecraft:generic.max_health": 1.25
         },
         "minecraft:enderman" :{
-            "speed": 1.5,
-		    "health": 1.25
+            "minecraft:generic.movement_speed": 1.5,
+		    "minecraft:generic.max_health": 1.25
         }
     }
 }
