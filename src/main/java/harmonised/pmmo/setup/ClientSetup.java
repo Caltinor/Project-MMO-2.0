@@ -2,11 +2,13 @@ package harmonised.pmmo.setup;
 
 import org.lwjgl.glfw.GLFW;
 
+import harmonised.pmmo.client.gui.IndicatorsOverlayGUI;
 import harmonised.pmmo.client.gui.TutorialOverlayGUI;
 import harmonised.pmmo.client.gui.XPOverlayGUI;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -39,5 +41,6 @@ public class ClientSetup {
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
     	event.registerAboveAll("stats_overlay", new XPOverlayGUI());
     	event.registerAboveAll("tutorial", new TutorialOverlayGUI());
+    	event.registerAbove(new ResourceLocation("crosshair"), "overlay_icons", new IndicatorsOverlayGUI());
     }
 }
