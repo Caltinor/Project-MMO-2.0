@@ -356,22 +356,41 @@ public class CTUtils implements IRuntimeAction{
 		}
 	}
 	
+	/**Registers a perk for use in pmmo-Perks.toml.
+	 * 
+	 * @param perkID the Perk ID
+	 * @param defaults the default settings for your perk.  These
+	 * are provided to your execution if no manual user configuration
+	 * is present.  This allows you to ignore null checks and 
+	 * displays to users what settings are valid for your perk.
+	 * <i>(NOTE: you are not required to add settings here for them
+	 * to work.  It is permitted to have "hidden" settings.)</i>
+	 * @param customConditions used to check for conditions in which
+	 * a perk is allowed to execute in addition to pmmo's default 
+	 * checks.  For example, if the player is the correct dimension.
+	 * @param onExecute the logic executed by this perk
+	 * @param onConclude if an event has an end state, this executes
+	 * @param side which logical side this fires on CLIENT=0, SERVER=1, BOTH=2
+	 * 
+	 * @docparam perkID <resource:namespace:path>
+	 * @docparam defaults {"settingKey": "value", "otherSetting": 0} as MapData
+	 * @docparam customConditions (player, data, level) => {return true;}
+	 * @docparam onExecute (player, data, level) => { logic; return new MapData();}
+	 * @docparam onConclude (player, data, level) => { logic; return new MapData();}
+	 * @docparam side 0
+	 */
 	@ZenCodeType.Method
 	public static void registerPerk(
 			ResourceLocation perkID, 
-			MapData holder, 
+			MapData defaults, 
 			CTPerkPredicate customConditions,
 			CTPerkFunction onExecute,
 			CTPerkFunction onConclude,
 			int side) {
-		TriPredicate<Player, CompoundTag, Integer> conditions = (p,c,i) -> customConditions.test(p, compoundToData(c), i);
-		TriFunction<Player, CompoundTag, Integer, CompoundTag> execute = (p,c,i) -> onExecute.apply(p,compoundToData(c),i).getInternal();
-		TriFunction<Player, CompoundTag, Integer, CompoundTag> conclude = (p,c,i) -> onConclude.apply(p,compoundToData(c),i).getInternal();
+		TriPredicate<Player, CompoundTag, Integer> conditions = (p,c,i) -> customConditions.test(p, (MapData) TagToDataConverter.convert(c), i);
+		TriFunction<Player, CompoundTag, Integer, CompoundTag> execute = (p,c,i) -> onExecute.apply(p,(MapData) TagToDataConverter.convert(c),i).getInternal();
+		TriFunction<Player, CompoundTag, Integer, CompoundTag> conclude = (p,c,i) -> onConclude.apply(p, (MapData) TagToDataConverter.convert(c),i).getInternal();
 		PerkSide perkSide = PerkSide.values()[side > 2 ? 2 : side];
-		APIUtils.registerPerk(perkID, holder.getInternal(), conditions, execute, conclude, perkSide);
-	}
-	
-	private static MapData compoundToData(CompoundTag nbt) {
-		return (MapData) TagToDataConverter.convert(nbt);
+		APIUtils.registerPerk(perkID, defaults.getInternal(), conditions, execute, conclude, perkSide);
 	}
 }
