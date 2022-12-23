@@ -126,6 +126,12 @@ public class PerkRegistration {
 				FeaturePerks.GIVE_EFFECT, 
 				NONE, 
 				PerkSide.SERVER);
+		APIUtils.registerPerk(rl("tame_boost"), 
+				PerksImpl.TAME_DEFAULTS, 
+				PASS_TRUE, 
+				PerksImpl.TAME_BOOST, 
+				NONE, 
+				PerkSide.SERVER);
 	}
 	
 	private static TriFunction<Player, CompoundTag, Integer, CompoundTag> NONE = (a,b,c) -> {return new CompoundTag();};

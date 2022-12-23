@@ -7,6 +7,7 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.perks.PerksImpl;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
@@ -38,6 +39,7 @@ public class TameHandler {
 			}
 		}
 		//Process perks
+		hookOutput.putUUID(PerksImpl.ANIMAL_ID, event.getAnimal().getUUID());
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.TAMING, player, hookOutput, core.getSide()));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.TAMING, target, player, hookOutput);
