@@ -270,7 +270,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	
 	@SuppressWarnings("unchecked")
 	public void postProcess() {
-		for (DataSource<T>dataValue : new ArrayList<>(this.data.values())) {
+		for (DataSource<T> dataValue : new ArrayList<>(this.data.values())) {
 			if (dataValue.getTagValues().isEmpty()) continue;
 			List<ResourceLocation> tags = new ArrayList<>();
 			for (String str : dataValue.getTagValues()) {
@@ -290,7 +290,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 				else
 					tags.add(new ResourceLocation(str));
 			}
-			tags.forEach(rl -> {this.data.put(rl, (T) data);});
+			tags.forEach(rl -> {this.data.put(rl, (T) dataValue);});
 		}
 		//Execute post-processing behavior (mostly logging at this point).
 		finalizer.accept(this.data);
