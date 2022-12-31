@@ -263,17 +263,23 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	{
 		MsLoggy.INFO.log(LOG_CODE.DATA, "Beginning loading of data for data loader: {}", this.folderName);
 		// now that we're on the main thread, we can finalize the data
+		MsLoggy.DEBUG.log(LOG_CODE.DATA, processedData, "Loaded Data For: {} of: {}");
 		this.data.putAll(processedData);
 		//Apply overrides
+		MsLoggy.DEBUG.log(LOG_CODE.DATA, overrideSettings, "Loaded Override For: {} of: {}");
 		this.data.putAll(overrideSettings);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void postProcess() {
-		for (DataSource<T> dataValue : new ArrayList<>(this.data.values())) {
+		MsLoggy.DEBUG.log(LOG_CODE.DATA, "Begin PostProcessing for {}", folderName);
+		for (Map.Entry<ResourceLocation, T> dataRaw : new HashMap<>(this.data).entrySet()) {
+			DataSource<T> dataValue = dataRaw.getValue();
 			if (dataValue.getTagValues().isEmpty()) continue;
+			MsLoggy.INFO.log(LOG_CODE.DATA, "Tag Data Found for {}", dataRaw.getKey().toString());
 			List<ResourceLocation> tags = new ArrayList<>();
 			for (String str : dataValue.getTagValues()) {
+				MsLoggy.INFO.log(LOG_CODE.DATA, "Applying Setting to Tag: {}", str);
 				if (str.startsWith("#")) {
 					tags.addAll(registry.tags()
 							.getTag(TagKey.create(registry.getRegistryKey(), new ResourceLocation(str.substring(1))))
