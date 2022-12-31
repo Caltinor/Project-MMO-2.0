@@ -41,6 +41,6 @@ public class VeinData  implements DataSource<VeinData>{
 	public boolean isUnconfigured() {
 		return (chargeCap.isEmpty() || chargeCap.get() == 0)
 				&& (chargeRate.isEmpty() || chargeCap.get() == 0d)
-				&& (consumeAmount.isEmpty() || consumeAmount.get() == 1);
+				&& (consumeAmount.isEmpty() || consumeAmount.get() == 0);
 	}
 }

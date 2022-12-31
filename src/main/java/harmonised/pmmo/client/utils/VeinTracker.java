@@ -46,7 +46,8 @@ public class VeinTracker {
 	
 	public static void updateVein(Player player) {
 		Block block = player.level.getBlockState(currentTarget).getBlock();
-		int maxBlocks = getCurrentCharge()/Core.get(LogicalSide.CLIENT).getBlockConsume(block);
+		int perBlock = Core.get(LogicalSide.CLIENT).getBlockConsume(block);
+		int maxBlocks = perBlock <= 0 ? 0 : getCurrentCharge()/perBlock;
 		vein = new VeinShapeData(player.level, currentTarget, maxBlocks, mode, player.getDirection()).getVein();
 	}
 }

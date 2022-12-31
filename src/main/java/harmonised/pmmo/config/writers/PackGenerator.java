@@ -125,7 +125,7 @@ public class PackGenerator {
 					    "	\""+ReqType.INTERACT.name()+"\":[]",
 					    "},",
 					    "\"vein_data\":{",
-					    "    \"consumeAmount\": 1",
+					    "    \"consumeAmount\": 0",
 					    "}",
 						"}")),
 		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITY_TYPES.getKeys(), 
