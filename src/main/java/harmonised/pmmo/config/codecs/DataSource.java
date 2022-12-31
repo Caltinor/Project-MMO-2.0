@@ -1,5 +1,6 @@
 package harmonised.pmmo.config.codecs;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -51,4 +52,20 @@ public interface DataSource<T> {
 		return new HashMap<>();
 	};
 	public default void setPositiveEffects(Map<ResourceLocation, Integer> pos) {}
+	
+	//======SHARED CODEC UTILITIES===================
+	public static <K, V> HashMap<K,V> clearEmptyValues(Map<K,V> map) {
+		HashMap<K, V> outMap = new HashMap<>();
+		map.forEach((key, value) -> {
+			boolean isEmpty = false;
+			if (value instanceof Collection)
+				isEmpty = ((Collection<?>)value).isEmpty();
+			else if (value instanceof Map)
+				isEmpty = ((Map<?,?>)value).isEmpty();
+			
+			if (!isEmpty)
+				outMap.put(key, value);
+		});
+		return outMap;
+	}
 }

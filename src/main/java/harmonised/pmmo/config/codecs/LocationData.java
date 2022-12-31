@@ -86,12 +86,12 @@ public record LocationData(
 				new LocationData(
 						override.orElse(false),
 						new HashSet<>(tags.orElse(List.of())),
-						new HashMap<>(bonus.orElse(new HashMap<>())),
-						new HashMap<>(pos.orElse(new HashMap<>())),
-						new HashMap<>(neg.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(bonus.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(pos.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(neg.orElse(new HashMap<>())),
 						new ArrayList<>(vein.orElse(new ArrayList<>())),
-						new HashMap<>(req.orElse(new HashMap<>())),
-						new HashMap<>(mobs.orElse(new HashMap<>())))
+						DataSource.clearEmptyValues(req.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(mobs.orElse(new HashMap<>())))
 			));	
 	
 	@Override
