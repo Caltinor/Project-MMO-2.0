@@ -394,7 +394,7 @@ public class LangProvider extends LanguageProvider{
 	public static final Translation VEIN_HEADER = Translation.Builder.start("pmmo.vein_header")
 			.addLocale(Locale.EN_US, "Vein Mining Attributes").build();
 	public static final Translation VEIN_RATE = Translation.Builder.start("pmmo.veindata_rate")
-			.addLocale(Locale.EN_US, "Vein Recharge Rate Per Tick: %1$s").build();
+			.addLocale(Locale.EN_US, "Vein Recharge Rate Per Second: %1$s").build();
 	public static final Translation VEIN_CAP = Translation.Builder.start("pmmo.veindata_cap")
 			.addLocale(Locale.EN_US, "Vein Capacity Added By Item: %1$s").build();
 	public static final Translation VEIN_CONSUME = Translation.Builder.start("pmmo.veindata_consume")
