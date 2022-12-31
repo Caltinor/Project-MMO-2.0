@@ -603,14 +603,14 @@ public class StatScrollWidget extends ScrollPanel{
 			content.add(new TextElement(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate.orElse(0d)), step(1), 0xFFFFFF, false, 0));
 			content.add(new TextElement(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap.orElse(0)), step(1), 0xFFFFFF, false, 0));
 			if (isBlockItem)
-				content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.get()), step(1), 0xFFFFFF, false, 0));
+				content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.orElse(0)), step(1), 0xFFFFFF, false, 0));
 		}
 	}
 	
 	private void addBlockVeinSection(VeinData veinData) {
 		if (veinData.consumeAmount != VeinData.EMPTY.consumeAmount) {
 			content.add(new TextElement(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-			content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.get()), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.orElse(0)), step(1), 0xFFFFFF, false, 0));
 		}
 	}
 	

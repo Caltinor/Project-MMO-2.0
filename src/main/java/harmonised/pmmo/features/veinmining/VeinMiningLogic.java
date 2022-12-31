@@ -43,7 +43,7 @@ public class VeinMiningLogic {
 		ServerLevel level = player.getLevel();
 		Block block = level.getBlockState(pos).getBlock();
 		int cost = Core.get(level).getBlockConsume(block);
-		if (cost == -1) return; 
+		if (cost <= 0) return; 
 		int charge = getCurrentCharge(player);
 		int consumed = 0;			
 		int maxBlocks = Math.min(charge/cost, maxBlocksPerPlayer.computeIfAbsent(player.getUUID(), id -> 64));
