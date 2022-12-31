@@ -129,7 +129,7 @@ public class TooltipHandler {
 		event.getToolTip().add(header.asComponent());
 		event.getToolTip().add(LangProvider.VEIN_DATA.asComponent(
 				data.chargeCap.orElse(0),
-				DP.dp(data.chargeRate.orElse(0d) * 20d)));
+				DP.dp(data.chargeRate.orElse(0d) * 2d)));
 		if (isBlockItem) {
 			event.getToolTip().add(LangProvider.VEIN_BREAK.asComponent(
 					data.consumeAmount.orElse(0)));

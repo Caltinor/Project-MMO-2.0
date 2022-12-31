@@ -600,7 +600,7 @@ public class StatScrollWidget extends ScrollPanel{
 	private void addItemVeinSection(VeinData veinData, boolean isBlockItem) {
 		if (!veinData.equals(VeinData.EMPTY)) {
 			content.add(new TextElement(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-			content.add(new TextElement(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate.orElse(0d)), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate.orElse(0d) * 2d), step(1), 0xFFFFFF, false, 0));
 			content.add(new TextElement(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap.orElse(0)), step(1), 0xFFFFFF, false, 0));
 			if (isBlockItem)
 				content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.orElse(0)), step(1), 0xFFFFFF, false, 0));
