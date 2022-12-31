@@ -222,7 +222,7 @@ public class Core {
 	//======DATA OBTAINING UTILITY METHODS=======
 	public Map<String, Long> getObjectExperienceMap(ObjectType type, ResourceLocation objectID, EventType eventType, CompoundTag tag) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
-		return new HashMap<>(data != null ? data.getXpValues(eventType, tag) : new HashMap<>());
+		return new HashMap<>(data != null ? MsLoggy.DEBUG.logAndReturn(data.getXpValues(eventType, tag), LOG_CODE.DATA, "getObjectExperienceMap= {}") : new HashMap<>());
 	}
 	public Map<String, Double> getObjectModifierMap(ObjectType type, ResourceLocation objectID, ModifierDataType modifierType, CompoundTag tag) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
