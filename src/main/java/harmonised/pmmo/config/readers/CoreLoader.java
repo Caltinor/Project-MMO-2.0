@@ -24,7 +24,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.TagsUpdatedEvent.UpdateCause;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,20 +31,18 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.DEDICATED_SERVER)
+@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CoreLoader {
 	private static final Logger DATA_LOGGER = LogManager.getLogger();	
 	
 	@SubscribeEvent
 	public static void onTagLoad(TagsUpdatedEvent event) {
 		Core core = Core.get(event.getUpdateCause() == UpdateCause.CLIENT_PACKET_RECEIVED ? LogicalSide.CLIENT : LogicalSide.SERVER);
-		if (event.shouldUpdateStaticData()) {
-			core.getLoader().ITEM_LOADER.postProcess();
-			core.getLoader().BLOCK_LOADER.postProcess();
-			core.getLoader().ENTITY_LOADER.postProcess();
-			//core.getLoader().DIMENSION_LOADER.postProcess();
-			core.getLoader().BIOME_LOADER.postProcess();
-		}
+		core.getLoader().ITEM_LOADER.postProcess();
+		core.getLoader().BLOCK_LOADER.postProcess();
+		core.getLoader().ENTITY_LOADER.postProcess();
+		//core.getLoader().DIMENSION_LOADER.postProcess();
+		core.getLoader().BIOME_LOADER.postProcess();
 	}
 	
 	@SuppressWarnings("unchecked")

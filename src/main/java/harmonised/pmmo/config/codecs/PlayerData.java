@@ -38,7 +38,7 @@ public record PlayerData(
 				new PlayerData(
 						override.orElse(false),
 						reqIgnore.orElse(false),
-						new HashMap<>(bonus.orElse(new HashMap<>())))
+						DataSource.clearEmptyValues(bonus.orElse(new HashMap<>())))
 			));
 
 	@Override

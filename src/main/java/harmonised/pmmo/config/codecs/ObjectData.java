@@ -68,7 +68,6 @@ public record ObjectData(
 					? reqs().getOrDefault(type, new HashMap<>())
 					: NBTUtils.getRequirement(nbtReqs().get(type), nbt);
 		}
-
 		@Override
 		public void setReqs(ReqType type, Map<String, Integer> reqs) {
 			reqs().put(type, reqs);
@@ -115,14 +114,14 @@ public record ObjectData(
 					new ObjectData(
 						override.orElse(false),
 						new HashSet<>(tags.orElse(List.of())),
-						new HashMap<>(reqs.orElse(new HashMap<>())),
-						new HashMap<>(nbtreqs.orElse(new HashMap<>())),
-						new HashMap<>(effects.orElse(new HashMap<>())),
-						new HashMap<>(xp.orElse(new HashMap<>())),
-						new HashMap<>(nbtXp.orElse(new HashMap<>())),
-						new HashMap<>(bonus.orElse(new HashMap<>())),
-						new HashMap<>(nbtbonus.orElse(new HashMap<>())),
-						new HashMap<>(salvage.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(reqs.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(nbtreqs.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(effects.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(xp.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(nbtXp.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(bonus.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(nbtbonus.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(salvage.orElse(new HashMap<>())),
 						vein.orElse(VeinData.EMPTY))
 				));
 		
@@ -186,6 +185,7 @@ public record ObjectData(
 				reqs.putAll(o.reqs().isEmpty() ? t.reqs() : o.reqs());
 				reqEffects.putAll(o.negativeEffects().isEmpty() ? t.negativeEffects() : o.negativeEffects());
 				salvage.putAll(o.salvage().isEmpty() ? t.salvage() : o.salvage());
+				combinedVein[0] = o.veinData().isUnconfigured() ? t.veinData() : o.veinData();
 			}, 
 			bothOrNeither, 
 			bothOrNeither);
