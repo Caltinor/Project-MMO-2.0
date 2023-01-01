@@ -296,6 +296,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 				else
 					tags.add(new ResourceLocation(str));
 			}
+			DataSource<T> tagStrippedDataValue = dataValue;
+			tagStrippedDataValue.getTagValues().clear();
 			tags.forEach(rl -> {this.data.put(rl, (T) dataValue);});
 		}
 		//Execute post-processing behavior (mostly logging at this point).
