@@ -32,6 +32,10 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
+    	url 'https://cursemaven.com'
+    	content { includeGroup 'curse.maven' }
+	}
+    maven {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
@@ -41,7 +45,7 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.19-2.1.1'
+version = '1.19-2.1.2'
 group = 'harmonised.pmmo'
 archivesBaseName = 'pmmo'
 
@@ -92,7 +96,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.27'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.2'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
@@ -116,6 +120,7 @@ dependencies {
   	//runtimeOnly fg.deobf('local.maven:item-filters-forge:1902.2.9-build.41')
   	//runtimeOnly fg.deobf('local.maven:architectury:6.2.46-forge')
   	runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.14')
+  	runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
 }
 
 jar {
