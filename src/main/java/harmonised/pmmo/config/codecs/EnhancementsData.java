@@ -66,8 +66,13 @@ public record EnhancementsData(
 		return skillArray().isEmpty();
 	}
 
-
-	
-
-	
+	public static class Builder {
+        boolean override = false;
+        Map<Integer, Map<String, Integer>> skillArray = new HashMap<>();
+        private Builder() {}
+        public static Builder start() {return new Builder();}
+        public Builder override(boolean bool) {this.override = bool; return this;}
+        public Builder skillArray(Map<Integer, Map<String, Integer>> arr) {this.skillArray = arr; return this;}
+        public EnhancementsData build() {return new EnhancementsData(override, skillArray);}
+    }	
 }

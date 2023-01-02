@@ -21,7 +21,7 @@ public class EffectManager {
 
 	public static void applyEffects(Core core, Player player) {
 		//BIOME/DIM Efects
-		Biome biome = player.level.getBiome(player.blockPosition()).get();
+		Biome biome = player.level.getBiome(player.blockPosition()).value();
 		ResourceKey<Level> dimension = player.level.dimension();
 		List<MobEffectInstance> effects = core.isActionPermitted(ReqType.TRAVEL, biome, player)
 				? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getPositiveEffect(), false)

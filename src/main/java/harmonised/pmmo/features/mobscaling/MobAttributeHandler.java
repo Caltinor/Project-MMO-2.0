@@ -40,12 +40,12 @@ public class MobAttributeHandler {
 	@SubscribeEvent
 	public static void onMobSpawn(SpecialSpawn event) {		
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
-			LivingEntity entity = event.getEntity();
-			int diffScale = event.getLevel().getDifficulty().getId();
+			LivingEntity entity = event.getEntityLiving();
+			int diffScale = event.getWorld().getDifficulty().getId();
 			Vec3 spawnPos = new Vec3(event.getX(), event.getY(), event.getZ());
 			int range = Config.MOB_SCALING_AOE.get();
 			TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(Math.pow(range, 2)*3);
-			List<Player> nearbyPlayers = event.getLevel().getNearbyPlayers(targetCondition, entity, AABB.ofSize(spawnPos, range, range, range));
+			List<Player> nearbyPlayers = event.getWorld().getNearbyPlayers(targetCondition, entity, AABB.ofSize(spawnPos, range, range, range));
 			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
 			if (nearbyPlayers.isEmpty()) return;
 			//Set each Modifier type
@@ -61,7 +61,7 @@ public class MobAttributeHandler {
 					bonus *= Core.get(entity.level).getLoader().DIMENSION_LOADER.getData(entity.level.dimension().location()).mobModifiers()
 								.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
 									.getOrDefault(id.toString(), 1d);
-					bonus *= Core.get(entity.level).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level.getBiome(entity.blockPosition()).get())).mobModifiers()
+					bonus *= Core.get(entity.level).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level.getBiome(entity.blockPosition()).value())).mobModifiers()
 							 	.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
 							 		.getOrDefault(id.toString(), 1d);
 					AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);

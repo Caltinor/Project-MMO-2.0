@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import com.blamejared.crafttweaker.api.action.base.IRuntimeAction;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.data.MapData;
-import com.blamejared.crafttweaker.api.data.converter.tag.TagToDataConverter;
+import com.blamejared.crafttweaker.api.data.base.converter.tag.TagToDataConverter;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 
 import org.apache.commons.lang3.function.TriFunction;

@@ -9,16 +9,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.IIngameOverlay;
 
-public class IndicatorsOverlayGUI implements IGuiOverlay{
+public class IndicatorsOverlayGUI implements IIngameOverlay{
 	private static final ResourceLocation ICONS = new ResourceLocation(Reference.MOD_ID, "textures/gui/overlay_icons.png");
 	private Minecraft mc;
 	private BlockHitResult bhr;
 	
 	@Override
-	public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
+	public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (!(mc.hitResult instanceof BlockHitResult))

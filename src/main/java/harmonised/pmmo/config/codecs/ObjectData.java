@@ -205,4 +205,28 @@ public record ObjectData(
 					&& salvage.keySet().stream().allMatch(rl -> rl.equals(new ResourceLocation("item"))) 
 					&& veinData.isUnconfigured();
 		}
+		
+		public static class Builder {
+	        boolean override = false;
+	        Set<String> tagValues = new HashSet<>();
+	        Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
+	        Map<ModifierDataType, Map<String, Double>> modifiers = new HashMap<>();
+	        Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
+	        Map<ResourceLocation, Integer> reqNegativeEffect = new HashMap<>();
+	        Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
+	        private Builder() {}
+	        public static Builder start() {return new Builder();}
+	        public Builder override(boolean bool) {override = bool; return this;}
+	        public Builder isTagFor(Set<String> tags) {tagValues = tags; return this;}
+	        public Builder xpValues(Map<EventType, Map<String, Long>> xp) {xpValues = xp; return this;}
+	        public Builder bonus(Map<ModifierDataType, Map<String, Double>> bonuses) {modifiers = bonuses; return this;}
+	        public Builder reqs(Map<ReqType, Map<String, Integer>> requirements) {reqs = requirements; return this;}
+	        public Builder penalty(Map<ResourceLocation, Integer> penalty) {reqNegativeEffect = penalty; return this;}
+	        public Builder salvage(Map<ResourceLocation, SalvageData> scrap) {salvage = scrap; return this;}
+	        public ObjectData build() {
+	            return new ObjectData(override, tagValues, reqs, new HashMap<>(), reqNegativeEffect, 
+	                    xpValues, new HashMap<>(), modifiers, new HashMap<>(),
+	                    salvage, VeinData.EMPTY);
+	        }
+	    }
 }

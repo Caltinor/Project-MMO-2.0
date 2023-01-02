@@ -23,7 +23,8 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -43,7 +44,7 @@ public class TooltipHandler {
 		if(!tooltipOn)
             return;
 
-        Player player = event.getEntity();
+        Player player = event.getPlayer();
 
         if(player != null) {
         	Core core = Core.get(LogicalSide.CLIENT);
@@ -107,21 +108,21 @@ public class TooltipHandler {
 	private static void addRequirementTooltip(Translation header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
-			event.getToolTip().add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(" "+String.valueOf(req.getValue()))).setStyle(CoreUtils.getSkillStyle(req.getKey())));
+			event.getToolTip().add(new TranslatableComponent("pmmo."+req.getKey()).append(new TextComponent(" "+String.valueOf(req.getValue()))).setStyle(CoreUtils.getSkillStyle(req.getKey())));
 		}
 	}
 	
 	private static void addXpValueTooltip(Translation header, ItemTooltipEvent event, Map<String, Long> values, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Long> value : values.entrySet()) {
-			event.getToolTip().add(Component.translatable("pmmo."+value.getKey()).append(Component.literal(" "+String.valueOf(value.getValue()))).setStyle(CoreUtils.getSkillStyle(value.getKey())));
+			event.getToolTip().add(new TranslatableComponent("pmmo."+value.getKey()).append(new TextComponent(" "+String.valueOf(value.getValue()))).setStyle(CoreUtils.getSkillStyle(value.getKey())));
 		}
 	}
 	
 	private static void addModifierTooltip(Translation header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
 		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Double> modifier: values.entrySet()) {
-			event.getToolTip().add(Component.translatable("pmmo."+modifier.getKey()).append(Component.literal(" "+modifierPercent(modifier.getValue()))).setStyle(CoreUtils.getSkillStyle(modifier.getKey())));
+			event.getToolTip().add(new TranslatableComponent("pmmo."+modifier.getKey()).append(new TextComponent(" "+modifierPercent(modifier.getValue()))).setStyle(CoreUtils.getSkillStyle(modifier.getKey())));
 		}
 	}
 	

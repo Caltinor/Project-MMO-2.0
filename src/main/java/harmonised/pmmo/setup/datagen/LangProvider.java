@@ -7,8 +7,8 @@ import java.util.Map;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class LangProvider extends LanguageProvider{
@@ -565,15 +565,15 @@ public class LangProvider extends LanguageProvider{
 	}
 	
 	public static MutableComponent skill(String skill) {
-		return Component.translatable("pmmo."+skill).withStyle(style -> style.withColor(CoreUtils.getSkillColor(skill)));
+		return new TranslatableComponent("pmmo."+skill).withStyle(style -> style.withColor(CoreUtils.getSkillColor(skill)));
 	}
 	
 	public static record Translation(String key, Map<String, String> localeMap) {
 		public MutableComponent asComponent() {
-			return Component.translatable(key());
+			return new TranslatableComponent(key());
 		}
 		public MutableComponent asComponent(Object...obj) {
-			return Component.translatable(key(), obj);
+			return new TranslatableComponent(key(), obj);
 		}
 		public static class Builder {
 			private final String key;

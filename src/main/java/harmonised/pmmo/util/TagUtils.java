@@ -84,8 +84,8 @@ public class TagUtils {
 	 * @return an associated tag or new instance
 	 */
 	public static CompoundTag tileTag(BlockEntity tile) {
-		return tile == null || tile.getPersistentData() == null 
+		return tile == null || tile.getTileData() == null 
 				? new CompoundTag() 
-				: tile.getPersistentData();
+				: tile.getTileData();
 	}
 }

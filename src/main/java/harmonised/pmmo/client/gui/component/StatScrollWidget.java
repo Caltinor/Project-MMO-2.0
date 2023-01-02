@@ -47,6 +47,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -56,7 +58,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.gui.widget.ScrollPanel;
+import net.minecraftforge.client.gui.ScrollPanel;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -65,16 +67,16 @@ public class StatScrollWidget extends ScrollPanel{
 	
 	private static record TextElement(Component text, int xOffset, int color, boolean isHeader, int headerColor) implements Element{
 		public TextElement(String key, int value, int xOffset, int color) {
-			this(Component.translatable("pmmo."+key).append(Component.literal(": "+value)), xOffset, color, false, 0);
+			this(new TranslatableComponent("pmmo."+key).append(new TextComponent(": "+value)), xOffset, color, false, 0);
 		}
 		public TextElement(String key, long value, int xOffset, int color) {
-			this(Component.translatable("pmmo."+key).append(Component.literal(": "+value)), xOffset, color, false, 0);
+			this(new TranslatableComponent("pmmo."+key).append(new TextComponent(": "+value)), xOffset, color, false, 0);
 		}
 		public TextElement(String key, double value, int xOffset, int color) {
-			this(Component.translatable("pmmo."+key).append(Component.literal(": "+DP.dp(value*100)+"%")), xOffset, color, false, 0);
+			this(new TranslatableComponent("pmmo."+key).append(new TextComponent(": "+DP.dp(value*100)+"%")), xOffset, color, false, 0);
 		}
 		public TextElement(Enum<?> type, int xOffset, int color, boolean isHeader, int headerColor) {
-			this(Component.translatable("pmmo.enum."+type.name()), xOffset, color, isHeader, headerColor);
+			this(new TranslatableComponent("pmmo.enum."+type.name()), xOffset, color, isHeader, headerColor);
 		}
 		@SuppressWarnings("resource")
 		@Override
@@ -175,7 +177,7 @@ public class StatScrollWidget extends ScrollPanel{
 				break;}
 			case ENTITY: {
 				populateEntity(
-					ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(mc.level)).filter(entity -> entity != null).toList(),
+					ForgeRegistries.ENTITIES.getValues().stream().map(entityType -> entityType.create(mc.level)).filter(entity -> entity != null).toList(),
 					events,
 					type == null ? ReqType.ENTITY_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
 					false,
@@ -214,7 +216,7 @@ public class StatScrollWidget extends ScrollPanel{
 				break;}
 			case ENTITY: {
 				populateEntity(
-						ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(Minecraft.getInstance().level)).filter(entity -> entity != null).toList(),
+						ForgeRegistries.ENTITIES.getValues().stream().map(entityType -> entityType.create(Minecraft.getInstance().level)).filter(entity -> entity != null).toList(),
 						type == null ? EventType.ENTITY_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
 						reqs, false, skill);
 				break;}
@@ -387,7 +389,7 @@ public class StatScrollWidget extends ScrollPanel{
 			for (int lvl = 0; lvl <= getEffectHighestConfiguration(effect); lvl++) {
 				Map<String, Long> xpMap = core.getExperienceAwards(new MobEffectInstance(effect, 30, lvl), null, new CompoundTag());
 				if (!xpMap.isEmpty() && !xpMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
-					holder.add(new TextElement(Component.literal(String.valueOf(lvl)), 1, 0xFFFFFF, false, 0));
+					holder.add(new TextElement(new TextComponent(String.valueOf(lvl)), 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Long> map : xpMap.entrySet()) {
 						if (map.getValue() == 0) continue;
 						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), CoreUtils.getSkillColor(map.getKey())));
@@ -412,7 +414,7 @@ public class StatScrollWidget extends ScrollPanel{
 		locations.forEach(loc -> {
 			int lengthBeforeProcessing = content.size() + 1;
 			if (locations.size() > 1)
-				content.add(new TextElement(Component.literal(loc.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new TextElement(new TextComponent(loc.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			addReqSection((reqType -> core.getObjectSkillMap(isBiome ? ObjectType.BIOME : ObjectType.DIMENSION, 
 					loc, reqType, new CompoundTag())), 
 					isBiome 
@@ -437,12 +439,12 @@ public class StatScrollWidget extends ScrollPanel{
 		enchants.forEach(ench -> {
 			int lengthBeforeProcessing = content.size() + 1;
 			if (enchants.size() > 1)
-				content.add(new TextElement(Component.literal(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new TextElement(new TextComponent(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
 			for (int i = 0; i <= ForgeRegistries.ENCHANTMENTS.getValue(ench).getMaxLevel(); i++) {
 				Map<String, Integer> reqMap = core.getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
-					holder.add(new TextElement(Component.literal(String.valueOf(i)), 1, 0xFFFFFF, false, 0));
+					holder.add(new TextElement(new TextComponent(String.valueOf(i)), 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
 						if (map.getValue() == 0) continue;
 						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), CoreUtils.getSkillColor(map.getKey())));
@@ -466,11 +468,11 @@ public class StatScrollWidget extends ScrollPanel{
 			PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>()).forEach((skill, list) -> {
 				if (!skill.contains(skillFilter)) 
 					return;
-				holder.add(new TextElement(Component.translatable("pmmo."+skill).withStyle(ChatFormatting.UNDERLINE),
+				holder.add(new TextElement(new TranslatableComponent("pmmo."+skill).withStyle(ChatFormatting.UNDERLINE),
 						step(1), CoreUtils.getSkillStyle(skill).getColor().getValue(), false, 0));
 				list.forEach(src -> {
 					ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-					holder.add(new TextElement(Component.translatable("pmmo."+perkID.getNamespace()+"."+perkID.getPath()), 
+					holder.add(new TextElement(new TranslatableComponent("pmmo."+perkID.getNamespace()+"."+perkID.getPath()), 
 							step(1), 0xFFFFFF, false, 0));
 					CompoundTag newsrc = internalDefaults.copy().merge(core.getPerkRegistry().getProperties(perkID).merge(src));
 					newsrc.getAllKeys().forEach(key -> {
@@ -478,13 +480,13 @@ public class StatScrollWidget extends ScrollPanel{
 							return;
 						if (newsrc.get(key) instanceof ListTag) {
 							ListTag innerList = newsrc.getList(key, ((ListTag)newsrc.get(key)).getElementType());
-							holder.add(new TextElement(Component.literal(key +" = "), step(2), 0xAAFFFF, false, 0));
+							holder.add(new TextElement(new TextComponent(key +" = "), step(2), 0xAAFFFF, false, 0));
 							innerList.forEach(tag -> {
-								holder.add(new TextElement(Component.literal(tag.getAsString()), step(3), 0x7C83BC, false, 0));
+								holder.add(new TextElement(new TextComponent(tag.getAsString()), step(3), 0x7C83BC, false, 0));
 							});
 						}
 						else 
-							holder.add(new TextElement(Component.literal(key +" = " + newsrc.get(key).getAsString()), 
+							holder.add(new TextElement(new TextComponent(key +" = " + newsrc.get(key).getAsString()), 
 									step(2), 0xAAFFFF, false, 0));
 						
 					});
@@ -645,7 +647,7 @@ public class StatScrollWidget extends ScrollPanel{
 		if (!loader.veinBlacklist().isEmpty()) {
 			content.add(new TextElement(LangProvider.VEIN_BLACKLIST_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
 			for (ResourceLocation blockID : loader.veinBlacklist()) {
-				content.add(new TextElement(Component.literal(blockID.toString()), step(2), 0xEEEEEE, false, 0));
+				content.add(new TextElement(new TextComponent(blockID.toString()), step(2), 0xEEEEEE, false, 0));
 			}
 		}
 	}
@@ -657,7 +659,7 @@ public class StatScrollWidget extends ScrollPanel{
 		if (!loader.mobModifiers().isEmpty()) {
 			content.add(new TextElement(LangProvider.MOB_MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
 			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : loader.mobModifiers().entrySet()) {
-				Entity entity = ForgeRegistries.ENTITY_TYPES.getValue(mobMap.getKey()).create(mc.level);
+				Entity entity = ForgeRegistries.ENTITIES.getValue(mobMap.getKey()).create(mc.level);
 				content.add(new RenderableElement(entity.getName(), step(1), 0xFFFFFF, Config.SALVAGE_ITEM_COLOR.get(), entity));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
 					content.add(new TextElement(map.getKey(), map.getValue(), step(2), 0xFFFFFF));

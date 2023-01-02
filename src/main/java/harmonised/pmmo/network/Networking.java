@@ -39,63 +39,63 @@ public class Networking {
 		INSTANCE.messageBuilder(CP_UpdateLevelCache.class, ID++)
 			.encoder(CP_UpdateLevelCache::toBytes)
 			.decoder(CP_UpdateLevelCache::new)
-			.consumerNetworkThread(CP_UpdateLevelCache::handle)
+			.consumer(CP_UpdateLevelCache::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_UpdateExperience.class, ID++)
 			.encoder(CP_UpdateExperience::toBytes)
 			.decoder(CP_UpdateExperience::new)
-			.consumerNetworkThread(CP_UpdateExperience::handle)
+			.consumer(CP_UpdateExperience::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData.class, ID++)
 			.encoder(CP_SyncData::encode)
 			.decoder(CP_SyncData::decode)
-			.consumerNetworkThread(CP_SyncData::handle)
+			.consumer(CP_SyncData::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
 			.encoder((packet, buf) -> {})
 			.decoder(buf -> new CP_SyncData_ClearXp())
-			.consumerNetworkThread(CP_SyncData_ClearXp::handle)
+			.consumer(CP_SyncData_ClearXp::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_ClearData.class, ID++)
 			.encoder((packet, buf) -> {})
 			.decoder(buf -> new CP_ClearData())
-			.consumerNetworkThread(CP_ClearData::handle)
+			.consumer(CP_ClearData::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SetOtherExperience.class, ID++)
 			.encoder(CP_SetOtherExperience::toBytes)
 			.decoder(CP_SetOtherExperience::new)
-			.consumerNetworkThread(CP_SetOtherExperience::handle)
+			.consumer(CP_SetOtherExperience::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_ResetXP.class, ID++)
 			.encoder((packet, buf) -> {})
 			.decoder(buf -> new CP_ResetXP())
-			.consumerNetworkThread(CP_ResetXP::handle)
+			.consumer(CP_ResetXP::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncVein.class, ID++)
 			.encoder(CP_SyncVein::encode)
 			.decoder(CP_SyncVein::new)
-			.consumerNetworkThread(CP_SyncVein::handle)
+			.consumer(CP_SyncVein::handle)
 			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
 			.encoder(SP_UpdateVeinTarget::toBytes)
 			.decoder(SP_UpdateVeinTarget::new)
-			.consumerNetworkThread(SP_UpdateVeinTarget::handle)
+			.consumer(SP_UpdateVeinTarget::handle)
 			.add();
 		INSTANCE.messageBuilder(SP_OtherExpRequest.class, ID++)
 			.encoder(SP_OtherExpRequest::toBytes)
 			.decoder(SP_OtherExpRequest::new)
-			.consumerNetworkThread(SP_OtherExpRequest::handle)
+			.consumer(SP_OtherExpRequest::handle)
 			.add();
 		INSTANCE.messageBuilder(SP_SetVeinLimit.class, ID++)
 			.encoder(SP_SetVeinLimit::encode)
 			.decoder(SP_SetVeinLimit::new)
-			.consumerNetworkThread(SP_SetVeinLimit::handle)
+			.consumer(SP_SetVeinLimit::handle)
 			.add();
 		INSTANCE.messageBuilder(SP_SetVeinShape.class, ID++)
 			.encoder(SP_SetVeinShape::encode)
 			.decoder(SP_SetVeinShape::new)
-			.consumerNetworkThread(SP_SetVeinShape::handle)
+			.consumer(SP_SetVeinShape::handle)
 			.add();
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}

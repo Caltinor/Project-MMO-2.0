@@ -12,7 +12,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +28,10 @@ import com.mojang.serialization.JsonOps;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.codecs.CodecMapEnhancements;
-import harmonised.pmmo.config.codecs.CodecMapLocation;
-import harmonised.pmmo.config.codecs.CodecMapLocation.LocationMapContainer;
-import harmonised.pmmo.config.codecs.CodecMapObject;
-import harmonised.pmmo.config.codecs.CodecMapObject.ObjectMapContainer;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.config.codecs.EnhancementsData;
+import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -61,9 +58,9 @@ public class DataMigrator {
 	private static final String LEGACYDIR = "pmmo";
 	private static final Type mapType = new TypeToken<Map<String, Map<String, Double>>>(){}.getType();
     private static final Type mapType2 = new TypeToken<Map<String, Map<String, Map<String, Double>>>>(){}.getType();
-	private static final Map<ObjectType, Map<ResourceLocation, ObjectMapContainer>> objects = new HashMap<>();
-	private static final Map<ObjectType, Map<ResourceLocation, LocationMapContainer>> locations = new HashMap<>();
-	private static final Map<ResourceLocation, CodecMapEnhancements> enchants = new HashMap<>();
+	private static final Map<ObjectType, Map<ResourceLocation, ObjectData>> objects = new HashMap<>();
+	private static final Map<ObjectType, Map<ResourceLocation, LocationData>> locations = new HashMap<>();
+	private static final Map<ResourceLocation, EnhancementsData> enchants = new HashMap<>();
 	
 	private static enum JType {
 	    REQ_WEAR(DataMigrator.mapType, ObjectType.ITEM),
@@ -121,56 +118,56 @@ public class DataMigrator {
 		for (ResourceLocation objectID : objectIDs)	{
 			switch (type) {
 			case REQ_WEAR -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().reqs(Map.of(ReqType.WEAR, remapInt(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().reqs(Map.of(ReqType.WEAR, remapInt(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case REQ_TOOL -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().reqs(Map.of(ReqType.TOOL, remapInt(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().reqs(Map.of(ReqType.TOOL, remapInt(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case REQ_WEAPON -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().reqs(Map.of(ReqType.WEAPON, remapInt(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().reqs(Map.of(ReqType.WEAPON, remapInt(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case REQ_USE -> {
 				Map<String, Integer> mappedRaws = remapInt(data);
-				ObjectMapContainer raw = CodecMapObject.Builder.start().reqs(
+				ObjectData raw = ObjectData.Builder.start().reqs(
 						Map.of(ReqType.USE, mappedRaws, ReqType.INTERACT, mappedRaws)).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_CRAFT -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.CRAFT, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.CRAFT, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_SMELT -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.SMELT, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.SMELT, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_COOK -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.SMELT, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.SMELT, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_BREW -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.BREW, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.BREW, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_RIGHT_CLICK -> {
 				Map<String, Long> remappedData = remapLong(data);
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(
+				ObjectData raw = ObjectData.Builder.start().xpValues(
 						Map.of(EventType.ACTIVATE_ITEM, remappedData, EventType.ACTIVATE_BLOCK, remappedData)).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_BONUS_HELD -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().bonus(Map.of(ModifierDataType.HELD, remapDouble(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().bonus(Map.of(ModifierDataType.HELD, remapDouble(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_BONUS_WORN -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().bonus(Map.of(ModifierDataType.WORN, remapDouble(data))).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().bonus(Map.of(ModifierDataType.WORN, remapDouble(data))).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case SALVAGE -> {
-				ObjectMapContainer remappedRaws = CodecMapObject.Builder.start().salvage(remapSalvage(data)).build();
-				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, remappedRaws, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData remappedRaws = ObjectData.Builder.start().salvage(remapSalvage(data)).build();
+				objects.computeIfAbsent(ObjectType.ITEM, a -> new HashMap<>()).merge(objectID, remappedRaws, (og, ng) -> og.combine(ng));
 			}
 			default -> {}}
 		}
@@ -184,24 +181,24 @@ public class DataMigrator {
 		for (ResourceLocation objectID : objectIDs)	{
 			switch (type) {
 			case REQ_BREAK -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().reqs(Map.of(ReqType.BREAK, remapInt(data))).build();
-				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().reqs(Map.of(ReqType.BREAK, remapInt(data))).build();
+				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case REQ_PLACE -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().reqs(Map.of(ReqType.PLACE, remapInt(data))).build();
-				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().reqs(Map.of(ReqType.PLACE, remapInt(data))).build();
+				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_BREAK -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.BLOCK_BREAK, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.BLOCK_BREAK, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_PLACE -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.BLOCK_PLACE, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.BLOCK_PLACE, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_GROW -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.GROW, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.GROW, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.BLOCK, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			default -> {}}
 		}
@@ -215,24 +212,24 @@ public class DataMigrator {
 		for (ResourceLocation objectID : objectIDs)	{
 			switch (type) {
 			case REQ_KILL -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().reqs(Map.of(ReqType.KILL, remapInt(data))).build();
-				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().reqs(Map.of(ReqType.KILL, remapInt(data))).build();
+				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case REQ_ENTITY_INTERACT -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().reqs(Map.of(ReqType.ENTITY_INTERACT, remapInt(data))).build();
-				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().reqs(Map.of(ReqType.ENTITY_INTERACT, remapInt(data))).build();
+				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_BREED -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.BREED, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.BREED, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_TAME -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.TAMING, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.TAMING, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case XP_VALUE_KILL -> {
-				ObjectMapContainer raw = CodecMapObject.Builder.start().xpValues(Map.of(EventType.DEATH, remapLong(data))).build();
-				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> ObjectMapContainer.combine(og, ng));
+				ObjectData raw = ObjectData.Builder.start().xpValues(Map.of(EventType.DEATH, remapLong(data))).build();
+				objects.computeIfAbsent(ObjectType.ENTITY, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			default -> {}}
 		}
@@ -241,16 +238,16 @@ public class DataMigrator {
 	private static final TriConsumer<JType, String, Map<?,?>> DIMENSION_PROCESSOR = (type, rl, data) -> {
 		switch (type) {
 		case REQ_DIMENSION_TRAVEL -> {
-			LocationMapContainer raw = CodecMapLocation.Builder.start().req(remapInt(data)).build();
-			locations.computeIfAbsent(ObjectType.DIMENSION, a -> new HashMap<>()).merge(new ResourceLocation(rl), raw, (og, ng) -> LocationMapContainer.combine(og, ng));
+			LocationData raw = LocationData.Builder.start().req(remapInt(data)).build();
+			locations.computeIfAbsent(ObjectType.DIMENSION, a -> new HashMap<>()).merge(new ResourceLocation(rl), raw, (og, ng) -> og.combine(ng));
 		}
 		case XP_BONUS_DIMENSION -> {
-			LocationMapContainer raw = CodecMapLocation.Builder.start().bonus(Map.of(ModifierDataType.DIMENSION, remapDouble(data))).build();
-			locations.computeIfAbsent(ObjectType.DIMENSION, a -> new HashMap<>()).merge(new ResourceLocation(rl), raw, (og, ng) -> LocationMapContainer.combine(og, ng));
+			LocationData raw = LocationData.Builder.start().bonus(Map.of(ModifierDataType.DIMENSION, remapDouble(data))).build();
+			locations.computeIfAbsent(ObjectType.DIMENSION, a -> new HashMap<>()).merge(new ResourceLocation(rl), raw, (og, ng) -> og.combine(ng));
 		}
 		case VEIN_BLACKLIST -> {
-			LocationMapContainer raw = CodecMapLocation.Builder.start().veinBlacklist(remapVein(data)).build();
-			locations.computeIfAbsent(ObjectType.DIMENSION, a -> new HashMap<>()).merge(new ResourceLocation(rl), raw, (og, ng) -> LocationMapContainer.combine(og, ng));
+			LocationData raw = LocationData.Builder.start().veinBlacklist(remapVein(data)).build();
+			locations.computeIfAbsent(ObjectType.DIMENSION, a -> new HashMap<>()).merge(new ResourceLocation(rl), raw, (og, ng) -> og.combine(ng));
 		}
 		default -> {}}
 	};
@@ -263,23 +260,23 @@ public class DataMigrator {
 		for (ResourceLocation objectID : objectIDs)	{
 			switch (type) {
 			case REQ_BIOME -> {
-				LocationMapContainer raw = CodecMapLocation.Builder.start().req(remapInt(data)).build();
-				locations.computeIfAbsent(ObjectType.BIOME, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> LocationMapContainer.combine(og, ng));
+				LocationData raw = LocationData.Builder.start().req(remapInt(data)).build();
+				locations.computeIfAbsent(ObjectType.BIOME, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case BIOME_EFFECT_POSITIVE -> {
-				LocationMapContainer raw = CodecMapLocation.Builder.start().positive(remapInt(data).entrySet().stream()
+				LocationData raw = LocationData.Builder.start().positive(remapInt(data).entrySet().stream()
 						.collect(Collectors.toMap(entry -> new ResourceLocation(entry.getKey()), entry -> entry.getValue()))).build();
-				locations.computeIfAbsent(ObjectType.BIOME, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> LocationMapContainer.combine(og, ng));
+				locations.computeIfAbsent(ObjectType.BIOME, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			case BIOME_EFFECT_NEGATIVE -> {
-				LocationMapContainer raw = CodecMapLocation.Builder.start().negative(remapInt(data).entrySet().stream()
+				LocationData raw = LocationData.Builder.start().negative(remapInt(data).entrySet().stream()
 						.collect(Collectors.toMap(entry -> new ResourceLocation(entry.getKey()), entry -> entry.getValue()))).build();
-				locations.computeIfAbsent(ObjectType.BIOME, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> LocationMapContainer.combine(og, ng));
+				locations.computeIfAbsent(ObjectType.BIOME, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			//case BIOME_MOB_MULTIPLIER -> {}
 			case XP_BONUS_BIOME -> {
-				LocationMapContainer raw = CodecMapLocation.Builder.start().bonus(Map.of(ModifierDataType.BIOME, remapDouble(data))).build();
-				locations.computeIfAbsent(ObjectType.BIOME, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> LocationMapContainer.combine(og, ng));
+				LocationData raw = LocationData.Builder.start().bonus(Map.of(ModifierDataType.BIOME, remapDouble(data))).build();
+				locations.computeIfAbsent(ObjectType.BIOME, a -> new HashMap<>()).merge(objectID, raw, (og, ng) -> og.combine(ng));
 			}
 			default -> {}}
 		}
@@ -313,15 +310,15 @@ public class DataMigrator {
 	private static List<ResourceLocation> remapVein(Map<?,?> data) {
 		return data.keySet().stream().map(key -> new ResourceLocation(key.toString())).toList();
 	}
-	private static List<Map<String, Integer>> remapEnchant(Map<?,?> data) {
+	private static Map<Integer, Map<String, Integer>> remapEnchant(Map<?,?> data) {
 		Map<Integer, Map<String, Integer>> typeCastMap = data.entrySet().stream().collect(Collectors.toMap(
 				entry -> Double.valueOf(entry.getKey().toString()).intValue(), 
 				entry -> remapInt((Map<?,?>)entry.getValue())));
 		int maxConfigured = typeCastMap.keySet().stream().max(Comparators::max).orElse(-1);
-		List<Map<String, Integer>> outMap= new ArrayList<>();
+		Map<Integer, Map<String, Integer>> outMap= new HashMap<>();
 		for (int i = 0; i <= maxConfigured; i++) {
 			var innerMap = typeCastMap.get(i);
-			outMap.add(innerMap == null ? new HashMap<>() : innerMap);
+			outMap.put(i, innerMap == null ? new HashMap<>() : innerMap);
 		}
 		return outMap;
 	}
@@ -335,8 +332,8 @@ public class DataMigrator {
 		ENCHANTMENT("/pmmo/enchantments/", (type, rl, data) -> {
 			switch (type) {
 			case REQ_USE_ENCHANTMENT -> {
-				CodecMapEnhancements raw = CodecMapEnhancements.Builder.start().skillArray(remapEnchant(data)).build();
-				enchants.merge(new ResourceLocation(rl), raw, (og, ng) -> CodecMapEnhancements.combine(og, ng));
+				EnhancementsData raw = EnhancementsData.Builder.start().skillArray(remapEnchant(data)).build();
+				enchants.merge(new ResourceLocation(rl), raw, (og, ng) -> og.combine(ng));
 			}
 			default -> {}}
 		});
@@ -388,29 +385,29 @@ public class DataMigrator {
 			}			
 		}
 		
-		for(Map.Entry<ObjectType, Map<ResourceLocation, ObjectMapContainer>> entry : objects.entrySet()) {
+		for(Map.Entry<ObjectType, Map<ResourceLocation, ObjectData>> entry : objects.entrySet()) {
 			ObjectType type = entry.getKey();
 			System.out.println("Migration State: Objects Serialized"+entry.getValue().size());
-			for (Map.Entry<ResourceLocation, ObjectMapContainer> value : entry.getValue().entrySet()) {
-				JsonElement data = ObjectMapContainer.CODEC.encodeStart(JsonOps.INSTANCE, value.getValue())
+			for (Map.Entry<ResourceLocation, ObjectData> value : entry.getValue().entrySet()) {
+				JsonElement data = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, value.getValue())
 						.resultOrPartial(str -> System.out.println(str))
 						.get();
 				write(value.getKey(), data, type, filepath);
 			}
 		}
-		for(Map.Entry<ObjectType, Map<ResourceLocation, LocationMapContainer>> entry : locations.entrySet()) {
+		for(Map.Entry<ObjectType, Map<ResourceLocation, LocationData>> entry : locations.entrySet()) {
 			ObjectType type = entry.getKey();
 			System.out.println("Migration State: Locations Serialized"+entry.getValue().size());
-			for (Map.Entry<ResourceLocation, LocationMapContainer> value : entry.getValue().entrySet()) {
-				JsonElement data = LocationMapContainer.CODEC.encodeStart(JsonOps.INSTANCE, value.getValue())
+			for (Map.Entry<ResourceLocation, LocationData> value : entry.getValue().entrySet()) {
+				JsonElement data = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, value.getValue())
 						.resultOrPartial(str -> System.out.println(str))
 						.get();
 				write(value.getKey(), data, type, filepath);
 			}
 		}
 		System.out.println("Migration State: Enchants Serialized"+enchants.size());
-		for (Map.Entry<ResourceLocation, CodecMapEnhancements> value : enchants.entrySet()) {			
-			JsonElement data = CodecMapEnhancements.CODEC.encodeStart(JsonOps.INSTANCE, value.getValue())
+		for (Map.Entry<ResourceLocation, EnhancementsData> value : enchants.entrySet()) {			
+			JsonElement data = EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, value.getValue())
 					.resultOrPartial(str -> System.out.println(str))
 					.get();
 			write(value.getKey(), data, ObjectType.ENCHANTMENT, filepath);

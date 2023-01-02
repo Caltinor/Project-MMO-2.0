@@ -68,6 +68,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.PacketDistributor.PacketTarget;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 /**
  * Generic data loader for Codec-parsable data.
@@ -78,7 +79,7 @@ import net.minecraftforge.registries.IForgeRegistry;
  * @param <T> The type of the object we get after merging the parsed objects. Can be the same as RAW
  * @param <V>
  */
-public class MergeableCodecDataManager<T extends DataSource<T>, V> extends SimplePreparableReloadListener<Map<ResourceLocation, T>>
+public class MergeableCodecDataManager<T extends DataSource<T>, V extends IForgeRegistryEntry<V>> extends SimplePreparableReloadListener<Map<ResourceLocation, T>>
 {
 	protected static final String JSON_EXTENSION = ".json";
 	protected static final int JSON_EXTENSION_LENGTH = JSON_EXTENSION.length();
