@@ -1,6 +1,8 @@
 package harmonised.pmmo.compat.ftb_quests;
 
 
+import java.util.stream.Collectors;
+
 import dev.ftb.mods.ftblibrary.config.ConfigGroup;
 import dev.ftb.mods.ftblibrary.config.NameMap;
 import dev.ftb.mods.ftbquests.quest.Quest;
@@ -9,7 +11,9 @@ import dev.ftb.mods.ftbquests.quest.task.Task;
 import dev.ftb.mods.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.IDataStorage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -88,7 +92,16 @@ public class SkillTask extends Task
     {
         if(teamData.isCompleted(this))
             return;
-        teamData.setProgress(this, Core.get(player.level).getData().getPlayerSkillLevel(skill, player.getUUID()));
+        
+        IDataStorage data = Core.get(player.level).getData();
+        long xp = data.getPlayerSkillLevel(skill, player.getUUID());
+        SkillData config = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()); 
+        if (config.isSkillGroup() && config.getUseTotalLevels()) {
+        	xp = config.groupedSkills().get().entrySet().stream()
+        		.map(entry -> (int)(entry.getValue() * data.getPlayerSkillLevel(entry.getKey(), player.getUUID())))
+        		.collect(Collectors.summingInt(Integer::intValue));
+        }
+        teamData.setProgress(this, xp);
     }
 
     @Override
