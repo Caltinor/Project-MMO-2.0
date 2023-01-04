@@ -31,6 +31,7 @@ import harmonised.pmmo.registry.LevelRegistry;
 import harmonised.pmmo.registry.PerkRegistry;
 import harmonised.pmmo.registry.PredicateRegistry;
 import harmonised.pmmo.registry.TooltipRegistry;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
@@ -416,24 +417,27 @@ public class Core {
 	*/ 
 	//============================================================================================
 	public void getSalvage(ServerPlayer player) {
-		ItemStack salvageItem = player.getMainHandItem().isEmpty() 
-				? player.getOffhandItem().isEmpty() 
-						? ItemStack.EMPTY 
-						: player.getOffhandItem()
-				: player.getMainHandItem();
 		boolean salvageMainHand = !player.getMainHandItem().isEmpty();
 		boolean salvageOffHand = !salvageMainHand && !player.getOffhandItem().isEmpty();
+		ItemStack salvageItem = salvageMainHand 
+				? player.getMainHandItem() 
+				: salvageOffHand 
+					? player.getOffhandItem()
+					: ItemStack.EMPTY ;		
 		if (!loader.ITEM_LOADER.getData().containsKey(RegistryUtil.getId(salvageItem))) return;
 		Map<String, Long> playerXp = getData().getXpMap(player.getUUID());
 		
 		Map<String, Long> xpAwards = new HashMap<>();
+		boolean validAttempt = false;
+		entry:
 		for (Map.Entry<ResourceLocation, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(salvageItem)).salvage().entrySet()) {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met. 
 			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {
-				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l))) continue;
+				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l))) continue entry;
 			}
-			
+			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption
+			validAttempt = true;
 			//get the base calculation values including the bonuses from skills
 			double base = result.getValue().baseChance();
 			double max = result.getValue().maxChance();
@@ -452,10 +456,14 @@ public class Core {
 				}
 			}
 		}
-		if (salvageMainHand) player.getMainHandItem().shrink(1);
-		if (salvageOffHand) player.getOffhandItem().shrink(1);
-		List<ServerPlayer> party = PartyUtils.getPartyMembersInRange(player);
-		awardXP(party, xpAwards);
+		if (validAttempt) {
+			if (salvageMainHand) player.getMainHandItem().shrink(1);
+			if (salvageOffHand) player.getOffhandItem().shrink(1);
+			List<ServerPlayer> party = PartyUtils.getPartyMembersInRange(player);
+			awardXP(party, xpAwards);
+		}	
+		else
+			player.sendSystemMessage(LangProvider.DENIAL_SALVAGE.asComponent());
 	}
 	
 	/**stores the designated block marked for each player*/

@@ -543,6 +543,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "You are not skilled enough to tame %1$s").build();
 	public static final Translation DENIAL_ENTITY_INTERACT = Translation.Builder.start("pmmo.msg.denial.entity_interact")
 			.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
+	public static final Translation DENIAL_SALVAGE = Translation.Builder.start("pmmo.msg.denial.salvage")
+			.addLocale(Locale.EN_US, "You cannot salvage this item. Either it cannot be salvaged or you are not skilled enough yet.").build();
 	
 	//==========TUTORIAL TEXT======================
 	public static final Translation SALVAGE_TUTORIAL_HEADER = Translation.Builder.start("pmmo.client.tutorial.salvage.header")
