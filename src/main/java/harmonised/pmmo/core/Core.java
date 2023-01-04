@@ -320,11 +320,13 @@ public class Core {
 	}
 	public boolean isActionPermitted(ReqType type, Biome biome, Player player) {
 		if (type != ReqType.TRAVEL) return false;
+		if (!Config.reqEnabled(type).get()) return true;
 		return doesPlayerMeetReq(player.getUUID(), 
 				getObjectSkillMap(ObjectType.BIOME, RegistryUtil.getId(biome), type, new CompoundTag()));
 	}
 	public boolean isActionPermitted(ReqType type, ResourceKey<Level> dimension, Player player) {
 		if (type != ReqType.TRAVEL) return false;
+		if (!Config.reqEnabled(type).get()) return true;
 		return doesPlayerMeetReq(player.getUUID(),
 				getObjectSkillMap(ObjectType.DIMENSION, dimension.location(), type, new CompoundTag()));
 	}
