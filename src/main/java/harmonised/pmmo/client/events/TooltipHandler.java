@@ -145,12 +145,19 @@ public class TooltipHandler {
 		//if Reqs are not enabled, ignore the getters and return an empty map
 		//This will cause the map to be empty and result in no header being added.
 		if (!Config.reqEnabled(type).get()) return new HashMap<>();
+		
 		//Gather req data and populate a map for return
 		Map<String, Integer> map = type == ReqType.USE_ENCHANTMENT 
 				? core.getEnchantReqs(stack)
 				: core.getReqMap(type, stack);
+		
+		//splits skill groups that aren't using total levels
+		CoreUtils.processSkillGroupReqs(map);
+		
+		//return the raw map if met req filtering is not being applied
 		if (!Config.HIDE_MET_REQS.get())
 			return map;
+		
 		//remove values that meet the requirement
 		new HashMap<>(map).forEach((skill, level) -> {
 			if (SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).isSkillGroup()) {
@@ -160,7 +167,7 @@ public class TooltipHandler {
 						.stream()
 						.map(groupskill-> core.getData().getPlayerSkillLevel(groupskill, null))
 						.collect(Collectors.summingInt(Integer::intValue));
-				if (level > total) {
+				if (level <= total) {
 					map.remove(skill);
 				}
 			}
