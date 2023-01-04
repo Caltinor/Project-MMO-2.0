@@ -552,6 +552,26 @@ public class LangProvider extends LanguageProvider{
 	public static final Translation SALVAGE_TUTORIAL_USAGE = Translation.Builder.start("pmmo.client.tutorial.salvage.usage")
 			.addLocale(Locale.EN_US, "While crouching, right click this block to salvage the items in your hand.").build();
 	
+	//==========COMPAT MESSAGES====================
+	public static final Translation FTBQ_XP_TITLE = Translation.Builder.start("ftbquests.reward.pmmo.xpreward")
+			.addLocale(Locale.EN_US, "Skill Xp Reward").build();
+	public static final Translation FTBQ_XP_SKILL = Translation.Builder.start("ftbquests.reward.pmmo.xpreward.skill")
+			.addLocale(Locale.EN_US, "Skill").build();
+	public static final Translation FTBQ_XP_AMOUNT = Translation.Builder.start("ftbquests.reward.pmmo.xpreward.amount")
+			.addLocale(Locale.EN_US, "Xp Reward").build();
+	public static final Translation FTBQ_LVL_TITLE = Translation.Builder.start("ftbquests.reward.pmmo.levelreward")
+			.addLocale(Locale.EN_US, "Skill Level Reward").build();
+	public static final Translation FTBQ_LVL_SKILL = Translation.Builder.start("ftbquests.reward.pmmo.levelreward.skill")
+			.addLocale(Locale.EN_US, "Skill").build();
+	public static final Translation FTBQ_LVL_AMOUNT = Translation.Builder.start("ftbquests.reward.pmmo.levelreward.amount")
+			.addLocale(Locale.EN_US, "Level Reward").build();
+	public static final Translation FTBQ_SKILL_TITLE = Translation.Builder.start("ftbquests.task.pmmo.skill")
+			.addLocale(Locale.EN_US, "Skill").build();
+	public static final Translation FTBQ_SKILL_SKILL = Translation.Builder.start("ftbquests.task.pmmo.skill.skill")
+			.addLocale(Locale.EN_US, "Skill").build();
+	public static final Translation FTBQ_SKILL_LEVEL = Translation.Builder.start("ftbquests.task.pmmo.skill.requiredLevel")
+			.addLocale(Locale.EN_US, "Required Level").build();
+	
 	@Override
 	protected void addTranslations() {
 		for (Field entry : this.getClass().getDeclaredFields()) {
