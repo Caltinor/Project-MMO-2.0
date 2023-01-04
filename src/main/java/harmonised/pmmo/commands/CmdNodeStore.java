@@ -3,6 +3,7 @@ package harmonised.pmmo.commands;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -62,8 +63,9 @@ public class CmdNodeStore {
 		if (skillData == null) return 0;
 		if (skillData.isSkillGroup()) {
 			int groupLevel = 0;
+			double proportionModifier = skillData.getUseTotalLevels() ? 1d : skillData.groupedSkills().get().values().stream().collect(Collectors.summingDouble(Double::doubleValue));
 			for (Map.Entry<String, Double> portion : skillData.groupedSkills().get().entrySet()) {
-				groupLevel += (core.getData().getPlayerSkillLevel(portion.getKey(), pid) * portion.getValue());
+				groupLevel += (core.getData().getPlayerSkillLevel(portion.getKey(), pid) * (portion.getValue()/proportionModifier));
 			}
 			return groupLevel;
 		}
