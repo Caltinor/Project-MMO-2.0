@@ -514,6 +514,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> VEIN_ENABLED;
 	public static ForgeConfigSpec.ConfigValue<Boolean> REQUIRE_SETTING;
 	public static ForgeConfigSpec.ConfigValue<Integer> DEFAULT_CONSUME;
+	public static ForgeConfigSpec.DoubleValue VEIN_CHARGE_MODIFIER;
 	
 	private static void buildVeinMinerSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related to the Vein Miner").push("Vein_Miner");
@@ -524,6 +525,8 @@ public class Config {
 				.define("Require Settings", false);
 		DEFAULT_CONSUME = builder.comment("how much a block should consume if no setting is defined.")
 				.define("Vein Mine Default Consume", 1);
+		VEIN_CHARGE_MODIFIER = builder.comment("a multiplier to all vein charge rates.")
+				.defineInRange("Vein Charge Modifier", 1.0, 0.0, Double.MAX_VALUE);
 		builder.pop();
 	}
 }
