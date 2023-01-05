@@ -85,7 +85,7 @@ public class VeinMiningLogic {
 			return;
 	
 		final int fCap = chargeCap;
-		final double fRate = chargeRate;
+		final double fRate = chargeRate * Config.VEIN_CHARGE_MODIFIER.get();
 		if ((currentCharge + fRate) >= fCap) {
 			player.getCapability(VeinProvider.VEIN_CAP).ifPresent(vein -> {
 				vein.setCharge(fCap);
