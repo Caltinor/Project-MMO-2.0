@@ -1,0 +1,31 @@
+{"override":true,
+"xp_values":{
+	"BLOCK_BREAK":{
+		"mining": 250
+	},
+	"BLOCK_PLACE":{},
+	"GROW":{},
+	"HIT_BLOCK":{},
+	"ACTIVATE_BLOCK":{}
+},
+"nbt_xp_values":{
+	"BLOCK_BREAK":[],
+	"BLOCK_PLACE":[],
+	"GROW":[],
+	"HIT_BLOCK":[],
+	"ACTIVATE_BLOCK":[]
+},
+"requirements":{
+	"PLACE":{},
+	"BREAK":{},
+	"INTERACT":{}
+},
+"nbt_requirements":{
+	"PLACE":[],
+	"BREAK":[],
+	"INTERACT":[]
+},
+"vein_data":{
+    "consumeAmount": 0
+}
+}
