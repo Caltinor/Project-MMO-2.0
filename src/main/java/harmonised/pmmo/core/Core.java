@@ -195,7 +195,7 @@ public class Core {
 		return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, dataIn);
 	}
 	
-	private Map<String, Long> getCommonXpAwardData(Map<String, Long> xpGains, EventType type, ResourceLocation objectID, Player player, ObjectType oType, CompoundTag tag) {
+	public Map<String, Long> getCommonXpAwardData(Map<String, Long> xpGains, EventType type, ResourceLocation objectID, Player player, ObjectType oType, CompoundTag tag) {
 		if (xpGains.isEmpty()) {
 			xpGains = CoreUtils.mergeXpMapsWithSummateCondition(				
 					tag.contains(APIUtils.SERIALIZED_AWARD_MAP) 
@@ -395,7 +395,16 @@ public class Core {
 		return getCommonReqData(reqMap, ObjectType.BLOCK, blockID, reqType, TagUtils.tileTag(tile));
 	}
 	
-	private Map<String, Integer> getCommonReqData(Map<String, Integer> reqsIn, ObjectType oType, ResourceLocation objectID, ReqType type, CompoundTag tag) {
+	/**gets the default and autovalue data for the provided object.
+	 * 
+	 * @param reqsIn reqs from previous step
+	 * @param oType object type
+	 * @param objectID 
+	 * @param type req type
+	 * @param tag object's tag if present
+	 * @return a map of skills and levels required to perform the action
+	 */
+	public Map<String, Integer> getCommonReqData(Map<String, Integer> reqsIn, ObjectType oType, ResourceLocation objectID, ReqType type, CompoundTag tag) {
 		if (reqsIn.isEmpty()) {
 			reqsIn = getObjectSkillMap(oType, objectID, type, tag);
 			if (AutoValueConfig.ENABLE_AUTO_VALUES.get() && reqsIn.isEmpty())
