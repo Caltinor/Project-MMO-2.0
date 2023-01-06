@@ -131,7 +131,9 @@ public class StatScrollWidget extends ScrollPanel{
 	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack, ItemRenderer itemRenderer) {
 		this(width, height, top, left);
 		this.itemRenderer = itemRenderer;
-		populateItems(List.of(stack), EventType.ITEM_APPLICABLE_EVENTS, ReqType.ITEM_APPLICABLE_EVENTS, ModifierDataType.values(), "", true, true);
+		EventType[] events = stack.getItem() instanceof BlockItem ? EventType.BLOCKITEM_APPLICABLE_EVENTS : EventType.ITEM_APPLICABLE_EVENTS;
+		ReqType[] reqs = stack.getItem() instanceof BlockItem ? ReqType.BLOCKITEM_APPLICABLE_EVENTS : ReqType.ITEM_APPLICABLE_EVENTS;
+		populateItems(List.of(stack), events, reqs, ModifierDataType.values(), "", true, true);
 	}
 	public StatScrollWidget(int width, int height, int top, int left, Entity entity) {
 		this(width, height, top, left);
@@ -313,11 +315,18 @@ public class StatScrollWidget extends ScrollPanel{
 			int lengthBeforeProcessing = content.size() + 1;
 			if (items.size() > 1) 
 				content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color.getColor(), Config.SECTION_HEADER_COLOR.get(), stack));
-			addEventSection((event -> core.getExperienceAwards(event, stack, Minecraft.getInstance().player, new CompoundTag())), events, skillFilter);
+			addEventSection((event -> {
+				Map<String, Long> map = core.getExperienceAwards(event, stack, mc.player, new CompoundTag());
+				if (stack.getItem() instanceof BlockItem)
+					map = core.getCommonXpAwardData(new HashMap<>(), event, RegistryUtil.getId(stack), mc.player, ObjectType.BLOCK, TagUtils.stackTag(stack));
+				return map;
+				}), events, skillFilter);
 			addReqSection((reqType -> {
 				Map<String, Integer> reqMap = core.getReqMap(reqType, stack);
 				if (reqType == ReqType.USE_ENCHANTMENT)
 					core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
+				if (stack.getItem() instanceof BlockItem)
+					reqMap.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), reqType, TagUtils.stackTag(stack)));
 				return reqMap;
 				}),	
 				CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect(), true), 

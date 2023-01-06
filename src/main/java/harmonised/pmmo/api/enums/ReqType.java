@@ -42,6 +42,7 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum, GuiEnumGrou
 	public static final ReqType[] ITEM_APPLICABLE_EVENTS = Arrays.asList(ReqType.values()).stream().filter((type) -> type.itemApplicable).toArray(ReqType[]::new);
 	public static final ReqType[] BLOCK_APPLICABLE_EVENTS = Arrays.asList(ReqType.values()).stream().filter((type) -> type.blockApplicable).toArray(ReqType[]::new);
 	public static final ReqType[] ENTITY_APPLICABLE_EVENTS = Arrays.asList(ReqType.values()).stream().filter((type) -> type.entityApplicable).toArray(ReqType[]::new);
+	public static final ReqType[] BLOCKITEM_APPLICABLE_EVENTS = Arrays.asList(ReqType.values()).stream().filter((type) -> type.itemApplicable || type.blockApplicable).toArray(ReqType[]::new);
 
 	public static final Codec<ReqType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(ReqType::values, ReqType::byName);
 	private static final Map<String, ReqType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ReqType::getSerializedName, s -> {return s;}));

@@ -66,12 +66,12 @@ public class TooltipHandler {
             Map<String, Integer> useEnchantmentReq = getReqData(core, ReqType.USE_ENCHANTMENT, stack);
             Map<String, Integer> placeReq = getReqData(core, ReqType.PLACE, stack);
             Map<String, Integer> breakReq = getReqData(core, ReqType.BREAK, stack);
-            Map<String, Long> xpValueBreaking = core.getExperienceAwards(EventType.BLOCK_BREAK, stack, player, TagUtils.stackTag(stack));
-            Map<String, Long> xpValueCrafting = core.getExperienceAwards(EventType.CRAFT, stack, player, TagUtils.stackTag(stack));
-            Map<String, Long> xpValueSmelting = core.getExperienceAwards(EventType.SMELT, stack, player, TagUtils.stackTag(stack));
-            Map<String, Long> xpValueBrewing = core.getExperienceAwards(EventType.BREW, stack, player, TagUtils.stackTag(stack));
-            Map<String, Long> xpValueGrowing = core.getExperienceAwards(EventType.GROW, stack, player, TagUtils.stackTag(stack));
-            Map<String, Long> xpValuePlacing = core.getExperienceAwards(EventType.BLOCK_PLACE, stack, player, TagUtils.stackTag(stack));
+            Map<String, Long> xpValueBreaking = getXpData(core, EventType.BLOCK_BREAK, player, stack);
+            Map<String, Long> xpValueCrafting = getXpData(core, EventType.CRAFT, player, stack);
+            Map<String, Long> xpValueSmelting = getXpData(core, EventType.SMELT, player, stack);
+            Map<String, Long> xpValueBrewing = getXpData(core, EventType.BREW, player, stack);
+            Map<String, Long> xpValueGrowing = getXpData(core, EventType.GROW, player, stack);
+            Map<String, Long> xpValuePlacing = getXpData(core, EventType.BLOCK_PLACE, player, stack);
             //Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
             //Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
             Map<String, Double> heldItemXpBoost = core.getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack));
@@ -141,6 +141,13 @@ public class TooltipHandler {
 		return DP.dp((value - 1d) * 100d) + "%";
 	}
 	
+	private static Map<String, Long> getXpData(Core core, EventType type, Player player, ItemStack stack) {
+		Map<String, Long> map = core.getExperienceAwards(type, stack, player, new CompoundTag());
+		if (stack.getItem() instanceof BlockItem) 
+			map = core.getCommonXpAwardData(new HashMap<>(), type, RegistryUtil.getId(stack), player, ObjectType.BLOCK, TagUtils.stackTag(stack));
+		return map;
+	}
+	
 	private static Map<String, Integer> getReqData(Core core, ReqType type, ItemStack stack) {		
 		//if Reqs are not enabled, ignore the getters and return an empty map
 		//This will cause the map to be empty and result in no header being added.
@@ -150,6 +157,9 @@ public class TooltipHandler {
 		Map<String, Integer> map = type == ReqType.USE_ENCHANTMENT 
 				? core.getEnchantReqs(stack)
 				: core.getReqMap(type, stack);
+		
+		if (stack.getItem() instanceof BlockItem)
+			map.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), type, TagUtils.stackTag(stack)));
 		
 		//splits skill groups that aren't using total levels
 		CoreUtils.processSkillGroupReqs(map);
