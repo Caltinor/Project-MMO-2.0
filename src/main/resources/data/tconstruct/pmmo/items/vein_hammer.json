@@ -5,7 +5,7 @@
 			 "cases": [
 			 	{"paths": ["tic_materials[]"],
 			 	 "criteria": [
-					{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood","tconstruct:rock"],"value": { "mining": 5}},
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:rock","tconstruct:wood"],"value": { "mining": 5}},
 					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum","tconstruct:chorus","tconstruct:bloodbone"], "value": { "mining": 10}},
 					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:whitestone","tconstruct:amethyst_bronze","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "mining": 20}},
 					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:blaze_bone","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "mining": 30}}
@@ -17,7 +17,7 @@
 			 "cases": [
 			 	{"paths": ["tic_materials[]"],
 			 	 "criteria": [
-					{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood","tconstruct:rock"],"value": { "combat": 5}},
+					{"operator": "EQUALS","comparators": ["tconstruct:rock","tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "combat": 5}},
 					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum","tconstruct:chorus","tconstruct:bloodbone"], "value": { "combat": 10}},
 					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:whitestone","tconstruct:amethyst_bronze","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "combat": 20}},
 					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:blaze_bone","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "combat": 30}}
