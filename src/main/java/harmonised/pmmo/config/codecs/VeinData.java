@@ -43,4 +43,12 @@ public class VeinData  implements DataSource<VeinData>{
 				&& (chargeRate.isEmpty() || chargeCap.get() == 0d)
 				&& (consumeAmount.isEmpty() || consumeAmount.get() == 0);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("{Rate:%1$s ,Cap:%2$s ,Consume:%3$s" , 
+				chargeRate.isPresent() ? String.valueOf(chargeRate.get()) : "Empty",
+				chargeCap.isPresent() ? String.valueOf(chargeCap.get()) : "Empty",
+				consumeAmount.isPresent() ? String.valueOf(consumeAmount.get()) : "Empty");
+	}
 }
