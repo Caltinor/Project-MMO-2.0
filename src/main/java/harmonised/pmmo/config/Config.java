@@ -457,10 +457,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_LINEAR_PER_LEVEL;
 	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_POWER_BASE;
 	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_LEVEL_MOD;
-	
-	public static ConfigObject<Map<String, Double>> MOB_SCALE_HP;
-	public static ConfigObject<Map<String, Double>> MOB_SCALE_SPEED;
-	public static ConfigObject<Map<String, Double>> MOB_SCALE_DAMAGE;
+
 	public static ConfigObject<Map<String, Map<String, Double>>> MOB_SCALING;
 	
 	private static void buildMobScalingSettings(ForgeConfigSpec.Builder builder) {
@@ -495,12 +492,6 @@ public class Config {
 					, "minecraft:generic.movement_speed: 0.7 is base for most mobs.  this is added to that. so 0.7 from scaling is double speed"
 					, "minecraft:generic.attack_damage: is a multiplier of their base damage.  1 = no change, 2 = double damage"
 					, "negative values are possible and you can use this to create counterbalance skills").push("Scaling_Settings");
-				MOB_SCALE_HP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-						"HP Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.01));
-				MOB_SCALE_SPEED = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-						"Speed Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.001));
-				MOB_SCALE_DAMAGE = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-						"Damage Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.001));
 				MOB_SCALING = TomlConfigHelper.<Map<String, Map<String, Double>>>defineObject(builder,
 						"Mob Scaling IDs and Ratios", Codec.unboundedMap(Codec.STRING, CodecTypes.DOUBLE_CODEC), Map.of(
 								"minecraft:generic.max_health", Map.of("combat", 0.01),
