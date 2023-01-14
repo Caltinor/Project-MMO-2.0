@@ -5,10 +5,10 @@
 			 "cases": [
 			 	{"paths": ["tic_materials[]"],
 			 	 "criteria": [
-			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "woodcutting": 1}},
-					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "woodcutting": 10}},
-					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "woodcutting": 20}},
-					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "woodcutting": 30}}
+					{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood","tconstruct:rock"],"value": { "woodcutting": 5}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:plated_slimewood","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum","tconstruct:chorus","tconstruct:bloodbone"], "value": { "woodcutting": 10}},
+					{"operator": "EQUALS","comparators": ["twilightforest:steeleaf","twilightforest:knightmetal","twilightforest:fiery","tconstruct:slimesteel","tconstruct:whitestone","tconstruct:amethyst_bronze","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "woodcutting": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:blazing_bone","tconstruct:bloodbone","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "woodcutting": 30}}
 			 	]}
 			]}
         ],
@@ -17,10 +17,10 @@
 			 "cases": [
 			 	{"paths": ["tic_materials[]"],
 			 	 "criteria": [
-			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "combat": 1}},
-					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "combat": 10}},
-					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "combat": 20}},
-					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "combat": 30}}
+					{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood","tconstruct:rock"],"value": { "combat": 5}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:plated_slimewood","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum","tconstruct:chorus","tconstruct:bloodbone"], "value": { "combat": 10}},
+					{"operator": "EQUALS","comparators": ["twilightforest:steeleaf","twilightforest:knightmetal","twilightforest:fiery","tconstruct:slimesteel","tconstruct:whitestone","tconstruct:amethyst_bronze","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "combat": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:blazing_bone","tconstruct:bloodbone","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "combat": 30}}
 			 	]}
 			]}
         ]
