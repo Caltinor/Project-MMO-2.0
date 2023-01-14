@@ -472,7 +472,7 @@ public class Core {
 			awardXP(party, xpAwards);
 		}	
 		else
-			player.sendSystemMessage(LangProvider.DENIAL_SALVAGE.asComponent());
+			player.sendMessage(LangProvider.DENIAL_SALVAGE.asComponent(), player.getUUID());
 	}
 	
 	/**stores the designated block marked for each player*/
