@@ -495,7 +495,7 @@ public class Config {
 				MOB_SCALING = TomlConfigHelper.<Map<String, Map<String, Double>>>defineObject(builder,
 						"Mob Scaling IDs and Ratios", Codec.unboundedMap(Codec.STRING, CodecTypes.DOUBLE_CODEC), Map.of(
 								"minecraft:generic.max_health", Map.of("combat", 0.01),
-								"minecraft:generic.movement_speed", Map.of("combat", 0.001),
+								"minecraft:generic.movement_speed", Map.of("combat", 0.00001),
 								"minecraft:generic.attack_damage", Map.of("combat", 0.001)
 						));
 			builder.pop(); //Scaling Settings
