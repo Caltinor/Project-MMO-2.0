@@ -96,11 +96,11 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.2'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.3'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
-    annotationProcessor 'net.minecraftforge:forge:1.19.2-43.1.27'
+    annotationProcessor 'net.minecraftforge:forge:1.19.2-43.2.3'
     annotationProcessor 'com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.14'
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0:api")
@@ -114,13 +114,13 @@ dependencies {
   	
   	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
-  	runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
-  	runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
-  	runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
-  	runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
-  	runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.14')
-  	runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
+  	//runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
+  	//runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
+  	//runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+  	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
+  	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
+  	//runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.14')
+  	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
 }
 
 jar {
