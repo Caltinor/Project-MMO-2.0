@@ -14,7 +14,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 public class LangProvider extends LanguageProvider{
 	private String locale;
 	
-	private enum Locale {
+	public static enum Locale {
 		DE_DE("de_de"),
 		EN_US("en_us"),
 		ES_AR("es_ar"),
@@ -2231,7 +2231,8 @@ public class LangProvider extends LanguageProvider{
 	}
 	
 	private void add(Translation translation) {
-		add(translation.key(), translation.localeMap().getOrDefault(locale, ""));
+		if (translation.localeMap().get(locale) != null)
+			add(translation.key(), translation.localeMap().get(locale));
 	}
 	
 	public static MutableComponent skill(String skill) {

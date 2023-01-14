@@ -12,6 +12,7 @@ import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.setup.datagen.GLMProvider;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.setup.datagen.LangProvider.Locale;
 import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.MsLoggy;
@@ -105,7 +106,9 @@ public class CommonSetup {
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
 		if (event.includeClient()) {
-			generator.addProvider(true, new LangProvider(generator, "en_us"));
+			for (Locale locale : LangProvider.Locale.values()) {
+				generator.addProvider(true, new LangProvider(generator, locale.str));
+			}
 		}
 		if (event.includeServer()) {
 			generator.addProvider(true, new GLMProvider(generator));
