@@ -15,7 +15,29 @@ public class LangProvider extends LanguageProvider{
 	private String locale;
 	
 	private enum Locale {
-		EN_US("en_us");
+		DE_DE("de_de"),
+		EN_US("en_us"),
+		ES_AR("es_ar"),
+		ES_CL("es_cl"),
+		ES_EC("es_ec"),
+		ES_ES("es_es"),
+		ES_MX("ex_mx"),
+		ES_UY("es_uy"),
+		ES_VE("es_ve"),
+		FR_FR("fr_fr"),
+		HU("hu"),
+		IT_IT("it_it"),
+		JA("ja"),
+		KO_KR("ko_kr"),
+		LT_LT("lt_lt"),
+		NL_NL("nl_nl"),
+		PL("pl"),
+		PT_BR("pt_br"),
+		RU_RU("ru_ru"),
+		SV_SE("sv_se"),
+		UK_UA("uk_ua"),
+		ZH_CN("zh_cn"),
+		ZH_TW("zh_tw");
 		
 		public String str;
 		Locale(String locale) {str = locale;}
@@ -28,549 +50,2175 @@ public class LangProvider extends LanguageProvider{
 
 	//=========PERK NAMES======================
 	public static final Translation PERK_BREAK_SPEED = Translation.Builder.start("pmmo.pmmo.break_speed")
-			.addLocale(Locale.EN_US, "Break Speed Modifier").build();
+		.addLocale(Locale.EN_US, "Break Speed Modifier").build();
 	public static final Translation PERK_FIREWORK = Translation.Builder.start("pmmo.pmmo.fireworks")
-			.addLocale(Locale.EN_US, "Firework").build();
+		.addLocale(Locale.EN_US, "Firework").build();
 	public static final Translation PERK_REACH = Translation.Builder.start("pmmo.pmmo.reach")
-			.addLocale(Locale.EN_US, "Player Reach Distance").build();
+		.addLocale(Locale.EN_US, "Player Reach Distance").build();
 	public static final Translation PERK_DAMAGE = Translation.Builder.start("pmmo.pmmo.damage")
-			.addLocale(Locale.EN_US, "Melee Damage").build();
+		.addLocale(Locale.EN_US, "Melee Damage").build();
 	public static final Translation PERK_SPEED = Translation.Builder.start("pmmo.pmmo.speed")
-			.addLocale(Locale.EN_US, "Player Move Speed").build();
+		.addLocale(Locale.EN_US, "Player Move Speed").build();
 	public static final Translation PERK_HEALTH = Translation.Builder.start("pmmo.pmmo.health")
-			.addLocale(Locale.EN_US, "Extra Hearts").build();
+		.addLocale(Locale.EN_US, "Extra Hearts").build();
 	public static final Translation PERK_JUMP_BOOST = Translation.Builder.start("pmmo.pmmo.jump_boost")
-			.addLocale(Locale.EN_US, "Extra Jump Height").build();
+		.addLocale(Locale.EN_US, "Extra Jump Height").build();
 	public static final Translation PERK_BREATH = Translation.Builder.start("pmmo.pmmo.breath")
-			.addLocale(Locale.EN_US, "Breath Refresh").build();
+		.addLocale(Locale.EN_US, "Breath Refresh").build();
 	public static final Translation PERK_DAMAGE_BOOST = Translation.Builder.start("pmmo.pmmo.damage_boost")
-			.addLocale(Locale.EN_US, "Damage Modifier").build();
+		.addLocale(Locale.EN_US, "Damage Modifier").build();
 	public static final Translation PERK_COMMAND = Translation.Builder.start("pmmo.pmmo.command")
-			.addLocale(Locale.EN_US, "Custom Commands").build();
+		.addLocale(Locale.EN_US, "Custom Commands").build();
 	public static final Translation PERK_NIGHT_VISION = Translation.Builder.start("pmmo.pmmo.night_vision")
-			.addLocale(Locale.EN_US, "Night Vision").build();
+		.addLocale(Locale.EN_US, "Night Vision").build();
 	public static final Translation PERK_REGEN = Translation.Builder.start("pmmo.pmmo.regen")
-			.addLocale(Locale.EN_US, "Regeneration").build();
+		.addLocale(Locale.EN_US, "Regeneration").build();
 	public static final Translation PERK_EFFECT = Translation.Builder.start("pmmo.pmmo.effect")
-			.addLocale(Locale.EN_US, "Status Effect").build();
+		.addLocale(Locale.EN_US, "Status Effect").build();
 	public static final Translation PERK_FALL_SAVE = Translation.Builder.start("pmmo.pmmo.fall_save")
-			.addLocale(Locale.EN_US, "Reduce Fall Damage").build();
+		.addLocale(Locale.EN_US, "Reduce Fall Damage").build();
 	
 	//=========SKILL NAMES=====================
 	public static final Translation SKILL_HEALTH = Translation.Builder.start("pmmo.health")
-			.addLocale(Locale.EN_US, "Health").build();
+		.addLocale(Locale.EN_US, "Health").build();
 	public static final Translation SKILL_SPEED = Translation.Builder.start("pmmo.speed")
-			.addLocale(Locale.EN_US, "Speed").build();
+		.addLocale(Locale.HU, "Speed")
+		.addLocale(Locale.JA, "Speed")
+		.addLocale(Locale.PL, "Prędkość")
+		.addLocale(Locale.DE_DE, "Speed")
+		.addLocale(Locale.ES_AR, "Velocidad")
+		.addLocale(Locale.ES_CL, "Speed")
+		.addLocale(Locale.ES_EC, "Speed")
+		.addLocale(Locale.ES_ES, "Speed")
+		.addLocale(Locale.ES_MX, "Speed")
+		.addLocale(Locale.ES_UY, "Speed")
+		.addLocale(Locale.ES_VE, "Speed")
+		.addLocale(Locale.FR_FR, "Vitesse")
+		.addLocale(Locale.HU, "Speed")
+		.addLocale(Locale.IT_IT, "Speed")
+		.addLocale(Locale.JA, "Speed")
+		.addLocale(Locale.KO_KR, "스피드")
+		.addLocale(Locale.LT_LT, "Speed")
+		.addLocale(Locale.NL_NL, "Speed")
+		.addLocale(Locale.PL, "Prędkość")
+		.addLocale(Locale.PT_BR, "Velocidade")
+		.addLocale(Locale.RU_RU, "Speed")
+		.addLocale(Locale.SV_SE, "Speed")
+		.addLocale(Locale.UK_UA, "Швидкість")
+		.addLocale(Locale.ZH_CN, "速度")
+		.addLocale(Locale.ZH_TW, "速度")
+		.addLocale(Locale.EN_US, "Speed").build();
 	public static final Translation SKILL_DAMAGE = Translation.Builder.start("pmmo.damage")
-			.addLocale(Locale.EN_US, "Damage").build();
+		.addLocale(Locale.HU, "Damage")
+		.addLocale(Locale.JA, "Damage")
+		.addLocale(Locale.PL, "Obrażenia")
+		.addLocale(Locale.DE_DE, "Damage")
+		.addLocale(Locale.ES_AR, "Daño")
+		.addLocale(Locale.ES_CL, "Damage")
+		.addLocale(Locale.ES_EC, "Damage")
+		.addLocale(Locale.ES_ES, "Damage")
+		.addLocale(Locale.ES_MX, "Damage")
+		.addLocale(Locale.ES_UY, "Damage")
+		.addLocale(Locale.ES_VE, "Damage")
+		.addLocale(Locale.FR_FR, "Dommage")
+		.addLocale(Locale.HU, "Damage")
+		.addLocale(Locale.IT_IT, "Damage")
+		.addLocale(Locale.JA, "Damage")
+		.addLocale(Locale.KO_KR, "데미지")
+		.addLocale(Locale.LT_LT, "Damage")
+		.addLocale(Locale.NL_NL, "Damage")
+		.addLocale(Locale.PL, "Obrażenia")
+		.addLocale(Locale.PT_BR, "Dano")
+		.addLocale(Locale.RU_RU, "Damage")
+		.addLocale(Locale.SV_SE, "Damage")
+		.addLocale(Locale.UK_UA, "Пошкодження")
+		.addLocale(Locale.ZH_CN, "伤害")
+		.addLocale(Locale.ZH_TW, "傷害")
+		.addLocale(Locale.EN_US, "Damage").build();
 	public static final Translation SKILL_POWER = Translation.Builder.start("pmmo.power")
-			.addLocale(Locale.EN_US, "Power").build();
+		.addLocale(Locale.HU, "Power")
+		.addLocale(Locale.JA, "Power")
+		.addLocale(Locale.PL, "Moc")
+		.addLocale(Locale.DE_DE, "Kraft")
+		.addLocale(Locale.ES_AR, "Poder")
+		.addLocale(Locale.ES_CL, "Poder")
+		.addLocale(Locale.ES_EC, "Poder")
+		.addLocale(Locale.ES_ES, "Poder")
+		.addLocale(Locale.ES_MX, "Poder")
+		.addLocale(Locale.ES_UY, "Poder")
+		.addLocale(Locale.ES_VE, "Poder")
+		.addLocale(Locale.FR_FR, "Puissance")
+		.addLocale(Locale.HU, "Power")
+		.addLocale(Locale.IT_IT, "Power")
+		.addLocale(Locale.JA, "Power")
+		.addLocale(Locale.KO_KR, "힘")
+		.addLocale(Locale.LT_LT, "Galybė")
+		.addLocale(Locale.NL_NL, "Kracht")
+		.addLocale(Locale.PL, "Moc")
+		.addLocale(Locale.PT_BR, "Força")
+		.addLocale(Locale.RU_RU, "Сила")
+		.addLocale(Locale.SV_SE, "Power")
+		.addLocale(Locale.UK_UA, "Сила")
+		.addLocale(Locale.ZH_CN, "力量")
+		.addLocale(Locale.ZH_TW, "力量")
+		.addLocale(Locale.EN_US, "Power").build();
 	public static final Translation SKILL_MINING = Translation.Builder.start("pmmo.mining")
-			.addLocale(Locale.EN_US, "Mining").build();
+		.addLocale(Locale.HU, "Mining")
+		.addLocale(Locale.JA, "Mining")
+		.addLocale(Locale.PL, "Górnictwo")
+		.addLocale(Locale.DE_DE, "Mining")
+		.addLocale(Locale.ES_AR, "Minería")
+		.addLocale(Locale.ES_CL, "Minería")
+		.addLocale(Locale.ES_EC, "Minería")
+		.addLocale(Locale.ES_ES, "Minería")
+		.addLocale(Locale.ES_MX, "Minería")
+		.addLocale(Locale.ES_UY, "Minería")
+		.addLocale(Locale.ES_VE, "Minería")
+		.addLocale(Locale.FR_FR, "Minage")
+		.addLocale(Locale.HU, "Mining")
+		.addLocale(Locale.IT_IT, "Mining")
+		.addLocale(Locale.JA, "Mining")
+		.addLocale(Locale.KO_KR, "채광")
+		.addLocale(Locale.LT_LT, "Kasyba")
+		.addLocale(Locale.NL_NL, "Ontginnen")
+		.addLocale(Locale.PL, "Górnictwo")
+		.addLocale(Locale.PT_BR, "Mineração")
+		.addLocale(Locale.RU_RU, "Копание")
+		.addLocale(Locale.SV_SE, "Mining")
+		.addLocale(Locale.UK_UA, "Копання")
+		.addLocale(Locale.ZH_CN, "采矿")
+		.addLocale(Locale.ZH_TW, "採礦")
+		.addLocale(Locale.EN_US, "Mining").build();
 	public static final Translation SKILL_BUILDING = Translation.Builder.start("pmmo.building")
-			.addLocale(Locale.EN_US, "Building").build();
+		.addLocale(Locale.HU, "Building")
+		.addLocale(Locale.JA, "Building")
+		.addLocale(Locale.PL, "Budowanie")
+		.addLocale(Locale.DE_DE, "Bauen")
+		.addLocale(Locale.ES_AR, "Construcción")
+		.addLocale(Locale.ES_CL, "Construcción")
+		.addLocale(Locale.ES_EC, "Construcción")
+		.addLocale(Locale.ES_ES, "Construcción")
+		.addLocale(Locale.ES_MX, "Construcción")
+		.addLocale(Locale.ES_UY, "Construcción")
+		.addLocale(Locale.ES_VE, "Construcción")
+		.addLocale(Locale.FR_FR, "Construction")
+		.addLocale(Locale.HU, "Building")
+		.addLocale(Locale.IT_IT, "Building")
+		.addLocale(Locale.JA, "Building")
+		.addLocale(Locale.KO_KR, "건설")
+		.addLocale(Locale.LT_LT, "Statymas")
+		.addLocale(Locale.NL_NL, "Bouwen")
+		.addLocale(Locale.PL, "Budowanie")
+		.addLocale(Locale.PT_BR, "Construção")
+		.addLocale(Locale.RU_RU, "Строительство")
+		.addLocale(Locale.SV_SE, "Building")
+		.addLocale(Locale.UK_UA, "Будівництво")
+		.addLocale(Locale.ZH_CN, "建造")
+		.addLocale(Locale.ZH_TW, "建造")
+		.addLocale(Locale.EN_US, "Building").build();
 	public static final Translation SKILL_EXCAVATION = Translation.Builder.start("pmmo.excavation")
-			.addLocale(Locale.EN_US, "Excavation").build();
+		.addLocale(Locale.HU, "Excavation")
+		.addLocale(Locale.JA, "Excavation")
+		.addLocale(Locale.PL, "Wydobywanie")
+		.addLocale(Locale.DE_DE, "Buddeln")
+		.addLocale(Locale.ES_AR, "Excavación")
+		.addLocale(Locale.ES_CL, "Excavación")
+		.addLocale(Locale.ES_EC, "Excavación")
+		.addLocale(Locale.ES_ES, "Excavación")
+		.addLocale(Locale.ES_MX, "Excavación")
+		.addLocale(Locale.ES_UY, "Excavación")
+		.addLocale(Locale.ES_VE, "Excavación")
+		.addLocale(Locale.FR_FR, "Creusage")
+		.addLocale(Locale.HU, "Excavation")
+		.addLocale(Locale.IT_IT, "Excavation")
+		.addLocale(Locale.JA, "Excavation")
+		.addLocale(Locale.KO_KR, "굴삭")
+		.addLocale(Locale.LT_LT, "Kasinėjimas")
+		.addLocale(Locale.NL_NL, "Graven")
+		.addLocale(Locale.PL, "Wydobywanie")
+		.addLocale(Locale.PT_BR, "Escavação")
+		.addLocale(Locale.RU_RU, "Выкапывание")
+		.addLocale(Locale.SV_SE, "Excavation")
+		.addLocale(Locale.UK_UA, "Викопування")
+		.addLocale(Locale.ZH_CN, "挖掘")
+		.addLocale(Locale.ZH_TW, "挖掘")
+		.addLocale(Locale.EN_US, "Excavation").build();
 	public static final Translation SKILL_WOODCUTTING = Translation.Builder.start("pmmo.woodcutting")
-			.addLocale(Locale.EN_US, "Woodcutting").build();
+		.addLocale(Locale.HU, "Woodcutting")
+		.addLocale(Locale.JA, "Woodcutting")
+		.addLocale(Locale.PL, "Wydobywanie drewna")
+		.addLocale(Locale.DE_DE, "Holzschneiderei")
+		.addLocale(Locale.ES_AR, "Leñador")
+		.addLocale(Locale.ES_CL, "Leñador")
+		.addLocale(Locale.ES_EC, "Leñador")
+		.addLocale(Locale.ES_ES, "Leñador")
+		.addLocale(Locale.ES_MX, "Leñador")
+		.addLocale(Locale.ES_UY, "Leñador")
+		.addLocale(Locale.ES_VE, "Leñador")
+		.addLocale(Locale.FR_FR, "Bûchage")
+		.addLocale(Locale.HU, "Woodcutting")
+		.addLocale(Locale.IT_IT, "Woodcutting")
+		.addLocale(Locale.JA, "Woodcutting")
+		.addLocale(Locale.KO_KR, "벌목")
+		.addLocale(Locale.LT_LT, "Medžio kirtimas")
+		.addLocale(Locale.NL_NL, "Houthakken")
+		.addLocale(Locale.PL, "Wydobywanie drewna")
+		.addLocale(Locale.PT_BR, "Lenhador")
+		.addLocale(Locale.RU_RU, "Добыча дерева")
+		.addLocale(Locale.SV_SE, "Woodcutting")
+		.addLocale(Locale.UK_UA, "Видобуток дерева")
+		.addLocale(Locale.ZH_CN, "伐木")
+		.addLocale(Locale.ZH_TW, "伐木")
+		.addLocale(Locale.EN_US, "Woodcutting").build();
 	public static final Translation SKILL_FARMING = Translation.Builder.start("pmmo.farming")
-			.addLocale(Locale.EN_US, "Farming").build();
+		.addLocale(Locale.HU, "Farming")
+		.addLocale(Locale.JA, "Farming")
+		.addLocale(Locale.PL, "Rolnictwo")
+		.addLocale(Locale.DE_DE, "Gärtnerei")
+		.addLocale(Locale.ES_AR, "Agricultura")
+		.addLocale(Locale.ES_CL, "Agricultura")
+		.addLocale(Locale.ES_EC, "Agricultura")
+		.addLocale(Locale.ES_ES, "Agricultura")
+		.addLocale(Locale.ES_MX, "Agricultura")
+		.addLocale(Locale.ES_UY, "Agricultura")
+		.addLocale(Locale.ES_VE, "Agricultura")
+		.addLocale(Locale.FR_FR, "Agriculture")
+		.addLocale(Locale.HU, "Farming")
+		.addLocale(Locale.IT_IT, "Farming")
+		.addLocale(Locale.JA, "Farming")
+		.addLocale(Locale.KO_KR, "농사")
+		.addLocale(Locale.LT_LT, "Ūkininkavimas")
+		.addLocale(Locale.NL_NL, "Landbouw")
+		.addLocale(Locale.PL, "Rolnictwo")
+		.addLocale(Locale.PT_BR, "Fazendeiro")
+		.addLocale(Locale.RU_RU, "Фермерство")
+		.addLocale(Locale.SV_SE, "Farming")
+		.addLocale(Locale.UK_UA, "Фермерство")
+		.addLocale(Locale.ZH_CN, "种植")
+		.addLocale(Locale.ZH_TW, "種植")
+		.addLocale(Locale.EN_US, "Farming").build();
 	public static final Translation SKILL_AGILITY = Translation.Builder.start("pmmo.agility")
-			.addLocale(Locale.EN_US, "Agility").build();
+		.addLocale(Locale.HU, "Agility")
+		.addLocale(Locale.JA, "Agility")
+		.addLocale(Locale.PL, "Zwinność")
+		.addLocale(Locale.DE_DE, "Agilität")
+		.addLocale(Locale.ES_AR, "Agilidad")
+		.addLocale(Locale.ES_CL, "Agilidad")
+		.addLocale(Locale.ES_EC, "Agilidad")
+		.addLocale(Locale.ES_ES, "Agilidad")
+		.addLocale(Locale.ES_MX, "Agilidad")
+		.addLocale(Locale.ES_UY, "Agilidad")
+		.addLocale(Locale.ES_VE, "Agilidad")
+		.addLocale(Locale.FR_FR, "Agilité")
+		.addLocale(Locale.HU, "Agility")
+		.addLocale(Locale.IT_IT, "Agilità")
+		.addLocale(Locale.JA, "Agility")
+		.addLocale(Locale.KO_KR, "몸놀림")
+		.addLocale(Locale.LT_LT, "Judrumas")
+		.addLocale(Locale.NL_NL, "Behendigheid")
+		.addLocale(Locale.PL, "Zwinność")
+		.addLocale(Locale.PT_BR, "Agilidade")
+		.addLocale(Locale.RU_RU, "Ловкость")
+		.addLocale(Locale.SV_SE, "Agility")
+		.addLocale(Locale.UK_UA, "Спритність")
+		.addLocale(Locale.ZH_CN, "灵敏")
+		.addLocale(Locale.ZH_TW, "靈敏")
+		.addLocale(Locale.EN_US, "Agility").build();
 	public static final Translation SKILL_ENDURANCE = Translation.Builder.start("pmmo.endurance")
-			.addLocale(Locale.EN_US, "Endurance").build();
+		.addLocale(Locale.HU, "Endurance")
+		.addLocale(Locale.JA, "Endurance")
+		.addLocale(Locale.PL, "Wytrzymałość")
+		.addLocale(Locale.DE_DE, "Ausdauer")
+		.addLocale(Locale.ES_AR, "Aguante")
+		.addLocale(Locale.ES_CL, "Resistencia")
+		.addLocale(Locale.ES_EC, "Resistencia")
+		.addLocale(Locale.ES_ES, "Resistencia")
+		.addLocale(Locale.ES_MX, "Resistencia")
+		.addLocale(Locale.ES_UY, "Aguante")
+		.addLocale(Locale.ES_VE, "Resistencia")
+		.addLocale(Locale.FR_FR, "Endurance")
+		.addLocale(Locale.HU, "Endurance")
+		.addLocale(Locale.IT_IT, "Endurance")
+		.addLocale(Locale.JA, "Endurance")
+		.addLocale(Locale.KO_KR, "강인함")
+		.addLocale(Locale.LT_LT, "Ištvermė")
+		.addLocale(Locale.NL_NL, "Weerstandsvermogen")
+		.addLocale(Locale.PL, "Wytrzymałość")
+		.addLocale(Locale.PT_BR, "Resistência")
+		.addLocale(Locale.RU_RU, "Выносливость")
+		.addLocale(Locale.SV_SE, "Endurance")
+		.addLocale(Locale.UK_UA, "Витривалість")
+		.addLocale(Locale.ZH_CN, "耐力")
+		.addLocale(Locale.ZH_TW, "耐力")
+		.addLocale(Locale.EN_US, "Endurance").build();
 	public static final Translation SKILL_COMBAT = Translation.Builder.start("pmmo.combat")
-			.addLocale(Locale.EN_US, "Combat").build();
+		.addLocale(Locale.HU, "Combat")
+		.addLocale(Locale.JA, "Combat")
+		.addLocale(Locale.PL, "Walka")
+		.addLocale(Locale.DE_DE, "Kampf")
+		.addLocale(Locale.ES_AR, "Combate")
+		.addLocale(Locale.ES_CL, "Combate")
+		.addLocale(Locale.ES_EC, "Combate")
+		.addLocale(Locale.ES_ES, "Combate")
+		.addLocale(Locale.ES_MX, "Combate")
+		.addLocale(Locale.ES_UY, "Combate")
+		.addLocale(Locale.ES_VE, "Combate")
+		.addLocale(Locale.FR_FR, "Combat")
+		.addLocale(Locale.HU, "Combat")
+		.addLocale(Locale.IT_IT, "Combattimento")
+		.addLocale(Locale.JA, "Combat")
+		.addLocale(Locale.KO_KR, "전투력")
+		.addLocale(Locale.LT_LT, "Kovojimas")
+		.addLocale(Locale.NL_NL, "Vechten")
+		.addLocale(Locale.PL, "Walka")
+		.addLocale(Locale.PT_BR, "Combate")
+		.addLocale(Locale.RU_RU, "Бой")
+		.addLocale(Locale.SV_SE, "Combat")
+		.addLocale(Locale.UK_UA, "Бій")
+		.addLocale(Locale.ZH_CN, "战斗")
+		.addLocale(Locale.ZH_TW, "戰鬥")
+		.addLocale(Locale.EN_US, "Combat").build();
 	public static final Translation SKILL_ARCHERY = Translation.Builder.start("pmmo.archery")
-			.addLocale(Locale.EN_US, "Archery").build();
+		.addLocale(Locale.HU, "Archery")
+		.addLocale(Locale.JA, "Archery")
+		.addLocale(Locale.PL, "Łucznictwo")
+		.addLocale(Locale.DE_DE, "Bogenschießen")
+		.addLocale(Locale.ES_AR, "Arquería")
+		.addLocale(Locale.ES_CL, "Arquería")
+		.addLocale(Locale.ES_EC, "Arquería")
+		.addLocale(Locale.ES_ES, "Arquería")
+		.addLocale(Locale.ES_MX, "Arquería")
+		.addLocale(Locale.ES_UY, "Arquería")
+		.addLocale(Locale.ES_VE, "Arquería")
+		.addLocale(Locale.FR_FR, "Archerie")
+		.addLocale(Locale.HU, "Archery")
+		.addLocale(Locale.IT_IT, "Archery")
+		.addLocale(Locale.JA, "Archery")
+		.addLocale(Locale.KO_KR, "활솜씨")
+		.addLocale(Locale.LT_LT, "Šaudymas iš lanko")
+		.addLocale(Locale.NL_NL, "Boogschieten")
+		.addLocale(Locale.PL, "Łucznictwo")
+		.addLocale(Locale.PT_BR, "Arquearia")
+		.addLocale(Locale.RU_RU, "Стрельба из лука")
+		.addLocale(Locale.SV_SE, "Archery")
+		.addLocale(Locale.UK_UA, "Стрільба з лука")
+		.addLocale(Locale.ZH_CN, "箭术")
+		.addLocale(Locale.ZH_TW, "箭術")
+		.addLocale(Locale.EN_US, "Archery").build();
 	public static final Translation SKILL_SMITHING = Translation.Builder.start("pmmo.smithing")
-			.addLocale(Locale.EN_US, "Smithing").build();
+		.addLocale(Locale.HU, "Smithing")
+		.addLocale(Locale.JA, "Smithing")
+		.addLocale(Locale.PL, "Kowalstwo")
+		.addLocale(Locale.DE_DE, "Schmiederei")
+		.addLocale(Locale.ES_AR, "Metalúrgica")
+		.addLocale(Locale.ES_CL, "Metalúrgica")
+		.addLocale(Locale.ES_EC, "Metalúrgica")
+		.addLocale(Locale.ES_ES, "Metalúrgica")
+		.addLocale(Locale.ES_MX, "Metalúrgica")
+		.addLocale(Locale.ES_UY, "Metalúrgica")
+		.addLocale(Locale.ES_VE, "Metalúrgica")
+		.addLocale(Locale.FR_FR, "Forgeage")
+		.addLocale(Locale.HU, "Smithing")
+		.addLocale(Locale.IT_IT, "Smithing")
+		.addLocale(Locale.JA, "Smithing")
+		.addLocale(Locale.KO_KR, "대장장이")
+		.addLocale(Locale.LT_LT, "Kalvininkystė")
+		.addLocale(Locale.NL_NL, "Smeden")
+		.addLocale(Locale.PL, "Kowalstwo")
+		.addLocale(Locale.PT_BR, "Metalurgia")
+		.addLocale(Locale.RU_RU, "Кузнечное дело")
+		.addLocale(Locale.SV_SE, "Smithing")
+		.addLocale(Locale.UK_UA, "Ковальська справа")
+		.addLocale(Locale.ZH_CN, "巧匠")
+		.addLocale(Locale.ZH_TW, "巧匠")
+		.addLocale(Locale.EN_US, "Smithing").build();
 	public static final Translation SKILL_FLYING = Translation.Builder.start("pmmo.flying")
-			.addLocale(Locale.EN_US, "Flying").build();
+		.addLocale(Locale.HU, "Flying")
+		.addLocale(Locale.JA, "Flying")
+		.addLocale(Locale.PL, "Latanie")
+		.addLocale(Locale.DE_DE, "Fliegen")
+		.addLocale(Locale.ES_AR, "Vuelo")
+		.addLocale(Locale.ES_CL, "Vuelo")
+		.addLocale(Locale.ES_EC, "Vuelo")
+		.addLocale(Locale.ES_ES, "Vuelo")
+		.addLocale(Locale.ES_MX, "Vuelo")
+		.addLocale(Locale.ES_UY, "Vuelo")
+		.addLocale(Locale.ES_VE, "Vuelo")
+		.addLocale(Locale.FR_FR, "Vol")
+		.addLocale(Locale.HU, "Flying")
+		.addLocale(Locale.IT_IT, "Flying")
+		.addLocale(Locale.JA, "Flying")
+		.addLocale(Locale.KO_KR, "활공")
+		.addLocale(Locale.LT_LT, "Skraidymas")
+		.addLocale(Locale.NL_NL, "Vliegen")
+		.addLocale(Locale.PL, "Latanie")
+		.addLocale(Locale.PT_BR, "Voô")
+		.addLocale(Locale.RU_RU, "Полёт")
+		.addLocale(Locale.SV_SE, "Flying")
+		.addLocale(Locale.UK_UA, "Політ")
+		.addLocale(Locale.ZH_CN, "飞翔")
+		.addLocale(Locale.ZH_TW, "飛翔")
+		.addLocale(Locale.EN_US, "Flying").build();
 	public static final Translation SKILL_SWIMMING = Translation.Builder.start("pmmo.swimming")
-			.addLocale(Locale.EN_US, "Swimming").build();
+		.addLocale(Locale.HU, "Swimming")
+		.addLocale(Locale.JA, "Swimming")
+		.addLocale(Locale.PL, "Pływanie")
+		.addLocale(Locale.DE_DE, "Schwimmen")
+		.addLocale(Locale.ES_AR, "Natación")
+		.addLocale(Locale.ES_CL, "Natación")
+		.addLocale(Locale.ES_EC, "Natación")
+		.addLocale(Locale.ES_ES, "Natación")
+		.addLocale(Locale.ES_MX, "Natación")
+		.addLocale(Locale.ES_UY, "Natación")
+		.addLocale(Locale.ES_VE, "Natación")
+		.addLocale(Locale.FR_FR, "Nage")
+		.addLocale(Locale.HU, "Swimming")
+		.addLocale(Locale.IT_IT, "Swimming")
+		.addLocale(Locale.JA, "Swimming")
+		.addLocale(Locale.KO_KR, "수영")
+		.addLocale(Locale.LT_LT, "Plaukimas")
+		.addLocale(Locale.NL_NL, "Zwemmen")
+		.addLocale(Locale.PL, "Pływanie")
+		.addLocale(Locale.PT_BR, "Natação")
+		.addLocale(Locale.RU_RU, "Плавание")
+		.addLocale(Locale.SV_SE, "Swimming")
+		.addLocale(Locale.UK_UA, "Плавання")
+		.addLocale(Locale.ZH_CN, "游泳")
+		.addLocale(Locale.ZH_TW, "游泳")
+		.addLocale(Locale.EN_US, "Swimming").build();
 	public static final Translation SKILL_FISHING = Translation.Builder.start("pmmo.fishing")
-			.addLocale(Locale.EN_US, "Fishing").build();
+		.addLocale(Locale.HU, "Fishing")
+		.addLocale(Locale.JA, "Fishing")
+		.addLocale(Locale.PL, "Łowienie")
+		.addLocale(Locale.DE_DE, "Fischerei")
+		.addLocale(Locale.ES_AR, "Pesca")
+		.addLocale(Locale.ES_CL, "Pesca")
+		.addLocale(Locale.ES_EC, "Pesca")
+		.addLocale(Locale.ES_ES, "Pesca")
+		.addLocale(Locale.ES_MX, "Pesca")
+		.addLocale(Locale.ES_UY, "Pesca")
+		.addLocale(Locale.ES_VE, "Pesca")
+		.addLocale(Locale.FR_FR, "Pêche")
+		.addLocale(Locale.HU, "Fishing")
+		.addLocale(Locale.IT_IT, "Fishing")
+		.addLocale(Locale.JA, "Fishing")
+		.addLocale(Locale.KO_KR, "낚시")
+		.addLocale(Locale.LT_LT, "Žvejyba")
+		.addLocale(Locale.NL_NL, "Vissen")
+		.addLocale(Locale.PL, "Łowienie")
+		.addLocale(Locale.PT_BR, "Pescaria")
+		.addLocale(Locale.RU_RU, "Рыболовное дело")
+		.addLocale(Locale.SV_SE, "Fishing")
+		.addLocale(Locale.UK_UA, "Рибальська справа")
+		.addLocale(Locale.ZH_CN, "垂钓")
+		.addLocale(Locale.ZH_TW, "垂釣")
+		.addLocale(Locale.EN_US, "Fishing").build();
 	public static final Translation SKILL_CRAFTING = Translation.Builder.start("pmmo.crafting")
-			.addLocale(Locale.EN_US, "Crafting").build();
+		.addLocale(Locale.HU, "Crafting")
+		.addLocale(Locale.JA, "Crafting")
+		.addLocale(Locale.PL, "Tworzenie")
+		.addLocale(Locale.DE_DE, "Herstellung")
+		.addLocale(Locale.ES_AR, "Crafteo")
+		.addLocale(Locale.ES_CL, "Crafteo")
+		.addLocale(Locale.ES_EC, "Crafteo")
+		.addLocale(Locale.ES_ES, "Crafteo")
+		.addLocale(Locale.ES_MX, "Crafteo")
+		.addLocale(Locale.ES_UY, "Crafteo")
+		.addLocale(Locale.ES_VE, "Crafteo")
+		.addLocale(Locale.FR_FR, "Artisanat")
+		.addLocale(Locale.HU, "Crafting")
+		.addLocale(Locale.IT_IT, "Crafting")
+		.addLocale(Locale.JA, "Crafting")
+		.addLocale(Locale.KO_KR, "제작")
+		.addLocale(Locale.LT_LT, "Rankdarbimas")
+		.addLocale(Locale.NL_NL, "Vervaardiging")
+		.addLocale(Locale.PL, "Tworzenie")
+		.addLocale(Locale.PT_BR, "Criação")
+		.addLocale(Locale.RU_RU, "Создание предметов")
+		.addLocale(Locale.SV_SE, "Crafting")
+		.addLocale(Locale.UK_UA, "Крафтинг")
+		.addLocale(Locale.ZH_CN, "制造")
+		.addLocale(Locale.ZH_TW, "製造")
+		.addLocale(Locale.EN_US, "Crafting").build();
 	public static final Translation SKILL_MAGIC = Translation.Builder.start("pmmo.magic")
-			.addLocale(Locale.EN_US, "Magic").build();
+		.addLocale(Locale.HU, "Magic")
+		.addLocale(Locale.JA, "Magic")
+		.addLocale(Locale.PL, "Magia")
+		.addLocale(Locale.DE_DE, "Magie")
+		.addLocale(Locale.ES_AR, "Magia")
+		.addLocale(Locale.ES_CL, "Magia")
+		.addLocale(Locale.ES_EC, "Magia")
+		.addLocale(Locale.ES_ES, "Magia")
+		.addLocale(Locale.ES_MX, "Magia")
+		.addLocale(Locale.ES_UY, "Magia")
+		.addLocale(Locale.ES_VE, "Magia")
+		.addLocale(Locale.FR_FR, "Magie")
+		.addLocale(Locale.HU, "Magic")
+		.addLocale(Locale.IT_IT, "Magia")
+		.addLocale(Locale.JA, "Magic")
+		.addLocale(Locale.KO_KR, "마법")
+		.addLocale(Locale.LT_LT, "Magija")
+		.addLocale(Locale.NL_NL, "Toverij")
+		.addLocale(Locale.PL, "Magia")
+		.addLocale(Locale.PT_BR, "Magia")
+		.addLocale(Locale.RU_RU, "Колдовство")
+		.addLocale(Locale.SV_SE, "Magic")
+		.addLocale(Locale.UK_UA, "Чаклунство")
+		.addLocale(Locale.ZH_CN, "魔法")
+		.addLocale(Locale.ZH_TW, "魔法")
+		.addLocale(Locale.EN_US, "Magic").build();
 	public static final Translation SKILL_GUNSLINGING = Translation.Builder.start("pmmo.gunslinging")
-			.addLocale(Locale.EN_US, "Gunslinging").build();
+		.addLocale(Locale.UK_UA, "Стрільба зі зброї")
+		.addLocale(Locale.EN_US, "Gunslinging").build();
 	public static final Translation SKILL_SLAYER = Translation.Builder.start("pmmo.slayer")
-			.addLocale(Locale.EN_US, "Slayer").build();
+		.addLocale(Locale.HU, "Slayer")
+		.addLocale(Locale.JA, "Slayer")
+		.addLocale(Locale.PL, "Zabójca")
+		.addLocale(Locale.DE_DE, "Niederstrecker")
+		.addLocale(Locale.ES_AR, "Asesino")
+		.addLocale(Locale.ES_CL, "Asesino")
+		.addLocale(Locale.ES_EC, "Asesino")
+		.addLocale(Locale.ES_ES, "Asesino")
+		.addLocale(Locale.ES_MX, "Asesino")
+		.addLocale(Locale.ES_UY, "Asesino")
+		.addLocale(Locale.ES_VE, "Asesino")
+		.addLocale(Locale.FR_FR, "Tueur")
+		.addLocale(Locale.HU, "Slayer")
+		.addLocale(Locale.IT_IT, "Slayer")
+		.addLocale(Locale.JA, "Slayer")
+		.addLocale(Locale.KO_KR, "도살자")
+		.addLocale(Locale.LT_LT, "Žudymas")
+		.addLocale(Locale.NL_NL, "Moordenaar")
+		.addLocale(Locale.PL, "Zabójca")
+		.addLocale(Locale.PT_BR, "Matador")
+		.addLocale(Locale.RU_RU, "Убийца")
+		.addLocale(Locale.SV_SE, "Slayer")
+		.addLocale(Locale.UK_UA, "Вбивця")
+		.addLocale(Locale.ZH_CN, "屠夫")
+		.addLocale(Locale.ZH_TW, "屠夫")
+		.addLocale(Locale.EN_US, "Slayer").build();
 	public static final Translation SKILL_FLETCHING = Translation.Builder.start("pmmo.fletching")
-			.addLocale(Locale.EN_US, "Fletching").build();
+		.addLocale(Locale.HU, "Fletching")
+		.addLocale(Locale.JA, "Fletching")
+		.addLocale(Locale.PL, "Łucznictwo")
+		.addLocale(Locale.DE_DE, "Befiederung")
+		.addLocale(Locale.ES_AR, "Estabilización")
+		.addLocale(Locale.ES_CL, "Estabilización")
+		.addLocale(Locale.ES_EC, "Estabilización")
+		.addLocale(Locale.ES_ES, "Estabilización")
+		.addLocale(Locale.ES_MX, "Estabilización")
+		.addLocale(Locale.ES_UY, "Estabilización")
+		.addLocale(Locale.ES_VE, "Estabilización")
+		.addLocale(Locale.FR_FR, "Archerie")
+		.addLocale(Locale.HU, "Fletching")
+		.addLocale(Locale.IT_IT, "Fletching")
+		.addLocale(Locale.JA, "Fletching")
+		.addLocale(Locale.KO_KR, "화살제작")
+		.addLocale(Locale.LT_LT, "Flečingas")
+		.addLocale(Locale.NL_NL, "Fletchen")
+		.addLocale(Locale.PL, "Łucznictwo")
+		.addLocale(Locale.PT_BR, "Balístico")
+		.addLocale(Locale.RU_RU, "Оперение")
+		.addLocale(Locale.SV_SE, "Fletching")
+		.addLocale(Locale.UK_UA, "Оперення")
+		.addLocale(Locale.ZH_CN, "射箭")
+		.addLocale(Locale.ZH_TW, "射箭")
+		.addLocale(Locale.EN_US, "Fletching").build();
 	public static final Translation SKILL_TAMING = Translation.Builder.start("pmmo.taming")
-			.addLocale(Locale.EN_US, "Taming").build();
+		.addLocale(Locale.HU, "Taming")
+		.addLocale(Locale.JA, "Taming")
+		.addLocale(Locale.PL, "Tresowanie")
+		.addLocale(Locale.DE_DE, "Zähmung")
+		.addLocale(Locale.ES_AR, "Domadura")
+		.addLocale(Locale.ES_CL, "Domadura")
+		.addLocale(Locale.ES_EC, "Domadura")
+		.addLocale(Locale.ES_ES, "Domadura")
+		.addLocale(Locale.ES_MX, "Domadura")
+		.addLocale(Locale.ES_UY, "Domadura")
+		.addLocale(Locale.ES_VE, "Domadura")
+		.addLocale(Locale.FR_FR, "Apprivoisement")
+		.addLocale(Locale.HU, "Taming")
+		.addLocale(Locale.IT_IT, "Taming")
+		.addLocale(Locale.JA, "Taming")
+		.addLocale(Locale.KO_KR, "목축")
+		.addLocale(Locale.LT_LT, "Taming")
+		.addLocale(Locale.NL_NL, "Temmen")
+		.addLocale(Locale.PL, "Tresowanie")
+		.addLocale(Locale.PT_BR, "Domador")
+		.addLocale(Locale.RU_RU, "Приручение")
+		.addLocale(Locale.SV_SE, "Taming")
+		.addLocale(Locale.UK_UA, "Приручення")
+		.addLocale(Locale.ZH_CN, "驯服")
+		.addLocale(Locale.ZH_TW, "馴服")
+		.addLocale(Locale.EN_US, "Taming").build();
 	public static final Translation SKILL_HUNTER = Translation.Builder.start("pmmo.hunter")
-			.addLocale(Locale.EN_US, "Hunter").build();
+		.addLocale(Locale.HU, "Hunter")
+		.addLocale(Locale.JA, "Hunter")
+		.addLocale(Locale.PL, "Łowca")
+		.addLocale(Locale.DE_DE, "Jäger")
+		.addLocale(Locale.ES_AR, "Cazador")
+		.addLocale(Locale.ES_CL, "Cazador")
+		.addLocale(Locale.ES_EC, "Cazador")
+		.addLocale(Locale.ES_ES, "Cazador")
+		.addLocale(Locale.ES_MX, "Cazador")
+		.addLocale(Locale.ES_UY, "Cazador")
+		.addLocale(Locale.ES_VE, "Cazador")
+		.addLocale(Locale.FR_FR, "Chasseur")
+		.addLocale(Locale.HU, "Hunter")
+		.addLocale(Locale.IT_IT, "Cacciatore")
+		.addLocale(Locale.JA, "Hunter")
+		.addLocale(Locale.KO_KR, "사냥")
+		.addLocale(Locale.LT_LT, "Hunter")
+		.addLocale(Locale.NL_NL, "Jager")
+		.addLocale(Locale.PL, "Łowca")
+		.addLocale(Locale.PT_BR, "Caçador")
+		.addLocale(Locale.RU_RU, "Охота")
+		.addLocale(Locale.SV_SE, "Hunter")
+		.addLocale(Locale.UK_UA, "Полювання")
+		.addLocale(Locale.ZH_CN, "狩猎")
+		.addLocale(Locale.ZH_TW, "狩獵")
+		.addLocale(Locale.EN_US, "Hunter").build();
 	public static final Translation SKILL_ENGINEERING = Translation.Builder.start("pmmo.engineering")
-			.addLocale(Locale.EN_US, "Engineering").build();
+		.addLocale(Locale.HU, "Engineering")
+		.addLocale(Locale.JA, "Engineering")
+		.addLocale(Locale.PL, "Inżynieria")
+		.addLocale(Locale.DE_DE, "Ingenieurswesen")
+		.addLocale(Locale.ES_AR, "Ingeniería")
+		.addLocale(Locale.ES_CL, "Ingeniería")
+		.addLocale(Locale.ES_EC, "Ingeniería")
+		.addLocale(Locale.ES_ES, "Ingeniería")
+		.addLocale(Locale.ES_MX, "Ingeniería")
+		.addLocale(Locale.ES_UY, "Ingeniería")
+		.addLocale(Locale.ES_VE, "Ingeniería")
+		.addLocale(Locale.FR_FR, "Ingénierie")
+		.addLocale(Locale.HU, "Engineering")
+		.addLocale(Locale.IT_IT, "Ingegniere")
+		.addLocale(Locale.JA, "Engineering")
+		.addLocale(Locale.KO_KR, "엔지니어링")
+		.addLocale(Locale.LT_LT, "Engineering")
+		.addLocale(Locale.NL_NL, "Ingenieurswerk")
+		.addLocale(Locale.PL, "Inżynieria")
+		.addLocale(Locale.PT_BR, "Engenheiro")
+		.addLocale(Locale.RU_RU, "Инженерное дело")
+		.addLocale(Locale.SV_SE, "Engineering")
+		.addLocale(Locale.UK_UA, "Інженерна справа")
+		.addLocale(Locale.ZH_CN, "工程")
+		.addLocale(Locale.ZH_TW, "工程")
+		.addLocale(Locale.EN_US, "Engineering").build();
 	public static final Translation SKILL_BLOOD_MAGIC = Translation.Builder.start("pmmo.blood_magic")
-			.addLocale(Locale.EN_US, "Blood Magic").build();
+		.addLocale(Locale.HU, "Blood Magic")
+		.addLocale(Locale.JA, "Blood Magic")
+		.addLocale(Locale.PL, "Magia Krwi")
+		.addLocale(Locale.DE_DE, "Blut Magie")
+		.addLocale(Locale.ES_AR, "Magia Sangrienta")
+		.addLocale(Locale.ES_CL, "Magia Sangrienta")
+		.addLocale(Locale.ES_EC, "Magia Sangrienta")
+		.addLocale(Locale.ES_ES, "Magia Sangrienta")
+		.addLocale(Locale.ES_MX, "Magia Sangrienta")
+		.addLocale(Locale.ES_UY, "Magia Sangrienta")
+		.addLocale(Locale.ES_VE, "Magia Sangrienta")
+		.addLocale(Locale.FR_FR, "Magie du sang")
+		.addLocale(Locale.HU, "Blood Magic")
+		.addLocale(Locale.IT_IT, "Blood Magic")
+		.addLocale(Locale.JA, "Blood Magic")
+		.addLocale(Locale.KO_KR, "피 마법")
+		.addLocale(Locale.LT_LT, "Blood Magic")
+		.addLocale(Locale.NL_NL, "Bloedmagie")
+		.addLocale(Locale.PL, "Magia Krwi")
+		.addLocale(Locale.PT_BR, "Magia do Sangue")
+		.addLocale(Locale.RU_RU, "Blood Magic")
+		.addLocale(Locale.SV_SE, "Blood Magic")
+		.addLocale(Locale.UK_UA, "Магія крові")
+		.addLocale(Locale.ZH_CN, "腥红魔法")
+		.addLocale(Locale.ZH_TW, "腥紅魔法")
+		.addLocale(Locale.EN_US, "Blood Magic").build();
 	public static final Translation SKILL_ASTRAL_MAGIC = Translation.Builder.start("pmmo.astral_magic")
-			.addLocale(Locale.EN_US, "Astral Magic").build();
+		.addLocale(Locale.HU, "Astral Magic")
+		.addLocale(Locale.JA, "Astral Magic")
+		.addLocale(Locale.PL, "Magia astralna")
+		.addLocale(Locale.DE_DE, "Astrale Zauberei")
+		.addLocale(Locale.ES_AR, "Magia Astral")
+		.addLocale(Locale.ES_CL, "Magia Astral")
+		.addLocale(Locale.ES_EC, "Magia Astral")
+		.addLocale(Locale.ES_ES, "Magia Astral")
+		.addLocale(Locale.ES_MX, "Magia Astral")
+		.addLocale(Locale.ES_UY, "Magia Astral")
+		.addLocale(Locale.ES_VE, "Magia Astral")
+		.addLocale(Locale.FR_FR, "Magie astrale")
+		.addLocale(Locale.HU, "Astral Magic")
+		.addLocale(Locale.IT_IT, "Astral Magic")
+		.addLocale(Locale.JA, "Astral Magic")
+		.addLocale(Locale.KO_KR, "정신 마법")
+		.addLocale(Locale.LT_LT, "Astral Magic")
+		.addLocale(Locale.NL_NL, "Sterrenmagie")
+		.addLocale(Locale.PL, "Magia astralna")
+		.addLocale(Locale.PT_BR, "Magia Astral")
+		.addLocale(Locale.RU_RU, "Astral Magic")
+		.addLocale(Locale.SV_SE, "Astral Magic")
+		.addLocale(Locale.UK_UA, "Астральна магія")
+		.addLocale(Locale.ZH_CN, "星空魔法")
+		.addLocale(Locale.ZH_TW, "星空魔法")
+		.addLocale(Locale.EN_US, "Astral Magic").build();
 	public static final Translation SKILL_GOOD_MAGIC = Translation.Builder.start("pmmo.good_magic")
-			.addLocale(Locale.EN_US, "Good Magic").build();
+		.addLocale(Locale.HU, "Good Magic")
+		.addLocale(Locale.JA, "Good Magic")
+		.addLocale(Locale.PL, "Biała Magia")
+		.addLocale(Locale.DE_DE, "Gute Zauberei")
+		.addLocale(Locale.ES_AR, "Magia del Bien")
+		.addLocale(Locale.ES_CL, "Magia del Bien")
+		.addLocale(Locale.ES_EC, "Magia del Bien")
+		.addLocale(Locale.ES_ES, "Magia del Bien")
+		.addLocale(Locale.ES_MX, "Magia del Bien")
+		.addLocale(Locale.ES_UY, "Magia del Bien")
+		.addLocale(Locale.ES_VE, "Magia del Bien")
+		.addLocale(Locale.FR_FR, "Bonne magie")
+		.addLocale(Locale.HU, "Good Magic")
+		.addLocale(Locale.IT_IT, "Good Magic")
+		.addLocale(Locale.JA, "Good Magic")
+		.addLocale(Locale.KO_KR, "백마법")
+		.addLocale(Locale.LT_LT, "Good Magic")
+		.addLocale(Locale.NL_NL, "Goede Magie")
+		.addLocale(Locale.PL, "Biała Magia")
+		.addLocale(Locale.PT_BR, "Magia Boa")
+		.addLocale(Locale.RU_RU, "Good Magic")
+		.addLocale(Locale.SV_SE, "Good Magic")
+		.addLocale(Locale.UK_UA, "Магія добра ")
+		.addLocale(Locale.ZH_CN, "良善魔法")
+		.addLocale(Locale.ZH_TW, "良善魔法")
+		.addLocale(Locale.EN_US, "Good Magic").build();
 	public static final Translation SKILL_EVIL_MAGIC = Translation.Builder.start("pmmo.evil_magic")
-			.addLocale(Locale.EN_US, "Evil Magic").build();
+		.addLocale(Locale.HU, "Evil Magic")
+		.addLocale(Locale.JA, "Evil Magic")
+		.addLocale(Locale.PL, "Czarna Magia")
+		.addLocale(Locale.DE_DE, "Böse Zauberei")
+		.addLocale(Locale.ES_AR, "Magia Malévola")
+		.addLocale(Locale.ES_CL, "Magia Malévola")
+		.addLocale(Locale.ES_EC, "Magia Malévola")
+		.addLocale(Locale.ES_ES, "Magia Malévola")
+		.addLocale(Locale.ES_MX, "Magia Malévola")
+		.addLocale(Locale.ES_UY, "Magia Malévola")
+		.addLocale(Locale.ES_VE, "Magia Malévola")
+		.addLocale(Locale.FR_FR, "Magie maléfique")
+		.addLocale(Locale.HU, "Evil Magic")
+		.addLocale(Locale.IT_IT, "Evil Magic")
+		.addLocale(Locale.JA, "Evil Magic")
+		.addLocale(Locale.KO_KR, "흑마법")
+		.addLocale(Locale.LT_LT, "Evil Magic")
+		.addLocale(Locale.NL_NL, "Slechte Magie")
+		.addLocale(Locale.PL, "Czarna Magia")
+		.addLocale(Locale.PT_BR, "Magia Malígna")
+		.addLocale(Locale.RU_RU, "Evil Magic")
+		.addLocale(Locale.SV_SE, "Evil Magic")
+		.addLocale(Locale.UK_UA, "Магія Зла")
+		.addLocale(Locale.ZH_CN, "恶毒魔法")
+		.addLocale(Locale.ZH_TW, "惡毒魔法")
+		.addLocale(Locale.EN_US, "Evil Magic").build();
 	public static final Translation SKILL_ARCANE_MAGIC = Translation.Builder.start("pmmo.arcane_magic")
-			.addLocale(Locale.EN_US, "Arcane Magic").build();
+		.addLocale(Locale.HU, "Arcane Magic")
+		.addLocale(Locale.JA, "Arcane Magic")
+		.addLocale(Locale.PL, "Magia Tajemna")
+		.addLocale(Locale.DE_DE, "Arkane Zauberei")
+		.addLocale(Locale.ES_AR, "Magia Arcana")
+		.addLocale(Locale.ES_CL, "Magia Arcana")
+		.addLocale(Locale.ES_EC, "Magia Arcana")
+		.addLocale(Locale.ES_ES, "Magia Arcana")
+		.addLocale(Locale.ES_MX, "Magia Arcana")
+		.addLocale(Locale.ES_UY, "Magia Arcana")
+		.addLocale(Locale.ES_VE, "Magia Arcana")
+		.addLocale(Locale.FR_FR, "Magie des arcanes")
+		.addLocale(Locale.HU, "Arcane Magic")
+		.addLocale(Locale.IT_IT, "Arcane Magic")
+		.addLocale(Locale.JA, "Arcane Magic")
+		.addLocale(Locale.KO_KR, "비전 마법")
+		.addLocale(Locale.LT_LT, "Arcane Magic")
+		.addLocale(Locale.NL_NL, "Geheime Magie")
+		.addLocale(Locale.PL, "Magia Tajemna")
+		.addLocale(Locale.PT_BR, "Magia Arcana")
+		.addLocale(Locale.RU_RU, "Arcane Magic")
+		.addLocale(Locale.SV_SE, "Arcane Magic")
+		.addLocale(Locale.UK_UA, "Таємнича магія")
+		.addLocale(Locale.ZH_CN, "奥术魔法")
+		.addLocale(Locale.ZH_TW, "奧術魔法")
+		.addLocale(Locale.EN_US, "Arcane Magic").build();
 	public static final Translation SKILL_ELEMENTAL = Translation.Builder.start("pmmo.elemental")
-			.addLocale(Locale.EN_US, "Elemental").build();
+		.addLocale(Locale.HU, "Elemental")
+		.addLocale(Locale.JA, "Elemental")
+		.addLocale(Locale.PL, "Podstawowa")
+		.addLocale(Locale.DE_DE, "Elemental")
+		.addLocale(Locale.ES_AR, "Elemental")
+		.addLocale(Locale.ES_CL, "Elemental")
+		.addLocale(Locale.ES_EC, "Elemental")
+		.addLocale(Locale.ES_ES, "Elemental")
+		.addLocale(Locale.ES_MX, "Elemental")
+		.addLocale(Locale.ES_UY, "Elemental")
+		.addLocale(Locale.ES_VE, "Elemental")
+		.addLocale(Locale.FR_FR, "Élémentaire")
+		.addLocale(Locale.HU, "Elemental")
+		.addLocale(Locale.IT_IT, "Elemental")
+		.addLocale(Locale.JA, "Elemental")
+		.addLocale(Locale.KO_KR, "원소")
+		.addLocale(Locale.LT_LT, "Elemental")
+		.addLocale(Locale.NL_NL, "Elementale")
+		.addLocale(Locale.PL, "Podstawowa")
+		.addLocale(Locale.PT_BR, "Elemental")
+		.addLocale(Locale.RU_RU, "Elemental")
+		.addLocale(Locale.SV_SE, "Elemental")
+		.addLocale(Locale.UK_UA, "Стихійний")
+		.addLocale(Locale.ZH_CN, "元素")
+		.addLocale(Locale.ZH_TW, "元素")
+		.addLocale(Locale.EN_US, "Elemental").build();
 	public static final Translation SKILL_EARTH = Translation.Builder.start("pmmo.earth")
-			.addLocale(Locale.EN_US, "Earth").build();
+		.addLocale(Locale.HU, "Earth")
+		.addLocale(Locale.JA, "Earth")
+		.addLocale(Locale.PL, "Ziemia")
+		.addLocale(Locale.DE_DE, "Erde")
+		.addLocale(Locale.ES_AR, "Tierra")
+		.addLocale(Locale.ES_CL, "Tierra")
+		.addLocale(Locale.ES_EC, "Tierra")
+		.addLocale(Locale.ES_ES, "Tierra")
+		.addLocale(Locale.ES_MX, "Tierra")
+		.addLocale(Locale.ES_UY, "Tierra")
+		.addLocale(Locale.ES_VE, "Tierra")
+		.addLocale(Locale.FR_FR, "Terre")
+		.addLocale(Locale.HU, "Earth")
+		.addLocale(Locale.IT_IT, "Earth")
+		.addLocale(Locale.JA, "Earth")
+		.addLocale(Locale.KO_KR, "흑")
+		.addLocale(Locale.LT_LT, "Earth")
+		.addLocale(Locale.NL_NL, "Aarde")
+		.addLocale(Locale.PL, "Ziemia")
+		.addLocale(Locale.PT_BR, "Terra")
+		.addLocale(Locale.RU_RU, "Earth")
+		.addLocale(Locale.SV_SE, "Earth")
+		.addLocale(Locale.UK_UA, "Земля")
+		.addLocale(Locale.ZH_CN, "大地")
+		.addLocale(Locale.ZH_TW, "大地")
+		.addLocale(Locale.EN_US, "Earth").build();
 	public static final Translation SKILL_WATER = Translation.Builder.start("pmmo.water")
-			.addLocale(Locale.EN_US, "Water").build();
+		.addLocale(Locale.HU, "Water")
+		.addLocale(Locale.JA, "Water")
+		.addLocale(Locale.PL, "Woda")
+		.addLocale(Locale.DE_DE, "Wasser")
+		.addLocale(Locale.ES_AR, "Agua")
+		.addLocale(Locale.ES_CL, "Agua")
+		.addLocale(Locale.ES_EC, "Agua")
+		.addLocale(Locale.ES_ES, "Agua")
+		.addLocale(Locale.ES_MX, "Agua")
+		.addLocale(Locale.ES_UY, "Agua")
+		.addLocale(Locale.ES_VE, "Agua")
+		.addLocale(Locale.FR_FR, "Eau")
+		.addLocale(Locale.HU, "Water")
+		.addLocale(Locale.IT_IT, "Water")
+		.addLocale(Locale.JA, "Water")
+		.addLocale(Locale.KO_KR, "물")
+		.addLocale(Locale.LT_LT, "Water")
+		.addLocale(Locale.NL_NL, "Water")
+		.addLocale(Locale.PL, "Woda")
+		.addLocale(Locale.PT_BR, "Água")
+		.addLocale(Locale.RU_RU, "Water")
+		.addLocale(Locale.SV_SE, "Water")
+		.addLocale(Locale.UK_UA, "Вода")
+		.addLocale(Locale.ZH_CN, "净水")
+		.addLocale(Locale.ZH_TW, "淨水")
+		.addLocale(Locale.EN_US, "Water").build();
 	public static final Translation SKILL_AIR = Translation.Builder.start("pmmo.air")
-			.addLocale(Locale.EN_US, "Air").build();
+		.addLocale(Locale.HU, "Air")
+		.addLocale(Locale.JA, "Air")
+		.addLocale(Locale.PL, "Powietrze")
+		.addLocale(Locale.DE_DE, "Luft")
+		.addLocale(Locale.ES_AR, "Aire")
+		.addLocale(Locale.ES_CL, "Aire")
+		.addLocale(Locale.ES_EC, "Aire")
+		.addLocale(Locale.ES_ES, "Aire")
+		.addLocale(Locale.ES_MX, "Aire")
+		.addLocale(Locale.ES_UY, "Aire")
+		.addLocale(Locale.ES_VE, "Aire")
+		.addLocale(Locale.FR_FR, "Air")
+		.addLocale(Locale.HU, "Air")
+		.addLocale(Locale.IT_IT, "Air")
+		.addLocale(Locale.JA, "Air")
+		.addLocale(Locale.KO_KR, "공기")
+		.addLocale(Locale.LT_LT, "Air")
+		.addLocale(Locale.NL_NL, "Lucht")
+		.addLocale(Locale.PL, "Powietrze")
+		.addLocale(Locale.PT_BR, "Ar")
+		.addLocale(Locale.RU_RU, "Air")
+		.addLocale(Locale.SV_SE, "Air")
+		.addLocale(Locale.UK_UA, "Повітря")
+		.addLocale(Locale.ZH_CN, "空气")
+		.addLocale(Locale.ZH_TW, "空氣")
+		.addLocale(Locale.EN_US, "Air").build();
 	public static final Translation SKILL_FIRE = Translation.Builder.start("pmmo.fire")
-			.addLocale(Locale.EN_US, "Fire").build();
+		.addLocale(Locale.HU, "Fire")
+		.addLocale(Locale.JA, "Fire")
+		.addLocale(Locale.PL, "Ogień")
+		.addLocale(Locale.DE_DE, "Feuer")
+		.addLocale(Locale.ES_AR, "Fuego")
+		.addLocale(Locale.ES_CL, "Fuego")
+		.addLocale(Locale.ES_EC, "Fuego")
+		.addLocale(Locale.ES_ES, "Fuego")
+		.addLocale(Locale.ES_MX, "Fuego")
+		.addLocale(Locale.ES_UY, "Fuego")
+		.addLocale(Locale.ES_VE, "Fuego")
+		.addLocale(Locale.FR_FR, "Feu")
+		.addLocale(Locale.HU, "Fire")
+		.addLocale(Locale.IT_IT, "Fire")
+		.addLocale(Locale.JA, "Fire")
+		.addLocale(Locale.KO_KR, "불")
+		.addLocale(Locale.LT_LT, "Fire")
+		.addLocale(Locale.NL_NL, "Vuur")
+		.addLocale(Locale.PL, "Ogień")
+		.addLocale(Locale.PT_BR, "Fogo")
+		.addLocale(Locale.RU_RU, "Fire")
+		.addLocale(Locale.SV_SE, "Fire")
+		.addLocale(Locale.UK_UA, "Вогонь")
+		.addLocale(Locale.ZH_CN, "火焰")
+		.addLocale(Locale.ZH_TW, "火焰")
+		.addLocale(Locale.EN_US, "Fire").build();
 	public static final Translation SKILL_LIGHTNING = Translation.Builder.start("pmmo.lightning")
-			.addLocale(Locale.EN_US, "Lightning").build();
+		.addLocale(Locale.HU, "Lightning")
+		.addLocale(Locale.JA, "Lightning")
+		.addLocale(Locale.PL, "Błyskawice")
+		.addLocale(Locale.DE_DE, "Blitz")
+		.addLocale(Locale.ES_AR, "Electricidad")
+		.addLocale(Locale.ES_CL, "Electricidad")
+		.addLocale(Locale.ES_EC, "Electricidad")
+		.addLocale(Locale.ES_ES, "Electricidad")
+		.addLocale(Locale.ES_MX, "Electricidad")
+		.addLocale(Locale.ES_UY, "Electricidad")
+		.addLocale(Locale.ES_VE, "Electricidad")
+		.addLocale(Locale.FR_FR, "Foudre")
+		.addLocale(Locale.HU, "Lightning")
+		.addLocale(Locale.IT_IT, "Lightning")
+		.addLocale(Locale.JA, "Lightning")
+		.addLocale(Locale.KO_KR, "번개")
+		.addLocale(Locale.LT_LT, "Lightning")
+		.addLocale(Locale.NL_NL, "Bliksem")
+		.addLocale(Locale.PL, "Błyskawice")
+		.addLocale(Locale.PT_BR, "Relâmpago")
+		.addLocale(Locale.RU_RU, "Lightning")
+		.addLocale(Locale.SV_SE, "Lightning")
+		.addLocale(Locale.UK_UA, "Блискавка")
+		.addLocale(Locale.ZH_CN, "闪电")
+		.addLocale(Locale.ZH_TW, "閃電")
+		.addLocale(Locale.EN_US, "Lightning").build();
 	public static final Translation SKILL_VOID = Translation.Builder.start("pmmo.void")
-			.addLocale(Locale.EN_US, "Void").build();
+		.addLocale(Locale.HU, "Void")
+		.addLocale(Locale.JA, "Void")
+		.addLocale(Locale.PL, "Unieważnianie")
+		.addLocale(Locale.DE_DE, "Leere")
+		.addLocale(Locale.ES_AR, "Vacío")
+		.addLocale(Locale.ES_CL, "Vacío")
+		.addLocale(Locale.ES_EC, "Vacío")
+		.addLocale(Locale.ES_ES, "Vacío")
+		.addLocale(Locale.ES_MX, "Vacío")
+		.addLocale(Locale.ES_UY, "Vacío")
+		.addLocale(Locale.ES_VE, "Vacío")
+		.addLocale(Locale.FR_FR, "Vide")
+		.addLocale(Locale.HU, "Void")
+		.addLocale(Locale.IT_IT, "Void")
+		.addLocale(Locale.JA, "Void")
+		.addLocale(Locale.KO_KR, "공허")
+		.addLocale(Locale.LT_LT, "Void")
+		.addLocale(Locale.NL_NL, "Leegte")
+		.addLocale(Locale.PL, "Unieważnianie")
+		.addLocale(Locale.PT_BR, "Vazio")
+		.addLocale(Locale.RU_RU, "Void")
+		.addLocale(Locale.SV_SE, "Void")
+		.addLocale(Locale.UK_UA, "Пустота")
+		.addLocale(Locale.ZH_CN, "虚空")
+		.addLocale(Locale.ZH_TW, "虛空")
+		.addLocale(Locale.EN_US, "Void").build();
 	public static final Translation SKILL_THAUMATIC = Translation.Builder.start("pmmo.thaumatic")
-			.addLocale(Locale.EN_US, "Thaumatic").build();
+		.addLocale(Locale.HU, "Thaumatic")
+		.addLocale(Locale.JA, "Thaumatic")
+		.addLocale(Locale.PL, "Traumatyczna")
+		.addLocale(Locale.DE_DE, "Thaumatisch")
+		.addLocale(Locale.ES_AR, "Taumático")
+		.addLocale(Locale.ES_CL, "Taumático")
+		.addLocale(Locale.ES_EC, "Taumático")
+		.addLocale(Locale.ES_ES, "Taumático")
+		.addLocale(Locale.ES_MX, "Taumático")
+		.addLocale(Locale.ES_UY, "Taumático")
+		.addLocale(Locale.ES_VE, "Taumático")
+		.addLocale(Locale.FR_FR, "Thaumatique")
+		.addLocale(Locale.HU, "Thaumatic")
+		.addLocale(Locale.IT_IT, "Thaumatic")
+		.addLocale(Locale.JA, "Thaumatic")
+		.addLocale(Locale.KO_KR, "기적")
+		.addLocale(Locale.LT_LT, "Thaumatic")
+		.addLocale(Locale.NL_NL, "Thaumatische")
+		.addLocale(Locale.PL, "Traumatyczna")
+		.addLocale(Locale.PT_BR, "Tectônica")
+		.addLocale(Locale.RU_RU, "Thaumatic")
+		.addLocale(Locale.SV_SE, "Thaumatic")
+		.addLocale(Locale.UK_UA, "Thaumatic")
+		.addLocale(Locale.ZH_CN, "奇术")
+		.addLocale(Locale.ZH_TW, "奇術")
+		.addLocale(Locale.EN_US, "Thaumatic").build();
 	public static final Translation SKILL_SUMMONING = Translation.Builder.start("pmmo.summoning")
-			.addLocale(Locale.EN_US, "Summoning").build();
+		.addLocale(Locale.HU, "Summoning")
+		.addLocale(Locale.JA, "Summoning")
+		.addLocale(Locale.PL, "Przywołanie")
+		.addLocale(Locale.DE_DE, "Beschwörung")
+		.addLocale(Locale.ES_AR, "Convocación")
+		.addLocale(Locale.ES_CL, "Convocación")
+		.addLocale(Locale.ES_EC, "Convocación")
+		.addLocale(Locale.ES_ES, "Convocación")
+		.addLocale(Locale.ES_MX, "Convocación")
+		.addLocale(Locale.ES_UY, "Convocación")
+		.addLocale(Locale.ES_VE, "Convocación")
+		.addLocale(Locale.FR_FR, "Invocation")
+		.addLocale(Locale.HU, "Summoning")
+		.addLocale(Locale.IT_IT, "Summoning")
+		.addLocale(Locale.JA, "Summoning")
+		.addLocale(Locale.KO_KR, "소환술")
+		.addLocale(Locale.LT_LT, "Summoning")
+		.addLocale(Locale.NL_NL, "Oproepen")
+		.addLocale(Locale.PL, "Przywołanie")
+		.addLocale(Locale.PT_BR, "Invocação")
+		.addLocale(Locale.RU_RU, "Summoning")
+		.addLocale(Locale.SV_SE, "Summoning")
+		.addLocale(Locale.UK_UA, "Прикликання")
+		.addLocale(Locale.ZH_CN, "召唤")
+		.addLocale(Locale.ZH_TW, "召喚")
+		.addLocale(Locale.EN_US, "Summoning").build();
 	public static final Translation SKILL_INVENTION = Translation.Builder.start("pmmo.invention")
-			.addLocale(Locale.EN_US, "Invention").build();
+		.addLocale(Locale.HU, "Invention")
+		.addLocale(Locale.JA, "Invention")
+		.addLocale(Locale.PL, "Tworzenie")
+		.addLocale(Locale.DE_DE, "Erfindung")
+		.addLocale(Locale.ES_AR, "Invención")
+		.addLocale(Locale.ES_CL, "Invención")
+		.addLocale(Locale.ES_EC, "Invención")
+		.addLocale(Locale.ES_ES, "Invención")
+		.addLocale(Locale.ES_MX, "Invención")
+		.addLocale(Locale.ES_UY, "Invención")
+		.addLocale(Locale.ES_VE, "Invención")
+		.addLocale(Locale.FR_FR, "Invention")
+		.addLocale(Locale.HU, "Invention")
+		.addLocale(Locale.IT_IT, "Invention")
+		.addLocale(Locale.JA, "Invention")
+		.addLocale(Locale.KO_KR, "발명")
+		.addLocale(Locale.LT_LT, "Invention")
+		.addLocale(Locale.NL_NL, "Uitvinden")
+		.addLocale(Locale.PL, "Tworzenie")
+		.addLocale(Locale.PT_BR, "Invenção")
+		.addLocale(Locale.RU_RU, "Invention")
+		.addLocale(Locale.SV_SE, "Invention")
+		.addLocale(Locale.UK_UA, "Винахід")
+		.addLocale(Locale.ZH_CN, "发明")
+		.addLocale(Locale.ZH_TW, "發明")
+		.addLocale(Locale.EN_US, "Invention").build();
 	public static final Translation SKILL_RUNECRAFTING = Translation.Builder.start("pmmo.runecrafting")
-			.addLocale(Locale.EN_US, "Runecrafting").build();
+		.addLocale(Locale.HU, "Runecrafting")
+		.addLocale(Locale.JA, "Runecrafting")
+		.addLocale(Locale.PL, "Tworzenie run")
+		.addLocale(Locale.DE_DE, "Runenherstellung")
+		.addLocale(Locale.ES_AR, "Crafteo de Runas")
+		.addLocale(Locale.ES_CL, "Crafteo de Runas")
+		.addLocale(Locale.ES_EC, "Crafteo de Runas")
+		.addLocale(Locale.ES_ES, "Crafteo de Runas")
+		.addLocale(Locale.ES_MX, "Crafteo de Runas")
+		.addLocale(Locale.ES_UY, "Crafteo de Runas")
+		.addLocale(Locale.ES_VE, "Crafteo de Runas")
+		.addLocale(Locale.FR_FR, "Fabrication de runes")
+		.addLocale(Locale.HU, "Runecrafting")
+		.addLocale(Locale.IT_IT, "Runecrafting")
+		.addLocale(Locale.JA, "Runecrafting")
+		.addLocale(Locale.KO_KR, "룬제작")
+		.addLocale(Locale.LT_LT, "Runecrafting")
+		.addLocale(Locale.NL_NL, "Runenmaken")
+		.addLocale(Locale.PL, "Tworzenie run")
+		.addLocale(Locale.PT_BR, "Criação de Runas")
+		.addLocale(Locale.RU_RU, "Runecrafting")
+		.addLocale(Locale.SV_SE, "Runecrafting")
+		.addLocale(Locale.UK_UA, "Виготовлення рун")
+		.addLocale(Locale.ZH_CN, "制符")
+		.addLocale(Locale.ZH_TW, "製符")
+		.addLocale(Locale.EN_US, "Runecrafting").build();
 	public static final Translation SKILL_PRAYER = Translation.Builder.start("pmmo.prayer")
-			.addLocale(Locale.EN_US, "Prayer").build();
+		.addLocale(Locale.HU, "Prayer")
+		.addLocale(Locale.JA, "Prayer")
+		.addLocale(Locale.PL, "Kapłan")
+		.addLocale(Locale.DE_DE, "Prediger")
+		.addLocale(Locale.ES_AR, "Cura")
+		.addLocale(Locale.ES_CL, "Cura")
+		.addLocale(Locale.ES_EC, "Cura")
+		.addLocale(Locale.ES_ES, "Cura")
+		.addLocale(Locale.ES_MX, "Cura")
+		.addLocale(Locale.ES_UY, "Cura")
+		.addLocale(Locale.ES_VE, "Cura")
+		.addLocale(Locale.FR_FR, "Prière")
+		.addLocale(Locale.HU, "Prayer")
+		.addLocale(Locale.IT_IT, "Prayer")
+		.addLocale(Locale.JA, "Prayer")
+		.addLocale(Locale.KO_KR, "기도")
+		.addLocale(Locale.LT_LT, "Prayer")
+		.addLocale(Locale.NL_NL, "Bidden")
+		.addLocale(Locale.PL, "Kapłan")
+		.addLocale(Locale.PT_BR, "Orador")
+		.addLocale(Locale.RU_RU, "Prayer")
+		.addLocale(Locale.SV_SE, "Prayer")
+		.addLocale(Locale.UK_UA, "Молитва")
+		.addLocale(Locale.ZH_CN, "祈祷")
+		.addLocale(Locale.ZH_TW, "祈禱")
+		.addLocale(Locale.EN_US, "Prayer").build();
 	public static final Translation SKILL_COOKING = Translation.Builder.start("pmmo.cooking")
-			.addLocale(Locale.EN_US, "Cooking").build();
+		.addLocale(Locale.HU, "Cooking")
+		.addLocale(Locale.JA, "Cooking")
+		.addLocale(Locale.PL, "Gotowanie")
+		.addLocale(Locale.DE_DE, "Kochen")
+		.addLocale(Locale.ES_AR, "Cocina")
+		.addLocale(Locale.ES_CL, "Cocina")
+		.addLocale(Locale.ES_EC, "Cocina")
+		.addLocale(Locale.ES_ES, "Cocina")
+		.addLocale(Locale.ES_MX, "Cocina")
+		.addLocale(Locale.ES_UY, "Cocina")
+		.addLocale(Locale.ES_VE, "Cocina")
+		.addLocale(Locale.FR_FR, "Cuisine")
+		.addLocale(Locale.HU, "Cooking")
+		.addLocale(Locale.IT_IT, "Cooking")
+		.addLocale(Locale.JA, "Cooking")
+		.addLocale(Locale.KO_KR, "요리")
+		.addLocale(Locale.LT_LT, "Cooking")
+		.addLocale(Locale.NL_NL, "Koken")
+		.addLocale(Locale.PL, "Gotowanie")
+		.addLocale(Locale.PT_BR, "Cozinhar")
+		.addLocale(Locale.RU_RU, "Cooking")
+		.addLocale(Locale.SV_SE, "Cooking")
+		.addLocale(Locale.UK_UA, "Кулінарія")
+		.addLocale(Locale.ZH_CN, "烹饪")
+		.addLocale(Locale.ZH_TW, "烹飪")
+		.addLocale(Locale.EN_US, "Cooking").build();
 	public static final Translation SKILL_FIREMAKING = Translation.Builder.start("pmmo.firemaking")
-			.addLocale(Locale.EN_US, "Firemaking").build();
+		.addLocale(Locale.HU, "Firemaking")
+		.addLocale(Locale.JA, "Firemaking")
+		.addLocale(Locale.PL, "Rozpalanie ognia")
+		.addLocale(Locale.DE_DE, "Feuermacher")
+		.addLocale(Locale.ES_AR, "Soplete")
+		.addLocale(Locale.ES_CL, "Soplete")
+		.addLocale(Locale.ES_EC, "Soplete")
+		.addLocale(Locale.ES_ES, "Soplete")
+		.addLocale(Locale.ES_MX, "Soplete")
+		.addLocale(Locale.ES_UY, "Soplete")
+		.addLocale(Locale.ES_VE, "Soplete")
+		.addLocale(Locale.FR_FR, "Fabrication du feu")
+		.addLocale(Locale.HU, "Firemaking")
+		.addLocale(Locale.IT_IT, "Firemaking")
+		.addLocale(Locale.JA, "Firemaking")
+		.addLocale(Locale.KO_KR, "불피우기")
+		.addLocale(Locale.LT_LT, "Firemaking")
+		.addLocale(Locale.NL_NL, "Vuurmaken")
+		.addLocale(Locale.PL, "Rozpalanie ognia")
+		.addLocale(Locale.PT_BR, "Domador do Fogo")
+		.addLocale(Locale.RU_RU, "Firemaking")
+		.addLocale(Locale.SV_SE, "Firemaking")
+		.addLocale(Locale.UK_UA, "Розпалювання вогню")
+		.addLocale(Locale.ZH_CN, "炼火")
+		.addLocale(Locale.ZH_TW, "煉火")
+		.addLocale(Locale.EN_US, "Firemaking").build();
 	public static final Translation SKILL_AFKING = Translation.Builder.start("pmmo.afking")
-			.addLocale(Locale.EN_US, "Afking").build();
+		.addLocale(Locale.HU, "Afking")
+		.addLocale(Locale.JA, "Afking")
+		.addLocale(Locale.PL, "Nieaktywność")
+		.addLocale(Locale.DE_DE, "Afking")
+		.addLocale(Locale.ES_AR, "Afkero")
+		.addLocale(Locale.ES_CL, "Afkero")
+		.addLocale(Locale.ES_EC, "Afkero")
+		.addLocale(Locale.ES_ES, "Afkero")
+		.addLocale(Locale.ES_MX, "Afkero")
+		.addLocale(Locale.ES_UY, "Afkero")
+		.addLocale(Locale.ES_VE, "Afkero")
+		.addLocale(Locale.FR_FR, "AFKing")
+		.addLocale(Locale.HU, "Afking")
+		.addLocale(Locale.IT_IT, "Afking")
+		.addLocale(Locale.JA, "Afking")
+		.addLocale(Locale.KO_KR, "잠수")
+		.addLocale(Locale.LT_LT, "Afking")
+		.addLocale(Locale.NL_NL, "Afking")
+		.addLocale(Locale.PL, "Nieaktywność")
+		.addLocale(Locale.PT_BR, "Inativo")
+		.addLocale(Locale.RU_RU, "Afking")
+		.addLocale(Locale.SV_SE, "Afking")
+		.addLocale(Locale.UK_UA, "Відсутність")
+		.addLocale(Locale.ZH_CN, "挂机")
+		.addLocale(Locale.ZH_TW, "掛機")
+		.addLocale(Locale.EN_US, "Afking").build();
 	public static final Translation SKILL_TRADING = Translation.Builder.start("pmmo.trading")
-			.addLocale(Locale.EN_US, "Trading").build();
+		.addLocale(Locale.HU, "Trading")
+		.addLocale(Locale.JA, "Trading")
+		.addLocale(Locale.PL, "Handel")
+		.addLocale(Locale.DE_DE, "Handeln")
+		.addLocale(Locale.ES_AR, "Comercio")
+		.addLocale(Locale.ES_CL, "Comercio")
+		.addLocale(Locale.ES_EC, "Comercio")
+		.addLocale(Locale.ES_ES, "Comercio")
+		.addLocale(Locale.ES_MX, "Comercio")
+		.addLocale(Locale.ES_UY, "Comercio")
+		.addLocale(Locale.ES_VE, "Comercio")
+		.addLocale(Locale.FR_FR, "Commerce")
+		.addLocale(Locale.HU, "Trading")
+		.addLocale(Locale.IT_IT, "Trading")
+		.addLocale(Locale.JA, "Trading")
+		.addLocale(Locale.KO_KR, "거래")
+		.addLocale(Locale.LT_LT, "Trading")
+		.addLocale(Locale.NL_NL, "Handelen")
+		.addLocale(Locale.PL, "Handel")
+		.addLocale(Locale.PT_BR, "Mercador")
+		.addLocale(Locale.RU_RU, "Trading")
+		.addLocale(Locale.SV_SE, "Trading")
+		.addLocale(Locale.UK_UA, "Торгівля")
+		.addLocale(Locale.ZH_CN, "贸易")
+		.addLocale(Locale.ZH_TW, "貿易")
+		.addLocale(Locale.EN_US, "Trading").build();
 	public static final Translation SKILL_SAILING = Translation.Builder.start("pmmo.sailing")
-			.addLocale(Locale.EN_US, "Sailing").build();
+		.addLocale(Locale.HU, "Sailing")
+		.addLocale(Locale.JA, "Sailing")
+		.addLocale(Locale.PL, "Żeglarstwo")
+		.addLocale(Locale.DE_DE, "Segeln")
+		.addLocale(Locale.ES_AR, "Navegación")
+		.addLocale(Locale.ES_CL, "Navegación")
+		.addLocale(Locale.ES_EC, "Navegación")
+		.addLocale(Locale.ES_ES, "Navegación")
+		.addLocale(Locale.ES_MX, "Navegación")
+		.addLocale(Locale.ES_UY, "Navegación")
+		.addLocale(Locale.ES_VE, "Navegación")
+		.addLocale(Locale.FR_FR, "Navigation")
+		.addLocale(Locale.HU, "Sailing")
+		.addLocale(Locale.IT_IT, "Sailing")
+		.addLocale(Locale.JA, "Sailing")
+		.addLocale(Locale.KO_KR, "항해")
+		.addLocale(Locale.LT_LT, "Sailing")
+		.addLocale(Locale.NL_NL, "Zeilen")
+		.addLocale(Locale.PL, "Żeglarstwo")
+		.addLocale(Locale.PT_BR, "Navegador")
+		.addLocale(Locale.RU_RU, "Sailing")
+		.addLocale(Locale.SV_SE, "Sailing")
+		.addLocale(Locale.UK_UA, "Мореплавство")
+		.addLocale(Locale.ZH_CN, "航海")
+		.addLocale(Locale.ZH_TW, "航海")
+		.addLocale(Locale.EN_US, "Sailing").build();
 	public static final Translation SKILL_ALCHEMY = Translation.Builder.start("pmmo.alchemy")
-			.addLocale(Locale.EN_US, "Alchemy").build();
+		.addLocale(Locale.HU, "Alchemy")
+		.addLocale(Locale.JA, "Alchemy")
+		.addLocale(Locale.PL, "Alchemia")
+		.addLocale(Locale.DE_DE, "Alchemie")
+		.addLocale(Locale.ES_AR, "Alquimia")
+		.addLocale(Locale.ES_CL, "Alquimia")
+		.addLocale(Locale.ES_EC, "Alquimia")
+		.addLocale(Locale.ES_ES, "Alquimia")
+		.addLocale(Locale.ES_MX, "Alquimia")
+		.addLocale(Locale.ES_UY, "Alquimia")
+		.addLocale(Locale.ES_VE, "Alquimia")
+		.addLocale(Locale.FR_FR, "Alchimie")
+		.addLocale(Locale.HU, "Alchemy")
+		.addLocale(Locale.IT_IT, "Alchemy")
+		.addLocale(Locale.JA, "Alchemy")
+		.addLocale(Locale.KO_KR, "연금술")
+		.addLocale(Locale.LT_LT, "Alchemy")
+		.addLocale(Locale.NL_NL, "Alchemy")
+		.addLocale(Locale.PL, "Alchemia")
+		.addLocale(Locale.PT_BR, "Alquimia")
+		.addLocale(Locale.RU_RU, "Alchemy")
+		.addLocale(Locale.SV_SE, "Alchemy")
+		.addLocale(Locale.UK_UA, "Алхімія")
+		.addLocale(Locale.ZH_CN, "炼金")
+		.addLocale(Locale.ZH_TW, "煉金")
+		.addLocale(Locale.EN_US, "Alchemy").build();
 	public static final Translation SKILL_CONSTRUCTION = Translation.Builder.start("pmmo.construction")
-			.addLocale(Locale.EN_US, "Construction").build();
+		.addLocale(Locale.HU, "Construction")
+		.addLocale(Locale.JA, "Construction")
+		.addLocale(Locale.PL, "Budowa")
+		.addLocale(Locale.DE_DE, "Konstruktion")
+		.addLocale(Locale.ES_AR, "Edificación")
+		.addLocale(Locale.ES_CL, "Edificación")
+		.addLocale(Locale.ES_EC, "Edificación")
+		.addLocale(Locale.ES_ES, "Edificación")
+		.addLocale(Locale.ES_MX, "Edificación")
+		.addLocale(Locale.ES_UY, "Edificación")
+		.addLocale(Locale.ES_VE, "Edificación")
+		.addLocale(Locale.FR_FR, "Construction")
+		.addLocale(Locale.HU, "Construction")
+		.addLocale(Locale.IT_IT, "Construction")
+		.addLocale(Locale.JA, "Construction")
+		.addLocale(Locale.KO_KR, "건축")
+		.addLocale(Locale.LT_LT, "Construction")
+		.addLocale(Locale.NL_NL, "Construction")
+		.addLocale(Locale.PL, "Budowa")
+		.addLocale(Locale.PT_BR, "Construção")
+		.addLocale(Locale.RU_RU, "Construction")
+		.addLocale(Locale.SV_SE, "Construction")
+		.addLocale(Locale.UK_UA, "Будівництво")
+		.addLocale(Locale.ZH_CN, "建造")
+		.addLocale(Locale.ZH_TW, "建造")
+		.addLocale(Locale.EN_US, "Construction").build();
 	public static final Translation SKILL_LEATHERWORKING = Translation.Builder.start("pmmo.leatherworking")
-			.addLocale(Locale.EN_US, "Leatherworking").build();
+		.addLocale(Locale.HU, "Leatherworking")
+		.addLocale(Locale.JA, "Leatherworking")
+		.addLocale(Locale.PL, "Obróbka skóry")
+		.addLocale(Locale.DE_DE, "Lederverarbeitung")
+		.addLocale(Locale.ES_AR, "Curtiduría")
+		.addLocale(Locale.ES_CL, "Curtiduría")
+		.addLocale(Locale.ES_EC, "Curtiduría")
+		.addLocale(Locale.ES_ES, "Curtiduría")
+		.addLocale(Locale.ES_MX, "Curtiduría")
+		.addLocale(Locale.ES_UY, "Curtiduría")
+		.addLocale(Locale.ES_VE, "Curtiduría")
+		.addLocale(Locale.FR_FR, "Travail du cuir")
+		.addLocale(Locale.HU, "Leatherworking")
+		.addLocale(Locale.IT_IT, "Leatherworking")
+		.addLocale(Locale.JA, "Leatherworking")
+		.addLocale(Locale.KO_KR, "가죽마감")
+		.addLocale(Locale.LT_LT, "Leatherworking")
+		.addLocale(Locale.NL_NL, "Leatherworking")
+		.addLocale(Locale.PL, "Obróbka skóry")
+		.addLocale(Locale.PT_BR, "Coureiro")
+		.addLocale(Locale.RU_RU, "Leatherworking")
+		.addLocale(Locale.SV_SE, "Leatherworking")
+		.addLocale(Locale.UK_UA, "Обробка шкіри")
+		.addLocale(Locale.ZH_CN, "制皮")
+		.addLocale(Locale.ZH_TW, "製皮")
+		.addLocale(Locale.EN_US, "Leatherworking").build();
 	public static final Translation SKILL_EXPLORATION = Translation.Builder.start("pmmo.exploration")
-			.addLocale(Locale.EN_US, "Exploration").build();
+		.addLocale(Locale.HU, "Exploration")
+		.addLocale(Locale.JA, "Exploration")
+		.addLocale(Locale.PL, "Eksploracja")
+		.addLocale(Locale.DE_DE, "Erkundung")
+		.addLocale(Locale.ES_AR, "Exploración")
+		.addLocale(Locale.ES_CL, "Exploración")
+		.addLocale(Locale.ES_EC, "Exploración")
+		.addLocale(Locale.ES_ES, "Exploración")
+		.addLocale(Locale.ES_MX, "Exploración")
+		.addLocale(Locale.ES_UY, "Exploración")
+		.addLocale(Locale.ES_VE, "Exploración")
+		.addLocale(Locale.FR_FR, "Exploration")
+		.addLocale(Locale.HU, "Exploration")
+		.addLocale(Locale.IT_IT, "Exploration")
+		.addLocale(Locale.JA, "Exploration")
+		.addLocale(Locale.KO_KR, "탐험")
+		.addLocale(Locale.LT_LT, "Exploration")
+		.addLocale(Locale.NL_NL, "Exploration")
+		.addLocale(Locale.PL, "Eksploracja")
+		.addLocale(Locale.PT_BR, "Exploração")
+		.addLocale(Locale.RU_RU, "Exploration")
+		.addLocale(Locale.SV_SE, "Exploration")
+		.addLocale(Locale.UK_UA, "Розвідка")
+		.addLocale(Locale.ZH_CN, "Exploration")
+		.addLocale(Locale.ZH_TW, "探索")
+		.addLocale(Locale.EN_US, "Exploration").build();
 	public static final Translation SKILL_CHARISMA = Translation.Builder.start("pmmo.charisma")
-			.addLocale(Locale.EN_US, "Charisma").build();
+		.addLocale(Locale.EN_US, "Charisma").build();
 	
 	//=========ENUM VALUES=====================
 	public static final Translation ENUM_ANVIL_REPAIR = Translation.Builder.start("pmmo.enum.ANVIL_REPAIR")
-			.addLocale(Locale.EN_US, "Anvil Repair").build();
+		.addLocale(Locale.EN_US, "Anvil Repair").build();
 	public static final Translation ENUM_BLOCK_BREAK = Translation.Builder.start("pmmo.enum.BLOCK_BREAK")
-			.addLocale(Locale.EN_US, "Break Block").build();
+		.addLocale(Locale.EN_US, "Break Block").build();
 	public static final Translation ENUM_BREAK_SPEED = Translation.Builder.start("pmmo.enum.BREAK_SPEED")
-			.addLocale(Locale.EN_US, "Break Speed").build();
+		.addLocale(Locale.EN_US, "Break Speed").build();
 	public static final Translation ENUM_BLOCK_PLACE = Translation.Builder.start("pmmo.enum.BLOCK_PLACE")
-			.addLocale(Locale.EN_US, "Place Block").build();
+		.addLocale(Locale.EN_US, "Place Block").build();
 	public static final Translation ENUM_BREATH_CHANGE = Translation.Builder.start("pmmo.enum.BREATH_CHANGE")
-			.addLocale(Locale.EN_US, "Breath Change").build();
+		.addLocale(Locale.EN_US, "Breath Change").build();
 	public static final Translation ENUM_BREED = Translation.Builder.start("pmmo.enum.BREED")
-			.addLocale(Locale.EN_US, "Breed").build();
+		.addLocale(Locale.EN_US, "Breed").build();
 	public static final Translation ENUM_BREW = Translation.Builder.start("pmmo.enum.BREW")
-			.addLocale(Locale.EN_US, "Brew").build();
+		.addLocale(Locale.EN_US, "Brew").build();
 	public static final Translation ENUM_CRAFT = Translation.Builder.start("pmmo.enum.CRAFT")
-			.addLocale(Locale.EN_US, "Craft").build();
+		.addLocale(Locale.EN_US, "Craft").build();
 	public static final Translation ENUM_CONSUME = Translation.Builder.start("pmmo.enum.CONSUME")
-			.addLocale(Locale.EN_US, "Eat/Drink").build();
+		.addLocale(Locale.EN_US, "Eat/Drink").build();
 	public static final Translation ENUM_RECEIVE_DAMAGE = Translation.Builder.start("pmmo.enum.RECEIVE_DAMAGE")
-			.addLocale(Locale.EN_US, "Receive Damage (Unspecified)").build();
+		.addLocale(Locale.EN_US, "Receive Damage (Unspecified)").build();
 	public static final Translation ENUM_FROM_MOBS = Translation.Builder.start("pmmo.enum.FROM_MOBS")
-			.addLocale(Locale.EN_US, "Receive Mob Damage").build();
+		.addLocale(Locale.EN_US, "Receive Mob Damage").build();
 	public static final Translation ENUM_FROM_PLAYERS = Translation.Builder.start("pmmo.enum.FROM_PLAYERS")
-			.addLocale(Locale.EN_US, "Receive Player Damage").build();
+		.addLocale(Locale.EN_US, "Receive Player Damage").build();
 	public static final Translation ENUM_FROM_ANIMALS = Translation.Builder.start("pmmo.enum.FROM_ANIMALS")
-			.addLocale(Locale.EN_US, "Receive Animal Damage").build();
+		.addLocale(Locale.EN_US, "Receive Animal Damage").build();
 	public static final Translation ENUM_FROM_PROJECTILES = Translation.Builder.start("pmmo.enum.FROM_PROJECTILES")
-			.addLocale(Locale.EN_US, "Receive Projectile Damage").build();
+		.addLocale(Locale.EN_US, "Receive Projectile Damage").build();
 	public static final Translation ENUM_FROM_MAGIC = Translation.Builder.start("pmmo.enum.FROM_MAGIC")
-			.addLocale(Locale.EN_US, "Receive Magic Damage").build();
+		.addLocale(Locale.EN_US, "Receive Magic Damage").build();
 	public static final Translation ENUM_FROM_ENVIRONMENT = Translation.Builder.start("pmmo.enum.FROM_ENVIRONMENT")
-			.addLocale(Locale.EN_US, "Receive Environmental Damage").build();
+		.addLocale(Locale.EN_US, "Receive Environmental Damage").build();
 	public static final Translation ENUM_FROM_IMPACT = Translation.Builder.start("pmmo.enum.FROM_IMPACT")
-			.addLocale(Locale.EN_US, "Receive Impact Damage").build();
+		.addLocale(Locale.EN_US, "Receive Impact Damage").build();
 	public static final Translation ENUM_DEAL_MELEE_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_MELEE_DAMAGE")
-			.addLocale(Locale.EN_US, "Deal Melee Damage (Unspecified)").build();
+		.addLocale(Locale.EN_US, "Deal Melee Damage (Unspecified)").build();
 	public static final Translation ENUM_MELEE_TO_MOBS = Translation.Builder.start("pmmo.enum.MELEE_TO_MOBS")
-			.addLocale(Locale.EN_US, "Deal Melee Damage to Mobs").build();
+		.addLocale(Locale.EN_US, "Deal Melee Damage to Mobs").build();
 	public static final Translation ENUM_MELEE_TO_PLAYERS = Translation.Builder.start("pmmo.enum.MELEE_TO_PLAYERS")
-			.addLocale(Locale.EN_US, "Deal Melee Damage to Players").build();
+		.addLocale(Locale.EN_US, "Deal Melee Damage to Players").build();
 	public static final Translation ENUM_MELEE_TO_ANIMALS = Translation.Builder.start("pmmo.enum.MELEE_TO_ANIMALS")
-			.addLocale(Locale.EN_US, "Deal Melee Damage to Animals").build();
+		.addLocale(Locale.EN_US, "Deal Melee Damage to Animals").build();
 	public static final Translation ENUM_DEAL_RANGED_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_RANGED_DAMAGE")
-			.addLocale(Locale.EN_US, "Deal Ranged Damage (Unspecified)").build();
+		.addLocale(Locale.EN_US, "Deal Ranged Damage (Unspecified)").build();
 	public static final Translation ENUM_RANGED_TO_MOBS = Translation.Builder.start("pmmo.enum.RANGED_TO_MOBS")
-			.addLocale(Locale.EN_US, "Deal Ranged Damage to Mobs").build();
+		.addLocale(Locale.EN_US, "Deal Ranged Damage to Mobs").build();
 	public static final Translation ENUM_RANGED_TO_PLAYERS = Translation.Builder.start("pmmo.enum.RANGED_TO_PLAYERS")
-			.addLocale(Locale.EN_US, "Deal Ranged Damage to Players").build();
+		.addLocale(Locale.EN_US, "Deal Ranged Damage to Players").build();
 	public static final Translation ENUM_RANGED_TO_ANIMALS = Translation.Builder.start("pmmo.enum.RANGED_TO_ANIMALS")
-			.addLocale(Locale.EN_US, "Deal Ranged Damage to Animals").build();
+		.addLocale(Locale.EN_US, "Deal Ranged Damage to Animals").build();
 	public static final Translation ENUM_DEATH = Translation.Builder.start("pmmo.enum.DEATH")
-			.addLocale(Locale.EN_US, "Death").build();
+		.addLocale(Locale.EN_US, "Death").build();
 	public static final Translation ENUM_ENCHANT = Translation.Builder.start("pmmo.enum.ENCHANT")
-			.addLocale(Locale.EN_US, "Enchant").build();
+		.addLocale(Locale.EN_US, "Enchant").build();
 	public static final Translation ENUM_FISH = Translation.Builder.start("pmmo.enum.FISH")
-			.addLocale(Locale.EN_US, "Fish").build();
+		.addLocale(Locale.EN_US, "Fish").build();
 	public static final Translation ENUM_SMELT = Translation.Builder.start("pmmo.enum.SMELT")
-			.addLocale(Locale.EN_US, "Smelt/Cook").build();
+		.addLocale(Locale.EN_US, "Smelt/Cook").build();
 	public static final Translation ENUM_GROW = Translation.Builder.start("pmmo.enum.GROW")
-			.addLocale(Locale.EN_US, "Grow").build();
+		.addLocale(Locale.EN_US, "Grow").build();
 	public static final Translation ENUM_HEALTH_CHANGE = Translation.Builder.start("pmmo.enum.HEALTH_CHANGE")
-			.addLocale(Locale.EN_US, "Health Change").build();
+		.addLocale(Locale.EN_US, "Health Change").build();
 	public static final Translation ENUM_JUMP = Translation.Builder.start("pmmo.enum.JUMP")
-			.addLocale(Locale.EN_US, "Jump").build();
+		.addLocale(Locale.EN_US, "Jump").build();
 	public static final Translation ENUM_SPRINT_JUMP = Translation.Builder.start("pmmo.enum.SPRINT_JUMP")
-			.addLocale(Locale.EN_US, "Sprint Jump").build();
+		.addLocale(Locale.EN_US, "Sprint Jump").build();
 	public static final Translation ENUM_CROUCH_JUMP = Translation.Builder.start("pmmo.enum.CROUCH_JUMP")
-			.addLocale(Locale.EN_US, "Crouch Jump").build();
+		.addLocale(Locale.EN_US, "Crouch Jump").build();
 	public static final Translation ENUM_WORLD_CONNECT = Translation.Builder.start("pmmo.enum.WORLD_CONNECT")
-			.addLocale(Locale.EN_US, "World Connect").build();
+		.addLocale(Locale.EN_US, "World Connect").build();
 	public static final Translation ENUM_WORLD_DISCONNECT = Translation.Builder.start("pmmo.enum.WORLD_DISCONNECT")
-			.addLocale(Locale.EN_US, "World Disconnect").build();
+		.addLocale(Locale.EN_US, "World Disconnect").build();
 	public static final Translation ENUM_HIT_BLOCK = Translation.Builder.start("pmmo.enum.HIT_BLOCK")
-			.addLocale(Locale.EN_US, "Hit Block").build();
+		.addLocale(Locale.EN_US, "Hit Block").build();
 	public static final Translation ENUM_ACTIVATE_BLOCK = Translation.Builder.start("pmmo.enum.ACTIVATE_BLOCK")
-			.addLocale(Locale.EN_US, "Activate Block").build();
+		.addLocale(Locale.EN_US, "Activate Block").build();
 	public static final Translation ENUM_ACTIVATE_ITEM = Translation.Builder.start("pmmo.enum.ACTIVATE_ITEM")
-			.addLocale(Locale.EN_US, "Activate Item").build();
+		.addLocale(Locale.EN_US, "Activate Item").build();
 	public static final Translation ENUM_ENTITY = Translation.Builder.start("pmmo.enum.ENTITY")
-			.addLocale(Locale.EN_US, "Interact with Entity").build();
+		.addLocale(Locale.EN_US, "Interact with Entity").build();
 	public static final Translation ENUM_RESPAWN = Translation.Builder.start("pmmo.enum.RESPAWN")
-			.addLocale(Locale.EN_US, "Respawn").build();
+		.addLocale(Locale.EN_US, "Respawn").build();
 	public static final Translation ENUM_RIDING = Translation.Builder.start("pmmo.enum.RIDING")
-			.addLocale(Locale.EN_US, "Riding").build();
+		.addLocale(Locale.EN_US, "Riding").build();
 	public static final Translation ENUM_SHIELD_BLOCK = Translation.Builder.start("pmmo.enum.SHIELD_BLOCK")
-			.addLocale(Locale.EN_US, "Block with Shield").build();
+		.addLocale(Locale.EN_US, "Block with Shield").build();
 	public static final Translation ENUM_SKILL_UP = Translation.Builder.start("pmmo.enum.SKILL_UP")
-			.addLocale(Locale.EN_US, "Level Up").build();
+		.addLocale(Locale.EN_US, "Level Up").build();
 	public static final Translation ENUM_SLEEP = Translation.Builder.start("pmmo.enum.SLEEP")
-			.addLocale(Locale.EN_US, "Sleep").build();
+		.addLocale(Locale.EN_US, "Sleep").build();
 	public static final Translation ENUM_SPRINTING = Translation.Builder.start("pmmo.enum.SPRINTING")
-			.addLocale(Locale.EN_US, "Sprinting").build();
+		.addLocale(Locale.EN_US, "Sprinting").build();
 	public static final Translation ENUM_SUBMERGED = Translation.Builder.start("pmmo.enum.SUBMERGED")
-			.addLocale(Locale.EN_US, "Submerged").build();
+		.addLocale(Locale.EN_US, "Submerged").build();
 	public static final Translation ENUM_SWIMMING = Translation.Builder.start("pmmo.enum.SWIMMING")
-			.addLocale(Locale.EN_US, "Swimming (above surface)").build();
+		.addLocale(Locale.EN_US, "Swimming (above surface)").build();
 	public static final Translation ENUM_DIVING = Translation.Builder.start("pmmo.enum.DIVING")
-			.addLocale(Locale.EN_US, "Diving").build();
+		.addLocale(Locale.EN_US, "Diving").build();
 	public static final Translation ENUM_SURFACING = Translation.Builder.start("pmmo.enum.SURFACING")
-			.addLocale(Locale.EN_US, "Surfacing").build();
+		.addLocale(Locale.EN_US, "Surfacing").build();
 	public static final Translation ENUM_SWIM_SPRINTING = Translation.Builder.start("pmmo.enum.SWIM_SPRINTING")
-			.addLocale(Locale.EN_US, "Fast Swimming").build();
+		.addLocale(Locale.EN_US, "Fast Swimming").build();
 	public static final Translation ENUM_TAMING = Translation.Builder.start("pmmo.enum.TAMING")
-			.addLocale(Locale.EN_US, "Taming").build();
+		.addLocale(Locale.EN_US, "Taming").build();
 	public static final Translation ENUM_VEIN_MINE = Translation.Builder.start("pmmo.enum.VEIN_MINE")
-			.addLocale(Locale.EN_US, "Vein Mining").build();
+		.addLocale(Locale.EN_US, "Vein Mining").build();
 	public static final Translation ENUM_DISABLE_PERK = Translation.Builder.start("pmmo.enum.DISABLE_PERK")
-			.addLocale(Locale.EN_US, "Disable Perk").build();
+		.addLocale(Locale.EN_US, "Disable Perk").build();
 	public static final Translation ENUM_WEAR = Translation.Builder.start("pmmo.enum.WEAR")
-			.addLocale(Locale.EN_US, "Wear Item").build();
+		.addLocale(Locale.EN_US, "Wear Item").build();
 	public static final Translation ENUM_USE_ENCHANTMENT = Translation.Builder.start("pmmo.enum.USE_ENCHANTMENT")
-			.addLocale(Locale.EN_US, "Use Enchantment").build();
+		.addLocale(Locale.EN_US, "Use Enchantment").build();
 	public static final Translation ENUM_TOOL = Translation.Builder.start("pmmo.enum.TOOL")
-			.addLocale(Locale.EN_US, "Use as Tool").build();
+		.addLocale(Locale.EN_US, "Use as Tool").build();
 	public static final Translation ENUM_WEAPON = Translation.Builder.start("pmmo.enum.WEAPON")
-			.addLocale(Locale.EN_US, "Use as Weapon").build();
+		.addLocale(Locale.EN_US, "Use as Weapon").build();
 	public static final Translation ENUM_USE = Translation.Builder.start("pmmo.enum.USE")
-			.addLocale(Locale.EN_US, "Activate Item Ability").build();
+		.addLocale(Locale.EN_US, "Activate Item Ability").build();
 	public static final Translation ENUM_PLACE = Translation.Builder.start("pmmo.enum.PLACE")
-			.addLocale(Locale.EN_US, "Place Block").build();
+		.addLocale(Locale.EN_US, "Place Block").build();
 	public static final Translation ENUM_BREAK = Translation.Builder.start("pmmo.enum.BREAK")
-			.addLocale(Locale.EN_US, "Break Block").build();
+		.addLocale(Locale.EN_US, "Break Block").build();
 	public static final Translation ENUM_KILL = Translation.Builder.start("pmmo.enum.KILL")
-			.addLocale(Locale.EN_US, "Kill Entity").build();
+		.addLocale(Locale.EN_US, "Kill Entity").build();
 	public static final Translation ENUM_TRAVEL = Translation.Builder.start("pmmo.enum.TRAVEL")
-			.addLocale(Locale.EN_US, "Travel to").build();
+		.addLocale(Locale.EN_US, "Travel to").build();
 	public static final Translation ENUM_RIDE = Translation.Builder.start("pmmo.enum.RIDE")
-			.addLocale(Locale.EN_US, "Ride/Drive").build();
+		.addLocale(Locale.EN_US, "Ride/Drive").build();
 	public static final Translation ENUM_TAME = Translation.Builder.start("pmmo.enum.TAME")
-			.addLocale(Locale.EN_US, "Tame Animal").build();
+		.addLocale(Locale.EN_US, "Tame Animal").build();
 	public static final Translation ENUM_INTERACT = Translation.Builder.start("pmmo.enum.INTERACT")
-			.addLocale(Locale.EN_US, "Interact with Block").build();
+		.addLocale(Locale.EN_US, "Interact with Block").build();
 	public static final Translation ENUM_ENTITY_INTERACT = Translation.Builder.start("pmmo.enum.ENTITY_INTERACT")
-			.addLocale(Locale.EN_US, "Interact with Entity").build();
+		.addLocale(Locale.EN_US, "Interact with Entity").build();
 	public static final Translation ENUM_BIOME = Translation.Builder.start("pmmo.enum.BIOME")
-			.addLocale(Locale.EN_US, "Biome").build();
+		.addLocale(Locale.EN_US, "Biome").build();
 
 	//=========KEY BINDINGS====================
 	public static final Translation KEYBIND_CATEGORY = Translation.Builder.start("category.pmmo")
-			.addLocale(Locale.EN_US, "Project MMO").build();
+		.addLocale(Locale.HU, "Project MMO")
+		.addLocale(Locale.JA, "Project MMO")
+		.addLocale(Locale.PL, "Project MMO")
+		.addLocale(Locale.DE_DE, "Project MMO")
+		.addLocale(Locale.ES_AR, "Project MMO")
+		.addLocale(Locale.ES_CL, "Project MMO")
+		.addLocale(Locale.ES_EC, "Project MMO")
+		.addLocale(Locale.ES_ES, "Project MMO")
+		.addLocale(Locale.ES_MX, "Project MMO")
+		.addLocale(Locale.ES_UY, "Project MMO")
+		.addLocale(Locale.ES_VE, "Project MMO")
+		.addLocale(Locale.FR_FR, "Project MMO")
+		.addLocale(Locale.HU, "Project MMO")
+		.addLocale(Locale.IT_IT, "Project MMO")
+		.addLocale(Locale.JA, "Project MMO")
+		.addLocale(Locale.KO_KR, "프로젝트 MMO")
+		.addLocale(Locale.LT_LT, "Projektas MMO")
+		.addLocale(Locale.NL_NL, "Project MMO")
+		.addLocale(Locale.PL, "Project MMO")
+		.addLocale(Locale.PT_BR, "Projeto MMO")
+		.addLocale(Locale.RU_RU, "Project MMO")
+		.addLocale(Locale.SV_SE, "Projekt MMO")
+		.addLocale(Locale.UK_UA, "Project MMO")
+		.addLocale(Locale.ZH_CN, "Project MMO")
+		.addLocale(Locale.ZH_TW, "Project MMO")
+		.addLocale(Locale.EN_US, "Project MMO").build();
 	public static final Translation KEYBIND_SHOWVEIN = Translation.Builder.start("key.pmmo.showVein")
-			.addLocale(Locale.EN_US, "Toggle Vein Gauge").build();
+		.addLocale(Locale.EN_US, "Toggle Vein Gauge").build();
 	public static final Translation KEYBIND_ADDVEIN = Translation.Builder.start("key.pmmo.addVein")
-			.addLocale(Locale.EN_US, "Increase Vein Size").build();
+		.addLocale(Locale.EN_US, "Increase Vein Size").build();
 	public static final Translation KEYBIND_SUBVEIN = Translation.Builder.start("key.pmmo.subVein")
-			.addLocale(Locale.EN_US, "Decrease Vein Size").build();
+		.addLocale(Locale.EN_US, "Decrease Vein Size").build();
 	public static final Translation KEYBIND_VEINCYCLE = Translation.Builder.start("key.pmmo.cyclevein")
-			.addLocale(Locale.EN_US, "Cycle Vein Mode").build();
+		.addLocale(Locale.EN_US, "Cycle Vein Mode").build();
 	public static final Translation KEYBIND_SHOWLIST = Translation.Builder.start("key.pmmo.showList")
-			.addLocale(Locale.EN_US, "Toggle Skill List").build();
+		.addLocale(Locale.EN_US, "Toggle Skill List").build();
 	public static final Translation KEYBIND_VEIN = Translation.Builder.start("key.pmmo.vein")
-			.addLocale(Locale.EN_US, "Vein Mine Marker").build();
+		.addLocale(Locale.HU, "Vein Mine")
+		.addLocale(Locale.JA, "鉱脈鉱山")
+		.addLocale(Locale.PL, "Wydobywanie żył")
+		.addLocale(Locale.DE_DE, "Ader Mine")
+		.addLocale(Locale.ES_AR, "Rasgar")
+		.addLocale(Locale.ES_CL, "Rasgar")
+		.addLocale(Locale.ES_EC, "Rasgar")
+		.addLocale(Locale.ES_ES, "Rasgar")
+		.addLocale(Locale.ES_MX, "Rasgar")
+		.addLocale(Locale.ES_UY, "Rasgar")
+		.addLocale(Locale.ES_VE, "Rasgar")
+		.addLocale(Locale.FR_FR, "Minage en veine")
+		.addLocale(Locale.HU, "Vein Mine")
+		.addLocale(Locale.IT_IT, "Vein Mine")
+		.addLocale(Locale.JA, "鉱脈鉱山")
+		.addLocale(Locale.KO_KR, "채광 피로도")
+		.addLocale(Locale.LT_LT, "Vein Mine")
+		.addLocale(Locale.NL_NL, "Vein Mine")
+		.addLocale(Locale.PL, "Wydobywanie żył")
+		.addLocale(Locale.PT_BR, "minerador de veio")
+		.addLocale(Locale.RU_RU, "Вскопать жилу")
+		.addLocale(Locale.SV_SE, "ven mine")
+		.addLocale(Locale.UK_UA, "Вскопати жилу")
+		.addLocale(Locale.ZH_CN, "连锁挖矿")
+		.addLocale(Locale.ZH_TW, "連鎖挖礦")
+		.addLocale(Locale.EN_US, "Vein Mine Marker").build();
 	public static final Translation KEYBIND_OPENMENU = Translation.Builder.start("key.pmmo.openMenu")
-			.addLocale(Locale.EN_US, "Open Glossary").build();
+		.addLocale(Locale.EN_US, "Open Glossary").build();
 	
 	//=========LOGIN HANDLER===================
 	public static final Translation WELCOME_TEXT = Translation.Builder.start("pmmo.welcomeText")
-			.addLocale(Locale.EN_US, "Welcome! Project MMO is more fun with datapacks. download one %s").build();
+		.addLocale(Locale.EN_US, "Welcome! Project MMO is more fun with datapacks. download one %s").build();
 	public static final Translation CLICK_ME = Translation.Builder.start("pmmo.clickMe")
-			.addLocale(Locale.EN_US, "HERE").build();
+		.addLocale(Locale.EN_US, "HERE").build();
 	
 	//=========KEY PRESS HANLDER===============
 	public static final Translation VEIN_BLACKLIST = Translation.Builder.start("pmmo.veinBlacklist")
-			.addLocale(Locale.EN_US, "Blacklisted blocks from Veining").build();
+		.addLocale(Locale.EN_US, "Blacklisted blocks from Veining").build();
 	public static final Translation VEIN_SHAPE = Translation.Builder.start("pmmo.veinshape")
-			.addLocale(Locale.EN_US, "Vein Shape Set To: %s").build();
+		.addLocale(Locale.EN_US, "Vein Shape Set To: %s").build();
 	
 	//=========TOOLTIP HEADERS=================
 	public static final Translation REQ_WEAR = Translation.Builder.start("pmmo.toWear")
-			.addLocale(Locale.EN_US, "To Wear").build();
+		.addLocale(Locale.EN_US, "To Wear").build();
 	public static final Translation REQ_TOOL = Translation.Builder.start("pmmo.tool")
-			.addLocale(Locale.EN_US, "Tool").build();
+		.addLocale(Locale.HU, "Tool")
+		.addLocale(Locale.JA, "Tool")
+		.addLocale(Locale.PL, "Narzędzie")
+		.addLocale(Locale.DE_DE, "Werkzeug")
+		.addLocale(Locale.ES_AR, "Herramienta")
+		.addLocale(Locale.ES_CL, "Herramienta")
+		.addLocale(Locale.ES_EC, "Herramienta")
+		.addLocale(Locale.ES_ES, "Herramienta")
+		.addLocale(Locale.ES_MX, "Herramienta")
+		.addLocale(Locale.ES_UY, "Herramienta")
+		.addLocale(Locale.ES_VE, "Herramienta")
+		.addLocale(Locale.FR_FR, "Outils")
+		.addLocale(Locale.HU, "Tool")
+		.addLocale(Locale.IT_IT, "Attrezzo")
+		.addLocale(Locale.JA, "Tool")
+		.addLocale(Locale.KO_KR, "도구")
+		.addLocale(Locale.LT_LT, "Įrankis")
+		.addLocale(Locale.NL_NL, "Gereedschap")
+		.addLocale(Locale.PL, "Narzędzie")
+		.addLocale(Locale.PT_BR, "Ferramenta")
+		.addLocale(Locale.RU_RU, "Инструмент")
+		.addLocale(Locale.SV_SE, "Tool")
+		.addLocale(Locale.UK_UA, "Інструмент")
+		.addLocale(Locale.ZH_CN, "工具")
+		.addLocale(Locale.ZH_TW, "工具")
+		.addLocale(Locale.EN_US, "Tool").build();
 	public static final Translation REQ_WEAPON = Translation.Builder.start("pmmo.weapon")
-			.addLocale(Locale.EN_US, "Weapon").build();
+		.addLocale(Locale.HU, "Weapon")
+		.addLocale(Locale.JA, "Weapon")
+		.addLocale(Locale.PL, "Broń")
+		.addLocale(Locale.DE_DE, "Waffe")
+		.addLocale(Locale.ES_AR, "Arma")
+		.addLocale(Locale.ES_CL, "Arma")
+		.addLocale(Locale.ES_EC, "Arma")
+		.addLocale(Locale.ES_ES, "Arma")
+		.addLocale(Locale.ES_MX, "Arma")
+		.addLocale(Locale.ES_UY, "Arma")
+		.addLocale(Locale.ES_VE, "Arma")
+		.addLocale(Locale.FR_FR, "Arme")
+		.addLocale(Locale.HU, "Weapon")
+		.addLocale(Locale.IT_IT, "Arma")
+		.addLocale(Locale.JA, "Weapon")
+		.addLocale(Locale.KO_KR, "무기")
+		.addLocale(Locale.LT_LT, "Ginklas")
+		.addLocale(Locale.NL_NL, "Wapen")
+		.addLocale(Locale.PL, "Broń")
+		.addLocale(Locale.PT_BR, "Arma")
+		.addLocale(Locale.RU_RU, "Оружие")
+		.addLocale(Locale.SV_SE, "Weapon")
+		.addLocale(Locale.UK_UA, "Зброя")
+		.addLocale(Locale.ZH_CN, "武器")
+		.addLocale(Locale.ZH_TW, "武器")
+		.addLocale(Locale.EN_US, "Weapon").build();
 	public static final Translation REQ_USE = Translation.Builder.start("pmmo.use")
-			.addLocale(Locale.EN_US, "Use").build();
+		.addLocale(Locale.HU, "Use")
+		.addLocale(Locale.JA, "Use")
+		.addLocale(Locale.PL, "Wykorzystaj")
+		.addLocale(Locale.DE_DE, "Benutzen")
+		.addLocale(Locale.ES_AR, "Usar")
+		.addLocale(Locale.ES_CL, "Usar")
+		.addLocale(Locale.ES_EC, "Usar")
+		.addLocale(Locale.ES_ES, "Usar")
+		.addLocale(Locale.ES_MX, "Usar")
+		.addLocale(Locale.ES_UY, "Usar")
+		.addLocale(Locale.ES_VE, "Usar")
+		.addLocale(Locale.FR_FR, "Utiliser")
+		.addLocale(Locale.HU, "Use")
+		.addLocale(Locale.IT_IT, "Usa")
+		.addLocale(Locale.JA, "Use")
+		.addLocale(Locale.KO_KR, "사용")
+		.addLocale(Locale.LT_LT, "Naudoti")
+		.addLocale(Locale.NL_NL, "Gebruiken")
+		.addLocale(Locale.PL, "Wykorzystaj")
+		.addLocale(Locale.PT_BR, "Usar")
+		.addLocale(Locale.RU_RU, "Использовать")
+		.addLocale(Locale.SV_SE, "Use")
+		.addLocale(Locale.UK_UA, "Використати")
+		.addLocale(Locale.ZH_CN, "使用需求等级")
+		.addLocale(Locale.ZH_TW, "使用需求等級")
+		.addLocale(Locale.EN_US, "Use").build();
 	public static final Translation REQ_PLACE = Translation.Builder.start("pmmo.place")
-			.addLocale(Locale.EN_US, "To Place").build();
+		.addLocale(Locale.HU, "Place Down")
+		.addLocale(Locale.JA, "Place Down")
+		.addLocale(Locale.PL, "Postawić")
+		.addLocale(Locale.DE_DE, "Platzieren")
+		.addLocale(Locale.ES_AR, "Colocar")
+		.addLocale(Locale.ES_CL, "Colocar")
+		.addLocale(Locale.ES_EC, "Colocar")
+		.addLocale(Locale.ES_ES, "Colocar")
+		.addLocale(Locale.ES_MX, "Colocar")
+		.addLocale(Locale.ES_UY, "Colocar")
+		.addLocale(Locale.ES_VE, "Colocar")
+		.addLocale(Locale.FR_FR, "Placer")
+		.addLocale(Locale.HU, "Place Down")
+		.addLocale(Locale.IT_IT, "Piazza Giu")
+		.addLocale(Locale.JA, "Place Down")
+		.addLocale(Locale.KO_KR, "놓기")
+		.addLocale(Locale.LT_LT, "Statyti")
+		.addLocale(Locale.NL_NL, "Plaatsen")
+		.addLocale(Locale.PL, "Postawić")
+		.addLocale(Locale.PT_BR, "Colocar")
+		.addLocale(Locale.RU_RU, "Разместить")
+		.addLocale(Locale.SV_SE, "Place Down")
+		.addLocale(Locale.UK_UA, "Розмістити")
+		.addLocale(Locale.ZH_CN, "放置需求等级")
+		.addLocale(Locale.ZH_TW, "放置需求等級")
+		.addLocale(Locale.EN_US, "To Place").build();
 	public static final Translation REQ_ENCHANT = Translation.Builder.start("pmmo.use_enchant")
-			.addLocale(Locale.EN_US, "Use Enchantment").build();
+		.addLocale(Locale.EN_US, "Use Enchantment").build();
 	public static final Translation REQ_BREAK = Translation.Builder.start("pmmo.break")
-			.addLocale(Locale.EN_US, "To Break").build();
+		.addLocale(Locale.HU, "Break")
+		.addLocale(Locale.JA, "Break")
+		.addLocale(Locale.PL, "Rozwalić")
+		.addLocale(Locale.DE_DE, "Zerstören")
+		.addLocale(Locale.ES_AR, "Quebrar")
+		.addLocale(Locale.ES_CL, "Quebrar")
+		.addLocale(Locale.ES_EC, "Quebrar")
+		.addLocale(Locale.ES_ES, "Quebrar")
+		.addLocale(Locale.ES_MX, "Quebrar")
+		.addLocale(Locale.ES_UY, "Quebrar")
+		.addLocale(Locale.ES_VE, "Quebrar")
+		.addLocale(Locale.FR_FR, "Casser")
+		.addLocale(Locale.HU, "Break")
+		.addLocale(Locale.IT_IT, "Rompi")
+		.addLocale(Locale.JA, "Break")
+		.addLocale(Locale.KO_KR, "부수기")
+		.addLocale(Locale.LT_LT, "Nugriauti")
+		.addLocale(Locale.NL_NL, "Breken")
+		.addLocale(Locale.PL, "Rozwalić")
+		.addLocale(Locale.PT_BR, "Quebrar")
+		.addLocale(Locale.RU_RU, "Сломать")
+		.addLocale(Locale.SV_SE, "Break")
+		.addLocale(Locale.UK_UA, "Зламати")
+		.addLocale(Locale.ZH_CN, "破坏需求等级")
+		.addLocale(Locale.ZH_TW, "破壞需求等級")
+		.addLocale(Locale.EN_US, "To Break").build();
 	public static final Translation XP_VALUE_BREAK = Translation.Builder.start("pmmo.xpValueBreak")
-			.addLocale(Locale.EN_US, "Break Xp Value").build();
+		.addLocale(Locale.EN_US, "Break Xp Value").build();
 	public static final Translation XP_VALUE_CRAFT = Translation.Builder.start("pmmo.xpValueCraft")
-			.addLocale(Locale.EN_US, "Craft Xp Value").build();
+		.addLocale(Locale.EN_US, "Craft Xp Value").build();
 	public static final Translation XP_VALUE_SMELT = Translation.Builder.start("pmmo.xpValueSmelt")
-			.addLocale(Locale.EN_US, "Smelt Xp Value").build();
+		.addLocale(Locale.EN_US, "Smelt Xp Value").build();
 	public static final Translation XP_VALUE_BREW = Translation.Builder.start("pmmo.xpValueBrew")
-			.addLocale(Locale.EN_US, "Brew Xp Value").build();
+		.addLocale(Locale.EN_US, "Brew Xp Value").build();
 	public static final Translation XP_VALUE_GROW = Translation.Builder.start("pmmo.xpValueGrow")
-			.addLocale(Locale.EN_US, "Grow Xp Value").build();
+		.addLocale(Locale.EN_US, "Grow Xp Value").build();
 	public static final Translation XP_VALUE_PLACE = Translation.Builder.start("pmmo.xpValuePlace")
-			.addLocale(Locale.EN_US, "Place Xp Value").build();
+		.addLocale(Locale.EN_US, "Place Xp Value").build();
 	public static final Translation BOOST_HELD = Translation.Builder.start("pmmo.itemXpBoostHeld")
-			.addLocale(Locale.EN_US, "Xp Boost In Hand").build();
+		.addLocale(Locale.EN_US, "Xp Boost In Hand").build();
 	public static final Translation BOOST_WORN = Translation.Builder.start("pmmo.itemXpBoostWorn")
-			.addLocale(Locale.EN_US, "Xp Boost Worn").build();
+		.addLocale(Locale.EN_US, "Xp Boost Worn").build();
 	public static final Translation VEIN_TOOLTIP = Translation.Builder.start("pmmo.veintooltip")
-			.addLocale(Locale.EN_US, "Vein Mining").build();
+		.addLocale(Locale.EN_US, "Vein Mining").build();
 	public static final Translation VEIN_DATA = Translation.Builder.start("pmmo.veindata")
-			.addLocale(Locale.EN_US, "Charge Cap %1$s, recharges %2$s/s").build();
+		.addLocale(Locale.EN_US, "Charge Cap %1$s, recharges %2$s/s").build();
 	public static final Translation VEIN_BREAK = Translation.Builder.start("pmmo.veinbreak")
-			.addLocale(Locale.EN_US, "Cost to break as block: %s").build();
+		.addLocale(Locale.EN_US, "Cost to break as block: %s").build();
 	
 	//=========STAT SCROLL WIDGET=================
 	public static final Translation OPEN_GLOSSARY = Translation.Builder.start("pmmo.gui.stat_screen.open_glossary")
-			.addLocale(Locale.EN_US, "Open Glossary").build();
+		.addLocale(Locale.EN_US, "Open Glossary").build();
 	public static final Translation EVENT_HEADER = Translation.Builder.start("pmmo.event_header")
-			.addLocale(Locale.EN_US, "XP Award Events").build();
+		.addLocale(Locale.EN_US, "XP Award Events").build();
 	public static final Translation REQ_HEADER = Translation.Builder.start("pmmo.req_header")
-			.addLocale(Locale.EN_US, "Requirements").build();
+		.addLocale(Locale.EN_US, "Requirements").build();
 	public static final Translation REQ_EFFECTS_HEADER = Translation.Builder.start("pmmo.req_effects_header")
-			.addLocale(Locale.EN_US, "Negative Effects for unmet Reqs").build();
+		.addLocale(Locale.EN_US, "Negative Effects for unmet Reqs").build();
 	public static final Translation MODIFIER_HEADER = Translation.Builder.start("pmmo.modifier_header")
-			.addLocale(Locale.EN_US, "XP Modifiers").build();
+		.addLocale(Locale.EN_US, "XP Modifiers").build();
 	public static final Translation SALVAGE_HEADER = Translation.Builder.start("pmmo.salvage_header")
-			.addLocale(Locale.EN_US, "Salvage").build();
+		.addLocale(Locale.EN_US, "Salvage").build();
 	public static final Translation SALVAGE_LEVEL_REQ = Translation.Builder.start("pmmo.salvage_levelreq")
-			.addLocale(Locale.EN_US, "Required level to obtain").build();
+		.addLocale(Locale.EN_US, "Required level to obtain").build();
 	public static final Translation SALVAGE_CHANCE = Translation.Builder.start("pmmo.salvage_chance")
-			.addLocale(Locale.EN_US, "Chance: %1$s / %2$s").build();
+		.addLocale(Locale.EN_US, "Chance: %1$s / %2$s").build();
 	public static final Translation SALVAGE_MAX = Translation.Builder.start("pmmo.salvage_max")
-			.addLocale(Locale.EN_US, "Max Obtainable: %1$s").build();
+		.addLocale(Locale.EN_US, "Max Obtainable: %1$s").build();
 	public static final Translation SALVAGE_CHANCE_MOD = Translation.Builder.start("pmmo.salvage_chance_modifier")
-			.addLocale(Locale.EN_US, "Chance boost based on level").build();
+		.addLocale(Locale.EN_US, "Chance boost based on level").build();
 	public static final Translation SALVAGE_XP_AWARD = Translation.Builder.start("pmmo.salvage_xpAward_header")
-			.addLocale(Locale.EN_US, "Xp awarded on success").build();
+		.addLocale(Locale.EN_US, "Xp awarded on success").build();
 	public static final Translation VEIN_HEADER = Translation.Builder.start("pmmo.vein_header")
-			.addLocale(Locale.EN_US, "Vein Mining Attributes").build();
+		.addLocale(Locale.EN_US, "Vein Mining Attributes").build();
 	public static final Translation VEIN_RATE = Translation.Builder.start("pmmo.veindata_rate")
-			.addLocale(Locale.EN_US, "Vein Recharge Rate Per Second: %1$s").build();
+		.addLocale(Locale.EN_US, "Vein Recharge Rate Per Second: %1$s").build();
 	public static final Translation VEIN_CAP = Translation.Builder.start("pmmo.veindata_cap")
-			.addLocale(Locale.EN_US, "Vein Capacity Added By Item: %1$s").build();
+		.addLocale(Locale.EN_US, "Vein Capacity Added By Item: %1$s").build();
 	public static final Translation VEIN_CONSUME = Translation.Builder.start("pmmo.veindata_consume")
-			.addLocale(Locale.EN_US, "Vein Consumed on Break: %1$s").build();
+		.addLocale(Locale.EN_US, "Vein Consumed on Break: %1$s").build();
 	public static final Translation PLAYER_HEADER = Translation.Builder.start("pmmo.playerspecific_header")
-			.addLocale(Locale.EN_US, "Player-Specific Settings").build();
+		.addLocale(Locale.EN_US, "Player-Specific Settings").build();
 	public static final Translation PLAYER_IGNORE_REQ = Translation.Builder.start("pmmo.playerspecific.ignorereq")
-			.addLocale(Locale.EN_US, "Ignore Reqs: %1$s").build();
+		.addLocale(Locale.EN_US, "Ignore Reqs: %1$s").build();
 	public static final Translation PLAYER_BONUSES = Translation.Builder.start("pmmo.playerspecific.bonus")
-			.addLocale(Locale.EN_US, "Player Bonuses:").build();
+		.addLocale(Locale.EN_US, "Player Bonuses:").build();
 	public static final Translation SKILL_LIST_HEADER = Translation.Builder.start("pmmo.skilllist_header")
-			.addLocale(Locale.EN_US, "Player Skills").build();
+		.addLocale(Locale.EN_US, "Player Skills").build();
 	public static final Translation DIMENSION_HEADER = Translation.Builder.start("pmmo.dimension_header")
-			.addLocale(Locale.EN_US, "Dimension: %1$s").build();
+		.addLocale(Locale.EN_US, "Dimension: %1$s").build();
 	public static final Translation VEIN_BLACKLIST_HEADER = Translation.Builder.start("pmmo.vein_blacklist_header")
-			.addLocale(Locale.EN_US, "Vein Blacklisted Blocks").build();
+		.addLocale(Locale.EN_US, "Vein Blacklisted Blocks").build();
 	public static final Translation MOB_MODIFIER_HEADER = Translation.Builder.start("pmmo.mob_modifier_header")
-			.addLocale(Locale.EN_US, "Mob Modifiers").build();
+		.addLocale(Locale.EN_US, "Mob Modifiers").build();
 	public static final Translation BIOME_HEADER = Translation.Builder.start("pmmo.biome_header")
-			.addLocale(Locale.EN_US, "Mob Modifiers").build();
+		.addLocale(Locale.EN_US, "Mob Modifiers").build();
 	public static final Translation BIOME_EFFECT_NEG = Translation.Builder.start("pmmo.biome_negative")
-			.addLocale(Locale.EN_US, "Penalty Effects").build();
+		.addLocale(Locale.EN_US, "Penalty Effects").build();
 	public static final Translation BIOME_EFFECT_POS = Translation.Builder.start("pmmo.biome_positive")
-			.addLocale(Locale.EN_US, "Bonus Effects").build();
+		.addLocale(Locale.EN_US, "Bonus Effects").build();
 	public static final Translation ADDON_AFFECTED_ATTRIBUTE = Translation.Builder.start("pmmo.gui.statscroll.addon_affected")
-			.addLocale(Locale.EN_US, "This Property is Dynamically Defined").build();
+		.addLocale(Locale.EN_US, "This Property is Dynamically Defined").build();
 	
 	//=========GLOSSARY SELECT SCREEN=============
 	public static final Translation GLOSSARY_DEFAULT_SECTION = Translation.Builder.start("pmmo.gui.glossary.default_section")
-			.addLocale(Locale.EN_US, "Choose Section").build();
+		.addLocale(Locale.EN_US, "Choose Section").build();
 	public static final Translation GLOSSARY_SECTION_REQ = Translation.Builder.start("pmmo.gui.glossary.section.req")
-			.addLocale(Locale.EN_US, "Requirements").build();
+		.addLocale(Locale.EN_US, "Requirements").build();
 	public static final Translation GLOSSARY_SECTION_XP = Translation.Builder.start("pmmo.gui.glossary.section.xp_sources")
-			.addLocale(Locale.EN_US, "XP Sources").build();
+		.addLocale(Locale.EN_US, "XP Sources").build();
 	public static final Translation GLOSSARY_SECTION_BONUS = Translation.Builder.start("pmmo.gui.glossary.section.bonuses")
-			.addLocale(Locale.EN_US, "Bonuses").build();
+		.addLocale(Locale.EN_US, "Bonuses").build();
 	public static final Translation GLOSSARY_SECTION_SALVAGE = Translation.Builder.start("pmmo.gui.glossary.section.salvage")
-			.addLocale(Locale.EN_US, "Salvage").build();
+		.addLocale(Locale.EN_US, "Salvage").build();
 	public static final Translation GLOSSARY_SECTION_VEIN = Translation.Builder.start("pmmo.gui.glossary.section.vein")
-			.addLocale(Locale.EN_US, "Vein Mining").build();
+		.addLocale(Locale.EN_US, "Vein Mining").build();
 	public static final Translation GLOSSARY_SECTION_MOB = Translation.Builder.start("pmmo.gui.glossary.section.mobscaling")
-			.addLocale(Locale.EN_US, "Mob Scaling").build();
+		.addLocale(Locale.EN_US, "Mob Scaling").build();
 	public static final Translation GLOSSARY_SECTION_PERKS = Translation.Builder.start("pmmo.gui.glossary.section.perks")
-			.addLocale(Locale.EN_US, "Perks").build();
+		.addLocale(Locale.EN_US, "Perks").build();
 	
 	public static final Translation GLOSSARY_DEFAULT_OBJECT = Translation.Builder.start("pmmo.gui.glossary.default_object")
-			.addLocale(Locale.EN_US, "All Content").build();
+		.addLocale(Locale.EN_US, "All Content").build();
 	public static final Translation GLOSSARY_OBJECT_ITEMS = Translation.Builder.start("pmmo.gui.glossary.object.items")
-			.addLocale(Locale.EN_US, "Items").build();
+		.addLocale(Locale.EN_US, "Items").build();
 	public static final Translation GLOSSARY_OBJECT_BLOCKS = Translation.Builder.start("pmmo.gui.glossary.object.blocks")
-			.addLocale(Locale.EN_US, "Blocks").build();
+		.addLocale(Locale.EN_US, "Blocks").build();
 	public static final Translation GLOSSARY_OBJECT_ENTITIES = Translation.Builder.start("pmmo.gui.glossary.object.entities")
-			.addLocale(Locale.EN_US, "Animals/Mobs").build();
+		.addLocale(Locale.EN_US, "Animals/Mobs").build();
 	public static final Translation GLOSSARY_OBJECT_DIMENSIONS = Translation.Builder.start("pmmo.gui.glossary.object.dimensions")
-			.addLocale(Locale.EN_US, "Dimensions").build();
+		.addLocale(Locale.EN_US, "Dimensions").build();
 	public static final Translation GLOSSARY_OBJECT_BIOMES = Translation.Builder.start("pmmo.gui.glossary.object.biomes")
-			.addLocale(Locale.EN_US, "Biomes").build();
+		.addLocale(Locale.EN_US, "Biomes").build();
 	public static final Translation GLOSSARY_OBJECT_ENCHANTS = Translation.Builder.start("pmmo.gui.glossary.object.enchantments")
-			.addLocale(Locale.EN_US, "Enchantments").build();
+		.addLocale(Locale.EN_US, "Enchantments").build();
 	public static final Translation GLOSSARY_OBJECT_EFFECTS = Translation.Builder.start("pmmo.gui.glossary.object.effects")
-			.addLocale(Locale.EN_US, "Effects").build();
+		.addLocale(Locale.EN_US, "Effects").build();
 	public static final Translation GLOSSARY_OBJECT_PERKS = Translation.Builder.start("pmmo.gui.glossary.object.perks")
-			.addLocale(Locale.EN_US, "Perks").build();
+		.addLocale(Locale.EN_US, "Perks").build();
 	
 	public static final Translation GLOSSARY_DEFAULT_SKILL = Translation.Builder.start("pmmo.gui.glossary.default_skill")
-			.addLocale(Locale.EN_US, "All Skills").build();
+		.addLocale(Locale.EN_US, "All Skills").build();
 	public static final Translation GLOSSARY_DEFAULT_ENUM = Translation.Builder.start("pmmo.gui.glossary.default_enum")
-			.addLocale(Locale.EN_US, "All Event/Req/Type").build();
+		.addLocale(Locale.EN_US, "All Event/Req/Type").build();
 	public static final Translation GLOSSARY_VIEW_BUTTON = Translation.Builder.start("pmmo.gui.glossary.view_button")
-			.addLocale(Locale.EN_US, "View Info").build();
+		.addLocale(Locale.EN_US, "View Info").build();
 	
 	//=========FEATURES===========================
 	public static final Translation FOUND_TREASURE = Translation.Builder.start("pmmo.youFoundTreasure")
-			.addLocale(Locale.EN_US, "You Found Treasure!").build();
+		.addLocale(Locale.EN_US, "You Found Treasure!").build();
 	public static final Translation LEVELED_UP = Translation.Builder.start("pmmo.leveled_up")
-			.addLocale(Locale.EN_US, "You leveled up to %s in %s").build();
+		.addLocale(Locale.EN_US, "You leveled up to %s in %s").build();
 	public static final Translation PERK_BREATH_REFRESH = Translation.Builder.start("pmmo.perks.breathrefresh")
-			.addLocale(Locale.EN_US, "Your skill extended your breath").build();
+		.addLocale(Locale.EN_US, "Your skill extended your breath").build();
 	public static final Translation VEIN_LIMIT = Translation.Builder.start("pmmo.veinLimit")
-			.addLocale(Locale.EN_US, "Vein Limit: %1$s").build();
+		.addLocale(Locale.EN_US, "Vein Limit: %1$s").build();
 	public static final Translation VEIN_CHARGE = Translation.Builder.start("pmmo.veinCharge")
-			.addLocale(Locale.EN_US, "Vein Ability: %1$s/%2$s").build();
+		.addLocale(Locale.EN_US, "Vein Ability: %1$s/%2$s").build();
 	
 	//=========COMMANDS===========================
 	public static final Translation SET_LEVEL = Translation.Builder.start("pmmo.setLevel")
-			.addLocale(Locale.EN_US, "%1$s has been set to level %2$s for %3$s").build();
+		.addLocale(Locale.EN_US, "%1$s has been set to level %2$s for %3$s").build();
 	public static final Translation SET_XP = Translation.Builder.start("pmmo.setXp")
-			.addLocale(Locale.EN_US, "%1$s has been set to %2$sxp for %3$s").build();
+		.addLocale(Locale.EN_US, "%1$s has been set to %2$sxp for %3$s").build();
 	public static final Translation ADD_LEVEL = Translation.Builder.start("pmmo.addLevel")
-			.addLocale(Locale.EN_US, "%1$s has been changed by %2$s levels for %3$s").build();
+		.addLocale(Locale.EN_US, "%1$s has been changed by %2$s levels for %3$s").build();
 	public static final Translation ADD_XP = Translation.Builder.start("pmmo.addXp")
-			.addLocale(Locale.EN_US, "%1$s has been changed by %2$sxp for %3$s").build();
+		.addLocale(Locale.EN_US, "%1$s has been changed by %2$sxp for %3$s").build();
 	public static final Translation PARTY_ALREADY_IN = Translation.Builder.start("pmmo.youAreAlreadyInAParty")
-			.addLocale(Locale.EN_US, "You are already in a Party").build();
+		.addLocale(Locale.EN_US, "You are already in a Party").build();
 	public static final Translation PARTY_CREATED = Translation.Builder.start("pmmo.partyCreated")
-			.addLocale(Locale.EN_US, "You have created a Party").build();
+		.addLocale(Locale.EN_US, "You have created a Party").build();
 	public static final Translation PARTY_LEFT = Translation.Builder.start("pmmo.youLeftTheParty")
-			.addLocale(Locale.EN_US, "You have left the Party").build();
+		.addLocale(Locale.EN_US, "You have left the Party").build();
 	public static final Translation PARTY_NOT_IN = Translation.Builder.start("pmmo.youAreNotInAParty")
-			.addLocale(Locale.EN_US, "You are not in a Party").build();
+		.addLocale(Locale.EN_US, "You are not in a Party").build();
 	public static final Translation PARTY_INVITE = Translation.Builder.start("pmmo.youHaveInvitedAPlayerToYourParty")
-			.addLocale(Locale.EN_US, "You invited %1$s to your Party").build();
+		.addLocale(Locale.EN_US, "You invited %1$s to your Party").build();
 	public static final Translation PARTY_MEMBER_TOTAL = Translation.Builder.start("pmmo.totalMembers")
-			.addLocale(Locale.EN_US, "Total Members: %1$s").build();
+		.addLocale(Locale.EN_US, "Total Members: %1$s").build();
 	public static final Translation PARTY_MEMBER_LIST = Translation.Builder.start("pmmo.partyMemberListEntry")
-			.addLocale(Locale.EN_US, "%1$s").build();
+		.addLocale(Locale.EN_US, "%1$s").build();
 	public static final Translation PARTY_DECLINE = Translation.Builder.start("pmmo.youHaveDeclinedPartyInvitation")
-			.addLocale(Locale.EN_US, "You have declined the Party invitation").build();
+		.addLocale(Locale.EN_US, "You have declined the Party invitation").build();
 	public static final Translation PARTY_NO_INVITES = Translation.Builder.start("pmmo.youAreNotInvitedToAnyParty")
-			.addLocale(Locale.EN_US, "You have no pending Party invitations").build();
+		.addLocale(Locale.EN_US, "You have no pending Party invitations").build();
 	public static final Translation PARTY_JOINED = Translation.Builder.start("pmmo.youJoinedAParty")
-			.addLocale(Locale.EN_US, "You have joined the Party!").build();
+		.addLocale(Locale.EN_US, "You have joined the Party!").build();
 	public static final Translation PARTY_RESCIND_INVITE = Translation.Builder.start("pmmo.msg.rescindInvite")
-			.addLocale(Locale.EN_US, "You have removed the invite for %1$s").build();
+		.addLocale(Locale.EN_US, "You have removed the invite for %1$s").build();
 	public static final Translation PARTY_ACCEPT = Translation.Builder.start("pmmo.msg.accept")
-			.addLocale(Locale.EN_US, "Accept").build();
+		.addLocale(Locale.EN_US, "Accept").build();
 	public static final Translation PARTY_DECLINE_INVITE = Translation.Builder.start("pmmo.msg.decline")
-			.addLocale(Locale.EN_US, "Decline").build();
+		.addLocale(Locale.EN_US, "Decline").build();
 	public static final Translation PARTY_PLAYER_INVITED = Translation.Builder.start("pmmo.playerInvitedYouToAParty")
-			.addLocale(Locale.EN_US, "%1$s invited you to their Party, %2$s|%3$s").build();
+		.addLocale(Locale.EN_US, "%1$s invited you to their Party, %2$s|%3$s").build();
 	
 	//=========DENIAL MESSAGES====================
 	public static final Translation DENIAL_WEAR = Translation.Builder.start("pmmo.msg.denial.wear")
-			.addLocale(Locale.EN_US, "You are not skilled enough to wear %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to wear %1$s").build();
 	public static final Translation DENIAL_USE_ENCHANT = Translation.Builder.start("pmmo.msg.denial.use_enchantment")
-			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s with %2$s enchantment").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s with %2$s enchantment").build();
 	public static final Translation DENIAL_TOOL = Translation.Builder.start("pmmo.msg.denial.tool")
-			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as tool").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as tool").build();
 	public static final Translation DENIAL_WEAPON = Translation.Builder.start("pmmo.msg.denial.weapon")
-			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as a weapon").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as a weapon").build();
 	public static final Translation DENIAL_USE = Translation.Builder.start("pmmo.msg.denial.use")
-			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s").build();
 	public static final Translation DENIAL_PLACE = Translation.Builder.start("pmmo.msg.denial.place")
-			.addLocale(Locale.EN_US, "You are not skilled enough to place %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to place %1$s").build();
 	public static final Translation DENIAL_BREAK = Translation.Builder.start("pmmo.msg.denial.break")
-			.addLocale(Locale.EN_US, "You are not skilled enough to break %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to break %1$s").build();
 	public static final Translation DENIAL_BIOME = Translation.Builder.start("pmmo.msg.denial.biome")
-			.addLocale(Locale.EN_US, "You are not skilled enough to survive in %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to survive in %1$s").build();
 	public static final Translation DENIAL_KILL = Translation.Builder.start("pmmo.msg.denial.kill")
-			.addLocale(Locale.EN_US, "You are not skilled enough to kill %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to kill %1$s").build();
 	public static final Translation DENIAL_TRAVEL = Translation.Builder.start("pmmo.msg.denial.travel")
-			.addLocale(Locale.EN_US, "Travel to %1$s requires %2$s").build();
+		.addLocale(Locale.EN_US, "Travel to %1$s requires %2$s").build();
 	public static final Translation DENIAL_RIDE = Translation.Builder.start("pmmo.msg.denial.ride")
-			.addLocale(Locale.EN_US, "You are not skilled enough to ride %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to ride %1$s").build();
 	public static final Translation DENIAL_TAME = Translation.Builder.start("pmmo.msg.denial.tame")
-			.addLocale(Locale.EN_US, "You are not skilled enough to tame %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to tame %1$s").build();
 	public static final Translation DENIAL_ENTITY_INTERACT = Translation.Builder.start("pmmo.msg.denial.entity_interact")
-			.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
+		.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
 	public static final Translation DENIAL_SALVAGE = Translation.Builder.start("pmmo.msg.denial.salvage")
-			.addLocale(Locale.EN_US, "You cannot salvage this item. Either it cannot be salvaged or you are not skilled enough yet.").build();
+		.addLocale(Locale.EN_US, "You cannot salvage this item. Either it cannot be salvaged or you are not skilled enough yet.").build();
 	
 	//==========TUTORIAL TEXT======================
 	public static final Translation SALVAGE_TUTORIAL_HEADER = Translation.Builder.start("pmmo.client.tutorial.salvage.header")
-			.addLocale(Locale.EN_US, "Salvage Block").build();
+		.addLocale(Locale.EN_US, "Salvage Block").build();
 	public static final Translation SALVAGE_TUTORIAL_USAGE = Translation.Builder.start("pmmo.client.tutorial.salvage.usage")
-			.addLocale(Locale.EN_US, "While crouching, right click this block to salvage the items in your hand.").build();
+		.addLocale(Locale.EN_US, "While crouching, right click this block to salvage the items in your hand.").build();
 	
 	//==========COMPAT MESSAGES====================
 	public static final Translation FTBQ_XP_TITLE = Translation.Builder.start("ftbquests.reward.pmmo.xpreward")
-			.addLocale(Locale.EN_US, "Skill Xp Reward").build();
+		.addLocale(Locale.HU, "Skill Xp Reward")
+		.addLocale(Locale.JA, "Skill Xp Reward")
+		.addLocale(Locale.PL, "Nagroda XP za umijętność")
+		.addLocale(Locale.DE_DE, "Skill Xp Reward")
+		.addLocale(Locale.ES_AR, "Recompensa Exp de Atributo")
+		.addLocale(Locale.ES_CL, "Skill Xp Reward")
+		.addLocale(Locale.ES_EC, "Skill Xp Reward")
+		.addLocale(Locale.ES_ES, "Skill Xp Reward")
+		.addLocale(Locale.ES_MX, "Skill Xp Reward")
+		.addLocale(Locale.ES_UY, "Skill Xp Reward")
+		.addLocale(Locale.ES_VE, "Skill Xp Reward")
+		.addLocale(Locale.FR_FR, "Xp de Compétence en Récompense")
+		.addLocale(Locale.HU, "Skill Xp Reward")
+		.addLocale(Locale.IT_IT, "Skill Xp Reward")
+		.addLocale(Locale.JA, "Skill Xp Reward")
+		.addLocale(Locale.KO_KR, "스킬 XP 보상")
+		.addLocale(Locale.LT_LT, "Skill Xp Reward")
+		.addLocale(Locale.NL_NL, "Skill Xp Reward")
+		.addLocale(Locale.PL, "Nagroda XP za umijętność")
+		.addLocale(Locale.PT_BR, "Recompensa de Exp de Habilidade")
+		.addLocale(Locale.RU_RU, "Skill Xp Reward")
+		.addLocale(Locale.SV_SE, "Skill Xp Reward")
+		.addLocale(Locale.UK_UA, "Нагорода за майстерність")
+		.addLocale(Locale.ZH_CN, "技能经验奖励")
+		.addLocale(Locale.ZH_TW, "獲得技術經驗")
+		.addLocale(Locale.EN_US, "Skill Xp Reward").build();
 	public static final Translation FTBQ_XP_SKILL = Translation.Builder.start("ftbquests.reward.pmmo.xpreward.skill")
-			.addLocale(Locale.EN_US, "Skill").build();
+		.addLocale(Locale.HU, "Skill")
+		.addLocale(Locale.JA, "Skill")
+		.addLocale(Locale.PL, "Umiejętność")
+		.addLocale(Locale.DE_DE, "Skill")
+		.addLocale(Locale.ES_AR, "Atributo")
+		.addLocale(Locale.ES_CL, "Skill")
+		.addLocale(Locale.ES_EC, "Skill")
+		.addLocale(Locale.ES_ES, "Skill")
+		.addLocale(Locale.ES_MX, "Skill")
+		.addLocale(Locale.ES_UY, "Skill")
+		.addLocale(Locale.ES_VE, "Skill")
+		.addLocale(Locale.FR_FR, "Compétence")
+		.addLocale(Locale.HU, "Skill")
+		.addLocale(Locale.IT_IT, "Skill")
+		.addLocale(Locale.JA, "Skill")
+		.addLocale(Locale.KO_KR, "스킬")
+		.addLocale(Locale.LT_LT, "Skill")
+		.addLocale(Locale.NL_NL, "Skill")
+		.addLocale(Locale.PL, "Umiejętność")
+		.addLocale(Locale.PT_BR, "Habilidade")
+		.addLocale(Locale.RU_RU, "Skill")
+		.addLocale(Locale.SV_SE, "Skill")
+		.addLocale(Locale.UK_UA, "Майстерність")
+		.addLocale(Locale.ZH_CN, "技能")
+		.addLocale(Locale.ZH_TW, "技術")
+		.addLocale(Locale.EN_US, "Skill").build();
 	public static final Translation FTBQ_XP_AMOUNT = Translation.Builder.start("ftbquests.reward.pmmo.xpreward.amount")
-			.addLocale(Locale.EN_US, "Xp Reward").build();
+		.addLocale(Locale.HU, "Xp Reward")
+		.addLocale(Locale.JA, "Xp Reward")
+		.addLocale(Locale.PL, "Nagroda XP")
+		.addLocale(Locale.DE_DE, "Xp Reward")
+		.addLocale(Locale.ES_AR, "Recompensa Exp")
+		.addLocale(Locale.ES_CL, "Xp Reward")
+		.addLocale(Locale.ES_EC, "Xp Reward")
+		.addLocale(Locale.ES_ES, "Xp Reward")
+		.addLocale(Locale.ES_MX, "Xp Reward")
+		.addLocale(Locale.ES_UY, "Xp Reward")
+		.addLocale(Locale.ES_VE, "Xp Reward")
+		.addLocale(Locale.FR_FR, "Xp en Récompense")
+		.addLocale(Locale.HU, "Xp Reward")
+		.addLocale(Locale.IT_IT, "Xp Reward")
+		.addLocale(Locale.JA, "Xp Reward")
+		.addLocale(Locale.KO_KR, "XP 보상")
+		.addLocale(Locale.LT_LT, "Xp Reward")
+		.addLocale(Locale.NL_NL, "Xp Reward")
+		.addLocale(Locale.PL, "Nagroda XP")
+		.addLocale(Locale.PT_BR, "Recompensa de Exp")
+		.addLocale(Locale.RU_RU, "Xp Reward")
+		.addLocale(Locale.SV_SE, "Xp Reward")
+		.addLocale(Locale.UK_UA, "Нагорода за досвід")
+		.addLocale(Locale.ZH_CN, "经验奖励")
+		.addLocale(Locale.ZH_TW, "獲得經驗")
+		.addLocale(Locale.EN_US, "Xp Reward").build();
 	public static final Translation FTBQ_LVL_TITLE = Translation.Builder.start("ftbquests.reward.pmmo.levelreward")
-			.addLocale(Locale.EN_US, "Skill Level Reward").build();
+		.addLocale(Locale.HU, "Skill Level Reward")
+		.addLocale(Locale.JA, "Skill Level Reward")
+		.addLocale(Locale.PL, "Nagroda za poziom umiejętności")
+		.addLocale(Locale.DE_DE, "Skill Level Reward")
+		.addLocale(Locale.ES_AR, "Recompensa por Nivel de Atributo")
+		.addLocale(Locale.ES_CL, "Skill Level Reward")
+		.addLocale(Locale.ES_EC, "Skill Level Reward")
+		.addLocale(Locale.ES_ES, "Skill Level Reward")
+		.addLocale(Locale.ES_MX, "Skill Level Reward")
+		.addLocale(Locale.ES_UY, "Skill Level Reward")
+		.addLocale(Locale.ES_VE, "Skill Level Reward")
+		.addLocale(Locale.FR_FR, "Niveau de Compétence en Récompense")
+		.addLocale(Locale.HU, "Skill Level Reward")
+		.addLocale(Locale.IT_IT, "Skill Level Reward")
+		.addLocale(Locale.JA, "Skill Level Reward")
+		.addLocale(Locale.KO_KR, "스킬 레벨 보상")
+		.addLocale(Locale.LT_LT, "Skill Level Reward")
+		.addLocale(Locale.NL_NL, "Skill Level Reward")
+		.addLocale(Locale.PL, "Nagroda za poziom umiejętności")
+		.addLocale(Locale.PT_BR, "Recompensa de Nível de Habilidade")
+		.addLocale(Locale.RU_RU, "Skill Level Reward")
+		.addLocale(Locale.SV_SE, "Skill Level Reward")
+		.addLocale(Locale.UK_UA, "Нагорода за рівень майстерності")
+		.addLocale(Locale.ZH_CN, "技能等级奖励")
+		.addLocale(Locale.ZH_TW, "獲得技術等級")
+		.addLocale(Locale.EN_US, "Skill Level Reward").build();
 	public static final Translation FTBQ_LVL_SKILL = Translation.Builder.start("ftbquests.reward.pmmo.levelreward.skill")
-			.addLocale(Locale.EN_US, "Skill").build();
+		.addLocale(Locale.HU, "Skill")
+		.addLocale(Locale.JA, "Skill")
+		.addLocale(Locale.PL, "Umiejętność")
+		.addLocale(Locale.DE_DE, "Skill")
+		.addLocale(Locale.ES_AR, "Atributo")
+		.addLocale(Locale.ES_CL, "Skill")
+		.addLocale(Locale.ES_EC, "Skill")
+		.addLocale(Locale.ES_ES, "Skill")
+		.addLocale(Locale.ES_MX, "Skill")
+		.addLocale(Locale.ES_UY, "Skill")
+		.addLocale(Locale.ES_VE, "Skill")
+		.addLocale(Locale.FR_FR, "Compétence")
+		.addLocale(Locale.HU, "Skill")
+		.addLocale(Locale.IT_IT, "Skill")
+		.addLocale(Locale.JA, "Skill")
+		.addLocale(Locale.KO_KR, "스킬")
+		.addLocale(Locale.LT_LT, "Skill")
+		.addLocale(Locale.NL_NL, "Skill")
+		.addLocale(Locale.PL, "Umiejętność")
+		.addLocale(Locale.PT_BR, "Habilidade")
+		.addLocale(Locale.RU_RU, "Skill")
+		.addLocale(Locale.SV_SE, "Skill")
+		.addLocale(Locale.UK_UA, "Майстерність")
+		.addLocale(Locale.ZH_CN, "技能")
+		.addLocale(Locale.ZH_TW, "技術")
+		.addLocale(Locale.EN_US, "Skill").build();
 	public static final Translation FTBQ_LVL_AMOUNT = Translation.Builder.start("ftbquests.reward.pmmo.levelreward.amount")
-			.addLocale(Locale.EN_US, "Level Reward").build();
+		.addLocale(Locale.HU, "Level Reward")
+		.addLocale(Locale.JA, "Level Reward")
+		.addLocale(Locale.PL, "Nagroda za poziom")
+		.addLocale(Locale.DE_DE, "Level Reward")
+		.addLocale(Locale.ES_AR, "Recompensa por Nivel")
+		.addLocale(Locale.ES_CL, "Level Reward")
+		.addLocale(Locale.ES_EC, "Level Reward")
+		.addLocale(Locale.ES_ES, "Level Reward")
+		.addLocale(Locale.ES_MX, "Level Reward")
+		.addLocale(Locale.ES_UY, "Level Reward")
+		.addLocale(Locale.ES_VE, "Level Reward")
+		.addLocale(Locale.FR_FR, "Niveau en Récompense")
+		.addLocale(Locale.HU, "Level Reward")
+		.addLocale(Locale.IT_IT, "Level Reward")
+		.addLocale(Locale.JA, "Level Reward")
+		.addLocale(Locale.KO_KR, "레벨 보상")
+		.addLocale(Locale.LT_LT, "Level Reward")
+		.addLocale(Locale.NL_NL, "Level Reward")
+		.addLocale(Locale.PL, "Nagroda za poziom")
+		.addLocale(Locale.PT_BR, "Recompensa de Nível")
+		.addLocale(Locale.RU_RU, "Level Reward")
+		.addLocale(Locale.SV_SE, "Level Reward")
+		.addLocale(Locale.UK_UA, "Винагорода за рівень")
+		.addLocale(Locale.ZH_CN, "等级奖励")
+		.addLocale(Locale.ZH_TW, "獲得等級")
+		.addLocale(Locale.EN_US, "Level Reward").build();
 	public static final Translation FTBQ_SKILL_TITLE = Translation.Builder.start("ftbquests.task.pmmo.skill")
-			.addLocale(Locale.EN_US, "Skill").build();
+		.addLocale(Locale.HU, "Skill")
+		.addLocale(Locale.JA, "Skill")
+		.addLocale(Locale.PL, "Umiejętność")
+		.addLocale(Locale.DE_DE, "Fähigkeit")
+		.addLocale(Locale.ES_AR, "Habilidad")
+		.addLocale(Locale.ES_CL, "Habilidad")
+		.addLocale(Locale.ES_EC, "Habilidad")
+		.addLocale(Locale.ES_ES, "Habilidad")
+		.addLocale(Locale.ES_MX, "Habilidad")
+		.addLocale(Locale.ES_UY, "Habilidad")
+		.addLocale(Locale.ES_VE, "Habilidad")
+		.addLocale(Locale.FR_FR, "Compétence")
+		.addLocale(Locale.HU, "Skill")
+		.addLocale(Locale.IT_IT, "Skill")
+		.addLocale(Locale.JA, "Skill")
+		.addLocale(Locale.KO_KR, "스킬")
+		.addLocale(Locale.LT_LT, "Skill")
+		.addLocale(Locale.NL_NL, "Skill")
+		.addLocale(Locale.PL, "Umiejętność")
+		.addLocale(Locale.PT_BR, "Habilidade")
+		.addLocale(Locale.RU_RU, "Skill")
+		.addLocale(Locale.SV_SE, "Skill")
+		.addLocale(Locale.UK_UA, "Майстерність")
+		.addLocale(Locale.ZH_CN, "技能")
+		.addLocale(Locale.ZH_TW, "技能")
+		.addLocale(Locale.EN_US, "Skill").build();
 	public static final Translation FTBQ_SKILL_SKILL = Translation.Builder.start("ftbquests.task.pmmo.skill.skill")
-			.addLocale(Locale.EN_US, "Skill").build();
+		.addLocale(Locale.HU, "Skill")
+		.addLocale(Locale.JA, "Skill")
+		.addLocale(Locale.PL, "Umiejętność")
+		.addLocale(Locale.DE_DE, "Fähigkeit")
+		.addLocale(Locale.ES_AR, "Atributo")
+		.addLocale(Locale.ES_CL, "Atributo")
+		.addLocale(Locale.ES_EC, "Atributo")
+		.addLocale(Locale.ES_ES, "Atributo")
+		.addLocale(Locale.ES_MX, "Atributo")
+		.addLocale(Locale.ES_UY, "Atributo")
+		.addLocale(Locale.ES_VE, "Atributo")
+		.addLocale(Locale.FR_FR, "Compétence")
+		.addLocale(Locale.HU, "Skill")
+		.addLocale(Locale.IT_IT, "Skill")
+		.addLocale(Locale.JA, "Skill")
+		.addLocale(Locale.KO_KR, "스킬")
+		.addLocale(Locale.LT_LT, "Skill")
+		.addLocale(Locale.NL_NL, "Skill")
+		.addLocale(Locale.PL, "Umiejętność")
+		.addLocale(Locale.PT_BR, "Habilidade")
+		.addLocale(Locale.RU_RU, "Skill")
+		.addLocale(Locale.SV_SE, "Skill")
+		.addLocale(Locale.UK_UA, "Майстерність")
+		.addLocale(Locale.ZH_CN, "技能")
+		.addLocale(Locale.ZH_TW, "技能")
+		.addLocale(Locale.EN_US, "Skill").build();
 	public static final Translation FTBQ_SKILL_LEVEL = Translation.Builder.start("ftbquests.task.pmmo.skill.requiredLevel")
-			.addLocale(Locale.EN_US, "Required Level").build();
+		.addLocale(Locale.HU, "Required Level")
+		.addLocale(Locale.JA, "Required Level")
+		.addLocale(Locale.PL, "Wymagany Poziom")
+		.addLocale(Locale.DE_DE, "Required Level")
+		.addLocale(Locale.ES_AR, "Nivel Requerido")
+		.addLocale(Locale.ES_CL, "Nivel Requerido")
+		.addLocale(Locale.ES_EC, "Nivel Requerido")
+		.addLocale(Locale.ES_ES, "Nivel Requerido")
+		.addLocale(Locale.ES_MX, "Nivel Requerido")
+		.addLocale(Locale.ES_UY, "Nivel Requerido")
+		.addLocale(Locale.ES_VE, "Nivel Requerido")
+		.addLocale(Locale.FR_FR, "Niveau requis")
+		.addLocale(Locale.HU, "Required Level")
+		.addLocale(Locale.IT_IT, "Required Level")
+		.addLocale(Locale.JA, "Required Level")
+		.addLocale(Locale.KO_KR, "요구 레벨")
+		.addLocale(Locale.LT_LT, "Required Level")
+		.addLocale(Locale.NL_NL, "Required Level")
+		.addLocale(Locale.PL, "Wymagany Poziom")
+		.addLocale(Locale.PT_BR, "Nível Exigido")
+		.addLocale(Locale.RU_RU, "Required Level")
+		.addLocale(Locale.SV_SE, "Required Level")
+		.addLocale(Locale.UK_UA, "Необхідний рівень")
+		.addLocale(Locale.ZH_CN, "需求等级")
+		.addLocale(Locale.ZH_TW, "需求等級")
+		.addLocale(Locale.EN_US, "Required Level").build();
 	
 	@Override
 	protected void addTranslations() {
