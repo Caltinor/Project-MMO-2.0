@@ -45,7 +45,7 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.18.2-5.1.1'
+version = '1.18.2-5.1.2'
 group = 'harmonised.pmmo'
 archivesBaseName = 'pmmo'
 
@@ -119,6 +119,7 @@ dependencies {
   	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
   	//runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.198')
+  	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337390')
 }
 
 jar {
@@ -152,4 +153,8 @@ publishing {
             url "file://${project.projectDir}/mcmodsrepo"
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    compileJava.options.encoding = 'UTF-8' 
 }
