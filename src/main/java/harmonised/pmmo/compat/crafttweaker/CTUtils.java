@@ -203,7 +203,7 @@ public class CTUtils implements IRuntimeAction{
 	}
 	/**registers a configuration setting for items which can be obtained 
 	 * via salvage from the item supplied.
-	 * <p>This class provides {@link SalvageBuilder} as a means to construct
+	 * <p>This class provides {@link CTUtils.SalvageBuilder} as a means to construct
 	 * the salvage settings for each output object</p>
 	 * 
 	 * @param item a key for the item to be consumed by the salvage operation
@@ -253,8 +253,7 @@ public class CTUtils implements IRuntimeAction{
 		default -> {}}
 	}
 	
-	/**A builder class used to create a {@link harmonised.pmmo.config.codecs.CodecTypes SalvageData}
-	 * for use in {@link APIUtils#registerSalvage(ResourceLocation, Map, boolean) registerSalvage}
+	/**A builder class used to create a Salvage Data for use as a parameter.
 	 * 
 	 * @author Caltinor
 	 *

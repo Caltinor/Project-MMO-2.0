@@ -101,7 +101,7 @@ dependencies {
     //CT Processors
     annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
     annotationProcessor 'net.minecraftforge:forge:1.19.2-43.2.3'
-    annotationProcessor 'com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.24'
+    annotationProcessor 'com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.25'
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0:api")
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
@@ -110,7 +110,7 @@ dependencies {
   	compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
   	compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	compileOnly('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.24')
+  	compileOnly('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.25')
   	
   	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
@@ -119,9 +119,9 @@ dependencies {
   	//runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
   	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	//runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.14')
+  	//runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.25')
   	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
-  	runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
+  	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
 }
 
 jar {
@@ -163,4 +163,8 @@ tasks.withType(Copy).all {
 
 tasks.withType(JavaCompile).configureEach {
     compileJava.options.encoding = 'UTF-8' 
+}
+
+compileJava {
+    options.compilerArgs << "-Acrafttweaker.processor.document.output_directory=${file('docsOut')}"
 }
