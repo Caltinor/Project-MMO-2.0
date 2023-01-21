@@ -12,8 +12,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 
 public class PotionHandler {
+	private static final String BREWED = "brewXpAwarded";
 
 	public static void handle(PlayerBrewedPotionEvent event) {
+		if (event.getStack().getTag().getBoolean(BREWED))
+			return;
 		Player player = event.getPlayer();
 		Core core = Core.get(player.getLevel());
 		boolean serverSide = !player.level.isClientSide; 
@@ -24,5 +27,6 @@ public class PotionHandler {
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
+		event.getStack().getTag().putBoolean(BREWED, true);
 	}
 }
