@@ -166,10 +166,10 @@ public class APIUtils {
 		return Core.get(level).getExperienceAwards(type, pos, level, null, new CompoundTag());
 	}
 	
-	/**Obtians a map of the skills and experience amount that would be awarded for the provided
+	/**Obtains a map of the skills and experience amount that would be awarded for the provided
 	 * entity and event.  The logical side argument allows you to specify if you want to obtain 
 	 * this information from the server data or from the client clone.  Which side used will 
-	 * depend entirely on the sidedeness context of your implementation. <br><br>
+	 * depend entirely on the sidedness context of your implementation. <br><br>
 	 * <b>NOTE:</b><i>This is a raw map from the configuration settings and does not necessarily
 	 * reflect final values during gameplay.  Many events make changes to experience values
 	 * before committing them to the player's data.</i>
@@ -184,6 +184,28 @@ public class APIUtils {
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);;
 		return Core.get(side).getExperienceAwards(type, entity, null, new CompoundTag());
+	}
+	
+	/**<p>Obtains a map of the skills and experience amount that would be awarded for the object
+	 * identified in the object type for the provided event.  The logical side lets you specify
+	 * if you want to obtain this information from the server data or from the client clone.
+	 * The side you use will depend entirely on the sidedness context of your implementation</p>
+	 * <p><b>NOTE:</b><i>This is the raw map from the configuration and is obtained by bypassing
+	 * the configurations that would be provided via API. This should only be used to intentionally
+	 * bypass those features.</i></p>
+	 * 
+	 * @param oType what kind of object the ID refers to
+	 * @param type the event this configuration setting is being obtained for
+	 * @param objectID the object's unique ID
+	 * @param side the side to execute the data getter
+	 * @return a map of skill names and experience values
+	 */
+	public static Map<String, Long> getXpAwardMap(ObjectType oType, EventType type, ResourceLocation objectID, LogicalSide side) {
+		Preconditions.checkNotNull(oType);
+		Preconditions.checkNotNull(type);
+		Preconditions.checkNotNull(objectID);
+		Preconditions.checkNotNull(side);
+		return Core.get(side).getCommonXpAwardData(new HashMap<>(), type, objectID, null, oType, new CompoundTag());
 	}
 	
 	/**Returns a skill-level map for the requirements of the item and the requirement type passed.
@@ -222,7 +244,7 @@ public class APIUtils {
 	
 	/**Returns a skill-level map for the requirements of the entity and the requirement type passed.
 	 * Note that registered entity predicates do not have to conform to the level system in determining
-	 * whether an block action is permitted or not.  Because of this, a missing or innacurate tooltip 
+	 * whether an block action is permitted or not.  Because of this, a missing or inaccurate tooltip 
 	 * registration may not reflect the outcome of a predicate check during gameplay.
 	 * 
 	 * @param entity the entity being queried
@@ -235,6 +257,26 @@ public class APIUtils {
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);
 		return Core.get(side).getReqMap(type, entity);
+	}
+	
+	/**<p>Returns a skill-level map for the requirements of the object identified in the type provided
+	 * for the requirement type provided.</p>
+	 * <p><b>NOTE:</b><i> This method bypasses all API requirement suppliers and obtains the base 
+	 * configuration from the default PMMO configuration settings.  This should only be used when 
+	 * intentionally needing to bypass API behavior.</i></p> 
+	 * 
+	 * @param oType what kind of object the ID refers to
+	 * @param objectID the object's unique ID
+	 * @param type the requirement type for this configuration
+	 * @param side the side to execute the data getter
+	 * @return a map of skill names an associated level requirements
+	 */
+	public static Map<String, Integer> getRequirementMap(ObjectType oType, ResourceLocation objectID, ReqType type, LogicalSide side) {
+		Preconditions.checkNotNull(oType);
+		Preconditions.checkNotNull(type);
+		Preconditions.checkNotNull(objectID);
+		Preconditions.checkNotNull(side);
+		return Core.get(side).getCommonReqData(new HashMap<>(), oType, objectID, type, new CompoundTag());
 	}
 	
 	//===============CONFIGURATION SUPPLIERS=========================
