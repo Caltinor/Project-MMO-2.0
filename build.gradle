@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.5-3.67'
+version = '1.16.5-3.67.7'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
