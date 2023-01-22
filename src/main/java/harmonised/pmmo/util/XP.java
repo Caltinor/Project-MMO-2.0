@@ -1939,16 +1939,17 @@ public class XP
 
 	public static void addWorldXpDrop(WorldXpDrop xpDrop, ServerPlayerEntity player)
 	{
-//        System.out.println("xp drop added at " + xpDrop.getPos());
-		xpDrop.startXp = xpDrop.startXp * (float) XP.getMultiplier(player, xpDrop.getSkill());
-		if(Config.getPreferencesMap(player).getOrDefault("worldXpDropsEnabled", 1D) != 0)
+		if(Config.forgeConfig.worldXpDropsEnabled.get()) {
+			xpDrop.startXp = xpDrop.startXp * (float) XP.getMultiplier(player, xpDrop.getSkill());
+			
 			NetworkHandler.sendToPlayer(new MessageWorldXp(xpDrop), player);
-		UUID uuid = player.getUniqueID();
-		for(ServerPlayerEntity otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers())
-		{
-			double distance = Util.getDistance(xpDrop.getPos(), otherPlayer.getPositionVec());
-			if (distance < 64D && !uuid.equals(otherPlayer.getUniqueID()) && Config.getPreferencesMap(otherPlayer).getOrDefault("showOthersWorldXpDrops", 0D) != 0)
-				NetworkHandler.sendToPlayer(new MessageWorldXp(xpDrop), otherPlayer);
+			UUID uuid = player.getUniqueID();
+			for(ServerPlayerEntity otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers())
+			{
+				double distance = Util.getDistance(xpDrop.getPos(), otherPlayer.getPositionVec());
+				if (distance < 64D && !uuid.equals(otherPlayer.getUniqueID()) && Config.getPreferencesMap(otherPlayer).getOrDefault("showOthersWorldXpDrops", 0D) != 0)
+					NetworkHandler.sendToPlayer(new MessageWorldXp(xpDrop), otherPlayer);
+			}
 		}
 	}
 
