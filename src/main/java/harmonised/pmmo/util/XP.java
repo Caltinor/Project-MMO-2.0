@@ -1726,7 +1726,7 @@ public class XP
 						Effect effect = ForgeRegistries.POTIONS.getValue(XP.getResLoc(entry.getKey()));
 
 						if(effect != null)
-							player.addPotionEffect(new EffectInstance(effect, 75, (int) Math.floor(entry.getValue()), false, false));
+							player.addPotionEffect(new EffectInstance(effect, 150, (int) Math.floor(entry.getValue()), false, false));
 					}
 				}
 			}
