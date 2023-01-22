@@ -10,22 +10,21 @@ buildscript
     }
     dependencies
     {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.5"
+		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: "com.wynprice.cursemaven"
 
 version = '1.16.5-3.67'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
 minecraft
 {
@@ -104,7 +103,7 @@ repositories
 
     maven
     {
-        url "http://dvs1.progwml6.com/files/maven/"
+        url "https://dvs1.progwml6.com/files/maven/"
     }
 
     maven
@@ -116,6 +115,10 @@ repositories
     {
         url = "https://maven.blamejared.com/"
     }
+	maven {
+    	url 'https://cursemaven.com'
+    	content { includeGroup 'curse.maven' }
+	}
 
     mavenLocal()
 }
@@ -123,59 +126,48 @@ repositories
 dependencies
         {
             minecraft 'net.minecraftforge:forge:1.16.5-36.1.23'
-            implementation 'com.google.code.gson:gson:2.8.6'
 
             compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52:api")
-            runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52")
-//            runtimeOnly fg.deobf("curse.maven:jei:3039766")
-//            runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
-            runtimeOnly fg.deobf("curse.maven:curio-of-undying:3122649")
-//            runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
-//            runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
-
-//            runtimeOnly fg.deobf("curse.maven:azuredoom-doom-mod:3009638")
-
-//            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
-//            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
-            compileOnly fg.deobf("curse.maven:ftb-quests:3385407")
-            runtimeOnly fg.deobf("curse.maven:ftb-quests:3385407")
-            compileOnly fg.deobf("curse.maven:ftb-gui-library:3373833")
-            runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3373833")
-            compileOnly fg.deobf("curse.maven:item-filters:3376819")
-            runtimeOnly fg.deobf("curse.maven:item-filters:3376819")
-            compileOnly fg.deobf("curse.maven:ftb-teams-forge:3373835")
-            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3373835")
-            compileOnly fg.deobf("curse.maven:architectury-forge:3385660")
-            runtimeOnly fg.deobf("curse.maven:architectury-forge:3385660")
-
-            runtimeOnly fg.deobf("curse.maven:cgm:3224957")
-            runtimeOnly fg.deobf("curse.maven:obfuscate:3336021")
-
-            compileOnly fg.deobf("curse.maven:dynamictrees:3304858")
-            runtimeOnly fg.deobf("curse.maven:dynamictrees:3304858")
-
-
-//            compileOnly fg.deobf("curse.maven:engineers-decor:3253781")
-//            runtimeOnly fg.deobf("curse.maven:engineers-decor:3253781")
-
-//            compileOnly fg.deobf("curse.maven:epic-fight-mod:3281689")
-//            runtimeOnly fg.deobf("curse.maven:epic-fight-mod:3281689")
-
-
-//            compileOnly fg.deobf("curse.maven:tinkers-construct:3263129")
-//            runtimeOnly fg.deobf("curse.maven:tinkers-construct:3263129")
-//            compileOnly fg.deobf("curse.maven:mantle:3180804")
-//            runtimeOnly fg.deobf("curse.maven:mantle:3180804")
-
-//            compileOnly fg.deobf("curse.maven:patchouli:3126931")
-//            runtimeOnly fg.deobf("curse.maven:patchouli:3126931")
-//            compileOnly fg.deobf("curse.maven:geckolib:3259843")
-//            runtimeOnly fg.deobf("curse.maven:geckolib:3259843")
-//            compileOnly fg.deobf("curse.maven:ars-nouveau:3259810")
-//            runtimeOnly fg.deobf("curse.maven:ars-nouveau:3259810")
-
-            runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0")
-            compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0:api")
+			compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
+            compileOnly fg.deobf("curse.maven:ftb-quests-289412:3385407")
+			compileOnly fg.deobf("curse.maven:ftb-gui-library-404465:3373833")
+			compileOnly fg.deobf("curse.maven:item-filters-309674:3376819")
+			compileOnly fg.deobf("curse.maven:ftb-teams-forge-404468:3373835")
+			compileOnly fg.deobf("curse.maven:architectury-forge-419699:3385660")
+			//compileOnly fg.deobf("curse.maven:dynamictrees:3304858")
+			//compileOnly fg.deobf("curse.maven:engineers-decor:3253781")
+			//compileOnly fg.deobf("curse.maven:epic-fight-mod:3281689")
+			//compileOnly fg.deobf("curse.maven:tinkers-construct:3263129")
+			//compileOnly fg.deobf("curse.maven:mantle:3180804")
+			//compileOnly fg.deobf("curse.maven:patchouli:3126931")
+			//compileOnly fg.deobf("curse.maven:geckolib:3259843")
+			//compileOnly fg.deobf("curse.maven:ars-nouveau:3259810")
+			compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0:api")
+			
+            //runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52")
+			//runtimeOnly fg.deobf("curse.maven:jei:3039766")
+            //runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
+            //runtimeOnly fg.deobf("curse.maven:curio-of-undying:3122649")
+            //runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
+            //runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
+            //runtimeOnly fg.deobf("curse.maven:azuredoom-doom-mod:3009638")
+            //runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")            
+            //runtimeOnly fg.deobf("curse.maven:ftb-quests:3385407")            
+            //runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3373833")            
+            //runtimeOnly fg.deobf("curse.maven:item-filters:3376819")            
+            //runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3373835")            
+            //runtimeOnly fg.deobf("curse.maven:architectury-forge:3385660")
+            //runtimeOnly fg.deobf("curse.maven:cgm:3224957")
+            //runtimeOnly fg.deobf("curse.maven:obfuscate:3336021")
+			//runtimeOnly fg.deobf("curse.maven:dynamictrees:3304858")            
+            //runtimeOnly fg.deobf("curse.maven:engineers-decor:3253781")            
+            //runtimeOnly fg.deobf("curse.maven:epic-fight-mod:3281689")            
+            //runtimeOnly fg.deobf("curse.maven:tinkers-construct:3263129")           
+            //runtimeOnly fg.deobf("curse.maven:mantle:3180804")            
+            //runtimeOnly fg.deobf("curse.maven:patchouli:3126931")            
+            //runtimeOnly fg.deobf("curse.maven:geckolib:3259843")            
+            //runtimeOnly fg.deobf("curse.maven:ars-nouveau:3259810")
+            //runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0")
         }
 
 jar
@@ -219,9 +211,11 @@ publishing
     }
 }
 
-apply plugin: 'org.spongepowered.mixin'
-
 mixin
 {
-    add sourceSets.main, "${modid}.refmap.json"
+    config "pmmo.mixins.json"
+    add sourceSets.main, "pmmo.refmap.json"
+    disableEclipseAddon = true
+
+    debug.export = true
 }
