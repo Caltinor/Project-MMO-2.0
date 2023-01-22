@@ -153,15 +153,6 @@ public class EventHandler
 		ServerStoppingHandler.handleServerStop(event);
 	}
 
-//	@SubscribeEvent
-//	public static void itemThrown(EntityItemPickupEvent event)
-//	{
-//		PickupHandler.handlePickup(event);
-//	}
-
-//	@SubscribeEvent
-//	public static void furnace(PlayerEvent.ItemSmeltedEvent)
-
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void sleepDone(SleepFinishedTimeEvent event)
 	{

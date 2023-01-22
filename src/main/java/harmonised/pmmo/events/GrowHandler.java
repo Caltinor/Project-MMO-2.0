@@ -6,8 +6,10 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
+import net.minecraft.block.AttachedStemBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.StemBlock;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
@@ -97,6 +99,9 @@ public class GrowHandler
             {
                 ageProp = BlockStateProperties.AGE_0_7;
                 maxAge = 7;
+                //Fixes #178 preventing place attempts from awarding XP when the block isn't placed
+                if (event.getState().getBlock() instanceof StemBlock && state.get(ageProp) == maxAge)
+                	return;
             }
             else if(state.hasProperty(BlockStateProperties.AGE_0_15))
             {
@@ -134,7 +139,7 @@ public class GrowHandler
             }
 
             if(age == maxAge)
-            {
+            {                
                 Map<String, Double> award = XP.getXpBypass(resLoc, JType.XP_VALUE_GROW);
                 if(award.size() == 0)
                     award.put(Skill.FARMING.toString(), Config.forgeConfig.defaultCropGrowXp.get());
