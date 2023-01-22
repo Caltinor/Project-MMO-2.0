@@ -1,13 +1,10 @@
 package harmonised.pmmo;
 
-import dev.ftb.mods.ftbquests.quest.reward.RewardType;
-import dev.ftb.mods.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
-import harmonised.pmmo.events.RegisterHandler;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.ftb_quests.FTBQHandler;
 import harmonised.pmmo.network.NetworkHandler;
@@ -31,7 +28,6 @@ import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.JarVersionLookupHandler;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
