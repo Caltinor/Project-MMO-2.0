@@ -38,7 +38,9 @@ public class MobAttributeHandler {
 	);
 	
 	@SubscribeEvent
-	public static void onMobSpawn(SpecialSpawn event) {		
+	public static void onMobSpawn(SpecialSpawn event) {
+	    if (!Config.MOB_SCALING_ENABLED.get())
+	        return;
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
 			LivingEntity entity = event.getEntityLiving();
 			int diffScale = event.getWorld().getDifficulty().getId();
