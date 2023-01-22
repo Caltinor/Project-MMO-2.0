@@ -1,7 +1,6 @@
 package harmonised.pmmo.util;
 
 import com.google.common.collect.Lists;
-import javafx.util.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
