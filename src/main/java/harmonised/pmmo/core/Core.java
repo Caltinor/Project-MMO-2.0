@@ -61,7 +61,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 /**<p>This class bridges the gap between various systems within Project MMO.
  * Methods within this class connect these distinct systems without 
- * poluting the features themselves with content that is not true to their
+ * polluting the features themselves with content that is not true to their
  * purpose.</p>  
  * <p>This class also allows for client and server to have their own copies
  * of both the data itself and the logic.  Using this approach Core can
@@ -141,7 +141,7 @@ public class Core {
 			xpValues.put(skill, (long)((double)value * Config.SKILL_MODIFIERS.get().getOrDefault(skill, Config.GLOBAL_MODIFIER.get())));
 		});
 		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i) instanceof FakePlayer) continue;
+			if (players.get(i) instanceof FakePlayer || players.get(i).isDeadOrDying()) continue;
 			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
 				long xpAward = award.getValue();
 				if (players.size() > 1)
