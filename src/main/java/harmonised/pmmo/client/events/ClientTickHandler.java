@@ -54,7 +54,7 @@ public class ClientTickHandler {
 		public GainEntry(String skill, long value) {
 			this.duration = MsLoggy.DEBUG.logAndReturn(Config.GAIN_LIST_LINGER_DURATION.get()
 								, LOG_CODE.GUI, "Gain Duration Set as: {}");
-			display = Component.literal("+"+value+" ")
+			display = Component.literal((value >= 0 ? "+" : "")+value+" ")
 					.append(Component.translatable("pmmo."+skill))
 					.setStyle(CoreUtils.getSkillStyle(skill));
 		}
