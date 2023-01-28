@@ -8,6 +8,8 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.function.TriFunction;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -90,7 +92,7 @@ public class APIUtils {
 	
 	/**Gets the raw xp value associated with the specified skill and player.
 	 * 
-	 * @param skill skill name.  Skills are case senstivive and usually lowercase.
+	 * @param skill skill name.  Skills are case sensitive and usually lowercase.
 	 * @param player the player whose experience is being sought.
 	 * @return the raw experience earned in the specified skill.
 	 */
@@ -102,7 +104,7 @@ public class APIUtils {
 	
 	/**Sets the raw XP value for the player in the skill specified.
 	 * 
-	 * @param skill skill name.  Skills are case senstivie and usually lowercase.
+	 * @param skill skill name.  Skills are case sensitive and usually lowercase.
 	 * @param player the player whose skill is being set.
 	 * @param xpRaw the new experience amount to be set for this skill
 	 */
@@ -126,70 +128,78 @@ public class APIUtils {
 		return Core.get(player.level).getData().setXpDiff(player.getUUID(), skill, change);
 	}
 	
-	/**Obtians a map of the skills and experience amount that would be awarded for the provided
+	/**<p>Obtains a map of the skills and experience amount that would be awarded for the provided
 	 * item and event.  The logical side argument allows you to specify if you want to obtain 
 	 * this information from the server data or from the client clone.  Which side used will 
-	 * depend entirely on the sidedeness context of your implementation. <br><br>
-	 * <b>NOTE:</b><i>This is a raw map from the configuration settings and does not necessarily
+	 * depend entirely on the sidedness context of your implementation.</p>
+	 * <p>If the player is argument is not null, this map will also return the xp modified by
+	 * the player's bonuses.</p>
+	 * <p><b>NOTE:</b><i>This is a raw map from the configuration settings and does not necessarily
 	 * reflect final values during gameplay.  Many events make changes to experience values
-	 * before committing them to the player's data.</i>
+	 * before committing them to the player's data.</i></p>
 	 * 
 	 * @param item the itemstack being queried.
 	 * @param type the event type the configuration is being specified for
 	 * @param side the logical side this should be querying.
 	 * @return a skill and experience map for the event type and item.
 	 */
-	public static Map<String, Long> getXpAwardMap(ItemStack item, EventType type, LogicalSide side) {
+	public static Map<String, Long> getXpAwardMap(ItemStack item, EventType type, LogicalSide side, @Nullable Player player) {
 		Preconditions.checkNotNull(item);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);
-		return Core.get(side).getExperienceAwards(type, item, null, new CompoundTag());
+		return Core.get(side).getExperienceAwards(type, item, player, new CompoundTag());
 	}
 	
-	/**Obtians a map of the skills and experience amount that would be awarded for the provided
+	/**<p>Obtains a map of the skills and experience amount that would be awarded for the provided
 	 * block and event.  The level argument allows you to specify if you want to obtain 
 	 * this information from the server data or from the client clone.  Which side used will 
-	 * depend entirely on the sidedeness context of your implementation. <br><br>
-	 * <b>NOTE:</b><i>This is a raw map from the configuration settings and does not necessarily
+	 * depend entirely on the sidedness context of your implementation.</p>
+	 * <p>If the player is argument is not null, this map will also return the xp modified by
+	 * the player's bonuses.</p>
+	 * <p><b>NOTE:</b><i>This is a raw map from the configuration settings and does not necessarily
 	 * reflect final values during gameplay.  Many events make changes to experience values
-	 * before committing them to the player's data.</i>
+	 * before committing them to the player's data.</i></p>
 	 * 
 	 * @param level the level object associated with the block. Using a ClientLevel will use the client's mirror of the server data.
 	 * @param pos the block location. This is used to obtain the TileEntity if one exists
 	 * @param type the event type for the configuration
 	 * @return a skill and experience map for the event type and block
 	 */
-	public static Map<String, Long> getXpAwardMap(Level level, BlockPos pos, EventType type) {
+	public static Map<String, Long> getXpAwardMap(Level level, BlockPos pos, EventType type, @Nullable Player player) {
 		Preconditions.checkNotNull(level);
 		Preconditions.checkNotNull(pos);
 		Preconditions.checkNotNull(type);
-		return Core.get(level).getExperienceAwards(type, pos, level, null, new CompoundTag());
+		return Core.get(level).getExperienceAwards(type, pos, level, player, new CompoundTag());
 	}
 	
-	/**Obtains a map of the skills and experience amount that would be awarded for the provided
+	/**<p>Obtains a map of the skills and experience amount that would be awarded for the provided
 	 * entity and event.  The logical side argument allows you to specify if you want to obtain 
 	 * this information from the server data or from the client clone.  Which side used will 
-	 * depend entirely on the sidedness context of your implementation. <br><br>
-	 * <b>NOTE:</b><i>This is a raw map from the configuration settings and does not necessarily
+	 * depend entirely on the sidedness context of your implementation.</p>
+	 * <p>If the player is argument is not null, this map will also return the xp modified by
+	 * the player's bonuses.</p>
+	 * <p><b>NOTE:</b><i>This is a raw map from the configuration settings and does not necessarily
 	 * reflect final values during gameplay.  Many events make changes to experience values
-	 * before committing them to the player's data.</i>
+	 * before committing them to the player's data.</i></p>
 	 * 
 	 * @param entity the entity whose configuration is being sought
 	 * @param type the event type for the configuration sought
 	 * @param side the logical side the information is being obtained from
-	 * @return a skill and experience map for the event tyep and block
+	 * @return a skill and experience map for the event type and block
 	 */
-	public static Map<String, Long> getXpAwardMap(Entity entity, EventType type, LogicalSide side) {
+	public static Map<String, Long> getXpAwardMap(Entity entity, EventType type, LogicalSide side, @Nullable Player player) {
 		Preconditions.checkNotNull(entity);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);;
-		return Core.get(side).getExperienceAwards(type, entity, null, new CompoundTag());
+		return Core.get(side).getExperienceAwards(type, entity, player, new CompoundTag());
 	}
 	
 	/**<p>Obtains a map of the skills and experience amount that would be awarded for the object
 	 * identified in the object type for the provided event.  The logical side lets you specify
 	 * if you want to obtain this information from the server data or from the client clone.
 	 * The side you use will depend entirely on the sidedness context of your implementation</p>
+	 * <p>If the player is argument is not null, this map will also return the xp modified by
+	 * the player's bonuses.</p>
 	 * <p><b>NOTE:</b><i>This is the raw map from the configuration and is obtained by bypassing
 	 * the configurations that would be provided via API. This should only be used to intentionally
 	 * bypass those features.</i></p>
@@ -200,17 +210,17 @@ public class APIUtils {
 	 * @param side the side to execute the data getter
 	 * @return a map of skill names and experience values
 	 */
-	public static Map<String, Long> getXpAwardMap(ObjectType oType, EventType type, ResourceLocation objectID, LogicalSide side) {
+	public static Map<String, Long> getXpAwardMap(ObjectType oType, EventType type, ResourceLocation objectID, LogicalSide side, @Nullable Player player) {
 		Preconditions.checkNotNull(oType);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(side);
-		return Core.get(side).getCommonXpAwardData(new HashMap<>(), type, objectID, null, oType, new CompoundTag());
+		return Core.get(side).getCommonXpAwardData(new HashMap<>(), type, objectID, player, oType, new CompoundTag());
 	}
 	
 	/**Returns a skill-level map for the requirements of the item and the requirement type passed.
 	 * Note that registered item predicates do not have to conform to the level system in determining
-	 * whether an item is permitted or not.  Because of this, a missing or innacurate tooltip 
+	 * whether an item is permitted or not.  Because of this, a missing or inaccurate tooltip 
 	 * registration may not reflect the outcome of a predicate check during gameplay.
 	 * 
 	 * @param item the item being queried
@@ -227,7 +237,7 @@ public class APIUtils {
 	
 	/**Returns a skill-level map for the requirements of the block and the requirement type passed.
 	 * Note that registered block predicates do not have to conform to the level system in determining
-	 * whether an block action is permitted or not.  Because of this, a missing or innacurate tooltip 
+	 * whether an block action is permitted or not.  Because of this, a missing or inaccurate tooltip 
 	 * registration may not reflect the outcome of a predicate check during gameplay.
 	 * 
 	 * @param pos the location of the block or block entity being queried
@@ -239,7 +249,7 @@ public class APIUtils {
 		Preconditions.checkNotNull(pos);
 		Preconditions.checkNotNull(level);
 		Preconditions.checkNotNull(type);
-		return Core.get(level).getReqMap(null, pos, level);
+		return Core.get(level).getReqMap(type, pos, level);
 	}
 	
 	/**Returns a skill-level map for the requirements of the entity and the requirement type passed.
@@ -636,7 +646,7 @@ public class APIUtils {
 	}
 	
 	/**Registers a function to be used in supplying custom bonuses for the item ID,
-	 * and modifier type provided.  This supercedes the configured settings and will
+	 * and modifier type provided.  This supersedes the configured settings and will
 	 * override and negate them.
 	 * 
 	 * @param res the item ID
@@ -654,7 +664,7 @@ public class APIUtils {
 	 * <p>Providers are registered and executed in sequence.  The level value supplied to
 	 * your function may be the product of a previous implementation.  
 	 * 
-	 * @param provider the funtion providing the new player level
+	 * @param provider the function providing the new player level
 	 * @param event required to ensure event process correctly during lifecycle
 	 */
 	public static void registerLevelProvider(BiFunction<String, Integer, Integer> provider, FMLCommonSetupEvent event) {
@@ -665,22 +675,22 @@ public class APIUtils {
 	}
 	
 	//===============EVENT TRIGGER REFERENCES========================
-	/**Used as a map key for signalling to PMMO that an event should be cancelled*/
+	/**Used as a map key for signaling to PMMO that an event should be cancelled*/
 	public static final String IS_CANCELLED = "is_cancelled";
-	/**Used as a map key for signalling to PMMO that an item interaction should be denied*/
+	/**Used as a map key for signaling to PMMO that an item interaction should be denied*/
 	public static final String DENY_ITEM_USE = "deny_item";
-	/**Used as a map key for signalling to PMMO that a block interaction should be denied*/
+	/**Used as a map key for signaling to PMMO that a block interaction should be denied*/
 	public static final String DENY_BLOCK_USE = "deny_block";
 	
-	/**Registers a custome event listener inside PMMO's listeners.  All registered
+	/**Registers a custom event listener inside PMMO's listeners.  All registered
 	 * listeners execute after requirement checks have succeeded but before perks
 	 * and xp awards.  The outputs of these functions are used provided to perks and
 	 * used in modify xp awards, and also to cancel event behavior before perks and
 	 * xp awards execute.
 	 * 
-	 * @param listenerID a unique ID for this perk for usin debugging.
-	 * @param eventType the PMMO event this should execute for.  Reference the API docs on the PMMO wiki to make sure your impelmentation uses the correct forge event.
-	 * @param executeOnTrigger the fucntion to execute when conditions are met to trigger custom listeners.
+	 * @param listenerID a unique ID for this behavior for use in debugging.
+	 * @param eventType the PMMO event this should execute for.  Reference the API docs on the PMMO wiki to make sure your implementation uses the correct forge event.
+	 * @param executeOnTrigger the function to execute when conditions are met to trigger custom listeners.
 	 */
 	public static void registerListener(
 			@NonNull ResourceLocation listenerID, 
@@ -736,7 +746,7 @@ public class APIUtils {
 	 * @param customConditions a predicate for checks outside the standard built in checks
 	 * @param onExecute the function executing the behavior of this perk when triggered
 	 * @param onConclude the function executing the behavior of this perk when expected to end
-	 * @param side the logical sides this perk should exeute on.  Your implementation should factor in sidedness to avoid crashes.
+	 * @param side the logical sides this perk should execute on.  Your implementation should factor in sidedness to avoid crashes.
 	 */
 	public static void registerPerk(
 			@NonNull ResourceLocation perkID,
