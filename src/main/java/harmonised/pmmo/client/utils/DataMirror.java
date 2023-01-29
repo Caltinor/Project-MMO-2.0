@@ -43,6 +43,8 @@ public class DataMirror implements IDataStorage{
 	@Override
 	public int getLevelFromXP(long xp) {
 		for (int i = 0; i < levelCache.size(); i++) {
+			if (i == Config.MAX_LEVEL.get())
+				return i;
 			if (levelCache.get(i) > xp)
 				return Core.get(LogicalSide.CLIENT).getLevelProvider().process("", i);
 		}
