@@ -9,6 +9,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.features.anticheese.AntiCheeseConfig;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.loot_modifiers.GLMRegistry;
 import harmonised.pmmo.setup.CommonSetup;
@@ -21,6 +22,7 @@ public class ProjectMMO {
     	ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
     	ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG); 
+    	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, AntiCheeseConfig.SERVER_CONFIG, "pmmo-AntiCheese.toml");
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, AutoValueConfig.SERVER_CONFIG, "pmmo-AutoValues.toml");
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, GlobalsConfig.SERVER_CONFIG, "pmmo-Globals.toml");
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SkillsConfig.SERVER_CONFIG, "pmmo-Skills.toml");
