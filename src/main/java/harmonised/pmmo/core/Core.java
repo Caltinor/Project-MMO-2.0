@@ -213,7 +213,7 @@ public class Core {
 			CoreUtils.applyXpModifiers(xpGains, getConsolidatedModifierMap(player));
 		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterMod): "+MsLoggy.mapToString(xpGains));
 		
-		CheeseTracker.applyAntiCheese(xpGains);
+		CheeseTracker.applyAntiCheese(type, objectID, player, xpGains);
 		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(xpGains));
 		
 		CoreUtils.processSkillGroupXP(xpGains);
