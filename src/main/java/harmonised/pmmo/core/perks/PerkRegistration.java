@@ -94,7 +94,7 @@ public class PerkRegistration {
 				NONE, 
 				PerkSide.SERVER);
 		APIUtils.registerPerk(rl("command"), 
-				new CompoundTag(), //TODO update the perk to show these and not use null as a conditional
+				new CompoundTag(),
 				PASS_TRUE,
 				FeaturePerks.RUN_COMMAND, 
 				NONE, 

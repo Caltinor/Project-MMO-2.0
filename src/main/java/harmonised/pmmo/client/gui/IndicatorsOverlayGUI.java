@@ -28,7 +28,7 @@ public class IndicatorsOverlayGUI implements IGuiOverlay{
 		
 		if(!mc.options.renderDebug && VeinTracker.isLookingAtVeinTarget(bhr)){
 			RenderSystem.setShaderTexture(0, ICONS);
-			float iconIndex = VeinTracker.mode.ordinal() * 16; //TODO Use VeinShape to set value
+			float iconIndex = VeinTracker.mode.ordinal() * 16;
 			GuiComponent.blit(poseStack, (screenWidth/2)-16, (screenHeight/2)-8, iconIndex, 0f, 16, 16, 48, 16);
 		}
 	}
