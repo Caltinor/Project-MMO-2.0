@@ -20,6 +20,7 @@ public class AntiCheeseConfig {
 		SERVER_CONFIG = SERVER_BUILDER.build();
 	}	
 	
+	public static ForgeConfigSpec.BooleanValue AFK_CAN_SUBTRACT;
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_AFK;
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_DIMINISHING;
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_NORMALIZED;
@@ -33,6 +34,10 @@ public class AntiCheeseConfig {
 				"features address many of the most common.")
 			.push("AntiCheese");
 			
+		AFK_CAN_SUBTRACT = builder.comment("if set to true, players who are AFK will continuously grow their",
+				"reduction value and will end up gaining negative xp.",
+				"If this is false, they only stop gaining and never lose.")
+				.define("AFK_Can_Subtract", false);
 		
 		SETTINGS_AFK = TomlConfigHelper.defineObject(builder.comment("AFK Tracking allows you to control if and when a player",
 				"should not gain xp while afk.  All afk timers are configuration",
