@@ -96,6 +96,7 @@ public class CheeseTracker {
 	
 	private static class NormTracker {
 		public final Map<String, Long> norms = new HashMap<>();
+		@SuppressWarnings("unused")  //for some reason the IDE doesn't detect its usage on line 62
 		public int retainTimeRemaining;
 		
 		public NormTracker(int defaultRetention) {
@@ -116,12 +117,12 @@ public class CheeseTracker {
 		
 		public static class Builder {
 			private List<String> source = new ArrayList<>();
-			private int minTime;
-			private int retention;
-			private int toleranceFlat;
-			private double reduction;
-			private int cooloff;
-			private double tolerancePercent;
+			private int minTime = 0;
+			private int retention = 0;
+			private int toleranceFlat = 0;
+			private double reduction = 0.0;
+			private int cooloff = 0;
+			private double tolerancePercent = 0.0;
 			protected Builder() {}
 			public Builder source(String entry) {
 				source.add(entry);

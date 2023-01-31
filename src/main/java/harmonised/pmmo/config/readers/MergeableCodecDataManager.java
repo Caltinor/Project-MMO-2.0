@@ -149,8 +149,6 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V extends IForge
 		this.registry = registry;
 	}
 	
-	//TODO Add a method that scans the data for tags and then parses the tags for applying them to their respective final objects.
-	
 	public Map<ResourceLocation, T> getData() {return data;}
 	
 	public void clearData() {this.data = new HashMap<>();}
