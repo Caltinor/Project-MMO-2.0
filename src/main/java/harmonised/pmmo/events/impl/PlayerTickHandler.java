@@ -10,10 +10,13 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
+import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.features.penalties.EffectManager;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -174,6 +177,10 @@ public class PlayerTickHandler {
 			}
 			default -> {}
 			}
+			
+			CheeseTracker.applyAntiCheese(type, null, event.player, xpAward);
+			MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(xpAward));
+			
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.player);
 			core.awardXP(partyMembersInRange, xpAward);	
 		}

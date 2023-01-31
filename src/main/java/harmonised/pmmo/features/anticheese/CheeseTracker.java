@@ -10,6 +10,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -81,12 +83,15 @@ public class CheeseTracker {
 		
 		public AFKTracker update(Player player) {
 			this.durationAFK +=  (lastLookAngle.equals(player.getLookAngle()) && lastPos.equals(player.blockPosition())) 
-					? 1 : -cooldownBy;
+					? 1 
+					: this.durationAFK > cooldownBy 
+						? -cooldownBy 
+						: 0;
 			return this;
 		}
 		
 		public boolean isAFK() {
-			return durationAFK >= minDuration;
+			return MsLoggy.DEBUG.logAndReturn(durationAFK >= minDuration, LOG_CODE.FEATURE, "isAFK:{}({}:{})", durationAFK, minDuration);
 		}
 		
 		public int getAFKDuration() {
@@ -192,7 +197,13 @@ public class CheeseTracker {
 			if ((this.source().isEmpty() || this.source().contains(source.toString())) 
 					&& afkData.isAFK()) {
 				awardIn.keySet().forEach(skill -> {
-					awardIn.compute(skill, (key, xp) -> xp * Double.valueOf(1d - (reduction * (double)afkData.getAFKDuration())).longValue());
+					MsLoggy.DEBUG.log(LOG_CODE.XP, "AFK reduction factor: {}", reduction * (double)afkData.getAFKDuration());
+					awardIn.compute(skill, (key, xp) -> {
+						long reductionAmount = Double.valueOf(xp * (reduction * (double)afkData.getAFKDuration())).longValue();						
+						return xp - (AntiCheeseConfig.AFK_CAN_SUBTRACT.get()
+									? reductionAmount
+									: reductionAmount > xp ? xp : reductionAmount);
+					});
 				});
 			}
 		}
