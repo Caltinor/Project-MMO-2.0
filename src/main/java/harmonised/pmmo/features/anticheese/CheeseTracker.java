@@ -17,9 +17,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent.PlayerTickEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 /**This class was originally implemented as a successor feature to the anti-cheese
@@ -42,7 +43,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
  * @author Caltinor
  *
  */
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.FORGE, value=Dist.DEDICATED_SERVER)
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.FORGE)
 public class CheeseTracker {
 
 	public static void applyAntiCheese(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
@@ -51,22 +52,27 @@ public class CheeseTracker {
 			setting.applyAFK(event, source, player, awardIn);
 		if ((setting = AntiCheeseConfig.SETTINGS_DIMINISHING.get().get(event)) != null)
 			setting.applyDiminuation(event, source, player, awardIn);
-		if ((setting = AntiCheeseConfig.SETTINGS_NORMALIZED.get().get(event)) != null) {
+		if ((setting = AntiCheeseConfig.SETTINGS_NORMALIZED.get().get(event)) != null)
 			setting.applyNormalization(event, source, player, awardIn);
-		}
 		if ((setting = AntiCheeseConfig.SETTINGS_RANGE_LIMIT.get().get(event)) != null)
 			setting.applyRangeLimit(event, source, player, awardIn);
 	}
 	
 	@SubscribeEvent
-	public static void playerWatcher(PlayerTickEvent event) {
-		NORMALIZED_DATA.getOrDefault(event.player, new HashMap<>()).forEach((type, tracker) -> {
-			tracker.retainTimeRemaining--;
-		});
+	public static void playerWatcher(ServerTickEvent event) {
+		if (event.phase == TickEvent.Phase.END || event.side == LogicalSide.CLIENT) 
+			return;
+		
+		AFK_DATA.forEach((player, map) -> map.forEach((type, tracker) -> {
+			if (player != null && !tracker.meetsAFKCriteria(player))
+				tracker.cooldown();
+		}));
+		DIMINISH_DATA.forEach((player, map) -> map.forEach((type, tracker) -> tracker.cooloff()));
+		NORMALIZED_DATA.forEach((player, map) -> map.forEach((type, tracker) -> tracker.retainTimeRemaining--));
 	}
 	
 	private static final Map<Player, Map<EventType, AFKTracker>> AFK_DATA = new HashMap<>();
-	private static final Map<Player, Map<EventType, Integer>> DIMINISH_DATA = new HashMap<>();
+	private static final Map<Player, Map<EventType, DiminishTracker>> DIMINISH_DATA = new HashMap<>();
 	private static final Map<Player, Map<EventType, NormTracker>> NORMALIZED_DATA = new HashMap<>();
 	
 	private static class AFKTracker {
@@ -82,12 +88,21 @@ public class CheeseTracker {
 		}
 		
 		public AFKTracker update(Player player) {
-			this.durationAFK +=  (lastLookAngle.equals(player.getLookAngle()) && lastPos.equals(player.blockPosition())) 
-					? 1 
-					: this.durationAFK > cooldownBy 
-						? -cooldownBy 
-						: 0;
+			if (meetsAFKCriteria(player))
+				durationAFK++;
+			else {
+				lastLookAngle = player.getLookAngle();
+				lastPos = player.blockPosition();
+			}
 			return this;
+		}
+		
+		public void cooldown() {
+			if (durationAFK > 0)
+				durationAFK -= cooldownBy;
+		}
+		public boolean meetsAFKCriteria(Player player) {
+			return lastLookAngle.equals(player.getLookAngle()) && lastPos.equals(player.blockPosition());
 		}
 		
 		public boolean isAFK() {
@@ -101,11 +116,26 @@ public class CheeseTracker {
 	
 	private static class NormTracker {
 		public final Map<String, Long> norms = new HashMap<>();
-		@SuppressWarnings("unused")  //for some reason the IDE doesn't detect its usage on line 62
 		public int retainTimeRemaining;
 		
 		public NormTracker(int defaultRetention) {
 			this.retainTimeRemaining = defaultRetention;
+		}
+	}
+	
+	private static class DiminishTracker {
+		public int persistedTime, cooloffLeft;
+		private final int timeToClearReduction;
+		public DiminishTracker(int timeToClear) {
+			this.timeToClearReduction = timeToClear;
+		}
+		public void cooloff() {
+			if (--cooloffLeft <= 0)
+				persistedTime = 0;
+		}
+		public void diminish() {
+			persistedTime++;
+			cooloffLeft = timeToClearReduction;
 		}
 	}
 	
@@ -193,9 +223,9 @@ public class CheeseTracker {
 				)));
 		
 		public void applyAFK(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
-			AFKTracker afkData = AFK_DATA.computeIfAbsent(player, p -> new HashMap<>()).computeIfAbsent(event, e -> new AFKTracker(player, minTime, cooloff)).update(player);
-			if ((this.source().isEmpty() || this.source().contains(source.toString())) 
-					&& afkData.isAFK()) {
+			AFKTracker afkData = AFK_DATA.computeIfAbsent(player, p -> new HashMap<>())
+					.computeIfAbsent(event, e -> new AFKTracker(player, minTime, cooloff)).update(player);
+			if ((this.source().isEmpty() || this.source().contains(source.toString())) && afkData.isAFK()) {
 				awardIn.keySet().forEach(skill -> {
 					MsLoggy.DEBUG.log(LOG_CODE.XP, "AFK reduction factor: {}", reduction * (double)afkData.getAFKDuration());
 					awardIn.compute(skill, (key, xp) -> {
@@ -208,24 +238,22 @@ public class CheeseTracker {
 			}
 		}
 		public void applyDiminuation(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
-			int duration = DIMINISH_DATA.computeIfAbsent(player, p -> new HashMap<>()).computeIfAbsent(event, e -> 0);
+			var tracker = DIMINISH_DATA.computeIfAbsent(player, p -> new HashMap<>()).computeIfAbsent(event, e -> new DiminishTracker(retention));
 			if (this.source().isEmpty() || this.source().contains(source.toString())) {				
-				duration++;
-				final int atomicDuration = duration;
+				tracker.diminish();
 				awardIn.keySet().forEach(skill -> {
-					awardIn.compute(skill, (key, xp) -> xp * Double.valueOf(1d - (reduction * atomicDuration)).longValue());
+					double reductionScale = 1d - (reduction * (double)tracker.persistedTime);
+					awardIn.compute(skill, (key, xp) -> Double.valueOf((double)xp * Math.max(0d, reductionScale)).longValue());
 				});
 			}
-			else 
-				duration -= cooloff;
 		}
 		public void applyNormalization(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {			
 			if (this.source().isEmpty() || this.source().contains(source.toString())) {
 				NormTracker norms = NORMALIZED_DATA.computeIfAbsent(player, p -> new HashMap<>()).computeIfAbsent(event, e -> new NormTracker(retention));
 				norms.retainTimeRemaining = retention;
 				awardIn.forEach((skill, value) -> {
-					long norm = norms.norms.getOrDefault(norms, value);
-					long acceptableVariance = Double.valueOf(Math.max(norm + (norm * tolerancePercent), norm + toleranceFlat)).longValue();
+					long norm = norms.norms.computeIfAbsent(skill, s -> value);
+					long acceptableVariance = Double.valueOf(Math.min(norm + ((double)norm * tolerancePercent), norm + toleranceFlat)).longValue();
 					norms.norms.put(skill, value > acceptableVariance ? acceptableVariance : value);
 				});
 				awardIn = norms.norms;

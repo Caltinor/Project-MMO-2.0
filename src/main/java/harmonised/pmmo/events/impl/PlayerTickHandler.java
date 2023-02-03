@@ -17,7 +17,9 @@ import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -92,6 +94,7 @@ public class PlayerTickHandler {
 		}
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.player, eventHookOutput, core.getSide()));
 		if (serverSide) {
+			ResourceLocation source = new ResourceLocation("player");
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
 					: new HashMap<>();
@@ -113,12 +116,14 @@ public class PlayerTickHandler {
 				});
 			}
 			case RIDING -> {
+				source = RegistryUtil.getId(event.player.getVehicle());
 				core.getExperienceAwards(type, event.player.getVehicle(), event.player, perkOutput).forEach((skill, value) -> {
 					xpAward.put(skill, value);
 				});;
 			}
 			case EFFECT -> {
 				for (MobEffectInstance mei : event.player.getActiveEffects()) {	
+					source = RegistryUtil.getId(mei.getEffect());
 					core.getExperienceAwards(mei, event.player, perkOutput).forEach((skill, value) -> {
 						xpAward.put(skill, value);
 					});
@@ -178,7 +183,7 @@ public class PlayerTickHandler {
 			default -> {}
 			}
 			
-			CheeseTracker.applyAntiCheese(type, null, event.player, xpAward);
+			CheeseTracker.applyAntiCheese(type, source, event.player, xpAward);
 			MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(xpAward));
 			
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.player);
