@@ -34,7 +34,7 @@ public class AutoEntity {
 			return new HashMap<>();
 				
 		Map<String, Long> outMap = new HashMap<>();
-		EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(entityID);
+		EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(entityID);
 		switch (type) {		 				
 		case FROM_PLAYERS:					 		
 		case MELEE_TO_PLAYERS:						
@@ -92,26 +92,7 @@ public class AutoEntity {
 		return outMap;	
 	}
 	
-	//========================GETTER METHODS==============================
-	/*private static Map<String, Integer> getReqMap(ResourceLocation entity, ReqType type) {
-		Map<String, Integer> outMap = new HashMap<>();
-		double healthScale = 
-				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.MAX_HEALTH), LOG_CODE.AUTO_VALUES, "Health Attribute: {}") * 
-				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH.key, 0d), LOG_CODE.AUTO_VALUES, "Health Config Value: {}");
-		double speedScale = 
-				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.MOVEMENT_SPEED), LOG_CODE.AUTO_VALUES, "Speed Attribute: {}") * 
-				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED.key, 0d), LOG_CODE.AUTO_VALUES, "Speed Config Value: {}");
-		double damageScale = 
-				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.ATTACK_DAMAGE), LOG_CODE.AUTO_VALUES, "Damage Attribute: {}") * 
-				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.DMG.key, 0d), LOG_CODE.AUTO_VALUES, "Damage Config Value: {}");
-		double scale = healthScale + speedScale + damageScale;
-		
-		AutoValueConfig.getEntityReq(type).forEach((skill, level) -> {
-			outMap.put(skill, Double.valueOf((double)level * scale).intValue());
-		});
-		return outMap;
-	}*/
-	
+	//========================GETTER METHODS==============================	
 	private static Map<String, Long> getXpMap(ResourceLocation entity, EventType type) {
 		Map<String, Long> outMap = new HashMap<>();
 		double healthScale = getAttribute(entity, Attributes.MAX_HEALTH) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH.key, 0d);
@@ -128,7 +109,7 @@ public class AutoEntity {
 	//========================UTILITY METHODS=============================
 	@SuppressWarnings("unchecked")
 	private static double getAttribute(ResourceLocation entityID, Attribute attribute) {
-		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(entityID);
+		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITIES.getValue(entityID);
 		if (!DefaultAttributes.hasSupplier(entity)) return 0d;
 		AttributeSupplier attSup = DefaultAttributes.getSupplier(entity);
 		if (attSup == null) return 0d;
