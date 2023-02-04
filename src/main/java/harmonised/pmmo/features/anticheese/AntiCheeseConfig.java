@@ -24,7 +24,6 @@ public class AntiCheeseConfig {
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_AFK;
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_DIMINISHING;
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_NORMALIZED;
-	public static ConfigObject<Map<EventType, Setting>> SETTINGS_RANGE_LIMIT;
 	
 	private static void setupServer(ForgeConfigSpec.Builder builder) {
 		builder.comment("Anti-Cheese is a system for managing how XP is gained.",
@@ -43,25 +42,22 @@ public class AntiCheeseConfig {
 				"should not gain xp while afk.  All afk timers are configuration",
 				"specific, so you can configure separate thresholds for different",
 				"types of xp."
-				), "AFK", CODEC, Map.of(EventType.SUBMERGED, Setting.build().minTime(200).reduction(0.1).cooloff(1).build()));
+				), "AFK", CODEC, Map.of(EventType.SUBMERGED, Setting.build().minTime(200).reduction(0.1).cooloff(1).build(),
+								EventType.SWIMMING, Setting.build().minTime(200).reduction(0.1).cooloff(1).build(),
+								EventType.DIVING, Setting.build().minTime(200).reduction(0.1).cooloff(1).build(),
+								EventType.SURFACING, Setting.build().minTime(200).reduction(0.1).cooloff(1).build(),
+								EventType.SWIM_SPRINTING, Setting.build().minTime(200).reduction(0.1).cooloff(1).build()));
 				
 		SETTINGS_DIMINISHING = TomlConfigHelper.defineObject(builder.comment("Diminishing XP allows you to reduce the amount of XP earned",
 				"for a specific event when the xp is earned in quick succession."
 				), "DiminishingXP", CODEC, Map.of(EventType.RIDING, Setting.build()
-						.source("minecraft:horse","minecraft:boat").retention(200).reduction(0.005).build()));
-		
+						.source("minecraft:horse","minecraft:boat").retention(200).reduction(0.005).build()));		
 		
 		SETTINGS_NORMALIZED = TomlConfigHelper.defineObject(builder.comment("Normalization allows you to keep xp gain values from spiking",
 				"by keeping them within a range of tolerance.  When normalized,",
 				"xp from an event will not exceed the threshold above the previously",
 				"earned xp value."
 				), "Normalization", CODEC, Map.of(EventType.SPRINTING, Setting.build().retention(400).tolerance(0.1).tolerance(10).build()));
-
-		
-		SETTINGS_RANGE_LIMIT = TomlConfigHelper.defineObject(builder.comment("Range Limits allow you to specify a distance in which xp is",
-				"no longer awarded.  This can be used to prevent remote xp from",
-				"GROW and SMELT events when chunk loaders are being used."
-		), "RangeLimits", CODEC, Map.of(EventType.SMELT, Setting.build().build()));
 		
 		builder.pop();
 		
