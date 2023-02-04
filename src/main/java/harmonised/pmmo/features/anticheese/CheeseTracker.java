@@ -54,8 +54,6 @@ public class CheeseTracker {
 			setting.applyDiminuation(event, source, player, awardIn);
 		if ((setting = AntiCheeseConfig.SETTINGS_NORMALIZED.get().get(event)) != null)
 			setting.applyNormalization(event, source, player, awardIn);
-		if ((setting = AntiCheeseConfig.SETTINGS_RANGE_LIMIT.get().get(event)) != null)
-			setting.applyRangeLimit(event, source, player, awardIn);
 	}
 	
 	@SubscribeEvent
@@ -253,15 +251,11 @@ public class CheeseTracker {
 				norms.retainTimeRemaining = retention;
 				awardIn.forEach((skill, value) -> {
 					long norm = norms.norms.computeIfAbsent(skill, s -> value);
-					long acceptableVariance = Double.valueOf(Math.min(norm + ((double)norm * tolerancePercent), norm + toleranceFlat)).longValue();
+					long acceptableVariance = Double.valueOf(Math.min(norm + (Math.max(1d, (double)norm * tolerancePercent)), norm + toleranceFlat)).longValue();
 					norms.norms.put(skill, value > acceptableVariance ? acceptableVariance : value);
 				});
-				awardIn = norms.norms;
+				awardIn.putAll(norms.norms);
 			}
-		}
-		public void applyRangeLimit(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
-			//TODO this will be tricky because we need to track blocks that are awarding xp and that's gonna take
-			// an extra layer.  I may just abandon this feature.
 		}
 	}
 }
