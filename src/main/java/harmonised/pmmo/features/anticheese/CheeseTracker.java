@@ -15,6 +15,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
@@ -47,6 +48,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 public class CheeseTracker {
 
 	public static void applyAntiCheese(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
+		if (player == null || event == null || !(player instanceof ServerPlayer))
+			return;
 		Setting setting = AntiCheeseConfig.SETTINGS_AFK.get().get(event); 
 		if (setting != null)
 			setting.applyAFK(event, source, player, awardIn);
