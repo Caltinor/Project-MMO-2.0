@@ -4,7 +4,6 @@ import com.ferreusveritas.dynamictrees.api.network.MapSignal;
 import com.ferreusveritas.dynamictrees.blocks.branches.BranchBlock;
 import com.ferreusveritas.dynamictrees.systems.nodemappers.NetVolumeNode;
 import harmonised.pmmo.ProjectMMOMod;
-import harmonised.pmmo.api.events.SalvageEvent;
 import harmonised.pmmo.api.events.TreasureEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -13,9 +12,7 @@ import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.skills.*;
-import harmonised.pmmo.util.DrawUtil;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
@@ -162,20 +159,6 @@ public class BlockBrokenHandler
         boolean isRemote = world.isRemote();
         PlayerEntity player = event.getPlayer();
         boolean veiningAllowed = Config.getConfig("veiningAllowed") != 0;
-
-        if(!Util.isProduction())
-        {
-            BlockState coalState = Blocks.COAL_BLOCK.getDefaultState();
-            BlockState glassState = Blocks.GLASS.getDefaultState();
-            int mainRadius = 10;
-
-//            DrawUtil.drawToWorld(world, pos.up(mainRadius), DrawUtil.getSphereSolid(mainRadius), glassState);
-//            DrawUtil.drawToWorld(world, pos.up(mainRadius), DrawUtil.getCircleSolid(mainRadius), glassState);
-//            DrawUtil.drawToWorld(world, pos.up(mainRadius), DrawUtil.getCircle(mainRadius), glassState);
-
-//            DrawUtil.drawToWorld(world, pos.up(), DrawUtil.getCircleSolid(mainRadius), glassState);
-//            DrawUtil.drawToWorld(world, pos, DrawUtil.getCircle(mainRadius), coalState);
-        }
 
         if(XP.isVeining.contains(player.getUniqueID()) && veiningAllowed && !WorldTickHandler.activeVein.containsKey(player))
             WorldTickHandler.scheduleVein(player, new VeinInfo(world, state, event.getPos(), player.getHeldItemMainhand()));
