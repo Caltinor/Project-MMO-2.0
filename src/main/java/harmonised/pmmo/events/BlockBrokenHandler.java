@@ -501,7 +501,7 @@ public class BlockBrokenHandler
             branchBlock.analyse(state, world, pos, signal.localRootDir, new MapSignal(volumeNet));
             NetVolumeNode.Volume volume = volumeNet.getVolume();
             float volumeFloat = volume.getVolume();
-            drops = branchBlock.getLogDrops(world, pos, branchBlock.getFamily().getSpeciesForLocation(world, pos), volume);
+            drops = branchBlock.getFamily().getSpeciesForLocation(world, pos).getBranchesDrops(world, volume);
             award = new HashMap<>();
 
             for(ItemStack itemStack : drops)
