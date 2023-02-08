@@ -126,6 +126,7 @@ repositories
 dependencies
         {
             minecraft 'net.minecraftforge:forge:1.16.5-36.2.20'
+            annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
             compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52:api")
 			//compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
