@@ -37,6 +37,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import org.lwjgl.system.CallbackI;
 
 import java.util.Map;
 
@@ -186,13 +187,17 @@ public class DamageHandler
                         skill = itemSpecificSkill;
                     else
                     {
-                        if(event.getSource().damageType.equals("arrow"))
-                            skill = Skill.ARCHERY.toString();
+                        if (event.getSource().damageType.equals("arrow")) { skill = Skill.ARCHERY.toString(); }
+                        else if (event.getSource().damageType.equals("trident")) { skill = Skill.COMBAT.toString(); }
+                        else if (event.getSource().isMagicDamage()) { skill = Skill.MAGIC.toString(); }
+                        else if (event.getSource().isProjectile()) { skill = Skill.COMBAT.toString(); }
                         else
                         {
                             skill = Skill.COMBAT.toString();
-                            if(Util.getDistance(player.getPositionVec(), target.getPositionVec()) > 4.20 + target.getWidth() + (swordInMainHand ? 1.523 : 0))
+                            if (Util.getDistance(player.getPositionVec(), target.getPositionVec()) > 4.20 + target.getWidth() + (swordInMainHand ? 1.523 : 0))
+                            {
                                 skill = Skill.MAGIC.toString(); //Magically far melee damage
+                            }
                         }
                     }
 
