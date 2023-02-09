@@ -1,6 +1,5 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -23,9 +22,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -33,9 +29,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.Map;
@@ -186,13 +180,17 @@ public class DamageHandler
                         skill = itemSpecificSkill;
                     else
                     {
-                        if(event.getSource().damageType.equals("arrow"))
-                            skill = Skill.ARCHERY.toString();
+                        if (event.getSource().damageType.equals("arrow")) { skill = Skill.ARCHERY.toString(); }
+                        else if (event.getSource().damageType.equals("trident")) { skill = Skill.COMBAT.toString(); }
+                        else if (event.getSource().isMagicDamage()) { skill = Skill.MAGIC.toString(); }
+                        else if (event.getSource().isProjectile()) { skill = Skill.COMBAT.toString(); }
                         else
                         {
                             skill = Skill.COMBAT.toString();
-                            if(Util.getDistance(player.getPositionVec(), target.getPositionVec()) > 4.20 + target.getWidth() + (swordInMainHand ? 1.523 : 0))
+                            if (Util.getDistance(player.getPositionVec(), target.getPositionVec()) > 4.20 + target.getWidth() + (swordInMainHand ? 1.523 : 0))
+                            {
                                 skill = Skill.MAGIC.toString(); //Magically far melee damage
+                            }
                         }
                     }
 

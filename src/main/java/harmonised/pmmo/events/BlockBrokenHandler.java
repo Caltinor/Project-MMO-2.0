@@ -1,5 +1,9 @@
 package harmonised.pmmo.events;
 
+import com.ferreusveritas.dynamictrees.api.network.MapSignal;
+import com.ferreusveritas.dynamictrees.blocks.branches.BranchBlock;
+import com.ferreusveritas.dynamictrees.systems.nodemappers.NetVolumeNode;
+import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.events.TreasureEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -13,6 +17,7 @@ import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SeaPickleBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -470,7 +475,54 @@ public class BlockBrokenHandler
         }
 
         //LOG
-        if(XP.getExtraChance(player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false) > 0 && isEffective)
+        //Dynamic Trees
+        if(ProjectMMOMod.dynamicTreesLoaded && block instanceof BranchBlock)
+        {
+            BranchBlock branchBlock = (BranchBlock) block;
+            MapSignal signal = branchBlock.analyse(state, world, pos, null, new MapSignal());
+            NetVolumeNode volumeNet = new NetVolumeNode();
+            branchBlock.analyse(state, world, pos, signal.localRootDir, new MapSignal(volumeNet));
+            NetVolumeNode.Volume volume = volumeNet.getVolume();
+            float volumeFloat = volume.getVolume();
+            drops = branchBlock.getFamily().getSpeciesForLocation(world, pos).getBranchesDrops(world, volume);
+            award = new HashMap<>();
+
+            for(ItemStack itemStack : drops)
+            {
+                try
+                {
+                    int extraDrops;
+                    ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+//                    Set<ResourceLocation> tags = block.getTags();
+//                    for(ResourceLocation tag : tags)
+//                    {
+//                        String tagName = tag.toString();
+//                        if(tagName.equals("minecraft:logs"))
+//                        {
+//                            resLoc = itemStack.getItem().getRegistryName();
+//                            break;
+//                        }
+//                    }
+
+                    double extraChance = XP.getExtraChance(player.getUniqueID(), resLoc, JType.INFO_LOG, false);
+                    extraDrops = (int) (itemStack.getCount() * extraChance / 100D);
+                    XP.addMapsAnyDouble(award, XP.multiplyMapAnyDouble(XP.getXpBypass(resLoc, JType.XP_VALUE_BREAK), volumeFloat + extraDrops));
+
+                    if(extraDrops > 0)
+                    {
+                        ItemStack extraDropStack = itemStack.copy();
+                        extraDropStack.setCount(extraDrops);
+                        XP.dropItemStack(extraDropStack, world, pos);
+                        NetworkHandler.sendToPlayer(new MessageDoubleTranslation("pmmo.extraDrop", "" + extraDrops, extraDropStack.getTranslationKey(), true, 1), (ServerPlayerEntity) player);
+                    }
+                }
+                catch(Exception e)
+                {
+                    LOGGER.error(e);
+                }
+            }
+        }
+        else if(XP.getExtraChance(player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false) > 0 && isEffective)
         {
             if(!wasPlaced)			//EXTRA DROPS
             {
