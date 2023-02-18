@@ -67,6 +67,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_SIZE;
 	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_LINGER_DURATION;
 	public static ConfigValue<List<? extends String>> GAIN_BLACKLIST;
+	public static ForgeConfigSpec.BooleanValue HIDE_SKILL_BUTTON;
 	
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
@@ -99,6 +100,8 @@ public class Config {
 				.define("Gain List Linger Duration", 100);
 		GAIN_BLACKLIST = builder.comment("skills that should now show their gains in the gain list.  this can be used to limit spammy skills")
 				.defineList("Gain Blacklist", new ArrayList<>(), s -> s instanceof String);
+		HIDE_SKILL_BUTTON = builder.comment("if true, removes the skills button from the inventory screen")
+				.define("hide skill button", false);
 		
 		builder.pop();
 	}
@@ -233,6 +236,7 @@ public class Config {
 	
 	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
 	public static ForgeConfigSpec.ConfigValue<String> SALVAGE_BLOCK;
+	public static ForgeConfigSpec.BooleanValue TREASURE_ENABLED;
 	
 	private static void buildBasics(ForgeConfigSpec.Builder builder) {
 		builder.comment("General settings on the server").push("General");
@@ -241,6 +245,8 @@ public class Config {
 				.defineInRange("Creative Reach", 50d, 4d, Double.MAX_VALUE);
 		SALVAGE_BLOCK = builder.comment("Which block should be used for salvaging")
 				.define("Salvage Block", "minecraft:smithing_table");
+		TREASURE_ENABLED = builder.comment("if false, all pmmo loot conditions will be turned off")
+				.define("Treasure Enabled", true);
 		
 		builder.pop();
 	}
