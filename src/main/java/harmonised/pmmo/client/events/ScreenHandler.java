@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.events;
 
 import harmonised.pmmo.client.gui.component.PMMOButton;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -16,7 +17,7 @@ public class ScreenHandler {
     public static void onScreenInit(ScreenEvent.Init.Post event) {
         Screen screen = event.getScreen();
     
-        if (screen instanceof InventoryScreen inv) {
+        if (screen instanceof InventoryScreen inv && !Config.HIDE_SKILL_BUTTON.get()) {
             event.addListener(new PMMOButton(inv, inv.leftPos + 126, inv.height / 2 - 22, 20, 18, 148, 0, 19));
         }
     }
