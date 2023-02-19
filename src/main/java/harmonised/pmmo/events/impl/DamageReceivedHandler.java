@@ -116,11 +116,10 @@ public class DamageReceivedHandler {
 			DamageSource.DROWN.msgId,
 			DamageSource.STARVE.msgId,
 			DamageSource.CACTUS.msgId,
-			DamageSource.ANVIL.msgId,
-			DamageSource.FALLING_BLOCK.msgId,
+			DamageSource.anvil(null).msgId,
+			DamageSource.fallingBlock(null).msgId,
 			DamageSource.SWEET_BERRY_BUSH.msgId,
-			DamageSource.FREEZE.msgId,
-			DamageSource.FALLING_STALACTITE.msgId);
+			DamageSource.FREEZE.msgId);
 	private static final List<String> falling = List.of(
 			DamageSource.FALL.msgId,
 			DamageSource.STALAGMITE.msgId,

@@ -75,7 +75,8 @@ public class StatsScreen extends Screen{
 						entity != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, entity) :
 						selection != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, selection, object, skill ,type, this.itemRenderer)
 								: new StatScrollWidget(206, 200, renderY+30, renderX+25, 0);
-		openGlossary = new Button(this.width-84, 4, 80, 20, LangProvider.OPEN_GLOSSARY.asComponent(), b -> Minecraft.getInstance().setScreen(new GlossarySelectScreen()));
+		openGlossary = Button.builder(LangProvider.OPEN_GLOSSARY.asComponent(), b -> Minecraft.getInstance().setScreen(new GlossarySelectScreen()))
+				.bounds(this.width-84, 4, 80, 20).build();
 		
 		this.addRenderableWidget(scrollWidget);
 		this.addRenderableWidget(openGlossary);

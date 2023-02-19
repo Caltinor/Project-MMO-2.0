@@ -1,10 +1,9 @@
 package harmonised.pmmo.client.gui;
 
+import org.joml.Quaternionf;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import harmonised.pmmo.client.gui.component.PMMOButton;
 import harmonised.pmmo.client.gui.component.PlayerStatsComponent;
 import harmonised.pmmo.util.Reference;
@@ -96,8 +95,8 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
         PoseStack posestack1 = new PoseStack();
         posestack1.translate(0.0D, 0.0D, 1000.0D);
         posestack1.scale((float)pScale, (float)pScale, (float)pScale);
-        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
-        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(angleYComponent * 20.0F);
+        Quaternionf quaternion = (new Quaternionf()).rotateZ(180f);
+        Quaternionf quaternion1 = (new Quaternionf()).rotateX(angleYComponent * 20.0F);
         quaternion.mul(quaternion1);
         posestack1.mulPose(quaternion);
         float f2 = pLivingEntity.yBodyRot;
@@ -112,7 +111,7 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
         pLivingEntity.yHeadRotO = pLivingEntity.getYRot();
         Lighting.setupForEntityInInventory();
         EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-        quaternion1.conj();
+        quaternion1.conjugate();
         entityrenderdispatcher.overrideCameraOrientation(quaternion1);
         entityrenderdispatcher.setRenderShadow(false);
         MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();

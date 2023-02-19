@@ -7,7 +7,7 @@ import harmonised.pmmo.features.loot_modifiers.TreasureLootModifier;
 import harmonised.pmmo.features.loot_modifiers.ValidBlockCondition;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -24,7 +24,7 @@ import net.minecraftforge.common.loot.LootTableIdCondition;
 
 public class GLMProvider extends GlobalLootModifierProvider{
 
-	public GLMProvider(DataGenerator gen) {super(gen, Reference.MOD_ID);}
+	public GLMProvider(PackOutput gen) {super(gen, Reference.MOD_ID);}
 
 	@Override
 	protected void start() {

@@ -10,10 +10,8 @@ import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.client.gui.components.Widget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -27,8 +25,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
-    protected static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/player_stats.png");
+public class PlayerStatsComponent extends AbstractWidget {
+    public PlayerStatsComponent() {
+		super(0, 0, 0, 0, Component.empty());
+	}
+
+	protected static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/player_stats.png");
     protected static final Core core = Core.get(LogicalSide.CLIENT);
     protected Minecraft minecraft;
     private boolean visible;
@@ -118,23 +120,23 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         if (!this.isVisible()) return false;
-        return this.statsScroller.mouseClicked(pMouseX, pMouseY, pButton) || GuiEventListener.super.mouseClicked(pMouseX, pMouseY, pButton);
+        return this.statsScroller.mouseClicked(pMouseX, pMouseY, pButton) || super.mouseClicked(pMouseX, pMouseY, pButton);
     }
     
     @Override
     public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
         if (!this.isVisible()) return false;
-        return this.statsScroller.mouseScrolled(pMouseX, pMouseY, pDelta) || GuiEventListener.super.mouseScrolled(pMouseX, pMouseY, pDelta);
+        return this.statsScroller.mouseScrolled(pMouseX, pMouseY, pDelta) || super.mouseScrolled(pMouseX, pMouseY, pDelta);
     }
     
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
         if (!this.isVisible()) return false;
-        return this.statsScroller.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY) || GuiEventListener.super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+        return this.statsScroller.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY) || super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
     }
     
     @Override @NotNull public NarrationPriority narrationPriority() { return NarrationPriority.NONE; }
-    @Override public void updateNarration(@NotNull NarrationElementOutput pNarrationElementOutput) { }
+    @Override protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) { }
     
     static class PlayerStatsScroller extends ScrollPanel {
         private final List<String> skillsKeys = new ArrayList<>();
@@ -163,7 +165,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
                 StatComponent component = abilities.get(i);
                 int y = (int) (relativeY + (i * (component.getHeight() + 1)) - scrollDistance);
                 
-                component.setPosition(component.x, y);
+                component.setPosition(component.getX(), y);
                 component.render(poseStack, mouseX, mouseY, Minecraft.getInstance().getPartialTick());
             }
         }
@@ -206,24 +208,25 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
             
             RenderSystem.setShaderTexture(0, skillData.getIcon());
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            blit(pPoseStack, this.x + 3, this.y + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
+            blit(pPoseStack, this.getX() + 3, this.getY() + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
             
             renderProgressBar(pPoseStack);
-            GuiComponent.drawString(pPoseStack, minecraft.font, skillName, this.x + 24, this.y + 5, skillColor.getRGB());
-            GuiComponent.drawString(pPoseStack, minecraft.font, String.valueOf(skillLevel), (this.x + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.y + 5, skillColor.getRGB());
+            GuiComponent.drawString(pPoseStack, minecraft.font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
+            GuiComponent.drawString(pPoseStack, minecraft.font, String.valueOf(skillLevel), (this.getX() + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.getY() + 5, skillColor.getRGB());
         }
         
         public void renderProgressBar(PoseStack pPoseStack) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, TEXTURE_LOCATION);
             RenderSystem.setShaderColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
-            blit(pPoseStack, this.x + 24, this.y + (minecraft.font.lineHeight + 6), 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
+            blit(pPoseStack, this.getX() + 24, this.getY() + (minecraft.font.lineHeight + 6), 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
             
             long baseXP = core.getData().getBaseXpForLevel(skillLevel);
             long requiredXP = core.getData().getBaseXpForLevel(skillLevel + 1);
             float percent = 100.0f / (requiredXP - baseXP);
             int xp = (int) Math.min(Math.floor(percent * (skillCurrentXP - baseXP)), 94);
-            blit(pPoseStack, this.x + 24, this.y + (minecraft.font.lineHeight + 6), xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
+            blit(pPoseStack, this.getX() + 24, this.getY() + (minecraft.font.lineHeight + 6), xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
         }
     }
+
 }

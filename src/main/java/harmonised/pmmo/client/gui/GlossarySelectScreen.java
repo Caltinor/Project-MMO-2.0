@@ -74,12 +74,11 @@ public class GlossarySelectScreen extends Screen{
 				sel -> type = sel.reference);
 		selectEnum.visible = false;
 		
-		viewButton = new Button(this.width/2 - 40, renderY + 125, 80, 20, 
-				LangProvider.GLOSSARY_VIEW_BUTTON.asComponent(), 
+		viewButton = Button.builder(LangProvider.GLOSSARY_VIEW_BUTTON.asComponent(), 
 				button -> {
 					if (selection != null && object != null)
 						Minecraft.getInstance().setScreen(new StatsScreen(selection, object, skill, type));
-				});
+				}).bounds(this.width/2 - 40, renderY + 125, 80, 20).build();
 		viewButton.visible = false;
 		
 		addRenderableWidget(viewButton);
