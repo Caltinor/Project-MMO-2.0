@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -215,6 +216,7 @@ public class PackGenerator {
 						"}")),
 		EFFECTS("pmmo/effects", server -> ForgeRegistries.MOB_EFFECTS.getKeys(), 
 				List.of("{",
+				() -> List.of("{",
 						"\"levels\":[]",
 						"}"));
 		
@@ -249,7 +251,9 @@ public class PackGenerator {
 		
 		for (Category category : Category.values()) {
 			for (ResourceLocation id : category.valueList.apply(server)) {
-				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route);
+				int index = id.getPath().lastIndexOf('/');
+				String pathRoute = id.getPath().substring(0, index >= 0 ? index : 0);
+				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route+"/"+pathRoute);
 				finalPath.toFile().mkdirs();
 				try {
 				Files.write(
