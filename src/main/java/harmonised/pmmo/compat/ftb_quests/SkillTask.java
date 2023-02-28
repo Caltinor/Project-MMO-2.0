@@ -1,7 +1,7 @@
 package harmonised.pmmo.compat.ftb_quests;
 
 
-import java.util.stream.Collectors;
+/*import java.util.stream.Collectors;
 
 import dev.ftb.mods.ftblibrary.config.ConfigGroup;
 import dev.ftb.mods.ftblibrary.config.NameMap;
@@ -20,93 +20,93 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-public class SkillTask extends Task
+*/
+public class SkillTask// extends Task
 {
-    public static TaskType SKILL = FTBQHandler.SKILL;
-    public String skill;
-    public int requiredLevel;
-
-    public SkillTask(Quest quest)
-    {
-        super(quest);
-        skill = "mining";
-        requiredLevel = 1;
-    }
-
-    @Override
-    public TaskType getType()
-    {
-        return SKILL;
-    }
-
-    @Override
-    public void writeData(CompoundTag nbt)
-    {
-        super.writeData(nbt);
-        nbt.putString("skill", skill);
-        nbt.putInt("requiredLevel", requiredLevel);
-    }
-
-    @Override
-    public void readData(CompoundTag nbt)
-    {
-        super.readData(nbt);
-        skill = nbt.getString("skill");
-        requiredLevel = nbt.getInt("requiredLevel");
-    }
-
-    @Override
-    public void writeNetData(FriendlyByteBuf buffer)
-    {
-        super.writeNetData(buffer);
-        buffer.writeUtf(skill, Short.MAX_VALUE);
-        buffer.writeInt(requiredLevel);
-    }
-
-    @Override
-    public void readNetData(FriendlyByteBuf buffer)
-    {
-        super.readNetData(buffer);
-        skill = buffer.readUtf(Short.MAX_VALUE);
-        requiredLevel = buffer.readInt();
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getConfig(ConfigGroup config)
-    {
-        super.getConfig(config);
-        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of("mining", SkillsConfig.SKILLS.get().keySet().toArray()).create());
-        config.addInt("requiredLevel", requiredLevel, input -> requiredLevel = input, requiredLevel, 1, Config.MAX_LEVEL.get());
-    }
-
-    @Override
-    public int autoSubmitOnPlayerTick()
-    {
-        return 20;
-    }
-
-    @Override
-    public void submitTask(TeamData teamData, ServerPlayer player, ItemStack craftedItem)
-    {
-        if(teamData.isCompleted(this))
-            return;
-        
-        IDataStorage data = Core.get(player.level).getData();
-        long xp = data.getPlayerSkillLevel(skill, player.getUUID());
-        SkillData config = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()); 
-        if (config.isSkillGroup() && config.getUseTotalLevels()) {
-        	xp = config.groupedSkills().get().entrySet().stream()
-        		.map(entry -> (int)(entry.getValue() * data.getPlayerSkillLevel(entry.getKey(), player.getUUID())))
-        		.collect(Collectors.summingInt(Integer::intValue));
-        }
-        teamData.setProgress(this, xp);
-    }
-
-    @Override
-    public long getMaxProgress()
-    {
-        return (long) requiredLevel;
-    }
+//    public static TaskType SKILL = FTBQHandler.SKILL;
+//    public String skill;
+//    public int requiredLevel;
+//
+//    public SkillTask(Quest quest)
+//    {
+//        super(quest);
+//        skill = "mining";
+//        requiredLevel = 1;
+//    }
+//
+//    @Override
+//    public TaskType getType()
+//    {
+//        return SKILL;
+//    }
+//
+//    @Override
+//    public void writeData(CompoundTag nbt)
+//    {
+//        super.writeData(nbt);
+//        nbt.putString("skill", skill);
+//        nbt.putInt("requiredLevel", requiredLevel);
+//    }
+//
+//    @Override
+//    public void readData(CompoundTag nbt)
+//    {
+//        super.readData(nbt);
+//        skill = nbt.getString("skill");
+//        requiredLevel = nbt.getInt("requiredLevel");
+//    }
+//
+//    @Override
+//    public void writeNetData(FriendlyByteBuf buffer)
+//    {
+//        super.writeNetData(buffer);
+//        buffer.writeUtf(skill, Short.MAX_VALUE);
+//        buffer.writeInt(requiredLevel);
+//    }
+//
+//    @Override
+//    public void readNetData(FriendlyByteBuf buffer)
+//    {
+//        super.readNetData(buffer);
+//        skill = buffer.readUtf(Short.MAX_VALUE);
+//        requiredLevel = buffer.readInt();
+//    }
+//
+//    @Override
+//    @OnlyIn(Dist.CLIENT)
+//    public void getConfig(ConfigGroup config)
+//    {
+//        super.getConfig(config);
+//        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of("mining", SkillsConfig.SKILLS.get().keySet().toArray()).create());
+//        config.addInt("requiredLevel", requiredLevel, input -> requiredLevel = input, requiredLevel, 1, Config.MAX_LEVEL.get());
+//    }
+//
+//    @Override
+//    public int autoSubmitOnPlayerTick()
+//    {
+//        return 20;
+//    }
+//
+//    @Override
+//    public void submitTask(TeamData teamData, ServerPlayer player, ItemStack craftedItem)
+//    {
+//        if(teamData.isCompleted(this))
+//            return;
+//        
+//        IDataStorage data = Core.get(player.level).getData();
+//        long xp = data.getPlayerSkillLevel(skill, player.getUUID());
+//        SkillData config = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()); 
+//        if (config.isSkillGroup() && config.getUseTotalLevels()) {
+//        	xp = config.groupedSkills().get().entrySet().stream()
+//        		.map(entry -> (int)(entry.getValue() * data.getPlayerSkillLevel(entry.getKey(), player.getUUID())))
+//        		.collect(Collectors.summingInt(Integer::intValue));
+//        }
+//        teamData.setProgress(this, xp);
+//    }
+//
+//    @Override
+//    public long getMaxProgress()
+//    {
+//        return (long) requiredLevel;
+//    }
 }

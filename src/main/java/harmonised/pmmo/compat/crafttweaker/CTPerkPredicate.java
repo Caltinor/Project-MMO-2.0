@@ -1,6 +1,6 @@
 package harmonised.pmmo.compat.crafttweaker;
 
-import org.openzen.zencode.java.ZenCodeType;
+/*import org.openzen.zencode.java.ZenCodeType;
 
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.data.MapData;
@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 @FunctionalInterface
 @ZenRegister
 @ZenCodeType.Name("mods.pmmo.CTPerkPredicate")
-@Document("mods/pmmo/CTPerkPredicate")
+@Document("mods/pmmo/CTPerkPredicate")*/
 public interface CTPerkPredicate {
 	/**PMMO checks certain default conditions such as 
 	 * level requirements, and chance.  If you have 
@@ -25,6 +25,6 @@ public interface CTPerkPredicate {
 	 * @param level the current level of the player in the skill configured
 	 * @return if the perk is permitted to execute
 	 */
-	@ZenCodeType.Method
-	boolean test(Player player, MapData nbt, int level);
+	/*@ZenCodeType.Method
+	boolean test(Player player, MapData nbt, int level);*/
 }
