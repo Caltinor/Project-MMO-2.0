@@ -1,31 +1,17 @@
 package harmonised.pmmo.config;
 
-import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.events.PlayerInteractionHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.data.TagsProvider;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
-import net.minecraft.tags.*;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeTagHandler;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.common.data.ForgeBlockTagsProvider;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -324,10 +310,14 @@ public class JsonConfig
 
                     for(String regKey : associatedItems)
                     {
-//                        if(!rawMap.get(jType).containsKey(regKey))
+                        if (Config.forgeConfig.itemPriorityOverTag.get()) {
+                            if (!rawMap.get(jType).containsKey(regKey)) {
+                                rawMap.get(jType).put(regKey, rawMap.get(jType).get(itemKey));
+                            }
+                        } else {
                             rawMap.get(jType).put(regKey, rawMap.get(jType).get(itemKey));
+                        }
                     }
-//                    rawMap.get(jType).remove(itemKey);
                 }
             }
         }
@@ -671,7 +661,6 @@ public class JsonConfig
 
                 if(!(inMap.containsKey("minCount")))
                 {
-//                    LOGGER.debug("Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is invalid, loading default value 1 item");
                     inMap.put("minCount", 1D);
                 }
                 else if(inMap.get("minCount") > item.getMaxStackSize())
@@ -682,7 +671,6 @@ public class JsonConfig
 
                 if(!(inMap.containsKey("maxCount")))
                 {
-//                    LOGGER.debug("Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is invalid, loading default value 1");
                     inMap.put("maxCount", 1D);
                 }
                 else if(inMap.get("maxCount") > item.getMaxStackSize())
@@ -810,11 +798,7 @@ public class JsonConfig
 
             for(Map.Entry<String, Double> entry : element.getValue().entrySet())
             {
-//                innerKey = entry.getKey().toLowerCase();
-//                if(innerKey.equals("color"))
-                    output.get(element.getKey()).put(entry.getKey(), entry.getValue());
-//                else
-//                    LOGGER.debug("Invalid property of skill " + element.getKey() + ": " + innerKey);
+                output.get(element.getKey()).put(entry.getKey(), entry.getValue());
             }
         }
     }
