@@ -132,6 +132,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> scaleXpBoostByDurabilityStart;
         public ConfigHelper.ConfigValueListener<Double> scaleXpBoostByDurabilityEnd;
         public ConfigHelper.ConfigValueListener<Boolean> rightClickXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> itemPriorityOverTag;
 
         //Party
         public ConfigHelper.ConfigValueListener<Double> partyRange;
@@ -476,6 +477,11 @@ public class Config
                         .comment("Should right click xp be enabled?")
                         .translation("pmmo.rightClickXpEnabled")
                         .define("rightClickXpEnabled", true));
+
+                this.itemPriorityOverTag = subscriber.subscribe(builder
+                        .comment("Should item specific config values take precedence over tag based values? (true means minecraft:oak_log would take precedence over #minecraft:logs)")
+                        .translation("pmmo.itemPriorityOverTag")
+                        .define("itemPriorityOverTag", true));
 
                 builder.pop();
             }
