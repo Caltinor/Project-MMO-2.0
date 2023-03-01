@@ -177,7 +177,10 @@ public class DamageHandler
                     boolean swordInMainHand = mainItemStack.getItem() instanceof SwordItem;
 
                     if(itemSpecificSkill != null)
-                        skill = itemSpecificSkill;
+                    {
+                        if (itemSpecificSkill.matches("archery") && !event.getSource().damageType.equals("arrow")){ skill = Skill.COMBAT.toString(); }
+                        else { skill = itemSpecificSkill; }
+                    }
                     else
                     {
                         if (event.getSource().damageType.equals("arrow")) { skill = Skill.ARCHERY.toString(); }
