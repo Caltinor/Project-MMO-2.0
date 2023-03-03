@@ -4,9 +4,6 @@ import harmonised.pmmo.events.FurnaceHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.BrewingStandTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,7 +24,7 @@ public class AbstractFurnaceTileEntityShrinkMixin
     {
         World world = ((AbstractFurnaceTileEntity)(Object)this).getWorld();
         BlockPos pos = ((AbstractFurnaceTileEntity)(Object)this).getPos();
-        FurnaceHandler.handleSmelted(items.get(0), items.get(2), world, pos, 0);
-        FurnaceHandler.handleSmelted(items.get(0), items.get(2), world, pos, 1);
+        FurnaceHandler.handleSmelted(items.get(2), world, pos, 0);
+        FurnaceHandler.handleSmelted(items.get(2), world, pos, 1);
     }
 }

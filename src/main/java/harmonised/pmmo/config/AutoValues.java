@@ -4,21 +4,22 @@ import com.google.common.collect.Multimap;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CropsBlock;
+import net.minecraft.block.OreBlock;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,7 +54,6 @@ public class AutoValues
                     JsonConfig.localData.get(jType).get(resLoc).put(entry.getKey(), value);
                 if(outputToConsole)
                 {
-                    //addData("xp_value_smelt", 	"#forge:ores/aluminum",	{ "smithing": 12.5 });
                     StringBuilder addDataString = new StringBuilder("addData(\"" + jType.toString().toLowerCase() + "\",\t\"" + resLoc + "\", { ");
                     boolean firstEntry = true;
                     for(Map.Entry<String, Double> jsonEntry : values.entrySet())
@@ -224,20 +224,7 @@ public class AutoValues
                 {
                     Item outputItem = recipe.getRecipeOutput().getItem();
                     itemsWithCookRecipe.add(outputItem);
-                    for(Ingredient ingredient : recipe.getIngredients())
-                    {
-                        for(ItemStack itemStack : ingredient.getMatchingStacks())
-                        {
-                            if(!cooksFrom.containsKey(outputItem))
-                                cooksFrom.put(outputItem, new HashSet<>());
-                            cooksFrom.get(outputItem).add(itemStack.getItem());
-                        }
-                    }
                 }
-//                else if(recipe.getType() == IRecipeType.BLASTING)
-//                {
-//                    itemsWithBlastRecipe.add(item);
-//                }
             }
 
             for(Item item : ForgeRegistries.ITEMS)
@@ -338,17 +325,14 @@ public class AutoValues
                                 {
                                     Map<String, Double> xpValueMap = new HashMap<>();
                                     xpValueMap.put(Skill.COOKING.toString(), cookingXp);
-                                    for(Item rawItem : cooksFrom.get(item))
+                                    String rawResLoc = item.getRegistryName().toString();
+                                    if(Config.forgeConfig.autoGenerateCookingXpEnabled.get())
+                                        addJsonConfigValue(rawResLoc, JType.XP_VALUE_COOK, xpValueMap, true);
+                                    if(Config.forgeConfig.autoGenerateCookingExtraChanceEnabled.get())
                                     {
-                                        String rawResLoc = rawItem.getRegistryName().toString();
-                                        if(Config.forgeConfig.autoGenerateCookingXpEnabled.get())
-                                            addJsonConfigValue(rawResLoc, JType.XP_VALUE_COOK, xpValueMap, true);
-                                        if(Config.forgeConfig.autoGenerateCookingExtraChanceEnabled.get())
-                                        {
-                                            Map<String, Double> extraChanceMap = new HashMap<>();
-                                            extraChanceMap.put("extraChance", 10D/(saturation*15+healing));
-                                            addJsonConfigValue(rawResLoc, JType.INFO_COOK, extraChanceMap, true);
-                                        }
+                                        Map<String, Double> extraChanceMap = new HashMap<>();
+                                        extraChanceMap.put("extraChance", 10D/(saturation*15+healing));
+                                        addJsonConfigValue(rawResLoc, JType.INFO_COOK, extraChanceMap, true);
                                     }
                                 }
                             }
@@ -366,7 +350,6 @@ public class AutoValues
                 {
                     try
                     {
-//                ItemStack itemStack = new ItemStack(block);
                         String resLoc = block.getRegistryName().toString();
                         JType jType = JType.NONE;
                         Map<String, Double> infoMap = new HashMap<>();

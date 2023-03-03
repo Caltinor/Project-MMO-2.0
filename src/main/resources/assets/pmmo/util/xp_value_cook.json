@@ -1,32 +1,19 @@
 {
-	"foodexpansion:bat_wing":
+	"foodexpansion:cooked_bat_wing":
 	{
 		"cooking": 7.5
 	},
-	"minecraft:cactus":
+	"#forge:dyes":
 	{
 		"cooking": 12.5,
 		"crafting": 4
 	},
-	"minecraft:chorus_fruit":
+	"minecraft:popped_chorus_fruit":
 	{
 		"cooking": 25,
 		"crafting": 22.5
 	},
-	"minecraft:egg":
-	{
-		"cooking": 7.5
-	},
-	"minecraft:pumpkin_seed":
-	{
-		"cooking": 5
-	},
-	"minecraft:sea_pickle":
-	{
-		"cooking": 12.5,
-		"crafting": 3
-	},
-	"minecraft:wet_sponge":
+	"minecraft:sponge":
 	{
 		"cooking": 15,
 		"crafting": 15
