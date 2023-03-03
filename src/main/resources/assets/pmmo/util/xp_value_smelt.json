@@ -9,8 +9,12 @@
 		"smithing": 15
 	},
 	"#forge:dusts/saltpeter": {
-		"smithing": 14,
-		"magic": 2
+		"magic": 2,
+		"smithing": 14
+	},
+	"#forge:dusts/soulium": {
+		"magic": 4,
+		"smithing": 12
 	},
 	"#forge:gems/agate": {
 		"smithing": 18
@@ -19,8 +23,8 @@
 		"smithing": 18
 	},
 	"#forge:gems/amber": {
-		"smithing": 12,
-		"magic": 2
+		"magic": 2,
+		"smithing": 12
 	},
 	"#forge:gems/amethyst": {
 		"smithing": 18
@@ -38,8 +42,8 @@
 		"smithing": 18
 	},
 	"#forge:gems/aquamarine": {
-		"smithing": 15,
-		"magic": 2
+		"magic": 2,
+		"smithing": 15
 	},
 	"#forge:gems/benitoite": {
 		"smithing": 18
@@ -117,11 +121,15 @@
 		"smithing": 18
 	},
 	"#forge:gems/moonstone": {
-		"smithing": 12,
-		"magic": 2
+		"magic": 2,
+		"smithing": 12
 	},
 	"#forge:gems/morganite": {
 		"smithing": 18
+	},
+	"#forge:gems/negatite": {
+		"magic": 20,
+		"smithing": 10
 	},
 	"#forge:gems/onyx": {
 		"smithing": 18
@@ -137,6 +145,10 @@
 	},
 	"#forge:gems/phosphophyllite": {
 		"smithing": 18
+	},
+	"#forge:gems/positite": {
+		"magic": 20,
+		"smithing": 10
 	},
 	"#forge:gems/pyrope": {
 		"smithing": 18
@@ -186,9 +198,6 @@
 	"#forge:gravel": {
 		"smithing": 1
 	},
-	"#forge:ingots/brass": {
-		"smithing": 22
-	},
 	"#forge:ingots/aluminum": {
 		"smithing": 12.5
 	},
@@ -196,8 +205,12 @@
 		"smithing": 18
 	},
 	"#forge:ingots/arcane_gold": {
-		"smithing": 12,
-		"magic": 6
+		"magic": 6,
+		"smithing": 12
+	},
+	"#forge:ingots/awakened_supremium": {
+		"magic": 4,
+		"smithing": 18
 	},
 	"#forge:ingots/azure_electrum": {
 		"smithing": 22
@@ -220,9 +233,12 @@
 	"#forge:ingots/blaze_gold": {
 		"smithing": 18
 	},
+	"#forge:ingots/brass": {
+		"smithing": 22
+	},
 	"#forge:ingots/brick": {
-		"smithing": 1.5,
-		"crafting": 3.5
+		"crafting": 3.5,
+		"smithing": 1.5
 	},
 	"#forge:ingots/cloggrum": {
 		"smithing": 12
@@ -239,6 +255,9 @@
 	"#forge:ingots/cyanite": {
 		"smithing": 18
 	},
+	"#forge:ingots/endorium": {
+		"smithing": 20
+	},
 	"#forge:ingots/froststeel": {
 		"smithing": 12
 	},
@@ -249,8 +268,16 @@
 		"smithing": 12
 	},
 	"#forge:ingots/hellforged": {
-		"smithing": 18,
-		"magic": 4
+		"magic": 4,
+		"smithing": 18
+	},
+	"#forge:ingots/imperium": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/inferium": {
+		"magic": 2,
+		"smithing": 12
 	},
 	"#forge:ingots/iron": {
 		"smithing": 12
@@ -277,11 +304,23 @@
 		"smithing": 12
 	},
 	"#forge:ingots/pewter": {
-		"smithing": 12,
-		"magic": 2
+		"magic": 2,
+		"smithing": 12
 	},
 	"#forge:ingots/platinum": {
 		"smithing": 28
+	},
+	"#forge:ingots/prosperity": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/prudentium": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/rainbow": {
+		"magic": 4,
+		"smithing": 18
 	},
 	"#forge:ingots/redstone_alloy": {
 		"smithing": 18
@@ -298,11 +337,26 @@
 	"#forge:ingots/silver": {
 		"smithing": 11
 	},
+	"#forge:ingots/soulium": {
+		"magic": 4,
+		"smithing": 12
+	},
 	"#forge:ingots/steel": {
 		"smithing": 16
 	},
+	"#forge:ingots/supremium": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/tertium": {
+		"magic": 2,
+		"smithing": 12
+	},
 	"#forge:ingots/tin": {
 		"smithing": 6.5
+	},
+	"#forge:ingots/tungsten": {
+		"smithing": 20
 	},
 	"#forge:ingots/tyrian_steel": {
 		"smithing": 28
@@ -318,6 +372,10 @@
 	},
 	"#forge:ingots/zinc": {
 		"smithing": 16
+	},
+	"#forge:ingots/zitrite": {
+		"magic": 4,
+		"smithing": 12
 	},
 	"#forge:nuggets/gold": {
 		"smithing": 1.95
@@ -337,21 +395,6 @@
 	"#forge:stone": {
 		"smithing": 1
 	},
-	"#forge:storage_blocks/inferium_essence": {
-		"smithing": 12,
-		"magic": 2
-	},
-	"#forge:storage_blocks/prosperity_shard": {
-		"smithing": 12,
-		"magic": 2
-	},
-	"#forge:storage_blocks/soulium_dust": {
-		"smithing": 12,
-		"magic": 2
-	},
-	"#forge:storage_blocks/uraninite": {
-		"smithing": 18
-	},
 	"#forge:terracottas": {
 		"smithing": 1.5
 	},
@@ -362,8 +405,8 @@
 		"smithing": 1
 	},
 	"eidolon:enchanted_ash": {
-		"smithing": 1,
-		"magic": 2
+		"magic": 2,
+		"smithing": 1
 	},
 	"minecraft:cracked_nether_bricks": {
 		"smithing": 1.5
@@ -378,7 +421,10 @@
 		"smithing": 1
 	},
 	"minecraft:terracotta": {
-		"smithing": 6,
-		"crafting": 14
+		"crafting": 14,
+		"smithing": 6
+	},
+	"powah:uraninite": {
+		"smithing": 14
 	}
 }
