@@ -9,8 +9,7 @@ on:
       - '1.16'
 
 jobs:
-
-  path:
+  setup:
     if: ${{ contains(github.event.head_commit.message, 'version bump for release') && github.event_name != 'release' }}
     name: Generate file path
     runs-on: ubuntu-latest
@@ -43,14 +42,14 @@ jobs:
   build:
     name: Build and cache
     runs-on: ubuntu-latest
-    needs: [ path ]
+    needs: [ setup ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '${{ needs.path.outputs.java_version }}'
+          java-version: '${{ needs.setup.outputs.java_version }}'
           distribution: 'adopt'
           cache: 'gradle'
       - name: Grant execute permission for gradlew
@@ -61,20 +60,20 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ${{ needs.path.outputs.file_path }}
+            ${{ needs.setup.outputs.file_path }}
             CHANGELOG.md
           key: ${{ github.sha }}
 
-  curseforge:
+  upload:
     name: Upload to ModRepo
     runs-on: ubuntu-latest
-    needs: [ path,build ]
+    needs: [ setup,build ]
     steps:
       - name: Restore Cache
         uses: actions/cache@v3
         with:
           path: |
-            ${{ needs.path.outputs.file_path }}
+            ${{ needs.setup.outputs.file_path }}
             CHANGELOG.md
           key: ${{ github.sha }}
       - name: Upload to CurseForge
@@ -84,19 +83,19 @@ jobs:
           curseforge-id: 353935
           curseforge-token: ${{ secrets.curseforge_api }}
 
-          files-primary: ${{ needs.path.outputs.file_path }}
+          files-primary: ${{ needs.setup.outputs.file_path }}
 
-          name: ${{ needs.path.outputs.mod_name }}-${{ needs.path.outputs.mod_version }}
-          version: ${{ needs.path.outputs.mod_version }}
+          name: ${{ needs.setup.outputs.mod_name }}-${{ needs.setup.outputs.mod_version }}
+          version: ${{ needs.setup.outputs.mod_version }}
           changelog-file: CHANGELOG.md
 
           loaders: |
             forge
           game-versions: |
-            ${{ needs.path.outputs.mc_minor_version }}
-            ${{ needs.path.outputs.mc_patch_version }}
+            ${{ needs.setup.outputs.mc_minor_version }}
+            ${{ needs.setup.outputs.mc_patch_version }}
           java: |
-            ${{ needs.path.outputs.java_version }}
+            ${{ needs.setup.outputs.java_version }}
       - name: Upload to Modrinth
         if: ${{ vars.MODREPO == 'modrinth' || vars.MODREPO == 'both' }}
         uses: Kir-Antipov/mc-publish@v3.2
@@ -104,16 +103,16 @@ jobs:
           modrinth-id: KFQYC1Uy
           modrinth-token: ${{ secrets.curseforge_api }}
 
-          files-primary: ${{ needs.path.outputs.file_path }}
+          files-primary: ${{ needs.setup.outputs.file_path }}
 
-          name: ${{ needs.path.outputs.mod_name }}-${{ needs.path.outputs.mod_version }}
-          version: ${{ needs.path.outputs.mod_version }}
+          name: ${{ needs.setup.outputs.mod_name }}-${{ needs.setup.outputs.mod_version }}
+          version: ${{ needs.setup.outputs.mod_version }}
           changelog-file: CHANGELOG.md
 
           loaders: |
             forge
           game-versions: |
-            ${{ needs.path.outputs.mc_minor_version }}
-            ${{ needs.path.outputs.mc_patch_version }}
+            ${{ needs.setup.outputs.mc_minor_version }}
+            ${{ needs.setup.outputs.mc_patch_version }}
           java: |
-            ${{ needs.path.outputs.java_version }}
+            ${{ needs.setup.outputs.java_version }}
