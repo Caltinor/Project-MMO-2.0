@@ -17,7 +17,7 @@ public class FurnaceHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void handleSmelted(ItemStack input, ItemStack output, World world, BlockPos pos, int type)
+    public static void handleSmelted(ItemStack output, World world, BlockPos pos, int type)
     {
         try
         {
@@ -43,13 +43,13 @@ public class FurnaceHandler
                     return;
             }
 
-            source += " " + input.getItem().getRegistryName();
-            source += " [" + XP.getDimResLoc(world).toString() + "|x" + pos.getX() + "|y" + pos.getY() + "|z" + pos.getZ() + "]";
+            source += " " + output.getItem().getRegistryName();
+            source += " [" + XP.getDimResLoc(world) + "|x" + pos.getX() + "|y" + pos.getY() + "|z" + pos.getZ() + "]";
             UUID uuid = ChunkDataHandler.checkPos(world, pos);
 
             if(uuid != null)
             {
-                double extraChance = XP.getExtraChance(uuid, input.getItem().getRegistryName(), infoType, false) / 100D;
+                double extraChance = XP.getExtraChance(uuid, output.getItem().getRegistryName(), infoType, false) / 100D;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -63,7 +63,7 @@ public class FurnaceHandler
 
                 output.grow(totalExtraDrops);
 
-                Map<String, Double> award = XP.multiplyMapAnyDouble(XP.getXp(input, xpType), 1 + totalExtraDrops);
+                Map<String, Double> award = XP.multiplyMapAnyDouble(XP.getXp(output, xpType), 1 + totalExtraDrops);
 
 
                 for(String awardSkillName : award.keySet())

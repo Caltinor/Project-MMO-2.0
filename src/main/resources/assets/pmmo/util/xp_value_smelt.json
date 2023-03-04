@@ -1,1444 +1,430 @@
 {
-	"#forge:ores/aluminum":
-	{
+	"#forge:cobblestone": {
+		"smithing": 1
+	},
+	"#forge:dusts/hop_graphite": {
+		"smithing": 22
+	},
+	"#forge:dusts/redstone": {
+		"smithing": 15
+	},
+	"#forge:dusts/saltpeter": {
+		"magic": 2,
+		"smithing": 14
+	},
+	"#forge:dusts/soulium": {
+		"magic": 4,
+		"smithing": 12
+	},
+	"#forge:gems/agate": {
+		"smithing": 18
+	},
+	"#forge:gems/alexandrite": {
+		"smithing": 18
+	},
+	"#forge:gems/amber": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:gems/amethyst": {
+		"smithing": 18
+	},
+	"#forge:gems/ametrine": {
+		"smithing": 18
+	},
+	"#forge:gems/ammolite": {
+		"smithing": 18
+	},
+	"#forge:gems/amythest": {
+		"smithing": 35
+	},
+	"#forge:gems/apatite": {
+		"smithing": 18
+	},
+	"#forge:gems/aquamarine": {
+		"magic": 2,
+		"smithing": 15
+	},
+	"#forge:gems/benitoite": {
+		"smithing": 18
+	},
+	"#forge:gems/black_diamond": {
+		"smithing": 18
+	},
+	"#forge:gems/carnelian": {
+		"smithing": 18
+	},
+	"#forge:gems/cats_eye": {
+		"smithing": 18
+	},
+	"#forge:gems/chaos": {
+		"smithing": 18
+	},
+	"#forge:gems/chrysoprase": {
+		"smithing": 18
+	},
+	"#forge:gems/citrine": {
+		"smithing": 18
+	},
+	"#forge:gems/coral": {
+		"smithing": 18
+	},
+	"#forge:gems/diamond": {
+		"smithing": 35
+	},
+	"#forge:gems/emerald": {
+		"smithing": 60
+	},
+	"#forge:gems/euclase": {
+		"smithing": 18
+	},
+	"#forge:gems/fluorite": {
+		"smithing": 15
+	},
+	"#forge:gems/garnet": {
+		"smithing": 18
+	},
+	"#forge:gems/green_sapphire": {
+		"smithing": 18
+	},
+	"#forge:gems/heliodor": {
+		"smithing": 18
+	},
+	"#forge:gems/iolite": {
+		"smithing": 18
+	},
+	"#forge:gems/jade": {
+		"smithing": 18
+	},
+	"#forge:gems/jasper": {
+		"smithing": 18
+	},
+	"#forge:gems/kunzite": {
+		"smithing": 18
+	},
+	"#forge:gems/kyanite": {
+		"smithing": 18
+	},
+	"#forge:gems/lapis": {
+		"smithing": 25
+	},
+	"#forge:gems/lepidolite": {
+		"smithing": 18
+	},
+	"#forge:gems/malachite": {
+		"smithing": 18
+	},
+	"#forge:gems/mana": {
+		"smithing": 15
+	},
+	"#forge:gems/moldavit": {
+		"smithing": 18
+	},
+	"#forge:gems/moonstone": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:gems/morganite": {
+		"smithing": 18
+	},
+	"#forge:gems/negatite": {
+		"magic": 20,
+		"smithing": 10
+	},
+	"#forge:gems/onyx": {
+		"smithing": 18
+	},
+	"#forge:gems/opal": {
+		"smithing": 18
+	},
+	"#forge:gems/pearl": {
+		"smithing": 18
+	},
+	"#forge:gems/peridot": {
+		"smithing": 18
+	},
+	"#forge:gems/phosphophyllite": {
+		"smithing": 18
+	},
+	"#forge:gems/positite": {
+		"magic": 20,
+		"smithing": 10
+	},
+	"#forge:gems/pyrope": {
+		"smithing": 18
+	},
+	"#forge:gems/quartz": {
+		"smithing": 8
+	},
+	"#forge:gems/rose_quartz": {
+		"smithing": 18
+	},
+	"#forge:gems/ruby": {
+		"smithing": 18
+	},
+	"#forge:gems/sapphire": {
+		"smithing": 35
+	},
+	"#forge:gems/sodalite": {
+		"smithing": 18
+	},
+	"#forge:gems/spinel": {
+		"smithing": 18
+	},
+	"#forge:gems/sunstone": {
+		"smithing": 18
+	},
+	"#forge:gems/tanzanite": {
+		"smithing": 18
+	},
+	"#forge:gems/tektite": {
+		"smithing": 18
+	},
+	"#forge:gems/topaz": {
+		"smithing": 18
+	},
+	"#forge:gems/turquoise": {
+		"smithing": 18
+	},
+	"#forge:gems/yellow_diamond": {
+		"smithing": 18
+	},
+	"#forge:gems/zircon": {
+		"smithing": 18
+	},
+	"#forge:glass": {
+		"smithing": 1
+	},
+	"#forge:gravel": {
+		"smithing": 1
+	},
+	"#forge:ingots/aluminum": {
 		"smithing": 12.5
 	},
-	"#forge:ores/coal":
-	{
-		"smithing": 8
+	"#forge:ingots/aluminum_steel": {
+		"smithing": 18
 	},
-	"#forge:ores/copper":
-	{
+	"#forge:ingots/arcane_gold": {
+		"magic": 6,
+		"smithing": 12
+	},
+	"#forge:ingots/awakened_supremium": {
+		"magic": 4,
+		"smithing": 18
+	},
+	"#forge:ingots/azure_electrum": {
+		"smithing": 22
+	},
+	"#forge:ingots/azure_silver": {
+		"smithing": 16
+	},
+	"#forge:ingots/bauxite": {
+		"smithing": 12
+	},
+	"#forge:ingots/bismuth_brass": {
+		"smithing": 18
+	},
+	"#forge:ingots/bismuth_ore": {
+		"smithing": 12
+	},
+	"#forge:ingots/bismuth_steel": {
+		"smithing": 18
+	},
+	"#forge:ingots/blaze_gold": {
+		"smithing": 18
+	},
+	"#forge:ingots/brass": {
+		"smithing": 22
+	},
+	"#forge:ingots/brick": {
+		"crafting": 3.5,
+		"smithing": 1.5
+	},
+	"#forge:ingots/cloggrum": {
+		"smithing": 12
+	},
+	"#forge:ingots/copper": {
 		"smithing": 7.5
 	},
-	"#forge:ores/diamond":
-	{
-		"smithing": 35
-	},
-	"#forge:ores/emerald":
-	{
-		"smithing": 60
-	},
-	"#forge:ores/netherite_scrap":
-	{
-		"smithing": 333
-	},
-	"#forge:ores/gold":
-	{
-		"smithing": 18
-	},
-	"#forge:ores/iron":
-	{
-		"smithing": 12
-	},
-	"#forge:ores/lapis":
-	{
-		"smithing": 25
-	},
-	"#forge:ores/nickel":
-	{
-		"smithing": 8.5
-	},
-	"#forge:ores/quartz":
-	{
-		"smithing": 8
-	},
-	"#forge:ores/redstone":
-	{
-		"smithing": 15
-	},
-	"#forge:ores/silver":
-	{
-		"smithing": 11
-	},
-	"#forge:ores/tin":
-	{
-		"smithing": 6.5
-	},
-	"#forge:ores/zinc":
-	{
+	"#forge:ingots/crimson_iron": {
 		"smithing": 16
 	},
-	"#forge:sandstone":
-	{
-		"smithing": 3
-	},
-	"#forge:stone":
-	{
-		"smithing": 1
-	},
-	"#minecraft:logs":
-	{
-		"smithing": 0.25
-	},
-	"appliedenergistics2:certus_quartz_dust":
-	{
-		"smithing": 16
-	},
-	"appliedenergistics2:gold_dust":
-	{
-		"smithing": 16
-	},
-	"appliedenergistics2:iron_dust":
-	{
-		"smithing": 24
-	},
-	"appliedenergistics2:nether_quartz_dust":
-	{
-		"smithing": 12
-	},
-	"aquaculture:tin_can":
-	{
-		"smithing": 12
-	},
-	"ars_nouveau:arcane_ore":
-	{
-		"smithing": 15
-	},
-	"astralsorcery:aquamarine_sand_ore":
-	{
-		"smithing": 15,
-		"magic": 2
-	},
-	"astralsorcery:starmetal_ore":
-	{
-		"smithing": 18,
-		"magic": 20
-	},
-	"autumnity:maple_log":
-	{
-		"smithing": 0.25
-	},
-	"autumnity:sappy_maple_log":
-	{
-		"smithing": 0.25
-	},
-	"biggerreactors:blutonium_dust":
-	{
-		"smithing": 18
-	},
-	"biggerreactors:cyanite_dust":
-	{
-		"smithing": 18
-	},
-	"biggerreactors:graphite_dust":
-	{
-		"smithing": 12
-	},
-	"biggerreactors:ludicrite_dust":
-	{
-		"smithing": 35
-	},
-	"bigreactors:anglesite_ore":
-	{
-		"smithing": 18
-	},
-	"bigreactors:benitoite_ore":
-	{
-		"smithing": 18
-	},
-	"bigreactors:yellorite_ore":
-	{
-		"smithing": 18
-	},
-	"bigreactors:yellorium_dust":
-	{
-		"smithing": 16
-	},
-	"biomesoplenty:cherry_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:dead_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:fir_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:hellbark_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:jacaranda_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:magic_log":
-	{
-		"smithing": 0.15,
-		"magic": 0.05
-	},
-	"biomesoplenty:mahogany_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:mud_ball":
-	{
-		"smithing": 1.2
-	},
-	"biomesoplenty:palm_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:redwood_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:umbran_log":
-	{
-		"smithing": 0.25
-	},
-	"biomesoplenty:white_sand":
-	{
-		"smithing": 1
-	},
-	"biomesoplenty:willow_log":
-	{
-		"smithing": 0.25
-	},
-	"bloodmagic:goldsand":
-	{
-		"smithing": 16
-	},
-	"bloodmagic:ironsand":
-	{
-		"smithing": 12
-	},
-	"bloodmagic:sand_hellforged":
-	{
-		"smithing": 18,
-		"magic": 4
-	},
-	"bloodmagic:sand_netherite":
-	{
-		"smithing": 60
-	},
-	"bno:netheraluminum_ore":
-	{
-		"smithing": 12
-	},
-	"bno:nethercoal_ore":
-	{
-		"smithing": 8
-	},
-	"bno:nethercopper_ore":
-	{
-		"smithing": 7
-	},
-	"bno:netherdiamond_ore":
-	{
-		"smithing": 35
-	},
-	"bno:netheremerald_ore":
-	{
-		"smithing": 60
-	},
-	"bno:netheriron_ore":
-	{
-		"smithing": 12
-	},
-	"bno:netherlapis_ore":
-	{
-		"smithing": 25
-	},
-	"bno:netherlead_ore":
-	{
-		"smithing": 18
-	},
-	"bno:nethernickel_ore":
-	{
-		"smithing": 28
-	},
-	"bno:netherosmium_ore":
-	{
-		"smithing": 12
-	},
-	"bno:netherredstone_ore":
-	{
-		"smithing": 15
-	},
-	"bno:nethersilver_ore":
-	{
-		"smithing": 18
-	},
-	"bno:nethertin_ore":
-	{
-		"smithing": 12
-	},
-	"bno:netheruranium_ore":
-	{
-		"smithing": 18
-	},
-	"charm:nether_gold_deposit":
-	{
+	"#forge:ingots/crimson_steel": {
 		"smithing": 22
 	},
-	"charm:pig_iron_ore":
-	{
-		"smithing": 22
-	},
-	"create:crushed_aluminum_ore":
-	{
-		"smithing": 10
-	},
-	"create:crushed_brass_ore":
-	{
-		"smithing": 23.5
-	},
-	"create:crushed_copper_ore":
-	{
-		"smithing": 6.5
-	},
-	"create:crushed_gold_ore":
-	{
-		"smithing": 17
-	},
-	"create:crushed_iron_ore":
-	{
-		"smithing": 11
-	},
-	"create:crushed_lead_ore":
-	{
-		"smithing": 16
-	},
-	"create:crushed_nickel_ore":
-	{
-		"smithing": 26
-	},
-	"create:crushed_osmium_ore":
-	{
-		"smithing": 10
-	},
-	"create:crushed_platinum_ore":
-	{
-		"smithing": 26
-	},
-	"create:crushed_silver_ore":
-	{
-		"smithing": 16
-	},
-	"create:crushed_tin_ore":
-	{
-		"smithing": 11
-	},
-	"create:crushed_uranium_ore":
-	{
+	"#forge:ingots/cyanite": {
 		"smithing": 18
 	},
-	"create:crushed_zinc_ore":
-	{
-		"smithing": 15
-	},
-	"druidcraft:amber_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"druidcraft:fiery_glass_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"druidcraft:moonstone_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"druidcraft:rockroot_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"eidolon:pewter_blend":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"elementalcraft:crystalore":
-	{
-		"smithing": 12
-	},
-	"elementalcraft:pure_ore":
-	{
-		"smithing": 12
-	},
-	"endreborn:end_wolframium_ore":
-	{
-		"smithing": 14
-	},
-	"endreborn:quartz_ore":
-	{
-		"smithing": 13
-	},
-	"endreborn:wolframium_horse_armor":
-	{
+	"#forge:ingots/endorium": {
 		"smithing": 20
 	},
-	"endreborn:wolframium_ore":
-	{
+	"#forge:ingots/froststeel": {
 		"smithing": 12
 	},
-	"enigmaticlegacy:etherium_ore":
-	{
+	"#forge:ingots/gold": {
 		"smithing": 18
 	},
-	"forbidden_arcanus:arcane_crystal":
-	{
-		"smithing": 12,
-		"magic": 6
+	"#forge:ingots/graphite": {
+		"smithing": 12
 	},
-	"forbidden_arcanus:arcane_crystal_ore":
-	{
-		"smithing": 12,
-		"magic": 6
-	},
-	"forbidden_arcanus:dark_runestone":
-	{
-		"smithing": 10,
-		"magic": 12
-	},
-	"forbidden_arcanus:edelwood_log":
-	{
-		"smithing": 8,
-		"magic": 16
-	},
-	"forbidden_arcanus:obsidian_with_iron":
-	{
-		"smithing": 12,
-		"magic": 6
-	},
-	"forbidden_arcanus:runestone":
-	{
-		"smithing": 8,
-		"magic": 10
-	},
-	"good_nights_sleep:necrum_ore":
-	{
-		"smithing": 18,
-		"magic": 4
-	},
-	"good_nights_sleep:negatite_ore":
-	{
-		"smithing": 10,
-		"magic": 20
-	},
-	"good_nights_sleep:positite_ore":
-	{
-		"smithing": 10,
-		"magic": 20
-	},
-	"good_nights_sleep:rainbow_ore":
-	{
-		"smithing": 18,
-		"magic": 4
-	},
-	"good_nights_sleep:zitrite_ore":
-	{
-		"smithing": 12,
-		"magic": 4
-	},
-	"iceandfire:amythest_ore":
-	{
-		"smithing": 35
-	},
-	"iceandfire:copper_ore":
-	{
-		"smithing": 7
-	},
-	"iceandfire:frozen_cobblestone":
-	{
-		"smithing": 2
-	},
-	"iceandfire:frozen_grass_path":
-	{
-		"smithing": 2
-	},
-	"iceandfire:frozen_stone":
-	{
-		"smithing": 2
-	},
-	"iceandfire:sapphire_ore":
-	{
-		"smithing": 35
-	},
-	"iceandfire:silver_ore":
-	{
+	"#forge:ingots/hellforged": {
+		"magic": 4,
 		"smithing": 18
 	},
-	"immersiveengineering:dust_gold":
-	{
-		"smithing": 16
-	},
-	"immersiveengineering:dust_hop_graphite":
-	{
-		"smithing": 22
-	},
-	"immersiveengineering:dust_iron":
-	{
+	"#forge:ingots/imperium": {
+		"magic": 2,
 		"smithing": 12
 	},
-	"mekanism:dust_netherite":
-	{
+	"#forge:ingots/inferium": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/iron": {
+		"smithing": 12
+	},
+	"#forge:ingots/lead": {
+		"smithing": 18
+	},
+	"#forge:ingots/ludicrite": {
+		"smithing": 35
+	},
+	"#forge:ingots/nether_brick": {
+		"smithing": 0.25
+	},
+	"#forge:ingots/netherite": {
+		"smithing": 1400
+	},
+	"#forge:ingots/nickel": {
+		"smithing": 8.5
+	},
+	"#forge:ingots/obsidian": {
+		"smithing": 50
+	},
+	"#forge:ingots/osmium": {
+		"smithing": 12
+	},
+	"#forge:ingots/pewter": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/platinum": {
+		"smithing": 28
+	},
+	"#forge:ingots/prosperity": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/prudentium": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/rainbow": {
+		"magic": 4,
+		"smithing": 18
+	},
+	"#forge:ingots/redstone_alloy": {
+		"smithing": 18
+	},
+	"#forge:ingots/refined_glowstone": {
+		"smithing": 16
+	},
+	"#forge:ingots/refined_obsidian": {
 		"smithing": 60
 	},
-	"mekanism:dust_osmium":
-	{
-		"smithing": 8
-	},
-	"mekanism:dust_quartz":
-	{
-		"smithing": 16
-	},
-	"mekanism:fluorite_ore":
-	{
-		"smithing": 15
-	},
-	"mekanism:osmium_ore":
-	{
+	"#forge:ingots/regalium": {
 		"smithing": 12
 	},
-	"minecraft:acacia_log":
-	{
-		"smithing": 0.25
+	"#forge:ingots/silver": {
+		"smithing": 11
 	},
-	"minecraft:ancient_debris":
-	{
-		"smithing": 60
-	},
-	"minecraft:birch_log":
-	{
-		"smithing": 0.25
-	},
-	"minecraft:black_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:blue_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:brown_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:chainmail_boots":
-	{
-		"smithing": 6
-	},
-	"minecraft:chainmail_chestplate":
-	{
+	"#forge:ingots/soulium": {
+		"magic": 4,
 		"smithing": 12
 	},
-	"minecraft:chainmail_helmet":
-	{
-		"smithing": 7.5
-	},
-	"minecraft:chainmail_leggings":
-	{
-		"smithing": 10.5
-	},
-	"minecraft:charcoal":
-	{
-		"smithing": 8
-	},
-	"minecraft:clay":
-	{
-		"smithing": 6,
-		"crafting": 14
-	},
-	"minecraft:clay_ball":
-	{
-		"smithing": 1.5,
-		"crafting": 3.5
-	},
-	"minecraft:coal":
-	{
-		"smithing": 8
-	},
-	"minecraft:cobblestone":
-	{
-		"smithing": 0.5
-	},
-	"minecraft:cyan_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:dark_oak_log":
-	{
-		"smithing": 0.25
-	},
-	"minecraft:golden_axe":
-	{
-		"smithing": 6
-	},
-	"minecraft:golden_boots":
-	{
-		"smithing": 8
-	},
-	"minecraft:golden_chestplate":
-	{
+	"#forge:ingots/steel": {
 		"smithing": 16
 	},
-	"minecraft:golden_helmet":
-	{
-		"smithing": 10
+	"#forge:ingots/supremium": {
+		"magic": 2,
+		"smithing": 12
 	},
-	"minecraft:golden_hoe":
-	{
+	"#forge:ingots/tertium": {
+		"magic": 2,
+		"smithing": 12
+	},
+	"#forge:ingots/tin": {
+		"smithing": 6.5
+	},
+	"#forge:ingots/tungsten": {
+		"smithing": 20
+	},
+	"#forge:ingots/tyrian_steel": {
+		"smithing": 28
+	},
+	"#forge:ingots/uranium": {
+		"smithing": 18
+	},
+	"#forge:ingots/utherium": {
+		"smithing": 12
+	},
+	"#forge:ingots/yellorium": {
+		"smithing": 16
+	},
+	"#forge:ingots/zinc": {
+		"smithing": 16
+	},
+	"#forge:ingots/zitrite": {
+		"magic": 4,
+		"smithing": 12
+	},
+	"#forge:nuggets/gold": {
+		"smithing": 1.95
+	},
+	"#forge:nuggets/iron": {
+		"smithing": 1.3
+	},
+	"#forge:plastic": {
 		"smithing": 4
 	},
-	"minecraft:golden_horse_armor":
-	{
-		"smithing": 100
-	},
-	"minecraft:golden_leggings":
-	{
-		"smithing": 14
-	},
-	"minecraft:golden_pickaxe":
-	{
-		"smithing": 6
-	},
-	"minecraft:golden_shovel":
-	{
-		"smithing": 2
-	},
-	"minecraft:golden_sword":
-	{
-		"smithing": 4
-	},
-	"minecraft:gray_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:green_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:iron_axe":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:iron_boots":
-	{
-		"smithing": 2
-	},
-	"minecraft:iron_chestplate":
-	{
-		"smithing": 4
-	},
-	"minecraft:iron_helmet":
-	{
-		"smithing": 2.5
-	},
-	"minecraft:iron_hoe":
-	{
-		"smithing": 1
-	},
-	"minecraft:iron_horse_armor":
-	{
-		"smithing": 25
-	},
-	"minecraft:iron_leggings":
-	{
-		"smithing": 3.5
-	},
-	"minecraft:iron_pickaxe":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:iron_shovel":
-	{
-		"smithing": 0.5
-	},
-	"minecraft:iron_sword":
-	{
-		"smithing": 1
-	},
-	"minecraft:jungle_log":
-	{
-		"smithing": 0.25
-	},
-	"minecraft:light_blue_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:light_gray_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:lime_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:log":
-	{
-		"smithing": 0.25
-	},
-	"minecraft:magenta_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:nether_bricks":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:netherrack":
-	{
-		"smithing": 0.25
-	},
-	"minecraft:oak_log":
-	{
-		"smithing": 0.25
-	},
-	"minecraft:orange_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:pink_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:polished_blackstone_bricks":
-	{
-		"smithing": 2.5
-	},
-	"minecraft:purple_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:red_sand":
-	{
-		"smithing": 1.2
-	},
-	"minecraft:red_sandstone":
-	{
-		"smithing": 3.6
-	},
-	"minecraft:red_terracotta":
-	{
-		"smithing": 1.5
-	},
-	"minecraft:sand":
-	{
-		"smithing": 1
-	},
-	"minecraft:sandstone":
-	{
+	"#forge:sandstone": {
 		"smithing": 3
 	},
-	"minecraft:spruce_log":
-	{
-		"smithing": 0.25
+	"#forge:silicon": {
+		"smithing": 16
 	},
-	"minecraft:stone":
-	{
+	"#forge:stone": {
 		"smithing": 1
 	},
-	"minecraft:stone_bricks":
-	{
+	"#forge:terracottas": {
+		"smithing": 1.5
+	},
+	"#minecraft:coals": {
+		"smithing": 8
+	},
+	"#minecraft:stone_bricks": {
 		"smithing": 1
 	},
-	"minecraft:terracotta":
-	{
+	"eidolon:enchanted_ash": {
+		"magic": 2,
+		"smithing": 1
+	},
+	"minecraft:cracked_nether_bricks": {
 		"smithing": 1.5
 	},
-	"minecraft:white_terracotta":
-	{
-		"smithing": 1.5
+	"minecraft:cracked_polished_blackstone_bricks": {
+		"smithing": 2.5
 	},
-	"minecraft:yellow_terracotta":
-	{
-		"smithing": 1.5
+	"minecraft:netherite_scrap": {
+		"smithing": 333
 	},
-	"mysticalagradditions:end_inferium_ore":
-	{
-		"smithing": 12,
-		"magic": 2
+	"minecraft:smooth_stone": {
+		"smithing": 1
 	},
-	"mysticalagradditions:end_prosperity_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"mysticalagradditions:nether_inferium_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"mysticalagradditions:nether_prosperity_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"mysticalagriculture:inferium_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"mysticalagriculture:prosperity_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"mysticalagriculture:soulium_ore":
-	{
-		"smithing": 12,
-		"magic": 2
-	},
-	"powah:uraninite_ore":
-	{
-		"smithing": 14
-	},
-	"powah:uraninite_ore_dense":
-	{
-		"smithing": 18
-	},
-	"powah:uraninite_ore_poor":
-	{
-		"smithing": 10
-	},
-	"powah:uraninite_raw":
-	{
-		"smithing": 14
-	},
-	"powah:uraninite_raw_dense":
-	{
-		"smithing": 18
-	},
-	"powah:uraninite_raw_poor":
-	{
-		"smithing": 10
-	},
-	"rats:cheese_ore":
-	{
-		"smithing": 8
-	},
-	"rats:marbled_cheese_raw":
-	{
-		"smithing": 12
-	},
-	"rats:oratchalcum_ore":
-	{
-		"smithing": 18
-	},
-	"rats:ratlantean_gem_ore":
-	{
-		"smithing": 35
-	},
-	"silentgear:azure_electrum_dust":
-	{
-		"smithing": 22
-	},
-	"silentgear:azure_silver_chunks":
-	{
-		"smithing": 16
-	},
-	"silentgear:azure_silver_dust":
-	{
-		"smithing": 16
-	},
-	"silentgear:azure_silver_ore":
-	{
-		"smithing": 16
-	},
-	"silentgear:blaze_gold_dust":
-	{
-		"smithing": 18
-	},
-	"silentgear:crimson_iron_chunks":
-	{
-		"smithing": 16
-	},
-	"silentgear:crimson_iron_dust":
-	{
-		"smithing": 16
-	},
-	"silentgear:crimson_iron_ore":
-	{
-		"smithing": 16
-	},
-	"silentgear:crimson_steel_dust":
-	{
-		"smithing": 22
-	},
-	"silentgems:agate_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:alexandrite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:amber_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:ametrine_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:ammolite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:apatite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:aquamarine_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:benitoite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:black_diamond_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:carnelian_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:cats_eye_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:chaos_gold_dust":
-	{
-		"smithing": 18
-	},
-	"silentgems:chaos_iron_dust":
-	{
-		"smithing": 18
-	},
-	"silentgems:chaos_ore":
-	{
-		"smithing": 8
-	},
-	"silentgems:chaos_silver_dust":
-	{
-		"smithing": 18
-	},
-	"silentgems:chrysoprase_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:citrine_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:coral_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:ender_ore":
-	{
-		"smithing": 12
-	},
-	"silentgems:euclase_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:fluorite_ore":
-	{
-		"smithing": 15
-	},
-	"silentgems:garnet_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:green_sapphire_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:heliodor_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:iolite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:jade_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:jasper_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:kunzite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:kyanite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:lepidolite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:malachite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:moldavite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:moonstone_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:morganite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:onyx_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:opal_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:pearl_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:peridot_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:phosphophyllite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:pyrope_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:rose_quartz_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:ruby_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:sapphire_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:sodalite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:spinel_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:sunstone_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:tanzanite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:tektite_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:topaz_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:turquoise_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:yellow_diamond_ore":
-	{
-		"smithing": 18
-	},
-	"silentgems:zircon_ore":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:aluminum_dust":
-	{
-		"smithing": 8
-	},
-	"silents_mechanisms:aluminum_steel_dust":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:bauxite_chunks":
-	{
-		"smithing": 8
-	},
-	"silents_mechanisms:bauxite_ore":
-	{
-		"smithing": 12
-	},
-	"silents_mechanisms:bismuth_brass_dust":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:bismuth_chunks":
-	{
-		"smithing": 8
-	},
-	"silents_mechanisms:bismuth_dust":
-	{
-		"smithing": 8
-	},
-	"silents_mechanisms:bismuth_ore":
-	{
-		"smithing": 12
-	},
-	"silents_mechanisms:bismuth_steel_dust":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:brass_dust":
-	{
-		"smithing": 22
-	},
-	"silents_mechanisms:copper_chunks":
-	{
-		"smithing": 7
-	},
-	"silents_mechanisms:gold_chunks":
-	{
-		"smithing": 16
-	},
-	"silents_mechanisms:iron_chunks":
-	{
-		"smithing": 12
-	},
-	"silents_mechanisms:lead_chunks":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:nickel_chunks":
-	{
-		"smithing": 28
-	},
-	"silents_mechanisms:platinum_chunks":
-	{
-		"smithing": 28
-	},
-	"silents_mechanisms:platinum_dust":
-	{
-		"smithing": 28
-	},
-	"silents_mechanisms:platinum_ore":
-	{
-		"smithing": 28
-	},
-	"silents_mechanisms:redstone_alloy_dust":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:silver_chunks":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:steel_dust":
-	{
-		"smithing": 16
-	},
-	"silents_mechanisms:uranium_chunks":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:uranium_dust":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:uranium_ore":
-	{
-		"smithing": 18
-	},
-	"silents_mechanisms:zinc_chunks":
-	{
-		"smithing": 12
-	},
-	"silents_mechanisms:zinc_dust":
-	{
-		"smithing": 12
-	},
-	"silents_mechanisms:zinc_ore":
-	{
-		"smithing": 16
-	},
-	"silentsgems:amethyst_ore":
-	{
-		"smithing": 18
-	},
-	"theabyss:abyssingot":
-	{
-		"smithing": 8
-	},
-	"theabyss:unactivefusioningot":
-	{
-		"smithing": 18
-	},
-	"thermal:apatite_ore":
-	{
+	"minecraft:terracotta": {
+		"crafting": 14,
 		"smithing": 6
 	},
-	"thermal:bronze_dust":
-	{
-		"smithing": 18
-	},
-	"thermal:cinnabar_ore":
-	{
-		"smithing": 12
-	},
-	"thermal:constantan_dust":
-	{
-		"smithing": 18
-	},
-	"thermal:copper_dust":
-	{
-		"smithing": 7
-	},
-	"thermal:copper_ore":
-	{
-		"smithing": 7
-	},
-	"thermal:electrum_dust":
-	{
-		"smithing": 18
-	},
-	"thermal:enderium_dust":
-	{
-		"smithing": 28,
-		"magic": 2
-	},
-	"thermal:gold_dust":
-	{
-		"smithing": 16
-	},
-	"thermal:invar_dust":
-	{
-		"smithing": 22
-	},
-	"thermal:iron_dust":
-	{
-		"smithing": 12
-	},
-	"thermal:lead_dust":
-	{
-		"smithing": 18
-	},
-	"thermal:lead_ore":
-	{
-		"smithing": 18
-	},
-	"thermal:lumium_dust":
-	{
-		"smithing": 18
-	},
-	"thermal:nickel_dust":
-	{
-		"smithing": 28
-	},
-	"thermal:nickel_ore":
-	{
-		"smithing": 28
-	},
-	"thermal:niter_ore":
-	{
-		"smithing": 12
-	},
-	"thermal:quartz_dust":
-	{
-		"smithing": 16
-	},
-	"thermal:rubber":
-	{
-		"smithing": 8
-	},
-	"thermal:ruby_ore":
-	{
-		"smithing": 18
-	},
-	"thermal:sapphire_ore":
-	{
-		"smithing": 18
-	},
-	"thermal:signalum_dust":
-	{
-		"smithing": 22
-	},
-	"thermal:silver_dust":
-	{
-		"smithing": 18
-	},
-	"thermal:silver_ore":
-	{
-		"smithing": 18
-	},
-	"thermal:sulfur_ore":
-	{
-		"smithing": 12
-	},
-	"thermal:tin_dust":
-	{
-		"smithing": 12
-	},
-	"thermal:tin_ore":
-	{
-		"smithing": 12
-	},
-	"tmechworks:aluminum_ore":
-	{
-		"smithing": 12
-	},
-	"tmechworks:copper_ore":
-	{
-		"smithing": 7
-	},
-	"treemendous:alder_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:ash_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:beech_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:cedar_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:cherry_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:chestnut_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:douglas_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:elm_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:fir_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:japanese_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:juniper_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:larch_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:linden_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:magnolia_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:maple_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:pine_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:plane_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:pomegranate_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:poplar_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:rainbow_eucalyptus_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:robinia_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:walnut_log":
-	{
-		"smithing": 0.25
-	},
-	"treemendous:willow_log":
-	{
-		"smithing": 0.25
-	},
-	"undergarden:cloggrum_ore":
-	{
-		"smithing": 12
-	},
-	"undergarden:coal_ore":
-	{
-		"smithing": 8
-	},
-	"undergarden:diamond_ore":
-	{
-		"smithing": 35
-	},
-	"undergarden:froststeel_ore":
-	{
-		"smithing": 12
-	},
-	"undergarden:gold_ore":
-	{
-		"smithing": 18
-	},
-	"undergarden:iron_ore":
-	{
-		"smithing": 12
-	},
-	"undergarden:regalium_ore":
-	{
-		"smithing": 12
-	},
-	"undergarden:utherium_ore":
-	{
-		"smithing": 12
-	},
-	"woot:si_dust":
-	{
-		"smithing": 12
-	},
-	"#forge:dusts":
-	{
-		"smithing": 0
+	"powah:uraninite": {
+		"smithing": 14
 	}
 }
