@@ -1,132 +1,111 @@
 package harmonised.pmmo.registry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-
-import org.apache.commons.lang3.function.TriFunction;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.DoubleTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.util.TriPredicate;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.event.TickEvent.LevelTickEvent;
 
 public class PerkRegistry {
 	public PerkRegistry() {}
+
+	private final Map<ResourceLocation, Perk> perks = new HashMap<>(); 
 	
-	private Map<ResourceLocation, CompoundTag> properties = new HashMap<>();
-	private Map<ResourceLocation, TriPredicate<Player, CompoundTag, Integer>> conditions = new HashMap<>();
-	private Map<ResourceLocation, TriFunction<Player, CompoundTag, Integer, CompoundTag>> perkExecutions = new HashMap<>();
-	private Map<ResourceLocation, TriFunction<Player, CompoundTag, Integer, CompoundTag>> perkTerminations = new HashMap<>();
-	
-	public void registerPerk(
-			ResourceLocation perkID, 
-			CompoundTag propertyDefaults,
-			TriPredicate<Player, CompoundTag, Integer> customConditions,
-			TriFunction<Player, CompoundTag, Integer, CompoundTag> onExecute, 
-			TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude) {
+	public void registerPerk(ResourceLocation perkID, Perk perk) {
 		Preconditions.checkNotNull(perkID);
-		Preconditions.checkNotNull(propertyDefaults);
-		Preconditions.checkNotNull(customConditions);
-		Preconditions.checkNotNull(onExecute);
-		Preconditions.checkNotNull(onConclude);
-		properties.put(perkID, propertyDefaults);
-		conditions.put(perkID, customConditions);
-		perkExecutions.put(perkID, onExecute);
-		perkTerminations.put(perkID, onConclude);
+		Preconditions.checkNotNull(perk);
+		perks.put(perkID, perk);
 		MsLoggy.DEBUG.log(LOG_CODE.API, "Registered Perk: "+perkID.toString());
 	}
 	
-	public void registerProperties(ResourceLocation perkID, CompoundTag propertyDefaults) {
-		properties.put(perkID, propertyDefaults);
+	public void registerClientClone(ResourceLocation perkID, Perk perk) {
+		Preconditions.checkNotNull(perkID);
+		Preconditions.checkNotNull(perk);
+		Perk clientCopy = new Perk(perk.conditions(), perk.propertyDefaults(), 
+				(a,b) -> new CompoundTag(), 
+				(a,b,c) -> new CompoundTag(), 
+				(a,b) -> new CompoundTag(), 
+				perk.description(), perk.status());
+		perks.putIfAbsent(perkID, clientCopy);
 	}
 	
-	public CompoundTag getProperties(ResourceLocation perkID) {
-		return properties.getOrDefault(perkID, new CompoundTag()).copy();
+	public MutableComponent getDescription(ResourceLocation id) {
+		return perks.getOrDefault(id, Perk.empty()).description();
 	}
 	
-	public CompoundTag executePerk(EventType cause, Player player, LogicalSide side) {
-		return executePerk(cause, player, new CompoundTag(), side);
+	public List<MutableComponent> getStatusLines(ResourceLocation id, Player player, CompoundTag settings) {
+		return perks.getOrDefault(id, Perk.empty()).status().apply(player, settings);
 	}
 	
-	public CompoundTag executePerk(EventType cause, Player player, @NotNull CompoundTag dataIn, LogicalSide side) {
+	public CompoundTag executePerk(EventType cause, Player player, @NotNull CompoundTag dataIn) {
 		if (player == null) return new CompoundTag();
 		CompoundTag output = new CompoundTag();
-		PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>()).forEach((skill, list) -> {
-			int skillLevel = Core.get(side).getData().getPlayerSkillLevel(skill, player.getUUID());
-			list.forEach(src -> {
-				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				src = getProperties(perkID).merge(src.merge(dataIn));
-				CompoundTag executionOutput = new CompoundTag();
-				
-				if (isValidContext(perkID, player, src, skillLevel))
-					executionOutput = perkExecutions.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel);
-				output.merge(TagUtils.mergeTags(output, executionOutput));
-			});
+		PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
+			ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
+			Perk perk = perks.getOrDefault(perkID, Perk.empty());
+			src = perk.propertyDefaults().merge(src.merge(dataIn));
+			src.putInt(APIUtils.SKILL_LEVEL, src.contains(APIUtils.SKILLNAME) 
+					? Core.get(player.level).getData().getPlayerSkillLevel(src.getString(APIUtils.SKILLNAME), player.getUUID())
+					: 0);
+			CompoundTag executionOutput = perk.start(player, src);
+			tickTracker.add(new TickSchedule(perk, player, src, new AtomicInteger(0)));
+			if (src.contains(APIUtils.COOLDOWN))
+				coolTracker.add(new PerkCooldown(perkID, player, src, player.level.getGameTime()));
+			output.merge(TagUtils.mergeTags(output, executionOutput));
 		});
 		return output;
 	}
 	
-	
-	private final Random rand = new Random();
-	
-	private boolean isValidContext(ResourceLocation perkID, Player player, CompoundTag src, int skillLevel) {
-		if (src.contains(APIUtils.MAX_LEVEL) && skillLevel > src.getInt(APIUtils.MAX_LEVEL))
-			return false;
-		if (src.contains(APIUtils.MIN_LEVEL) && skillLevel < src.getInt(APIUtils.MIN_LEVEL))
-			return false;
-		boolean modulus = src.contains(APIUtils.MODULUS), 
-				milestone = src.contains(APIUtils.MILESTONES);
-		if (modulus || milestone) {
-			boolean modulus_match = modulus,
-					milestone_match = milestone;
-			if (modulus && skillLevel % Math.max(1, src.getInt(APIUtils.MODULUS)) != 0)
-				modulus_match = false;
-			if (milestone && !src.getList(APIUtils.MILESTONES, Tag.TAG_DOUBLE).stream()
-					.map(tag -> ((DoubleTag)tag).getAsInt()).toList().contains(skillLevel))
-				milestone_match = false;
-			if (!modulus_match && !milestone_match)
-				return false;
+	private static record TickSchedule(Perk perk, Player player, CompoundTag src, AtomicInteger ticksElapsed) {
+		public boolean shouldTick() {
+			return src.contains(APIUtils.DURATION) && ticksElapsed.get() <= src.getInt(APIUtils.DURATION);
 		}
-		if (src.contains(APIUtils.CHANCE) && src.getDouble(APIUtils.CHANCE) < rand.nextDouble())
-			return false;
 		
-		return conditions.getOrDefault(perkID, (p,s,l) -> true).test(player, src, skillLevel);
-	}
-	
-	public CompoundTag terminatePerk(EventType cause, Player player, LogicalSide side) {
-		return terminatePerk(cause, player, new CompoundTag(), side);
-	}
-	
-	public CompoundTag terminatePerk(EventType cause, Player player, CompoundTag dataIn, LogicalSide side) {
-		Map<String, List<CompoundTag>> map =  PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>());
-		CompoundTag output = new CompoundTag();
-		for (String skill : map.keySet()) {
-			List<CompoundTag> entries = map.get(skill);
-			int skillLevel = Core.get(side).getData().getPlayerSkillLevel(skill, player.getUUID());
-			for (int i = 0; i < entries.size(); i++) {
-				CompoundTag src = entries.get(i);
-				src.merge(dataIn);
-				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				CompoundTag executionOutput = new CompoundTag();
-				executionOutput = perkTerminations.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel);
-				output = TagUtils.mergeTags(output, executionOutput);
-			}
+		public void tick() {
+			ticksElapsed().getAndIncrement();
+			perk.tick(player, src, ticksElapsed.get());
 		}
-		return output;
+	}
+	private static record PerkCooldown(ResourceLocation perkID, Player player, CompoundTag src, long lastUse) {
+		public boolean cooledDown(Level level) {
+			return level.getGameTime() > lastUse + src.getInt(APIUtils.COOLDOWN);
+		}
+	}
+	
+	private final List<TickSchedule> tickTracker = new ArrayList<>();
+	private final List<PerkCooldown> coolTracker = new ArrayList<>();
+	
+	public void executePerkTicks(LevelTickEvent event) {
+		coolTracker.removeIf(tracker -> tracker.cooledDown(event.level));
+		new ArrayList<>(tickTracker).forEach(schedule -> {
+			if (schedule.shouldTick())
+				schedule.tick();
+			else
+				schedule.perk().stop(schedule.player(), schedule.src());
+				tickTracker.remove(schedule);
+		});
+	}
+
+	public boolean isPerkCooledDown(Player player, CompoundTag src) {
+		ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
+		return coolTracker.stream().noneMatch(cd -> cd.player().equals(player) && cd.perkID().equals(perkID));
 	}
 }

@@ -55,7 +55,7 @@ public class DeathHandler {
 				}
 			}
 			//Process perks
-			hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.DEATH, player, hookOutput, core.getSide()));
+			hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.DEATH, player, hookOutput));
 			if (serverSide) {
 				Map<String, Long> xpAward = core.getExperienceAwards(EventType.DEATH, target, player, hookOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);

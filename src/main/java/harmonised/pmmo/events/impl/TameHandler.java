@@ -40,7 +40,7 @@ public class TameHandler {
 		}
 		//Process perks
 		hookOutput.putUUID(PerksImpl.ANIMAL_ID, event.getAnimal().getUUID());
-		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.TAMING, player, hookOutput, core.getSide()));
+		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.TAMING, player, hookOutput));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.TAMING, target, player, hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);

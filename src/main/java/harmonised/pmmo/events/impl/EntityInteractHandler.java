@@ -36,7 +36,7 @@ public class EntityInteractHandler {
 			}
 		}
 		//Process perks
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ENTITY,  event.getEntity(), eventHookOutput, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ENTITY,  event.getEntity(), eventHookOutput));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENTITY, event.getTarget(), event.getEntity(), perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());

@@ -28,7 +28,7 @@ public class EnchantHandler {
 					.withString(APIUtils.ENCHANT_NAME, event.getEnchantment().enchantment.getDescriptionId()).build();
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ENCHANT, event, dataIn);
 		}
-		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ENCHANT, event.getEntity(), hookOutput, core.getSide()));
+		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ENCHANT, event.getEntity(), hookOutput));
 		if (serverSide) {
 			double proportion = (double)event.getEnchantment().level / (double)event.getEnchantment().enchantment.getMaxLevel();
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENCHANT, event.getItem(), event.getEntity(), hookOutput);

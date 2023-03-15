@@ -35,10 +35,12 @@ import harmonised.pmmo.events.impl.SleepHandler;
 import harmonised.pmmo.events.impl.TameHandler;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.TickEvent.LevelTickEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
@@ -111,7 +113,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
 		Core core = Core.get(event.getEntity().level); 
-		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(), core.getSide());
+		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(), new CompoundTag());
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onSleep(SleepFinishedTimeEvent event) {
@@ -122,6 +124,10 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		PistonHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.HIGH)
+	public static void tickPerks(LevelTickEvent event) {
+		Core.get(event.level).getPerkRegistry().executePerkTicks(event);
 	}
 	
 	//==========================================================

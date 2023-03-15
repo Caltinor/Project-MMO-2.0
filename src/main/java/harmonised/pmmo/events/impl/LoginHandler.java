@@ -2,7 +2,6 @@ package harmonised.pmmo.events.impl;
 
 import java.util.Map;
 
-import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
@@ -23,17 +22,6 @@ public class LoginHandler {
 	public static void handle(PlayerLoggedInEvent event) {		
 		Player player = event.getEntity();
 		Core core = Core.get(player.level);
-		//Send welcome message encouraging datapack usage
-		/*MutableComponent welcome = Component.translatable(LangProvider.WELCOME_TEXT.key()
-				, LangProvider.CLICK_ME.asComponent()
-					.setStyle(Style.EMPTY
-					.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.curseforge.com/minecraft/texture-packs/search?category=&search=project+mmo"))
-					.withUnderlined(true)
-					.withColor(ChatFormatting.BLUE))
-				);
-		player.sendSystemMessage(welcome);	*/	
-		
-		core.getPerkRegistry().terminatePerk(EventType.DISABLE_PERK, player, core.getSide());
 		
 		if (core.getSide().equals(LogicalSide.SERVER)) {
 			//===========UPDATE DATA MIRROR=======================

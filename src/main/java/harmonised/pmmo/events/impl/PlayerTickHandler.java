@@ -92,7 +92,7 @@ public class PlayerTickHandler {
 		if (serverSide){			
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
 		}
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.player, eventHookOutput, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.player, eventHookOutput));
 		if (serverSide) {
 			ResourceLocation source = new ResourceLocation("player");
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 

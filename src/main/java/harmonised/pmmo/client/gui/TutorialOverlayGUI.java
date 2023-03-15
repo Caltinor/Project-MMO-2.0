@@ -13,6 +13,8 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+
+import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.core.Core;
@@ -57,13 +59,13 @@ public class TutorialOverlayGUI implements IGuiOverlay{
 		if(!mc.options.renderDebug){
 			//IDENTIFY LINES
 			if (mc.level.getBlockState(bhr.getBlockPos()).getBlock().equals(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Config.SALVAGE_BLOCK.get())))) {	
-				lines = new ArrayList<>(ctc(mc, LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent().withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), tooltipWidth));
+				lines = new ArrayList<>(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent().withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), tooltipWidth));
 				if (mc.player.isCrouching() && (!mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty())) {
 					ItemStack salvageStack = mc.player.getMainHandItem().isEmpty() ? mc.player.getOffhandItem() : mc.player.getMainHandItem();
-					gatherSalvageData(salvageStack).forEach(line -> lines.addAll(ctc(mc, line, tooltipWidth)));
+					gatherSalvageData(salvageStack).forEach(line -> lines.addAll(ClientUtils.ctc(mc, line, tooltipWidth)));
 				}
 				else 
-					lines.addAll(ctc(mc, LangProvider.SALVAGE_TUTORIAL_USAGE.asComponent(), tooltipWidth));				
+					lines.addAll(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_USAGE.asComponent(), tooltipWidth));				
 			}
 			else
 				return; //stop render if none of the viewing cases are met.			
@@ -153,10 +155,6 @@ public class TutorialOverlayGUI implements IGuiOverlay{
 	      pBuilder.vertex(pMatrix, (float)pX1, (float)pY1, (float)pBlitOffset).color(f1, f2, f3, f).endVertex();
 	      pBuilder.vertex(pMatrix, (float)pX1, (float)pY2, (float)pBlitOffset).color(f5, f6, f7, f4).endVertex();
 	      pBuilder.vertex(pMatrix, (float)pX2, (float)pY2, (float)pBlitOffset).color(f5, f6, f7, f4).endVertex();
-	}
-	
-	private List<ClientTooltipComponent> ctc(Minecraft mc, MutableComponent component, int width) {
-		return mc.font.split(component, width).stream().map(fcs -> ClientTooltipComponent.create(fcs)).toList();
 	}
 	
 	private List<MutableComponent> gatherSalvageData(ItemStack stack) {

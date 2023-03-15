@@ -36,7 +36,7 @@ public class FishHandler {
 				return;
 			}
 		}
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.FISH, player, eventHookOutput, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.FISH, player, eventHookOutput));
 		if (serverSide) {
 			Map<String, Long> xpAward = new HashMap<>(); 
 			for (ItemStack stack : event.getDrops()) {

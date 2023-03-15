@@ -45,7 +45,7 @@ public class BreakHandler {
 			}
 		}
 		//Process perks on both sides. note that only server-side perks will affect xp outputs.
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_BREAK, event.getPlayer(), eventHookOutput, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_BREAK, event.getPlayer(), eventHookOutput));
 		if (serverSide) {
 			Map<String, Long> xpAward = calculateXpAward(core, event, perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());

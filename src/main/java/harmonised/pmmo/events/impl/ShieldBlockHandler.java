@@ -45,7 +45,7 @@ public class ShieldBlockHandler {
 		}
 		//Process perks
 		hookOutput.putFloat(APIUtils.DAMAGE_IN, event.getBlockedDamage());
-		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.SHIELD_BLOCK, player, hookOutput, core.getSide()));
+		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.SHIELD_BLOCK, player, hookOutput));
 		if (serverSide) {
 			Map<String, Long> xpAward = new HashMap<>();
 			core.getExperienceAwards(EventType.SHIELD_BLOCK, attacker, player, hookOutput).forEach((skill, value) -> {

@@ -36,7 +36,7 @@ public class JumpHandler {
 			}
 		}
 		//Process perks
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, eventHookOutput, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, eventHookOutput));
 		if (serverSide) {
 			//NOTE a default value of 0.4 is consistent with the base jump amount of a player without any vanilla/modded jump modifiers
 			double jumpXpBase = perkOutput.contains(APIUtils.JUMP_OUT) ? Math.max(0.4, perkOutput.getDouble(APIUtils.JUMP_OUT)) : player.getDeltaMovement().y;

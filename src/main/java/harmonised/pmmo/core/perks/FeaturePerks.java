@@ -1,37 +1,34 @@
 package harmonised.pmmo.core.perks;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import org.apache.commons.lang3.function.TriFunction;
-
+import java.util.function.BiFunction;
 import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.util.TriPredicate;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
-
-	private static Map<UUID, Long> regen_cooldown = new HashMap<>();
-	private static Map<UUID, Long> breathe_cooldown = new HashMap<>();
 	
 	private static final UUID ATTRIBUTE_ID = UUID.fromString("b902b6aa-8393-4bdc-8f0d-b937268ef5af");
 	private static final Map<String, Attribute> attributeCache = new HashMap<>();
@@ -40,202 +37,163 @@ public class FeaturePerks {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
 				name -> ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(name)));
 	}
+	//TODO figure out how to have duplicate attribute perks that compound the bonuses
+	public static final Perk ATTRIBUTE = Perk.begin()
+			.addDefaults(TagBuilder.start().withDouble(APIUtils.MAX_BOOST, 0d).withDouble(APIUtils.PER_LEVEL, 0d).build())
+			.setStart((player, nbt) -> {
+				double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
+				double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
+				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
+				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost);
+				
+				AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "PMMO-modifier based on user skill", boost, AttributeModifier.Operation.ADDITION);
+				instance.removeModifier(ATTRIBUTE_ID);
+				instance.addPermanentModifier(modifier);
+				return NONE;
+			})
+			.setDescription(LangProvider.PERK_ATTRIBUTE_DESC.asComponent())
+			.setStatus((player, settings) -> {
+				double perLevel = settings.getDouble(APIUtils.PER_LEVEL);
+				String skillname = settings.getString(APIUtils.SKILLNAME);
+				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
+				return List.of(
+				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
+				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname),
+				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel)));
+			}).build();
 	
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> ATTRIBUTE = (player, nbt, level) -> {
-		double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
-		double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
-		AttributeInstance instance = player.getAttribute(getAttribute(nbt));
-		double boost = Math.min(perLevel * level, maxBoost);
-		
-		AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "PMMO-modifier based on user skill", boost, AttributeModifier.Operation.ADDITION);
-		instance.removeModifier(ATTRIBUTE_ID);
-		instance.addPermanentModifier(modifier);
-		return NONE;
-	};
-	
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> ATTRIBUTE_TERM = (player, nbt, level) -> {
-		AttributeInstance instance = player.getAttribute(getAttribute(nbt));
-		instance.removeModifier(ATTRIBUTE_ID);
-		return NONE;
-	};
-	
-	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");	
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> SPEED = (player, nbt, level) -> {
-		double maxSpeedBoost = nbt.getDouble(APIUtils.MAX_BOOST);
-		AttributeInstance speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
-		double speedBoost = player.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() 
-							* Math.max(0, Math.min(maxSpeedBoost, Math.min(maxSpeedBoost, (level * nbt.getDouble(APIUtils.PER_LEVEL)) / 100)));
-
-		if(speedBoost > 0)
-		{
-			if(speedAttribute.getModifier(speedModifierID) == null || speedAttribute.getModifier(speedModifierID).getAmount() != speedBoost)
-			{
-				AttributeModifier speedModifier = new AttributeModifier(speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, AttributeModifier.Operation.ADDITION);
-				speedAttribute.removeModifier(speedModifierID);
-				speedAttribute.addPermanentModifier(speedModifier);
-			}
-		}
-		return NONE;
-	};
-	
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> SPEED_TERM = (p, nbt, l) -> {
-		AttributeInstance speedAttribute = p.getAttribute(Attributes.MOVEMENT_SPEED);
-		speedAttribute.removeModifier(speedModifierID);
-		return NONE;
-	};
-	
-	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE = (player, nbt, level) -> {
-		double maxDamage = nbt.getDouble(APIUtils.MAX_BOOST);
-		double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
-		AttributeInstance damageAttribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
-		double damageBoost = Math.min(maxDamage, level * perLevel);
-		AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.MULTIPLY_BASE);
-		damageAttribute.removeModifier(damageModifierID);
-		damageAttribute.addPermanentModifier(damageModifier);
-		return NONE;
-	};
-	
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE_TERM = (player, nbt, level) -> {
-		AttributeInstance damageAttribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
-		damageAttribute.removeModifier(damageModifierID);
-		return NONE;
-	};
-	
-	private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> REACH = (player, nbt, level) -> {
-		double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
-		double maxReach = nbt.getDouble(APIUtils.MAX_BOOST);
-		double reach = -0.91 + (level * perLevel);
-		reach = Math.min(maxReach, reach);	
-		AttributeInstance reachAttribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
-		if(reachAttribute.getModifier(reachModifierID) == null || reachAttribute.getModifier(reachModifierID).getAmount() != reach)
-		{
-			AttributeModifier reachModifier = new AttributeModifier(reachModifierID, "Reach bonus thanks to Build Level", reach, AttributeModifier.Operation.ADDITION);
-			reachAttribute.removeModifier(reachModifierID);
-			reachAttribute.addPermanentModifier(reachModifier);
-		}
-		return NONE;
-	};
-	
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> REACH_TERM = (player, nbt, level) -> {
-		AttributeInstance reachAttribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
-		reachAttribute.removeModifier(reachModifierID);
-		return NONE;
-	};
-	
-	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> HEALTH = (player, nbt, level) -> {
-		double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
-		int maxHeart = nbt.getInt(APIUtils.MAX_BOOST);
-		int heartBoost = (int)(perLevel * (double)level);
-		heartBoost = Math.min(maxHeart, heartBoost);		
-		AttributeInstance hpAttribute = player.getAttribute(Attributes.MAX_HEALTH);
-		AttributeModifier hpModifier = new AttributeModifier(hpModifierID, "Max HP Bonus thanks to Endurance Level", heartBoost, AttributeModifier.Operation.ADDITION);
-		hpAttribute.removeModifier(hpModifierID);
-		hpAttribute.addPermanentModifier(hpModifier);
-		return NONE;
-	};
-	
-	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> HEALTH_TERM = (player, nbt, level) -> {
-		AttributeInstance hpAttribute = player.getAttribute(Attributes.MAX_HEALTH);
-		hpAttribute.removeModifier(hpModifierID);
-		return NONE;
-	};
-
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> NIGHT_VISION = (player, nbt, level) -> {
-		player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, nbt.getInt(APIUtils.DURATION), 0, true, false, false));
-		return NONE;
-	};
-	
-	public static TriPredicate<Player, CompoundTag, Integer> NIGHT_VISION_CHECK = (player, nbt, level) -> {
-		return !player.hasEffect(MobEffects.NIGHT_VISION) || player.getEffect(MobEffects.NIGHT_VISION).getDuration() <= 80;
-	};
-	
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> REGEN = (player, nbt, level) -> {
-		long cooldown = nbt.getLong(APIUtils.COOLDOWN);
-		int duration = nbt.getInt(APIUtils.DURATION);
-		double strength = nbt.getDouble(APIUtils.PER_LEVEL);
-		int perLevel = Math.max(0, (int)((double)level * strength));
-		long currentCD = regen_cooldown.getOrDefault(player.getUUID(), System.currentTimeMillis());
-		if (currentCD < System.currentTimeMillis() - cooldown 
-				|| currentCD + 20 >= System.currentTimeMillis()) {
-			player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, duration, perLevel));
-			regen_cooldown.put(player.getUUID(), System.currentTimeMillis());
-		}
-		return NONE;
-	};
-	
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> JUMP_CLIENT = (player, nbt, level) -> {
-        double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + level * nbt.getDouble(APIUtils.PER_LEVEL));
-        player.setDeltaMovement(player.getDeltaMovement().add(0, jumpBoost, 0));
-        player.hurtMarked = true; 
-        return NONE;
-	};
-	
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> JUMP_SERVER = (player, nbt, level) -> {
-		double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + level * nbt.getDouble(APIUtils.PER_LEVEL));
-        return TagBuilder.start().withDouble(APIUtils.JUMP_OUT, player.getDeltaMovement().y + jumpBoost).build();
-	};
-	
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> BREATH = (player, nbt, level) -> {
-		int perLevel = Math.max(1, (int)((double)level * nbt.getDouble(APIUtils.PER_LEVEL)));
-		player.setAirSupply(player.getAirSupply() + perLevel);
-		player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
-		breathe_cooldown.put(player.getUUID(), System.currentTimeMillis());
-		return NONE;
-	};
-	
-	public static TriPredicate<Player, CompoundTag, Integer> BREATH_CHECK = (player, nbt, level) -> {
-		long currentCD = breathe_cooldown.getOrDefault(player.getUUID(), System.currentTimeMillis());
-		return player.getAirSupply() < 2 && (currentCD < System.currentTimeMillis() - nbt.getLong(APIUtils.COOLDOWN) 
-				|| currentCD + 20 >= System.currentTimeMillis());
-	};
-
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> FALL_SAVE = (player, nbt, level) -> {
-		float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)level);
-		return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, Math.max(nbt.getFloat(APIUtils.DAMAGE_IN) - saved, 0)).build();
-	};
-
-	public static final String APPLICABLE_TO = "applies_to";
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE_BOOST = (player, nbt, level) -> {
-		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (1f + (float)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)level));
-		return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, damage).build();
-	};
-	
-	public static TriPredicate<Player, CompoundTag, Integer> DAMAGE_BOOST_CHECK = (player, nbt, level) -> {
-		List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
-		return type.contains(RegistryUtil.getId(player.getMainHandItem()).toString());
-	};
-	
-	private static final String COMMAND = "command";
-	private static final String FUNCTION = "function";
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> RUN_COMMAND = (p, nbt, level) -> {
-		if (!(p instanceof ServerPlayer)) return NONE;
-		ServerPlayer player = (ServerPlayer) p;
-		if (nbt.contains(FUNCTION)) {
-			player.getServer().getFunctions().execute(
-					player.getServer().getFunctions().get(new ResourceLocation(nbt.getString(FUNCTION))).get(), 
-					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2));			
-		}
-		else if (nbt.contains(COMMAND)) {
-			player.getServer().getCommands().performPrefixedCommand(
-					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2), 
-					nbt.getString(COMMAND));
-		}
-		return NONE;
-	};
-	
-	public static final String EFFECT = "effect";
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> GIVE_EFFECT = (player, nbt, level) -> {
+	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
 		MobEffect effect;
-		if ((effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString(EFFECT)))) != null) {
+		if ((effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString("effect")))) != null) {
+			int configDuration = nbt.getInt(APIUtils.DURATION);
+			int duration = player.hasEffect(effect) && player.getEffect(effect).getDuration() > configDuration 
+					? player.getEffect(effect).getDuration() 
+					: configDuration;
 			int perLevel = nbt.getInt(APIUtils.PER_LEVEL);
 			int amplifier = nbt.getInt(APIUtils.MODIFIER);
 			boolean ambient = nbt.getBoolean(APIUtils.AMBIENT);
 			boolean visible = nbt.getBoolean(APIUtils.VISIBLE);
-			player.addEffect(new MobEffectInstance(effect, perLevel * level, amplifier, ambient, visible));
+			player.addEffect(new MobEffectInstance(effect, perLevel * duration, amplifier, ambient, visible));
 		}
 		return NONE;
 	};
+	
+	public static final Perk EFFECT = Perk.begin()
+			.addDefaults(TagBuilder.start().withString("effect", "modid:effect")
+					.withInt(APIUtils.DURATION, 100)
+					.withInt(APIUtils.PER_LEVEL, 1)
+					.withInt(APIUtils.MODIFIER, 0)
+					.withBool(APIUtils.AMBIENT, false)
+					.withBool(APIUtils.VISIBLE, true).build())
+			.setStart(EFFECT_SETTER)
+			.setTick((player, nbt, ticks) -> EFFECT_SETTER.apply(player, nbt))
+			.setDescription(LangProvider.PERK_EFFECT_DESC.asComponent())
+			.setStatus((player, nbt) -> List.of(
+					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString("effect"))).getDescriptionId())),
+					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER), nbt.getInt(APIUtils.DURATION))))
+			.build();
+	
+	private static BiFunction<Player, CompoundTag, List<MutableComponent>> JUMP_LINES = (player, nbt) -> 
+			List.of(LangProvider.PERK_JUMP_BOOST_STATUS_1.asComponent(
+			nbt.getInt(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL)));
+	private static CompoundTag JUMP_DEFAULTS = TagBuilder.start()
+			.withDouble(APIUtils.PER_LEVEL, 0.0005)
+			.withDouble(APIUtils.MAX_BOOST, 0.033).build();
+	
+	public static final Perk JUMP_CLIENT = Perk.begin()
+		.addDefaults(JUMP_DEFAULTS)
+		.setStart((player, nbt) -> {
+	        double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL));
+	        player.setDeltaMovement(player.getDeltaMovement().add(0, jumpBoost, 0));
+	        player.hurtMarked = true; 
+	        return NONE;
+		})
+		.setDescription(LangProvider.PERK_JUMP_BOOST_DESC.asComponent())
+		.setStatus(JUMP_LINES).build();
+	
+	public static final Perk JUMP_SERVER = Perk.begin()
+		.addDefaults(JUMP_DEFAULTS)
+		.setStart((player, nbt) -> {
+			double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL));
+	        return TagBuilder.start().withDouble(APIUtils.JUMP_OUT, player.getDeltaMovement().y + jumpBoost).build();
+		})
+		.setDescription(LangProvider.PERK_JUMP_BOOST_DESC.asComponent())
+		.setStatus(JUMP_LINES).build();
+	
+	public static final Perk BREATH = Perk.begin()
+			.addConditions((player, nbt) -> player.getAirSupply() < 2)
+			.addDefaults(TagBuilder.start().withLong(APIUtils.COOLDOWN, 30000l).withDouble(APIUtils.PER_LEVEL, 1d).build())
+			.setStart((player, nbt) -> {
+				int perLevel = Math.max(1, (int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)));
+				player.setAirSupply(player.getAirSupply() + perLevel);
+				player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
+				return NONE;
+			})
+			.setDescription(LangProvider.PERK_BREATH_DESC.asComponent())
+			.setStatus((player, nbt) -> List.of(
+					LangProvider.PERK_BREATH_STATUS_1.asComponent((int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL))),
+					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
+
+	public static final Perk FALL_SAVE = Perk.begin()
+			.addDefaults(TagBuilder.start().withDouble(APIUtils.PER_LEVEL, 0.025).withFloat(APIUtils.DAMAGE_IN, 0).build())
+			.setStart((player, nbt) -> {
+				float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, Math.max(nbt.getFloat(APIUtils.DAMAGE_IN) - saved, 0)).build();
+			})
+			.setDescription(LangProvider.PERK_FALL_SAVE_DESC.asComponent())
+			.setStatus((player, nbt) -> List.of(
+					LangProvider.PERK_FALL_SAVE_STATUS_1.asComponent(nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)),
+					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
+
+	public static final String APPLICABLE_TO = "applies_to";
+	public static final Perk DAMAGE_BOOST = Perk.begin()
+			.addConditions((player, nbt) -> {
+				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
+				return type.contains(RegistryUtil.getId(player.getMainHandItem()).toString());
+			})
+			.addDefaults(TagBuilder.start()
+				.withFloat(APIUtils.DAMAGE_IN, 0)
+				.withList(FeaturePerks.APPLICABLE_TO, StringTag.valueOf("weapon:id"))
+				.withDouble(APIUtils.PER_LEVEL, 0.05).build())
+			.setStart((player, nbt) -> {
+				float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (1f + (float)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL)));
+				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, damage).build();
+			})
+			.setDescription(LangProvider.PERK_DAMAGE_BOOST_DESC.asComponent())
+			.setStatus((player, nbt) ->{
+				List<MutableComponent> lines = new ArrayList<>();
+				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
+				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
+					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entry.getAsString()));
+					line1.append(item.getDescription());
+					line1.append(Component.literal(", "));
+				}
+				lines.add(LangProvider.PERK_DAMAGE_BOOST_STATUS_2.asComponent((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)));
+				return lines;
+			}).build();
+	
+	private static final String COMMAND = "command";
+	private static final String FUNCTION = "function";	
+	public static final Perk RUN_COMMAND = Perk.begin()
+		.setStart((p, nbt) -> {
+			if (!(p instanceof ServerPlayer)) return NONE;
+			ServerPlayer player = (ServerPlayer) p;
+			if (nbt.contains(FUNCTION)) {
+				player.getServer().getFunctions().execute(
+						player.getServer().getFunctions().get(new ResourceLocation(nbt.getString(FUNCTION))).get(), 
+						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2));			
+			}
+			else if (nbt.contains(COMMAND)) {
+				player.getServer().getCommands().performPrefixedCommand(
+						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2), 
+						nbt.getString(COMMAND));
+			}
+			return NONE;
+		})
+		.setDescription(LangProvider.PERK_COMMAND_DESC.asComponent())
+		.setStatus((player, nbt) -> List.of(
+				LangProvider.PERK_COMMAND_STATUS_1.asComponent(
+				nbt.contains(FUNCTION) ? "Function" : "Command",
+				nbt.contains(FUNCTION) ? nbt.getString(FUNCTION) : nbt.getString(COMMAND)))).build();
+
 }

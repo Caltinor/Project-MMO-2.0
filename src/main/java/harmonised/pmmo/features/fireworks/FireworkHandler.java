@@ -1,14 +1,16 @@
 package harmonised.pmmo.features.fireworks;
 
-import org.apache.commons.lang3.function.TriFunction;
-
+import java.util.List;
 import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.core.CoreUtils;
+import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -16,16 +18,18 @@ import net.minecraft.world.phys.Vec3;
 
 public class FireworkHandler {
 	public static final String FIREWORK_SKILL = "firework_skill";
-	//This is technically a perk which is by default used during the SKILL_UP event trigger
-	//This should be passed both the skill triggering the event via FIREWORK_SKILL and take a parameter of SKILLNAME from the settings
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> FIREWORKS = (player, nbt, level) -> {
-		String skill = nbt.getString(APIUtils.SKILLNAME);
-		if (!skill.equals(nbt.getString(FIREWORK_SKILL))) return new CompoundTag();
-		BlockPos pos = player.blockPosition();
-		//GET STRING COLOR
-		spawnRocket(player.getLevel(), new Vec3(pos.getX(), pos.getY(), pos.getZ()), skill);
-		return new CompoundTag();
-	};
+	
+	public static final Perk FIREWORK = Perk.begin()
+			.addConditions((player, settings) -> settings.getString(APIUtils.SKILLNAME).equals(settings.getString(FIREWORK_SKILL)))
+			.addDefaults(TagBuilder.start().withString(APIUtils.SKILLNAME, "none").build())
+			.setStart((player, nbt) -> {
+				BlockPos pos = player.blockPosition();
+				spawnRocket(player.getLevel(), new Vec3(pos.getX(), pos.getY(), pos.getZ()), nbt.getString(FIREWORK_SKILL));
+				return new CompoundTag();
+			})
+			.setDescription(LangProvider.PERK_FIREWORK_DESC.asComponent())
+			.setStatus((p, nbt) -> List.of(LangProvider.PERK_FIREWORK_STATUS_1
+					.asComponent(Component.translatable("pmmo."+nbt.getString(APIUtils.SKILLNAME))))).build();
 	
 	public static void spawnRocket(Level world, Vec3 pos, String skill/*, @Nullable WorldText explosionText*/)
 	{

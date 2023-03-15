@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.function.TriFunction;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.google.common.base.Preconditions;
@@ -20,6 +19,7 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.codecs.DataSource;
@@ -39,7 +39,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -714,6 +713,7 @@ public class APIUtils {
 	
 	public static final String BLOCK_POS = "block_pos";
 	public static final String SKILLNAME = "skill";
+	public static final String SKILL_LEVEL = "level";
 	
 	public static final String BREAK_SPEED_INPUT_VALUE = "speedIn";
 	public static final String BREAK_SPEED_OUTPUT_VALUE = "speed";
@@ -744,23 +744,26 @@ public class APIUtils {
 	 * @param perkID a custom id for your perk that can be used in perks.json to reference this perk
 	 * @param propertyDefaults keys used by your perks and default values to supply if omitted
 	 * @param customConditions a predicate for checks outside the standard built in checks
-	 * @param onExecute the function executing the behavior of this perk when triggered
-	 * @param onConclude the function executing the behavior of this perk when expected to end
+	 * @param onStart the function executing the behavior of this perk when triggered
+	 * @param onTick the function to execute each tick for the duration configured
+	 * @param onStop the function executing the behavior of this perk when expected to end
+	 * @param description summarizes what the function does for the glossary
+	 * @param status provides a multiline description of the status of the perk for the supplied player
 	 * @param side the logical sides this perk should execute on.  Your implementation should factor in sidedness to avoid crashes.
 	 */
 	public static void registerPerk(
 			@NonNull ResourceLocation perkID,
-			@NonNull CompoundTag propertyDefaults,
-			@NonNull TriPredicate<Player, CompoundTag, Integer> customConditions,
-			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onExecute, 
-			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude,
+			@NonNull Perk perk,
 			@NonNull PerkSide side) {
-		if (side.equals(PerkSide.SERVER) || side.equals(PerkSide.BOTH)) {
-			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
-			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerProperties(perkID, propertyDefaults);
+		switch (side) {
+		case SERVER -> {
+			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, perk);
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerClientClone(perkID, perk);}
+		case CLIENT -> Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, perk);
+		case BOTH -> {
+			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, perk);
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, perk);}
 		}
-		if (side.equals(PerkSide.CLIENT) || side.equals(PerkSide.BOTH))
-			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
 	}	
 	
 	//===============UTILITY METHODS=================================

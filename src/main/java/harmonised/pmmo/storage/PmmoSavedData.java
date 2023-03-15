@@ -78,7 +78,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			//capture command cases for XP gain which should prompt a skillup event
 			if (formerRaw != getLevelFromXP(value)) {
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
-					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build(), LogicalSide.SERVER);
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 			}
 		}
 	}
@@ -116,7 +116,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			
 			if (gainXpEvent.isLevelUp()) 
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
-						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build(), LogicalSide.SERVER);
+						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
 			setPlayerSkillLevel(gainXpEvent.skill, playerID, gainXpEvent.endLevel());
 		}
 		else 

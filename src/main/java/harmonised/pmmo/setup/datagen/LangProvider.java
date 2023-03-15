@@ -49,34 +49,76 @@ public class LangProvider extends LanguageProvider{
 	}
 
 	//=========PERK NAMES======================
-	public static final Translation PERK_BREAK_SPEED = Translation.Builder.start("pmmo.pmmo.break_speed")
+	public static final Translation PERK_BREAK_SPEED = Translation.Builder.start("perk.pmmo.break_speed")
 		.addLocale(Locale.EN_US, "Break Speed Modifier").build();
-	public static final Translation PERK_FIREWORK = Translation.Builder.start("pmmo.pmmo.fireworks")
+	public static final Translation PERK_BREAK_SPEED_DESC = Translation.Builder.start("perk.pmmo.break_speed.description")
+		.addLocale(Locale.EN_US, "Increases how fast you can break blocks when using the correct tool.").build();
+	public static final Translation PERK_BREAK_SPEED_STATUS_1 = Translation.Builder.start("perk.pmmo.break_speed.status1")
+		.addLocale(Locale.EN_US, "%s speed +%s").build();
+	public static final Translation PERK_FIREWORK = Translation.Builder.start("perk.pmmo.fireworks")
 		.addLocale(Locale.EN_US, "Firework").build();
-	public static final Translation PERK_REACH = Translation.Builder.start("pmmo.pmmo.reach")
-		.addLocale(Locale.EN_US, "Player Reach Distance").build();
-	public static final Translation PERK_DAMAGE = Translation.Builder.start("pmmo.pmmo.damage")
-		.addLocale(Locale.EN_US, "Melee Damage").build();
-	public static final Translation PERK_SPEED = Translation.Builder.start("pmmo.pmmo.speed")
-		.addLocale(Locale.EN_US, "Player Move Speed").build();
-	public static final Translation PERK_HEALTH = Translation.Builder.start("pmmo.pmmo.health")
-		.addLocale(Locale.EN_US, "Extra Hearts").build();
-	public static final Translation PERK_JUMP_BOOST = Translation.Builder.start("pmmo.pmmo.jump_boost")
+	public static final Translation PERK_FIREWORK_DESC = Translation.Builder.start("perk.pmmo.fireworks.description")
+		.addLocale(Locale.EN_US, "Spawns a firework colored like the provided skill").build();
+	public static final Translation PERK_FIREWORK_STATUS_1 = Translation.Builder.start("perk.pmmo.fireworks.status1")
+		.addLocale(Locale.EN_US, "Rocket Color and Skill = %s").build();
+	public static final Translation PERK_JUMP_BOOST = Translation.Builder.start("perk.pmmo.jump_boost")
 		.addLocale(Locale.EN_US, "Extra Jump Height").build();
-	public static final Translation PERK_BREATH = Translation.Builder.start("pmmo.pmmo.breath")
+	public static final Translation PERK_JUMP_BOOST_DESC = Translation.Builder.start("perk.pmmo.jump_boost.description")
+		.addLocale(Locale.EN_US, "Give extra height to your jumps").build();
+	public static final Translation PERK_JUMP_BOOST_STATUS_1 = Translation.Builder.start("perk.pmmo.jump_boost.status1")
+		.addLocale(Locale.EN_US, "Extra Height: %s").build();
+	public static final Translation PERK_BREATH = Translation.Builder.start("perk.pmmo.breath")
 		.addLocale(Locale.EN_US, "Breath Refresh").build();
-	public static final Translation PERK_DAMAGE_BOOST = Translation.Builder.start("pmmo.pmmo.damage_boost")
+	public static final Translation PERK_BREATH_DESC = Translation.Builder.start("perk.pmmo.breath.description")
+		.addLocale(Locale.EN_US, "Restores breath when not on cooldown").build();
+	public static final Translation PERK_BREATH_STATUS_1 = Translation.Builder.start("perk.pmmo.breath.status1")
+		.addLocale(Locale.EN_US, "Breath Restored: %s").build();
+	public static final Translation PERK_BREATH_STATUS_2 = Translation.Builder.start("perk.pmmo.breath.status2")
+			.addLocale(Locale.EN_US, "Cooldown: %ss").build();
+	public static final Translation PERK_DAMAGE_BOOST = Translation.Builder.start("perk.pmmo.damage_boost")
 		.addLocale(Locale.EN_US, "Damage Modifier").build();
-	public static final Translation PERK_COMMAND = Translation.Builder.start("pmmo.pmmo.command")
+	public static final Translation PERK_DAMAGE_BOOST_DESC = Translation.Builder.start("perk.pmmo.damage_boost.description")
+		.addLocale(Locale.EN_US, "Increases damage dealt by the applicable items").build();
+	public static final Translation PERK_DAMAGE_BOOST_STATUS_1 = Translation.Builder.start("perk.pmmo.damage_boost.status1")
+		.addLocale(Locale.EN_US, "Applicable to: ").build();
+	public static final Translation PERK_DAMAGE_BOOST_STATUS_2 = Translation.Builder.start("perk.pmmo.damage_boost.status2")
+			.addLocale(Locale.EN_US, "Damage Boost: %s").build();
+	public static final Translation PERK_COMMAND = Translation.Builder.start("perk.pmmo.command")
 		.addLocale(Locale.EN_US, "Custom Commands").build();
-	public static final Translation PERK_NIGHT_VISION = Translation.Builder.start("pmmo.pmmo.night_vision")
-		.addLocale(Locale.EN_US, "Night Vision").build();
-	public static final Translation PERK_REGEN = Translation.Builder.start("pmmo.pmmo.regen")
-		.addLocale(Locale.EN_US, "Regeneration").build();
-	public static final Translation PERK_EFFECT = Translation.Builder.start("pmmo.pmmo.effect")
+	public static final Translation PERK_COMMAND_DESC = Translation.Builder.start("perk.pmmo.command.description")
+		.addLocale(Locale.EN_US, "Executes a command or function").build();
+	public static final Translation PERK_COMMAND_STATUS_1 = Translation.Builder.start("perk.pmmo.comand.status1")
+		.addLocale(Locale.EN_US, "%s = /%s").build();
+	public static final Translation PERK_EFFECT = Translation.Builder.start("perk.pmmo.effect")
 		.addLocale(Locale.EN_US, "Status Effect").build();
-	public static final Translation PERK_FALL_SAVE = Translation.Builder.start("pmmo.pmmo.fall_save")
+	public static final Translation PERK_EFFECT_DESC = Translation.Builder.start("perk.pmmo.effect.description")
+		.addLocale(Locale.EN_US, "Grants the player an effect. If the player already has the effect, it pauses the cooldown").build();
+	public static final Translation PERK_EFFECT_STATUS_1 = Translation.Builder.start("perk.pmmo.effect.status1")
+		.addLocale(Locale.EN_US, "Effect: %s").build();
+	public static final Translation PERK_EFFECT_STATUS_2 = Translation.Builder.start("perk.pmmo.effect.status2")
+			.addLocale(Locale.EN_US, "Lvl:%s for %ss").build();
+	public static final Translation PERK_FALL_SAVE = Translation.Builder.start("perk.pmmo.fall_save")
 		.addLocale(Locale.EN_US, "Reduce Fall Damage").build();
+	public static final Translation PERK_FALL_SAVE_DESC = Translation.Builder.start("perk.pmmo.fall_save.description")
+		.addLocale(Locale.EN_US, "Prevents damage when not on cooldown").build();
+	public static final Translation PERK_FALL_SAVE_STATUS_1 = Translation.Builder.start("perk.pmmo.fall_save.status1")
+		.addLocale(Locale.EN_US, "Damage Prevented: %s").build();
+	public static final Translation PERK_TAME_BOOST = Translation.Builder.start("perk.pmmo.tame_boost")
+		.addLocale(Locale.EN_US, "Tamed Animal Boost").build();
+	public static final Translation PERK_TAME_BOOST_DESC = Translation.Builder.start("perk.pmmo.tame_boost.description")
+		.addLocale(Locale.EN_US, "Increases an animal's attributes when it is tamed, based on your skill").build();
+	public static final Translation PERK_TAME_BOOST_STATUS_1 = Translation.Builder.start("perk.pmmo.tame_boost.status1")
+		.addLocale(Locale.EN_US, "%s increased by %s").build();
+	public static final Translation PERK_ATTRIBUTE = Translation.Builder.start("perk.pmmo.attribute")
+		.addLocale(Locale.EN_US, "Modified Player Attributes").build();
+	public static final Translation PERK_ATTRIBUTE_DESC = Translation.Builder.start("perk.pmmo.attribute.description")
+		.addLocale(Locale.EN_US, "Alters the specified player attribute according to their skill level").build();
+	public static final Translation PERK_ATTRIBUTE_STATUS_1 = Translation.Builder.start("perk.pmmo.attribute.status1")
+		.addLocale(Locale.EN_US, "Specified Attribute: %s").build();
+	public static final Translation PERK_ATTRIBUTE_STATUS_2 = Translation.Builder.start("perk.pmmo.attribute.status2")
+			.addLocale(Locale.EN_US, "%s from %s").build();
+	public static final Translation PERK_ATTRIBUTE_STATUS_3 = Translation.Builder.start("perk.pmmo.attribute.status3")
+			.addLocale(Locale.EN_US, "Current Modification: %s").build();
 	
 	//=========SKILL NAMES=====================
 	public static final Translation SKILL_HEALTH = Translation.Builder.start("pmmo.health")

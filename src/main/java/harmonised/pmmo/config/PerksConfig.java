@@ -1,5 +1,6 @@
 package harmonised.pmmo.config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class PerksConfig {
 	public static ForgeConfigSpec SERVER_CONFIG;
 	
-	private static final Codec<Map<EventType, Map<String, List<CompoundTag>>>> CODEC = 
-			Codec.unboundedMap(EventType.CODEC, 
-					Codec.unboundedMap(Codec.STRING, CompoundTag.CODEC.listOf()));
+	private static final Codec<Map<EventType, List<CompoundTag>>> CODEC = 
+			Codec.unboundedMap(EventType.CODEC, CompoundTag.CODEC.listOf());
 	
 	static {
 		generateDefaults();
@@ -31,8 +31,8 @@ public class PerksConfig {
 		SERVER_CONFIG = SERVER_BUILDER.build();
 	}
 	
-	public static ConfigObject<Map<EventType, Map<String, List<CompoundTag>>>> PERK_SETTINGS;
-	private static Map<EventType, Map<String, List<CompoundTag>>> defaultSettings;
+	public static ConfigObject<Map<EventType, List<CompoundTag>>> PERK_SETTINGS;
+	private static Map<EventType, List<CompoundTag>> defaultSettings;
 	
 	private static void buildPerkSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("These settings define which perks are used and the settings which govern them.").push("Perks");
@@ -44,104 +44,96 @@ public class PerksConfig {
 	
 	private static void generateDefaults() {
 		defaultSettings = new HashMap<>();
-		Map<String, List<CompoundTag>> bodyMap = new HashMap<>();
+		List<CompoundTag> bodyList = new ArrayList<>();
 		
 		//====================BREAK SPEED DEFAULTS========================
-		bodyMap.put("mining", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("pickaxe_dig", 0.005).build()));
-		bodyMap.put("excavation", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("shovel_dig", 0.005).build()));
-		bodyMap.put("woodcutting", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("axe_dig", 0.005).build()));
-		bodyMap.put("farming", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("hoe_dig", 0.005).withDouble("shears_dig", 0.005).build()));
-		bodyMap.put("combat", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("sword_dig", 0.005).build()));
-		defaultSettings.put(EventType.BREAK_SPEED, bodyMap);
-		bodyMap = new HashMap<>();
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "mining").withDouble("pickaxe_dig", 0.005).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "excavation").withDouble("shovel_dig", 0.005).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "woodcutting").withDouble("axe_dig", 0.005).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "farming").withDouble("hoe_dig", 0.005).withDouble("shears_dig", 0.005).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "farming").withDouble("sword_dig", 0.005).build());
+		defaultSettings.put(EventType.BREAK_SPEED, new ArrayList<>(bodyList));
+		bodyList.clear();
 		//====================SKILL_UP DEFAULTS==========================
-		bodyMap.put("mining", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "mining").build()));
-		bodyMap.put("building", List.of(
-				TagBuilder.start()
-					.withString("perk", "pmmo:attribute")
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "mining").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "building")
 					.withString(APIUtils.ATTRIBUTE, "forge:reach_distance")
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
-					.withDouble(APIUtils.MAX_BOOST, 10d).build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "building").build()));
-		bodyMap.put("excavation", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "excavation").build()));
-		bodyMap.put("woodcutting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "woodcutting").build()));
-		bodyMap.put("farming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "farming").build()));
-		bodyMap.put("agility", List.of(
-				TagBuilder.start()
-					.withString("perk", "pmmo:attribute")
+					.withDouble(APIUtils.MAX_BOOST, 10d).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "building").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "excavation").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "woodcutting").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "farming").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "agility")
 					.withString(APIUtils.ATTRIBUTE, "minecraft:generic.movement_speed")
 					.withDouble(APIUtils.PER_LEVEL, 0.000035)
-					.withDouble(APIUtils.MAX_BOOST, 1d).build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "agility").build()));
-		bodyMap.put("endurance", List.of(
-				TagBuilder.start()
-					.withString("perk", "pmmo:attribute")
+					.withDouble(APIUtils.MAX_BOOST, 1d).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "agility").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "endurance")
 					.withString(APIUtils.ATTRIBUTE, "minecraft:generic.max_health")
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
-					.withDouble(APIUtils.MAX_BOOST, 10d).build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "endurance").build()));
-		bodyMap.put("combat", List.of(
-				TagBuilder.start()
-				.withString("perk", "pmmo:attribute")
+					.withDouble(APIUtils.MAX_BOOST, 10d).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "endurance").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "combat")
 				.withString(APIUtils.ATTRIBUTE, "minecraft:generic.attack_damage")
 				.withDouble(APIUtils.PER_LEVEL, 0.005)
-				.withDouble(APIUtils.MAX_BOOST, 1d).build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "combat").build()));
-		bodyMap.put("gunslinging", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "gunslinging").build()));
-		bodyMap.put("archery", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "archery").build()));
-		bodyMap.put("smithing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "smithing").build()));
-		bodyMap.put("flying", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "flying").build()));
-		bodyMap.put("swimming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "swimming").build()));
-		bodyMap.put("sailing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "sailing").build()));
-		bodyMap.put("fishing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "fishing").build()));
-		bodyMap.put("crafting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "crafting").build()));
-		bodyMap.put("magic", List.of(
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "magic").build(),
-				TagBuilder.start().withString("perk", "ars_scalaes:mana_boost").withDouble(APIUtils.MAX_BOOST, 3000d).withDouble(APIUtils.PER_LEVEL, 3.0d).build(),
-				TagBuilder.start().withString("perk", "ars_scalaes:mana_regen").withDouble(APIUtils.MAX_BOOST, 100d).withDouble(APIUtils.PER_LEVEL, 0.06d).build()));
-		bodyMap.put("slayer", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "slayer").build()));
-		bodyMap.put("hunter", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "hunter").build()));
-		bodyMap.put("taming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "taming").build()));
-		bodyMap.put("cooking", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "cooking").build()));
-		bodyMap.put("alchemy", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "alchemy").build()));
+				.withDouble(APIUtils.MAX_BOOST, 1d).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "combat").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "gunslinging").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "archery").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "smithing").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "flying").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "swimming").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "sailing").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "fishing").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "crafting").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "magic").build());
+		bodyList.add(TagBuilder.start().withString("perk", "ars_scalaes:mana_boost").withString(APIUtils.SKILLNAME, "magic")
+				.withDouble(APIUtils.MAX_BOOST, 3000d).withDouble(APIUtils.PER_LEVEL, 3.0d).build());
+		bodyList.add(TagBuilder.start().withString("perk", "ars_scalaes:mana_regen").withString(APIUtils.SKILLNAME, "magic")
+				.withDouble(APIUtils.MAX_BOOST, 100d).withDouble(APIUtils.PER_LEVEL, 0.06d).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "slayer").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "hunter").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "taming").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "cooking").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "alchemy").build());
 		
-		defaultSettings.put(EventType.SKILL_UP, bodyMap);
-		bodyMap = new HashMap<>();
-		
-		//=====================JUMP DEFAULTS=============================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.0005).build()));
-		defaultSettings.put(EventType.JUMP, bodyMap);
-		bodyMap = new HashMap<>();
+		defaultSettings.put(EventType.SKILL_UP, new ArrayList<>(bodyList));
+		bodyList.clear();
 		
 		//=====================JUMP DEFAULTS=============================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.001).build()));
-		defaultSettings.put(EventType.SPRINT_JUMP, bodyMap);
-		bodyMap = new HashMap<>();
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble("per_level", 0.0005).build());
+		defaultSettings.put(EventType.JUMP, new ArrayList<>(bodyList));
+		bodyList.clear();
+		
+		//=====================JUMP DEFAULTS=============================
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble("per_level", 0.001).build());
+		defaultSettings.put(EventType.SPRINT_JUMP, new ArrayList<>(bodyList));
+		bodyList.clear();
 				
 		//=====================JUMP DEFAULTS=============================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.0015).build()));
-		defaultSettings.put(EventType.CROUCH_JUMP, bodyMap);
-		bodyMap = new HashMap<>();
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble("per_level", 0.0015).build());
+		defaultSettings.put(EventType.CROUCH_JUMP, new ArrayList<>(bodyList));
+		bodyList.clear();
 		
 		//=====================SUBMERGED DEFAULTS========================
-		bodyMap.put("swimming", List.of(
-				TagBuilder.start().withString("perk", "pmmo:breath").build(),
-				TagBuilder.start().withString("perk", "pmmo:night_vision").build()));
-		defaultSettings.put(EventType.SUBMERGED, bodyMap);
-		bodyMap = new HashMap<>();
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:breath").withString(APIUtils.SKILLNAME, "swimming").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:effect").withString(APIUtils.SKILLNAME, "swimming")
+				.withString("effect", "minecraft:night_vision").build());
+		defaultSettings.put(EventType.SUBMERGED, new ArrayList<>(bodyList));
+		bodyList.clear();
 		
 		//=====================FROM_IMPACT==============================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:fall_save").withDouble("per_level", 0.005).build()));
-		bodyMap.put("endurance", List.of(TagBuilder.start().withString("perk", "pmmo:fall_save").withDouble("per_level", 0.025).build()));
-		defaultSettings.put(EventType.FROM_IMPACT, bodyMap);
-		bodyMap = new HashMap<>();
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fall_save").withString(APIUtils.SKILLNAME, "agility").withDouble("per_level", 0.005).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fall_save").withString(APIUtils.SKILLNAME, "endurance").withDouble("per_level", 0.025).build());
+		defaultSettings.put(EventType.FROM_IMPACT, new ArrayList<>(bodyList));
+		bodyList.clear();
 		
 		//=====================DEAL_RANGED_DAMAGE=======================
-		bodyMap.put("archery", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withList("applies_to", StringTag.valueOf("minecraft:bow"), StringTag.valueOf("mineraft:crossbow"), StringTag.valueOf("minecraft:trident")).build()));
-		bodyMap.put("magic", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build()));
-		bodyMap.put("gunslinging", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build()));
-		defaultSettings.put(EventType.DEAL_RANGED_DAMAGE, bodyMap);
-		defaultSettings.put(EventType.RANGED_TO_MOBS, bodyMap);
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "archery").withList("applies_to", StringTag.valueOf("minecraft:bow"), StringTag.valueOf("mineraft:crossbow"), StringTag.valueOf("minecraft:trident")).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic").withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging").withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build());
+		defaultSettings.put(EventType.DEAL_RANGED_DAMAGE, new ArrayList<>(bodyList));
 	}
 	
 	

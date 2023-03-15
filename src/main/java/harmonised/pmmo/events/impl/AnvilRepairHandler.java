@@ -20,7 +20,7 @@ public class AnvilRepairHandler {
 		if (serverSide)		
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ANVIL_REPAIR, event, new CompoundTag());
 		//Process perks
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ANVIL_REPAIR, event.getEntity(), eventHookOutput, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ANVIL_REPAIR, event.getEntity(), eventHookOutput));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ANVIL_REPAIR, event.getOutput(), event.getEntity(), perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());

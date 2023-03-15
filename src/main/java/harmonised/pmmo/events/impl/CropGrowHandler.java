@@ -42,7 +42,7 @@ public class CropGrowHandler {
 			CompoundTag hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.GROW, event, new CompoundTag());
 			
 			//Execute perks configured by the player
-			hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.GROW, player, core.getSide()));
+			hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.GROW, player, new CompoundTag()));
 
 			//Apply experience gains
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.GROW, event.getPos(), level, player, hookOutput);
