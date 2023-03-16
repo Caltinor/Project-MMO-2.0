@@ -2,6 +2,7 @@ package harmonised.pmmo.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -67,5 +68,23 @@ public class Functions<X, Y> {
 		});
 		 MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Merged Map: {}", MsLoggy.mapToString(outMap));
 		return outMap;
+	}
+	
+	/**Constructs a {@ling UUID} using the hash code of the supplied string
+	 * the UUID in string format is the hash integer prepended with zeros.
+	 * 
+	 * @param str a string to be converted
+	 * @return a consistent UUID derived from the string.
+	 */
+	public static UUID getReliableUUID(String str) {
+		String hashedString = String.valueOf(str.hashCode());
+		while (hashedString.length() < 36) {
+			hashedString = (hashedString.length() == 12 ||
+					hashedString.length() == 16 ||
+					hashedString.length() == 20 ||
+					hashedString.length() == 24 
+					? "-" : "0") + hashedString;		
+		}
+		return UUID.fromString(hashedString);
 	}
 }

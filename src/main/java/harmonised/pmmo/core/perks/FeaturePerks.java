@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
@@ -30,14 +31,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
 	
-	private static final UUID ATTRIBUTE_ID = UUID.fromString("b902b6aa-8393-4bdc-8f0d-b937268ef5af");
 	private static final Map<String, Attribute> attributeCache = new HashMap<>();
 	
 	private static Attribute getAttribute(CompoundTag nbt) {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
 				name -> ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(name)));
 	}
-	//TODO figure out how to have duplicate attribute perks that compound the bonuses
+	
 	public static final Perk ATTRIBUTE = Perk.begin()
 			.addDefaults(TagBuilder.start().withDouble(APIUtils.MAX_BOOST, 0d).withDouble(APIUtils.PER_LEVEL, 0d).build())
 			.setStart((player, nbt) -> {
@@ -46,8 +46,9 @@ public class FeaturePerks {
 				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost);
 				
-				AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "PMMO-modifier based on user skill", boost, AttributeModifier.Operation.ADDITION);
-				instance.removeModifier(ATTRIBUTE_ID);
+				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
+				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, AttributeModifier.Operation.ADDITION);
+				instance.removeModifier(attributeID);
 				instance.addPermanentModifier(modifier);
 				return NONE;
 			})
@@ -58,8 +59,8 @@ public class FeaturePerks {
 				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
 				return List.of(
 				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
-				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname),
-				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel)));
+				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
+				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
 			}).build();
 	
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {

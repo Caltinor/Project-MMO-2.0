@@ -7,6 +7,7 @@ import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.features.fireworks.FireworkHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.Tag;
@@ -109,7 +110,9 @@ public record Perk(
 		if (src.contains(APIUtils.CHANCE) && src.getDouble(APIUtils.CHANCE) < player.level.random.nextDouble())
 			return false;
 		if (src.contains(APIUtils.SKILLNAME)) {
-			int skillLevel = Core.get(player.level).getData().getPlayerSkillLevel(src.getString(APIUtils.SKILLNAME), player.getUUID());
+			if (src.contains(FireworkHandler.FIREWORK_SKILL) && !src.getString(APIUtils.SKILLNAME).equals(src.getString(FireworkHandler.FIREWORK_SKILL)))
+				return false;
+			int skillLevel = src.getInt(APIUtils.SKILL_LEVEL);
 			if (src.contains(APIUtils.MAX_LEVEL) && skillLevel > src.getInt(APIUtils.MAX_LEVEL))
 				return false;
 			if (src.contains(APIUtils.MIN_LEVEL) && skillLevel < src.getInt(APIUtils.MIN_LEVEL))

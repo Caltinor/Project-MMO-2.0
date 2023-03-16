@@ -17,10 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class FireworkHandler {
+	/**A sorely misplaced key used by the SKILL_UP event to mark what skill leveled up.*/
 	public static final String FIREWORK_SKILL = "firework_skill";
 	
 	public static final Perk FIREWORK = Perk.begin()
-			.addConditions((player, settings) -> settings.getString(APIUtils.SKILLNAME).equals(settings.getString(FIREWORK_SKILL)))
 			.addDefaults(TagBuilder.start().withString(APIUtils.SKILLNAME, "none").build())
 			.setStart((player, nbt) -> {
 				BlockPos pos = player.blockPosition();
@@ -29,7 +29,8 @@ public class FireworkHandler {
 			})
 			.setDescription(LangProvider.PERK_FIREWORK_DESC.asComponent())
 			.setStatus((p, nbt) -> List.of(LangProvider.PERK_FIREWORK_STATUS_1
-					.asComponent(Component.translatable("pmmo."+nbt.getString(APIUtils.SKILLNAME))))).build();
+					.asComponent(Component.translatable("pmmo."+nbt.getString(APIUtils.SKILLNAME))
+							.withStyle(CoreUtils.getSkillStyle(nbt.getString(APIUtils.SKILLNAME)))))).build();
 	
 	public static void spawnRocket(Level world, Vec3 pos, String skill/*, @Nullable WorldText explosionText*/)
 	{

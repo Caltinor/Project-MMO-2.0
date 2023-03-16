@@ -63,9 +63,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 		DIVING(false, false, true, "swimming"),					
 		SURFACING(false, false, true, "swimming"),				
 		SWIM_SPRINTING(false, false, true, "swimming"),			
-	TAMING(false, false, true, "taming"),					
-	VEIN_MINE(false, false, false, ""),
-	DISABLE_PERK(false, false, false, "");					
+	TAMING(false, false, true, "taming");					
 	
 	public final boolean itemApplicable;
 	public final boolean blockApplicable;
