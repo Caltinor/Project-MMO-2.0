@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -150,7 +151,21 @@ public class FeaturePerks {
 	public static final Perk DAMAGE_BOOST = Perk.begin()
 			.addConditions((player, nbt) -> {
 				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
-				return type.contains(RegistryUtil.getId(player.getMainHandItem()).toString());
+				for (String key : type) {
+					if (key.startsWith("#") && ForgeRegistries.ITEMS.tags()
+							.getTag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation(key.substring(1))))
+							.stream().anyMatch(item -> player.getMainHandItem().getItem().equals(item))) {
+						return true;
+					}
+					else if (key.endsWith(":*") && ForgeRegistries.ITEMS.getValues().stream()
+							.anyMatch(item -> player.getMainHandItem().getItem().equals(item))) {
+						return true;
+					}
+					else if (key.equals(RegistryUtil.getId(player.getMainHandItem()).toString()))
+						return true;
+						
+				}
+				return false;
 			})
 			.addDefaults(TagBuilder.start()
 				.withFloat(APIUtils.DAMAGE_IN, 0)
