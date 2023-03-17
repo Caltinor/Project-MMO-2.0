@@ -177,6 +177,7 @@ public class Core {
 		ResourceLocation res = RegistryUtil.getId(level.getBlockState(pos));
 		BlockEntity tile = level.getBlockEntity(pos);
 		dataIn.merge(TagUtils.tileTag(tile));
+		dataIn.put("state", TagUtils.stateTag(level.getBlockState(pos)));
 
 		Map<String, Long> xpGains = (tile != null && tooltips.xpGainTooltipExists(res, type))
 			? tooltips.getBlockXpGainTooltipData(res, type, tile)
@@ -392,7 +393,9 @@ public class Core {
 		Map<String, Integer> reqMap = (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
 			? tooltips.getBlockRequirementTooltipData(blockID, reqType, tile)
 			: new HashMap<>();
-		return getCommonReqData(reqMap, ObjectType.BLOCK, blockID, reqType, TagUtils.tileTag(tile));
+		CompoundTag dataIn = TagUtils.tileTag(tile);
+		dataIn.put("state", TagUtils.stateTag(level.getBlockState(pos)));
+		return getCommonReqData(reqMap, ObjectType.BLOCK, blockID, reqType, dataIn);
 	}
 	
 	/**gets the default and autovalue data for the provided object.

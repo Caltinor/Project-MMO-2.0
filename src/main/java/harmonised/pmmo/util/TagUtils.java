@@ -12,6 +12,7 @@ import net.minecraft.nbt.ShortTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TagUtils {
 
@@ -87,5 +88,11 @@ public class TagUtils {
 		return tile == null || tile.getPersistentData() == null 
 				? new CompoundTag() 
 				: tile.getPersistentData();
+	}
+	
+	public static CompoundTag stateTag(BlockState state) {
+		CompoundTag dataOut = new CompoundTag();
+		state.getProperties().forEach(prop -> dataOut.putString(prop.getName(), state.getValue(prop).toString()));
+		return dataOut;
 	}
 }
