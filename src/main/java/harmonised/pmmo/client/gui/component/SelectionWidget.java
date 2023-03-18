@@ -41,7 +41,12 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
 
     @Override
     public void renderWidget(PoseStack pstack, int mouseX, int mouseY, float partialTicks) {
-        super.render(pstack, mouseX, mouseY, partialTicks);
+    	RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+        RenderSystem.enableBlend();
+        RenderSystem.enableDepthTest();
+        blitNineSliced(pstack, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, 66);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (selected != null)
             selected.render(pstack, getX(), getY(), width, false, getFGColor(), alpha);

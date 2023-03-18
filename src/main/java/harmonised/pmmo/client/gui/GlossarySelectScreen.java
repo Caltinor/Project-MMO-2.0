@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -86,7 +85,7 @@ public class GlossarySelectScreen extends Screen{
 		addRenderableWidget(selectEnum);
 		addRenderableWidget(selectSkills);
 		addRenderableWidget(selectObject);
-		addRenderableWidget(selectSection);		
+		addRenderableWidget(selectSection);
 	}
 
 	@Override

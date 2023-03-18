@@ -110,18 +110,18 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 		@Override
 		public void render(PoseStack poseStack, int x, int y, int width, ItemRenderer itemRenderer, Tesselator tess) {
-			GuiComponent.fill(poseStack, x, y, x+width, y+12, headerColor());
+			fill(poseStack, x, y, x+width, y+12, headerColor());
 			@SuppressWarnings("resource")
 			Font font = Minecraft.getInstance().font;
 			if (stack() != null || block() != null) {
 				ItemStack renderStack = stack() == null ? new ItemStack(block().asItem()) : stack();
 				itemRenderer.renderAndDecorateItem(poseStack, renderStack, x+width - 25, y);
-				GuiComponent.drawString(poseStack, font, renderStack.getDisplayName(), x + 10, y, 0xFFFFFF);
+				drawString(poseStack, font, renderStack.getDisplayName(), x + 10, y, 0xFFFFFF);
 			}
 			else if (entity != null && entity instanceof LivingEntity) {
 				int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
-				InventoryScreen.renderEntityInInventoryFollowsAngle(poseStack, x+width - 20, y+12, scale, (float)(x+ 51) - 100, (float)(y + 75 - 50) - 100, (LivingEntity) entity);
-				GuiComponent.drawString(poseStack, font, this.entity.getDisplayName(), x, y, 0xFFFFFF);
+				InventoryScreen.renderEntityInInventoryFollowsAngle(poseStack, x+width - 20, y+12, scale, 0f, 0f, (LivingEntity) entity);
+				drawString(poseStack, font, this.entity.getDisplayName(), x, y, 0xFFFFFF);
 			}
 		}
 	}
@@ -160,7 +160,7 @@ public class StatScrollWidget extends ScrollPanel{
 		this.itemRenderer = itemRenderer;
 		generateGlossary(selection, object, skill, type);
 	}
-	
+
 	//Utility method for uniform nesting indentation
 	private int step(int level) {return level * 10;}
 	
@@ -696,7 +696,7 @@ public class StatScrollWidget extends ScrollPanel{
 	@Override
 	protected void drawPanel(PoseStack poseStack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
 		for (int i = 0; i < content.size(); i++) {
-			content.get(i).render(poseStack, this.left, (int)(relativeY + (i*12) - scrollDistance), this.width, this.itemRenderer, tess);			
+			content.get(i).render(poseStack, this.left, (int)(relativeY + (i*12) - scrollDistance), this.width, mc.getItemRenderer(), tess);			
 		}
 	}
 
