@@ -8,6 +8,7 @@ import harmonised.pmmo.client.gui.component.PMMOButton;
 import harmonised.pmmo.client.gui.component.PlayerStatsComponent;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -76,7 +77,7 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
         RenderSystem.setShaderTexture(0, INVENTORY_LOCATION);
         int i = this.leftPos;
         int j = this.topPos;
-        this.blit(pPoseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        GuiComponent.blit(pPoseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
         renderEntityInInventory(i + 51, j + 75, 30, (float)(i + 51) - this.xMouse, (float)(j + 75 - 50) - this.yMouse, this.minecraft.player);
     }
     

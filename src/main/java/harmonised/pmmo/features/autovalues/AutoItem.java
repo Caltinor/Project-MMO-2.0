@@ -280,7 +280,7 @@ public class AutoItem {
 		double durabilityScale = (double)stack.getMaxDamage() * AutoValueConfig.getWearableAttribute(type, AttributeKey.DUR);
 		//Armor Specific
 		ArmorMaterial material = isArmor ? ((ArmorItem)stack.getItem()).getMaterial() : null;
-		double armorScale = isArmor ? material.getDefenseForSlot(LivingEntity.getEquipmentSlotForItem(stack)) * AutoValueConfig.getWearableAttribute(type, AttributeKey.AMR) : 0d;
+		double armorScale = isArmor ? material.getDefenseForType(((ArmorItem)stack.getItem()).getType()) * AutoValueConfig.getWearableAttribute(type, AttributeKey.AMR) : 0d;
 		double toughnessScale = isArmor? material.getToughness() * AutoValueConfig.getWearableAttribute(type, AttributeKey.TUF) : 0d;
 		double knockbackScale = isArmor? material.getKnockbackResistance() * AutoValueConfig.getWearableAttribute(type, AttributeKey.KBR) : 0d;
 		//return and log output

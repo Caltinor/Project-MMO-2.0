@@ -18,6 +18,7 @@ import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -90,14 +91,14 @@ public class GlossarySelectScreen extends Screen{
 
 	@Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(stack, 1);
+		renderBackground(stack);
 		super.render(stack, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
-    public void renderBackground(PoseStack stack, int p_renderBackground_1_) {
+    public void renderBackground(PoseStack stack) {
 		RenderSystem.setShaderTexture(0, GUI_BG);
-        this.blit(stack,  renderX, renderY, 0, 0,  256, 256);
+        GuiComponent.blit(stack,  renderX, renderY, 0, 0,  256, 256);
 	}
 	
 	@Override

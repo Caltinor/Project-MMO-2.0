@@ -85,23 +85,23 @@ public class StatsScreen extends Screen{
 	
 	@Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(stack, 1);
+		renderBackground(stack);
 		if (this.stack != null || block != null) {
 			ItemStack renderStack = this.stack == null ? new ItemStack(Minecraft.getInstance().player.level.getBlockState(block).getBlock().asItem()) : this.stack;
-			this.itemRenderer.renderAndDecorateItem(renderStack, this.renderX+25, this.renderY+15);
+			this.itemRenderer.renderAndDecorateItem(stack, renderStack, this.renderX+25, this.renderY+15);
 			GuiComponent.drawString(stack, font, renderStack.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}
 		else if (entity != null && entity instanceof LivingEntity) {
-			InventoryScreen.renderEntityInInventory(this.renderX+30, this.renderY+30,  10, (float)(this .renderX+ 51) - mouseX, (float)(this.renderY + 75 - 50) - mouseY, (LivingEntity) entity);
+			InventoryScreen.renderEntityInInventoryFollowsAngle(stack, this.renderX+width - 20, this.renderY+12, 10, (float)(this.renderX+ 51) - 100, (float)(this.renderY + 75 - 50) - 100, (LivingEntity) entity);
 			GuiComponent.drawString(stack, font, this.entity.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}	
 		super.render(stack, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
-    public void renderBackground(PoseStack stack, int p_renderBackground_1_) {
+    public void renderBackground(PoseStack stack) {
 		RenderSystem.setShaderTexture(0, GUI_BG);
-        this.blit(stack,  renderX, renderY, 0, 0,  256, 256);
+        GuiComponent.blit(stack,  renderX, renderY, 0, 0,  256, 256);
 	}
 	
 	@Override

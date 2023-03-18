@@ -113,7 +113,7 @@ public class Networking {
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {
-		INSTANCE.sendTo(packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+		INSTANCE.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 	}
 	public static void sendToServer(Object packet) {
 		INSTANCE.sendToServer(packet);

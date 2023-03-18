@@ -67,7 +67,7 @@ public class PlayerStatsComponent extends AbstractWidget {
     }
     
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         if (this.isVisible()) {
             poseStack.pushPose();
             poseStack.translate(0.0D, 0.0D, 120.0D);
@@ -76,7 +76,7 @@ public class PlayerStatsComponent extends AbstractWidget {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int i = (this.width - IMAGE_WIDTH) / 2 - this.xOffset;
             int j = (this.height - IMAGE_HEIGHT) / 2;
-            this.blit(poseStack, i, j, 0, 0, 147, 166);
+            GuiComponent.blit(poseStack, i, j, 0, 0, 147, 166);
             this.statsScroller.render(poseStack, mouseX, mouseY, partialTicks);
             poseStack.popPose();
         }
@@ -203,8 +203,8 @@ public class PlayerStatsComponent extends AbstractWidget {
         }
     
         @Override
-        public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-            super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+            super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
             
             RenderSystem.setShaderTexture(0, skillData.getIcon());
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -228,5 +228,4 @@ public class PlayerStatsComponent extends AbstractWidget {
             blit(pPoseStack, this.getX() + 24, this.getY() + (minecraft.font.lineHeight + 6), xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
         }
     }
-
 }

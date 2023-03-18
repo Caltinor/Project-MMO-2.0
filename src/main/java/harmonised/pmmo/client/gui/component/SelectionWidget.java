@@ -40,8 +40,8 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     }
 
     @Override
-    public void renderButton(PoseStack pstack, int mouseX, int mouseY, float partialTicks) {
-        super.renderButton(pstack, mouseX, mouseY, partialTicks);
+    public void renderWidget(PoseStack pstack, int mouseX, int mouseY, float partialTicks) {
+        super.render(pstack, mouseX, mouseY, partialTicks);
 
         if (selected != null)
             selected.render(pstack, getX(), getY(), width, false, getFGColor(), alpha);
@@ -184,5 +184,11 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
             FormattedCharSequence text = Language.getInstance().getVisualOrder(FormattedText.composite(font.substrByWidth(message, width - 12)));
             font.drawShadow(pstack, text, x + 6, y + 6, fgColor | Mth.ceil(alpha * 255.0F) << 24);
         }
+
+		@Override
+		public void setFocused(boolean p_265728_) {}
+
+		@Override
+		public boolean isFocused() {return false;}
     }
 }

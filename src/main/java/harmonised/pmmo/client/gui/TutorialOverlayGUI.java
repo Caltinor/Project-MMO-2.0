@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
@@ -24,6 +23,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
@@ -36,7 +36,7 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class TutorialOverlayGUI implements IGuiOverlay{
+public class TutorialOverlayGUI implements IGuiOverlay {
 	private Minecraft mc;
 	private Font fontRenderer;
 	private List<ClientTooltipComponent> lines = new ArrayList<>();
@@ -54,132 +54,128 @@ public class TutorialOverlayGUI implements IGuiOverlay{
 			fontRenderer = mc.font;
 		int renderLeft = (screenWidth / 8) * 5;
 		int renderTop = (screenHeight / 4);
-		int tooltipWidth = 3 * (screenWidth/8);
-		
-		if(!mc.options.renderDebug){
-			//IDENTIFY LINES
-			if (mc.level.getBlockState(bhr.getBlockPos()).getBlock().equals(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Config.SALVAGE_BLOCK.get())))) {	
-				lines = new ArrayList<>(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent().withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), tooltipWidth));
-				if (mc.player.isCrouching() && (!mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty())) {
-					ItemStack salvageStack = mc.player.getMainHandItem().isEmpty() ? mc.player.getOffhandItem() : mc.player.getMainHandItem();
-					gatherSalvageData(salvageStack).forEach(line -> lines.addAll(ClientUtils.ctc(mc, line, tooltipWidth)));
-				}
-				else 
-					lines.addAll(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_USAGE.asComponent(), tooltipWidth));				
-			}
-			else
-				return; //stop render if none of the viewing cases are met.			
-			
-			//RENDER
+		int tooltipWidth = 3 * (screenWidth / 8);
+
+		if (!mc.options.renderDebug) {
+			// IDENTIFY LINES
+			if (mc.level.getBlockState(bhr.getBlockPos()).getBlock()
+					.equals(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Config.SALVAGE_BLOCK.get())))) {
+				lines = new ArrayList<>(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent()
+						.withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), tooltipWidth));
+				if (mc.player.isCrouching()
+						&& (!mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty())) {
+					ItemStack salvageStack = mc.player.getMainHandItem().isEmpty() ? mc.player.getOffhandItem()
+							: mc.player.getMainHandItem();
+					gatherSalvageData(salvageStack)
+							.forEach(line -> lines.addAll(ClientUtils.ctc(mc, line, tooltipWidth)));
+				} else
+					lines.addAll(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_USAGE.asComponent(), tooltipWidth));
+			} else
+				return; // stop render if none of the viewing cases are met.
+
+			// RENDER
 			stack.pushPose();
 			RenderSystem.enableBlend();
 			if (!lines.isEmpty()) {
-		         int i = 0;
-		         int j = lines.size() == 1 ? -2 : 0;
+				int i = 0;
+				int j = lines.size() == 1 ? -2 : 0;
 
-		         for(ClientTooltipComponent clienttooltipcomponent : lines) {
-		            int k = clienttooltipcomponent.getWidth(fontRenderer);
-		            if (k > i) {
-		               i = k;
-		            }
+				for (ClientTooltipComponent clienttooltipcomponent : lines) {
+					int k = clienttooltipcomponent.getWidth(mc.font);
+					if (k > i) {
+						i = k;
+					}
 
-		            j += clienttooltipcomponent.getHeight();
-		         }
+					j += clienttooltipcomponent.getHeight();
+				}
 
-		         int j2 = renderLeft;
-		         int k2 = renderTop;
-		         if (j2 + i > screenWidth) {
-		            j2 -= 28 + i;
-		         }
+				int l = renderLeft;
+				int i1 = renderTop;
+				stack.pushPose();
+				Tesselator tesselator = Tesselator.getInstance();
+				BufferBuilder bufferbuilder = tesselator.getBuilder();
+				RenderSystem.setShader(GameRenderer::getPositionColorShader);
+				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+				Matrix4f matrix4f = stack.last().pose();
+				TooltipRenderUtil.renderTooltipBackground((p_262872_, p_262873_, p_262874_, p_262875_, p_262876_,
+						p_262877_, p_262878_, p_262879_, p_262880_) -> {
+					fillGradient(p_262872_, p_262873_, p_262874_, p_262875_, p_262876_, p_262877_, p_262878_, p_262879_,
+							p_262880_);
+				}, matrix4f, bufferbuilder, l, i1, i, j, 400);
+				RenderSystem.enableDepthTest();
+				RenderSystem.enableBlend();
+				RenderSystem.defaultBlendFunc();
+				BufferUploader.drawWithShader(bufferbuilder.end());
+				MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource
+						.immediate(Tesselator.getInstance().getBuilder());
+				stack.translate(0.0F, 0.0F, 400.0F);
+				int k1 = i1;
 
-		         if (k2 + j + 6 > screenHeight) {
-		            k2 = screenHeight - j - 6;
-		         }
+				for (int l1 = 0; l1 < lines.size(); ++l1) {
+					ClientTooltipComponent clienttooltipcomponent1 = lines.get(l1);
+					clienttooltipcomponent1.renderText(mc.font, l, k1, matrix4f, multibuffersource$buffersource);
+					k1 += clienttooltipcomponent1.getHeight() + (l1 == 0 ? 2 : 0);
+				}
 
-		         stack.pushPose();
-		         Tesselator tesselator = Tesselator.getInstance();
-		         BufferBuilder bufferbuilder = tesselator.getBuilder();
-		         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-		         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-		         Matrix4f matrix4f = stack.last().pose();
-		         net.minecraftforge.client.event.RenderTooltipEvent.Color colorEvent = net.minecraftforge.client.ForgeHooksClient.onRenderTooltipColor(ItemStack.EMPTY, stack, j2, k2, fontRenderer, lines);
-		         fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 4, j2 + i + 3, k2 - 3, 400, colorEvent.getBackgroundStart(), colorEvent.getBackgroundStart());
-		         fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 + j + 3, j2 + i + 3, k2 + j + 4, 400, colorEvent.getBackgroundEnd(), colorEvent.getBackgroundEnd());
-		         fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 + j + 3, 400, colorEvent.getBackgroundStart(), colorEvent.getBackgroundEnd());
-		         fillGradient(matrix4f, bufferbuilder, j2 - 4, k2 - 3, j2 - 3, k2 + j + 3, 400, colorEvent.getBackgroundStart(), colorEvent.getBackgroundEnd());
-		         fillGradient(matrix4f, bufferbuilder, j2 + i + 3, k2 - 3, j2 + i + 4, k2 + j + 3, 400, colorEvent.getBackgroundStart(), colorEvent.getBackgroundEnd());
-		         fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 3 + 1, j2 - 3 + 1, k2 + j + 3 - 1, 400, colorEvent.getBorderStart(), colorEvent.getBorderEnd());
-		         fillGradient(matrix4f, bufferbuilder, j2 + i + 2, k2 - 3 + 1, j2 + i + 3, k2 + j + 3 - 1, 400, colorEvent.getBorderStart(), colorEvent.getBorderEnd());
-		         fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 - 3 + 1, 400, colorEvent.getBorderStart(), colorEvent.getBorderStart());
-		         fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 + j + 2, j2 + i + 3, k2 + j + 3, 400, colorEvent.getBorderEnd(), colorEvent.getBorderEnd());
-		         RenderSystem.enableDepthTest();
-		         RenderSystem.disableTexture();
-		         RenderSystem.enableBlend();
-		         RenderSystem.defaultBlendFunc();
-		         BufferUploader.drawWithShader(bufferbuilder.end());
-		         RenderSystem.disableBlend();
-		         RenderSystem.enableTexture();
-		         MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-		         stack.translate(0.0D, 0.0D, 400.0D);
-		         int l1 = k2;
+				multibuffersource$buffersource.endBatch();
+				k1 = i1;
 
-		         for(int i2 = 0; i2 < lines.size(); ++i2) {
-		            ClientTooltipComponent clienttooltipcomponent1 = lines.get(i2);
-		            clienttooltipcomponent1.renderText(fontRenderer, j2, l1, matrix4f, multibuffersource$buffersource);
-		            l1 += clienttooltipcomponent1.getHeight() + (i2 == 0 ? 2 : 0);
-		         }
+				for (int i2 = 0; i2 < lines.size(); ++i2) {
+					ClientTooltipComponent clienttooltipcomponent2 = lines.get(i2);
+					clienttooltipcomponent2.renderImage(mc.font, l, k1, stack, mc.getItemRenderer());
+					k1 += clienttooltipcomponent2.getHeight() + (i2 == 0 ? 2 : 0);
+				}
 
-		         multibuffersource$buffersource.endBatch();
-		         stack.popPose();
-		         l1 = k2;
-
-		         for(int l2 = 0; l2 < lines.size(); ++l2) {
-		            ClientTooltipComponent clienttooltipcomponent2 = lines.get(l2);
-		            l1 += clienttooltipcomponent2.getHeight() + (l2 == 0 ? 2 : 0);
-		         }
-		      }
+			}
 			stack.popPose();
 		}
 	}
 
-	protected static void fillGradient(Matrix4f pMatrix, BufferBuilder pBuilder, int pX1, int pY1, int pX2, int pY2, int pBlitOffset, int pColorA, int pColorB) {
-	      float f = (float)(pColorA >> 24 & 255) / 255.0F;
-	      float f1 = (float)(pColorA >> 16 & 255) / 255.0F;
-	      float f2 = (float)(pColorA >> 8 & 255) / 255.0F;
-	      float f3 = (float)(pColorA & 255) / 255.0F;
-	      float f4 = (float)(pColorB >> 24 & 255) / 255.0F;
-	      float f5 = (float)(pColorB >> 16 & 255) / 255.0F;
-	      float f6 = (float)(pColorB >> 8 & 255) / 255.0F;
-	      float f7 = (float)(pColorB & 255) / 255.0F;
-	      pBuilder.vertex(pMatrix, (float)pX2, (float)pY1, (float)pBlitOffset).color(f1, f2, f3, f).endVertex();
-	      pBuilder.vertex(pMatrix, (float)pX1, (float)pY1, (float)pBlitOffset).color(f1, f2, f3, f).endVertex();
-	      pBuilder.vertex(pMatrix, (float)pX1, (float)pY2, (float)pBlitOffset).color(f5, f6, f7, f4).endVertex();
-	      pBuilder.vertex(pMatrix, (float)pX2, (float)pY2, (float)pBlitOffset).color(f5, f6, f7, f4).endVertex();
+	protected static void fillGradient(Matrix4f pMatrix, BufferBuilder pBuilder, int pX1, int pY1, int pX2, int pY2,
+			int pBlitOffset, int pColorA, int pColorB) {
+		float f = (float) (pColorA >> 24 & 255) / 255.0F;
+		float f1 = (float) (pColorA >> 16 & 255) / 255.0F;
+		float f2 = (float) (pColorA >> 8 & 255) / 255.0F;
+		float f3 = (float) (pColorA & 255) / 255.0F;
+		float f4 = (float) (pColorB >> 24 & 255) / 255.0F;
+		float f5 = (float) (pColorB >> 16 & 255) / 255.0F;
+		float f6 = (float) (pColorB >> 8 & 255) / 255.0F;
+		float f7 = (float) (pColorB & 255) / 255.0F;
+		pBuilder.vertex(pMatrix, (float) pX2, (float) pY1, (float) pBlitOffset).color(f1, f2, f3, f).endVertex();
+		pBuilder.vertex(pMatrix, (float) pX1, (float) pY1, (float) pBlitOffset).color(f1, f2, f3, f).endVertex();
+		pBuilder.vertex(pMatrix, (float) pX1, (float) pY2, (float) pBlitOffset).color(f5, f6, f7, f4).endVertex();
+		pBuilder.vertex(pMatrix, (float) pX2, (float) pY2, (float) pBlitOffset).color(f5, f6, f7, f4).endVertex();
 	}
-	
+
 	private List<MutableComponent> gatherSalvageData(ItemStack stack) {
 		List<MutableComponent> outList = new ArrayList<>();
-		for (Map.Entry<ResourceLocation, SalvageData> entry : Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).salvage().entrySet()) {
-			outList.add(MutableComponent.create(new ItemStack(ForgeRegistries.ITEMS.getValue(entry.getKey())).getDisplayName().getContents()));
+		for (Map.Entry<ResourceLocation, SalvageData> entry : Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER
+				.getData(RegistryUtil.getId(stack)).salvage().entrySet()) {
+			outList.add(MutableComponent.create(
+					new ItemStack(ForgeRegistries.ITEMS.getValue(entry.getKey())).getDisplayName().getContents()));
 			SalvageData data = entry.getValue();
 			if (!data.levelReq().isEmpty()) {
 				outList.add(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE));
 				for (Map.Entry<String, Integer> req : data.levelReq().entrySet()) {
-					outList.add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(": "+req.getValue())));
+					outList.add(Component.translatable("pmmo." + req.getKey())
+							.append(Component.literal(": " + req.getValue())));
 				}
 			}
-			outList.add(LangProvider.SALVAGE_CHANCE.asComponent(data.baseChance(), data.maxChance()).withStyle(ChatFormatting.UNDERLINE));
+			outList.add(LangProvider.SALVAGE_CHANCE.asComponent(data.baseChance(), data.maxChance())
+					.withStyle(ChatFormatting.UNDERLINE));
 			outList.add(LangProvider.SALVAGE_MAX.asComponent(data.salvageMax()).withStyle(ChatFormatting.UNDERLINE));
 			if (!data.chancePerLevel().isEmpty()) {
 				outList.add(LangProvider.SALVAGE_CHANCE_MOD.asComponent().withStyle(ChatFormatting.UNDERLINE));
 				for (Map.Entry<String, Double> perLevel : data.chancePerLevel().entrySet()) {
-					outList.add(Component.translatable("pmmo."+perLevel.getKey()).append(Component.literal(": "+perLevel.getValue())));
+					outList.add(Component.translatable("pmmo." + perLevel.getKey())
+							.append(Component.literal(": " + perLevel.getValue())));
 				}
 			}
 			if (!data.xpAward().isEmpty()) {
 				outList.add(LangProvider.SALVAGE_XP_AWARD.asComponent().withStyle(ChatFormatting.UNDERLINE));
 				for (Map.Entry<String, Long> award : data.xpAward().entrySet()) {
-					outList.add(Component.translatable("pmmo."+award.getKey()).append(Component.literal(": "+award.getValue())));
+					outList.add(Component.translatable("pmmo." + award.getKey())
+							.append(Component.literal(": " + award.getValue())));
 				}
 			}
 		}

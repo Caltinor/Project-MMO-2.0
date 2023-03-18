@@ -5,6 +5,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
@@ -26,8 +27,8 @@ public class AbstractFurnaceTileEntityShrinkMixin
     @Inject(at = @At(
             	value = "INVOKE",
             	target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"),
-            method = "burn(Lnet/minecraft/world/item/crafting/Recipe;Lnet/minecraft/core/NonNullList;I)Z")
-    public void projectmmo$$handleSmeltingShrink(@Nullable Recipe<?> p_155027_, NonNullList<ItemStack> p_155028_, int p_155029_, CallbackInfoReturnable<?> info)
+            method = "burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/Recipe;Lnet/minecraft/core/NonNullList;I)Z")
+    public void projectmmo$$handleSmeltingShrink(RegistryAccess p_266740_, @Nullable Recipe<?> p_266780_, NonNullList<ItemStack> p_267073_, int p_267157_, CallbackInfoReturnable<?> info)
     {
         Level world = ((AbstractFurnaceBlockEntity)(Object)this).getLevel();
         BlockPos pos = ((AbstractFurnaceBlockEntity)(Object)this).getBlockPos();
