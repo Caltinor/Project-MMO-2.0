@@ -30,7 +30,7 @@ public class DamageReceivedHandler {
 			if (type.equals(EventType.FROM_PLAYERS) && player.equals(event.getSource().getEntity()))
 				return;
 			Core core = Core.get(player.getLevel());
-			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+type.name()+" | Source Raw: "+event.getSource().msgId);
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+type.name()+" | Source Raw: "+event.getSource().getMsgId());
 			
 			boolean serverSide = !player.level.isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();
@@ -105,36 +105,14 @@ public class DamageReceivedHandler {
 		return mapOut;
 	}
 	
-	private static final List<String> environmental = List.of(
-			DamageSource.IN_FIRE.msgId,
-			DamageSource.LIGHTNING_BOLT.msgId,
-			DamageSource.ON_FIRE.msgId,
-			DamageSource.LAVA.msgId,
-			DamageSource.HOT_FLOOR.msgId,
-			DamageSource.IN_WALL.msgId,
-			DamageSource.CRAMMING.msgId,
-			DamageSource.DROWN.msgId,
-			DamageSource.STARVE.msgId,
-			DamageSource.CACTUS.msgId,
-			DamageSource.anvil(null).msgId,
-			DamageSource.fallingBlock(null).msgId,
-			DamageSource.SWEET_BERRY_BUSH.msgId,
-			DamageSource.FREEZE.msgId);
-	private static final List<String> falling = List.of(
-			DamageSource.FALL.msgId,
-			DamageSource.STALAGMITE.msgId,
-			DamageSource.FLY_INTO_WALL.msgId);
-	private static final List<String> magic = List.of(
-			DamageSource.MAGIC.msgId,
-			"indirectMagic");
 	private static EventType getSourceCategory(DamageSource source) {
-		if (source.msgId.equals("player"))
+		if (source.typeHolder().get().msgId().equals("player"))
 			return EventType.FROM_PLAYERS;
-		if (environmental.contains(source.msgId))
+		if (source.is(Reference.FROM_ENVIRONMENT))
 			return EventType.FROM_ENVIRONMENT;
-		if (falling.contains(source.msgId))
+		if (source.is(Reference.FROM_IMPACT))
 			return EventType.FROM_IMPACT;
-		if (magic.contains(source.msgId))
+		if (source.is(Reference.FROM_MAGIC))
 			return EventType.FROM_MAGIC;
 		if (source.getEntity() != null) {
 			if (source.getEntity().getType().is(Reference.MOB_TAG))
@@ -142,7 +120,7 @@ public class DamageReceivedHandler {
 			if (source.getEntity().getType().is(Reference.ANIMAL_TAG))
 				return EventType.FROM_ANIMALS;
 		}
-		if (source.isProjectile())
+		if (source.is(Reference.FROM_RANGED))
 			return EventType.FROM_PROJECTILES;
 		return EventType.RECEIVE_DAMAGE;
 	}

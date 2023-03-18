@@ -2,8 +2,10 @@ package harmonised.pmmo.util;
 
 import java.util.UUID;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -31,4 +33,10 @@ public class Reference {
 	public static final TagKey<Block> MINABLE_SHOVEL = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), new ResourceLocation("mineable/shovel"));
 	public static final TagKey<Item> BREWABLES = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation(MOD_ID, "brewables"));
 	public static final TagKey<Item> SMELTABLES = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation(MOD_ID, "smeltables"));
+	public static final TagKey<DamageType> FROM_PLAYER = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "player"));
+	public static final TagKey<DamageType> FROM_ENVIRONMENT = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "environment"));
+	public static final TagKey<DamageType> FROM_IMPACT = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "impact"));
+	public static final TagKey<DamageType> FROM_MAGIC = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "magic"));
+	public static final TagKey<DamageType> FROM_MELEE = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "melee"));
+	public static final TagKey<DamageType> FROM_RANGED = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "ranged"));
 }

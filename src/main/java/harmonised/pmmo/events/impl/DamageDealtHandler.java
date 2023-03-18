@@ -44,7 +44,7 @@ public class DamageDealtHandler {
 			if (target.equals(player))
 				return;
 			Core core = Core.get(player.level);
-			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntity());
+			EventType type = getEventCategory(event.getSource().is(Reference.FROM_RANGED), event.getEntity());
 			MsLoggy.INFO.log(LOG_CODE.EVENT,"Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
 			
 			
@@ -83,7 +83,7 @@ public class DamageDealtHandler {
 			if (target.equals(player)) return;
 			
 			Core core = Core.get(player.level);
-			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntity());
+			EventType type = getEventCategory(event.getSource().is(Reference.FROM_RANGED), event.getEntity());
 			//Process perks
 			CompoundTag perkOutput = core.getPerkRegistry().executePerk(type, player, TagBuilder.start().withFloat(APIUtils.DAMAGE_IN, event.getAmount()).build());
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Pre-Perk Damage:"+event.getAmount());
@@ -103,7 +103,7 @@ public class DamageDealtHandler {
 		Map<String, Long> mapOut = new HashMap<>();
 		float ultimateDamage = Math.min(damage, target.getHealth());
 		ItemStack weapon = player.getMainHandItem();
-		Entity srcEntity = source.isProjectile() ? source.getDirectEntity() : player;
+		Entity srcEntity = source.is(Reference.FROM_RANGED) ? source.getDirectEntity() : player;
 		switch (type) {
 		case MELEE_TO_MOBS: case MELEE_TO_ANIMALS: case MELEE_TO_PLAYERS: case RANGED_TO_MOBS: case RANGED_TO_ANIMALS: case RANGED_TO_PLAYERS: {
 			Functions.mergeMaps(core.getExperienceAwards(type, weapon, player, dataIn),

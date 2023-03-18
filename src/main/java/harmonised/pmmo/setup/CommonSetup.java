@@ -10,7 +10,11 @@ import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.capability.VeinHandler;
 import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.setup.datagen.BlockTagProvider;
+import harmonised.pmmo.setup.datagen.DamageTagProvider;
+import harmonised.pmmo.setup.datagen.EntityTagProvider;
 import harmonised.pmmo.setup.datagen.GLMProvider;
+import harmonised.pmmo.setup.datagen.ItemTagProvider;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.setup.datagen.LangProvider.Locale;
 import harmonised.pmmo.storage.ChunkDataProvider;
@@ -112,6 +116,11 @@ public class CommonSetup {
 		}
 		if (event.includeServer()) {
 			generator.addProvider(true, new GLMProvider(generator.getPackOutput()));
+			BlockTagProvider blockProvider = new BlockTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper());
+			generator.addProvider(true, blockProvider);
+			generator.addProvider(true, new EntityTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+			generator.addProvider(true, new ItemTagProvider(generator.getPackOutput(), event.getLookupProvider(), blockProvider.contentsGetter(), event.getExistingFileHelper()));
+			generator.addProvider(true, new DamageTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
 		}
 	}
 }
