@@ -96,7 +96,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.3'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.7'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
@@ -120,8 +120,10 @@ dependencies {
   	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
   	//runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.25')
-  	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
-  	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
+  	runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
+  	runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
+  	runtimeOnly fg.deobf('curse.maven:stalwart-474817:4033660')
+  	runtimeOnly fg.deobf('curse.maven:YASD-613087:4111117')
 }
 
 jar {
