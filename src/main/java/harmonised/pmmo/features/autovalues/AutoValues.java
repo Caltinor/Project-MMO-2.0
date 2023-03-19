@@ -16,12 +16,14 @@ public class AutoValues {
 	private static ConcurrentMap<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainValues = new ConcurrentHashMap<>();
 	
 	//============================CACHE GETTERS============================================================	
-	private static void cacheRequirement(ReqType reqType, ResourceLocation objectID, Map<String, Integer> requirementMap) {
+	private static Map<String, Integer> cacheRequirement(ReqType reqType, ResourceLocation objectID, Map<String, Integer> requirementMap) {
 		reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).put(objectID, requirementMap);
+		return requirementMap;
 	}
 	
-	private static void cacheXpGainValue(EventType eventType, ResourceLocation objectID, Map<String, Long> xpGainMap) {
+	private static Map<String, Long> cacheXpGainValue(EventType eventType, ResourceLocation objectID, Map<String, Long> xpGainMap) {
 		xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).put(objectID, xpGainMap);
+		return xpGainMap;
 	}
 	
 	public static void resetCache() {
@@ -61,8 +63,7 @@ public class AutoValues {
 			if (level > 0)
 				finalReqs.put(skill, level);
 		});
-		cacheRequirement(reqType, objectID, finalReqs);
-		return finalReqs;
+		return cacheRequirement(reqType, objectID, finalReqs);
 	}
 	
 	public static Map<String, Long> getExperienceAward(EventType eventType, ResourceLocation objectID, ObjectType autoValueType) {
@@ -96,8 +97,7 @@ public class AutoValues {
 			if (value > 0)
 				finalAwards.put(skill, value);
 		});
-		cacheXpGainValue(eventType, objectID, finalAwards);
-		return finalAwards;
+		return cacheXpGainValue(eventType, objectID, finalAwards);
 	}
 	
 }
