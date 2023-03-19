@@ -512,6 +512,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> REQUIRE_SETTING;
 	public static ForgeConfigSpec.ConfigValue<Integer> DEFAULT_CONSUME;
 	public static ForgeConfigSpec.DoubleValue VEIN_CHARGE_MODIFIER;
+	public static ConfigValue<List<? extends String>> VEIN_BLACKLIST;
 	
 	private static void buildVeinMinerSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related to the Vein Miner").push("Vein_Miner");
@@ -524,6 +525,8 @@ public class Config {
 				.define("Vein Mine Default Consume", 1);
 		VEIN_CHARGE_MODIFIER = builder.comment("a multiplier to all vein charge rates.")
 				.defineInRange("Vein Charge Modifier", 1.0, 0.0, Double.MAX_VALUE);
+		VEIN_BLACKLIST = builder.comment("Tools in this list do not cause the vein miner to trigger")
+				.defineList("Vein_Blacklist", new ArrayList<>(List.of("silentgear:saw")) , s -> s instanceof String);
 		builder.pop();
 	}
 }

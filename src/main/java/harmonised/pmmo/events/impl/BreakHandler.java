@@ -16,6 +16,7 @@ import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -65,7 +66,7 @@ public class BreakHandler {
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			if (event.getPlayer().getMainHandItem().getItem() instanceof TieredItem) {
 				TieredItem item = (TieredItem) event.getPlayer().getMainHandItem().getItem();
-				if (item.isCorrectToolForDrops(event.getPlayer().getMainHandItem(), block)) 
+				if (item.isCorrectToolForDrops(event.getPlayer().getMainHandItem(), block) && !Config.VEIN_BLACKLIST.get().contains(RegistryUtil.getId(item).toString())) 
 					VeinMiningLogic.applyVein((ServerPlayer) event.getPlayer(), event.getPos());
 			}
 		}
