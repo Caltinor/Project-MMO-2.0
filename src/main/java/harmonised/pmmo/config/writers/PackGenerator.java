@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Supplier;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -216,7 +214,6 @@ public class PackGenerator {
 						"}")),
 		EFFECTS("pmmo/effects", server -> ForgeRegistries.MOB_EFFECTS.getKeys(), 
 				List.of("{",
-				() -> List.of("{",
 						"\"levels\":[]",
 						"}"));
 		
