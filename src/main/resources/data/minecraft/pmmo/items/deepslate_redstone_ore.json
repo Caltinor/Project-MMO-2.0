@@ -1,4 +1,5 @@
 {
+    "isTagFor":["#forge:ores/redstone"],
     "xp_values":{
         "SMELT": {
             "smithing": 200
