@@ -5,6 +5,7 @@ import java.util.Map;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
@@ -17,21 +18,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.ModList;
 
 public class LoginHandler {
 
 	public static void handle(PlayerLoggedInEvent event) {		
 		Player player = event.getEntity();
 		Core core = Core.get(player.level);
-		//Send welcome message encouraging datapack usage
-		/*MutableComponent welcome = Component.translatable(LangProvider.WELCOME_TEXT.key()
-				, LangProvider.CLICK_ME.asComponent()
-					.setStyle(Style.EMPTY
-					.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.curseforge.com/minecraft/texture-packs/search?category=&search=project+mmo"))
-					.withUnderlined(true)
-					.withColor(ChatFormatting.BLUE))
-				);
-		player.sendSystemMessage(welcome);	*/	
 		
 		core.getPerkRegistry().terminatePerk(EventType.DISABLE_PERK, player, core.getSide());
 		
@@ -50,5 +43,8 @@ public class LoginHandler {
 		else {
 			Networking.sendToServer(new SP_SetVeinLimit(Config.VEIN_LIMIT.get()));
 		}
+		
+		if (ModList.get().isLoaded("jei"))
+			AutoValues.resetCache();
 	}
 }
