@@ -101,7 +101,7 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           modrinth-id: KFQYC1Uy
-          modrinth-token: ${{ secrets.curseforge_api }}
+          modrinth-token: ${{ secrets.modrinth_api }}
 
           files-primary: ${{ needs.setup.outputs.file_path }}
 
