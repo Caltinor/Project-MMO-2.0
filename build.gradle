@@ -87,6 +87,7 @@ minecraft {
             mods {
                 pmmo {
                     source sourceSets.main
+                    forceExit = false
                 }
             }
         }
