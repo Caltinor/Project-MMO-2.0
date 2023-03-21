@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.writers.PackGenerator;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 
 public class CmdPmmoRoot {
@@ -17,20 +18,15 @@ public class CmdPmmoRoot {
 				.then(CmdNodeParty.register(dispatcher))					
 				.then(Commands.literal("genData")
 						.requires(ctx -> ctx.hasPermission(2))
-						.executes(ctx -> {
-							PackGenerator.generateEmptyPack(ctx.getSource().getServer(), false);
-							return 0;
-						})
+						.executes(ctx -> PackGenerator.generateEmptyPack(ctx.getSource().getServer(), false))
 						.then(Commands.literal("withOverride")
-								.executes(ctx -> {
-									PackGenerator.generateEmptyPack(ctx.getSource().getServer(), true);
-									return 0;
-								}))
+								.executes(ctx -> PackGenerator.generateEmptyPack(ctx.getSource().getServer(), true)))
 						.then(Commands.literal("disabler")
-								.executes(ctx -> {
-									PackGenerator.generateDisablingPack(ctx.getSource().getServer());
-									return 0;
-								})))
+								.executes(ctx -> PackGenerator.generateDisablingPack(ctx.getSource().getServer())))
+						.then(Commands.literal("forPlayers")
+							.then(Commands.argument("players", EntityArgument.players())
+									.executes(ctx -> PackGenerator.generatePlayerConfigs(ctx.getSource().getServer(), EntityArgument.getPlayers(ctx, "players"))
+						))))					
 				.then(CmdNodeStore.register(dispatcher))
 				.then(Commands.literal("debug"))
 				.then(Commands.literal("help")
