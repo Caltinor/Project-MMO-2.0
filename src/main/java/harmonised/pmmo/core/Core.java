@@ -1,5 +1,6 @@
 package harmonised.pmmo.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DataMirror;
+import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.DataSource;
@@ -248,31 +250,22 @@ public class Core {
 				
 		Map<String, Double> modifiers = new HashMap<>();
 		//HELD Modification
-		ItemStack offhandStack = player.getOffhandItem();
-		ItemStack mainhandStack = player.getMainHandItem();
-		ResourceLocation offhandID = RegistryUtil.getId(offhandStack);
-		modifiers = tooltips.bonusTooltipExists(offhandID, ModifierDataType.HELD) 
-				? tooltips.getBonusTooltipData(offhandID, ModifierDataType.HELD, offhandStack) 
-				: getObjectModifierMap(ObjectType.ITEM, offhandID, ModifierDataType.HELD
-						, offhandStack.getTag() == null 
-							? new CompoundTag()
-							: offhandStack.getTag());
-		for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
-		}				
-		ResourceLocation mainhandID = RegistryUtil.getId(mainhandStack);				
-		modifiers = tooltips.bonusTooltipExists(mainhandID, ModifierDataType.HELD) ?
-				tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
-				getObjectModifierMap(ObjectType.ITEM, mainhandID, ModifierDataType.HELD
-						, mainhandStack.getTag() == null
-							? new CompoundTag()
-							: mainhandStack.getTag());
-		for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+		for (ItemStack stack : List.of(player.getOffhandItem(), player.getMainHandItem())) {
+			ResourceLocation itemID = RegistryUtil.getId(stack);
+			modifiers = tooltips.bonusTooltipExists(itemID, ModifierDataType.HELD) 
+					? tooltips.getBonusTooltipData(itemID, ModifierDataType.HELD, stack) 
+					: getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack));
+			for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+				mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+			}		
 		}
 		
 		//WORN Modification
-		player.getArmorSlots().forEach((stack) -> {
+		List<ItemStack> wornItems = new ArrayList<>();
+		player.getArmorSlots().forEach(wornItems::add);
+		if (CurioCompat.hasCurio)
+			CurioCompat.getItems(player).forEach(wornItems::add);
+		wornItems.forEach((stack) -> {
 			ResourceLocation itemID = RegistryUtil.getId(stack);
 			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?
 					tooltips.getBonusTooltipData(itemID, ModifierDataType.WORN, stack):
