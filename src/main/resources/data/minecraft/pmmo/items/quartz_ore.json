@@ -1,5 +1,5 @@
 {
-    "isTagFor": ["#forge:raw_materials/iron"],
+    "isTagFor":["#forge:ores/quartz"],
     "xp_values":{
         "SMELT": {
             "smithing": 100
