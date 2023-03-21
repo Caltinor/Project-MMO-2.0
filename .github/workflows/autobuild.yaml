@@ -57,6 +57,7 @@ jobs:
       - name: Data Generators
         run: ./gradlew rundata
       - name: Build
+        if: always()
         run: ./gradlew :build
       - name: Cache
         uses: actions/cache@v3
