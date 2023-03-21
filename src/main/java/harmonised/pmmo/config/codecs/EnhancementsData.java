@@ -28,7 +28,7 @@ public record EnhancementsData(
 				return dataOut;
 			}, map -> {
 				List<Map<String, Integer>> dataOut = new ArrayList<>();
-				for (int i = 0; i <= map.keySet().stream().max(Integer::compare).get(); i++) {
+				for (int i = 0; i <= map.keySet().stream().max(Integer::compare).orElse(0); i++) {
 					dataOut.add(map.getOrDefault(i, new HashMap<>()));
 				}
 				return dataOut;
