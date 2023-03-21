@@ -3,7 +3,7 @@
 ## [1.19.2-3.0.3]
 ### Bugfixes / Tweaks
 - Added: NBT configurations can now access blockstates via path "state{}.property"
-- Added: Vein tool Blacklist config to server config which prevents listed tools from activating vein ability.
+- Added: Vein Tool Blacklist config to server config which prevents listed tools from activating vein ability.
 - Added: `/pmmo genData forPlayers <player selector>` which generates player config files in `generated_data` pack.
 - Updated: sub-paths in IDs now properly generate via genData
 - Updated: ore configs now propagate to their respective forge tag members.
