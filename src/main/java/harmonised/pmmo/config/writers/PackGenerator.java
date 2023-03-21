@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,10 +30,12 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
+import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -128,7 +131,7 @@ public class PackGenerator {
 		}
 	}
 	
-	public static void generateEmptyPack(MinecraftServer server, boolean withOverride) {		
+	public static int generateEmptyPack(MinecraftServer server, boolean withOverride) {		
 		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME);
 		filepath.toFile().mkdirs();
 		try {
@@ -156,9 +159,10 @@ public class PackGenerator {
 				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
 			}			
 		}
+		return 0;
 	}
 	
-	public static void generateDisablingPack(MinecraftServer server) {
+	public static int generateDisablingPack(MinecraftServer server) {
 		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(DISABLER);
 		filepath.toFile().mkdirs();
 		filepath.resolve("data").toFile().mkdirs();
@@ -175,5 +179,23 @@ public class PackGenerator {
 			StandardOpenOption.CREATE_NEW,
 			StandardOpenOption.WRITE);
 		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
+		return 0;
+	}
+	
+	public static int generatePlayerConfigs(MinecraftServer server, Collection<ServerPlayer> players) {
+		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME+"/data/minecraft/pmmo/players/");
+		filepath.toFile().mkdirs();
+		for (ServerPlayer player : players) {
+			String idString = player.getUUID().toString();
+			try {
+				Files.writeString(
+						filepath.resolve(idString+".json"), 
+						gson.toJson(PlayerData.CODEC.encodeStart(JsonOps.INSTANCE, new PlayerData()).result().get()),
+						Charset.defaultCharset(),
+						StandardOpenOption.CREATE_NEW,
+						StandardOpenOption.WRITE);
+			} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+idString.toString()+" ("+e.toString()+")");}
+		}
+		return 0;
 	}
 }
