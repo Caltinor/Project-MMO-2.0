@@ -2,11 +2,11 @@ name: Build and upload mod
 on:
   push:
     branches:
-      - '1.16'
+      - 'main'
   release:
     types: [ published ]
     branches:
-      - '1.16'
+      - 'main'
 
 jobs:
   setup:
@@ -54,6 +54,8 @@ jobs:
           cache: 'gradle'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Generate Data
+        run: ./gradlew rundata
       - name: Build
         run: ./gradlew :build
       - name: Cache
@@ -101,7 +103,7 @@ jobs:
         uses: Kir-Antipov/mc-publish@v3.2
         with:
           modrinth-id: KFQYC1Uy
-          modrinth-token: ${{ secrets.curseforge_api }}
+          modrinth-token: ${{ secrets.modrinth_api }}
 
           files-primary: ${{ needs.setup.outputs.file_path }}
 
