@@ -1,15 +1,11 @@
 # Changelog
 
-## [1.16.5-3.69.0] - 2023-03-04
-### Minor Changes
-- Updated: Smelting and Cooking configurations now award XP based on the output item, not the input item.
-### Bugfixes / Tweaks
-- Updated: Configurations to prioritize an explicit item configuration over a tag configuration for which that item is a member
-- Fixed: Bows giving combat xp under certain conditions
+## [1.19.4-0.0.1] - 2023-03-22
+### Major Changes
+- Complete revision of the Perk System
 
-## [1.16.5-3.68.0] - 2023-02-12
-### Bugfixes
-- Fixed: DT compat to use the most recent DT build and restored original xp functionality
-- Fixed: Alchemy not giving XP
-- Fixed: Smelting not giving XP
-- Fixed: req and XP bugs with spartan weaponry
+### Minor Changes
+- Damage `FROM_XXX` events now use damage type tags for classification
+
+### Technical Notes
+- This is a pre-1.20 build.  The officially supported version for 1.19 is 1.19.2.  This port is provided for addon developers and testing purposes.  You may use this in your world/packs, but no promise is made to stability.  Bug reports are appreciated by may be delayed until a 1.20 Forge release is available and pmmo is ported.
