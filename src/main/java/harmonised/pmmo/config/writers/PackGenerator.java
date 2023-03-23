@@ -75,7 +75,7 @@ public class PackGenerator {
 			raw.remove("nbt_bonuses");
 			raw.remove("salvage");
 			return gson.toJson(raw);}),
-		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITY_TYPES.getKeys(), override -> {
+		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITIES.getKeys(), override -> {
 			ObjectData data = new ObjectData(override, new HashSet<>(),
 					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new HashMap<>())),
 					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new ArrayList<>())),
