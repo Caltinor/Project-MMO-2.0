@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.19.2-3.0.4]
+### Bugfixes / Tweaks
+- Added: `pmmo:skill_up` trigger for advancements
+
 ## [1.19.2-3.0.3]
 ### Bugfixes / Tweaks
 - Added: NBT configurations can now access blockstates via path "state{}.property"
