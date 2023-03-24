@@ -77,7 +77,7 @@ public class Functions<X, Y> {
 	 * @return a consistent UUID derived from the string.
 	 */
 	public static UUID getReliableUUID(String str) {
-		String hashedString = String.valueOf(str.hashCode());
+		String hashedString = String.valueOf(Math.abs(str.hashCode()));
 		while (hashedString.length() < 36) {
 			hashedString = (hashedString.length() == 12 ||
 					hashedString.length() == 16 ||
