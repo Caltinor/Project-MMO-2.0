@@ -7,6 +7,7 @@ import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.autovalues.AutoValues;
+import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
 import harmonised.pmmo.features.veinmining.capability.VeinHandler;
 import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
@@ -22,6 +23,7 @@ import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +50,7 @@ public class CommonSetup {
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
 		
-		
+		event.enqueueWork(() -> CriteriaTriggers.register(SkillUpTrigger.SKILL_UP));
 		//=========COMPAT=============
 		CurioCompat.hasCurio = ModList.get().isLoaded("curios");
 		if (ModList.get().isLoaded("ftbquests")) FTBQHandler.init();

@@ -17,6 +17,7 @@ import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
+import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
@@ -78,6 +79,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
 			//capture command cases for XP gain which should prompt a skillup event
 			if (formerRaw != getLevelFromXP(value)) {
+				SkillUpTrigger.SKILL_UP.trigger(player);
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 			}
