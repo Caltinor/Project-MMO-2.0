@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.19.4-0.0.2] - 2023-02-24
+### Bugfixes / Tweaks
+- Fixed: crash from invalid UUID case
+
 ## [1.19.4-0.0.1] - 2023-03-22
 ### Major Changes
 - Complete revision of the Perk System
