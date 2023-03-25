@@ -21,7 +21,7 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent.SpecialSpawn;
+import net.minecraftforge.event.entity.living.MobSpawnEvent.FinalizeSpawn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -38,7 +38,7 @@ public class MobAttributeHandler {
 	);
 	
 	@SubscribeEvent
-	public static void onMobSpawn(SpecialSpawn event) {
+	public static void onMobSpawn(FinalizeSpawn event) {
 	    if (!Config.MOB_SCALING_ENABLED.get())
 	        return;
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {

@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.19.4-0.0.2] - 2023-02-24
+## [1.19.4-0.0.3] - 2023-XX-XX
+
+Minimum Forge Version now 45.0.23
+### Bugfixes / Tweaks
+- Fixed ClassDefNotFound error from breaking change to spawn event
+
+## [1.19.4-0.0.2] - 2023-03-24
 ### Bugfixes / Tweaks
 - Fixed: crash from invalid UUID case
 

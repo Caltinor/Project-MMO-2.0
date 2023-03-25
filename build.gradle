@@ -97,7 +97,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.4-45.0.22'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.0.24'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
