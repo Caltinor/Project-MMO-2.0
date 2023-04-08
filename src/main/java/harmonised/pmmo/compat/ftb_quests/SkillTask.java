@@ -14,8 +14,10 @@ import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -108,5 +110,10 @@ public class SkillTask extends Task
     public long getMaxProgress()
     {
         return (long) requiredLevel;
+    }
+    
+    @Override
+    public Component getAltTitle() {
+    	return LangProvider.FTBQ_SKILL_TITLE.asComponent(requiredLevel, LangProvider.skill(skill));
     }
 }

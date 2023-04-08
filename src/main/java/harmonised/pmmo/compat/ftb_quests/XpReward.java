@@ -9,8 +9,10 @@ import dev.ftb.mods.ftbquests.quest.reward.RewardAutoClaim;
 import dev.ftb.mods.ftbquests.quest.reward.RewardType;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -84,5 +86,10 @@ public class XpReward extends Reward
     public void claim(ServerPlayer player, boolean notify)
     {
         Core.get(player.level).getData().setXpDiff(player.getUUID(), skill, amount);
+    }
+    
+    @Override
+    public Component getAltTitle() {
+    	return LangProvider.FTBQ_XP_TITLE.asComponent(amount, LangProvider.skill(skill)); 
     }
 }
