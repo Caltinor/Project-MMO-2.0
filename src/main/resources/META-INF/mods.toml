@@ -17,7 +17,7 @@ Adds many different skills and benefits thanks to the skills to the game!
 [[dependencies.pmmo]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[45.0.23,)"
+    versionRange="[45.0.39,)"
     ordering="NONE"
     side="BOTH"  
 

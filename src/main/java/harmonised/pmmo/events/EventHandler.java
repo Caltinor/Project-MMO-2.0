@@ -99,7 +99,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
-			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.REACH_DISTANCE.get());
+			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get());
 			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.CREATIVE_REACH.get())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
@@ -107,7 +107,7 @@ public class EventHandler {
 			}
 		}
 		else {
-			event.getEntity().getAttribute(ForgeMod.REACH_DISTANCE.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
+			event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
 	}
 	@SubscribeEvent
