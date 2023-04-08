@@ -38,7 +38,7 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagFile;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -132,7 +132,7 @@ public class PackGenerator {
 				Functions.pathPrepend(Reference.TAMABLE_TAG.location(), "entity_types"),
 				Functions.pathPrepend(Reference.BREWABLES.location(), "items"),
 				Functions.pathPrepend(Reference.SMELTABLES.location(), "items")), 
-				override -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false)).result().get())); 
+				override -> gson.toJson(Tag.Builder.tag().serializeToJson())); 
 
 		
 		public String route;
