@@ -1,0 +1,16 @@
+{
+  "xp_values": {
+    "CRAFT": {"magic": 1000, "crafting": 1000},
+    "FISH": {"fishing":1500},
+    "ANVIL_REPAIR": {"smithing":30},
+    "ENCHANT": {"magic":1000}
+  },
+  "requirements": {
+    "WEAR": {"crafting":30},
+    "USE": {"magic":15}
+  },
+  "negative_effect": {
+    "minecraft:slowness":3, 
+    "minecraft:weakness":3
+  }
+}
