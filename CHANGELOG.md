@@ -1,10 +1,18 @@
 # Changelog
 
-## [1.19.4-0.0.3] - 2023-XX-XX
+## [1.19.4-0.0.3] - 2023-04-08
 
-Minimum Forge Version now 45.0.23
+Minimum Forge Version now 45.0.39
 ### Bugfixes / Tweaks
-- Fixed ClassDefNotFound error from breaking change to spawn event
+- Fixed: ClassDefNotFound error from breaking change to spawn event
+- Added: default data for gravel, mushroom stems, basalt, blackstone, bricks, fungii, magma blocks, nether bricks, and netherrack
+- Added: default data for Goblins & Dungeons
+- Added: pmmo tags to genData
+- Added: "multiplicative" boolean and "base" double values to attribute and damage_boost perks for better scaling control
+- Fixed: xp values of zero displaying in tooltips
+- Fixed: an IOOB exception from the stats menu
+- Fixed: typo in default crossbow id of damage boost perk
+- Fixed: damage_boost applies_to items now showing in the glossary
 
 ## [1.19.4-0.0.2] - 2023-03-24
 ### Bugfixes / Tweaks
