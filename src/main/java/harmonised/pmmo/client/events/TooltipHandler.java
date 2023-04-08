@@ -115,9 +115,9 @@ public class TooltipHandler {
 	
 	private static void addXpValueTooltip(Translation header, ItemTooltipEvent event, Map<String, Long> values, Core core) {
 		event.getToolTip().add(header.asComponent());
-		for (Map.Entry<String, Long> value : values.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+value.getKey()).append(new TextComponent(" "+String.valueOf(value.getValue()))).setStyle(CoreUtils.getSkillStyle(value.getKey())));
-		}
+		values.entrySet().stream().filter(entry -> entry.getValue() > 0).forEach(value -> {
+			event.getToolTip().add(Component.translatable("pmmo."+value.getKey()).append(Component.literal(" "+String.valueOf(value.getValue()))).setStyle(CoreUtils.getSkillStyle(value.getKey())));
+		});
 	}
 	
 	private static void addModifierTooltip(Translation header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
