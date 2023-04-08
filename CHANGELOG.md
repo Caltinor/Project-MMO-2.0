@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.19.2-3.0.5] - 2023-04-08
+### Bugfixes / Tweaks
+- Added: default data for Goblins & Dungeons to prevent a crash
+- Added: PMMO's tags to genData for easy adding of values
+- Updated: FTB Quests compat titles to make them easier to read at a glance
+- Fixed: XP Awards of zero no longer show in tooltips
+- Fixed: an IOOB exception from the stat menu when tinkering with level configurations
+
 ## [1.19.2-3.0.4]
 ### Bugfixes / Tweaks
 - Added: `pmmo:skill_up` trigger for advancements
