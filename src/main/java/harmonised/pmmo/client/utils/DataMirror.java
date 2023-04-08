@@ -101,5 +101,5 @@ public class DataMirror implements IDataStorage{
 	@Override
 	public IDataStorage get() {return this;}
 	@Override
-	public long getBaseXpForLevel(int level) {return level > 0 ? levelCache.get(level - 1) : 0l;}
+	public long getBaseXpForLevel(int level) {return level > 0 && (level -1) < levelCache.size() ? levelCache.get(level - 1) : 0l;}
 }
