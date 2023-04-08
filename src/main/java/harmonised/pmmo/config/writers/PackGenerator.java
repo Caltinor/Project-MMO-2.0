@@ -33,9 +33,12 @@ import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.util.Functions;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagFile;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -118,7 +121,18 @@ public class PackGenerator {
 		EFFECTS("pmmo/effects", server -> ForgeRegistries.MOB_EFFECTS.getKeys(), override -> {
 			return gson.toJson(EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, 
 					new EnhancementsData(override, new HashMap<>())).result().get());
-		}); 
+		}),
+		TAGS("tags", server -> Set.of(
+				Functions.pathPrepend(Reference.CROPS.location(), "blocks"),
+				Functions.pathPrepend(Reference.CASCADING_BREAKABLES.location(), "blocks"),
+				Functions.pathPrepend(Reference.ANIMAL_TAG.location(), "entity_types"),
+				Functions.pathPrepend(Reference.BREEDABLE_TAG.location(), "entity_types"),
+				Functions.pathPrepend(Reference.MOB_TAG.location(), "entity_types"),
+				Functions.pathPrepend(Reference.RIDEABLE_TAG.location(), "entity_types"),
+				Functions.pathPrepend(Reference.TAMABLE_TAG.location(), "entity_types"),
+				Functions.pathPrepend(Reference.BREWABLES.location(), "items"),
+				Functions.pathPrepend(Reference.SMELTABLES.location(), "items")), 
+				override -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false)).result().get())); 
 
 		
 		public String route;
@@ -149,7 +163,7 @@ public class PackGenerator {
 				finalPath.toFile().mkdirs();
 				try {
 				Files.writeString(
-						finalPath.resolve(id.getPath()+".json"), 
+						finalPath.resolve(id.getPath().substring(id.getPath().lastIndexOf('/')+1)+".json"), 
 						category.defaultData.apply(withOverride),
 						Charset.defaultCharset(),
 						StandardOpenOption.CREATE_NEW,

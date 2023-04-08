@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.resources.ResourceLocation;
 
 public class Functions<X, Y> {
 	
@@ -86,5 +87,17 @@ public class Functions<X, Y> {
 					? "-" : "0") + hashedString;		
 		}
 		return UUID.fromString(hashedString);
+	}
+
+	/**Returns a new {@link ResourceLocation} with a modified path attribute.
+	 * The path modification prepends the supplied string to the front of the
+	 * path and includes a "/" between the values.  
+	 * 
+	 * @param original The {@link ResourceLocation} being copied and modified
+	 * @param prepend The text being prepended to the path
+	 * @return a new ResourceLocation with the prepended path.
+	 */
+	public static ResourceLocation pathPrepend(ResourceLocation original, String prepend) {
+		return new ResourceLocation(original.getNamespace(), prepend +"/"+ original.getPath());
 	}
 }
