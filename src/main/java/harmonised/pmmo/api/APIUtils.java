@@ -735,6 +735,9 @@ public class APIUtils {
 	
 	public static final String EFFECTS = "effects";
 	
+	public static final String MULTIPLICATIVE = "multiplicative";
+	public static final String BASE = "base";
+	
 	/**Called during common setup, this method is used to register custom perks
 	 * to PMMO so that players can use them in their configurations.  It is 
 	 * strongly recommended that you document your perks so that users have a

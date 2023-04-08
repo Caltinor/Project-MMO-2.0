@@ -82,7 +82,7 @@ public class LangProvider extends LanguageProvider{
 	public static final Translation PERK_DAMAGE_BOOST_STATUS_1 = Translation.Builder.start("perk.pmmo.damage_boost.status1")
 		.addLocale(Locale.EN_US, "Applicable to: ").build();
 	public static final Translation PERK_DAMAGE_BOOST_STATUS_2 = Translation.Builder.start("perk.pmmo.damage_boost.status2")
-			.addLocale(Locale.EN_US, "Damage Boost: %s").build();
+			.addLocale(Locale.EN_US, "Damage Boost: %s%s").build();
 	public static final Translation PERK_COMMAND = Translation.Builder.start("perk.pmmo.command")
 		.addLocale(Locale.EN_US, "Custom Commands").build();
 	public static final Translation PERK_COMMAND_DESC = Translation.Builder.start("perk.pmmo.command.description")

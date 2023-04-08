@@ -130,7 +130,7 @@ public class PerksConfig {
 		bodyList.clear();
 		
 		//=====================DEAL_RANGED_DAMAGE=======================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "archery").withList("applies_to", StringTag.valueOf("minecraft:bow"), StringTag.valueOf("mineraft:crossbow"), StringTag.valueOf("minecraft:trident")).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "archery").withList("applies_to", StringTag.valueOf("minecraft:bow"), StringTag.valueOf("minecraft:crossbow"), StringTag.valueOf("minecraft:trident")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic").withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging").withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build());
 		defaultSettings.put(EventType.DEAL_RANGED_DAMAGE, new ArrayList<>(bodyList));

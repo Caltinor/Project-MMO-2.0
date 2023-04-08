@@ -25,8 +25,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class FeaturePerks {
@@ -40,15 +42,20 @@ public class FeaturePerks {
 	}
 	
 	public static final Perk ATTRIBUTE = Perk.begin()
-			.addDefaults(TagBuilder.start().withDouble(APIUtils.MAX_BOOST, 0d).withDouble(APIUtils.PER_LEVEL, 0d).build())
+			.addDefaults(TagBuilder.start()
+					.withDouble(APIUtils.MAX_BOOST, 0d)
+					.withDouble(APIUtils.PER_LEVEL, 0d)
+					.withDouble(APIUtils.BASE, 0d)
+					.withBool(APIUtils.MULTIPLICATIVE, false).build())
 			.setStart((player, nbt) -> {
 				double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
 				double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
 				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
-				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost);
+				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
+				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.MULTIPLY_BASE :  Operation.ADDITION;
 				
 				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
-				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, AttributeModifier.Operation.ADDITION);
+				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, operation);
 				instance.removeModifier(attributeID);
 				instance.addPermanentModifier(modifier);
 				return NONE;
@@ -165,14 +172,20 @@ public class FeaturePerks {
 						return true;
 						
 				}
+				System.out.println("Not applicable To"); //TODO remove
 				return false;
 			})
 			.addDefaults(TagBuilder.start()
 				.withFloat(APIUtils.DAMAGE_IN, 0)
 				.withList(FeaturePerks.APPLICABLE_TO, StringTag.valueOf("weapon:id"))
-				.withDouble(APIUtils.PER_LEVEL, 0.05).build())
+				.withDouble(APIUtils.PER_LEVEL, 0.05)
+				.withDouble(APIUtils.BASE, 1d)
+				.withBool(APIUtils.MULTIPLICATIVE, true).build())
 			.setStart((player, nbt) -> {
-				float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (1f + (float)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL)));
+				float damageModification = (float)(nbt.getDouble(APIUtils.BASE) + nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+				float damage = nbt.getBoolean(APIUtils.MULTIPLICATIVE) 
+						? nbt.getFloat(APIUtils.DAMAGE_IN) * damageModification
+						: nbt.getFloat(APIUtils.DAMAGE_IN) + damageModification;
 				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, damage).build();
 			})
 			.setDescription(LangProvider.PERK_DAMAGE_BOOST_DESC.asComponent())
@@ -181,10 +194,14 @@ public class FeaturePerks {
 				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
 				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
 					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entry.getAsString()));
-					line1.append(item.getDescription());
+					line1.append(item.equals(Items.AIR) ? Component.literal(entry.getAsString()) : item.getDescription());
 					line1.append(Component.literal(", "));
 				}
-				lines.add(LangProvider.PERK_DAMAGE_BOOST_STATUS_2.asComponent((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)));
+				lines.add(line1);
+				lines.add(LangProvider.PERK_DAMAGE_BOOST_STATUS_2.asComponent(
+						nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? "x" : "+",
+						(double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)
+				));
 				return lines;
 			}).build();
 	
