@@ -62,7 +62,6 @@ public class StatsScreen extends Screen{
 	
 	@Override
 	protected void init() {
-		System.out.println(this.width+" | "+this.height);
 		renderX = this.width/2 - 128;
 		renderY = this.height/2 - 128;
 		addRenderableWidget(scrollSupplier.apply(renderX+25, renderY+30));

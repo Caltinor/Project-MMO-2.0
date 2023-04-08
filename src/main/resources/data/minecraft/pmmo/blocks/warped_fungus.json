@@ -6,7 +6,7 @@
 		"GROW": {
 			"farming": 300
 		}
-	}
+	},
 	"requirements": {
 		"PLACE": {
 			"farming": 5,
