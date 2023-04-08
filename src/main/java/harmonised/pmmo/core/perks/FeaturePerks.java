@@ -172,7 +172,6 @@ public class FeaturePerks {
 						return true;
 						
 				}
-				System.out.println("Not applicable To"); //TODO remove
 				return false;
 			})
 			.addDefaults(TagBuilder.start()
