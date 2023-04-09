@@ -1899,7 +1899,7 @@ public class LangProvider extends LanguageProvider{
 	public static final Translation VEIN_LIMIT = Translation.Builder.start("pmmo.veinLimit")
 		.addLocale(Locale.EN_US, "Vein Limit: %1$s").build();
 	public static final Translation VEIN_CHARGE = Translation.Builder.start("pmmo.veinCharge")
-		.addLocale(Locale.EN_US, "Vein Ability: %1$s/%2$s").build();
+		.addLocale(Locale.EN_US, "Vein Miner: %1$s%% charged (%2$s blocks)").build();
 	
 	//=========COMMANDS===========================
 	public static final Translation SET_LEVEL = Translation.Builder.start("pmmo.setLevel")
