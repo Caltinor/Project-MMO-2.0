@@ -110,7 +110,7 @@ public class XPOverlayGUI implements IIngameOverlay
 		int percentCharged = (int) Math.round((float) currentCharge / (float) maxCharge);
 		int veinLimit = Config.VEIN_LIMIT.get();
 		int maxBlocks = Math.min(currentCharge, veinLimit) / Config.DEFAULT_CONSUME.get();
-		if (currentCharge > 0) {
+		if (currentCharge > 0 && maxCharge > 0) {
 			GuiComponent.drawString(stack, fontRenderer, LangProvider.VEIN_CHARGE.asComponent(percentCharged, maxBlocks), posX, posY - lineHeight, 0xFFFFFF);
 		}
 	}
