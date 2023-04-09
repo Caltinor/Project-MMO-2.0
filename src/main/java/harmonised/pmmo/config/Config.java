@@ -53,12 +53,13 @@ public class Config {
 		builder.pop();
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_LIST_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_LIST_OFFSET_Y;
-	public static ForgeConfigSpec.ConfigValue<Integer> VEIN_GAUGE_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Integer> VEIN_GAUGE_OFFSET_Y;
-	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_OFFSET_Y;
+	public static ForgeConfigSpec.ConfigValue<Float> SKILL_LIST_OFFSET_X;
+	public static ForgeConfigSpec.ConfigValue<Float> SKILL_LIST_OFFSET_Y;
+	public static ForgeConfigSpec.ConfigValue<Float> VEIN_GAUGE_OFFSET_X;
+	public static ForgeConfigSpec.ConfigValue<Float> VEIN_GAUGE_OFFSET_Y;
+	public static ForgeConfigSpec.ConfigValue<Boolean> GAIN_LIST_CENTERED;
+	public static ForgeConfigSpec.ConfigValue<Float> GAIN_LIST_OFFSET_X;
+	public static ForgeConfigSpec.ConfigValue<Float> GAIN_LIST_OFFSET_Y;
 	public static ForgeConfigSpec.ConfigValue<Boolean> SKILL_LIST_DISPLAY;
 	public static ForgeConfigSpec.ConfigValue<Boolean> GAIN_LIST_DISPLAY;
 	public static ForgeConfigSpec.ConfigValue<Boolean> VEIN_GAUGE_DISPLAY;
@@ -72,35 +73,37 @@ public class Config {
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
 		
-		SKILL_LIST_OFFSET_X = builder.comment("how far right from the top left corner the skill list should be")
-						.define("Skill List Xoffset", 0);
-		SKILL_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the skill list should be")
-						.define("Skill List Yoffset", 0);
-		SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed")
+		SKILL_LIST_OFFSET_X = builder.comment("How far right from the top left corner the skill list should be (0.0 - 1.0)")
+						.define("Skill List Xoffset", 0.0f);
+		SKILL_LIST_OFFSET_Y = builder.comment("How far down from the top left corner the skill list should be (0.0 - 1.0)")
+						.define("Skill List Yoffset", 0.0f);
+		SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed?")
 						.define("Display Skill List", true);
-		VEIN_GAUGE_OFFSET_X = builder.comment("how far right from the bottom left corner the vein guage sholud be")
-				.define("Vein Gauge Xoffset", 4);
-		VEIN_GAUGE_OFFSET_Y = builder.comment("how far up from the bottm left corner the vein guage should be")
-				.define("Vein Gauge Yoffset", 15);
-		VEIN_GAUGE_DISPLAY = builder.comment("Should the vein charge data be displayed")
-				.define("Display Veing Gauge", true);
-		GAIN_LIST_OFFSET_X = builder.comment("how far offset from center the gain list should be")
-				.define("Gain List Xoffset", 0);
-		GAIN_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the gain list should be")
-				.define("Gain List Yoffset", 0);
-		GAIN_LIST_DISPLAY = builder.comment("Should the Gain list be displayed")
+		VEIN_GAUGE_OFFSET_X = builder.comment("how far right from the bottom left corner the vein gauge should be (0.0 - 1.0)")
+				.define("Vein Gauge Xoffset", 0.0f);
+		VEIN_GAUGE_OFFSET_Y = builder.comment("How far up from the bottom left corner the vein gauge should be (0.0 - 1.0)")
+				.define("Vein Gauge Yoffset", 0.0f);
+		VEIN_GAUGE_DISPLAY = builder.comment("Should the vein charge data be displayed?")
+				.define("Display Vein Gauge", true);
+		GAIN_LIST_OFFSET_X = builder.comment("How far offset from left edge the gain list should be (0.0 - 1.0)")
+				.define("Gain List Xoffset", 0.5f);
+		GAIN_LIST_OFFSET_Y = builder.comment("How far down from the top left corner the gain list should be (0.0 - 1.0)")
+				.define("Gain List Yoffset", 0.85f);
+		GAIN_LIST_CENTERED = builder.comment("Should the gain list be centered?")
+				.define("Gain List Centered", true);
+		GAIN_LIST_DISPLAY = builder.comment("Should the Gain list be displayed?")
 				.define("Display Gain List", true);
-		SECTION_HEADER_COLOR = builder.comment("what color should the background be for the section header lines in the glossary")
+		SECTION_HEADER_COLOR = builder.comment("What color should the background be for the section header lines in the glossary")
 				.define("Section Header Color", 0x1504B520);
 		SALVAGE_ITEM_COLOR = builder.comment("What color should the background be for the salvage item lines in the glossary")
 				.define("Salvage Item Color", 0x15D2A319);
-		GAIN_LIST_SIZE = builder.comment("how much xp gain hisory should display")
-				.define("Gain List Size", 3);
+		GAIN_LIST_SIZE = builder.comment("How much xp gain history should display")
+				.define("Gain List Size", 1);
 		GAIN_LIST_LINGER_DURATION = builder.comment("How long, in ticks, items on the gain list should stay on screen before disappearing")
 				.define("Gain List Linger Duration", 100);
-		GAIN_BLACKLIST = builder.comment("skills that should now show their gains in the gain list.  this can be used to limit spammy skills")
+		GAIN_BLACKLIST = builder.comment("Skills that should now show their gains in the gain list.  This can be used to limit spammy skills")
 				.defineList("Gain Blacklist", new ArrayList<>(), s -> s instanceof String);
-		HIDE_SKILL_BUTTON = builder.comment("if true, removes the skills button from the inventory screen")
+		HIDE_SKILL_BUTTON = builder.comment("If true, removes the skills button from the inventory screen")
 				.define("hide skill button", false);
 		
 		builder.pop();
