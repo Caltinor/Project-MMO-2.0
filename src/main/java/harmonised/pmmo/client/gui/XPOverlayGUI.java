@@ -107,7 +107,7 @@ public class XPOverlayGUI implements IIngameOverlay
 			if (maxCharge > 0)
 				currentCharge = VeinTracker.getCurrentCharge();
 		}
-		int percentCharged = (int) Math.round((float) currentCharge / (float) maxCharge);
+		int percentCharged = (int) Math.round(((float) currentCharge / (float) maxCharge) * 100);
 		int veinLimit = Config.VEIN_LIMIT.get();
 		int maxBlocks = Math.min(currentCharge, veinLimit) / Config.DEFAULT_CONSUME.get();
 		if (currentCharge > 0 && maxCharge > 0) {
