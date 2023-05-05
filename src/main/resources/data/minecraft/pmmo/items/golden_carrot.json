@@ -12,6 +12,8 @@
         }
     },
     "bonuses": {
-        "magic": 1.5
+        "HELD": {
+            "magic": 1.5
+        }
     }
 }
