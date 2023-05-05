@@ -611,6 +611,7 @@ public class LangProvider extends LanguageProvider{
 		.addLocale(Locale.EN_US, "Magic").build();
 	public static final Translation SKILL_GUNSLINGING = Translation.Builder.start("pmmo.gunslinging")
 		.addLocale(Locale.UK_UA, "Ð¡Ñ‚Ñ€Ñ–Ð»ÑŒÐ±Ð° Ð·Ñ– Ð·Ð±Ñ€Ð¾Ñ—")
+		.addLocale(Locale.FR_FR, "Fusillade")
 		.addLocale(Locale.EN_US, "Gunslinging").build();
 	public static final Translation SKILL_SLAYER = Translation.Builder.start("pmmo.slayer")
 		.addLocale(Locale.HU, "Slayer")
