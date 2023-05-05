@@ -17,7 +17,9 @@
         }
     },
     "bonuses": {
-        "mining": 1.25
+        "WORN": {
+            "mining": 1.25
+        }
     },
     "negative_effect":{
         "minecraft:slowness":1,
