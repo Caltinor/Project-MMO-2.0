@@ -53,12 +53,12 @@ public class Config {
 		builder.pop();
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_LIST_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_LIST_OFFSET_Y;
-	public static ForgeConfigSpec.ConfigValue<Integer> VEIN_GAUGE_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Integer> VEIN_GAUGE_OFFSET_Y;
-	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_OFFSET_Y;
+	public static ForgeConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_X;
+	public static ForgeConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_Y;
+	public static ForgeConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_X;
+	public static ForgeConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_Y;
+	public static ForgeConfigSpec.ConfigValue<Double> GAIN_LIST_OFFSET_X;
+	public static ForgeConfigSpec.ConfigValue<Double> GAIN_LIST_OFFSET_Y;
 	public static ForgeConfigSpec.ConfigValue<Boolean> SKILL_LIST_DISPLAY;
 	public static ForgeConfigSpec.ConfigValue<Boolean> GAIN_LIST_DISPLAY;
 	public static ForgeConfigSpec.ConfigValue<Boolean> VEIN_GAUGE_DISPLAY;
@@ -73,21 +73,21 @@ public class Config {
 		builder.comment("Configuration settings for the guis").push("GUI");
 		
 		SKILL_LIST_OFFSET_X = builder.comment("how far right from the top left corner the skill list should be")
-						.define("Skill List Xoffset", 0);
+						.define("Skill List Xoffset", 0.01d);
 		SKILL_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the skill list should be")
-						.define("Skill List Yoffset", 0);
+						.define("Skill List Yoffset", 0.0005d);
 		SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed")
 						.define("Display Skill List", true);
 		VEIN_GAUGE_OFFSET_X = builder.comment("how far right from the bottom left corner the vein guage sholud be")
-				.define("Vein Gauge Xoffset", 4);
+				.define("Vein Gauge Xoffset", 0.01d);
 		VEIN_GAUGE_OFFSET_Y = builder.comment("how far up from the bottm left corner the vein guage should be")
-				.define("Vein Gauge Yoffset", 15);
+				.define("Vein Gauge Yoffset", 0.95d);
 		VEIN_GAUGE_DISPLAY = builder.comment("Should the vein charge data be displayed")
 				.define("Display Veing Gauge", true);
 		GAIN_LIST_OFFSET_X = builder.comment("how far offset from center the gain list should be")
-				.define("Gain List Xoffset", 0);
+				.define("Gain List Xoffset", 0.45d);
 		GAIN_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the gain list should be")
-				.define("Gain List Yoffset", 0);
+				.define("Gain List Yoffset", 0.0005d);
 		GAIN_LIST_DISPLAY = builder.comment("Should the Gain list be displayed")
 				.define("Display Gain List", true);
 		SECTION_HEADER_COLOR = builder.comment("what color should the background be for the section header lines in the glossary")
