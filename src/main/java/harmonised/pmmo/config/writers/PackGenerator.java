@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
@@ -149,9 +150,9 @@ public class PackGenerator {
 		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME);
 		filepath.toFile().mkdirs();
 		try {
-		Files.write(
+		Files.writeString(
 			filepath.resolve("pack.mcmeta"), 
-			List.of("{","\"pack\":{\"description\":\"Generated Resources\",","\"pack_format\":9}","}"), 
+			gson.toJson(getPackObject(false)), 
 			Charset.defaultCharset(),
 			StandardOpenOption.CREATE_NEW,
 			StandardOpenOption.WRITE);
@@ -177,21 +178,16 @@ public class PackGenerator {
 	}
 	
 	public static int generateDisablingPack(MinecraftServer server) {
-		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(DISABLER);
+		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME);
 		filepath.toFile().mkdirs();
 		filepath.resolve("data").toFile().mkdirs();
-		try {
-		Files.write(
-			filepath.resolve("pack.mcmeta"), 
-			List.of(
-					"{",
-					"\"pack\":{\"description\":\"Pack to disable PMMO Defaults\",",
-					"\"pack_format\":9},",
-					"\"filter\":{\"block\":[{\"path\":\"pmmo\"}]}",
-					"}"), 
-			Charset.defaultCharset(),
-			StandardOpenOption.CREATE_NEW,
-			StandardOpenOption.WRITE);
+		try {			
+			Files.writeString(
+				filepath.resolve("pack.mcmeta"), 
+				gson.toJson(getPackObject(true)), 
+				Charset.defaultCharset(),
+				StandardOpenOption.CREATE,
+				StandardOpenOption.WRITE);
 		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
 		return 0;
 	}
@@ -211,5 +207,31 @@ public class PackGenerator {
 			} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+idString.toString()+" ("+e.toString()+")");}
 		}
 		return 0;
+	}
+	
+	private static JsonObject getPackObject(boolean isDisabler) {
+		JsonObject mcmeta = new JsonObject();
+		
+		JsonObject pack = new JsonObject();
+		pack.addProperty("description", isDisabler 
+				? "Generated Resources including a disabler filter for PMMO's defaults"
+				: "Generated Resources");
+		pack.addProperty("pack_format", 9);
+		
+		mcmeta.add("pack", pack);
+		
+		if (isDisabler) {
+			JsonObject all = new JsonObject();
+			all.addProperty("path", "pmmo");
+			
+			JsonArray array = new JsonArray();
+			array.add(all);	
+			
+			JsonObject filter = new JsonObject();					
+			filter.add("block", array);
+			
+			mcmeta.add("filter", filter);
+		}
+		return mcmeta;
 	}
 }
