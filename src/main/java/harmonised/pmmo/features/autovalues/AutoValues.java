@@ -38,11 +38,12 @@ public class AutoValues {
 			reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).remove(objectID);
 			return new HashMap<>();
 		}
-		//Check the cache for an existing calculation
-		if (reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).containsKey(objectID))
-			return new HashMap<>(reqValues.get(reqType).get(objectID));
 		
 		Map<String, Integer> requirements = new HashMap<>();
+		//Check the cache for an existing calculation
+		if (reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).containsKey(objectID) && !(requirements = new HashMap<>(reqValues.get(reqType).get(objectID))).isEmpty())
+			return requirements;
+				
 		switch (autoValueType) {
 		case ITEM: {
 			requirements = AutoItem.processReqs(reqType, objectID);
@@ -72,11 +73,12 @@ public class AutoValues {
 			xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).remove(objectID);
 			return new HashMap<>();
 		}
-		//Check the cache for an existing calculation
-		if (xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).containsKey(objectID))
-			return new HashMap<>(xpGainValues.get(eventType).get(objectID));
-
 		Map<String, Long> awards = new HashMap<>();
+		//Check the cache for an existing calculation
+		if (xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).containsKey(objectID) && !(awards = new HashMap<>(xpGainValues.get(eventType).get(objectID))).isEmpty())
+			return awards;
+
+		
 		switch (autoValueType) {
 		case ITEM: {
 			awards = AutoItem.processXpGains(eventType, objectID);
