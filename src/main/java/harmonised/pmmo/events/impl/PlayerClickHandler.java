@@ -15,6 +15,7 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
@@ -69,8 +70,8 @@ public class PlayerClickHandler {
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
 			event.setUseItem(Result.DENY);
 		}
-		if (event.getUseBlock().equals(Result.DENY)) {
-			Messenger.sendDenialMsg(ReqType.INTERACT, player, event.getItemStack());
+		if (event.getUseBlock().equals(Result.DENY) && !serverSide && event.getHand().equals(InteractionHand.MAIN_HAND)) {
+			Messenger.sendDenialMsg(ReqType.INTERACT, player, event.getLevel().getBlockState(event.getPos()).getBlock().getName());
 			return;
 		}
 		
