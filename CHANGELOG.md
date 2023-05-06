@@ -1,24 +1,14 @@
 # Changelog
 
-## [1.19.2-3.0.5] - 2023-04-08
-### Bugfixes / Tweaks
-- Added: default data for Goblins & Dungeons to prevent a crash
-- Added: PMMO's tags to genData for easy adding of values
-- Updated: FTB Quests compat titles to make them easier to read at a glance
-- Fixed: XP Awards of zero no longer show in tooltips
-- Fixed: an IOOB exception from the stat menu when tinkering with level configurations
+## [1.19.2-3.1.0] - 2023-05-06
+### Minor Version Changes
+- golden items in default data now properly give bonuses
+- HUD objects now use percentage based values for positioning in pmmo-client.toml.  values range from 0.0-1.0
 
-## [1.19.2-3.0.4]
 ### Bugfixes / Tweaks
-- Added: `pmmo:skill_up` trigger for advancements
+- Mob scaling entries in the glossary are no longer cut off
+- Fixed "unable to interact with 0 air" bug
+- Vein tooltip no longer displays when vein mining is disabled
+- `/pmmo genData disabler` now modifies the `generated_data/pack.mcmeta` instead of creating a whole new pack
+- fix incompatibility on servers with JEI
 
-## [1.19.2-3.0.3]
-### Bugfixes / Tweaks
-- Added: NBT configurations can now access blockstates via path "state{}.property"
-- Added: Vein Tool Blacklist config to server config which prevents listed tools from activating vein ability.
-- Added: `/pmmo genData forPlayers <player selector>` which generates player config files in `generated_data` pack.
-- Updated: sub-paths in IDs now properly generate via genData
-- Updated: ore configs now propagate to their respective forge tag members.
-- Fixed: Curio slots now properly give bonuses for the items.
-- Fixed: boats not being included in default data for sailing xp.
-- Fixed: AutoValues crash case caused by caching too early
