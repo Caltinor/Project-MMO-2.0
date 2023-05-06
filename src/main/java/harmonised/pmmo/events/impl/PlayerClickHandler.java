@@ -71,7 +71,7 @@ public class PlayerClickHandler {
 			event.setUseItem(Result.DENY);
 		}
 		if (event.getUseBlock().equals(Result.DENY) && !serverSide && event.getHand().equals(InteractionHand.MAIN_HAND)) {
-			Messenger.sendDenialMsg(ReqType.INTERACT, player, event.getLevel().getBlockState(event.getPos()).getBlock().getName());
+			Messenger.sendDenialMsg(ReqType.INTERACT, player, event.getWorld().getBlockState(event.getPos()).getBlock().getName());
 			return;
 		}
 		
