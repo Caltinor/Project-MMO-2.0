@@ -73,21 +73,21 @@ public class Config {
 		builder.comment("Configuration settings for the guis").push("GUI");
 		
 		SKILL_LIST_OFFSET_X = builder.comment("how far right from the top left corner the skill list should be")
-						.define("Skill List Xoffset", 0.01d);
+						.defineInRange("Skill List Xoffset", 0.01d, 0, 1);
 		SKILL_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the skill list should be")
-						.define("Skill List Yoffset", 0.0005d);
+						.defineInRange("Skill List Yoffset", 0.0005d, 0, 1);
 		SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed")
 						.define("Display Skill List", true);
 		VEIN_GAUGE_OFFSET_X = builder.comment("how far right from the bottom left corner the vein guage sholud be")
-				.define("Vein Gauge Xoffset", 0.01d);
+				.defineInRange("Vein Gauge Xoffset", 0.01d, 0, 1);
 		VEIN_GAUGE_OFFSET_Y = builder.comment("how far up from the bottm left corner the vein guage should be")
-				.define("Vein Gauge Yoffset", 0.95d);
+				.defineInRange("Vein Gauge Yoffset", 0.95d, 0, 1);
 		VEIN_GAUGE_DISPLAY = builder.comment("Should the vein charge data be displayed")
 				.define("Display Veing Gauge", true);
 		GAIN_LIST_OFFSET_X = builder.comment("how far offset from center the gain list should be")
-				.define("Gain List Xoffset", 0.45d);
+				.defineInRange("Gain List Xoffset", 0.45d, 0, 1);
 		GAIN_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the gain list should be")
-				.define("Gain List Yoffset", 0.0005d);
+				.defineInRange("Gain List Yoffset", 0.0005d, 0, 1);
 		GAIN_LIST_DISPLAY = builder.comment("Should the Gain list be displayed")
 				.define("Display Gain List", true);
 		SECTION_HEADER_COLOR = builder.comment("what color should the background be for the section header lines in the glossary")
