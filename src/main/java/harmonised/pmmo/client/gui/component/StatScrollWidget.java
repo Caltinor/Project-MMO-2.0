@@ -47,11 +47,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -669,7 +671,10 @@ public class StatScrollWidget extends ScrollPanel{
 				Entity entity = ForgeRegistries.ENTITY_TYPES.getValue(mobMap.getKey()).create(mc.level);
 				content.add(new RenderableElement(entity.getName(), step(1), 0xFFFFFF, Config.SALVAGE_ITEM_COLOR.get(), entity));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
-					content.add(new TextElement(map.getKey(), map.getValue(), step(2), 0xFFFFFF));
+					Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(map.getKey()));
+					MutableComponent text = attribute == null ? Component.literal(map.getKey()) : Component.translatable(attribute.getDescriptionId());
+					text.append(Component.literal(": "+map.getValue()));
+					content.add(new TextElement(text, step(2), 0xFFFFFF, false, 0xFFFFFF));
 				}
 			}
 		}
