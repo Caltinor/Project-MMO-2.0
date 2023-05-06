@@ -672,7 +672,7 @@ public class StatScrollWidget extends ScrollPanel{
 					Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(map.getKey()));
 					MutableComponent text = attribute == null ? Component.literal(map.getKey()) : Component.translatable(attribute.getDescriptionId());
 					text.append(Component.literal(": "+map.getValue()));
-					content.add(new TextElement(text, step(2), 0xFFFFFF, false, 0xFFFFFF));
+					content.addAll(TextElement.build(text, this.width, step(2), 0xFFFFFF, false, 0xFFFFFF));
 				}
 			}
 		}
