@@ -57,6 +57,10 @@ public class CommonSetup {
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Computing data for cache");
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
+		
+		//Migration Logic
+		if (DataMigrator.shouldMigrate(event.getServer()))
+			DataMigrator.generateMigrationPack(event.getServer());
 	}
 	
 	@SubscribeEvent
