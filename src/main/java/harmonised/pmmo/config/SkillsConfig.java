@@ -62,8 +62,8 @@ public class SkillsConfig {
 		defaultSkills.put("crafting", 	SkillData.Builder.start().withColor(0xff9900).withIcon(new ResourceLocation("pmmo:textures/skills/crafting.png")).withIconSize(32).build());
 		defaultSkills.put("magic",	 	SkillData.Builder.start().withColor(0x0000ff).withIcon(new ResourceLocation("textures/particle/enchanted_hit.png")).withIconSize(8).build());
 		defaultSkills.put("slayer", 	SkillData.Builder.start().withColor(0xffffff).withIcon(new ResourceLocation("textures/item/netherite_sword.png")).withIconSize(16).build());
-		defaultSkills.put("hunter", 	SkillData.Builder.start().withColor(0xcf7815).withIcon(new ResourceLocation("textures/item/diamond_sword")).withIconSize(16).build());
-		defaultSkills.put("taming", 	SkillData.Builder.start().withColor(0xffffff).withIcon(new ResourceLocation("textures/item/leash")).withIconSize(16).build());
+		defaultSkills.put("hunter", 	SkillData.Builder.start().withColor(0xcf7815).withIcon(new ResourceLocation("textures/item/diamond_sword.png")).withIconSize(16).build());
+		defaultSkills.put("taming", 	SkillData.Builder.start().withColor(0xffffff).withIcon(new ResourceLocation("textures/item/lead.png")).withIconSize(16).build());
 		defaultSkills.put("cooking", 	SkillData.Builder.start().withColor(0xe69900).withAfkExempt(true).withIcon(new ResourceLocation("textures/item/cooked_mutton.png")).withIconSize(16).build());
 		defaultSkills.put("alchemy", 	SkillData.Builder.start().withColor(0xe69900).withAfkExempt(true).withIcon(new ResourceLocation("textures/item/potion.png")).withIconSize(16).build());
 		defaultSkills.put("engineering",SkillData.Builder.start().withColor(0xffffff).withMaxLevel(100).withIcon(new ResourceLocation("textures/item/redstone.png")).withIconSize(16).build());
