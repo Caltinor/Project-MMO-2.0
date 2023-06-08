@@ -44,6 +44,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -58,6 +59,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.gui.ScrollPanel;
@@ -163,7 +165,13 @@ public class StatScrollWidget extends ScrollPanel{
 			switch (object) {
 			case ITEMS: {
 				populateItems(
-					ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+					ForgeRegistries.ITEMS.getValues().stream()
+						.flatMap(item -> {
+							NonNullList<ItemStack> list = NonNullList.create();
+							item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
+							return list.stream();
+						})
+						.toList(),
 					events,
 					type == null ? ReqType.ITEM_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
 					bonuses,
@@ -208,7 +216,13 @@ public class StatScrollWidget extends ScrollPanel{
 			switch (object) {
 			case ITEMS: {
 				populateItems(
-						ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+						ForgeRegistries.ITEMS.getValues().stream()
+						.flatMap(item -> {
+							NonNullList<ItemStack> list = NonNullList.create();
+							item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
+							return list.stream();
+						})
+						.toList(),
 						type == null ? EventType.ITEM_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
 						reqs, bonuses, skill, false, false);
 				break;}
@@ -240,7 +254,13 @@ public class StatScrollWidget extends ScrollPanel{
 			switch (object) {
 			case ITEMS: {
 				populateItems(
-						ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+						ForgeRegistries.ITEMS.getValues().stream()
+						.flatMap(item -> {
+							NonNullList<ItemStack> list = NonNullList.create();
+							item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
+							return list.stream();
+						})
+						.toList(),
 						events, reqs, 
 						type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, 
 						skill, false, false);
@@ -270,7 +290,13 @@ public class StatScrollWidget extends ScrollPanel{
 			switch (object) {
 			case ITEMS: {
 				populateItems(
-						ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+						ForgeRegistries.ITEMS.getValues().stream()
+						.flatMap(item -> {
+							NonNullList<ItemStack> list = NonNullList.create();
+							item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
+							return list.stream();
+						})
+						.toList(),
 						events, reqs, bonuses, skill, false, true);
 				break;}
 			case BLOCKS: {
