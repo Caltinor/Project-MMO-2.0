@@ -59,7 +59,7 @@ public class AutoBlock {
 			else
 				AutoValueConfig.getBlockXpAward(type).forEach((skill, level) -> {
 					float breakSpeed = Math.max(1, block.defaultBlockState().getDestroySpeed(null, null));
-					long xpOut = Double.valueOf(Math.max(0, breakSpeed * AutoValueConfig.HARDNESS_MODIFIER.get() * level)).longValue();
+					long xpOut = Double.valueOf(Math.max(1, breakSpeed * AutoValueConfig.HARDNESS_MODIFIER.get() * level)).longValue();
 					if (ForgeRegistries.BLOCKS.tags().getTag(Tags.Blocks.ORES).contains(block))
 						xpOut *= AutoValueConfig.RARITIES_MODIFIER.get();
 					outMap.put(skill, xpOut);
