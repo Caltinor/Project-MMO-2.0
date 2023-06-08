@@ -205,9 +205,11 @@ public class AutoItem {
 			return outMap;
 		
 		final double scale = getUtensilAttributes(utensil, stack, asWeapon);
-		Map<String, Integer> configValue = type == ReqType.TOOL || type == ReqType.WEAR
+		Map<String, Integer> configValue = type == ReqType.TOOL || (type == ReqType.WEAR && !asWeapon)
 				? AutoValueConfig.getToolReq(stack) 
-				: AutoValueConfig.getItemReq(type);
+				: (type == ReqType.WEAR && asWeapon) 
+					? AutoValueConfig.getItemReq(ReqType.WEAPON)
+					: AutoValueConfig.getItemReq(type);					
 		configValue.forEach((skill, level) -> {
 			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
 		});
