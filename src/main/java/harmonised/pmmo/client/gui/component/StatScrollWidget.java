@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -59,6 +60,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.gui.widget.ScrollPanel;
@@ -167,6 +169,17 @@ public class StatScrollWidget extends ScrollPanel{
 	//Utility method for uniform nesting indentation
 	private int step(int level) {return level * 10;}
 	
+	private Supplier<List<ItemStack>> itemSupplier = () -> ForgeRegistries.ITEMS.getValues().stream()
+			.flatMap(item -> {
+				NonNullList<ItemStack> list = NonNullList.create();
+				for (CreativeModeTab tab : CreativeModeTabs.allTabs()) {
+					tab.getDisplayItems().stream().filter(stack -> stack.getItem().equals(item) && list.stream().noneMatch(eStack -> eStack.equals(stack, false))).forEach(list::add);
+				}
+				return list.stream().distinct();
+			})
+			.sorted((a, b) -> a.getDisplayName().toString().compareTo(b.getDisplayName().toString()))
+			.toList();
+	
 	public void generateGlossary(SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
 		switch (selection) {
 		case REQS:{
@@ -175,13 +188,7 @@ public class StatScrollWidget extends ScrollPanel{
 			switch (object) {
 			case ITEMS: {
 				populateItems(
-					ForgeRegistries.ITEMS.getValues().stream()
-						.flatMap(item -> {
-							NonNullList<ItemStack> list = NonNullList.create();
-							item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
-							return list.stream();
-						})
-						.toList(),
+					itemSupplier.get(),
 					events,
 					type == null ? ReqType.ITEM_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
 					bonuses,
@@ -226,13 +233,7 @@ public class StatScrollWidget extends ScrollPanel{
 			switch (object) {
 			case ITEMS: {
 				populateItems(
-						ForgeRegistries.ITEMS.getValues().stream()
-						.flatMap(item -> {
-							NonNullList<ItemStack> list = NonNullList.create();
-							item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
-							return list.stream();
-						})
-						.toList(),
+						itemSupplier.get(),
 						type == null ? EventType.ITEM_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
 						reqs, bonuses, skill, false, false);
 				break;}
@@ -264,13 +265,7 @@ public class StatScrollWidget extends ScrollPanel{
 			switch (object) {
 			case ITEMS: {
 				populateItems(
-						ForgeRegistries.ITEMS.getValues().stream()
-						.flatMap(item -> {
-							NonNullList<ItemStack> list = NonNullList.create();
-							item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
-							return list.stream();
-						})
-						.toList(),
+						itemSupplier.get(),
 						events, reqs, 
 						type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, 
 						skill, false, false);
@@ -300,13 +295,7 @@ public class StatScrollWidget extends ScrollPanel{
 			switch (object) {
 			case ITEMS: {
 				populateItems(
-						ForgeRegistries.ITEMS.getValues().stream()
-						.flatMap(item -> {
-							NonNullList<ItemStack> list = NonNullList.create();
-							item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
-							return list.stream();
-						})
-						.toList(),
+						itemSupplier.get(),
 						events, reqs, bonuses, skill, false, true);
 				break;}
 			case BLOCKS: {
