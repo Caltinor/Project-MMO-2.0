@@ -1981,6 +1981,18 @@ public class LangProvider extends LanguageProvider{
 		.addLocale(Locale.EN_US, "Decline").build();
 	public static final Translation PARTY_PLAYER_INVITED = Translation.Builder.start("pmmo.playerInvitedYouToAParty")
 		.addLocale(Locale.EN_US, "%1$s invited you to their Party, %2$s|%3$s").build();
+	public static final Translation PACK_BEGIN = Translation.Builder.start("pmmo.cmd.pack.begin")
+		.addLocale(Locale.EN_US, "Starting new genData.  Override, defaults, players, simplify, and disabler settings have all been set to false.").build();
+	public static final Translation PACK_OVERRIDE = Translation.Builder.start("pmmo.cmd.pack.override")
+		.addLocale(Locale.EN_US, "Generated files will now include override set to true").build();
+	public static final Translation PACK_DEFAULTS = Translation.Builder.start("pmmo.cmd.pack.defaults")
+		.addLocale(Locale.EN_US, "Generated files will now include existing settings and AutoValues.").build();
+	public static final Translation PACK_DISABLER = Translation.Builder.start("pmmo.cmd.pack.disabler")
+		.addLocale(Locale.EN_US, "Generated pack will now disable all packs loaded before it.").build();
+	public static final Translation PACK_PLAYERS = Translation.Builder.start("pmmo.cmd.pack.players")
+		.addLocale(Locale.EN_US, "Generated pack will now include the selected player files").build();
+	public static final Translation PACK_SIMPLE = Translation.Builder.start("pmmo.cmd.pack.simple")
+		.addLocale(Locale.EN_US, "Generated pack will exclude unused properties.").build();
 	
 	//=========DENIAL MESSAGES====================
 	public static final Translation DENIAL_WEAR = Translation.Builder.start("pmmo.msg.denial.wear")

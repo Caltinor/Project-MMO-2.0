@@ -19,20 +19,25 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.api.APIUtils.SalvageBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.config.codecs.VeinData;
+import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.nbt.LogicEntry;
+import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
@@ -41,29 +46,67 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagFile;
 import net.minecraft.world.level.storage.LevelResource;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class PackGenerator {
 	public static final String PACKNAME = "generated_pack";
 	public static final String DISABLER = "pmmo_disabler_pack";
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	public static boolean applyOverride = false, applyDefaults = false, applyDisabler = false, applySimple = false;
+	public static List<ServerPlayer> players = new ArrayList<>();
 	
 	private enum Category {
-		ITEMS("pmmo/items", server -> ForgeRegistries.ITEMS.getKeys(), override -> {
-			ObjectData data = new ObjectData(override, new HashSet<>(),
-					Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new HashMap<>())),
-					Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new ArrayList<>())),
-					new HashMap<>(),
-					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new HashMap<>())),
-					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new ArrayList<>())),
-					Map.of(ModifierDataType.WORN, new HashMap<>(), ModifierDataType.HELD, new HashMap<>()),
-					Map.of(ModifierDataType.WORN, new ArrayList<>(), ModifierDataType.HELD, new ArrayList<>()),
-					Map.of(new ResourceLocation("modid:item"), SalvageBuilder.start().build()),
-					VeinData.EMPTY);
+		@SuppressWarnings("unchecked")
+		ITEMS("pmmo/items", server -> ForgeRegistries.ITEMS.getKeys(), (id) -> {
+			Core core = Core.get(LogicalSide.SERVER);
+			ObjectData existing = core.getLoader().ITEM_LOADER.getData(id);
+			
+			ObjectData data = new ObjectData(applyOverride, new HashSet<>(),
+					Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> 
+							applyDefaults 
+								? existing.reqs().getOrDefault(r, AutoValues.getRequirements(r, id, ObjectType.ITEM))
+								: new HashMap<>()))
+						.entrySet().stream()
+						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.collect(Collectors.toMap(e -> e.getKey(), e -> (Map<String, Integer>)e.getValue())),
+					Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> 
+							applyDefaults
+								? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
+								: new ArrayList<>()))
+						.entrySet().stream()
+						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.collect(Collectors.toMap(e -> e.getKey(), e -> (List<LogicEntry>)e.getValue())),
+					applyDefaults ? existing.negativeEffects() : new HashMap<>(),
+					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> 
+						applyDefaults 
+							? existing.xpValues().getOrDefault(e, AutoValues.getExperienceAward(e, id, ObjectType.ITEM))
+							: new HashMap<>()))
+						.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.collect(Collectors.toMap(e -> e.getKey(), e -> (Map<String, Long>)e.getValue())),
+					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> 
+							applyDefaults
+								? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
+								: new ArrayList<>()))
+						.entrySet().stream()
+						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.collect(Collectors.toMap(e -> e.getKey(), e -> (List<LogicEntry>)e.getValue())),
+					Arrays.stream(new ModifierDataType[] {ModifierDataType.WORN, ModifierDataType.HELD})
+						.collect(Collectors.toMap(m -> m, m -> applyDefaults ? existing.bonuses().getOrDefault(m, new HashMap<>()) : new HashMap<>()))
+						.entrySet().stream()
+						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.collect(Collectors.toMap(e -> e.getKey(), e -> (Map<String, Double>)e.getValue())),
+					Arrays.stream(new ModifierDataType[] {ModifierDataType.WORN, ModifierDataType.HELD})
+						.collect(Collectors.toMap(m -> m, m -> applyDefaults ? existing.nbtBonuses().getOrDefault(m, new ArrayList<>()) : new ArrayList<>()))
+						.entrySet().stream()
+						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.collect(Collectors.toMap(m -> m.getKey(), m -> (List<LogicEntry>)m.getValue())),
+					applyDefaults ? existing.salvage() : Map.of(new ResourceLocation("modid:item"), SalvageBuilder.start().build()),
+					applyDefaults ? existing.veinData() : VeinData.EMPTY);
 			JsonElement raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get();
 			return gson.toJson(raw);}),
-		BLOCKS("pmmo/blocks", server -> ForgeRegistries.BLOCKS.getKeys(), override -> {
-			ObjectData data = new ObjectData(override, new HashSet<>(),
+		BLOCKS("pmmo/blocks", server -> ForgeRegistries.BLOCKS.getKeys(), (id) -> {
+			ObjectData data = new ObjectData(applyOverride, new HashSet<>(),
 					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new HashMap<>())),
 					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new ArrayList<>())),
 					new HashMap<>(), //negative effects
@@ -79,8 +122,8 @@ public class PackGenerator {
 			raw.remove("nbt_bonuses");
 			raw.remove("salvage");
 			return gson.toJson(raw);}),
-		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITY_TYPES.getKeys(), override -> {
-			ObjectData data = new ObjectData(override, new HashSet<>(),
+		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITY_TYPES.getKeys(), (id) -> {
+			ObjectData data = new ObjectData(applyOverride, new HashSet<>(),
 					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new HashMap<>())),
 					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new ArrayList<>())),
 					new HashMap<>(), //negative effects
@@ -98,8 +141,8 @@ public class PackGenerator {
 			raw.remove(VeinMiningLogic.VEIN_DATA);
 			return gson.toJson(raw);}),
 		DIMENSIONS("pmmo/dimensions", server -> new HashSet<>(server.levelKeys().stream().map(key -> key.location()).toList()), 
-				override -> {
-				LocationData data = new LocationData(override, new HashSet<>(),
+				(id) -> {
+				LocationData data = new LocationData(applyOverride, new HashSet<>(),
 						Map.of(ModifierDataType.DIMENSION, new HashMap<>()),
 						new HashMap<>(),
 						new HashMap<>(),
@@ -110,19 +153,19 @@ public class PackGenerator {
 				raw.remove("positive_effect");
 				raw.remove("negative_effect");
 				return gson.toJson(raw);}),
-		BIOMES("pmmo/biomes", server -> ForgeRegistries.BIOMES.getKeys(), override -> {
-			LocationData data = new LocationData(override, new HashSet<>(),	Map.of(ModifierDataType.BIOME, new HashMap<>()),
+		BIOMES("pmmo/biomes", server -> ForgeRegistries.BIOMES.getKeys(), (id) -> {
+			LocationData data = new LocationData(applyOverride, new HashSet<>(),	Map.of(ModifierDataType.BIOME, new HashMap<>()),
 					new HashMap<>(), new HashMap<>(),new ArrayList<>(),	new HashMap<>(), new HashMap<>());				
 			JsonObject raw = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
-		ENCHANTMENTS("pmmo/enchantments", server -> ForgeRegistries.ENCHANTMENTS.getKeys(), override -> {
+		ENCHANTMENTS("pmmo/enchantments", server -> ForgeRegistries.ENCHANTMENTS.getKeys(), (id) -> {
 			return gson.toJson(EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, 
-					new EnhancementsData(override, new HashMap<>())).result().get());
-		}),
-		EFFECTS("pmmo/effects", server -> ForgeRegistries.MOB_EFFECTS.getKeys(), override -> {
+					new EnhancementsData(applyOverride, new HashMap<>())).result().get());
+			}),
+		EFFECTS("pmmo/effects", server -> ForgeRegistries.MOB_EFFECTS.getKeys(), (id) -> {
 			return gson.toJson(EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, 
-					new EnhancementsData(override, new HashMap<>())).result().get());
-		}),
+					new EnhancementsData(applyOverride, new HashMap<>())).result().get());
+			}),
 		TAGS("tags", server -> Set.of(
 				Functions.pathPrepend(Reference.CROPS.location(), "blocks"),
 				Functions.pathPrepend(Reference.CASCADING_BREAKABLES.location(), "blocks"),
@@ -133,17 +176,55 @@ public class PackGenerator {
 				Functions.pathPrepend(Reference.TAMABLE_TAG.location(), "entity_types"),
 				Functions.pathPrepend(Reference.BREWABLES.location(), "items"),
 				Functions.pathPrepend(Reference.SMELTABLES.location(), "items")), 
-				override -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false)).result().get())); 
+				(id) -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false)).result().get())); 
 
 		
 		public String route;
 		public Function<MinecraftServer, Set<ResourceLocation>> valueList;
-		private Function<Boolean, String> defaultData;
-		Category(String route, Function<MinecraftServer, Set<ResourceLocation>> values, Function<Boolean, String> defaultData) {
+		private Function<ResourceLocation, String> defaultData;
+		Category(String route, Function<MinecraftServer, Set<ResourceLocation>> values, Function<ResourceLocation, String> defaultData) {
 			this.route = route;
 			this.valueList = values;
 			this.defaultData = defaultData;
 		}
+	}
+	
+	private static final Filter defaultFilter = new Filter(List.of(new BlockFilter(Optional.empty(), Optional.of("pmmo"))));
+	
+	public static int generatePack(MinecraftServer server) {
+		//create the filepath for our datapack.  this will do nothing if already created
+		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME);
+		filepath.toFile().mkdirs();
+		/* checks for existence of the pack.mcmeta.  This will:
+		 * 1. create a new file if not present, using the disabler setting
+		 * 2. overwrite the existing file if the disabler setting conflicts*/
+		Path packPath = filepath.resolve("pack.mcmeta");
+		try {
+			Files.writeString(
+				packPath, 
+				gson.toJson(getPackObject(applyDisabler)), 
+				Charset.defaultCharset(),
+				StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW, StandardOpenOption.TRUNCATE_EXISTING);		
+			
+		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
+
+		for (Category category : Category.values()) {
+			for (ResourceLocation id : category.valueList.apply(server)) {
+				int index = id.getPath().lastIndexOf('/');
+				String pathRoute = id.getPath().substring(0, index >= 0 ? index : 0);
+				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route+"/"+pathRoute);
+				finalPath.toFile().mkdirs();
+				try {					
+					Files.writeString(
+						finalPath.resolve(id.getPath().substring(id.getPath().lastIndexOf('/')+1)+".json"), 
+						category.defaultData.apply(id),
+						Charset.defaultCharset(),
+						StandardOpenOption.CREATE_NEW,
+						StandardOpenOption.WRITE);
+				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
+			}			
+		}
+		return 0;
 	}
 	
 	public static int generateEmptyPack(MinecraftServer server, boolean withOverride) {		
@@ -152,7 +233,7 @@ public class PackGenerator {
 		try {
 		Files.writeString(
 			filepath.resolve("pack.mcmeta"), 
-			gson.toJson(getPackObject(false)), 
+			gson.toJson(getPackObject(applyDisabler)), 
 			Charset.defaultCharset(),
 			StandardOpenOption.CREATE_NEW,
 			StandardOpenOption.WRITE);
@@ -165,28 +246,13 @@ public class PackGenerator {
 				try {
 				Files.writeString(
 						finalPath.resolve(id.getPath().substring(id.getPath().lastIndexOf('/')+1)+".json"), 
-						category.defaultData.apply(withOverride),
+						category.defaultData.apply(id),
 						Charset.defaultCharset(),
 						StandardOpenOption.CREATE_NEW,
 						StandardOpenOption.WRITE);
 				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
 			}			
 		}
-		return 0;
-	}
-	
-	public static int generateDisablingPack(MinecraftServer server) {
-		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME);
-		filepath.toFile().mkdirs();
-		filepath.resolve("data").toFile().mkdirs();
-		try {			
-			Files.writeString(
-				filepath.resolve("pack.mcmeta"), 
-				gson.toJson(getPackObject(true)), 
-				Charset.defaultCharset(),
-				StandardOpenOption.CREATE,
-				StandardOpenOption.WRITE);
-		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
 		return 0;
 	}
 	
@@ -207,29 +273,39 @@ public class PackGenerator {
 		return 0;
 	}
 	
-	private static JsonObject getPackObject(boolean isDisabler) {
-		JsonObject mcmeta = new JsonObject();
+	private static record Pack(String description, int format) {
+		public static final Codec<Pack> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.fieldOf("description").forGetter(Pack::description),
+				Codec.INT.fieldOf("pack_format").forGetter(Pack::format)
+				).apply(instance, Pack::new));
+	}
+	private static record BlockFilter(Optional<String> namespace, Optional<String> path) {
+		public static final Codec<BlockFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.STRING.optionalFieldOf("namespace").forGetter(BlockFilter::namespace),
+				Codec.STRING.optionalFieldOf("path").forGetter(BlockFilter::path)
+				).apply(instance, BlockFilter::new));
+	}
+	private static record Filter(List<BlockFilter> block) {
+		public static final Codec<Filter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				BlockFilter.CODEC.listOf().fieldOf("block").forGetter(Filter::block)
+				).apply(instance, Filter::new));
+	}
+	private static record McMeta(Pack pack, Optional<Filter> filter) {
+		public static final Codec<McMeta> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Pack.CODEC.fieldOf("pack").forGetter(McMeta::pack),
+				Filter.CODEC.optionalFieldOf("filter").forGetter(McMeta::filter)
+				).apply(instance, McMeta::new));
+	}
+	private static JsonElement getPackObject(boolean isDisabler) {
+		McMeta pack = new McMeta(
+				new Pack(isDisabler 
+					? "Generated Resources including a disabler filter for PMMO's defaults"
+					: "Generated Resources",
+					9),
+				isDisabler 
+					? Optional.of(defaultFilter)
+					: Optional.empty());
 		
-		JsonObject pack = new JsonObject();
-		pack.addProperty("description", isDisabler 
-				? "Generated Resources including a disabler filter for PMMO's defaults"
-				: "Generated Resources");
-		pack.addProperty("pack_format", 9);
-		
-		mcmeta.add("pack", pack);
-		
-		if (isDisabler) {
-			JsonObject all = new JsonObject();
-			all.addProperty("path", "pmmo");
-			
-			JsonArray array = new JsonArray();
-			array.add(all);	
-			
-			JsonObject filter = new JsonObject();					
-			filter.add("block", array);
-			
-			mcmeta.add("filter", filter);
-		}
-		return mcmeta;
+		return McMeta.CODEC.encodeStart(JsonOps.INSTANCE, pack).result().get();
 	}
 }
