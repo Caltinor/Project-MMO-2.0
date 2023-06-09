@@ -28,10 +28,6 @@ mixin {
 repositories {
     maven { url "https://maven.theillusivec4.top/" }
     maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
     	url 'https://cursemaven.com'
     	content { includeGroup 'curse.maven' }
 	}
@@ -45,7 +41,7 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.19.4-0.0.4'
+version = '1.19.4-0.0.5'
 group = 'harmonised.pmmo'
 archivesBaseName = 'pmmo'
 
@@ -97,7 +93,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.4-45.0.43'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.0.64'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
