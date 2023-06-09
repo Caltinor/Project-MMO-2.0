@@ -4,6 +4,7 @@ import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.readers.CoreLoader;
+import harmonised.pmmo.config.writers.DataMigrator;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.autovalues.AutoValues;
