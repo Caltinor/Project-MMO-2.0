@@ -1,13 +1,18 @@
 # Changelog
 
-## [1.18.2-6.1.0] - 2023-05-06
-### Minor Version Changes
-- golden items in default data now properly give bonuses
-- HUD objects now use percentage based values for positioning in pmmo-client.toml.  values range from 0.0-1.0
-
+## [1.18.2-6.1.1] - 2023-06-09
 ### Bugfixes / Tweaks
-- Mob scaling entries in the glossary are no longer cut off
-- Fixed "unable to interact with 0 air" bug
-- Vein tooltip no longer displays when vein mining is disabled
-- `/pmmo genData disabler` now modifies the `generated_data/pack.mcmeta` instead of creating a whole new pack
-- fix incompatibility on servers with JEI
+- Fixed typo in archery damage boost perk
+- Fixed low-hardness blocks giving zero XP
+- Fixed Swords having farming wear req
+- Fixed Taming and Hunter skills having missing skill textures
+- Fixed crash in glossary from items with special construction
+- Updated glossary to now include variants like the creative menu
+- Updated genData command to work like a builder and added new options.
+  - "begin" resets your settings
+  - "disabler" makes the pack.mcmeta a disabler 
+  - "withOverride" still sets the override property to true
+  - "withDefaults" uses current settings + AutoValues to fill files with what they show in game
+  - "forPlayers" lets you select players to have player configs generated
+  - "simplified" removes all unused sections from files to make them cleaner
+  - "create" builds the datapack based on current settings

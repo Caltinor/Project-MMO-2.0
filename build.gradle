@@ -28,10 +28,6 @@ mixin {
 repositories {
     maven { url "https://maven.theillusivec4.top/" }
     maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
         url 'https://cursemaven.com'
         content { includeGroup 'curse.maven' }
     }
@@ -45,7 +41,7 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.18.2-6.1.0'
+version = '1.18.2-6.1.1'
 group = 'harmonised.pmmo'
 archivesBaseName = 'pmmo'
 
