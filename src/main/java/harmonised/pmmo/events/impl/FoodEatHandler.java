@@ -13,10 +13,11 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class FoodEatHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(EatFoodEvent event) {
-		Core core = Core.get(event.getEntity().getLevel());
+		Core core = Core.get(event.getEntity().level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !event.getEntity().level.isClientSide; 
+		boolean serverSide = !event.getEntity().level().isClientSide; 
 		if (serverSide)		
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.CONSUME, event, new CompoundTag());
 		//Process perks

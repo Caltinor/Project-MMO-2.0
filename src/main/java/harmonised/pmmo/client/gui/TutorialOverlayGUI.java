@@ -9,7 +9,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
@@ -22,6 +21,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
@@ -43,7 +43,7 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 	private BlockHitResult bhr;
 
 	@Override
-	public void render(ForgeGui gui, PoseStack stack, float partialTick, int screenWidth, int screenHeight) {
+	public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (!(mc.hitResult instanceof BlockHitResult))
@@ -74,7 +74,7 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 				return; // stop render if none of the viewing cases are met.
 
 			// RENDER
-			stack.pushPose();
+			guiGraphics.pose().pushPose();
 			RenderSystem.enableBlend();
 			if (!lines.isEmpty()) {
 				int i = 0;
@@ -91,24 +91,20 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 
 				int l = renderLeft;
 				int i1 = renderTop;
-				stack.pushPose();
+				guiGraphics.pose().pushPose();
 				Tesselator tesselator = Tesselator.getInstance();
 				BufferBuilder bufferbuilder = tesselator.getBuilder();
 				RenderSystem.setShader(GameRenderer::getPositionColorShader);
 				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-				Matrix4f matrix4f = stack.last().pose();
-				TooltipRenderUtil.renderTooltipBackground((p_262872_, p_262873_, p_262874_, p_262875_, p_262876_,
-						p_262877_, p_262878_, p_262879_, p_262880_) -> {
-					fillGradient(p_262872_, p_262873_, p_262874_, p_262875_, p_262876_, p_262877_, p_262878_, p_262879_,
-							p_262880_);
-				}, matrix4f, bufferbuilder, l, i1, i, j, 400);
+				Matrix4f matrix4f = guiGraphics.pose().last().pose();
+				TooltipRenderUtil.renderTooltipBackground(guiGraphics, l, i1, i, j, 400);
 				RenderSystem.enableDepthTest();
 				RenderSystem.enableBlend();
 				RenderSystem.defaultBlendFunc();
 				BufferUploader.drawWithShader(bufferbuilder.end());
 				MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource
 						.immediate(Tesselator.getInstance().getBuilder());
-				stack.translate(0.0F, 0.0F, 400.0F);
+				guiGraphics.pose().translate(0.0F, 0.0F, 400.0F);
 				int k1 = i1;
 
 				for (int l1 = 0; l1 < lines.size(); ++l1) {
@@ -122,12 +118,12 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 
 				for (int i2 = 0; i2 < lines.size(); ++i2) {
 					ClientTooltipComponent clienttooltipcomponent2 = lines.get(i2);
-					clienttooltipcomponent2.renderImage(mc.font, l, k1, stack, mc.getItemRenderer());
+					clienttooltipcomponent2.renderImage(mc.font, l, k1, guiGraphics);
 					k1 += clienttooltipcomponent2.getHeight() + (i2 == 0 ? 2 : 0);
 				}
 
 			}
-			stack.popPose();
+			guiGraphics.pose().popPose();
 		}
 	}
 

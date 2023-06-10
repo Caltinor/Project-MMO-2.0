@@ -32,7 +32,7 @@ public class SkillLootConditionKill implements LootItemCondition{
 		Entity player = t.getParamOrNull(LootContextParams.KILLER_ENTITY);
 		if (player == null || skill == null) return false;
 		
-		int actualLevel = Core.get(player.level).getData().getPlayerSkillLevel(skill, player.getUUID());
+		int actualLevel = Core.get(player.level()).getData().getPlayerSkillLevel(skill, player.getUUID());
 		
 		return (levelMin == null || actualLevel >= levelMin) && (levelMax == null || actualLevel <= levelMax);
 	}

@@ -27,8 +27,9 @@ public class BreakSpeedHandler {
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	public static void handle(BreakSpeed event) {
-		Core core = Core.get(event.getEntity().getLevel());
+		Core core = Core.get(event.getEntity().level());
 		//First, check the cache for a repeat event trigger
 		if (resultCache.containsKey(event.getEntity().getUUID())) {
 			if (usingCache(event)) {
@@ -55,7 +56,7 @@ public class BreakSpeedHandler {
 			return;
 		}
 		CompoundTag eventHookOutput = new CompoundTag();
-		if (!event.getEntity().level.isClientSide){
+		if (!event.getEntity().level().isClientSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BREAK_SPEED, event, new CompoundTag());
 			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
 				event.setCanceled(true);
@@ -73,13 +74,13 @@ public class BreakSpeedHandler {
 			float newSpeed = Math.max(0, perkDataOut.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE));
 			event.setNewSpeed(newSpeed);
 			resultCache.put(event.getEntity().getUUID(), 
-					new DetailsCache(event.getEntity().getMainHandItem(), event.getPosition().orElse(new BlockPos(0,0,0)), event.getState(), event.getEntity().isOnGround(), false, newSpeed));
+					new DetailsCache(event.getEntity().getMainHandItem(), event.getPosition().orElse(new BlockPos(0,0,0)), event.getState(), event.getEntity().onGround(), false, newSpeed));
 		}			
 	}
 
 	private static boolean usingCache(BreakSpeed event) {
 		DetailsCache cachedData = resultCache.get(event.getEntity().getUUID());
-		if (event.getEntity().isOnGround() == cachedData.isPlayerStanding()
+		if (event.getEntity().onGround() == cachedData.isPlayerStanding()
 			&&event.getPosition().orElse(new BlockPos(0,0,0)).equals(cachedData.pos)
 			&& event.getState().equals(cachedData.state)
 			&& event.getEntity().getMainHandItem().equals(cachedData.item, false)) {			

@@ -21,7 +21,7 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
     @Override
     public void explode()
     {
-        this.level.broadcastEntityEvent(this, (byte)17);
+        this.level().broadcastEntityEvent(this, (byte)17);
         /*if(explosionText != null)
         {
             Vec3 pos = position();

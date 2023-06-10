@@ -7,13 +7,13 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -40,30 +40,28 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     }
 
     @Override
-    public void renderWidget(PoseStack pstack, int mouseX, int mouseY, float partialTicks) {
-    	RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        blitNineSliced(pstack, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, 66);
+        graphics.blitNineSliced(WIDGETS_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, 66);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (selected != null)
-            selected.render(pstack, getX(), getY(), width, false, getFGColor(), alpha);
+            selected.render(graphics, getX(), getY(), width, false, getFGColor(), alpha);
         else
-            drawString(pstack, font, title, getX() + 6, getY() + (height - 8) / 2, getFGColor() | Mth.ceil(alpha * 255.0F) << 24);
+            graphics.drawString(font, title, getX() + 6, getY() + (height - 8) / 2, getFGColor() | Mth.ceil(alpha * 255.0F) << 24);
 
         if (extended) {
-            pstack.pushPose();
-            pstack.translate(0, 0, 500);
+            graphics.pose().pushPose();
+            graphics.pose().translate(0, 0, 500);
 
             int boxHeight = Math.max(1, ENTRY_HEIGHT * Math.min(entries.size(), 4)) + 2;
 
-            fill(pstack, getX(),     getY() + ENTRY_HEIGHT - 1, getX() + width,     getY() + ENTRY_HEIGHT + boxHeight - 1, 0xFFFFFFFF);
-            fill(pstack, getX() + 1, getY() + ENTRY_HEIGHT,     getX() + width - 1, getY() + ENTRY_HEIGHT + boxHeight - 2, 0xFF000000);
+            graphics.fill(RenderType.gui(), getX(),     getY() + ENTRY_HEIGHT - 1, getX() + width,     getY() + ENTRY_HEIGHT + boxHeight - 1, 0xFFFFFFFF);
+            graphics.fill(RenderType.gui(), getX() + 1, getY() + ENTRY_HEIGHT,     getX() + width - 1, getY() + ENTRY_HEIGHT + boxHeight - 2, 0xFF000000);
 
-            RenderSystem.setShaderTexture(0, ICONS);
-            blit(pstack, getX() + width - 17, getY() + 6, 114, 5, 11, 7);
+            graphics.blit(ICONS, getX() + width - 17, getY() + 6, 114, 5, 11, 7);
 
             T hoverEntry = getEntryAtPosition(mouseX, mouseY);
 
@@ -73,7 +71,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
                     int entryY = getY() + ((i + 1) * ENTRY_HEIGHT);
 
                     T entry = entries.get(idx);
-                    entry.render(pstack, getX() + 1, entryY, width - 2, entry == hoverEntry, getFGColor(), alpha);
+                    entry.render(graphics, getX() + 1, entryY, width - 2, entry == hoverEntry, getFGColor(), alpha);
                 }
             }
 
@@ -83,15 +81,14 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
                 int barHeight = (int)(ENTRY_HEIGHT * 4 * scale + 1);
                 int scrollBotY = Math.min(scrollY + barHeight, getY() + ENTRY_HEIGHT + boxHeight - 2);
 
-                fill(pstack, getX() + width - 5, scrollY,     getX() + width - 1, scrollBotY,     0xFF666666);
-                fill(pstack, getX() + width - 4, scrollY + 1, getX() + width - 2, scrollBotY - 1, 0xFFAAAAAA);
+                graphics.fill(RenderType.gui(), getX() + width - 5, scrollY,     getX() + width - 1, scrollBotY,     0xFF666666);
+                graphics.fill(RenderType.gui(), getX() + width - 4, scrollY + 1, getX() + width - 2, scrollBotY - 1, 0xFFAAAAAA);
             }
 
-            pstack.popPose();
+            graphics.pose().popPose();
         }
         else {
-            RenderSystem.setShaderTexture(0, ICONS);
-            blit(pstack, getX() + width - 17, getY() + 6, 82, 20, 11, 7);
+            graphics.blit(ICONS, getX() + width - 17, getY() + 6, 82, 20, 11, 7);
         }
     }
 
@@ -182,12 +179,12 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
         	this.reference = reference;
         }
 
-        public void render(PoseStack pstack, int x, int y, int width, boolean hovered, int fgColor, float alpha) {
+        public void render(GuiGraphics graphics, int x, int y, int width, boolean hovered, int fgColor, float alpha) {
             if (hovered)
-                fill(pstack, x, y, x + width, y + ENTRY_HEIGHT, 0xFFA0A0A0);
+                graphics.fill(RenderType.gui(), x, y, x + width, y + ENTRY_HEIGHT, 0xFFA0A0A0);
 
             FormattedCharSequence text = Language.getInstance().getVisualOrder(FormattedText.composite(font.substrByWidth(message, width - 12)));
-            font.drawShadow(pstack, text, x + 6, y + 6, fgColor | Mth.ceil(alpha * 255.0F) << 24);
+            graphics.drawString(font, text, x + 6, y + 6, fgColor | Mth.ceil(alpha * 255.0F) << 24);
         }
 
 		@Override

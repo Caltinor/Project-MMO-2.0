@@ -19,15 +19,16 @@ import net.minecraftforge.event.entity.player.ItemFishedEvent;
 
 public class FishHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(ItemFishedEvent event) {
 		Player player = event.getEntity();
-		Core core = Core.get(player.getLevel());
+		Core core = Core.get(player.level());
 		if (!core.isActionPermitted(ReqType.TOOL, event.getDrops().get(0), player)) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.TOOL, player, event.getDrops().get(0).getDisplayName());
 			return;
 		}
-		boolean serverSide = !player.level.isClientSide;
+		boolean serverSide = !player.level().isClientSide;
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.FISH, event, new CompoundTag());

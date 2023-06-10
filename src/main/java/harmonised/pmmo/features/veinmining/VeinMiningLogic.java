@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import harmonised.pmmo.compat.curios.CurioCompat;
+//import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
@@ -39,7 +39,7 @@ public class VeinMiningLogic {
 	 */
 	public static void applyVein(ServerPlayer player, BlockPos pos) {
 		if (!Config.VEIN_ENABLED.get()) return;
-		ServerLevel level = player.getLevel();
+		ServerLevel level = player.serverLevel();
 		Block block = level.getBlockState(pos).getBlock();
 		int cost = Core.get(level).getBlockConsume(block);
 		if (cost <= 0) return; 
@@ -64,12 +64,12 @@ public class VeinMiningLogic {
 		items.add(inv.getSelected());
 		items.addAll(inv.offhand);
 		//========== CURIOS ==============
-		if (CurioCompat.hasCurio) {
-			items = new ArrayList<>(items);
-			items.addAll(CurioCompat.getItems(player));
-		}
+//		if (CurioCompat.hasCurio) {
+//			items = new ArrayList<>(items);
+//			items.addAll(CurioCompat.getItems(player));
+//		}
 		//================================
-		Core core = Core.get(player.level);
+		Core core = Core.get(player.level());
 		double currentCharge = getCurrentCharge(player);
 		int chargeCap = 0;
 		double chargeRate = 0d;
@@ -109,18 +109,19 @@ public class VeinMiningLogic {
 		return player.getCapability(VeinProvider.VEIN_CAP).map(vein -> (int)vein.getCharge()).orElse(0); 
 	}
 	
+	@SuppressWarnings("resource")
 	public static int getMaxChargeFromAllItems(Player player) {
 		Inventory inv = player.getInventory();		
 		List<ItemStack> items = List.of(inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39), player.getMainHandItem(), player.getOffhandItem());
 		//========== CURIOS ==============
-		if (CurioCompat.hasCurio) {
-			items = new ArrayList<>(items);
-			items.addAll(CurioCompat.getItems(player));
-		}
+//		if (CurioCompat.hasCurio) {
+//			items = new ArrayList<>(items);
+//			items.addAll(CurioCompat.getItems(player));
+//		}
 		//================================
 		int totalCapacity = 0;
 		for (ItemStack stack : items) {
-			totalCapacity += Core.get(player.level).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0);
+			totalCapacity += Core.get(player.level()).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0);
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
 		return totalCapacity; 

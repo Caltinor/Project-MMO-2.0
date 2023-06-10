@@ -13,7 +13,7 @@ public class MountHandler {
 		if (event.getEntityMounting() instanceof Player && event.isMounting()) {
 			Player player = (Player) event.getEntityMounting();
 			Entity mount = event.getEntityBeingMounted();
-			Core core = Core.get(player.level);
+			Core core = Core.get(player.level());
 			
 			if (!core.isActionPermitted(ReqType.RIDE, mount, player)) {
 				event.setCanceled(true);

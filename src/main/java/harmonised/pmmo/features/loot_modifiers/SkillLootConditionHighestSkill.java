@@ -35,10 +35,10 @@ public class SkillLootConditionHighestSkill implements LootItemCondition{
 		Entity player = t.getParamOrNull(LootContextParams.THIS_ENTITY);
 		if (player == null || targetSkill == null || comparables.isEmpty()) return false;
 		
-		int targetLevel = Core.get(player.level).getData().getPlayerSkillLevel(targetSkill, player.getUUID());
+		int targetLevel = Core.get(player.level()).getData().getPlayerSkillLevel(targetSkill, player.getUUID());
 		for (String comparable : comparables) {
 			if (comparable.equals(targetSkill)) continue;
-			if (targetLevel < Core.get(player.level).getData().getPlayerSkillLevel(comparable, player.getUUID()))
+			if (targetLevel < Core.get(player.level()).getData().getPlayerSkillLevel(comparable, player.getUUID()))
 				return false;
 		}
 		

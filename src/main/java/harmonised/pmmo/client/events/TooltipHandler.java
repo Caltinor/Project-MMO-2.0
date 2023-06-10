@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.mojang.blaze3d.platform.InputConstants;
+
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
@@ -54,7 +56,7 @@ public class TooltipHandler {
             if(itemID == null)
                 return;
 
-            if(ClientSetup.OPEN_MENU.isDown()) {
+            if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), ClientSetup.OPEN_MENU.getKey().getValue())) {
                 Minecraft.getInstance().setScreen(new StatsScreen(stack));
                 return;
             }

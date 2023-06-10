@@ -20,12 +20,13 @@ import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 
 public class ShieldBlockHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(ShieldBlockEvent event) {
 		if (!(event.getEntity() instanceof Player)) return;
 		if (event.getDamageSource().getEntity() == null) return;
 		
 		Player player = (Player) event.getEntity();
-		Core core = Core.get(player.level);
+		Core core = Core.get(player.level());
 		ItemStack shield = player.getUseItem();
 		Entity attacker = event.getDamageSource().getEntity();
 
@@ -34,7 +35,7 @@ public class ShieldBlockHandler {
 			Messenger.sendDenialMsg(ReqType.WEAPON, player, shield.getDisplayName());
 			return;
 		}
-		boolean serverSide = !player.level.isClientSide;
+		boolean serverSide = !player.level().isClientSide;
 		CompoundTag hookOutput = new CompoundTag();
 		if (serverSide) {
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.SHIELD_BLOCK, event, new CompoundTag());

@@ -12,10 +12,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 
 public class CraftHandler {
+	@SuppressWarnings("resource")
 	public static void handle(ItemCraftedEvent event) {
-		Core core = Core.get(event.getEntity().getLevel());
+		Core core = Core.get(event.getEntity().level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !event.getEntity().level.isClientSide; 
+		boolean serverSide = !event.getEntity().level().isClientSide; 
 		if (serverSide)		
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.CRAFT, event, new CompoundTag());
 		//Process perks

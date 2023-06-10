@@ -1,21 +1,22 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
         classpath 'org.parchmentmc:librarian:1.+'
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'maven-publish'
-apply plugin: 'eclipse'
 
 mixin {
     config "pmmo.mixins.json"
@@ -41,7 +42,7 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.19.4-0.0.5'
+version = '1.20-0.0.1'
 group = 'harmonised.pmmo'
 archivesBaseName = 'pmmo'
 
@@ -49,7 +50,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'parchment', version: '1.19.3-2023.03.12-1.19.4'
+	copyIdeResources = true
+    mappings channel: 'parchment', version: '1.19.3-2023.03.12-1.20'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -83,7 +85,6 @@ minecraft {
             mods {
                 pmmo {
                     source sourceSets.main
-                    forceExit = false
                 }
             }
         }
@@ -93,14 +94,14 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.4-45.0.64'
+    minecraft 'net.minecraftforge:forge:1.20-46.0.12'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
     //annotationProcessor 'net.minecraftforge:forge:1.19.3-43.2.3'
     //annotationProcessor 'com.blamejared.crafttweaker:CraftTweaker-forge-1.19.3:10.0.25'
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.3-5.1.4.0:api")
+    //compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.3-5.1.4.0:api")
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
   	//compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
   	//compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
@@ -120,6 +121,23 @@ dependencies {
   	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
   	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
 }
+
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+//def replaceProperties = [
+//        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+//        forge_version: forge_version, forge_version_range: forge_version_range,
+//        loader_version_range: loader_version_range,
+//        mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+//        mod_authors: mod_authors, mod_description: mod_description
+//]
+//processResources {
+//    inputs.properties replaceProperties
+//    replaceProperties.put 'project', project
+
+//    filesMatching(resourceTargets) {
+//        expand replaceProperties
+//    }
+//}
 
 jar {
     manifest {

@@ -14,12 +14,13 @@ import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 public class PotionHandler {
 	private static final String BREWED = "brewXpAwarded";
 
+	@SuppressWarnings("resource")
 	public static void handle(PlayerBrewedPotionEvent event) {
 		if (event.getStack().getTag().getBoolean(BREWED))
 			return;
 		Player player = event.getEntity();
-		Core core = Core.get(player.getLevel());
-		boolean serverSide = !player.level.isClientSide; 
+		Core core = Core.get(player.level());
+		boolean serverSide = !player.level().isClientSide; 
 		//proecess perks
 		CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.BREW, player, new CompoundTag());
 		if (serverSide) {

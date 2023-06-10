@@ -29,6 +29,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public class DamageDealtHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(LivingAttackEvent event) {
 		//Check the source entity isn't null.  This should also reduce
 		//the number of events processed.
@@ -43,7 +44,7 @@ public class DamageDealtHandler {
 			Player player = (Player) event.getSource().getEntity();
 			if (target.equals(player))
 				return;
-			Core core = Core.get(player.level);
+			Core core = Core.get(player.level());
 			EventType type = getEventCategory(event.getSource().is(Reference.FROM_RANGED), event.getEntity());
 			MsLoggy.INFO.log(LOG_CODE.EVENT,"Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
 			
@@ -59,7 +60,7 @@ public class DamageDealtHandler {
 				Messenger.sendDenialMsg(ReqType.KILL, player, target.getDisplayName());
 				return;
 			}
-			boolean serverSide = !player.level.isClientSide;
+			boolean serverSide = !player.level().isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide) {
 				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
@@ -72,6 +73,7 @@ public class DamageDealtHandler {
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	public static void handle(LivingDamageEvent event) {
 		if (event.getSource().getEntity() == null) return;
 		//Execute actual logic only if the source is a player
@@ -82,7 +84,7 @@ public class DamageDealtHandler {
 			Player player = (Player) event.getSource().getEntity();
 			if (target.equals(player)) return;
 			
-			Core core = Core.get(player.level);
+			Core core = Core.get(player.level());
 			EventType type = getEventCategory(event.getSource().is(Reference.FROM_RANGED), event.getEntity());
 			//Process perks
 			CompoundTag perkOutput = core.getPerkRegistry().executePerk(type, player, TagBuilder.start().withFloat(APIUtils.DAMAGE_IN, event.getAmount()).build());
@@ -91,7 +93,7 @@ public class DamageDealtHandler {
 				event.setAmount(perkOutput.getFloat(APIUtils.DAMAGE_OUT));
 			}
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+type.name()+" | Damage Out: "+event.getAmount());
-			if (!player.level.isClientSide) { 
+			if (!player.level().isClientSide) { 
 				Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), event.getSource(), player, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 				core.awardXP(partyMembersInRange, xpAward);

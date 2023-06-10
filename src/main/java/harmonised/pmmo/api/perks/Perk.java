@@ -105,9 +105,9 @@ public record Perk(
 	}
 	
 	public static final BiPredicate<Player, CompoundTag> VALID_CONTEXT = (player, src) -> {
-		if (src.contains(APIUtils.COOLDOWN) && !Core.get(player.level).getPerkRegistry().isPerkCooledDown(player, src))
+		if (src.contains(APIUtils.COOLDOWN) && !Core.get(player.level()).getPerkRegistry().isPerkCooledDown(player, src))
 			return false;
-		if (src.contains(APIUtils.CHANCE) && src.getDouble(APIUtils.CHANCE) < player.level.random.nextDouble())
+		if (src.contains(APIUtils.CHANCE) && src.getDouble(APIUtils.CHANCE) < player.level().random.nextDouble())
 			return false;
 		if (src.contains(APIUtils.SKILLNAME)) {
 			if (src.contains(FireworkHandler.FIREWORK_SKILL) && !src.getString(APIUtils.SKILLNAME).equals(src.getString(FireworkHandler.FIREWORK_SKILL)))

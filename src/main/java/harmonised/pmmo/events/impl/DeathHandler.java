@@ -18,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 public class DeathHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(LivingDeathEvent event) {
 		//Check the source entity isn't null.  This should also reduce
 		//the number of events processed.
@@ -32,7 +33,7 @@ public class DeathHandler {
 			Player player = (Player) event.getSource().getEntity();
 			if (target.equals(player))
 				return;
-			Core core = Core.get(player.level);			
+			Core core = Core.get(player.level());			
 			
 			//===========================DEFAULT LOGIC===================================
 			if (!core.isActionPermitted(ReqType.WEAPON, player.getMainHandItem(), player)) {
@@ -45,7 +46,7 @@ public class DeathHandler {
 				Messenger.sendDenialMsg(ReqType.KILL, player, target.getName());
 				return;
 			}
-			boolean serverSide = !player.level.isClientSide;
+			boolean serverSide = !player.level().isClientSide;
 			CompoundTag hookOutput = new CompoundTag();
 			if (serverSide) {
 				hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.DEATH, event, new CompoundTag());

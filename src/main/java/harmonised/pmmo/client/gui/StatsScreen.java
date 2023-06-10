@@ -2,9 +2,6 @@ package harmonised.pmmo.client.gui;
 
 import java.util.function.BiFunction;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
@@ -12,7 +9,7 @@ import harmonised.pmmo.client.gui.component.StatScrollWidget;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -42,12 +39,12 @@ public class StatsScreen extends Screen{
 	}
 	public StatsScreen(ItemStack stack) {
 		super(MENU_NAME);
-		scrollSupplier = (x,y) -> scrollWidget = new StatScrollWidget(206, 200, y, x, this.stack = stack, this.itemRenderer);
+		scrollSupplier = (x,y) -> scrollWidget = new StatScrollWidget(206, 200, y, x, this.stack = stack);
 		
 	}
 	public StatsScreen(BlockPos block) {
 		super(MENU_NAME);
-		scrollSupplier = (x,y) -> scrollWidget = new StatScrollWidget(206, 200, y, x, this.block = block, this.itemRenderer);
+		scrollSupplier = (x,y) -> scrollWidget = new StatScrollWidget(206, 200, y, x, this.block = block);
 		
 	}
 	public StatsScreen(Entity entity) {
@@ -57,7 +54,7 @@ public class StatsScreen extends Screen{
 	}	
 	public StatsScreen(SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
 		super(MENU_NAME);
-		scrollSupplier = (x,y) -> scrollWidget = new StatScrollWidget(206, 200, y, x, selection, object, skill ,type, this.itemRenderer);	
+		scrollSupplier = (x,y) -> scrollWidget = new StatScrollWidget(206, 200, y, x, selection, object, skill ,type);	
 	}
 	
 	@Override
@@ -70,26 +67,25 @@ public class StatsScreen extends Screen{
 	}
 	
 	@Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 //		renderX = this.width/2 - 128;
 //		renderY = this.height/2 - 128;
-		renderBackground(stack);
-		super.render(stack, mouseX, mouseY, partialTicks);
+		renderBackground(graphics);
+		super.render(graphics, mouseX, mouseY, partialTicks);
 		if (this.stack != null || block != null) {
-			ItemStack renderStack = this.stack == null ? new ItemStack(Minecraft.getInstance().player.level.getBlockState(block).getBlock().asItem()) : this.stack;
-			this.itemRenderer.renderAndDecorateItem(stack, renderStack, this.renderX+25, this.renderY+15);
-			GuiComponent.drawString(stack, font, renderStack.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
+			ItemStack renderStack = this.stack == null ? new ItemStack(Minecraft.getInstance().player.level().getBlockState(block).getBlock().asItem()) : this.stack;
+			graphics.renderItem(renderStack, this.renderX+25, this.renderY+15);
+			graphics.drawString(font, renderStack.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}
 		else if (entity != null && entity instanceof LivingEntity) {
-			InventoryScreen.renderEntityInInventoryFollowsAngle(stack, this.renderX+width - 20, this.renderY+12, 10, (float)(this.renderX+ 51) - 100, (float)(this.renderY + 75 - 50) - 100, (LivingEntity) entity);
-			GuiComponent.drawString(stack, font, this.entity.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
+			InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, this.renderX+width - 20, this.renderY+12, 10, (float)(this.renderX+ 51) - 100, (float)(this.renderY + 75 - 50) - 100, (LivingEntity) entity);
+			graphics.drawString(font, this.entity.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}			
 	}
 	
 	@Override
-    public void renderBackground(PoseStack stack) {
-		RenderSystem.setShaderTexture(0, GUI_BG);
-        blit(stack, renderX, renderY, 0, 0,  256, 256);
+    public void renderBackground(GuiGraphics graphics) {
+        graphics.blit(GUI_BG, renderX, renderY, 0, 0,  256, 256);
 	}
 	
 	@Override

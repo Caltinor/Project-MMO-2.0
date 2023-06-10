@@ -17,15 +17,16 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 
 public class EntityInteractHandler {
 	
+	@SuppressWarnings("resource")
 	public static void handle(EntityInteract event) {
-		Core core = Core.get(event.getEntity().level);
+		Core core = Core.get(event.getEntity().level());
 		if (!core.isActionPermitted(ReqType.ENTITY_INTERACT, event.getTarget(), event.getEntity())) {
 			event.setCanceled(true);
 			event.setCancellationResult(InteractionResult.FAIL);
 			Messenger.sendDenialMsg(ReqType.ENTITY_INTERACT, event.getEntity(), event.getTarget().getName());
 			return;
 		}
-		boolean serverSide = !event.getEntity().level.isClientSide;
+		boolean serverSide = !event.getEntity().level().isClientSide;
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ENTITY, event, new CompoundTag());

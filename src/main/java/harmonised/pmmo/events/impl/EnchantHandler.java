@@ -16,10 +16,11 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class EnchantHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(EnchantEvent event) {
-		Core core = Core.get(event.getEntity().getLevel());
+		Core core = Core.get(event.getEntity().level());
 		CompoundTag hookOutput = new CompoundTag();
-		boolean serverSide = !event.getEntity().level.isClientSide; 
+		boolean serverSide = !event.getEntity().level().isClientSide; 
 		if (serverSide) {
 			CompoundTag dataIn = TagBuilder.start()
 					.withString(APIUtils.STACK, event.getItem().serializeNBT().getAsString())

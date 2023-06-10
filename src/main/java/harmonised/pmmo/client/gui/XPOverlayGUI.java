@@ -3,8 +3,6 @@ package harmonised.pmmo.client.gui;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import harmonised.pmmo.client.events.ClientTickHandler;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
@@ -19,7 +17,7 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -35,26 +33,26 @@ public class XPOverlayGUI implements IGuiOverlay
 	private Font fontRenderer;
 
 	@Override
-	public void render(ForgeGui gui, PoseStack stack, float partialTick, int width, int height){
+	public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)
 			fontRenderer = mc.font;
 		
 		if(!mc.options.renderDebug){	
-			stack.pushPose();
+			guiGraphics.pose().pushPose();
 			RenderSystem.enableBlend();
 			
 			if(Config.SKILL_LIST_DISPLAY.get())
-				renderSkillList(stack, Config.SKILL_LIST_OFFSET_X.get(), Config.SKILL_LIST_OFFSET_Y.get());
+				renderSkillList(guiGraphics, Config.SKILL_LIST_OFFSET_X.get(), Config.SKILL_LIST_OFFSET_Y.get());
 			if(Config.VEIN_ENABLED.get() && Config.VEIN_GAUGE_DISPLAY.get())
-				renderVeinGauge(stack, Config.VEIN_GAUGE_OFFSET_X.get(), Config.VEIN_GAUGE_OFFSET_Y.get());
+				renderVeinGauge(guiGraphics, Config.VEIN_GAUGE_OFFSET_X.get(), Config.VEIN_GAUGE_OFFSET_Y.get());
 			if(Config.GAIN_LIST_DISPLAY.get()) {
 				if (ClientTickHandler.xpGains.size() >= 1 && ClientTickHandler.xpGains.get(0).duration <= 0)
 					ClientTickHandler.xpGains.remove(0);
-				renderGains(stack, Config.GAIN_LIST_OFFSET_X.get(), Config.GAIN_LIST_OFFSET_Y.get());
+				renderGains(guiGraphics, Config.GAIN_LIST_OFFSET_X.get(), Config.GAIN_LIST_OFFSET_Y.get());
 			}
-			stack.popPose();
+			guiGraphics.pose().popPose();
 		}
 		if (ClientTickHandler.isRefreshTick()) {ClientTickHandler.resetTicks();}
 	}
@@ -63,7 +61,7 @@ public class XPOverlayGUI implements IGuiOverlay
 	private List<String> skillsKeys = new ArrayList<>();
 	private LinkedHashMap<String, SkillLine> lineRenderers = new LinkedHashMap<>();
 
-	private void renderSkillList(PoseStack stack, double skillListX, double skillListY)
+	private void renderSkillList(GuiGraphics graphics, double skillListX, double skillListY)
 	{
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * skillListX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* skillListY);
@@ -89,14 +87,14 @@ public class XPOverlayGUI implements IGuiOverlay
 		}
 		
 		lineRenderers.forEach((skill, line) -> {
-			line.render(stack, renderX, renderY, fontRenderer);
+			line.render(graphics, renderX, renderY, fontRenderer);
 		});
 	}
 	
 	private int maxCharge = 0;
 	private int currentCharge = 0;
 	
-	private void renderVeinGauge(PoseStack stack, double gaugeX, double gaugeY) {
+	private void renderVeinGauge(GuiGraphics graphics, double gaugeX, double gaugeY) {
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * gaugeX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* gaugeY);
 		if (ClientTickHandler.isRefreshTick()) {
@@ -105,16 +103,16 @@ public class XPOverlayGUI implements IGuiOverlay
 				currentCharge = VeinTracker.getCurrentCharge();
 		}
 		if (currentCharge > 0) {
-			GuiComponent.drawString(stack, fontRenderer, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()), renderX, renderY-11, 0xFFFFFF);
-			GuiComponent.drawString(stack, fontRenderer, LangProvider.VEIN_CHARGE.asComponent(currentCharge, maxCharge), renderX, renderY, 0xFFFFFF);
+			graphics.drawString(fontRenderer, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()), renderX, renderY-11, 0xFFFFFF);
+			graphics.drawString(fontRenderer, LangProvider.VEIN_CHARGE.asComponent(currentCharge, maxCharge), renderX, renderY, 0xFFFFFF);
 		}
 	}
 	
-	private void renderGains(PoseStack stack, double listX, double listY) {
+	private void renderGains(GuiGraphics graphics, double listX, double listY) {
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * listX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* listY);
 		for (int i = 0; i < ClientTickHandler.xpGains.size(); i++) {			
-			GuiComponent.drawString(stack, fontRenderer, ClientTickHandler.xpGains.get(i).display, renderX, 3+renderY+ (i*9), i);
+			graphics.drawString(fontRenderer, ClientTickHandler.xpGains.get(i).display, renderX, 3+renderY+ (i*9), i);
 		}
 	}
 	
@@ -149,12 +147,12 @@ public class XPOverlayGUI implements IGuiOverlay
 			else return "";
 		}
 		
-		public void render(PoseStack stack, int skillListX, int skillListY, Font fontRenderer) {
+		public void render(GuiGraphics graphics, int skillListX, int skillListY, Font fontRenderer) {
 			int levelGap = fontRenderer.width(xpRaw());
-			GuiComponent.drawString(stack, fontRenderer, xpRaw(), skillListX, skillListY + 3 + yOffset(), color());
-			GuiComponent.drawString(stack, fontRenderer, " | " + skillName.getString(), skillListX + levelGap, skillListY + 3 + yOffset(), color());
-			GuiComponent.drawString(stack, fontRenderer, " | " + DP.dprefix(xpValue()), skillListX + levelGap + skillGap() + 9, skillListY + 3 + yOffset(), color());
-			GuiComponent.drawString(stack, fontRenderer, bonusLine, skillListX + levelGap + skillGap() + 46, skillListY + 3 + yOffset(), color());
+			graphics.drawString(fontRenderer, xpRaw(), skillListX, skillListY + 3 + yOffset(), color());
+			graphics.drawString(fontRenderer, " | " + skillName.getString(), skillListX + levelGap, skillListY + 3 + yOffset(), color());
+			graphics.drawString(fontRenderer, " | " + DP.dprefix(xpValue()), skillListX + levelGap + skillGap() + 9, skillListY + 3 + yOffset(), color());
+			graphics.drawString(fontRenderer, bonusLine, skillListX + levelGap + skillGap() + 46, skillListY + 3 + yOffset(), color());
 		}
 	}
 }

@@ -66,21 +66,21 @@ public class CmdNodeAdmin {
 			if (isSet) {
 				if (isLevel) {
 					data.setPlayerSkillLevel(skillName, player.getUUID(), value.intValue());
-					ctx.getSource().sendSuccess(LangProvider.SET_LEVEL.asComponent(skillName, value, player.getName()), true);
+					ctx.getSource().sendSuccess(() -> LangProvider.SET_LEVEL.asComponent(skillName, value, player.getName()), true);
 				}
 				else {
 					data.setXpRaw(player.getUUID(), skillName, value);
-					ctx.getSource().sendSuccess(LangProvider.SET_XP.asComponent(skillName, value, player.getName()), true);
+					ctx.getSource().sendSuccess(() -> LangProvider.SET_XP.asComponent(skillName, value, player.getName()), true);
 				}
 			}
 			else {
 				if (isLevel) {
 					data.changePlayerSkillLevel(skillName, player.getUUID(), value.intValue());
-					ctx.getSource().sendSuccess(LangProvider.ADD_LEVEL.asComponent(skillName, value, player.getName()), true);
+					ctx.getSource().sendSuccess(() -> LangProvider.ADD_LEVEL.asComponent(skillName, value, player.getName()), true);
 				}
 				else {
 					data.setXpDiff(player.getUUID(), skillName, value);
-					ctx.getSource().sendSuccess(LangProvider.ADD_XP.asComponent(skillName, value, player.getName()), true);
+					ctx.getSource().sendSuccess(() -> LangProvider.ADD_XP.asComponent(skillName, value, player.getName()), true);
 				}
 			}
 		}
@@ -100,10 +100,10 @@ public class CmdNodeAdmin {
 		//TODO replace with a gui
 		IDataStorage data = Core.get(LogicalSide.SERVER).getData();
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
-			ctx.getSource().sendSuccess(player.getName(), false);
+			ctx.getSource().sendSuccess(() -> player.getName(), false);
 			for (Map.Entry<String, Long> skillMap : data.getXpMap(player.getUUID()).entrySet()) {
 				int level = data.getLevelFromXP(skillMap.getValue());
-				ctx.getSource().sendSuccess(Component.literal(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
+				ctx.getSource().sendSuccess(() -> Component.literal(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
 			}
 		}
 		return 0;

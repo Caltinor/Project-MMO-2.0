@@ -19,8 +19,9 @@ import net.minecraftforge.event.entity.living.AnimalTameEvent;
 
 public class TameHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(AnimalTameEvent event) {
-		Core core = Core.get(event.getTamer().level);
+		Core core = Core.get(event.getTamer().level());
 		Player player = event.getTamer();
 		Animal target = event.getAnimal();
 
@@ -29,7 +30,7 @@ public class TameHandler {
 			Messenger.sendDenialMsg(ReqType.TAME, player, target.getName());
 			return;
 		}
-		boolean serverSide = !player.level.isClientSide;
+		boolean serverSide = !player.level().isClientSide;
 		CompoundTag hookOutput = new CompoundTag();
 		if (serverSide) {
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.TAMING, event, new CompoundTag());

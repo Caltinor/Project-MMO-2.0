@@ -59,7 +59,7 @@ public class APIUtils {
 	public static int getLevel(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level).getData().getPlayerSkillLevel(skill, player.getUUID());
+		return Core.get(player.level()).getData().getPlayerSkillLevel(skill, player.getUUID());
 	}
 	
 	/**Sets the player's current level in the skill provided
@@ -71,7 +71,7 @@ public class APIUtils {
 	public static void setLevel(String skill, Player player, int level) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		Core.get(player.level).getData().setPlayerSkillLevel(skill, player.getUUID(), level);
+		Core.get(player.level()).getData().setPlayerSkillLevel(skill, player.getUUID(), level);
 	}
 	
 	/**changes the player's level in the specified skill by a specific amount.
@@ -86,7 +86,7 @@ public class APIUtils {
 	public static boolean addLevel(String skill, Player player, int levelChange) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level).getData().changePlayerSkillLevel(skill, player.getUUID(), levelChange);
+		return Core.get(player.level()).getData().changePlayerSkillLevel(skill, player.getUUID(), levelChange);
 	}
 	
 	/**Gets the raw xp value associated with the specified skill and player.
@@ -98,7 +98,7 @@ public class APIUtils {
 	public static long getXp(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level).getData().getXpRaw(player.getUUID(), skill);
+		return Core.get(player.level()).getData().getXpRaw(player.getUUID(), skill);
 	}
 	
 	/**Sets the raw XP value for the player in the skill specified.
@@ -110,7 +110,7 @@ public class APIUtils {
 	public static void setXp(String skill, Player player, long xpRaw) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		Core.get(player.level).getData().setXpRaw(player.getUUID(), skill, xpRaw);
+		Core.get(player.level()).getData().setXpRaw(player.getUUID(), skill, xpRaw);
 	}
 	
 	/**Changes the player's current experience in the specified skill by the amount.
@@ -124,7 +124,7 @@ public class APIUtils {
 	public static boolean addXp(String skill, Player player, long change) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level).getData().setXpDiff(player.getUUID(), skill, change);
+		return Core.get(player.level()).getData().setXpDiff(player.getUUID(), skill, change);
 	}
 	
 	/**<p>Obtains a map of the skills and experience amount that would be awarded for the provided

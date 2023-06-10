@@ -14,7 +14,6 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DataMirror;
-import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.DataSource;
@@ -237,13 +236,13 @@ public class Core {
 		if (player instanceof FakePlayer) return mapOut;		
 		
 		//BIOME Modification
-		ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
+		ResourceLocation biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()).value());
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {
 			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 		}
 		
 		//DIMENSION Modification
-		ResourceLocation dimensionID = player.level.dimension().location();
+		ResourceLocation dimensionID = player.level().dimension().location();
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.DIMENSION, dimensionID, ModifierDataType.DIMENSION, new CompoundTag()).entrySet()) {
 			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 		}
@@ -263,8 +262,8 @@ public class Core {
 		//WORN Modification
 		List<ItemStack> wornItems = new ArrayList<>();
 		player.getArmorSlots().forEach(wornItems::add);
-		if (CurioCompat.hasCurio)
-			CurioCompat.getItems(player).forEach(wornItems::add);
+//		if (CurioCompat.hasCurio)
+//			CurioCompat.getItems(player).forEach(wornItems::add);
 		wornItems.forEach((stack) -> {
 			ResourceLocation itemID = RegistryUtil.getId(stack);
 			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?
@@ -300,11 +299,11 @@ public class Core {
 	}
 	public boolean isActionPermitted(ReqType type, BlockPos pos, Player player) {
 		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
-		BlockEntity tile = player.getLevel().getBlockEntity(pos);
-		ResourceLocation res = RegistryUtil.getId(player.getLevel().getBlockState(pos));
+		BlockEntity tile = player.level().getBlockEntity(pos);
+		ResourceLocation res = RegistryUtil.getId(player.level().getBlockState(pos));
 		return tile != null && predicates.predicateExists(res, type)
 			? predicates.checkPredicateReq(player, tile, type)
-			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, pos, player.level));
+			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, pos, player.level()));
 	}
 	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
 		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;

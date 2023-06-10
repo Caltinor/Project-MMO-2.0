@@ -19,7 +19,7 @@ public class PlayerDeathHandler {
 	
 		//IMPORTANT  this is confirmed by the call in EventHandler.  this assumption is critical to this call
 		Player player = (Player) event.getEntity();
-		Core core = Core.get(player.level);
+		Core core = Core.get(player.level());
 		
 		Map<String, Long> currentXp = new HashMap<>(core.getData().getXpMap(player.getUUID()));
 		for (Map.Entry<String, Long> skill :currentXp.entrySet()) {

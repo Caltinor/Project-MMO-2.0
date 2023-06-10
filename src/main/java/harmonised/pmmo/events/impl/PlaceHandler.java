@@ -19,16 +19,17 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
 
 public class PlaceHandler {
+	@SuppressWarnings("resource")
 	public static void handle(EntityPlaceEvent event) {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
-		Core core = Core.get(event.getEntity().getLevel());
+		Core core = Core.get(event.getEntity().level());
 		if (!core.isActionPermitted(ReqType.PLACE, event.getPos(), player)) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.PLACE, player, event.getPlacedBlock().getBlock().getName());
 			return;
 		}
-		boolean serverSide = !player.level.isClientSide;
+		boolean serverSide = !player.level().isClientSide;
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BLOCK_PLACE, event, new CompoundTag());

@@ -23,16 +23,17 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class DamageReceivedHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(LivingHurtEvent event) {
 		if (event.getEntity() instanceof Player) {			
 			Player player = (Player) event.getEntity();
 			EventType type = getSourceCategory(event.getSource());
 			if (type.equals(EventType.FROM_PLAYERS) && player.equals(event.getSource().getEntity()))
 				return;
-			Core core = Core.get(player.getLevel());
+			Core core = Core.get(player.level());
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+type.name()+" | Source Raw: "+event.getSource().getMsgId());
 			
-			boolean serverSide = !player.level.isClientSide;
+			boolean serverSide = !player.level().isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide){
 				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());

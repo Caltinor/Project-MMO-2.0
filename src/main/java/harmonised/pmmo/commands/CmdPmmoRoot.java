@@ -44,19 +44,19 @@ public class CmdPmmoRoot {
 	
 	public static int credits(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		//QOL open credits gui
-		context.getSource().sendSuccess(Component.literal("Mod by Harmony and Caltinor"), false);
+		context.getSource().sendSuccess(() -> Component.literal("Mod by Harmony and Caltinor"), false);
 		return 0;
 	}
 	
 	public static int help(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		//QOL if Patchouli is installed, open the book
-		context.getSource().sendSuccess(Component.literal("Help can be found on the wiki or in the discord"), false);
+		context.getSource().sendSuccess(() -> Component.literal("Help can be found on the wiki or in the discord"), false);
 		return 0;
 	}
 	
 	private static enum Setting{RESET, DEFAULT, OVERRIDE, DISABLER, PLAYER, SIMPLIFY}
 	public static int set(CommandContext<CommandSourceStack> context, Setting setting) throws CommandSyntaxException {
-		context.getSource().sendSuccess(switch (setting) {
+		context.getSource().sendSuccess(() -> switch (setting) {
 		case RESET -> {
 			PackGenerator.applyDefaults = false;
 			PackGenerator.applyOverride = false;
@@ -82,7 +82,7 @@ public class CmdPmmoRoot {
 			yield LangProvider.PACK_SIMPLE.asComponent();
 		}
 		case PLAYER -> {
-			PackGenerator.players.addAll(EntityArgument.getPlayers(context, "players"));
+			try {PackGenerator.players.addAll(EntityArgument.getPlayers(context, "players"));}catch(CommandSyntaxException e) {}
 			yield LangProvider.PACK_PLAYERS.asComponent();
 		}}, true);
 		return 0;

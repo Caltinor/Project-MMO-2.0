@@ -13,10 +13,11 @@ import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 
 public class AnvilRepairHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(AnvilRepairEvent event) {
-		Core core = Core.get(event.getEntity().getLevel());
+		Core core = Core.get(event.getEntity().level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !event.getEntity().level.isClientSide; 
+		boolean serverSide = !event.getEntity().level().isClientSide; 
 		if (serverSide)		
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ANVIL_REPAIR, event, new CompoundTag());
 		//Process perks

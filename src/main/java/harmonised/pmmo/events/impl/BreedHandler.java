@@ -17,17 +17,18 @@ import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
 public class BreedHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(BabyEntitySpawnEvent event) {
 		Player player = event.getCausedByPlayer();
 		//This catches if animals are bred by fake players or TEs
 		if (player == null) return;
-		Core core = Core.get(player.getLevel());
+		Core core = Core.get(player.level());
 		if (!core.isActionPermitted(ReqType.BREED, event.getChild(), player)) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.BREED, player, event.getChild().getName());
 			return;
 		}
-		boolean serverSide = !player.level.isClientSide;
+		boolean serverSide = !player.level().isClientSide;
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BREED, event, new CompoundTag());

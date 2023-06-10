@@ -29,9 +29,10 @@ import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 
 public class BreakHandler {
 	
+	@SuppressWarnings("resource")
 	public static void handle(BreakEvent event) {
-		Core core = Core.get(event.getPlayer().getLevel());
-		boolean serverSide = !event.getPlayer().level.isClientSide;
+		Core core = Core.get(event.getPlayer().level());
+		boolean serverSide = !event.getPlayer().level().isClientSide;
 		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.BREAK, event.getPlayer(), event.getState().getBlock().getName());

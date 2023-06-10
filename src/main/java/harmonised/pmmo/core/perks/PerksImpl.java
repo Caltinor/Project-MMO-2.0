@@ -85,8 +85,8 @@ public class PerksImpl {
 	public static final Perk TAME_BOOST = Perk.begin()
 			.addDefaults(TagBuilder.start().withString(APIUtils.SKILLNAME, "taming").withDouble(APIUtils.PER_LEVEL, 1d).build())
 			.setStart((player, nbt) -> {
-				if (player.level instanceof ServerLevel) {
-					ServerLevel world = (ServerLevel) player.level;
+				if (player.level() instanceof ServerLevel) {
+					ServerLevel world = (ServerLevel) player.level();
 					UUID animalID = nbt.getUUID(ANIMAL_ID);
 					LivingEntity animal = (LivingEntity) world.getEntities().get(animalID);
 					if (animal == null) return NONE;

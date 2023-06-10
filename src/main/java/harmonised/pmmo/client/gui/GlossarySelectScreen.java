@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -17,7 +15,7 @@ import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -89,15 +87,14 @@ public class GlossarySelectScreen extends Screen{
 	}
 
 	@Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(stack);
-		super.render(stack, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+		renderBackground(graphics);
+		super.render(graphics, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
-    public void renderBackground(PoseStack stack) {
-		RenderSystem.setShaderTexture(0, GUI_BG);
-        GuiComponent.blit(stack,  renderX, renderY, 0, 0,  256, 256);
+    public void renderBackground(GuiGraphics graphics) {
+        graphics.blit(GUI_BG,  renderX, renderY, 0, 0,  256, 256);
 	}
 	
 	@Override

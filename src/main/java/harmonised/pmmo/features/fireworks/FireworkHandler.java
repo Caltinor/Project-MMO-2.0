@@ -24,7 +24,7 @@ public class FireworkHandler {
 			.addDefaults(TagBuilder.start().withString(APIUtils.SKILLNAME, "none").build())
 			.setStart((player, nbt) -> {
 				BlockPos pos = player.blockPosition();
-				spawnRocket(player.getLevel(), new Vec3(pos.getX(), pos.getY(), pos.getZ()), nbt.getString(FIREWORK_SKILL));
+				spawnRocket(player.level(), new Vec3(pos.getX(), pos.getY(), pos.getZ()), nbt.getString(FIREWORK_SKILL));
 				return new CompoundTag();
 			})
 			.setDescription(LangProvider.PERK_FIREWORK_DESC.asComponent())

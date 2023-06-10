@@ -21,7 +21,7 @@ public class LoginHandler {
 
 	public static void handle(PlayerLoggedInEvent event) {		
 		Player player = event.getEntity();
-		Core core = Core.get(player.level);
+		Core core = Core.get(player.level());
 		
 		if (core.getSide().equals(LogicalSide.SERVER)) {
 			//===========UPDATE DATA MIRROR=======================

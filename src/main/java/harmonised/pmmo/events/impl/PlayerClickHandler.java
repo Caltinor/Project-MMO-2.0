@@ -25,10 +25,11 @@ import net.minecraftforge.eventbus.api.Event.Result;
 
 public class PlayerClickHandler {
 
+	@SuppressWarnings("resource")
 	public static void leftClickBlock(LeftClickBlock event ) {
 		Player player = event.getEntity();
-		Core core = Core.get(player.level);
-		boolean serverSide = !player.level.isClientSide;
+		Core core = Core.get(player.level());
+		boolean serverSide = !player.level().isClientSide;
 		
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
 			event.setUseBlock(Result.DENY);
@@ -53,16 +54,17 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.HIT_BLOCK, player, new CompoundTag()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getExperienceAwards(EventType.HIT_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.HIT_BLOCK, event.getPos(), player.level(), event.getEntity(), hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	public static void rightClickBlock(RightClickBlock event) {
 		Player player = event.getEntity();
-		Core core = Core.get(player.level);
-		boolean serverSide = !player.level.isClientSide;
+		Core core = Core.get(player.level());
+		boolean serverSide = !player.level().isClientSide;
 		
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
 			event.setUseBlock(Result.DENY);
@@ -91,16 +93,17 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_BLOCK, player, new CompoundTag()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ACTIVATE_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ACTIVATE_BLOCK, event.getPos(), player.level(), event.getEntity(), hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	public static void rightClickItem(RightClickItem event) {
 		Player player = event.getEntity();
-		Core core = Core.get(player.level);
-		boolean serverSide = !player.level.isClientSide;
+		Core core = Core.get(player.level());
+		boolean serverSide = !player.level().isClientSide;
 		
 		if (!core.isActionPermitted(ReqType.USE, event.getItemStack(), player)) {
 			event.setCancellationResult(InteractionResult.FAIL);

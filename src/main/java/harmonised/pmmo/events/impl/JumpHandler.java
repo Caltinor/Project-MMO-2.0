@@ -17,6 +17,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 
 public class JumpHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(LivingJumpEvent event) {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
@@ -25,9 +26,9 @@ public class JumpHandler {
 		if (player.isSprinting()) type = EventType.SPRINT_JUMP;
 		else if (player.isCrouching()) type = EventType.CROUCH_JUMP;
 		
-		Core core = Core.get(player.getLevel());
+		Core core = Core.get(player.level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !player.level.isClientSide; 
+		boolean serverSide = !player.level().isClientSide; 
 		if (serverSide){			
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
 			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
