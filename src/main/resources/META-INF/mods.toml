@@ -1,29 +1,29 @@
 modLoader="javafml" 
-loaderVersion="[46,)" 
+loaderVersion="${loader_version_range}" 
 license="All rights reserved"
 issueTrackerURL="https://github.com/Caltinor/Project-MMO-2.0/issues/"
 
 [[mods]]
-modId="pmmo"
-version="${file.jarVersion}"
-displayName="Project MMO"
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
 logoFile="star.png"
 credits="MMD were there when this mod needed them, including the start"
-authors="Harmonised"
+authors="Caltinor"
 description='''
 Adds many different skills and benefits thanks to the skills to the game!
 '''
 
-[[dependencies.pmmo]] #optional
+[[dependencies.${mod_id}]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[46.0.1,)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"  
 
-[[dependencies.pmmo]]
+[[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.20,1.21)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"

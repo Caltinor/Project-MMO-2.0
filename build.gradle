@@ -19,8 +19,8 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
 mixin {
-    config "pmmo.mixins.json"
-    add sourceSets.main, "pmmo.refmap.json"
+    config "${mod_id}.mixins.json"
+    add sourceSets.main, "${mod_id}.refmap.json"
     disableEclipseAddon = true
 
     debug.export = true
@@ -42,16 +42,16 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.20-0.0.1'
-group = 'harmonised.pmmo'
-archivesBaseName = 'pmmo'
+version = "${minecraft_version}-${mod_version}"
+group = "harmonised.${mod_id}"
+archivesBaseName = "${mod_id}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
 	copyIdeResources = true
-    mappings channel: 'parchment', version: '1.19.3-2023.03.12-1.20'
+    mappings channel: 'parchment', version: "1.19.3-2023.03.12-${minecraft_version}"
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -60,7 +60,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                pmmo {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -71,7 +71,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                pmmo {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -81,9 +81,9 @@ minecraft {
             workingDirectory project.file('run/client')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'pmmo', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
-                pmmo {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -94,7 +94,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20-46.0.12'
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
@@ -123,31 +123,37 @@ dependencies {
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
-//def replaceProperties = [
-//        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-//        forge_version: forge_version, forge_version_range: forge_version_range,
-//        loader_version_range: loader_version_range,
-//        mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-//        mod_authors: mod_authors, mod_description: mod_description
-//]
-//processResources {
-//    inputs.properties replaceProperties
-//    replaceProperties.put 'project', project
+def replaceProperties = [
+        minecraft_version: minecraft_version, 
+		minecraft_version_range: minecraft_version_range,
+        forge_version: forge_version, 
+        forge_version_range: forge_version_range,
+        loader_version_range: loader_version_range,
+        mod_id: mod_id, 
+		mod_name: mod_name, 
+//        mod_license: mod_license, 
+        mod_version: mod_version
+//        mod_authors: mod_authors, 
+//        mod_description: mod_description
+]
+processResources {
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
 
-//    filesMatching(resourceTargets) {
-//        expand replaceProperties
-//    }
-//}
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
+}
 
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "Project MMO 2.0",
-                "Specification-Vendor"    : "Project PMMO",
+                "Specification-Title"     : "${mod_name} 2.0",
+                "Specification-Vendor"    : "${mod_name}",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "Project PMMO",
+                "Implementation-Vendor"   : "${mod_name}",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

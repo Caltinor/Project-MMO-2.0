@@ -1,6 +1,6 @@
 {
     "pack": {
-        "description": "Project MMO resources",
-        "pack_format": 8
+        "description": "${mod_name} resources",
+        "pack_format": 15
     }
 }
