@@ -1,0 +1,884 @@
+{
+	"nbt_requirements": {
+		"TOOL": [
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/basic_blade_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/oak", "basic_blade/birch", "basic_blade/acacia", "basic_blade/jungle", "basic_blade/spruce", "basic_blade/dark_oak", "basic_blade/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/stone"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/andesite", "basic_blade/diorite", "basic_blade/granite", "basic_blade/copper"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/flint"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/iron"],
+								"value": {
+									"combat": 30
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/gold"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/blackstone", "basic_blade/obsidian"],
+								"value": {
+									"combat": 25
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/netherite"],
+								"value": {
+									"combat": 90
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/emerald"],
+								"value": {
+									"combat": 40
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_blade/diamond"],
+								"value": {
+									"combat": 60
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/basic_hilt_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["basic_hilt/oak", "basic_hilt/birch", "basic_hilt/acacia", "basic_hilt/jungle", "basic_hilt/spruce", "basic_hilt/dark_oak", "basic_hilt/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_hilt/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_hilt/iron"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_hilt/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_hilt/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/binding_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["binding/string", "binding/weeping_vine", "binding/vine", "binding/twisting_vine", "binding/leather", "binding/hide"],
+								"value": {
+									"combat": 1
+                                }
+                            }, {
+								"operator": "EQUALS",
+								"comparators": ["binding/phantom_membrane", "binding/dragon_sinew"],
+								"value": {
+									"combat": 2
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/counterweight_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["counterweight/oak", "counterweight/birch", "counterweight/acacia", "counterweight/jungle", "counterweight/spruce", "counterweight/dark_oak", "counterweight/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/stone"],
+								"value": {
+									"combat": 2
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/andesite", "counterweight/diorite", "counterweight/granite", "counterweight/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/flint"],
+								"value": {
+									"combat": 2
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/iron"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/blackstone", "counterweight/obsidian"],
+								"value": {
+									"combat": 12
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/emerald"],
+								"value": {
+									"combat": 20
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["counterweight/diamond"],
+								"value": {
+									"combat": 30
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/decorative_pommel_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/oak", "decorative_pommel/birch", "decorative_pommel/acacia", "decorative_pommel/jungle", "decorative_pommel/spruce", "decorative_pommel/dark_oak", "decorative_pommel/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/stone"],
+								"value": {
+									"combat": 2
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/andesite", "decorative_pommel/diorite", "decorative_pommel/granite", "decorative_pommel/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/flint"],
+								"value": {
+									"combat": 2
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/iron"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/blackstone", "decorative_pommel/obsidian"],
+								"value": {
+									"combat": 12
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/emerald"],
+								"value": {
+									"combat": 20
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["decorative_pommel/diamond"],
+								"value": {
+									"combat": 30
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/forefinger_ring_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["forefinger_ring/oak", "forefinger_ring/birch", "forefinger_ring/acacia", "forefinger_ring/jungle", "forefinger_ring/spruce", "forefinger_ring/dark_oak", "forefinger_ring/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["forefinger_ring/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["forefinger_ring/iron"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["forefinger_ring/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["forefinger_ring/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/grip_loop_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["grip_loop/oak", "grip_loop/birch", "grip_loop/acacia", "grip_loop/jungle", "grip_loop/spruce", "grip_loop/dark_oak", "grip_loop/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["grip_loop/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["grip_loop/iron"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["grip_loop/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["grip_loop/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["grip_loop/string", "grip_loop/weeping_vine", "grip_loop/vine", "grip_loop/twisting_vine", "grip_loop/leather", "grip_loop/hide"],
+								"value": {
+									"combat": 1
+                                }
+                            }, {
+								"operator": "EQUALS",
+								"comparators": ["grip_loop/phantom_membrane", "grip_loop/dragon_sinew"],
+								"value": {
+									"combat": 2
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/heavy_blade_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/oak", "heavy_blade/birch", "heavy_blade/acacia", "heavy_blade/jungle", "heavy_blade/spruce", "heavy_blade/dark_oak", "heavy_blade/bone"],
+								"value": {
+									"combat": 1
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/stone"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/andesite", "heavy_blade/diorite", "heavy_blade/granite", "heavy_blade/copper"],
+								"value": {
+									"combat": 8
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/flint"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/iron"],
+								"value": {
+									"combat": 12
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/gold"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/blackstone", "heavy_blade/obsidian"],
+								"value": {
+									"combat": 25
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/netherite"],
+								"value": {
+									"combat": 90
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/emerald"],
+								"value": {
+									"combat": 40
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heavy_blade/diamond"],
+								"value": {
+									"combat": 60
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["shield/howling_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["howling/oak", "howling/birch", "howling/acacia", "howling/jungle", "howling/spruce", "howling/dark_oak"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["howling/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["howling/iron", "howling/shulker_shell"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["howling/gold", "howling/turtle_scute"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["howling/netherite", "howling/vent_plate"],
+								"value": {
+									"combat": 45
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/machete_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["machete/oak", "machete/birch", "machete/acacia", "machete/jungle", "machete/spruce", "machete/dark_oak", "machete/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/stone"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/andesite", "machete/diorite", "machete/granite", "machete/copper"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/flint"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/iron"],
+								"value": {
+									"combat": 30
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/gold"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/blackstone", "machete/obsidian"],
+								"value": {
+									"combat": 25
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/netherite"],
+								"value": {
+									"combat": 90
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/emerald"],
+								"value": {
+									"combat": 40
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["machete/diamond"],
+								"value": {
+									"combat": 60
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/makeshift_guard_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/oak", "makeshift_guard/birch", "makeshift_guard/acacia", "makeshift_guard/jungle", "makeshift_guard/spruce", "makeshift_guard/dark_oak", "makeshift_guard/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/stone"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/andesite", "makeshift_guard/diorite", "makeshift_guard/granite", "makeshift_guard/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/flint"],
+								"value": {
+									"combat": 2
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/iron"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/blackstone", "makeshift_guard/obsidian"],
+								"value": {
+									"combat": 12
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/emerald"],
+								"value": {
+									"combat": 20
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["makeshift_guard/diamond"],
+								"value": {
+									"combat": 30
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/reinforced_fuller_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["reinforced_fuller/oak", "reinforced_fuller/birch", "reinforced_fuller/acacia", "reinforced_fuller/jungle", "reinforced_fuller/spruce", "reinforced_fuller/dark_oak", "reinforced_fuller/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["reinforced_fuller/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["reinforced_fuller/iron"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["reinforced_fuller/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["reinforced_fuller/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["reinforced_fuller/forged_beam"],
+								"value": {
+									"combat": 50
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/short_blade_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["short_blade/oak", "short_blade/birch", "short_blade/acacia", "short_blade/jungle", "short_blade/spruce", "short_blade/dark_oak", "short_blade/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/stone"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/andesite", "short_blade/diorite", "short_blade/granite", "short_blade/copper"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/flint"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/iron"],
+								"value": {
+									"combat": 30
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/gold"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/blackstone", "short_blade/obsidian"],
+								"value": {
+									"combat": 25
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/netherite"],
+								"value": {
+									"combat": 90
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/emerald"],
+								"value": {
+									"combat": 40
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/diamond"],
+								"value": {
+									"combat": 60
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/sturdy_guard_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["sturdy_guard/bone"],
+								"value": {
+									"combat": 1
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["sturdy_guard/copper"],
+								"value": {
+									"combat": 4
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["sturdy_guard/iron", "sturdy_guard/turtle_scute"],
+								"value": {
+									"combat": 6
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["sturdy_guard/gold", "sturdy_guard/shulker_shell"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["sturdy_guard/netherite", "sturdy_guard/vent_plate"],
+								"value": {
+									"combat": 25
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["sword/short_blade_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["short_blade/bone"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/copper"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/iron"],
+								"value": {
+									"combat": 30
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/gold"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/netherite"],
+								"value": {
+									"combat": 90
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/emerald"],
+								"value": {
+									"combat": 40
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["short_blade/diamond"],
+								"value": {
+									"combat": 60
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["shield/wide_guard_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["wide_guard/oak", "wide_guard/birch", "wide_guard/acacia", "wide_guard/jungle", "wide_guard/spruce", "wide_guard/dark_oak", "wide_guard/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["wide_guard/copper"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["wide_guard/iron", "wide_guard/shulker_shell"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["wide_guard/gold", "wide_guard/turtle_scute"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["wide_guard/netherite", "wide_guard/vent_plate"],
+								"value": {
+									"combat": 45
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+}
