@@ -1,0 +1,240 @@
+{
+	"nbt_requirements": {
+		"TOOL": [
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["shield/basic_grip_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["basic_grip/bone", "basic_grip/oak", "basic_grip/birch", "basic_grip/acacia", "basic_grip/jungle", "basic_grip/spruce", "basic_grip/dark_oak", "basic_grip/stick"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_grip/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_grip/iron", "basic_grip/blaze_rod", "basic_grip/end_rod"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_grip/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_grip/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["basic_grip/forged_beam"],
+								"value": {
+									"combat": 45
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["shield/buckler_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["buckler/bone", "buckler/oak", "buckler/birch", "buckler/acacia", "buckler/jungle", "buckler/spruce", "buckler/dark_oak"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["buckler/copper"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["buckler/iron"],
+								"value": {
+									"combat": 30
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["buckler/gold"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["buckler/netherite", "buckler/vent_plate"],
+								"value": {
+									"combat": 90
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["shield/heater_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["heater/bone", "heater/oak", "heater/birch", "heater/acacia", "heater/jungle", "heater/spruce", "heater/dark_oak"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heater/copper"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heater/iron"],
+								"value": {
+									"combat": 30
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heater/gold"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["heater/netherite", "heater/vent_plate"],
+								"value": {
+									"combat": 90
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["shield/tower_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["tower/bone", "tower/oak", "tower/birch", "tower/acacia", "tower/jungle", "tower/spruce", "tower/dark_oak"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["tower/copper"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["tower/iron"],
+								"value": {
+									"combat": 30
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["tower/gold"],
+								"value": {
+									"combat": 10
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["tower/netherite", "tower/vent_plate"],
+								"value": {
+									"combat": 90
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["shield/spike_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["spike/bone"],
+								"value": {
+									"combat": 0
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["spike/copper"],
+								"value": {
+									"combat": 7
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["spike/iron"],
+								"value": {
+									"combat": 15
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["spike/gold"],
+								"value": {
+									"combat": 5
+								}
+							}, {
+								"operator": "EQUALS",
+								"comparators": ["spike/netherite"],
+								"value": {
+									"combat": 45
+								}
+							}
+						]
+					}
+				]
+			},
+            {
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": false,
+				"cases": [
+                    {
+						"paths": ["shield/straps_material"],
+						"criteria": [{
+								"operator": "EQUALS",
+								"comparators": ["straps/string", "straps/weeping_vine", "straps/vine", "straps/twisting_vine", "straps/leather", "straps/hide"],
+								"value": {
+									"combat": 1
+                                }
+                            }, {
+								"operator": "EQUALS",
+								"comparators": ["straps/phantom_membrane", "straps/dragon_sinew"],
+								"value": {
+									"combat": 2
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+}
