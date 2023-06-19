@@ -20,8 +20,9 @@ public class BreedHandler {
 	public static void handle(BabyEntitySpawnEvent event) {
 		Player player = event.getCausedByPlayer();
 		//This catches if animals are bred by fake players or TEs
-		if (player == null) return;
+		if (player == null || event.getChild() == null) return;
 		Core core = Core.get(player.getLevel());
+
 		if (!core.isActionPermitted(ReqType.BREED, event.getChild(), player)) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.BREED, player, event.getChild().getName());
