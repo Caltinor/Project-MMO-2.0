@@ -54,7 +54,8 @@ public class PackGenerator {
 	public static final String DISABLER = "pmmo_disabler_pack";
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	public static boolean applyOverride = false, applyDefaults = false, applyDisabler = false, applySimple = false;
-	public static List<ServerPlayer> players = new ArrayList<>();
+	public static List<String> namespaceFilter = new ArrayList<>();
+	public static Set<ServerPlayer> players = new HashSet<>();
 	
 	private enum Category {
 		@SuppressWarnings("unchecked")
@@ -209,7 +210,10 @@ public class PackGenerator {
 		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
 
 		for (Category category : Category.values()) {
-			for (ResourceLocation id : category.valueList.apply(server)) {
+			Collection<ResourceLocation> filteredList = namespaceFilter.isEmpty() || category == Category.TAGS
+					? category.valueList.apply(server)
+					: category.valueList.apply(server).stream().filter(id -> namespaceFilter.contains(id.getNamespace())).toList();
+			for (ResourceLocation id : filteredList) {
 				int index = id.getPath().lastIndexOf('/');
 				String pathRoute = id.getPath().substring(0, index >= 0 ? index : 0);
 				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route+"/"+pathRoute);
