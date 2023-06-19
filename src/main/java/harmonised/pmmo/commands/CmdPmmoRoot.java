@@ -1,6 +1,7 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -9,7 +10,9 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraftforge.fml.ModList;
 
 public class CmdPmmoRoot {
 	
@@ -29,6 +32,13 @@ public class CmdPmmoRoot {
 								.executes(ctx -> set(ctx, Setting.DEFAULT)))
 						.then(Commands.literal("simplified")
 								.executes(ctx -> set(ctx, Setting.SIMPLIFY)))
+						.then(Commands.literal("modFilter")
+							.then(Commands.argument("namespace", StringArgumentType.word())
+									.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(ModList.get().getMods()
+											.stream().map(modInfo -> modInfo.getNamespace())
+											//special exclusions 
+											.filter(modid -> !modid.equals("pmmo") && !modid.equals("forge")), builder))
+									.executes(ctx -> set(ctx, Setting.FILTER))))
 						.then(Commands.literal("forPlayers")
 							.then(Commands.argument("players", EntityArgument.players())
 									.executes(ctx -> set(ctx, Setting.PLAYER))))
@@ -54,7 +64,7 @@ public class CmdPmmoRoot {
 		return 0;
 	}
 	
-	private static enum Setting{RESET, DEFAULT, OVERRIDE, DISABLER, PLAYER, SIMPLIFY}
+	private static enum Setting{RESET, DEFAULT, OVERRIDE, DISABLER, PLAYER, SIMPLIFY, FILTER}
 	public static int set(CommandContext<CommandSourceStack> context, Setting setting) throws CommandSyntaxException {
 		context.getSource().sendSuccess(switch (setting) {
 		case RESET -> {
@@ -63,6 +73,7 @@ public class CmdPmmoRoot {
 			PackGenerator.applyDisabler = false;
 			PackGenerator.applySimple = false;
 			PackGenerator.players.clear();
+			PackGenerator.namespaceFilter.clear();
 			yield LangProvider.PACK_BEGIN.asComponent();
 		}
 		case DEFAULT -> {
@@ -84,7 +95,12 @@ public class CmdPmmoRoot {
 		case PLAYER -> {
 			PackGenerator.players.addAll(EntityArgument.getPlayers(context, "players"));
 			yield LangProvider.PACK_PLAYERS.asComponent();
+		}
+		case FILTER -> {
+			PackGenerator.namespaceFilter.add(StringArgumentType.getString(context, "namespace"));
+			yield LangProvider.PACK_FILTER.asComponent();
 		}}, true);
+		
 		return 0;
 	}
 }
