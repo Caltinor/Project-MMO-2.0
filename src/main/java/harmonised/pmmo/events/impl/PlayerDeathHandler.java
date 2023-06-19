@@ -12,12 +12,13 @@ public class PlayerDeathHandler {
 
 	public static void handle(LivingDeathEvent event) {
 		//we can skip the heavier instanceof calculation if there is no loss on death
+		if (Config.LOSS_ON_DEATH.get() == 0.0) return;
 		double lossRatio = Config.LOSS_ON_DEATH.get() == 1.0 
 				? 1.0
 				: 1 - Config.LOSS_ON_DEATH.get();
-		if (lossRatio <= 0) return;
+		if (lossRatio <= 0d) return;
 	
-		//IMPORTANT  this is confirmed by the call in EventHandler.  this assumption is critical to this call
+		//IMPORTANT  this is confirmed by the call in EventHandler.  this assumption is critical to this cast
 		Player player = (Player) event.getEntity();
 		Core core = Core.get(player.level);
 		
@@ -34,7 +35,7 @@ public class PlayerDeathHandler {
 				else {
 					losableXp = Math.min(
 							Double.valueOf(losableXp - levelXpThreshold).longValue(), 
-							Double.valueOf(losableXp * (1 -lossRatio)).longValue());
+							Double.valueOf(losableXp * lossRatio).longValue());
 					finalXp -= losableXp;
 				}					
 			}
