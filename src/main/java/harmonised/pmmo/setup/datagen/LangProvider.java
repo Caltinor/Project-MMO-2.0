@@ -1950,6 +1950,8 @@ public class LangProvider extends LanguageProvider{
 		.addLocale(Locale.EN_US, "Generated pack will now include the selected player files").build();
 	public static final Translation PACK_SIMPLE = Translation.Builder.start("pmmo.cmd.pack.simple")
 		.addLocale(Locale.EN_US, "Generated pack will exclude unused properties.").build();
+	public static final Translation PACK_FILTER = Translation.Builder.start("pmmo.cmd.pack.filter")
+		.addLocale(Locale.EN_US, "Generated pack will only include files from this namespace").build();
 	
 	//=========DENIAL MESSAGES====================
 	public static final Translation DENIAL_WEAR = Translation.Builder.start("pmmo.msg.denial.wear")
