@@ -120,6 +120,7 @@ dependencies {
   	//runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.25')
   	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
   	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
+  	//runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
