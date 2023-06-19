@@ -10,6 +10,8 @@ import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.TagBuilder;
+import harmonised.pmmo.util.TagUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -21,7 +23,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
@@ -38,11 +39,17 @@ public class PerksImpl {
 	public static Perk BREAK_SPEED = Perk.begin()
 			.addDefaults(getDefaults())
 			.setStart((player, nbt) -> {
-				float speedIn = nbt.contains(APIUtils.BREAK_SPEED_INPUT_VALUE) ? nbt.getFloat(APIUtils.BREAK_SPEED_INPUT_VALUE) : player.getMainHandItem().getDestroySpeed(Blocks.OBSIDIAN.defaultBlockState());
+				float speedIn = TagUtils.getFloat(nbt, APIUtils.BREAK_SPEED_INPUT_VALUE,
+						player.getMainHandItem().getDestroySpeed(player.level().getBlockState(
+								TagUtils.getBlockPos(nbt, APIUtils.BLOCK_POS, new BlockPos(0,0,0)))));
 				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
+				System.out.println("speedBonuse: %s".formatted(speedBonus));//TODO remove
 				if (speedBonus == 0) return NONE;
-				float newSpeed = speedIn * Math.max(0, 1 + nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus);
-				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, newSpeed).build();
+				
+				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus);
+				System.out.println("per-Perk speedIn: %s".formatted(speedIn)); //TODO remove
+				System.out.println("per-Perk speedOut: %s".formatted(speedModification)); //TODO remove
+				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			})
 			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())
 			.setStatus((player, settings) -> {
@@ -68,7 +75,7 @@ public class PerksImpl {
 	public static CompoundTag getDefaults() {
 		TagBuilder builder = TagBuilder.start();
 		for (ToolAction action : DIG_ACTIONS) {
-			builder.withFloat(action.name(), 0);
+			builder.withFloat(action.name(), 0f);
 		}
 		return builder.build();
 	}

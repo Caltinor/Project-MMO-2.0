@@ -2,6 +2,8 @@ package harmonised.pmmo.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.FloatTag;
@@ -94,5 +96,13 @@ public class TagUtils {
 		CompoundTag dataOut = new CompoundTag();
 		state.getProperties().forEach(prop -> dataOut.putString(prop.getName(), state.getValue(prop).toString()));
 		return dataOut;
+	}
+	
+	public static float getFloat(CompoundTag nbt, String key, float ifAbsent) {
+		return nbt.contains(key) ? nbt.getFloat(key) : ifAbsent;
+	}
+	
+	public static BlockPos getBlockPos(CompoundTag nbt, String key, BlockPos ifAbsent) {
+		return nbt.contains(key) ? BlockPos.of(nbt.getLong(key)) : ifAbsent;
 	}
 }
