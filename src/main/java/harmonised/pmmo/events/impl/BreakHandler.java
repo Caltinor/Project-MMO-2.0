@@ -20,7 +20,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,11 +63,10 @@ public class BreakHandler {
 		}
 		//==============Process Vein Miner Logic==================
 		if (core.getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
-			BlockState block = event.getWorld().getBlockState(event.getPos());
-			if (event.getPlayer().getMainHandItem().getItem() instanceof TieredItem) {
-				TieredItem item = (TieredItem) event.getPlayer().getMainHandItem().getItem();
-				if (item.isCorrectToolForDrops(event.getPlayer().getMainHandItem(), block) && !Config.VEIN_BLACKLIST.get().contains(RegistryUtil.getId(item).toString())) 
-					VeinMiningLogic.applyVein((ServerPlayer) event.getPlayer(), event.getPos());
+			BlockState block = event.getLevel().getBlockState(event.getPos());
+			Item tool = event.getPlayer().getMainHandItem().getItem();
+			if (tool.isCorrectToolForDrops(block) && !Config.VEIN_BLACKLIST.get().contains(RegistryUtil.getId(tool).toString())) {
+				VeinMiningLogic.applyVein((ServerPlayer) event.getPlayer(), event.getPos());
 			}
 		}
 	}
