@@ -81,7 +81,7 @@ jobs:
           key: ${{ github.sha }}
       - name: Upload to CurseForge
         if: ${{ vars.MODREPO == 'curseforge' || vars.MODREPO == 'both' }}
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 353935
           curseforge-token: ${{ secrets.curseforge_api }}
@@ -101,7 +101,7 @@ jobs:
             ${{ needs.setup.outputs.java_version }}
       - name: Upload to Modrinth
         if: ${{ vars.MODREPO == 'modrinth' || vars.MODREPO == 'both' }}
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: KFQYC1Uy
           modrinth-token: ${{ secrets.modrinth_api }}
