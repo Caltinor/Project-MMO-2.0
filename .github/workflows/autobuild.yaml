@@ -2,11 +2,11 @@ name: Build and upload mod
 on:
   push:
     branches:
-      - 'main'
+      - '1.19.4'
   release:
     types: [ published ]
     branches:
-      - 'main'
+      - '1.19.4'
 
 jobs:
   setup:
