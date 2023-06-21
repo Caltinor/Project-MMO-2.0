@@ -31,13 +31,13 @@ jobs:
           echo "java_version=$(cat ./build.gradle | grep -o -P '(?<=JavaLanguageVersion.of\().*(?=\))')" >> $GITHUB_OUTPUT
       - name: MC Patch Version
         id: patchversion
-        run: echo "mc_patch_version=$(echo ${{ steps.moddetails.outputs.mod_version }} | awk -F- '{ print $1 }')" >> $GITHUB_OUTPUT
+        run: echo "mc_patch_version=$(cat ./gradle.properties  sed -n 's/minecraft_version \= //p' | tr -d "'")" >> $GITHUB_OUTPUT
       - name: MC Minor Version
         id: minorversion
         run: echo "mc_minor_version=$(echo ${{ steps.patchversion.outputs.mc_patch_version }} | awk -F. '{ print $1"."$2 }')" >> $GITHUB_OUTPUT
       - name: Get Details
         id: filepath
-        run: echo "file_path=./build/libs/${{ steps.moddetails.outputs.mod_name }}-${{ steps.moddetails.outputs.mod_version }}.jar" >> $GITHUB_OUTPUT
+        run: echo "file_path=./build/libs/${{ steps.moddetails.outputs.mod_name }}-${{ steps.moddetails.outputs.mc_patch_version}}-${{ steps.moddetails.outputs.mod_version }}.jar" >> $GITHUB_OUTPUT
 
   build:
     name: Build and cache
