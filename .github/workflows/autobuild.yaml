@@ -26,8 +26,8 @@ jobs:
       - name: Get Details
         id: moddetails
         run: |
-          echo "mod_name=$(cat ./build.gradle | sed -n 's/archivesBaseName \= //p' | tr -d "'")" >> $GITHUB_OUTPUT
-          echo "mod_version=$(cat ./build.gradle | sed -n 's/version \= //p' | tr -d "'")" >> $GITHUB_OUTPUT
+          echo "mod_name=$(cat ./gradle.properties | sed -n 's/mod_id \= //p' | tr -d "'")" >> $GITHUB_OUTPUT
+          echo "mod_version=$(cat ./gradle.properties | sed -n 's/mod_version \= //p' | tr -d "'")" >> $GITHUB_OUTPUT
           echo "java_version=$(cat ./build.gradle | grep -o -P '(?<=JavaLanguageVersion.of\().*(?=\))')" >> $GITHUB_OUTPUT
       - name: MC Patch Version
         id: patchversion
@@ -86,6 +86,7 @@ jobs:
           curseforge-token: ${{ secrets.curseforge_api }}
 
           files: |
+            ${{ needs.setup.outputs.file_path }}
             build/libs/!(*-@(dev|sources|javadoc)).jar
             build/libs/*-@(dev|sources|javadoc).jar
 
@@ -108,6 +109,7 @@ jobs:
           modrinth-token: ${{ secrets.modrinth_api }}
 
           files: |
+            ${{ needs.setup.outputs.file_path }}
             build/libs/!(*-@(dev|sources|javadoc)).jar
             build/libs/*-@(dev|sources|javadoc).jar
 
