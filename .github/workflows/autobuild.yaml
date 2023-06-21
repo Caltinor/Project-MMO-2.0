@@ -31,7 +31,7 @@ jobs:
           echo "java_version=$(cat ./build.gradle | grep -o -P '(?<=JavaLanguageVersion.of\().*(?=\))')" >> $GITHUB_OUTPUT
       - name: MC Patch Version
         id: patchversion
-        run: echo "mc_patch_version=$(cat ./gradle.properties  sed -n 's/minecraft_version \= //p' | tr -d "'")" >> $GITHUB_OUTPUT
+        run: echo "mc_patch_version=$(cat ./gradle.properties | sed -n 's/minecraft_version \= //p' | tr -d "'")" >> $GITHUB_OUTPUT
       - name: MC Minor Version
         id: minorversion
         run: echo "mc_minor_version=$(echo ${{ steps.patchversion.outputs.mc_patch_version }} | awk -F. '{ print $1"."$2 }')" >> $GITHUB_OUTPUT
