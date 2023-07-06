@@ -1,7 +1,9 @@
 package harmonised.pmmo.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -35,16 +37,16 @@ public class TagUtils {
 		}
 		for (String key : allKeys) {
 			if (tag1.contains(key) && tag2.contains(key)) {
-				if (tag1.get(key) instanceof NumericTag) {
-					if (tag1.get(key) instanceof DoubleTag)
+				if (tag1.get(key) instanceof NumericTag numTag) {
+					if (numTag instanceof DoubleTag)
 						output.putDouble(key, tag1.getDouble(key) + tag2.getDouble(key));
-					else if (tag1.get(key) instanceof FloatTag)
+					else if (numTag instanceof FloatTag)
 						output.putFloat(key, tag1.getFloat(key) + tag2.getFloat(key));
-					else if (tag1.get(key) instanceof IntTag)
+					else if (numTag instanceof IntTag)
 						output.putInt(key, tag1.getInt(key) + tag2.getInt(key));
-					else if (tag1.get(key) instanceof LongTag)
+					else if (numTag instanceof LongTag)
 						output.putLong(key, tag1.getLong(key) + tag2.getLong(key));
-					else if (tag1.get(key) instanceof ShortTag) 
+					else if (numTag instanceof ShortTag) 
 						output.putShort(key, (short)(tag1.getShort(key) + tag2.getShort(key)));
 					else
 						output.put(key, tag1.get(key));
