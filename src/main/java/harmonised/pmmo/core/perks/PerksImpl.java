@@ -10,8 +10,6 @@ import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.TagBuilder;
-import harmonised.pmmo.util.TagUtils;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -39,16 +37,10 @@ public class PerksImpl {
 	public static Perk BREAK_SPEED = Perk.begin()
 			.addDefaults(getDefaults())
 			.setStart((player, nbt) -> {
-				float speedIn = TagUtils.getFloat(nbt, APIUtils.BREAK_SPEED_INPUT_VALUE,
-						player.getMainHandItem().getDestroySpeed(player.level().getBlockState(
-								TagUtils.getBlockPos(nbt, APIUtils.BLOCK_POS, new BlockPos(0,0,0)))));
 				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
-				System.out.println("speedBonuse: %s".formatted(speedBonus));//TODO remove
 				if (speedBonus == 0) return NONE;
 				
 				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus);
-				System.out.println("per-Perk speedIn: %s".formatted(speedIn)); //TODO remove
-				System.out.println("per-Perk speedOut: %s".formatted(speedModification)); //TODO remove
 				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			})
 			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())

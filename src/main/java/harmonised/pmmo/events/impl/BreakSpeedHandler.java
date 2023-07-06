@@ -73,7 +73,6 @@ public class BreakSpeedHandler {
 		if (perkDataOut.contains(APIUtils.BREAK_SPEED_OUTPUT_VALUE)) {
 			float newSpeed = event.getNewSpeed() * (1 + Math.max(0, perkDataOut.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE)));
 			event.setNewSpeed(newSpeed);
-			System.out.println("newSpeed: %s, ogSpeed: %s".formatted(newSpeed, event.getOriginalSpeed()));//TODO remove
 			resultCache.put(event.getEntity().getUUID(), 
 					new DetailsCache(event.getEntity().getMainHandItem(), event.getPosition().orElse(new BlockPos(0,0,0)), event.getState(), event.getEntity().onGround(), false, newSpeed));
 		}			

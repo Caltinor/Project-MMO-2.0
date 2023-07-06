@@ -69,7 +69,6 @@ public class PerkRegistry {
 			tickTracker.add(new TickSchedule(perk, player, src, new AtomicInteger(0)));
 			if (src.contains(APIUtils.COOLDOWN))
 				coolTracker.add(new PerkCooldown(perkID, player, src, player.level().getGameTime()));
-			System.out.println("output: %s, perkOutput: %s".formatted(output, executionOutput));//TODO remove
 			output.merge(TagUtils.mergeTags(output, executionOutput));
 		});
 		return output;
