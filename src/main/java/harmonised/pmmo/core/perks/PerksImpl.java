@@ -21,7 +21,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
@@ -38,11 +37,11 @@ public class PerksImpl {
 	public static Perk BREAK_SPEED = Perk.begin()
 			.addDefaults(getDefaults())
 			.setStart((player, nbt) -> {
-				float speedIn = nbt.contains(APIUtils.BREAK_SPEED_INPUT_VALUE) ? nbt.getFloat(APIUtils.BREAK_SPEED_INPUT_VALUE) : player.getMainHandItem().getDestroySpeed(Blocks.OBSIDIAN.defaultBlockState());
 				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
 				if (speedBonus == 0) return NONE;
-				float newSpeed = speedIn * Math.max(0, 1 + nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus);
-				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, newSpeed).build();
+				
+				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus);
+				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			})
 			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())
 			.setStatus((player, settings) -> {
@@ -68,7 +67,7 @@ public class PerksImpl {
 	public static CompoundTag getDefaults() {
 		TagBuilder builder = TagBuilder.start();
 		for (ToolAction action : DIG_ACTIONS) {
-			builder.withFloat(action.name(), 0);
+			builder.withFloat(action.name(), 0f);
 		}
 		return builder.build();
 	}
@@ -85,8 +84,8 @@ public class PerksImpl {
 	public static final Perk TAME_BOOST = Perk.begin()
 			.addDefaults(TagBuilder.start().withString(APIUtils.SKILLNAME, "taming").withDouble(APIUtils.PER_LEVEL, 1d).build())
 			.setStart((player, nbt) -> {
-				if (player.level instanceof ServerLevel) {
-					ServerLevel world = (ServerLevel) player.level;
+				if (player.level() instanceof ServerLevel) {
+					ServerLevel world = (ServerLevel) player.level();
 					UUID animalID = nbt.getUUID(ANIMAL_ID);
 					LivingEntity animal = (LivingEntity) world.getEntities().get(animalID);
 					if (animal == null) return NONE;
