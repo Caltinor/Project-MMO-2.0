@@ -150,9 +150,7 @@ public class TooltipRegistry {
 			}
 			for (int i = 0; i < rawData.size(); i++) {
 				for (Map.Entry<String, Integer> entry : rawData.get(i).entrySet()) {
-					suppliedData.merge(entry.getKey(), entry.getValue(), (o,n) -> {
-						return o > n ? o : n;
-					});
+					suppliedData.merge(entry.getKey(), entry.getValue(), Integer::max);
 				}
 			}
 			return suppliedData;
@@ -178,9 +176,7 @@ public class TooltipRegistry {
 			}
 			for (int i = 0; i < rawData.size(); i++) {
 				for (Map.Entry<String, Integer> entry : rawData.get(i).entrySet()) {
-					suppliedData.merge(entry.getKey(), entry.getValue(), (o,n) -> {
-						return o > n ? o : n;
-					});
+					suppliedData.merge(entry.getKey(), entry.getValue(), Integer::max);
 				}
 			}
 			return suppliedData;
@@ -204,9 +200,7 @@ public class TooltipRegistry {
 			}
 			for (int i = 0; i < rawData.size(); i++) {
 				for (Map.Entry<String, Integer> entry : rawData.get(i).entrySet()) {
-					suppliedData.merge(entry.getKey(), entry.getValue(), (o,n) -> {
-						return o > n ? o : n;
-					});
+					suppliedData.merge(entry.getKey(), entry.getValue(), Integer::max);
 				}
 			}
 			return suppliedData;
@@ -265,7 +259,7 @@ public class TooltipRegistry {
 		}
 		for (Map<String, Long> map : rawData) {
 			for (Map.Entry<String, Long> entry : map.entrySet()) {
-				outData.merge(entry.getKey(), entry.getValue(), (o, n) -> o > n ? o : n);
+				outData.merge(entry.getKey(), entry.getValue(), Long::max);
 			}
 		}
 		return outData;
@@ -279,7 +273,7 @@ public class TooltipRegistry {
 		}
 		for (Map<String, Long> map : rawData) {
 			for (Map.Entry<String, Long> entry : map.entrySet()) {
-				outData.merge(entry.getKey(), entry.getValue(), (o, n) -> o > n ? o : n);
+				outData.merge(entry.getKey(), entry.getValue(), Long::max);
 			}
 		}
 		return outData;
@@ -293,7 +287,7 @@ public class TooltipRegistry {
 		}
 		for (Map<String, Long> map : rawData) {
 			for (Map.Entry<String, Long> entry : map.entrySet()) {
-				outData.merge(entry.getKey(), entry.getValue(), (o, n) -> o > n ? o : n);
+				outData.merge(entry.getKey(), entry.getValue(), Long::max);
 			}
 		}
 		return outData;
@@ -329,9 +323,7 @@ public class TooltipRegistry {
 			}
 			for (int i = 0; i < rawData.size(); i++) {
 				for (Map.Entry<String, Double> entry : rawData.get(i).entrySet()) {
-					suppliedData.merge(entry.getKey(), entry.getValue(), (o,n) -> {
-						return o > n ? o : n;
-					});
+					suppliedData.merge(entry.getKey(), entry.getValue(), Double::max);
 				}
 			}
 			return suppliedData;
