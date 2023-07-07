@@ -65,7 +65,7 @@ public class PerksConfig {
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "farming").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "agility")
 					.withString(APIUtils.ATTRIBUTE, "minecraft:generic.movement_speed")
-					.withDouble(APIUtils.PER_LEVEL, 0.000035)
+					.withDouble(APIUtils.PER_LEVEL, 0.000015)
 					.withDouble(APIUtils.MAX_BOOST, 1d).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "agility").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "endurance")
@@ -133,7 +133,14 @@ public class PerksConfig {
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic").withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging").withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build());
 		defaultSettings.put(EventType.DEAL_RANGED_DAMAGE, new ArrayList<>(bodyList));
+		bodyList.clear();
 
+		//=====================SPRINTING================================
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:temp_attribute").withString(APIUtils.SKILLNAME, "agility")
+				.withString(APIUtils.ATTRIBUTE, "minecraft:generic.movement_speed")
+				.withDouble(APIUtils.PER_LEVEL, 0.000035)
+				.withDouble(APIUtils.MAX_BOOST, 1d).build());
+		defaultSettings.put(EventType.SPRINTING, new ArrayList<>(bodyList));
 	}
 	
 	
