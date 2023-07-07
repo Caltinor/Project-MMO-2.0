@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -20,13 +21,17 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class TreasureLootModifier extends LootModifier{
 
 	public ItemStack drop;
+	private final int count;
 	public double chance;
 	
 	public TreasureLootModifier(LootItemCondition[] conditionsIn, ResourceLocation lootItemID, int count, double chance) {
 		super(conditionsIn);
 		this.chance = chance;
-		this.drop = new ItemStack(ForgeRegistries.ITEMS.getValue(lootItemID));
+		this.drop = lootItemID.equals(new ResourceLocation("air"))
+				? Items.AIR.getDefaultInstance() 
+				: new ItemStack(ForgeRegistries.ITEMS.getValue(lootItemID));
 		this.drop.setCount(count);
+		this.count = count;
 	}
 
 	@Override
@@ -34,17 +39,16 @@ public class TreasureLootModifier extends LootModifier{
 		if (context.getRandom().nextDouble() <= chance) {
 			
 			//this section checks if the drop is air and replaces it with the block
-			//being broken.  is is the logic for Extra Drops
+			//being broken.  this is the logic for Extra Drops
 			BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 			if (state != null && drop.getItem() == Items.AIR) {
-				int count = drop.getCount();
-				drop = new ItemStack(state.getBlock().asItem());
+				drop = state.getDrops(builderFromContext(context)).get(0);
 				drop.setCount(count);
 			}
 			
 			//Notify player that their skill awarded them an extra drop.
 			Entity breaker = context.getParamOrNull(LootContextParams.THIS_ENTITY);
-			if (breaker != null && breaker instanceof Player) {
+			if (breaker instanceof Player player) {
 				((Player)breaker).sendMessage(LangProvider.FOUND_TREASURE.asComponent(), breaker.getUUID());
 			}
 			generatedLoot.add(drop.copy());
