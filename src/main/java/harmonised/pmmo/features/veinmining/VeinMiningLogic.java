@@ -72,8 +72,8 @@ public class VeinMiningLogic {
 		//================================
 		Core core = Core.get(player.level);
 		double currentCharge = getCurrentCharge(player);
-		int chargeCap = 0;
-		double chargeRate = 0d;
+		int chargeCap = Config.BASE_CHARGE_CAP.get();
+		double chargeRate = Config.BASE_CHARGE_RATE.get();
 		for (ItemStack stack : items) {
 			VeinData data;
 			if ((data = core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData()).chargeRate.isPresent()) {
@@ -119,7 +119,7 @@ public class VeinMiningLogic {
 			items.addAll(CurioCompat.getItems(player));
 		}
 		//================================
-		int totalCapacity = 0;
+		int totalCapacity = Config.BASE_CHARGE_CAP.get();
 		for (ItemStack stack : items) {
 			totalCapacity += Core.get(player.level).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0);
 		}

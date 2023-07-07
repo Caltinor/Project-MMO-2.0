@@ -119,7 +119,7 @@ public class MobAttributeHandler {
 		for (Map.Entry<String, Double> configEntry : config.entrySet()) {
 			int averageLevel = totalLevel.getOrDefault(configEntry.getKey(), 0)/nearbyPlayers.size();
 			if (averageLevel < Config.MOB_SCALING_BASE_LEVEL.get()) continue;
-			outValue += Config.MOB_USE_EXPONENTIAL_FORUMULA.get() 
+			outValue += Config.MOB_USE_EXPONENTIAL_FORMULA.get()
 					? Math.pow(Config.MOB_EXPONENTIAL_POWER_BASE.get(), (Config.MOB_EXPONENTIAL_LEVEL_MOD.get() * (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get())))
 					: (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get()) * Config.MOB_LINEAR_PER_LEVEL.get();
 			outValue *= configEntry.getValue();
