@@ -79,6 +79,8 @@ public class PlayerTickHandler {
 			processEvent(EventType.SWIMMING, core, event); 
 		else if (player.isSprinting())
 			processEvent(EventType.SPRINTING, core, event);
+		else if (player.isCrouching())
+			processEvent(EventType.CROUCH, core, event);
 		
 		//update tracker variables
 		airLast.put(player.getUUID(), player.getAirSupply());
