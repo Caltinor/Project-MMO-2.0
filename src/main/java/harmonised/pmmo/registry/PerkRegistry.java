@@ -63,13 +63,13 @@ public class PerkRegistry {
 			Perk perk = perks.getOrDefault(perkID, Perk.empty());
 			src = perk.propertyDefaults().merge(src.merge(dataIn));
 			src.putInt(APIUtils.SKILL_LEVEL, src.contains(APIUtils.SKILLNAME) 
-					? Core.get(player.level()).getData().getPlayerSkillLevel(src.getString(APIUtils.SKILLNAME), player.getUUID())
+					? Core.get(player.level).getData().getPlayerSkillLevel(src.getString(APIUtils.SKILLNAME), player.getUUID())
 					: 0);
 			if (perk.canActivate(player, src)) {
 				CompoundTag executionOutput = perk.start(player, src);
 				tickTracker.add(new TickSchedule(perk, player, src, new AtomicInteger(0)));
 				if (src.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, src))
-					coolTracker.add(new PerkCooldown(perkID, player, src, player.level().getGameTime()));
+					coolTracker.add(new PerkCooldown(perkID, player, src, player.level.getGameTime()));
 				output.merge(TagUtils.mergeTags(output, executionOutput));
 			}
 		});

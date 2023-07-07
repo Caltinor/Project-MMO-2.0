@@ -15,7 +15,7 @@ public class PlayerDeathHandler {
 	
 		//IMPORTANT  this is confirmed by the call in EventHandler.  this assumption is critical to this cast
 		Player player = (Player) event.getEntity();
-		Core core = Core.get(player.level());
+		Core core = Core.get(player.level);
 
 		new HashMap<>(core.getData().getXpMap(player.getUUID())).forEach((skill, xp) -> {
 			int currentLevel = core.getData().getLevelFromXP(xp);
