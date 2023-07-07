@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -42,7 +41,7 @@ public class TreasureLootModifier extends LootModifier{
 			//being broken.  this is the logic for Extra Drops
 			BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 			if (state != null && drop.getItem() == Items.AIR) {
-				drop = state.getDrops(builderFromContext(context)).get(0);
+				drop = state.getDrops(new LootContext.Builder(context)).get(0);
 				drop.setCount(count);
 			}
 			
