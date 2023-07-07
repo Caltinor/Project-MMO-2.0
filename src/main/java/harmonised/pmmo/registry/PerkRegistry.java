@@ -65,11 +65,13 @@ public class PerkRegistry {
 			src.putInt(APIUtils.SKILL_LEVEL, src.contains(APIUtils.SKILLNAME) 
 					? Core.get(player.level()).getData().getPlayerSkillLevel(src.getString(APIUtils.SKILLNAME), player.getUUID())
 					: 0);
-			CompoundTag executionOutput = perk.start(player, src);
-			tickTracker.add(new TickSchedule(perk, player, src, new AtomicInteger(0)));
-			if (src.contains(APIUtils.COOLDOWN))
-				coolTracker.add(new PerkCooldown(perkID, player, src, player.level().getGameTime()));
-			output.merge(TagUtils.mergeTags(output, executionOutput));
+			if (perk.canActivate(player, src)) {
+				CompoundTag executionOutput = perk.start(player, src);
+				tickTracker.add(new TickSchedule(perk, player, src, new AtomicInteger(0)));
+				if (src.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, src))
+					coolTracker.add(new PerkCooldown(perkID, player, src, player.level().getGameTime()));
+				output.merge(TagUtils.mergeTags(output, executionOutput));
+			}
 		});
 		return output;
 	}
@@ -96,7 +98,7 @@ public class PerkRegistry {
 	public void executePerkTicks(LevelTickEvent event) {
 		coolTracker.removeIf(tracker -> tracker.cooledDown(event.level));
 		new ArrayList<>(tickTracker).forEach(schedule -> {
-			if (schedule.shouldTick())
+			if (schedule.shouldTick() && schedule.perk.canActivate(schedule.player, schedule.src))
 				schedule.tick();
 			else
 				schedule.perk().stop(schedule.player(), schedule.src());

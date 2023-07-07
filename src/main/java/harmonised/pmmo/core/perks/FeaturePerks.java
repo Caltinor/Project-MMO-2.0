@@ -131,7 +131,7 @@ public class FeaturePerks {
 	
 	public static final Perk BREATH = Perk.begin()
 			.addConditions((player, nbt) -> player.getAirSupply() < 2)
-			.addDefaults(TagBuilder.start().withLong(APIUtils.COOLDOWN, 30000l).withDouble(APIUtils.PER_LEVEL, 1d).build())
+			.addDefaults(TagBuilder.start().withLong(APIUtils.COOLDOWN, 600l).withDouble(APIUtils.PER_LEVEL, 1d).build())
 			.setStart((player, nbt) -> {
 				int perLevel = Math.max(1, (int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)));
 				player.setAirSupply(player.getAirSupply() + perLevel);
