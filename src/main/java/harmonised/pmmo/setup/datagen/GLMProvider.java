@@ -35,7 +35,7 @@ public class GLMProvider extends GlobalLootModifierProvider{
 		add("egapple_from_leaves",of(BlockTags.LEAVES, Items.ENCHANTED_GOLDEN_APPLE, 1, 0.01, "farming", 60));
 		add("dirt_cake", of(BlockTags.DIRT, Items.CAKE, 1, 0.003251, "excavation", 0));
 		add("dirt_bone", of(BlockTags.DIRT, Items.BONE, 1, 0.01, "excavation", 25));
-		add("iron_dposits", of(Tags.Blocks.STONE, Items.IRON_NUGGET, 2, 0.001, "mining", 15));
+		add("iron_deposits", of(Tags.Blocks.STONE, Items.IRON_NUGGET, 2, 0.001, "mining", 15));
 		add("pig_step", of(Tags.Blocks.BOOKSHELVES, Items.MUSIC_DISC_PIGSTEP, 1, 0.005, "building", 10));
 		add("grass_grass", of(Blocks.GRASS_BLOCK, Items.GRASS, 1, 0.01, "farming", 5));
 		add("magma_to_cream", of(Blocks.MAGMA_BLOCK, Items.MAGMA_CREAM, 1, 0.01, "mining", 25));
