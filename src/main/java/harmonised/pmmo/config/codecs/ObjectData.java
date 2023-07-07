@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -23,6 +24,8 @@ import harmonised.pmmo.util.Functions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public record ObjectData(
 		boolean override,
@@ -41,7 +44,12 @@ public record ObjectData(
 			this(false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), 
 					new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY);
 		}
-		
+
+		public Map<ResourceLocation, SalvageData> salvage() {
+			return salvage.entrySet().stream()
+					.filter(entry -> !ForgeRegistries.ITEMS.getValue(entry.getKey()).equals(Items.AIR))
+					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		}
 		@Override
 		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
 			return nbtXpValues().get(type) == null
@@ -83,7 +91,6 @@ public record ObjectData(
 		}
 		@Override
 		public Set<String> getTagValues() {return tagValues();}
-
 		public static final Codec<ObjectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),
 				Codec.STRING.listOf().optionalFieldOf("isTagFor").forGetter(od -> Optional.of(new ArrayList<>(od.tagValues))),
@@ -197,12 +204,12 @@ public record ObjectData(
 		public boolean isUnconfigured() {
 			return reqs().values().stream().allMatch(map -> map.isEmpty()) 
 					&& nbtReqs().values().stream().allMatch(map -> map.isEmpty()) 
-					&& negativeEffects.isEmpty()
-					&& xpValues.values().stream().allMatch(map -> map.isEmpty()) 
-					&& nbtXpValues.values().stream().allMatch(map -> map.isEmpty())
-					&& bonuses.values().stream().allMatch(map -> map.isEmpty()) 
-					&& nbtBonuses.values().stream().allMatch(map -> map.isEmpty())
-					&& salvage.keySet().stream().allMatch(rl -> rl.equals(new ResourceLocation("item"))) 
-					&& veinData.isUnconfigured();
+					&& negativeEffects().isEmpty()
+					&& xpValues().values().stream().allMatch(map -> map.isEmpty())
+					&& nbtXpValues().values().stream().allMatch(map -> map.isEmpty())
+					&& bonuses().values().stream().allMatch(map -> map.isEmpty())
+					&& nbtBonuses().values().stream().allMatch(map -> map.isEmpty())
+					&& salvage().keySet().stream().allMatch(rl -> rl.equals(new ResourceLocation("item")))
+					&& veinData().isUnconfigured();
 		}
 }
