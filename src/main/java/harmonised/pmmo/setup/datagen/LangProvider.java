@@ -111,6 +111,8 @@ public class LangProvider extends LanguageProvider{
 		.addLocale(Locale.EN_US, "%s increased by %s").build();
 	public static final Translation PERK_ATTRIBUTE = Translation.Builder.start("perk.pmmo.attribute")
 		.addLocale(Locale.EN_US, "Modified Player Attributes").build();
+	public static final Translation PERK_TEMP_ATTRIBUTE = Translation.Builder.start("perk.pmmo.temp_attribute")
+		.addLocale(Locale.EN_US, "Temporary Player Attributes").build();
 	public static final Translation PERK_ATTRIBUTE_DESC = Translation.Builder.start("perk.pmmo.attribute.description")
 		.addLocale(Locale.EN_US, "Alters the specified player attribute according to their skill level").build();
 	public static final Translation PERK_ATTRIBUTE_STATUS_1 = Translation.Builder.start("perk.pmmo.attribute.status1")

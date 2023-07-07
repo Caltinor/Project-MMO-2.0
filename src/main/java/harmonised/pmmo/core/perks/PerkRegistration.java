@@ -12,6 +12,7 @@ public class PerkRegistration {
 		APIUtils.registerPerk(rl("break_speed"), PerksImpl.BREAK_SPEED, PerkSide.BOTH);
 		APIUtils.registerPerk(rl("fireworks"), FireworkHandler.FIREWORK, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("attribute"), FeaturePerks.ATTRIBUTE, PerkSide.SERVER);
+		APIUtils.registerPerk(rl("temp_attribute"),FeaturePerks.TEMP_ATTRIBUTE, PerkSide.SERVER);
 		//Event Perks
 		APIUtils.registerPerk(rl("jump_boost"), FeaturePerks.JUMP_CLIENT, PerkSide.CLIENT);
 		APIUtils.registerPerk(rl("jump_boost"), FeaturePerks.JUMP_SERVER, PerkSide.SERVER);
