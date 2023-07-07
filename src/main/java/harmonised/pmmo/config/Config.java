@@ -83,7 +83,7 @@ public class Config {
 		VEIN_GAUGE_OFFSET_Y = builder.comment("how far up from the bottm left corner the vein guage should be")
 				.defineInRange("Vein Gauge Yoffset", 0.95d, 0, 1);
 		VEIN_GAUGE_DISPLAY = builder.comment("Should the vein charge data be displayed")
-				.define("Display Veing Gauge", true);
+				.define("Display Vein Gauge", true);
 		GAIN_LIST_OFFSET_X = builder.comment("how far offset from center the gain list should be")
 				.defineInRange("Gain List Xoffset", 0.45d, 0, 1);
 		GAIN_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the gain list should be")
@@ -94,7 +94,7 @@ public class Config {
 				.define("Section Header Color", 0x1504B520);
 		SALVAGE_ITEM_COLOR = builder.comment("What color should the background be for the salvage item lines in the glossary")
 				.define("Salvage Item Color", 0x15D2A319);
-		GAIN_LIST_SIZE = builder.comment("how much xp gain hisory should display")
+		GAIN_LIST_SIZE = builder.comment("how much xp gain history should display")
 				.define("Gain List Size", 3);
 		GAIN_LIST_LINGER_DURATION = builder.comment("How long, in ticks, items on the gain list should stay on screen before disappearing")
 				.define("Gain List Linger Duration", 100);
@@ -170,7 +170,7 @@ public class Config {
 		BREAK_NERF_HIGHLIGHTS = builder.comment("Should blocks affected by Reuse Penalty show a red outline?")
 				.define("Enable Reuse Penalty Highlights", true);
 		BLOCK_OWNER_HIGHLIGHTS = builder.comment("Should the owner of a block show when hovering?")
-				.define("Enable Owner Hightlights", true);
+				.define("Enable Owner Highlights", true);
 		SALVAGE_HIGHLIGHTS = builder.comment("Should hovering over a salvage block show helpful tips?")
 				.define("Enable Salvage Tips", true);
 		
@@ -255,7 +255,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Double> 	LOSS_ON_DEATH;
 	public static ForgeConfigSpec.ConfigValue<Boolean>	LOSE_LEVELS_ON_DEATH;
 	public static ForgeConfigSpec.ConfigValue<Boolean> 	LOSE_ONLY_EXCESS;
-	public static ForgeConfigSpec.ConfigValue<Boolean> 	USE_EXPONENTIAL_FORUMULA;
+	public static ForgeConfigSpec.ConfigValue<Boolean> USE_EXPONENTIAL_FORMULA;
 	public static ForgeConfigSpec.ConfigValue<Double> 	GLOBAL_MODIFIER;
 	public static TomlConfigHelper.ConfigObject<Map<String, Double>> SKILL_MODIFIERS;
 	public static ForgeConfigSpec.ConfigValue<Long> 	LINEAR_BASE_XP;
@@ -268,12 +268,12 @@ public class Config {
 	private static void buildLevels(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related level gain").push("Levels");
 		
-		MAX_LEVEL = builder.comment("The highest level a player can acheive in any skill."
+		MAX_LEVEL = builder.comment("The highest level a player can achieve in any skill."
 						, "NOTE: if this is changing on you to a lower value, that's intentional"
 						, "If your formula makes the required xp to get max level greater than"
 						, "pmmo can store, pmmo will replace your value with the actual max.")
 						.defineInRange("Max Level", 1523, 1, Integer.MAX_VALUE);
-		USE_EXPONENTIAL_FORUMULA = builder.comment("shold levels be determined using an exponential forumula?")
+		USE_EXPONENTIAL_FORMULA = builder.comment("should levels be determined using an exponential formula?")
 						.define("Use Exponential Formula", true);
 		STATIC_LEVELS = ConfigHelper.<List<Long>>defineObject(builder
 				.comment("=====LEAVE -1 VALUE UNLESS YOU WANT STATIC LEVELS====="
@@ -287,7 +287,7 @@ public class Config {
 				, "or linear formulaic calculation"),
 				"Static_Levels",
 				Codec.LONG.listOf(), 
-				new ArrayList<Long>(List.of(-1l))); 
+				new ArrayList<Long>(List.of(-1L)));
 
 		LOSS_ON_DEATH = builder.comment("How much experience should players lose when they die?"
 						, "zero is no loss, one is lose everything")
@@ -313,7 +313,7 @@ public class Config {
 		//========LINEAR SECTION===============
 		builder.comment("Settings for Linear XP configuration").push("LINEAR LEVELS");
 		LINEAR_BASE_XP = builder.comment("what is the base xp to reach level 2 (this + level * xpPerLevel)")
-							.defineInRange("Base XP", 250l, 0l, Long.MAX_VALUE);
+							.defineInRange("Base XP", 250L, 0L, Long.MAX_VALUE);
 		LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level (baseXp + level * this)")
 							.defineInRange("Per Level", 500d, 0d, Double.MAX_VALUE);		
 		builder.pop(); //COMPLETE LINEAR BLOCK
@@ -446,7 +446,7 @@ public class Config {
 	public static ForgeConfigSpec.DoubleValue PARTY_BONUS;
 	
 	private static void buildPartySettings(ForgeConfigSpec.Builder builder) {
-		builder.comment("All setings governing party behavior").push("Party");
+		builder.comment("All settings governing party behavior").push("Party");
 			PARTY_RANGE = builder.comment("How close do party members have to be to share experience.")
 					.defineInRange("Party Range", 50, 0, Integer.MAX_VALUE);
 			PARTY_BONUS = builder.comment("How much bonus xp should parties earn.",
@@ -457,7 +457,7 @@ public class Config {
 	
 	public static ForgeConfigSpec.BooleanValue MOB_SCALING_ENABLED;
 	
-	public static ForgeConfigSpec.ConfigValue<Boolean> 	MOB_USE_EXPONENTIAL_FORUMULA;
+	public static ForgeConfigSpec.ConfigValue<Boolean> MOB_USE_EXPONENTIAL_FORMULA;
 	public static ForgeConfigSpec.ConfigValue<Integer>  MOB_SCALING_AOE;
 	public static ForgeConfigSpec.ConfigValue<Integer> 	MOB_SCALING_BASE_LEVEL;
 	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_LINEAR_PER_LEVEL;
@@ -477,7 +477,7 @@ public class Config {
 				.defineInRange("Base Level", 0, 0, Integer.MAX_VALUE);
 		
 			builder.comment("How should mob attributes be calculated with respect to the player's level.").push("Formula");
-				MOB_USE_EXPONENTIAL_FORUMULA = builder.comment("shold levels be determined using an exponential forumula?")
+				MOB_USE_EXPONENTIAL_FORMULA = builder.comment("should levels be determined using an exponential formula?")
 						.define("Use Exponential Formula", true);
 				//========LINEAR SECTION===============
 				builder.comment("Settings for Linear scaling configuration").push("LINEAR_LEVELS");				
@@ -513,6 +513,8 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> DEFAULT_CONSUME;
 	public static ForgeConfigSpec.DoubleValue VEIN_CHARGE_MODIFIER;
 	public static ConfigValue<List<? extends String>> VEIN_BLACKLIST;
+	public static ForgeConfigSpec.DoubleValue BASE_CHARGE_RATE;
+	public static ForgeConfigSpec.IntValue BASE_CHARGE_CAP;
 	
 	private static void buildVeinMinerSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related to the Vein Miner").push("Vein_Miner");
@@ -527,6 +529,12 @@ public class Config {
 				.defineInRange("Vein Charge Modifier", 1.0, 0.0, Double.MAX_VALUE);
 		VEIN_BLACKLIST = builder.comment("Tools in this list do not cause the vein miner to trigger")
 				.defineList("Vein_Blacklist", new ArrayList<>(List.of("silentgear:saw")) , s -> s instanceof String);
+		BASE_CHARGE_RATE = builder.comment("A constant charge rate given to all players regardless of equipment.",
+				"Items worn will add to this amount, not replace it.")
+				.defineInRange("base charge rate", 0.01, 0.0, Double.MAX_VALUE);
+		BASE_CHARGE_CAP = builder.comment("A minimum capacity given to all players regardless of equipment.",
+				"Items worn will add to this amount, not replace it.")
+				.defineInRange("base vein capacity", 0, 0, Integer.MAX_VALUE);
 		builder.pop();
 	}
 }

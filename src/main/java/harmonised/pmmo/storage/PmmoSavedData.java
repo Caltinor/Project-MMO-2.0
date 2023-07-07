@@ -189,7 +189,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			}
 		}
 		
-		boolean exponential = Config.USE_EXPONENTIAL_FORUMULA.get();
+		boolean exponential = Config.USE_EXPONENTIAL_FORMULA.get();
 		
 		long linearBase = Config.LINEAR_BASE_XP.get();
 		double linearPer = Config.LINEAR_PER_LEVEL.get();
