@@ -88,20 +88,20 @@ public record Perk(
 	public static Builder begin() {return new Builder();}
 	public static Perk empty() {return new Builder().build();}
 	
-	private boolean canActivate(Player player, CompoundTag settings) {
+	public boolean canActivate(Player player, CompoundTag settings) {
 		return VALID_CONTEXT.test(player, settings) && conditions().test(player, settings);
 	}
 	
 	public CompoundTag start(Player player, CompoundTag nbt) {
-		return canActivate(player, nbt) ? start.apply(player, nbt) : new CompoundTag();
+		return start.apply(player, nbt);
 	}
 	
 	public CompoundTag tick(Player player, CompoundTag nbt, int elapsedTicks) {
-		return canActivate(player, nbt) ? tick.apply(player, nbt, elapsedTicks) : new CompoundTag();
+		return tick.apply(player, nbt, elapsedTicks);
 	}
 	
 	public CompoundTag stop(Player player, CompoundTag nbt) {
-		return canActivate(player, nbt) ? stop.apply(player, nbt) : new CompoundTag();
+		return stop.apply(player, nbt);
 	}
 	
 	public static final BiPredicate<Player, CompoundTag> VALID_CONTEXT = (player, src) -> {
