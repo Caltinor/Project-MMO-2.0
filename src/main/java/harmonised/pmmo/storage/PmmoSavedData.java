@@ -95,7 +95,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	public int getPlayerSkillLevel(String skill, UUID player) {
 		int rawLevel = Core.get(LogicalSide.SERVER).getLevelProvider().process(skill, getLevelFromXP(getXpRaw(player, skill)));
 		int skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
-		return rawLevel > skillMaxLevel ? skillMaxLevel : rawLevel;
+		return Math.min(rawLevel, skillMaxLevel);
 	}
 	@Override
 	public void setPlayerSkillLevel(String skill, UUID player, int level) {
@@ -106,7 +106,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	public boolean changePlayerSkillLevel(String skill, UUID playerID, int change) {
 		int currentLevel = getPlayerSkillLevel(skill, playerID);
 		long oldXp = getXpRaw(playerID, skill);
-		long newXp = (currentLevel - 1 + change) > 0 ? levelCache.get(currentLevel + change - 1) : 0l;
+		long newXp = (currentLevel - 1 + change) >= 0 ? levelCache.get(currentLevel + change - 1) : 0L;
 		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);	
 			
 		if (player != null) {
@@ -215,7 +215,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	public void awardScheduledXP(UUID playerID) {
 		//Clone the original scheduled XP so that we can remove the original
 		//This is vital because a disconnect while this is running would result in 
-		//the player having their scheduledXP rescheduled and we cannot modify
+		//the player having their scheduledXP rescheduled, and we cannot modify
 		//a collection whilst iterating over it.
 		Map<String, Long> queue = new HashMap<>(scheduledXP.getOrDefault(playerID, new HashMap<>()));
 		scheduledXP.remove(playerID);
