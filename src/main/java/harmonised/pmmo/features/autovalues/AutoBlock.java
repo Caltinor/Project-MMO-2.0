@@ -9,6 +9,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -28,14 +29,18 @@ public class AutoBlock {
 		Block block = ForgeRegistries.BLOCKS.getValue(blockID);
 		Map<String, Integer> outMap = new HashMap<>();
 		switch (type) {
-		case BREAK: {
+		case BREAK -> {
+			//this water check exists solely to capture breaking waterlogged blocks
+			//while autovalues are on, which spams chat with notification the user
+			//is unable to break water blocks.
+			if (block.equals(Blocks.WATER)) break;
+
 			float breakSpeed = block.defaultBlockState().getDestroySpeed(null, null);
 			AutoValueConfig.getBlockReq(type).forEach((skill, level) -> {
 				outMap.put(skill, (int)Math.max(0, (breakSpeed - BASE_HARDNESS) * AutoValueConfig.HARDNESS_MODIFIER.get()));
 			});
-			break;
 		}
-		default: }
+		default -> {}}
 		return outMap;
 	}
 	
