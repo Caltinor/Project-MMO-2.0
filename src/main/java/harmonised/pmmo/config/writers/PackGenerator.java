@@ -167,7 +167,8 @@ public class PackGenerator {
 			return gson.toJson(EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, 
 					new EnhancementsData(applyOverride, new HashMap<>())).result().get());
 			}),
-		TAGS("tags", server -> Set.of(
+		TAGS("tags", server -> {
+                Set<ResourceLocation> tags = new HashSet<>(Set.of(
 				Functions.pathPrepend(Reference.CROPS.location(), "blocks"),
 				Functions.pathPrepend(Reference.CASCADING_BREAKABLES.location(), "blocks"),
 				Functions.pathPrepend(Reference.ANIMAL_TAG.location(), "entity_types"),
@@ -176,8 +177,16 @@ public class PackGenerator {
 				Functions.pathPrepend(Reference.RIDEABLE_TAG.location(), "entity_types"),
 				Functions.pathPrepend(Reference.TAMABLE_TAG.location(), "entity_types"),
 				Functions.pathPrepend(Reference.BREWABLES.location(), "items"),
-				Functions.pathPrepend(Reference.SMELTABLES.location(), "items")), 
-				(id) -> gson.toJson(Tag.Builder.tag().serializeToJson())); 
+				Functions.pathPrepend(Reference.SMELTABLES.location(), "items")));
+                if (applyDisabler) tags.add(new ResourceLocation("minecraft:functions/load"));
+                return tags;
+                },
+				(id) -> id.equals(new ResourceLocation("minecraft:functions/load"))
+                    ? gson.toJson(Tag.Builder.tag().addElement(new ResourceLocation("pmmo:disable"), "disabler").serializeToJson())
+                    : gson.toJson(Tag.Builder.tag().serializeToJson())),
+        FUNCTIONS("functions", server -> {
+            return applyDisabler ? Set.of(new ResourceLocation("pmmo:disable")) : Set.of();
+        }, id -> "datapack disable \"mod:pmmo\"");
 
 		
 		public String route;
@@ -215,12 +224,13 @@ public class PackGenerator {
 					: category.valueList.apply(server).stream().filter(id -> namespaceFilter.contains(id.getNamespace())).toList();
 			for (ResourceLocation id : filteredList) {
 				int index = id.getPath().lastIndexOf('/');
-				String pathRoute = id.getPath().substring(0, index >= 0 ? index : 0);
+				String pathRoute = id.getPath().substring(0, Math.max(index, 0));
 				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route+"/"+pathRoute);
 				finalPath.toFile().mkdirs();
+                String extension = category.equals(Category.FUNCTIONS) ? ".mcfunction" : ".json";
 				try {					
 					Files.writeString(
-						finalPath.resolve(id.getPath().substring(id.getPath().lastIndexOf('/')+1)+".json"), 
+						finalPath.resolve(id.getPath().substring(id.getPath().lastIndexOf('/')+1)+extension),
 						category.defaultData.apply(id),
 						Charset.defaultCharset(),
 						StandardOpenOption.CREATE_NEW,
@@ -246,7 +256,7 @@ public class PackGenerator {
 		for (Category category : Category.values()) {
 			for (ResourceLocation id : category.valueList.apply(server)) {
 				int index = id.getPath().lastIndexOf('/');
-				String pathRoute = id.getPath().substring(0, index >= 0 ? index : 0);
+				String pathRoute = id.getPath().substring(0, Math.max(index, 0));
 				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route+"/"+pathRoute);
 				finalPath.toFile().mkdirs();
 				try {
