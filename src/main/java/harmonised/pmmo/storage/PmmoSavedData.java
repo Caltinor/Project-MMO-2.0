@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.mojang.serialization.Codec;
 import harmonised.pmmo.api.enums.EventType;
@@ -140,7 +141,11 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 
 	@Override
 	public CompoundTag save(CompoundTag nbt) {
-		nbt.put(XP_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, xp).result().orElse(new CompoundTag()))));
+		//This filter exists to scrub the data from empty values to reduce file bloat.
+		Map<UUID, Map<String, Long>> cleanXP = xp.entrySet().stream()
+				.filter(entry -> !entry.getValue().isEmpty())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		nbt.put(XP_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, cleanXP).result().orElse(new CompoundTag()))));
 		nbt.put(SCHEDULED_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, scheduledXP).result().orElse(new CompoundTag()))));
 		return nbt;
 	}
