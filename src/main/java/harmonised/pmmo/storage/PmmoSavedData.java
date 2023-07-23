@@ -42,12 +42,12 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	private static final Codec<Map<UUID, Map<String, Long>>> XP_CODEC = 
 			Codec.unboundedMap(CodecTypes.UUID_CODEC, 
 					Codec.unboundedMap(Codec.STRING, Codec.LONG)
-						.xmap(map -> new HashMap<>(map), map -> new HashMap<>(map)));
+						.xmap(HashMap::new, HashMap::new));
 	
 	//===========================GETTERS AND SETTERS================
 	@Override
 	public long getXpRaw(UUID playerID, String skillName) {
-		return xp.computeIfAbsent(playerID, s -> new HashMap<>()).getOrDefault(skillName, 0l);
+		return xp.getOrDefault(playerID, new HashMap<>()).getOrDefault(skillName, 0L);
 	}
 	@Override
 	public boolean setXpDiff(UUID playerID, String skillName, long change) {
