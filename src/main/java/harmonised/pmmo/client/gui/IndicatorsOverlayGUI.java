@@ -1,12 +1,9 @@
 package harmonised.pmmo.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -18,7 +15,7 @@ public class IndicatorsOverlayGUI implements IGuiOverlay{
 	private BlockHitResult bhr;
 	
 	@Override
-	public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
+	public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (!(mc.hitResult instanceof BlockHitResult))
@@ -26,10 +23,10 @@ public class IndicatorsOverlayGUI implements IGuiOverlay{
 		else
 			bhr = (BlockHitResult) mc.hitResult;
 		
-		if(!mc.options.renderDebug && VeinTracker.isLookingAtVeinTarget(bhr)){
-			RenderSystem.setShaderTexture(0, ICONS);
+		if(!mc.options.renderDebug && VeinTracker.isLookingAtVeinTarget(bhr)
+				&& !mc.player.level().getBlockState(bhr.getBlockPos()).isAir()){
 			float iconIndex = VeinTracker.mode.ordinal() * 16;
-			GuiComponent.blit(poseStack, (screenWidth/2)-16, (screenHeight/2)-8, iconIndex, 0f, 16, 16, 48, 16);
+			guiGraphics.blit(ICONS, (screenWidth/2)-16, (screenHeight/2)-8, iconIndex, 0f, 16, 16, 48, 16);
 		}
 	}
 
