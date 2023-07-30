@@ -21,7 +21,6 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
     
     public PlayerStatsScreen(Player player) {
         super(player.inventoryMenu, player.getInventory(), Component.translatable("container.crafting"));
-        //this.passEvents = true;
         this.titleLabelX = 97;
     }
     
@@ -58,9 +57,10 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
         this.yMouse = (float)pMouseY;
     }
     
-//    protected void renderLabels(PoseStack pPoseStack, int pX, int pY) {
-//        this.font.draw(pPoseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
-//    }
+    @Override
+    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+        pGuiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
+    }
     
     @Override
     protected void renderBg(GuiGraphics graphics, float p_97788_, int p_97789_, int p_97790_) {

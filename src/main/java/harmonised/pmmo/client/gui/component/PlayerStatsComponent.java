@@ -24,11 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class PlayerStatsComponent extends AbstractWidget {
-    public PlayerStatsComponent() {
-		super(0, 0, 0, 0, Component.empty());
-	}
-
-	protected static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/player_stats.png");
+    protected static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/player_stats.png");
     protected static final Core core = Core.get(LogicalSide.CLIENT);
     protected Minecraft minecraft;
     private boolean visible;
@@ -44,6 +40,10 @@ public class PlayerStatsComponent extends AbstractWidget {
     public static final int IMAGE_HEIGHT = 166;
     private static final int OFFSET_X_POSITION = 86;
     
+    public PlayerStatsComponent() {
+		super(0, 0, 0, 0, Component.empty());
+	}
+
     public void init(int width, int height, Minecraft minecraft, boolean widthTooNarrow) {
         this.minecraft = minecraft;
         this.width = width;
@@ -146,29 +146,37 @@ public class PlayerStatsComponent extends AbstractWidget {
         public void populateAbilities(Core core, Minecraft minecraft) {
             IDataStorage dataStorage = core.getData();
             
-            skillsKeys.addAll(dataStorage.getXpMap(null).keySet());
-            skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXpRaw(null, skill)).reversed());
+            this.skillsKeys.addAll(dataStorage.getXpMap(null).keySet());
+            this.skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXpRaw(null, skill)).reversed());
             
-            for (String skillKey : skillsKeys) {
+            for (String skillKey : this.skillsKeys) {
                 SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault());
-                abilities.add(new StatComponent(minecraft, this.left + 1, this.top, skillKey, skillData));
+                this.abilities.add(new StatComponent(minecraft, this.left + 1, this.top, skillKey, skillData));
             }
         }
     
         @Override
         protected void drawPanel(GuiGraphics guiGraphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
-            for (int i = 0; i < abilities.size(); i++) {
-                StatComponent component = abilities.get(i);
-                int y = (int) (relativeY + (i * (component.getHeight() + 1)) - scrollDistance);
-                
-                component.setPosition(component.getX(), y);
+            for (StatComponent component : this.abilities) {
+                component.setPosition(component.getX(), relativeY);
                 component.render(guiGraphics, mouseX, mouseY, Minecraft.getInstance().getPartialTick());
+                
+                relativeY += StatComponent.BASE_HEIGHT + this.border;
             }
         }
         
         @Override
+        protected int getScrollAmount() {
+            return StatComponent.BASE_HEIGHT + this.border;
+        }
+        
+        @Override
         protected int getContentHeight() {
-            return (int) (abilities.size() * StatComponent.BASE_HEIGHT);
+            int height = this.abilities.size() * (StatComponent.BASE_HEIGHT + this.border);
+            if (height < this.bottom - this.top - 1) {
+                height = this.bottom - this.top - 1;
+            }
+            return height;
         }
         
         @Override @NotNull public NarrationPriority narrationPriority() { return NarrationPriority.NONE; }
@@ -201,7 +209,6 @@ public class PlayerStatsComponent extends AbstractWidget {
         @Override
         public void renderWidget(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
             super.renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
-            
             graphics.blit(skillData.getIcon(), this.getX() + 3, this.getY() + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
             
             renderProgressBar(graphics);
@@ -218,6 +225,8 @@ public class PlayerStatsComponent extends AbstractWidget {
             float percent = 100.0f / (requiredXP - baseXP);
             int xp = (int) Math.min(Math.floor(percent * (skillCurrentXP - baseXP)), 94);
             graphics.blit(TEXTURE_LOCATION, this.getX() + 24, this.getY() + (minecraft.font.lineHeight + 6), xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
+            
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 }
