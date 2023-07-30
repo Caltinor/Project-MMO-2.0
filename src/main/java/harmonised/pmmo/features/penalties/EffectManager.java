@@ -1,9 +1,11 @@
 package harmonised.pmmo.features.penalties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.util.RegistryUtil;
@@ -36,10 +38,10 @@ public class EffectManager {
 		
 		List<ItemStack> items = List.of(inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39), player.getMainHandItem(), player.getOffhandItem());
 		//========== CURIOS ==============
-//		if (CurioCompat.hasCurio) {
-//			items = new ArrayList<>(items);
-//			items.addAll(CurioCompat.getItems(player));
-//		}
+		if (CurioCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CurioCompat.getItems(player));
+		}
 		//================================
 		for (ItemStack stack : items) {
 			if (!stack.isEmpty() && !core.isActionPermitted(ReqType.WEAR, stack, player)) {

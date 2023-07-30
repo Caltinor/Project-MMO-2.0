@@ -431,7 +431,9 @@ public class APIUtils {
 	/**<b>INTERNAL USE ONLY.</b> Utility method for registering custom configurations
 	 * 
 	 * @param asOverride should this apply after datapacks as an override
-	 * @param consumer execution for applying the configuration
+	 * @param objectID the unique id of data being registered
+	 * @param oType the type of data being registered
+	 * @param data a configuration object to be stored for the type provided
 	 */
 	private static void registerConfiguration(boolean asOverride, ObjectType oType, ResourceLocation objectID, DataSource<?> data) {
 		if (asOverride)
@@ -611,7 +613,7 @@ public class APIUtils {
 	 * should be applied.
 	 *  
 	 * @param res the item registrykey
-	 * @param reqType the event type
+	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
 	public static void registerItemXpGainTooltipData(ResourceLocation res, EventType eventType, Function<ItemStack, Map<String, Long>> func) {
@@ -624,7 +626,7 @@ public class APIUtils {
 	 * should be applied.
 	 *  
 	 * @param res the block registrykey
-	 * @param reqType the event type
+	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
 	public static void registerBlockXpGainTooltipData(ResourceLocation res, EventType eventType, Function<BlockEntity, Map<String, Long>> func) {
@@ -637,7 +639,7 @@ public class APIUtils {
 	 * should be applied.
 	 *  
 	 * @param res the entity registrykey
-	 * @param reqType the event type
+	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
 	public static void registerEntityXpGainTooltipData(ResourceLocation res, EventType eventType, Function<Entity, Map<String, Long>> func) {
@@ -745,13 +747,6 @@ public class APIUtils {
 	 * reasonable triggers, and sidedness.
 	 * 
 	 * @param perkID a custom id for your perk that can be used in perks.json to reference this perk
-	 * @param propertyDefaults keys used by your perks and default values to supply if omitted
-	 * @param customConditions a predicate for checks outside the standard built in checks
-	 * @param onStart the function executing the behavior of this perk when triggered
-	 * @param onTick the function to execute each tick for the duration configured
-	 * @param onStop the function executing the behavior of this perk when expected to end
-	 * @param description summarizes what the function does for the glossary
-	 * @param status provides a multiline description of the status of the perk for the supplied player
 	 * @param side the logical sides this perk should execute on.  Your implementation should factor in sidedness to avoid crashes.
 	 */
 	public static void registerPerk(
@@ -776,7 +771,7 @@ public class APIUtils {
 	
 	/** Both Perks and Event Triggers can be used to provide custom XP award maps
 	 *  to events. When returning the {@link net.minecraft.nbt.CompoundTag CompoundTag} in  {@link onExecute} 
-	 *  and {@link onConclude}, use the key {@link APIUtils.SERIALIZED_AWARD_MAP SERIALIZED_AWARD_MAP} and use 
+	 *  and {@link onConclude}, use the key {@link SERIALIZED_AWARD_MAP} and use
 	 *  this method to convert your award map into a universally serializable
 	 *  object that PMMO can understand and utilize when processing rewards.
 	 * 

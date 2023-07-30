@@ -14,6 +14,7 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DataMirror;
+import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.DataSource;
@@ -262,8 +263,8 @@ public class Core {
 		//WORN Modification
 		List<ItemStack> wornItems = new ArrayList<>();
 		player.getArmorSlots().forEach(wornItems::add);
-//		if (CurioCompat.hasCurio)
-//			CurioCompat.getItems(player).forEach(wornItems::add);
+		if (CurioCompat.hasCurio)
+			CurioCompat.getItems(player).forEach(wornItems::add);
 		wornItems.forEach((stack) -> {
 			ResourceLocation itemID = RegistryUtil.getId(stack);
 			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?

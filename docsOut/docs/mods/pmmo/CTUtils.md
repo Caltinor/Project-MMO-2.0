@@ -15,17 +15,20 @@ import mods.pmmo.CTUtils;
 Registers a perk for use in pmmo-Perks.toml.
 
 ```zenscript
-CTUtils.registerPerk(perkID as ResourceLocation, defaults as MapData, customConditions as CTPerkPredicate, onExecute as CTPerkFunction, onConclude as CTPerkFunction, side as int)
+CTUtils.registerPerk(perkID as ResourceLocation, defaults as MapData, customConditions as CTPerkPredicate, onStart as CTPerkFunction, onTick as CTTickFunction, onStop as CTPerkFunction, description as LiteralContents, status as CTDescriptionFunction, side as int)
 ```
 
-|    Parameter     |                            Type                            |                                                                                                                                                                                        Description                                                                                                                                                                                        |
-|------------------|------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| perkID           | [ResourceLocation](/vanilla/api/resource/ResourceLocation) | the Perk ID                                                                                                                                                                                                                                                                                                                                                                               |
-| defaults         | [MapData](/vanilla/api/data/MapData)                       | the default settings for your perk.  These <br />  are provided to your execution if no manual user configuration <br />  is present.  This allows you to ignore null checks and  <br />  displays to users what settings are valid for your perk. <br />  <i>(NOTE: you are not required to add settings here for them <br />  to work.  It is permitted to have "hidden" settings.)</i> |
-| customConditions | [CTPerkPredicate](/mods/pmmo/CTPerkPredicate)              | used to check for conditions in which <br />  a perk is allowed to execute in addition to pmmo's default  <br />  checks.  For example, if the player is the correct dimension.                                                                                                                                                                                                           |
-| onExecute        | [CTPerkFunction](/mods/pmmo/CTPerkFunction)                | the logic executed by this perk                                                                                                                                                                                                                                                                                                                                                           |
-| onConclude       | [CTPerkFunction](/mods/pmmo/CTPerkFunction)                | if an event has an end state, this executes                                                                                                                                                                                                                                                                                                                                               |
-| side             | int                                                        | which logical side this fires on CLIENT=0, SERVER=1, BOTH=2                                                                                                                                                                                                                                                                                                                               |
+|    Parameter     |                               Type                                |                                                                                                                                                                                       Description                                                                                                                                                                                        |
+|------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| perkID           | [ResourceLocation](/vanilla/api/resource/ResourceLocation)        | the Perk ID                                                                                                                                                                                                                                                                                                                                                                              |
+| defaults         | [MapData](/vanilla/api/data/MapData)                              | the default settings for your perk.  These <br />  are provided to your execution if no manual user configuration <br />  is present.  This allows you to ignore null checks and <br />  displays to users what settings are valid for your perk. <br />  <i>(NOTE: you are not required to add settings here for them <br />  to work.  It is permitted to have "hidden" settings.)</i> |
+| customConditions | [CTPerkPredicate](/mods/pmmo/CTPerkPredicate)                     | used to check for conditions in which <br />  a perk is allowed to execute in addition to pmmo's default <br />  checks.  For example, if the player is the correct dimension.                                                                                                                                                                                                           |
+| onStart          | [CTPerkFunction](/mods/pmmo/CTPerkFunction)                       | the logic executed by this perk when it is triggered                                                                                                                                                                                                                                                                                                                                     |
+| onTick           | [CTTickFunction](/mods/pmmo/CTTickFunction)                       | logic executed over the "duration" of the perk, if duration is set                                                                                                                                                                                                                                                                                                                       |
+| onStop           | [CTPerkFunction](/mods/pmmo/CTPerkFunction)                       | the logic executed after the start behavior and all ticking has concluded                                                                                                                                                                                                                                                                                                                |
+| description      | [LiteralContents](/vanilla/api/text/content/type/LiteralContents) | a short explanation of what the perk does.                                                                                                                                                                                                                                                                                                                                               |
+| status           | [CTDescriptionFunction](/mods/pmmo/CTDescriptionFunction)         |                                                                                                                                                                                                                                                                                                                                                                                          |
+| side             | int                                                               | which logical side this fires on CLIENT=0, SERVER=1, BOTH=2                                                                                                                                                                                                                                                                                                                              |
 
 
 :::
@@ -88,7 +91,7 @@ CTUtils.setEnchantment(<resource:namespace:path>, 1, {skillname: 00 as int?, oth
 
 :::group{name=setMobModifier}
 
-registers a configuration setting for mob modifiers to a biome or dimension. <br />   <br />  Attribute types for the inner map of mob_modifiers can be referenced <br />  using the static strings in this class prefixed with "MOB_"
+registers a configuration setting for mob modifiers to a biome or dimension. <br />  <br />  Attribute types for the inner map of mob_modifiers can be referenced <br />  using the static strings in this class prefixed with "MOB_"
 
 ```zenscript
 CTUtils.setMobModifier(objectType as invalid, locationID as ResourceLocation, mobID as ResourceLocation, modifiers as double?[string])
@@ -117,7 +120,7 @@ CTUtils.setNegativeEffect(<constant:pmmo:objecttype:value>, <resource:namespace:
 | Parameter  |                               Type                               |                      Description                      |
 |------------|------------------------------------------------------------------|-------------------------------------------------------|
 | objectType | **invalid**                                                      | a value of [item, block, entity, dimension, or biome] |
-| objectID   | [ResourceLocation](/vanilla/api/resource/ResourceLocation)       |                                                       |
+| objectID   | [ResourceLocation](/vanilla/api/resource/ResourceLocation)       | the key for the item being configured                 |
 | effects    | int?[[ResourceLocation](/vanilla/api/resource/ResourceLocation)] | a map of effect ids and levels                        |
 
 
@@ -136,7 +139,7 @@ CTUtils.setPositiveEffect(<constant:pmmo:objecttype:value>, <resource:namespace:
 | Parameter  |                               Type                               |                      Description                      |
 |------------|------------------------------------------------------------------|-------------------------------------------------------|
 | objectType | **invalid**                                                      | a value of [item, block, entity, dimension, or biome] |
-| objectID   | [ResourceLocation](/vanilla/api/resource/ResourceLocation)       |                                                       |
+| objectID   | [ResourceLocation](/vanilla/api/resource/ResourceLocation)       | the key for the dimension or biome being configured   |
 | effects    | int?[[ResourceLocation](/vanilla/api/resource/ResourceLocation)] | a map of effect ids and levels                        |
 
 
@@ -164,7 +167,7 @@ CTUtils.setReq(<constant:pmmo:objecttype:value>, <resource:namespace:path>, <con
 
 :::group{name=setSalvage}
 
-registers a configuration setting for items which can be obtained  <br />  via salvage from the item supplied. <br />  This class provides [SalvageBuilder](/mods/pmmo/SalvageBuilder) as a means to construct <br />  the salvage settings for each output object
+registers a configuration setting for items which can be obtained <br />  via salvage from the item supplied. <br />  This class provides [SalvageBuilder](/mods/pmmo/SalvageBuilder) as a means to construct <br />  the salvage settings for each output object
 
 ```zenscript
 // CTUtils.setSalvage(item as ResourceLocation, salvage as SalvageBuilder[ResourceLocation])
