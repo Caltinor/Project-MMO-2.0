@@ -23,14 +23,13 @@ Returns: if the perk is permitted to execute
 Return Type: boolean
 
 ```zenscript
-CTPerkPredicate.test(player as Player, nbt as MapData, level as int) as boolean
+CTPerkPredicate.test(player as Player, nbt as MapData) as boolean
 ```
 
-| Parameter |                       Type                       |                       Description                       |
-|-----------|--------------------------------------------------|---------------------------------------------------------|
-| player    | [Player](/vanilla/api/entity/type/player/Player) | perk executor                                           |
-| nbt       | [MapData](/vanilla/api/data/MapData)             | data provided by PMMO                                   |
-| level     | int                                              | the current level of the player in the skill configured |
+| Parameter |                       Type                       |      Description      |
+|-----------|--------------------------------------------------|-----------------------|
+| player    | [Player](/vanilla/api/entity/type/player/Player) | perk executor         |
+| nbt       | [MapData](/vanilla/api/data/MapData)             | data provided by PMMO |
 
 
 :::

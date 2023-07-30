@@ -1,10 +1,10 @@
-# CTPerkFunction
+# CTDescriptionFunction
 
 ## Importing the class
 
 It might be required for you to import the package if you encounter any issues (like casting an Array), so better be safe than sorry and add the import at the very top of the file.
 ```zenscript
-import mods.pmmo.CTPerkFunction;
+import mods.pmmo.CTDescriptionFunction;
 ```
 
 
@@ -12,18 +12,19 @@ import mods.pmmo.CTPerkFunction;
 
 :::group{name=apply}
 
-This function represents the logic being executed
- for a perk.  All perks are provided the player this
- perk is contextually applicable to, a map of settings
- and the players current level in the skill associated
- in the users' config.
+This function consumes information about the perk
+ and outputs text lines which give users specific
+ details about what their perk is doing.  This info
+ appears in the glossary and should be used to show
+ players how much benefit they get from a perk such
+ as the duration, power level, percent boost, etc
+ they are currently receiving from this perk.
 
-Returns: output data. not all events use output data, and your perk may not
- have anything to return.  In this case an empty map is sufficient.  
-Return Type: [MapData](/vanilla/api/data/MapData)
+Returns: output text.  
+Return Type: stdlib.List&lt;[LiteralContents](/vanilla/api/text/content/type/LiteralContents)&gt;
 
 ```zenscript
-CTPerkFunction.apply(player as Player, nbt as MapData) as MapData
+CTDescriptionFunction.apply(player as Player, nbt as MapData) as stdlib.List<LiteralContents>
 ```
 
 | Parameter |                       Type                       |      Description      |

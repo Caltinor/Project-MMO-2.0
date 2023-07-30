@@ -137,7 +137,7 @@ mySalvageBuilder.setSalvageMax(1);
 
 :::group{name=setXpAward}
 
-The xp that should be awarded when this item is successfully 
+The xp that should be awarded when this item is successfully
  obtained from salvage
  default = no xp awarded
 
