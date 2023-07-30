@@ -37,6 +37,7 @@ public class MobAttributeHandler {
 		new ResourceLocation("zombie.spawn_reinforcements"), 1f
 	);
 	
+	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onMobSpawn(FinalizeSpawn event) {
 	    if (!Config.MOB_SCALING_ENABLED.get())
@@ -60,10 +61,10 @@ public class MobAttributeHandler {
 					double base = baseValue(entity, id, attributeInstance);
 					float cap = CAPS.getOrDefault(attributeID, 0f);
 					float bonus = getBonus(nearbyPlayers, config, diffScale, base, cap);
-					bonus *= Core.get(entity.level).getLoader().DIMENSION_LOADER.getData(entity.level.dimension().location()).mobModifiers()
+					bonus *= Core.get(entity.level()).getLoader().DIMENSION_LOADER.getData(entity.level().dimension().location()).mobModifiers()
 								.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
 									.getOrDefault(id.toString(), 1d);
-					bonus *= Core.get(entity.level).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level.getBiome(entity.blockPosition()).get())).mobModifiers()
+					bonus *= Core.get(entity.level()).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level().getBiome(entity.blockPosition()))).mobModifiers()
 							 	.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
 							 		.getOrDefault(id.toString(), 1d);
 					AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
@@ -110,7 +111,7 @@ public class MobAttributeHandler {
 		//summate all levels from the configured skills for each nearby player
 		Map<String, Integer> totalLevel = new HashMap<>();
 		nearbyPlayers.forEach(player -> {
-			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level).getData().getPlayerSkillLevel(str, player.getUUID()))).forEach((skill, level) -> {
+			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getPlayerSkillLevel(str, player.getUUID()))).forEach((skill, level) -> {
 				totalLevel.merge(skill, level, (o, n) -> o + n);
 			});
 		});

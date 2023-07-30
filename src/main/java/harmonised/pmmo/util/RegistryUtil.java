@@ -1,5 +1,6 @@
 package harmonised.pmmo.util;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
@@ -30,8 +31,8 @@ public class RegistryUtil {
 		return ForgeRegistries.BLOCKS.getKey(block);
 	}
 
-	public static ResourceLocation getId(Biome biome) {
-		return ForgeRegistries.BIOMES.getKey(biome);
+	public static ResourceLocation getId(Holder<Biome> biome) {
+		return biome.unwrapKey().get().location();
 	}
 
 	public static ResourceLocation getId(SoundEvent sound) {
