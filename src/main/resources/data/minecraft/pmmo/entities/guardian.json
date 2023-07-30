@@ -3,7 +3,7 @@
     	"FROM_MOBS": {
             "endurance": 25
         },
-        "KILL":{
+        "DEATH":{
             "combat":25
         },
         "MELEE_TO_MOBS": {
