@@ -101,17 +101,17 @@ public class PerksConfig {
 		bodyList.clear();
 		
 		//=====================JUMP DEFAULTS=============================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble("per_level", 0.0005).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble(APIUtils.PER_LEVEL, 0.0005).build());
 		defaultSettings.put(EventType.JUMP, new ArrayList<>(bodyList));
 		bodyList.clear();
 		
 		//=====================JUMP DEFAULTS=============================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble("per_level", 0.001).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble(APIUtils.PER_LEVEL, 0.001).build());
 		defaultSettings.put(EventType.SPRINT_JUMP, new ArrayList<>(bodyList));
 		bodyList.clear();
 				
 		//=====================JUMP DEFAULTS=============================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble("per_level", 0.0015).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:jump_boost").withString(APIUtils.SKILLNAME, "agility").withDouble(APIUtils.PER_LEVEL, 0.0015).build());
 		defaultSettings.put(EventType.CROUCH_JUMP, new ArrayList<>(bodyList));
 		bodyList.clear();
 		
@@ -123,8 +123,8 @@ public class PerksConfig {
 		bodyList.clear();
 		
 		//=====================FROM_IMPACT==============================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fall_save").withString(APIUtils.SKILLNAME, "agility").withDouble("per_level", 0.005).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fall_save").withString(APIUtils.SKILLNAME, "endurance").withDouble("per_level", 0.025).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fall_save").withString(APIUtils.SKILLNAME, "agility").withDouble(APIUtils.PER_LEVEL, 0.005).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fall_save").withString(APIUtils.SKILLNAME, "endurance").withDouble(APIUtils.PER_LEVEL, 0.025).build());
 		defaultSettings.put(EventType.FROM_IMPACT, new ArrayList<>(bodyList));
 		bodyList.clear();
 		

@@ -142,7 +142,7 @@ public class FeaturePerks {
 			nbt.getInt(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL)));
 	private static CompoundTag JUMP_DEFAULTS = TagBuilder.start()
 			.withDouble(APIUtils.PER_LEVEL, 0.0005)
-			.withDouble(APIUtils.MAX_BOOST, 0.033).build();
+			.withDouble(APIUtils.MAX_BOOST, 0.25).build();
 	
 	public static final Perk JUMP_CLIENT = Perk.begin()
 		.addDefaults(JUMP_DEFAULTS)
