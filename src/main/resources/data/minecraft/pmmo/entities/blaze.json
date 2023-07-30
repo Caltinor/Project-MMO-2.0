@@ -1,6 +1,6 @@
 {
     "xp_values":{
-        "KILL":{
+        "DEATH":{
             "combat":30
         },
         "MELEE_TO_MOBS": {
