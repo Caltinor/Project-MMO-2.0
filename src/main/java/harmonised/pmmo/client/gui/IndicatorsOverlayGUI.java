@@ -23,7 +23,8 @@ public class IndicatorsOverlayGUI implements IGuiOverlay{
 		else
 			bhr = (BlockHitResult) mc.hitResult;
 		
-		if(!mc.options.renderDebug && VeinTracker.isLookingAtVeinTarget(bhr)){
+		if(!mc.options.renderDebug && VeinTracker.isLookingAtVeinTarget(bhr)
+				&& !mc.player.level().getBlockState(bhr.getBlockPos()).isAir()){
 			float iconIndex = VeinTracker.mode.ordinal() * 16;
 			guiGraphics.blit(ICONS, (screenWidth/2)-16, (screenHeight/2)-8, iconIndex, 0f, 16, 16, 48, 16);
 		}

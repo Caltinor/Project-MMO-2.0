@@ -31,9 +31,7 @@ public class VeinTracker {
 		if (!(hitResult instanceof BlockHitResult) || currentTarget == null)
 			return false;
 		BlockHitResult bhr = (BlockHitResult)hitResult;
-		if (currentTarget.equals(bhr.getBlockPos()))
-			return true;
-		return false;
+		return currentTarget.equals(bhr.getBlockPos());
 	}
 	
 	public static Set<BlockPos> getVein() {
