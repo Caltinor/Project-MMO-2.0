@@ -41,6 +41,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -237,7 +238,7 @@ public class Core {
 		if (player instanceof FakePlayer) return mapOut;		
 		
 		//BIOME Modification
-		ResourceLocation biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()).value());
+		ResourceLocation biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()));
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {
 			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 		}
@@ -313,7 +314,7 @@ public class Core {
 			? predicates.checkPredicateReq(player, entity, type)
 			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, entity));
 	}
-	public boolean isActionPermitted(ReqType type, Biome biome, Player player) {
+	public boolean isActionPermitted(ReqType type, Holder<Biome> biome, Player player) {
 		if (type != ReqType.TRAVEL) return false;
 		if (!Config.reqEnabled(type).get()) return true;
 		return doesPlayerMeetReq(player.getUUID(), 

@@ -46,6 +46,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -201,7 +202,7 @@ public class StatScrollWidget extends ScrollPanel{
 					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, false, false, false);
 				break;}
 			case BIOMES: {
-				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
+				populateLocation(mc.player.level().registryAccess().registryOrThrow(Registries.BIOME).keySet().stream().toList(),
 					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, true, false, false);
 				break;}
 			case ENCHANTS: {
@@ -259,7 +260,7 @@ public class StatScrollWidget extends ScrollPanel{
 						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, false, false, false);
 				break;}
 			case BIOMES: {
-				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
+				populateLocation(mc.player.level().registryAccess().registryOrThrow(Registries.BIOME).keySet().stream().toList(),
 						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, true, false, false);
 				break;}
 			default:{}
@@ -292,7 +293,7 @@ public class StatScrollWidget extends ScrollPanel{
 						reqs, bonuses, skill, false, true, false);
 				break;}
 			case BIOMES: {
-				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
+				populateLocation(mc.player.level().registryAccess().registryOrThrow(Registries.BIOME).keySet().stream().toList(),
 						reqs, bonuses, skill, true, true, false);
 				break;}
 			default:{}
@@ -307,7 +308,7 @@ public class StatScrollWidget extends ScrollPanel{
 						reqs, bonuses, skill, false, false, true);
 				break;}
 			case BIOMES: {
-				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
+				populateLocation(mc.player.level().registryAccess().registryOrThrow(Registries.BIOME).keySet().stream().toList(),
 						reqs, bonuses, skill, true, false, true);
 				break;}
 			default:{}
