@@ -50,7 +50,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'parchment', version: "2023.07.23-${minecraft_version}"
+    mappings channel: 'parchment', version: "2023.07.30-${minecraft_version}"
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     copyIdeResources = true
 
@@ -87,27 +87,27 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
-    //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
-    //annotationProcessor 'net.minecraftforge:forge:1.19.3-43.2.3'
-    //annotationProcessor 'com.blamejared.crafttweaker:CraftTweaker-forge-1.19.3:10.0.25'
+    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
+    annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
 
-    //compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.3-5.1.4.0:api")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api")
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
   	//compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
   	//compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
   	//compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
   	//compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	//compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	//compileOnly('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.3:10.0.25')
+  	compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
   	
-  	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
+  	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
   	//runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
   	//runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
   	//runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
   	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	//runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.25')
+  	runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
   	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
   	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
   	//runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
