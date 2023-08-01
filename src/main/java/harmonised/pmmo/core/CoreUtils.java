@@ -74,11 +74,11 @@ public class CoreUtils {
 	 * @return the modified map (optional usage)
 	 */
 	public static Map<String, Long> processSkillGroupXP(Map<String, Long> map) {
-		new HashMap<>(map).forEach((skill, level) -> {
+		new HashMap<>(map).forEach((skill, baseXP) -> {
 			SkillData data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
 			if (data.isSkillGroup()) {
 				map.remove(skill);
-				data.getGroupXP(level).forEach((member, xp) -> {
+				data.getGroupXP(baseXP).forEach((member, xp) -> {
 					map.merge(member, xp, Long::sum);
 				});																					
 			}
@@ -115,8 +115,8 @@ public class CoreUtils {
 	 */
 	public static Map<String, Double> processSkillGroupBonus(Map<String, Double> map) {
 		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillData.Builder.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
+			SkillData data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			if (data.isSkillGroup()) {
 				map.remove(skill);
 				map.putAll(data.getGroupBonus(level));																					
 			}
