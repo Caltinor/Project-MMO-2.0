@@ -26,8 +26,8 @@ public class EnchantApplyMixin {
 	        at = @At(
 	        	value = "INVOKE", 
 	        	target = "Lnet/minecraft/world/item/ItemStack;enchant(Lnet/minecraft/world/item/enchantment/Enchantment;I)V"), 
-	        locals = LocalCapture.CAPTURE_FAILHARD)
-	private void projectmmo$$enchantHandle(ItemStack stack, int $$1x, Player player, int $$3x, ItemStack $$4x, Level $$5, BlockPos $$6, CallbackInfo ci, ItemStack $$7, List<?> $$8, boolean $$9, int $$11, EnchantmentInstance instance) {
+	        locals = LocalCapture.CAPTURE_FAILSOFT)
+	private void projectmmo$$enchantHandle(ItemStack $$stack, int $$1x, Player player, int $$3x, ItemStack $$4x, Level $$5, BlockPos $$6, CallbackInfo ci, ItemStack stack, List<?> $$8, boolean $$9, int $$11, EnchantmentInstance instance) {
 		MinecraftForge.EVENT_BUS.post(new EnchantEvent(player, stack, instance));
  	}
 }
