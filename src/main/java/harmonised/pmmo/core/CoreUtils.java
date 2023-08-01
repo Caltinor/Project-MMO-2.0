@@ -75,11 +75,11 @@ public class CoreUtils {
 	 */
 	public static Map<String, Long> processSkillGroupXP(Map<String, Long> map) {
 		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillData.Builder.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
+			SkillData data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			if (data.isSkillGroup()) {
 				map.remove(skill);
 				data.getGroupXP(level).forEach((member, xp) -> {
-					map.merge(member, level, (o, n) -> o + n);
+					map.merge(member, xp, Long::sum);
 				});																					
 			}
 		});
@@ -95,11 +95,11 @@ public class CoreUtils {
 	 */
 	public static Map<String, Integer> processSkillGroupReqs(Map<String, Integer> map) {
 		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data;
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup() && !data.getUseTotalLevels()) {
+			SkillData data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			if (data.isSkillGroup() && !data.getUseTotalLevels()) {
 				map.remove(skill);
 				data.getGroupReq(level).forEach((member, xp) -> {
-					map.merge(member, level, (o, n) -> o + n);
+					map.merge(member, xp, Integer::sum);
 				});																						
 			}
 		});
