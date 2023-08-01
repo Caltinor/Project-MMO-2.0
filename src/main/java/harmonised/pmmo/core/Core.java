@@ -139,6 +139,8 @@ public class Core {
 	 * @param xpValues the map of pre-global-modifier xp awards
 	 */
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
+		CoreUtils.processSkillGroupXP(xpValues);
+
 		new HashMap<>(xpValues).forEach((skill, value) -> {
 			xpValues.put(skill, (long)((double)value * Config.SKILL_MODIFIERS.get().getOrDefault(skill, Config.GLOBAL_MODIFIER.get())));
 		});
@@ -218,8 +220,7 @@ public class Core {
 		
 		CheeseTracker.applyAntiCheese(type, objectID, player, xpGains);
 		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(xpGains));
-		
-		CoreUtils.processSkillGroupXP(xpGains);
+
 		return xpGains;
 	}	
 	
