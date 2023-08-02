@@ -497,7 +497,9 @@ public class Config {
 					, "minecraft:generic.max_health: 1 = half a heart, or 1 hitpoint"
 					, "minecraft:generic.movement_speed: 0.7 is base for most mobs.  this is added to that. so 0.7 from scaling is double speed"
 					, "minecraft:generic.attack_damage: is a multiplier of their base damage.  1 = no change, 2 = double damage"
-					, "negative values are possible and you can use this to create counterbalance skills").push("Scaling_Settings");
+					, "negative values are possible and you can use this to create counterbalance skills",""
+					, "NOTE: TOML WILL MOVE THE QUOTATIONS OF YOUR ATTRIBUTE ID AND BREAK YOUR CONFIG."
+					, "ENSURE YOU HAVE FORCIBLY PUT YOUR QUOTES AROUND YOUR ATTRIBUTE ID BEFORE SAVING.").push("Scaling_Settings");
 				MOB_SCALING = TomlConfigHelper.<Map<String, Map<String, Double>>>defineObject(builder,
 						"Mob Scaling IDs and Ratios", Codec.unboundedMap(Codec.STRING, CodecTypes.DOUBLE_CODEC), Map.of(
 								"minecraft:generic.max_health", Map.of("combat", 0.01),
