@@ -47,6 +47,9 @@ public class PathReader {
 		List<String> list = new ArrayList<>();
 		if (nbt.isEmpty() || nbt == null) return list;
 		String nodeEntry = nodes.get(0);
+
+		if (isQualifiedNode(nodeEntry) && !isQualifiedCompound(nodeEntry, nbt))
+			return list;
 		
 		if (isList(nodeEntry)) {	
 			nodes.remove(0);
@@ -101,6 +104,19 @@ public class PathReader {
 	private static boolean isList(String node) {return node.contains("[");}
 	
 	private static boolean isCompound(String node) {return node.contains("{");}
+
+	private static boolean isQualifiedNode(String node) {return node.contains(":");}
+
+	private static boolean isQualifiedCompound(String node, CompoundTag nbt) {
+		String root = rawNode(node);
+		String key = node.substring(node.indexOf("{")+1, node.indexOf(":")).replaceAll("\"", "");
+		String value = node.substring(node.indexOf(":")+1, node.indexOf("}")).replaceAll("\"", "");
+		boolean test = nbt.contains(root)
+				&& nbt.getCompound(root).contains(key)
+				&& nbt.getCompound(root).get(key).getAsString()
+				.equalsIgnoreCase(value);
+		return test;
+	}
 	
 	private static int getListIndex(String node) {
 		String rawIndex = getListParameters(node);
