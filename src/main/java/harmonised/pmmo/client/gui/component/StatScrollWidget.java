@@ -538,7 +538,7 @@ public class StatScrollWidget extends ScrollPanel{
 		if (events.length > 0) {
 			List<TextElement> holder = new ArrayList<>();
 			for (EventType event : events) {
-				Map<String, Long> xpAwards = xpSrc.apply(event).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+				Map<String, Long> xpAwards = CoreUtils.processSkillGroupXP(xpSrc.apply(event)).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 				if (xpAwards.containsKey(PREDICATE_KEY))
 					holder.add(new TextElement(LangProvider.ADDON_AFFECTED_ATTRIBUTE.asComponent(), 5, 0xFF9C03, false, 0x000000));
 				else if (!xpAwards.isEmpty()) {
@@ -559,7 +559,7 @@ public class StatScrollWidget extends ScrollPanel{
 		if (reqs.length > 0) {
 			List<TextElement> holder = new ArrayList<>();
 			for (ReqType reqType: reqs) {
-				Map<String, Integer> reqMap = reqSrc.apply(reqType).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
+				Map<String, Integer> reqMap = CoreUtils.processSkillGroupReqs(reqSrc.apply(reqType)).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 					holder.add(new TextElement(reqType, 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
