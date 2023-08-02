@@ -41,7 +41,6 @@ import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -155,14 +154,9 @@ public class PackGenerator {
 				raw.remove("positive_effect");
 				raw.remove("negative_effect");
 				return gson.toJson(raw);}),
-		BIOMES("pmmo/biomes", server -> server.registryAccess().registryOrThrow(Registries.BIOME).keySet(), (id) -> {
-			LocationData data = new LocationData(applyOverride, new HashSet<>(),
-					Map.of(ModifierDataType.BIOME, new HashMap<>()),
-					new HashMap<>(),
-					new HashMap<>(),
-					new ArrayList<>(),
-					new HashMap<>(),
-					new HashMap<>());
+		BIOMES("pmmo/biomes", server -> ForgeRegistries.BIOMES.getKeys(), (id) -> {
+			LocationData data = new LocationData(applyOverride, new HashSet<>(),	Map.of(ModifierDataType.BIOME, new HashMap<>()),
+					new HashMap<>(), new HashMap<>(),new ArrayList<>(),	new HashMap<>(), new HashMap<>());				
 			JsonObject raw = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
 		ENCHANTMENTS("pmmo/enchantments", server -> ForgeRegistries.ENCHANTMENTS.getKeys(), (id) -> {

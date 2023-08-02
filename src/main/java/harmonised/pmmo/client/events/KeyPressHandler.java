@@ -34,12 +34,12 @@ public class KeyPressHandler {
         {
             if(ClientSetup.VEIN_KEY.isDown() && mc.hitResult != null && mc.hitResult.getType().equals(Type.BLOCK)) {
             	BlockHitResult bhr = (BlockHitResult) mc.hitResult;
-            	Block block = mc.player.level().getBlockState(bhr.getBlockPos()).getBlock();
+            	Block block = mc.player.level.getBlockState(bhr.getBlockPos()).getBlock();
             	if (!Core.get(LogicalSide.CLIENT).getLoader().DIMENSION_LOADER
-            			.getData(mc.player.level().dimension().location())
+            			.getData(mc.player.level.dimension().location())
             			.veinBlacklist().contains(RegistryUtil.getId(block))
             		&& !Core.get(LogicalSide.CLIENT).getLoader().BIOME_LOADER
-            			.getData(RegistryUtil.getId(mc.player.level().getBiome(mc.player.blockPosition())))
+            			.getData(RegistryUtil.getId(mc.player.level.getBiome(mc.player.blockPosition()).get()))
             			.veinBlacklist().contains(RegistryUtil.getId(block))) {
 	            	VeinTracker.setTarget(bhr.getBlockPos());
 	            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));

@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 
 import harmonised.pmmo.api.APIUtils;
@@ -39,14 +40,14 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -58,6 +59,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -66,7 +68,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class StatScrollWidget extends ScrollPanel{
-	private static interface Element {public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess);}
+	private static interface Element {public void render(PoseStack poseStack, int x, int y, int width, ItemRenderer itemRenderer, Tesselator tess);}
 	
 	private static record TextElement(ClientTooltipComponent text, int xOffset, int color, boolean isHeader, int headerColor) implements Element{
 		public static List<TextElement> build(Component component, int width, int xOffset, int color, boolean isHeader, int headerColor) {
@@ -87,11 +89,11 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 		@SuppressWarnings("resource")
 		@Override
-		public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess) {
+		public void render(PoseStack poseStack, int x, int y, int width, ItemRenderer unused, Tesselator tess) {
 			if (isHeader()) 
-				graphics.fill(RenderType.gui(), x, y, x+width, y+12, headerColor());
+				GuiComponent.fill(poseStack, x, y, x+width, y+12, headerColor());
 			MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(tess.getBuilder());
-			text().renderText(Minecraft.getInstance().font, x + xOffset(), y, graphics.pose().last().pose(), buffer);
+			text().renderText(Minecraft.getInstance().font, x + xOffset(), y, poseStack.last().pose(), buffer);
 			buffer.endBatch();
 		}
 		
@@ -112,25 +114,26 @@ public class StatScrollWidget extends ScrollPanel{
 			this(text, xOffset, color, headerColor, null, null, entity);
 		}
 		@Override
-		public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess) {
-			graphics.fill(RenderType.gui(), x, y, x+width, y+12, headerColor());
+		public void render(PoseStack poseStack, int x, int y, int width, ItemRenderer itemRenderer, Tesselator tess) {
+			fill(poseStack, x, y, x+width, y+12, headerColor());
 			@SuppressWarnings("resource")
 			Font font = Minecraft.getInstance().font;
 			if (stack() != null || block() != null) {
 				ItemStack renderStack = stack() == null ? new ItemStack(block().asItem()) : stack();
-				graphics.renderItem(renderStack, x+width - 25, y);
-				graphics.drawString(font, renderStack.getDisplayName(), x + 10, y, 0xFFFFFF);
+				itemRenderer.renderAndDecorateItem(poseStack, renderStack, x+width - 25, y);
+				drawString(poseStack, font, renderStack.getDisplayName(), x + 10, y, 0xFFFFFF);
 			}
 			else if (entity != null && entity instanceof LivingEntity) {
 				int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
-				InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, x+width - 20, y+12, scale, 0f, 0f, (LivingEntity) entity);
-				graphics.drawString(font, this.entity.getDisplayName(), x, y, 0xFFFFFF);
+				InventoryScreen.renderEntityInInventoryFollowsAngle(poseStack, x+width - 20, y+12, scale, 0f, 0f, (LivingEntity) entity);
+				drawString(poseStack, font, this.entity.getDisplayName(), x, y, 0xFFFFFF);
 			}
 		}
 	}
 	
 	Minecraft mc = Minecraft.getInstance();
 	Core core = Core.get(LogicalSide.CLIENT);
+	ItemRenderer itemRenderer = null;
 	private final List<Element> content = new ArrayList<>();
 
 	private StatScrollWidget(int width, int height, int top, int left) {
@@ -141,8 +144,9 @@ public class StatScrollWidget extends ScrollPanel{
 		populateLocation(List.of(mc.level.dimension().location()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.DIMENSION}, "", false, true, true);
 		populateLocation(List.of(mc.level.getBiome(mc.player.blockPosition()).unwrapKey().get().location()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.BIOME}, "", true, true, true);
 	}
-	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack) {
+	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack, ItemRenderer itemRenderer) {
 		this(width, height, top, left);
+		this.itemRenderer = itemRenderer;
 		EventType[] events = stack.getItem() instanceof BlockItem ? EventType.BLOCKITEM_APPLICABLE_EVENTS : EventType.ITEM_APPLICABLE_EVENTS;
 		ReqType[] reqs = stack.getItem() instanceof BlockItem ? ReqType.BLOCKITEM_APPLICABLE_EVENTS : ReqType.ITEM_APPLICABLE_EVENTS;
 		populateItems(List.of(stack), events, reqs, ModifierDataType.values(), "", true, true);
@@ -151,19 +155,30 @@ public class StatScrollWidget extends ScrollPanel{
 		this(width, height, top, left);
 		populateEntity(List.of(entity), EventType.ENTITY_APPLICABLE_EVENTS, ReqType.ENTITY_APPLICABLE_EVENTS, entity instanceof Player, "");
 	}
-	public StatScrollWidget(int width, int height, int top, int left, BlockPos pos) {
+	public StatScrollWidget(int width, int height, int top, int left, BlockPos pos, ItemRenderer itemRenderer) {
 		this(width, height, top, left);
+		this.itemRenderer = itemRenderer;
 		populateBlockFromWorld(pos, EventType.BLOCK_APPLICABLE_EVENTS, ReqType.BLOCK_APPLICABLE_EVENTS);
 	}
-	public StatScrollWidget(int width, int height, int top, int left, SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
+	public StatScrollWidget(int width, int height, int top, int left, SELECTION selection, OBJECT object, String skill, GuiEnumGroup type, ItemRenderer itemRenderer) {
 		this(width, height, top, left);
+		this.itemRenderer = itemRenderer;
 		generateGlossary(selection, object, skill, type);
 	}
 
 	//Utility method for uniform nesting indentation
 	private int step(int level) {return level * 10;}
 	
-	private Supplier<List<ItemStack>> itemSupplier = () -> CreativeModeTabs.searchTab().getDisplayItems().stream().toList();
+	private Supplier<List<ItemStack>> itemSupplier = () -> ForgeRegistries.ITEMS.getValues().stream()
+			.flatMap(item -> {
+				NonNullList<ItemStack> list = NonNullList.create();
+				for (CreativeModeTab tab : CreativeModeTabs.allTabs()) {
+					tab.getDisplayItems().stream().filter(stack -> stack.getItem().equals(item) && list.stream().noneMatch(eStack -> eStack.equals(stack, false))).forEach(list::add);
+				}
+				return list.stream().distinct();
+			})
+			.sorted((a, b) -> a.getDisplayName().toString().compareTo(b.getDisplayName().toString()))
+			.toList();
 	
 	public void generateGlossary(SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
 		switch (selection) {
@@ -202,7 +217,7 @@ public class StatScrollWidget extends ScrollPanel{
 					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, false, false, false);
 				break;}
 			case BIOMES: {
-				populateLocation(mc.player.level().registryAccess().registryOrThrow(Registries.BIOME).keySet().stream().toList(),
+				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
 					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, true, false, false);
 				break;}
 			case ENCHANTS: {
@@ -260,7 +275,7 @@ public class StatScrollWidget extends ScrollPanel{
 						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, false, false, false);
 				break;}
 			case BIOMES: {
-				populateLocation(mc.player.level().registryAccess().registryOrThrow(Registries.BIOME).keySet().stream().toList(),
+				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
 						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, true, false, false);
 				break;}
 			default:{}
@@ -269,7 +284,7 @@ public class StatScrollWidget extends ScrollPanel{
 		case SALVAGE: {
 			if (object == OBJECT.ITEMS) {
 				populateItems(
-						itemSupplier.get(),
+						ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
 						new EventType[] {}, new ReqType[] {}, new ModifierDataType[] {}, skill, true, false);
 			}
 			break;}
@@ -293,7 +308,7 @@ public class StatScrollWidget extends ScrollPanel{
 						reqs, bonuses, skill, false, true, false);
 				break;}
 			case BIOMES: {
-				populateLocation(mc.player.level().registryAccess().registryOrThrow(Registries.BIOME).keySet().stream().toList(),
+				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
 						reqs, bonuses, skill, true, true, false);
 				break;}
 			default:{}
@@ -308,7 +323,7 @@ public class StatScrollWidget extends ScrollPanel{
 						reqs, bonuses, skill, false, false, true);
 				break;}
 			case BIOMES: {
-				populateLocation(mc.player.level().registryAccess().registryOrThrow(Registries.BIOME).keySet().stream().toList(),
+				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
 						reqs, bonuses, skill, true, false, true);
 				break;}
 			default:{}
@@ -489,7 +504,7 @@ public class StatScrollWidget extends ScrollPanel{
 			PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new ArrayList<>()).forEach(nbt -> {
 				ResourceLocation perkID = new ResourceLocation(nbt.getString("perk"));
 				nbt.putInt(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME) 
-						? Core.get(player.level()).getData().getPlayerSkillLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
+						? Core.get(player.level).getData().getPlayerSkillLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
 						: 0);
 				holder.addAll(TextElement.build(Component.translatable("perk."+perkID.getNamespace()+"."+perkID.getPath()), 
 						this.width,	step(1), 0x00ff00, false, 0x00ff00));
@@ -698,9 +713,9 @@ public class StatScrollWidget extends ScrollPanel{
 	}
 
 	@Override
-	protected void drawPanel(GuiGraphics guiGraphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
+	protected void drawPanel(PoseStack poseStack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
 		for (int i = 0; i < content.size(); i++) {
-			content.get(i).render(guiGraphics, this.left, (int)(relativeY + (i*12) - scrollDistance), this.width, tess);			
+			content.get(i).render(poseStack, this.left, (int)(relativeY + (i*12) - scrollDistance), this.width, mc.getItemRenderer(), tess);			
 		}
 	}
 
