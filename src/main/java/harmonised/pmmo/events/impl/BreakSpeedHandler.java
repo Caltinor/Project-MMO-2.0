@@ -70,7 +70,7 @@ public class BreakSpeedHandler {
 
 		CompoundTag perkDataOut = core.getPerkRegistry().executePerk(EventType.BREAK_SPEED, event.getEntity(), perkDataIn);
 		if (perkDataOut.contains(APIUtils.BREAK_SPEED_OUTPUT_VALUE)) {
-			float newSpeed = Math.max(0, perkDataOut.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE));
+			float newSpeed = event.getNewSpeed() * (1 + Math.max(0, perkDataOut.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE)));
 			event.setNewSpeed(newSpeed);
 			resultCache.put(event.getEntity().getUUID(), 
 					new DetailsCache(event.getEntity().getMainHandItem(), event.getPosition().orElse(new BlockPos(0,0,0)), event.getState(), event.getEntity().isOnGround(), false, newSpeed));
