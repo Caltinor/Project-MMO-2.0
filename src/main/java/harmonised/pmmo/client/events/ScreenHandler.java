@@ -28,7 +28,7 @@ public class ScreenHandler {
         if (screen instanceof InventoryScreen inventory) {
             inventory.renderables.forEach(widget -> {
                 if (widget instanceof PMMOButton button) {
-                    button.setPosition(inventory.leftPos + 126, inventory.height / 2 - 22);
+                    button.setPosition(inventory.leftPos + Config.SKILL_BUTTON_X.get(), inventory.height / 2 + Config.SKILL_BUTTON_Y.get());
                 }
             });
         }
