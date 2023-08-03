@@ -1,38 +1,11 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.api.events.EatFoodEvent;
 import harmonised.pmmo.api.events.EnchantEvent;
 import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.events.impl.AnvilRepairHandler;
-import harmonised.pmmo.events.impl.BreakHandler;
-import harmonised.pmmo.events.impl.BreakSpeedHandler;
-import harmonised.pmmo.events.impl.BreedHandler;
-import harmonised.pmmo.events.impl.CraftHandler;
-import harmonised.pmmo.events.impl.CropGrowHandler;
-import harmonised.pmmo.events.impl.DamageDealtHandler;
-import harmonised.pmmo.events.impl.DamageReceivedHandler;
-import harmonised.pmmo.events.impl.DeathHandler;
-import harmonised.pmmo.events.impl.DimensionTravelHandler;
-import harmonised.pmmo.events.impl.EnchantHandler;
-import harmonised.pmmo.events.impl.EntityInteractHandler;
-import harmonised.pmmo.events.impl.FishHandler;
-import harmonised.pmmo.events.impl.FoodEatHandler;
-import harmonised.pmmo.events.impl.FurnaceHandler;
-import harmonised.pmmo.events.impl.JumpHandler;
-import harmonised.pmmo.events.impl.LoginHandler;
-import harmonised.pmmo.events.impl.MountHandler;
-import harmonised.pmmo.events.impl.PistonHandler;
-import harmonised.pmmo.events.impl.PlaceHandler;
-import harmonised.pmmo.events.impl.PlayerClickHandler;
-import harmonised.pmmo.events.impl.PlayerDeathHandler;
-import harmonised.pmmo.events.impl.PlayerTickHandler;
-import harmonised.pmmo.events.impl.PotionHandler;
-import harmonised.pmmo.events.impl.ShieldBlockHandler;
-import harmonised.pmmo.events.impl.SleepHandler;
-import harmonised.pmmo.events.impl.TameHandler;
+import harmonised.pmmo.events.impl.*;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -43,22 +16,11 @@ import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.event.entity.living.AnimalTameEvent;
-import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
-import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangeGameModeEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
@@ -255,7 +217,7 @@ public class EventHandler {
 		DimensionTravelHandler.handle(event);
 	}
 	@SubscribeEvent
-	public static void onFoodEat(EatFoodEvent event) {
+	public static void onFoodEat(LivingEntityUseItemEvent.Finish event) {
 		FoodEatHandler.handle(event);
 	}
 	@SubscribeEvent

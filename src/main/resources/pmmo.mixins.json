@@ -7,8 +7,6 @@
     "mixins": [
         "AbstractFurnaceTileEntityShrinkMixin",
         "EnchantApplyMixin",
-        "PlayerMixin",
-        "PotionItemMixin",
         "ServerLevelMixin"
     ],
     "server": [
