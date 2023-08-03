@@ -18,9 +18,9 @@ import net.minecraftforge.eventbus.api.Event;
 public class FoodEatHandler {
 
 	private static void internalHandle(Event event, Player player, ItemStack food) {
-		Core core = Core.get(player.getLevel());
+		Core core = Core.get(player.level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !player.level.isClientSide;
+		boolean serverSide = !player.level().isClientSide;
 		if (serverSide)
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.CONSUME, event, new CompoundTag());
 		//Process perks
