@@ -23,7 +23,7 @@ public class WorldRenderHandler {
 
 		if (Config.VEIN_ENABLED.get()
 				&& VeinTracker.isLookingAtVeinTarget(mc.hitResult)
-				&& !mc.player.level().getBlockState(((BlockHitResult)mc.hitResult).getBlockPos()).isAir()) {
+				&& !mc.player.level.getBlockState(((BlockHitResult)mc.hitResult).getBlockPos()).isAir()) {
 			VeinTracker.updateVein(mc.player);
 			VeinRenderer.drawBoxHighlights(event.getPoseStack(), VeinTracker.getVein());
 		}

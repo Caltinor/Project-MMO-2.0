@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '[6.0,6.2)', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
         classpath 'org.parchmentmc:librarian:1.+'
     }
@@ -18,8 +18,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 
 mixin {
-    config "pmmo.mixins.json"
-    add sourceSets.main, "pmmo.refmap.json"
+    config "${modid}.mixins.json"
+    add sourceSets.main, "${modid}.refmap.json"
     disableEclipseAddon = true
 
     debug.export = true
@@ -41,9 +41,9 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.19.4-0.0.7'
-group = 'harmonised.pmmo'
-archivesBaseName = 'pmmo'
+version = "${mcver}-${modver}"
+group = "harmonised.${modid}"
+archivesBaseName = "${modid}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -53,39 +53,28 @@ minecraft {
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
-        client {
-            workingDirectory project.file('run/client')
+        configureEach {
+            jvmArg "-Dterminal.ansi=true"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                pmmo {
+                "${modid}" {
                     source sourceSets.main
                 }
             }
+        }
+
+        client {
+            workingDirectory project.file('run/client')
         }
 
         server {
             workingDirectory project.file('run/server')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                pmmo {
-                    source sourceSets.main
-                }
-            }
         }
 
         data {
             workingDirectory project.file('run/client')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'pmmo', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            mods {
-                pmmo {
-                    source sourceSets.main
-                    forceExit = false
-                }
-            }
+            args '--mod', modid, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
 }
@@ -93,30 +82,31 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.4-45.0.64'
+    minecraft "net.minecraftforge:forge:${mcver}-45.0.64"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
-    //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
-    //annotationProcessor 'net.minecraftforge:forge:1.19.3-43.2.3'
-    //annotationProcessor 'com.blamejared.crafttweaker:CraftTweaker-forge-1.19.3:10.0.25'
+    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
+    annotationProcessor "net.minecraftforge:forge:${mcver}-45.0.64"
+    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${mcver}:${ct_version}"
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.3-5.1.4.0:api")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mcver}-${curio_ver}:api")
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
   	//compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
   	//compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
   	//compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
   	//compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	//compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	//compileOnly('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.3:10.0.25')
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mcver}-${curio_ver}:api")
+  	compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${mcver}:${ct_version}")
   	
-  	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
+  	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mcver}-${curio_ver}")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
   	//runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
   	//runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
   	//runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
   	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	//runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.25')
+  	runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mcver}:${ct_version}")
   	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
   	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
 }
