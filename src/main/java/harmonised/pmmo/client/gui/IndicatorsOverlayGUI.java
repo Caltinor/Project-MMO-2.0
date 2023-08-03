@@ -26,7 +26,8 @@ public class IndicatorsOverlayGUI implements IGuiOverlay{
 		else
 			bhr = (BlockHitResult) mc.hitResult;
 		
-		if(!mc.options.renderDebug && VeinTracker.isLookingAtVeinTarget(bhr)){
+		if (!mc.options.renderDebug && VeinTracker.isLookingAtVeinTarget(bhr)
+			&& !mc.player.getLevel().getBlockState(bhr.getBlockPos()).isAir()){
 			RenderSystem.setShaderTexture(0, ICONS);
 			float iconIndex = VeinTracker.mode.ordinal() * 16;
 			GuiComponent.blit(poseStack, (screenWidth/2)-16, (screenHeight/2)-8, iconIndex, 0f, 16, 16, 48, 16);
