@@ -1,19 +1,21 @@
 # Changelog
 
-## [1.19.4-0.0.7~~~~] - 2023-07-07
+## [1.19.4-0.1.8] - 2023-08-03
+### Minor version changes
+- Removed `EatFoodEvent` which wasn't capturing all CONSUME cases
+- Added seagrass to default data, so it doesn't give mining xp
+- Fixed default data which used the legacy "KILL" xp event to now use "DEATH"
 ### Bugfixes / Tweaks
-- Added CROUCH event (no XP source, only used for perk activation)
-- Added defaults for Tetra items
-- Added default XP for brewing potions
-- Added global vein setting for all players in server config
-- Added perk `"pmmo:temp_attribute"` which expires after the event ends
-  - nerfed move speed from skill-up default value and added sprinting speed boost
-- Updated vein feature to only prevent activation if the tool would result in no drops
-- Updated default breath perk to not require a 25-minute cooldown
-- Fixed log spam from perks
-- Fixed extra drops on tagged blocks giving zero extra
-- Fixed xp loss on death cases.  should be consistent now
-- Fixed breaking waterlogged insta-break blocks unbreakable water notification
-- Fixed admin command not honoring level setting from zero to one
-- Fixed cooldown functionality of perks.
-- Fixed [Air] showing in salvage instead of none
+- Added CT and Curio compat.  (FTBQ still isn't updated yet)
+- Added comment to mob-scaling config section to inform users about TOML bug
+- Added Compound filtering to NBT configs (eg. "foo{"bar":1}.baz")
+- Added config options for inventory stats button positioning
+- Fixed pmmo.dat bloat (includes feature to clean up old files)
+- Fixed vein marker showing veinable air after using
+- Fixed default jump max boost to be actually noticable
+- Fixed biomes not showing in glossary
+- Fixed biome bonuses not applying from config
+- Fixed skill groups not distributing XP to member skills
+- Fixed skill groups not being detected by certain events
+- Fixed break speed being slower than vanilla
+- Fixed 0% bonuses showing in tooltips
