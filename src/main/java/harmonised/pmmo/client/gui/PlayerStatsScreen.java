@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.client.gui.component.PMMOButton;
 import harmonised.pmmo.client.gui.component.PlayerStatsComponent;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -37,7 +38,7 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
         this.playerStatsComponent.toggleVisibility();
         this.leftPos = this.playerStatsComponent.updateScreenPosition(this.width, this.imageWidth);
         
-        this.addRenderableWidget(new PMMOButton(this, this.leftPos + 104, this.height / 2 - 22, 20, 18, 148, 0, 19));
+        this.addRenderableWidget(new PMMOButton(this, this.leftPos + Config.SKILL_BUTTON_X.get() - 22, this.height / 2 +Config.SKILL_BUTTON_Y.get(), 20, 18, 148, 0, 19));
         this.addWidget(this.playerStatsComponent);
     }
     
