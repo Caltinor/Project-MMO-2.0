@@ -24,7 +24,7 @@ public class FoodEatHandler {
 		if (serverSide)
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.CONSUME, event, new CompoundTag());
 		//Process perks
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.CONSUME, player, eventHookOutput));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.CONSUME, player, eventHookOutput, core.getSide()));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.CONSUME, food, player, perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);

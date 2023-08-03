@@ -124,7 +124,7 @@ public class TooltipHandler {
 		event.getToolTip().add(header.asComponent());
 		values.entrySet().stream().filter(entry -> entry.getValue() != 0.0).forEach(modifier -> {
 			event.getToolTip().add(new TranslatableComponent("pmmo."+modifier.getKey()).append(new TextComponent(" "+modifierPercent(modifier.getValue()))).setStyle(CoreUtils.getSkillStyle(modifier.getKey())));
-		}
+		});
 	}
 	
 	private static void addVeinTooltip(Translation header, ItemTooltipEvent event, VeinData data, boolean isBlockItem) {
