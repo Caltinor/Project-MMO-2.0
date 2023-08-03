@@ -5,8 +5,6 @@ import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,9 +19,7 @@ public class WorldRenderHandler {
 			return;
 		Minecraft mc = Minecraft.getInstance();
 
-		if (Config.VEIN_ENABLED.get()
-				&& VeinTracker.isLookingAtVeinTarget(mc.hitResult)
-				&& !mc.player.level().getBlockState(((BlockHitResult)mc.hitResult).getBlockPos()).isAir()) {
+		if (Config.VEIN_ENABLED.get() && VeinTracker.isLookingAtVeinTarget(mc.hitResult)) {
 			VeinTracker.updateVein(mc.player);
 			VeinRenderer.drawBoxHighlights(event.getPoseStack(), VeinTracker.getVein());
 		}
