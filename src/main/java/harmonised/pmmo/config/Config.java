@@ -68,6 +68,8 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_LINGER_DURATION;
 	public static ConfigValue<List<? extends String>> GAIN_BLACKLIST;
 	public static ForgeConfigSpec.BooleanValue HIDE_SKILL_BUTTON;
+	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_X;
+	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_Y;
 	
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
@@ -102,7 +104,11 @@ public class Config {
 				.defineList("Gain Blacklist", new ArrayList<>(), s -> s instanceof String);
 		HIDE_SKILL_BUTTON = builder.comment("if true, removes the skills button from the inventory screen")
 				.define("hide skill button", false);
-		
+		SKILL_BUTTON_X = builder.comment("the horizontal location of the skill button in the inventory.","Default = 126.  For removing overlaps, 150 is a good setting")
+				.define("skill_button_x", 126);
+		SKILL_BUTTON_Y = builder.comment("the vertical location (from center) of the skill button in the inventory.","Default = -22")
+				.define("skill_button_y", -22);
+
 		builder.pop();
 	}
 	
