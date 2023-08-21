@@ -109,8 +109,8 @@ public class PathReader {
 
 	private static boolean isQualifiedCompound(String node, CompoundTag nbt) {
 		String root = rawNode(node);
-		String key = node.substring(node.indexOf("{")+1, node.indexOf(":")).replaceAll("\"", "");
-		String value = node.substring(node.indexOf(":")+1, node.indexOf("}")).replaceAll("\"", "");
+		String key = node.substring(node.indexOf("{")+1, Math.max(0, node.indexOf(":"))).replaceAll("\"", "");
+		String value = node.substring(node.indexOf(":")+1, Math.max(0, node.indexOf("}"))).replaceAll("\"", "");
 		boolean test = nbt.contains(root)
 				&& nbt.getCompound(root).contains(key)
 				&& nbt.getCompound(root).get(key).getAsString()
