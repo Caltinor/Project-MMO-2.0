@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -51,6 +52,15 @@ public class MobAttributeHandler {
 			List<Player> nearbyPlayers = event.getLevel().getNearbyPlayers(targetCondition, entity, AABB.ofSize(spawnPos, range, range, range));
 			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
 			if (nearbyPlayers.isEmpty()) return;
+
+			//get values for biome and dimension scaling
+			Core core = Core.get(event.getLevel().getLevel());
+			LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(event.getLevel().getLevel().dimension().location());
+			LocationData bioData = core.getLoader().BIOME_LOADER.getData(event.getLevel().getBiome(event.getEntity().getOnPos()).unwrapKey().get().location());
+
+			var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
+			var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
+
 			//Set each Modifier type
 			Config.MOB_SCALING.get().forEach((id, config) -> {
 				ResourceLocation attributeID = new ResourceLocation(id);
@@ -67,6 +77,8 @@ public class MobAttributeHandler {
 					bonus *= Core.get(entity.level()).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level().getBiome(entity.blockPosition()))).mobModifiers()
 							 	.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
 							 		.getOrDefault(id.toString(), 1d);
+					bonus += dimMods.getOrDefault(attributeID, 0d).floatValue();
+					bonus += bioMods.getOrDefault(attributeID, 0d).floatValue();
 					AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
 					attributeInstance.removeModifier(MODIFIER_ID);
 					attributeInstance.addPermanentModifier(modifier);
