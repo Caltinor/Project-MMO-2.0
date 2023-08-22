@@ -136,13 +136,25 @@ public record ObjectData(
 		public ObjectData combine(ObjectData two) {
 			Set<String> tagValues = new HashSet<>();
 			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
+			Map<EventType, List<LogicEntry>> nbtXp = new HashMap<>();
 			Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
+			Map<ModifierDataType, List<LogicEntry>> nbtBonus = new HashMap<>();
 			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
+			Map<ReqType, List<LogicEntry>> nbtReq = new HashMap<>();
 			Map<ResourceLocation, Integer> reqEffects = new HashMap<>();
 			Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
 			VeinData[] combinedVein = {this.veinData()};
 			
 			BiConsumer<ObjectData, ObjectData> bothOrNeither = (o, t) -> {
+				//combine NBT settings
+				nbtXp.putAll(o.nbtXpValues());
+				t.nbtXpValues().forEach((event, logic) -> nbtXp.merge(event, logic, (a, b) -> {var list = new ArrayList<>(a); list.addAll(b); return list;}));
+				nbtBonus.putAll(o.nbtBonuses());
+				t.nbtBonuses().forEach((modifier, logic) -> nbtBonus.merge(modifier, logic, (a, b) -> {var list = new ArrayList<>(a); list.addAll(b); return list;}));
+				nbtReq.putAll(o.nbtReqs());
+				t.nbtReqs().forEach((req, logic) -> nbtReq.merge(req, logic, (a, b) -> {var list = new ArrayList<>(a); list.addAll(b); return list;}));
+
+				//merge all other settings
 				tagValues.addAll(o.tagValues());
 				t.tagValues.forEach((rl) -> {
 					if (!tagValues.contains(rl))
@@ -197,7 +209,7 @@ public record ObjectData(
 			bothOrNeither, 
 			bothOrNeither);
 			
-			return new ObjectData(this.override() || two.override(), tagValues, reqs, two.nbtReqs(), reqEffects, xpValues, two.nbtXpValues(), bonuses, two.nbtBonuses(), salvage, combinedVein[0]);
+			return new ObjectData(this.override() || two.override(), tagValues, reqs, nbtReq, reqEffects, xpValues, nbtXp, bonuses, nbtBonus, salvage, combinedVein[0]);
 		}
 		
 		@Override
