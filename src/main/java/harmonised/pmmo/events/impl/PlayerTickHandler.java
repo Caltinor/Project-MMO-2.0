@@ -61,6 +61,7 @@ public class PlayerTickHandler {
 			processEvent(EventType.EFFECT, core, event);
 		
 		if (player.isUnderWater()) {
+			processEvent(EventType.SUBMERGED, core, event);
 			Vec3 vec = player.getDeltaMovement();
 			if (player.isSprinting())
 				processEvent(EventType.SWIM_SPRINTING, core, event); 
@@ -72,8 +73,6 @@ public class PlayerTickHandler {
 				processEvent(EventType.SURFACING, core, event);
 			else if (vec.y() < -sinkingRate)
 				processEvent(EventType.DIVING, core, event);
-			else
-				processEvent(EventType.SUBMERGED, core, event);
 		}
 		else if (player.isInWater())
 			processEvent(EventType.SWIMMING, core, event); 
