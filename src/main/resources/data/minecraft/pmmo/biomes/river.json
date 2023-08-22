@@ -6,34 +6,34 @@
     },
     "mob_multiplier":{
         "minecraft:zombie" :{
-            "minecraft:generic.movement_speed": 0.75,
-		    "minecraft:generic.max_health": 0.75,
-            "minecraft:generic.attack_damage": 0.75
+            "minecraft:generic.movement_speed": -0.0075,
+		    "minecraft:generic.max_health": -7.0,
+            "minecraft:generic.attack_damage": -0.0075
         },
         "minecraft:skeleton" :{
-            "minecraft:generic.movement_speed": 0.75,
-		    "minecraft:generic.max_health": 0.75,
-            "minecraft:generic.attack_damage": 0.75
+            "minecraft:generic.movement_speed": -0.0075,
+		    "minecraft:generic.max_health": -7.0,
+            "minecraft:generic.attack_damage": -0.0075
         },
         "minecraft:creeper" :{
-            "minecraft:generic.movement_speed": 0.75,
-		    "minecraft:generic.max_health": 0.75,
-            "minecraft:generic.attack_damage": 0.75
+            "minecraft:generic.movement_speed": -0.0075,
+		    "minecraft:generic.max_health": -7.0,
+            "minecraft:generic.attack_damage": -0.0075
         },
         "minecraft:spider" :{
-            "minecraft:generic.movement_speed": 0.75,
-		    "minecraft:generic.max_health": 0.75,
-            "minecraft:generic.attack_damage": 0.75
+            "minecraft:generic.movement_speed": -0.0075,
+		    "minecraft:generic.max_health": -7.0,
+            "minecraft:generic.attack_damage": -0.0075
         },
         "minecraft:enderman" :{
-            "minecraft:generic.movement_speed": 0.75,
-		    "minecraft:generic.max_health": 0.75,
-            "minecraft:generic.attack_damage": 0.75
+            "minecraft:generic.movement_speed": -0.0075,
+		    "minecraft:generic.max_health": -7.0,
+            "minecraft:generic.attack_damage": -0.0075
         },
         "minecraft:husk" :{
-            "minecraft:generic.movement_speed": 0.75,
-		    "minecraft:generic.max_health": 0.75,
-            "minecraft:generic.attack_damage": 0.75
+            "minecraft:generic.movement_speed": -0.0075,
+		    "minecraft:generic.max_health": -7.0,
+            "minecraft:generic.attack_damage": -0.0075
         }
     }
 }
