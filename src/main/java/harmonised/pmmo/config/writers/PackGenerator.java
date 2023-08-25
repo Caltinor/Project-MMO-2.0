@@ -52,7 +52,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class PackGenerator {
 	public static final String PACKNAME = "generated_pack";
-	public static final String DISABLER = "pmmo_disabler_pack";
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	public static boolean applyOverride = false, applyDefaults = false, applyDisabler = false, applySimple = false;
 	public static List<String> namespaceFilter = new ArrayList<>();
@@ -234,35 +233,7 @@ public class PackGenerator {
 				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
 			}			
 		}
-		return 0;
-	}
-	
-	public static int generateEmptyPack(MinecraftServer server, boolean withOverride) {		
-		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME);
-		filepath.toFile().mkdirs();
-		try {
-		Files.writeString(
-			filepath.resolve("pack.mcmeta"), 
-			gson.toJson(getPackObject(applyDisabler)), 
-			Charset.defaultCharset(),
-			StandardOpenOption.CREATE_NEW,
-			StandardOpenOption.WRITE);
-		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
-		
-		for (Category category : Category.values()) {
-			for (ResourceLocation id : category.valueList.apply(server)) {
-				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route);
-				finalPath.toFile().mkdirs();
-				try {
-				Files.writeString(
-						finalPath.resolve(id.getPath().substring(id.getPath().lastIndexOf('/')+1)+".json"), 
-						category.defaultData.apply(id),
-						Charset.defaultCharset(),
-						StandardOpenOption.CREATE_NEW,
-						StandardOpenOption.WRITE);
-				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
-			}			
-		}
+		generatePlayerConfigs(server, players);
 		return 0;
 	}
 	
