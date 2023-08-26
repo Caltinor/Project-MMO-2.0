@@ -29,7 +29,7 @@
 			 	 	{"operator":"EQUALS","comparators":["8439583"],"value":{"agility":1.1}},
 			 	 	{"operator":"EQUALS","comparators":["6192150"],"value":{"farming":1.1}},
 			 	 	{"operator":"EQUALS","comparators":["3949738"],"value":{"fishing":1.1}},
-			 	 	{"operator":"EQUALS","comparators":["1908001"],"value":{"combat":1.1}},
+			 	 	{"operator":"EQUALS","comparators":["1908001"],"value":{"combat":1.1, "archery":1.1}},
 			 	 	{"operator":"EQUALS","comparators":["11546150"],"value":{"endurance":1.1}},
 			 	 	{"operator":"EQUALS","comparators":["16383998"],"value":{"smithing":1.1}},
 			 	 	{"operator":"EQUALS","comparators":["16351261"],"value":{"crafting":1.1}},
