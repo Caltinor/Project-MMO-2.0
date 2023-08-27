@@ -124,16 +124,23 @@ public class PerksConfig {
 		bodyList.clear();
 		
 		//=====================FROM_IMPACT==============================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fall_save").withString(APIUtils.SKILLNAME, "agility").withDouble(APIUtils.PER_LEVEL, 0.005).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fall_save").withString(APIUtils.SKILLNAME, "endurance").withDouble(APIUtils.PER_LEVEL, 0.025).build());
-		defaultSettings.put(EventType.FROM_IMPACT, new ArrayList<>(bodyList));
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_reduce").withString(APIUtils.SKILLNAME, "agility")
+				.withString(APIUtils.DAMAGE_TYPE_IN, "minecraft:fall")
+				.withDouble(APIUtils.PER_LEVEL, 0.025).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_reduce").withString(APIUtils.SKILLNAME, "endurance")
+				.withString(APIUtils.DAMAGE_TYPE_IN, "minecraft:mob_attack")
+				.withDouble(APIUtils.PER_LEVEL, 0.025).build());
+		defaultSettings.put(EventType.RECEIVE_DAMAGE, new ArrayList<>(bodyList));
 		bodyList.clear();
 		
 		//=====================DEAL_RANGED_DAMAGE=======================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "archery").withList("applies_to", StringTag.valueOf("minecraft:bow"), StringTag.valueOf("minecraft:crossbow"), StringTag.valueOf("minecraft:trident")).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic").withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging").withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build());
-		defaultSettings.put(EventType.DEAL_RANGED_DAMAGE, new ArrayList<>(bodyList));
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "archery")
+				.withList("applies_to", StringTag.valueOf("minecraft:bow"), StringTag.valueOf("minecraft:crossbow"), StringTag.valueOf("minecraft:trident")).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic")
+				.withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging")
+				.withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build());
+		defaultSettings.put(EventType.DEAL_DAMAGE, new ArrayList<>(bodyList));
 		bodyList.clear();
 
 		//=====================SPRINTING================================

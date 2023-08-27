@@ -2,6 +2,7 @@ package harmonised.pmmo.util;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -52,5 +53,9 @@ public class RegistryUtil {
 
 	public static ResourceLocation getId(MobEffect effect) {
 		return ForgeRegistries.MOB_EFFECTS.getKey(effect);
+	}
+
+	public static ResourceLocation getId(DamageSource source) {
+		return source.typeHolder().unwrapKey().get().location();
 	}
 }

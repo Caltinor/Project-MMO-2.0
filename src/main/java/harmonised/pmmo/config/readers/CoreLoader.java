@@ -38,11 +38,11 @@ public class CoreLoader {
 	@SubscribeEvent
 	public static void onTagLoad(TagsUpdatedEvent event) {
 		Core core = Core.get(event.getUpdateCause() == UpdateCause.CLIENT_PACKET_RECEIVED ? LogicalSide.CLIENT : LogicalSide.SERVER);
-		core.getLoader().ITEM_LOADER.postProcess();
-		core.getLoader().BLOCK_LOADER.postProcess();
-		core.getLoader().ENTITY_LOADER.postProcess();
+		core.getLoader().ITEM_LOADER.postProcess(event.getRegistryAccess());
+		core.getLoader().BLOCK_LOADER.postProcess(event.getRegistryAccess());
+		core.getLoader().ENTITY_LOADER.postProcess(event.getRegistryAccess());
 		//core.getLoader().DIMENSION_LOADER.postProcess();
-		core.getLoader().BIOME_LOADER.postProcess();
+		core.getLoader().BIOME_LOADER.postProcess(event.getRegistryAccess());
 	}
 	
 	@SuppressWarnings("unchecked")

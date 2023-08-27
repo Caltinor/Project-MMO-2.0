@@ -372,14 +372,9 @@ public class Config {
 		builder.pop();
 	}
 	
-	public static ConfigObject<Map<String, Double>> FROM_ENVIRONMENT_XP;
-	public static ConfigObject<Map<String, Double>> FROM_IMPACT_XP;
-	public static ConfigObject<Map<String, Double>> FROM_MAGIC_XP;
-	public static ConfigObject<Map<String, Double>> FROM_PROJECTILE_XP;
-	
-	public static ConfigObject<Map<String, Double>> RECEIVE_DAMAGE_XP;
-	public static ConfigObject<Map<String, Double>> DEAL_MELEE_DAMAGE_XP;
-	public static ConfigObject<Map<String, Double>> DEAL_RANGED_DAMAGE_XP;
+	public static ConfigObject<Map<String, Map<String, Long>>> RECEIVE_DAMAGE_XP;
+	public static ConfigObject<Map<String, Map<String, Long>>> DEAL_DAMAGE_XP;
+
 	
 	public static ConfigObject<Map<String, Double>> JUMP_XP;
 	public static ConfigObject<Map<String, Double>> SPRINT_JUMP_XP;
@@ -397,24 +392,22 @@ public class Config {
 	private static void buildEventBasedXPSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related to certain default event XP awards.").push("Event_XP_Specifics");
 		
-		builder.push("Damage_Received");
-			FROM_ENVIRONMENT_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"FROM_ENVIRONMENT Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 10d));
-			FROM_IMPACT_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"FROM_IMPACT Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 15d));
-			FROM_MAGIC_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"FROM_MAGIC Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("magic", 15d));
-			FROM_PROJECTILE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder,
-					"FROM_PROJECTILE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 15d));
-			RECEIVE_DAMAGE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"RECEIVE_DAMAGE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
-		builder.pop();
-		
-		builder.push("Damage_Dealt");
-			DEAL_MELEE_DAMAGE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"DEAL_MELEE_DAMAGE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 1d));
-			DEAL_RANGED_DAMAGE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"DEAL_RANGED_DAMAGE SKills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("archery", 1d));
+		builder.push("Damage").comment(
+				"damage dealt and received is defined by the damage type",
+				"or damage type tag preceding it.  xp is awarded based on",
+				"the value below multiplied by the damage applied.");
+			DEAL_DAMAGE_XP = TomlConfigHelper.defineObject(builder,
+					"DEAL_DAMAGE", CodecTypes.DAMAGE_XP_CODEC, Map.of(
+							"minecraft:generic_kill", Map.of("combat", 1l),
+							"minecraft:player_attack", Map.of("combat", 1l),
+							"#minecraft:is_projectile", Map.of("archery", 1l)));
+			RECEIVE_DAMAGE_XP = TomlConfigHelper.defineObject(builder,
+					"RECEIVE_DAMAGE", CodecTypes.DAMAGE_XP_CODEC, Map.of(
+							"minecraft:generic_kill", Map.of("endurance", 1l),
+							"#pmmo:environment", Map.of("endurance", 10l),
+							"#pmmo:impact", Map.of("endurance", 15l),
+							"#pmmo:magic", Map.of("magic", 15l),
+							"#minecraft:is_projectile", Map.of("endurance", 15l)));
 		builder.pop();
 		
 		builder.push("Jumps");

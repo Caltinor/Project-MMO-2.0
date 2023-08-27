@@ -719,7 +719,9 @@ public class APIUtils {
 	
 	public static final String BREAK_SPEED_INPUT_VALUE = "speedIn";
 	public static final String BREAK_SPEED_OUTPUT_VALUE = "speed";
-	
+
+	public static final String DAMAGE_TYPE_IN = "for_damage";
+	public static final String DAMAGE_TYPE = "damage_type";
 	public static final String DAMAGE_IN = "damageIn";
 	public static final String DAMAGE_OUT ="damage";
 	

@@ -10,14 +10,13 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
-import harmonised.pmmo.util.Functions;
-import harmonised.pmmo.util.Messenger;
-import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
-import harmonised.pmmo.util.TagBuilder;
+import harmonised.pmmo.util.*;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,6 +28,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 public class DamageDealtHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(LivingAttackEvent event) {
 		//Check the source entity isn't null.  This should also reduce
 		//the number of events processed.
@@ -43,9 +43,8 @@ public class DamageDealtHandler {
 			Player player = (Player) event.getSource().getEntity();
 			if (target.equals(player))
 				return;
-			Core core = Core.get(player.level);
-			EventType type = getEventCategory(event.getSource().is(Reference.FROM_RANGED), event.getEntity());
-			MsLoggy.INFO.log(LOG_CODE.EVENT,"Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
+			Core core = Core.get(player.level());
+			MsLoggy.INFO.log(LOG_CODE.EVENT,"Attack Type: "+EventType.DEAL_DAMAGE.name()+" | TargetType: "+target.getType().toString());
 			
 			
 			//===========================DEFAULT LOGIC===================================
@@ -59,10 +58,10 @@ public class DamageDealtHandler {
 				Messenger.sendDenialMsg(ReqType.KILL, player, target.getDisplayName());
 				return;
 			}
-			boolean serverSide = !player.level.isClientSide;
+			boolean serverSide = !player.level().isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide) {
-				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
+				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.DEAL_DAMAGE, event, new CompoundTag());
 				if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) { 
 					event.setCanceled(true);
 					return;
@@ -72,6 +71,7 @@ public class DamageDealtHandler {
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	public static void handle(LivingDamageEvent event) {
 		if (event.getSource().getEntity() == null) return;
 		//Execute actual logic only if the source is a player
@@ -82,77 +82,55 @@ public class DamageDealtHandler {
 			Player player = (Player) event.getSource().getEntity();
 			if (target.equals(player)) return;
 			
-			Core core = Core.get(player.level);
-			EventType type = getEventCategory(event.getSource().is(Reference.FROM_RANGED), event.getEntity());
+			Core core = Core.get(player.level());
+			String damageType = RegistryUtil.getId(event.getSource()).toString();
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+event.getSource().getMsgId());
 			//Process perks
-			CompoundTag perkOutput = core.getPerkRegistry().executePerk(type, player, TagBuilder.start().withFloat(APIUtils.DAMAGE_IN, event.getAmount()).build());
+			CompoundTag dataIn = TagBuilder.start()
+					.withFloat(APIUtils.DAMAGE_IN, event.getAmount())
+					.withString(APIUtils.DAMAGE_TYPE, RegistryUtil.getId(event.getSource()).toString()).build();
+			CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.DEAL_DAMAGE, player, dataIn);
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Pre-Perk Damage:"+event.getAmount());
 			if (perkOutput.contains(APIUtils.DAMAGE_OUT)) {
-				event.setAmount(perkOutput.getFloat(APIUtils.DAMAGE_OUT));
+				float damageOut = perkOutput.getFloat(APIUtils.DAMAGE_OUT);
+				MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Damage Modified from %s to %s".formatted(event.getAmount(), damageOut));
+				event.setAmount(damageOut);
 			}
-			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+type.name()+" | Damage Out: "+event.getAmount());
-			if (!player.level.isClientSide) { 
-				Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), event.getSource(), player, perkOutput);
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+damageType+" | Damage Out: "+event.getAmount());
+			if (!player.level().isClientSide) {
+				perkOutput.putString(APIUtils.DAMAGE_TYPE, damageType);
+				Map<String, Long> xpAward = getExperienceAwards(core, target, event.getAmount(), event.getSource(), player, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 				core.awardXP(partyMembersInRange, xpAward);
 			}
 		}
 	}
 	
-	private static Map<String, Long> getExperienceAwards(Core core, EventType type, LivingEntity target, float damage, DamageSource source, Player player, CompoundTag dataIn) {
+	private static Map<String, Long> getExperienceAwards(Core core, LivingEntity target, float damage, DamageSource source, Player player, CompoundTag dataIn) {
 		Map<String, Long> mapOut = new HashMap<>();
 		float ultimateDamage = Math.min(damage, target.getHealth());
 		ItemStack weapon = player.getMainHandItem();
-		Entity srcEntity = source.is(Reference.FROM_RANGED) ? source.getDirectEntity() : player;
-		switch (type) {
-		case MELEE_TO_MOBS: case MELEE_TO_ANIMALS: case MELEE_TO_PLAYERS: case RANGED_TO_MOBS: case RANGED_TO_ANIMALS: case RANGED_TO_PLAYERS: {
-			Functions.mergeMaps(core.getExperienceAwards(type, weapon, player, dataIn),
-								core.getExperienceAwards(type, srcEntity, player, dataIn),
-								core.getExperienceAwards(type, target, player, dataIn))
-			.forEach((skill, value) -> {
-				mapOut.put(skill, (long)((float)value * ultimateDamage));
-			});
-			break;
-		}
-		case DEAL_MELEE_DAMAGE: {
-			Config.DEAL_MELEE_DAMAGE_XP.get().keySet().forEach((skill) -> {
-				Double value = ultimateDamage * Config.DEAL_MELEE_DAMAGE_XP.get().getOrDefault(skill, 0d) * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
-				mapOut.put(skill, value.longValue());
-			});
-			break;
-		}
-		case DEAL_RANGED_DAMAGE: {
-			Config.DEAL_RANGED_DAMAGE_XP.get().keySet().forEach((skill) -> {
-				Double value = ultimateDamage * Config.DEAL_RANGED_DAMAGE_XP.get().getOrDefault(skill, 0d) * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
-				mapOut.put(skill, value.longValue());
-			});
-			break;
-		}
-		default: {return new HashMap<>();}
-		}
+		Entity srcEntity = source.getDirectEntity() != null ? source.getDirectEntity() : player;
+		//get data from object configurations
+		Functions.mergeMaps(
+				core.getExperienceAwards(EventType.DEAL_DAMAGE, weapon, player, dataIn),
+				core.getExperienceAwards(EventType.DEAL_DAMAGE, srcEntity, player, dataIn),
+				core.getExperienceAwards(EventType.DEAL_DAMAGE, target, player, dataIn))
+			.forEach((skill, xp) -> mapOut.put(skill, (long)(xp.floatValue() * ultimateDamage)));
+		//get and supplement object data with fallback configs.
+		//the fallback should only fill in where the configs do not have values
+		Map<String, Map<String, Long>> config = Config.DEAL_DAMAGE_XP.get();
+		List<String> tags = config.keySet().stream()
+				.filter(str -> {
+					if (!str.contains("#"))
+						return false;
+					var registry = player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+					var tag = registry.getTag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(str.substring(1))));
+					return tag.map(type -> type.contains(source.typeHolder())).orElse(false);
+				}).toList();
+		Map<String, Long> tagXp = tags.stream().map(str -> config.get(str)).reduce((mapA, mapB) -> Functions.mergeMaps(mapA, mapB)).orElse(new HashMap<>());
+		Functions.mergeMaps(config.getOrDefault(RegistryUtil.getId(source).toString(), new HashMap<>()), tagXp)
+				.forEach((skill, xp) -> mapOut.putIfAbsent(skill, (long)(xp.floatValue() * ultimateDamage)));
 		return mapOut;
-	}
-	
-	private static EventType getEventCategory(boolean projectileSource, LivingEntity target) {
-		if (projectileSource) {
-			if (target.getType().is(Reference.MOB_TAG))
-				return EventType.RANGED_TO_MOBS;
-			if (target.getType().is(Reference.ANIMAL_TAG))
-				return EventType.RANGED_TO_ANIMALS;
-			if (target.getType().equals(EntityType.PLAYER))
-				return EventType.RANGED_TO_PLAYERS;
-			else
-				return EventType.DEAL_RANGED_DAMAGE;
-		}
-		else {
-			if (target.getType().is(Reference.MOB_TAG))
-				return EventType.MELEE_TO_MOBS;
-			if (target.getType().is(Reference.ANIMAL_TAG))
-				return EventType.MELEE_TO_ANIMALS;
-			if (target.getType().equals(EntityType.PLAYER))
-				return EventType.MELEE_TO_PLAYERS;
-			else
-				return EventType.DEAL_MELEE_DAMAGE;
-		}
 	}
 }
