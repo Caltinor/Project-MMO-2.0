@@ -72,11 +72,7 @@ public class FeaturePerks {
 			}).build();
 
 	public static final Perk TEMP_ATTRIBUTE = Perk.begin()
-			.addDefaults(TagBuilder.start()
-					.withDouble(APIUtils.MAX_BOOST, 0d)
-					.withDouble(APIUtils.PER_LEVEL, 0d)
-					.withDouble(APIUtils.BASE, 0d)
-					.withBool(APIUtils.MULTIPLICATIVE, false).build())
+			.addDefaults(ATTRIBUTE.propertyDefaults())
 			.setStart((player, nbt) -> {
 				double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
 				double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
@@ -84,27 +80,20 @@ public class FeaturePerks {
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
 				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.MULTIPLY_BASE :  Operation.ADDITION;
 
-				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
-				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, operation);
-				instance.removeModifier(attributeID);
+				UUID attributeID = Functions.getReliableUUID("temp/"+nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
+				AttributeModifier modifier = new AttributeModifier(attributeID, "temporary PMMO-modifier based on user skill", boost, operation);
+				if (instance.hasModifier(modifier))
+					instance.removeModifier(attributeID);
 				instance.addTransientModifier(modifier);
 				return NONE;
 			})
 			.setStop((player, nbt) -> {
-				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
+				UUID attributeID = Functions.getReliableUUID("temp/"+nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
 				player.getAttribute(getAttribute(nbt)).removeModifier(attributeID);
 				return NONE;
 			})
-			.setDescription(LangProvider.PERK_ATTRIBUTE_DESC.asComponent())
-			.setStatus((player, settings) -> {
-				double perLevel = settings.getDouble(APIUtils.PER_LEVEL);
-				String skillname = settings.getString(APIUtils.SKILLNAME);
-				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
-				return List.of(
-						LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
-						LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
-						LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
-			}).build();
+			.setDescription(ATTRIBUTE.description())
+			.setStatus(ATTRIBUTE.status()).build();
 	
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
 		MobEffect effect;
