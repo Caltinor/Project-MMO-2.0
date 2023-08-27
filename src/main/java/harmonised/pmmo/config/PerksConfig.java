@@ -145,7 +145,8 @@ public class PerksConfig {
 		//=====================SPRINTING================================
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:temp_attribute").withString(APIUtils.SKILLNAME, "agility")
 				.withString(APIUtils.ATTRIBUTE, "minecraft:generic.movement_speed")
-				.withDouble(APIUtils.PER_LEVEL, 0.000035)
+				.withInt(APIUtils.DURATION, 120)
+				.withDouble(APIUtils.PER_LEVEL, 0.0035)
 				.withDouble(APIUtils.MAX_BOOST, 1d).build());
 		defaultSettings.put(EventType.SPRINTING, new ArrayList<>(bodyList));
 	}

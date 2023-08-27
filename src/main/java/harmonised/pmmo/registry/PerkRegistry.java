@@ -62,16 +62,16 @@ public class PerkRegistry {
 		PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
 			ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
 			Perk perk = perks.getOrDefault(perkID, Perk.empty());
-			src = perk.propertyDefaults().copy().merge(src.copy().merge(dataIn.copy().merge(output.copy())));
-			src.putInt(APIUtils.SKILL_LEVEL, src.contains(APIUtils.SKILLNAME) 
-					? Core.get(player.level()).getData().getPlayerSkillLevel(src.getString(APIUtils.SKILLNAME), player.getUUID())
+			CompoundTag fullSrc = perk.propertyDefaults().copy().merge(src.copy().merge(dataIn.copy().merge(output.copy())));
+			fullSrc.putInt(APIUtils.SKILL_LEVEL, fullSrc.contains(APIUtils.SKILLNAME)
+					? Core.get(player.level()).getData().getPlayerSkillLevel(fullSrc.getString(APIUtils.SKILLNAME), player.getUUID())
 					: 0);
-			if (perk.canActivate(player, src)) {
+			if (perk.canActivate(player, fullSrc)) {
 				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(perkID.toString()));
-				CompoundTag executionOutput = perk.start(player, src);
-				tickTracker.add(new TickSchedule(perk, player, src, new AtomicInteger(0)));
-				if (src.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, src))
-					coolTracker.add(new PerkCooldown(perkID, player, src, player.level().getGameTime()));
+				CompoundTag executionOutput = perk.start(player, fullSrc);
+				tickTracker.add(new TickSchedule(perk, player, fullSrc.copy(), new AtomicInteger(0)));
+				if (fullSrc.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, fullSrc))
+					coolTracker.add(new PerkCooldown(perkID, player, fullSrc, player.level().getGameTime()));
 				output.merge(executionOutput);
 			}
 		});
@@ -98,13 +98,15 @@ public class PerkRegistry {
 	private final List<PerkCooldown> coolTracker = new ArrayList<>();
 	
 	public void executePerkTicks(LevelTickEvent event) {
+		MsLoggy.DEBUG.log(LOG_CODE.PERKS, "Perk Tick Tracker:" +MsLoggy.listToString(tickTracker));
 		coolTracker.removeIf(tracker -> tracker.cooledDown(event.level));
 		new ArrayList<>(tickTracker).forEach(schedule -> {
 			if (schedule.shouldTick() && schedule.perk().canActivate(schedule.player(), schedule.src()))
 				schedule.tick();
-			else
+			else {
 				schedule.perk().stop(schedule.player(), schedule.src());
 				tickTracker.remove(schedule);
+			}
 		});
 	}
 
