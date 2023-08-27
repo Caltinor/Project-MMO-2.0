@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -30,10 +31,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 public record ObjectData(
 		boolean override,
 		Set<String> tagValues,
-		Map<ReqType, Map<String, Integer>> reqs,		
+		Map<ReqType, Map<String, Integer>> reqs,
 		Map<ReqType, List<LogicEntry>> nbtReqs,
 		Map<ResourceLocation, Integer> negativeEffects,
 		Map<EventType, Map<String, Long>> xpValues,
+		Map<EventType, Map<String, Map<String, Long>>> damageXpValues,
 		Map<EventType, List<LogicEntry>> nbtXpValues,
 		Map<ModifierDataType, Map<String, Double>> bonuses,
 		Map<ModifierDataType, List<LogicEntry>> nbtBonuses,
@@ -41,7 +43,7 @@ public record ObjectData(
 		VeinData veinData) implements DataSource<ObjectData>{
 	
 		public ObjectData() {
-			this(false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), 
+			this(false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
 					new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY);
 		}
 
@@ -52,9 +54,15 @@ public record ObjectData(
 		}
 		@Override
 		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
-			return nbtXpValues().get(type) == null
-					? xpValues().getOrDefault(type, new HashMap<>())
-					: NBTUtils.getExperienceAward(nbtXpValues().get(type), nbt);
+			if (nbtXpValues().get(type) == null)
+				return switch (type) {
+					case RECEIVE_DAMAGE, DEAL_DAMAGE -> damageXpValues()
+							.getOrDefault(type, new HashMap<>())
+							.getOrDefault(nbt.getString(APIUtils.DAMAGE_TYPE), new HashMap<>());
+					default -> xpValues().getOrDefault(type, new HashMap<>());
+				};
+			else
+				return NBTUtils.getExperienceAward(nbtXpValues().get(type), nbt);
 		}
 		@Override
 		public void setXpValues(EventType type, Map<String, Long> award) {
@@ -109,6 +117,10 @@ public record ObjectData(
 				Codec.optionalField("nbt_xp_values",
 					Codec.simpleMap(EventType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(EventType.values())).codec())
 					.forGetter(od -> Optional.of(od.nbtXpValues())),
+				Codec.optionalField("dealt_damage_xp",
+						CodecTypes.DAMAGE_XP_CODEC).forGetter(od -> Optional.of(od.damageXpValues().getOrDefault(EventType.DEAL_DAMAGE, new HashMap<>()))),
+				Codec.optionalField("received_damage_xp",
+						CodecTypes.DAMAGE_XP_CODEC).forGetter(od -> Optional.of(od.damageXpValues().getOrDefault(EventType.RECEIVE_DAMAGE, new HashMap<>()))),
 				Codec.optionalField("bonuses",
 					Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).codec())
 					.forGetter(od -> Optional.of(od.bonuses())),
@@ -117,7 +129,7 @@ public record ObjectData(
 					.forGetter(od -> Optional.of(od.nbtBonuses())),
 				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).optionalFieldOf("salvage").forGetter(od -> Optional.of(od.salvage())),
 				VeinData.VEIN_DATA_CODEC.optionalFieldOf(VeinMiningLogic.VEIN_DATA).forGetter(od -> Optional.of(od.veinData()))
-				).apply(instance, (override, tags, reqs, nbtreqs, effects, xp, nbtXp, bonus, nbtbonus, salvage, vein) -> 
+				).apply(instance, (override, tags, reqs, nbtreqs, effects, xp, nbtXp, dealt, received, bonus, nbtbonus, salvage, vein) ->
 					new ObjectData(
 						override.orElse(false),
 						new HashSet<>(tags.orElse(List.of())),
@@ -125,6 +137,8 @@ public record ObjectData(
 						DataSource.clearEmptyValues(nbtreqs.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(effects.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(xp.orElse(new HashMap<>())),
+						Map.of(EventType.DEAL_DAMAGE, DataSource.clearEmptyValues(dealt.orElse(new HashMap<>())),
+								EventType.RECEIVE_DAMAGE, DataSource.clearEmptyValues(received.orElse(new HashMap<>()))),
 						DataSource.clearEmptyValues(nbtXp.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(bonus.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(nbtbonus.orElse(new HashMap<>())),
@@ -137,6 +151,7 @@ public record ObjectData(
 			Set<String> tagValues = new HashSet<>();
 			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
 			Map<EventType, List<LogicEntry>> nbtXp = new HashMap<>();
+			Map<EventType, Map<String, Map<String, Long>>> damageXP = new HashMap<>();
 			Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
 			Map<ModifierDataType, List<LogicEntry>> nbtBonus = new HashMap<>();
 			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
@@ -166,6 +181,16 @@ public record ObjectData(
 						Map<String, Long> mergedMap = new HashMap<>(oMap);
 						nMap.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
 						return mergedMap;
+					});
+				});
+				damageXP.putAll(o.damageXpValues());
+				t.damageXpValues().forEach((event, map) -> {
+					map.forEach((dmg, xp) -> {
+						damageXP.computeIfAbsent(event, e -> new HashMap<>()).merge(dmg, xp, (oMap, nMap) -> {
+							Map<String, Long> mergedMap = new HashMap<>(oMap);
+							nMap.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
+							return mergedMap;
+						});
 					});
 				});
 				bonuses.putAll(o.bonuses());	
@@ -200,6 +225,7 @@ public record ObjectData(
 			Functions.biPermutation(this, two, this.override(), two.override(), (o, t) -> {
 				tagValues.addAll(o.tagValues().isEmpty() ? t.tagValues() : o.tagValues());
 				xpValues.putAll(o.xpValues().isEmpty() ? t.xpValues() : o.xpValues());
+				damageXP.putAll(o.damageXpValues().isEmpty() ? t.damageXpValues() : o.damageXpValues());
 				bonuses.putAll(o.bonuses().isEmpty() ? t.bonuses() : o.bonuses());
 				reqs.putAll(o.reqs().isEmpty() ? t.reqs() : o.reqs());
 				reqEffects.putAll(o.negativeEffects().isEmpty() ? t.negativeEffects() : o.negativeEffects());
@@ -209,7 +235,8 @@ public record ObjectData(
 			bothOrNeither, 
 			bothOrNeither);
 			
-			return new ObjectData(this.override() || two.override(), tagValues, reqs, nbtReq, reqEffects, xpValues, nbtXp, bonuses, nbtBonus, salvage, combinedVein[0]);
+			return new ObjectData(this.override() || two.override(), tagValues, reqs, nbtReq, reqEffects
+					, xpValues, damageXP, nbtXp, bonuses, nbtBonus, salvage, combinedVein[0]);
 		}
 		
 		@Override

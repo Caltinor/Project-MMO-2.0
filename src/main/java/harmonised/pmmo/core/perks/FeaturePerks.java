@@ -178,11 +178,19 @@ public class FeaturePerks {
 					LangProvider.PERK_BREATH_STATUS_1.asComponent((int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL))),
 					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
 
-	public static final Perk FALL_SAVE = Perk.begin()
-			.addDefaults(TagBuilder.start().withDouble(APIUtils.PER_LEVEL, 0.025).withFloat(APIUtils.DAMAGE_IN, 0).build())
+	public static final Perk DAMAGE_REDUCE = Perk.begin()
+			.addConditions((player, nbt) -> nbt.getString(APIUtils.DAMAGE_TYPE).equals(nbt.getString(APIUtils.DAMAGE_TYPE_IN)))
+			.addDefaults(TagBuilder.start()
+					.withDouble(APIUtils.PER_LEVEL, 0.025)
+					.withFloat(APIUtils.DAMAGE_IN, 0)
+					.withString(APIUtils.DAMAGE_TYPE, "missing")
+					.withString(APIUtils.DAMAGE_TYPE_IN, "omitted").build())
 			.setStart((player, nbt) -> {
 				float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
-				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, Math.max(nbt.getFloat(APIUtils.DAMAGE_IN) - saved, 0)).build();
+				float baseDamage = nbt.contains(APIUtils.DAMAGE_OUT)
+						? nbt.getFloat(APIUtils.DAMAGE_OUT)
+						: nbt.getFloat(APIUtils.DAMAGE_IN);
+				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, Math.max(baseDamage - saved, 0)).build();
 			})
 			.setDescription(LangProvider.PERK_FALL_SAVE_DESC.asComponent())
 			.setStatus((player, nbt) -> List.of(

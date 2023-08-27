@@ -19,7 +19,8 @@ import net.minecraft.world.level.ChunkPos;
 public class CodecTypes {
 	public static final Codec<Map<String, Double>> DOUBLE_CODEC = Codec.unboundedMap(Codec.STRING, Codec.DOUBLE);
 	public static final Codec<Map<String, Long>> LONG_CODEC = Codec.unboundedMap(Codec.STRING, Codec.LONG);
-	public static final Codec<Map<String, Integer>> INTEGER_CODEC = Codec.unboundedMap(Codec.STRING, Codec.INT);	
+	public static final Codec<Map<String, Integer>> INTEGER_CODEC = Codec.unboundedMap(Codec.STRING, Codec.INT);
+	public static final Codec<Map<String, Map<String, Long>>> DAMAGE_XP_CODEC = Codec.unboundedMap(Codec.STRING, LONG_CODEC);
 	
 	public record SalvageData (
 			Map<String, Double> chancePerLevel,

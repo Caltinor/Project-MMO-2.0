@@ -18,10 +18,7 @@ import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class AutoEntity {
-	//public static final ReqType[] REQTYPES = {ReqType.RIDE, ReqType.TAME, ReqType.BREED, ReqType.ENTITY_INTERACT};
-	public static final EventType[] EVENTTYPES = {EventType.BREED, EventType.FROM_MOBS, EventType.FROM_PLAYERS,	EventType.FROM_ANIMALS, 		
-			EventType.MELEE_TO_MOBS, EventType.MELEE_TO_PLAYERS, EventType.MELEE_TO_ANIMALS, EventType.RANGED_TO_MOBS,
-			EventType.RANGED_TO_PLAYERS, EventType.RANGED_TO_ANIMALS, EventType.DEATH, EventType.ENTITY, EventType.RIDING, 	
+	public static final EventType[] EVENTTYPES = {EventType.BREED, EventType.DEATH, EventType.ENTITY, EventType.RIDING,
 			EventType.SHIELD_BLOCK,	EventType.TAMING};
 
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation entityID) {
@@ -35,15 +32,7 @@ public class AutoEntity {
 				
 		Map<String, Long> outMap = new HashMap<>();
 		EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(entityID);
-		switch (type) {		 				
-		case FROM_PLAYERS:					 		
-		case MELEE_TO_PLAYERS:						
-		case RANGED_TO_PLAYERS:	{
-			if (entityID.equals(new ResourceLocation("minecraft:player"))) {
-				outMap.putAll(getXpMap(entityID, type));
-			}
-			break;
-		}
+		switch (type) {
 		case RIDING: {
 			if (entityType.is(Reference.RIDEABLE_TAG)) {
 				outMap.putAll(getXpMap(entityID, type));
@@ -69,50 +58,13 @@ public class AutoEntity {
 			}
 			break;
 		}
-		case FROM_ANIMALS: 
-		case MELEE_TO_ANIMALS: 
-		case RANGED_TO_ANIMALS: {
-			if (entityType.is(Reference.ANIMAL_TAG)	
-					|| entityType.getCategory() == MobCategory.CREATURE 
-					|| entityType.getCategory() == MobCategory.WATER_CREATURE
-					|| entityType.getCategory() == MobCategory.WATER_AMBIENT) {
-				outMap.putAll(getXpMap(entityID, type));
-			}
-			break;
-		}
-		case FROM_MOBS: 
-		case MELEE_TO_MOBS:
-		case RANGED_TO_MOBS: {
-			if (entityType.is(Reference.MOB_TAG) || entityType.getCategory() == MobCategory.MONSTER) {
-				outMap.putAll(getXpMap(entityID, type));
-			}
-			break;
-		}
 		default: }
 		return outMap;	
 	}
 	
 	//========================GETTER METHODS==============================
-	/*private static Map<String, Integer> getReqMap(ResourceLocation entity, ReqType type) {
-		Map<String, Integer> outMap = new HashMap<>();
-		double healthScale = 
-				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.MAX_HEALTH), LOG_CODE.AUTO_VALUES, "Health Attribute: {}") * 
-				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH.key, 0d), LOG_CODE.AUTO_VALUES, "Health Config Value: {}");
-		double speedScale = 
-				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.MOVEMENT_SPEED), LOG_CODE.AUTO_VALUES, "Speed Attribute: {}") * 
-				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED.key, 0d), LOG_CODE.AUTO_VALUES, "Speed Config Value: {}");
-		double damageScale = 
-				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.ATTACK_DAMAGE), LOG_CODE.AUTO_VALUES, "Damage Attribute: {}") * 
-				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.DMG.key, 0d), LOG_CODE.AUTO_VALUES, "Damage Config Value: {}");
-		double scale = healthScale + speedScale + damageScale;
-		
-		AutoValueConfig.getEntityReq(type).forEach((skill, level) -> {
-			outMap.put(skill, Double.valueOf((double)level * scale).intValue());
-		});
-		return outMap;
-	}*/
-	
-	private static Map<String, Long> getXpMap(ResourceLocation entity, EventType type) {
+	private static Map<String, Long> getXpMap(ResourceLocation entityID, EventType type) {
+		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(entityID);
 		Map<String, Long> outMap = new HashMap<>();
 		double healthScale = getAttribute(entity, Attributes.MAX_HEALTH) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH.key, 0d);
 		double speedScale = getAttribute(entity, Attributes.MOVEMENT_SPEED) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED.key, 0d);
@@ -127,8 +79,7 @@ public class AutoEntity {
 	
 	//========================UTILITY METHODS=============================
 	@SuppressWarnings("unchecked")
-	private static double getAttribute(ResourceLocation entityID, Attribute attribute) {
-		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(entityID);
+	private static double getAttribute(EntityType<? extends LivingEntity> entity, Attribute attribute) {
 		if (!DefaultAttributes.hasSupplier(entity)) return 0d;
 		AttributeSupplier attSup = DefaultAttributes.getSupplier(entity);
 		if (attSup == null) return 0d;

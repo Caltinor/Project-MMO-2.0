@@ -18,7 +18,7 @@ public class PerkRegistration {
 		APIUtils.registerPerk(rl("jump_boost"), FeaturePerks.JUMP_SERVER, PerkSide.SERVER);
 		
 		APIUtils.registerPerk(rl("breath"), FeaturePerks.BREATH, PerkSide.SERVER);
-		APIUtils.registerPerk(rl("fall_save"), FeaturePerks.FALL_SAVE, PerkSide.SERVER);
+		APIUtils.registerPerk(rl("damage_reduce"), FeaturePerks.DAMAGE_REDUCE, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("damage_boost"),FeaturePerks.DAMAGE_BOOST, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("command"), FeaturePerks.RUN_COMMAND, PerkSide.SERVER);
 		//Effect Perks

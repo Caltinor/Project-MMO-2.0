@@ -85,6 +85,10 @@ public class PackGenerator {
 							: new HashMap<>()))
 						.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
 						.collect(Collectors.toMap(e -> e.getKey(), e -> (Map<String, Long>)e.getValue())),
+					List.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).stream().collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.damageXpValues().getOrDefault(e, new HashMap<>())
+									: new HashMap<>())),
 					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> 
 							applyDefaults
 								? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
@@ -104,7 +108,7 @@ public class PackGenerator {
 						.collect(Collectors.toMap(m -> m.getKey(), m -> (List<LogicEntry>)m.getValue())),
 					applyDefaults ? existing.salvage() : Map.of(new ResourceLocation("modid:item"), SalvageBuilder.start().build()),
 					applyDefaults ? existing.veinData() : VeinData.EMPTY);
-			JsonElement raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get();
+			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
 		BLOCKS("pmmo/blocks", server -> ForgeRegistries.BLOCKS.getKeys(), (id) -> {
 			ObjectData data = new ObjectData(applyOverride, new HashSet<>(),
@@ -112,6 +116,7 @@ public class PackGenerator {
 					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new ArrayList<>())),
 					new HashMap<>(), //negative effects
 					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new HashMap<>())),
+					new HashMap<>(), //damage events
 					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new ArrayList<>())),
 					new HashMap<>(), //bonuses
 					new HashMap<>(), //nbt bonuses
@@ -120,15 +125,24 @@ public class PackGenerator {
 			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			raw.remove("negative_effect");
 			raw.remove("bonuses");
+			raw.remove("dealt_damage_xp");
+			raw.remove("received_damage_xp");
 			raw.remove("nbt_bonuses");
 			raw.remove("salvage");
 			return gson.toJson(raw);}),
 		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITY_TYPES.getKeys(), (id) -> {
+			Core core = Core.get(LogicalSide.SERVER);
+			ObjectData existing = core.getLoader().ENTITY_LOADER.getData(id);
+
 			ObjectData data = new ObjectData(applyOverride, new HashSet<>(),
 					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new HashMap<>())),
 					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new ArrayList<>())),
 					new HashMap<>(), //negative effects
 					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new HashMap<>())),
+					List.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).stream().collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.damageXpValues().getOrDefault(e, new HashMap<>())
+									: new HashMap<>())),
 					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new ArrayList<>())),
 					new HashMap<>(), //bonuses
 					new HashMap<>(), //nbt bonuses

@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent.LevelTickEvent;
+import org.jline.utils.Log;
 
 public class PerkRegistry {
 	public PerkRegistry() {}
@@ -61,16 +62,17 @@ public class PerkRegistry {
 		PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
 			ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
 			Perk perk = perks.getOrDefault(perkID, Perk.empty());
-			src = perk.propertyDefaults().merge(src.merge(dataIn));
+			src = perk.propertyDefaults().copy().merge(src.copy().merge(dataIn.copy().merge(output.copy())));
 			src.putInt(APIUtils.SKILL_LEVEL, src.contains(APIUtils.SKILLNAME) 
 					? Core.get(player.level()).getData().getPlayerSkillLevel(src.getString(APIUtils.SKILLNAME), player.getUUID())
 					: 0);
 			if (perk.canActivate(player, src)) {
+				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(perkID.toString()));
 				CompoundTag executionOutput = perk.start(player, src);
 				tickTracker.add(new TickSchedule(perk, player, src, new AtomicInteger(0)));
 				if (src.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, src))
 					coolTracker.add(new PerkCooldown(perkID, player, src, player.level().getGameTime()));
-				output.merge(TagUtils.mergeTags(output, executionOutput));
+				output.merge(executionOutput);
 			}
 		});
 		return output;
@@ -98,7 +100,7 @@ public class PerkRegistry {
 	public void executePerkTicks(LevelTickEvent event) {
 		coolTracker.removeIf(tracker -> tracker.cooledDown(event.level));
 		new ArrayList<>(tickTracker).forEach(schedule -> {
-			if (schedule.shouldTick() && schedule.perk.canActivate(schedule.player, schedule.src))
+			if (schedule.shouldTick() && schedule.perk().canActivate(schedule.player(), schedule.src()))
 				schedule.tick();
 			else
 				schedule.perk().stop(schedule.player(), schedule.src());

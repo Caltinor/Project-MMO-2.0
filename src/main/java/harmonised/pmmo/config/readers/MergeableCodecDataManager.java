@@ -38,6 +38,13 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.config.codecs.ObjectData;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -269,7 +276,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void postProcess() {
+	public void postProcess(RegistryAccess registryAccess) {
 		MsLoggy.DEBUG.log(LOG_CODE.DATA, "Begin PostProcessing for {}", folderName);
 		for (Map.Entry<ResourceLocation, T> dataRaw : new HashMap<>(this.data).entrySet()) {
 			DataSource<T> dataValue = dataRaw.getValue();
@@ -295,6 +302,29 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 					tags.add(new ResourceLocation(str));
 			}
 			dataValue.getTagValues().clear();
+
+			if (dataValue instanceof ObjectData entityData) {
+				List<ResourceLocation> damageMembers = new ArrayList<>();
+				for (EventType event : List.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE)) {
+					Map<String, Map<String, Long>> values = entityData.damageXpValues().getOrDefault(event, new HashMap<>());
+					for (String str : values.keySet()) {
+						damageMembers.clear();
+						if (str.startsWith("#")) {
+							damageMembers.addAll(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE)
+									.getTag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(str.substring(1))))
+									.stream()
+									.map(type -> type.unwrapKey().get().location())
+									.toList());
+
+							damageMembers.forEach(damageType -> values
+									.put(damageType.toString(), values.get(str)));
+						}
+					}
+
+
+				}
+			}
+
 			tags.forEach(rl -> this.data.merge(rl, (T)dataValue, (o, n) -> o.combine(n)));
 		}
 		//Execute post-processing behavior (mostly logging at this point).
