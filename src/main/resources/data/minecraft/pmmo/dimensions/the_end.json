@@ -8,7 +8,7 @@
         }
     },
     "vein_blacklist":["minecraft:bedrock"],
-    "mob_multiplier": {
+    "mob_modifier": {
 	    "minecraft:ender_dragon": {
             "minecraft:generic.movement_speed": 0.00025,
 		    "minecraft:generic.max_health": 10,

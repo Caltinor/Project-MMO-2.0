@@ -51,7 +51,6 @@ public class MobAttributeHandler {
 			TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(Math.pow(range, 2)*3);
 			List<Player> nearbyPlayers = event.getLevel().getNearbyPlayers(targetCondition, entity, AABB.ofSize(spawnPos, range, range, range));
 			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
-			if (nearbyPlayers.isEmpty()) return;
 
 			//get values for biome and dimension scaling
 			Core core = Core.get(event.getLevel().getLevel());
@@ -69,16 +68,16 @@ public class MobAttributeHandler {
 				AttributeInstance attributeInstance = entity.getAttribute(attribute);				
 				if (attributeInstance != null) {
 					double base = baseValue(entity, id, attributeInstance);
-					float cap = CAPS.getOrDefault(attributeID, 0f);
+					float cap = CAPS.getOrDefault(attributeID, Float.MAX_VALUE);
 					float bonus = getBonus(nearbyPlayers, config, diffScale, base, cap);
 					bonus *= Core.get(entity.level()).getLoader().DIMENSION_LOADER.getData(entity.level().dimension().location()).mobModifiers()
 								.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
-									.getOrDefault(id.toString(), 1d);
+									.getOrDefault(id, 1d);
 					bonus *= Core.get(entity.level()).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level().getBiome(entity.blockPosition()))).mobModifiers()
 							 	.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
-							 		.getOrDefault(id.toString(), 1d);
-					bonus += dimMods.getOrDefault(attributeID, 0d).floatValue();
-					bonus += bioMods.getOrDefault(attributeID, 0d).floatValue();
+							 		.getOrDefault(id, 1d);
+					bonus += dimMods.getOrDefault(id, 0d).floatValue();
+					bonus += bioMods.getOrDefault(id, 0d).floatValue();
 					AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
 					attributeInstance.removeModifier(MODIFIER_ID);
 					attributeInstance.addPermanentModifier(modifier);
@@ -122,6 +121,8 @@ public class MobAttributeHandler {
 	private static float getBonus(List<Player> nearbyPlayers, Map<String, Double> config, int scale, double ogValue, float cap) {
 		//summate all levels from the configured skills for each nearby player
 		Map<String, Integer> totalLevel = new HashMap<>();
+		//pass through case for dim/biome bonuses to still apply.
+		if (nearbyPlayers.size() == 0) return 0f;
 		nearbyPlayers.forEach(player -> {
 			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getPlayerSkillLevel(str, player.getUUID()))).forEach((skill, level) -> {
 				totalLevel.merge(skill, level, (o, n) -> o + n);

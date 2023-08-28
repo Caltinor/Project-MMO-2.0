@@ -12,7 +12,7 @@
         "combat": 30
     },
     "vein_blacklist":["minecraft:bedrock"],
-    "mob_multiplier": {
+    "mob_modifier": {
         "minecraft:skeleton": {
             "minecraft:generic.max_health": 7,
             "minecraft:generic.attack_damage": 0.05
