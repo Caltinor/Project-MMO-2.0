@@ -10,7 +10,7 @@
     "travel_req":{
         "agility":0
     },
-    "mob_multiplier":{
+    "mob_modifier":{
         "minecraft:zombie" :{
             "minecraft:generic.movement_speed": -0.0075,
 		    "minecraft:generic.max_health": -7.0,
