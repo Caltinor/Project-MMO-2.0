@@ -17,7 +17,7 @@
     "travel_req":{
         "endurance": 20
     },
-    "mob_multiplier":{
+    "mob_modifier":{
         "minecraft:zombie" :{
             "minecraft:generic.movement_speed": 0.005,
 		    "minecraft:generic.max_health": 5.0
