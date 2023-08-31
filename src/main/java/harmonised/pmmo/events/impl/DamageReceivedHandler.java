@@ -26,17 +26,15 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class DamageReceivedHandler {
 
-	@SuppressWarnings("resource")
 	public static void handle(LivingHurtEvent event) {
-		if (event.getEntity() instanceof Player) {			
-			Player player = (Player) event.getEntity();
+		if (event.getEntity() instanceof Player player) {
 			if (player.equals(event.getSource().getEntity()))
 				return;
-			Core core = Core.get(player.level());
+			Core core = Core.get(player.level);
 			String damageType = RegistryUtil.getId(event.getSource()).toString();
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+event.getSource().getMsgId());
 			
-			boolean serverSide = !player.level().isClientSide;
+			boolean serverSide = !player.level.isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide){
 				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.RECEIVE_DAMAGE, event, new CompoundTag());
@@ -75,11 +73,11 @@ public class DamageReceivedHandler {
 				.filter(str -> {
 					if (!str.contains("#"))
 						return false;
-					var registry = player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+					var registry = player.level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
 					var tag = registry.getTag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(str.substring(1))));
 					return tag.map(type -> type.contains(source.typeHolder())).orElse(false);
 				}).toList();
-		Map<String, Long> tagXp = tags.stream().map(str -> config.get(str)).reduce((mapA, mapB) -> Functions.mergeMaps(mapA, mapB)).orElse(new HashMap<>());
+		Map<String, Long> tagXp = tags.stream().map(config::get).reduce(Functions::mergeMaps).orElse(new HashMap<>());
 		Functions.mergeMaps(config.getOrDefault(RegistryUtil.getId(source).toString(), new HashMap<>()), tagXp)
 				.forEach((skill, xp) -> mapOut.putIfAbsent(skill, (long)(xp.floatValue() * ultimateDamage)));
 		return mapOut;

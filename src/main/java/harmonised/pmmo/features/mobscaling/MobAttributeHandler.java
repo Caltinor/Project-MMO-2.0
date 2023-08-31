@@ -72,12 +72,12 @@ public class MobAttributeHandler {
 					float bonus = getBonus(nearbyPlayers, config, diffScale, base, cap);
 					bonus *= Core.get(entity.level).getLoader().DIMENSION_LOADER.getData(entity.level.dimension().location()).mobModifiers()
 								.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
-									.getOrDefault(id.toString(), 1d);
+									.getOrDefault(id, 1d);
 					bonus *= Core.get(entity.level).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level.getBiome(entity.blockPosition()).get())).mobModifiers()
 							 	.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
-							 		.getOrDefault(id.toString(), 1d);
-					bonus += dimMods.getOrDefault(attributeID, 0d).floatValue();
-					bonus += bioMods.getOrDefault(attributeID, 0d).floatValue();
+							 		.getOrDefault(id, 1d);
+					bonus += dimMods.getOrDefault(attributeID.toString(), 0d).floatValue();
+					bonus += bioMods.getOrDefault(attributeID.toString(), 0d).floatValue();
 					AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
 					attributeInstance.removeModifier(MODIFIER_ID);
 					attributeInstance.addPermanentModifier(modifier);
@@ -100,7 +100,7 @@ public class MobAttributeHandler {
 	 * @return
 	 */
 	private static double baseValue(LivingEntity entity, String id, AttributeInstance ai) {
-		return switch (id.toString()) {
+		return switch (id) {
 		case "minecraft:generic.attack_damage" -> 1f;
 		case "minecraft:generic.movement_speed" -> entity.getSpeed();
 		default -> ai.getBaseValue();};

@@ -43,7 +43,7 @@ public class DamageDealtHandler {
 			Player player = (Player) event.getSource().getEntity();
 			if (target.equals(player))
 				return;
-			Core core = Core.get(player.level());
+			Core core = Core.get(player.level);
 			MsLoggy.INFO.log(LOG_CODE.EVENT,"Attack Type: "+EventType.DEAL_DAMAGE.name()+" | TargetType: "+target.getType().toString());
 			
 			
@@ -58,7 +58,7 @@ public class DamageDealtHandler {
 				Messenger.sendDenialMsg(ReqType.KILL, player, target.getDisplayName());
 				return;
 			}
-			boolean serverSide = !player.level().isClientSide;
+			boolean serverSide = !player.level.isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide) {
 				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.DEAL_DAMAGE, event, new CompoundTag());
@@ -82,7 +82,7 @@ public class DamageDealtHandler {
 			Player player = (Player) event.getSource().getEntity();
 			if (target.equals(player)) return;
 			
-			Core core = Core.get(player.level());
+			Core core = Core.get(player.level);
 			String damageType = RegistryUtil.getId(event.getSource()).toString();
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+event.getSource().getMsgId());
 			//Process perks
@@ -97,7 +97,7 @@ public class DamageDealtHandler {
 				event.setAmount(damageOut);
 			}
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+damageType+" | Damage Out: "+event.getAmount());
-			if (!player.level().isClientSide) {
+			if (!player.level.isClientSide) {
 				perkOutput.putString(APIUtils.DAMAGE_TYPE, damageType);
 				Map<String, Long> xpAward = getExperienceAwards(core, target, event.getAmount(), event.getSource(), player, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
@@ -124,7 +124,7 @@ public class DamageDealtHandler {
 				.filter(str -> {
 					if (!str.contains("#"))
 						return false;
-					var registry = player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+					var registry = player.level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
 					var tag = registry.getTag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(str.substring(1))));
 					return tag.map(type -> type.contains(source.typeHolder())).orElse(false);
 				}).toList();
