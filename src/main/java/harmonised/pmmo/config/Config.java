@@ -70,6 +70,7 @@ public class Config {
 	public static ForgeConfigSpec.BooleanValue HIDE_SKILL_BUTTON;
 	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_X;
 	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_Y;
+	public static ForgeConfigSpec.BooleanValue RENDER_ENTITIES_IN_GUI;
 	
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
@@ -108,6 +109,8 @@ public class Config {
 				.define("skill_button_x", 126);
 		SKILL_BUTTON_Y = builder.comment("the vertical location (from center) of the skill button in the inventory.","Default = -22")
 				.define("skill_button_y", -22);
+		RENDER_ENTITIES_IN_GUI = builder.comment("if set to false, will only show entity names in the glossary.")
+				.define("render_entities_in_glossary", true);
 
 		builder.pop();
 	}

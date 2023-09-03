@@ -111,7 +111,8 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 			else if (entity != null && entity instanceof LivingEntity) {
 				int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
-				InventoryScreen.renderEntityInInventory(x+width - 20, y+12,  scale, (float)(x+ 51) - 100, (float)(y + 75 - 50) - 100, (LivingEntity) entity);
+				if (Config.RENDER_ENTITIES_IN_GUI.get())
+					InventoryScreen.renderEntityInInventory(x+width - 20, y+12,  scale, (float)(x+ 51) - 100, (float)(y + 75 - 50) - 100, (LivingEntity) entity);
 				GuiComponent.drawString(poseStack, font, this.entity.getDisplayName(), x, y, 0xFFFFFF);
 			}
 		}
