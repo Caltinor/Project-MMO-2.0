@@ -45,7 +45,7 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.19.2-3.2.4'
+version = '1.19.2-3.3.5'
 group = 'harmonised.pmmo'
 archivesBaseName = 'pmmo'
 
@@ -126,6 +126,8 @@ dependencies {
   	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
   	//runtimeOnly fg.deobf('curse.maven:stalwart-474817:4033660')
   	//runtimeOnly fg.deobf('curse.maven:YASD-613087:4111117')
+    //runtimeOnly fg.deobf('curse.maven:untamedwilds-457252:4576581')
+    //runtimeOnly fg.deobf('curse.maven:citadel-331936:4556677')
 }
 
 jar {
