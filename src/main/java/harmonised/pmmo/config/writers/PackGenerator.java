@@ -226,8 +226,9 @@ public class PackGenerator {
 						StandardOpenOption.CREATE_NEW,
 						StandardOpenOption.WRITE);
 				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
-			}			
+			}
 		}
+		generatePlayerConfigs(server, players);
 		return 0;
 	}
 	

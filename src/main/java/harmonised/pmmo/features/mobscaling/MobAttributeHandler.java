@@ -53,8 +53,8 @@ public class MobAttributeHandler {
 			if (nearbyPlayers.isEmpty()) return;
 
 			//get values for biome and dimension scaling
-			Core core = Core.get(event.getLevel().getLevel());
-			LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(event.getLevel().getLevel().dimension().location());
+			Core core = Core.get(event.getEntity().getLevel());
+			LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(event.getEntity().getLevel().dimension().location());
 			LocationData bioData = core.getLoader().BIOME_LOADER.getData(event.getLevel().getBiome(event.getEntity().getOnPos()).unwrapKey().get().location());
 
 			var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
