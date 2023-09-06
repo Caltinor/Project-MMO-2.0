@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 
 import harmonised.pmmo.util.Reference;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.EntityPredicate.Composite;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +20,7 @@ public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.Trigge
 	public ResourceLocation getId() {return ID;}
 
 	@Override
-	protected TriggerInstance createInstance(JsonObject pJson, Composite pPlayer, DeserializationContext pContext) {
+	protected TriggerInstance createInstance(JsonObject pJson, ContextAwarePredicate pPlayer, DeserializationContext pContext) {
 		return new TriggerInstance(getId(), pPlayer);
 	}
 	
@@ -30,7 +30,7 @@ public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.Trigge
 	
 	public static class TriggerInstance extends AbstractCriterionTriggerInstance {
 
-		public TriggerInstance(ResourceLocation pCriterion, Composite pPlayer) {
+		public TriggerInstance(ResourceLocation pCriterion, ContextAwarePredicate pPlayer) {
 			super(pCriterion, pPlayer);
 		}
 		
