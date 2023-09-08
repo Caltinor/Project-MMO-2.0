@@ -12,10 +12,13 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.commands.CommandSourceStack;
@@ -23,6 +26,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -51,7 +55,9 @@ public class CmdNodeAdmin {
 												.then(Commands.argument(VALUE_ARG, LongArgumentType.longArg())
 														.executes(ctx -> adminSetOrAdd(ctx, false))))))
 						.then(Commands.literal("clear")
-								.executes(ctx -> adminClear(ctx)))
+								.executes(CmdNodeAdmin::adminClear))
+						.then(Commands.literal("ignoreReqs")
+								.executes(CmdNodeAdmin::exemptAdmin))
 						.executes(ctx -> displayPlayer(ctx)));
 	}
 	
@@ -106,6 +112,15 @@ public class CmdNodeAdmin {
 				ctx.getSource().sendSuccess(new TextComponent(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
 			}
 		}
+		return 0;
+	}
+
+	public static int exemptAdmin(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		Core core = Core.get(ctx.getSource().getLevel());
+		ServerPlayer player = EntityArgument.getPlayer(ctx, TARGET_ARG);
+		ResourceLocation playerID = new ResourceLocation(player.getUUID().toString());
+		core.getLoader().PLAYER_LOADER.getData().put(playerID, new PlayerData(true, true, Map.of()));
+		Networking.sendToClient(new CP_SyncData(ObjectType.PLAYER, core.getLoader().PLAYER_LOADER.getData()), player);
 		return 0;
 	}
 }

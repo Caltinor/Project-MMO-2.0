@@ -41,6 +41,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -238,13 +239,13 @@ public class Core {
 		if (player instanceof FakePlayer) return mapOut;		
 		
 		//BIOME Modification
-		ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
+		ResourceLocation biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()));
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {
 			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 		}
 		
 		//DIMENSION Modification
-		ResourceLocation dimensionID = player.level.dimension().location();
+		ResourceLocation dimensionID = player.level().dimension().location();
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.DIMENSION, dimensionID, ModifierDataType.DIMENSION, new CompoundTag()).entrySet()) {
 			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 		}
@@ -292,7 +293,9 @@ public class Core {
 	//============================================================================================
   	
 	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
-		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
+		if (player instanceof FakePlayer
+			|| !Config.reqEnabled(type).get()
+			|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		ResourceLocation itemID = RegistryUtil.getId(stack.getItem());
 		
 		return (predicates.predicateExists(itemID, type)) 
@@ -300,29 +303,37 @@ public class Core {
 			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, stack));
 	}
 	public boolean isActionPermitted(ReqType type, BlockPos pos, Player player) {
-		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
-		BlockEntity tile = player.getLevel().getBlockEntity(pos);
-		ResourceLocation res = RegistryUtil.getId(player.getLevel().getBlockState(pos));
+		if (player instanceof FakePlayer
+				|| !Config.reqEnabled(type).get()
+				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
+		BlockEntity tile = player.level().getBlockEntity(pos);
+		ResourceLocation res = RegistryUtil.getId(player.level().getBlockState(pos));
 		return tile != null && predicates.predicateExists(res, type)
 			? predicates.checkPredicateReq(player, tile, type)
-			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, pos, player.level));
+			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, pos, player.level()));
 	}
 	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
-		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
+		if (player instanceof FakePlayer
+				|| !Config.reqEnabled(type).get()
+				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
 		return (predicates.predicateExists(entityID, type))
 			? predicates.checkPredicateReq(player, entity, type)
 			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, entity));
 	}
-	public boolean isActionPermitted(ReqType type, Biome biome, Player player) {
+	public boolean isActionPermitted(ReqType type, Holder<Biome> biome, Player player) {
 		if (type != ReqType.TRAVEL) return false;
-		if (!Config.reqEnabled(type).get()) return true;
+		if (player instanceof FakePlayer
+				|| !Config.reqEnabled(type).get()
+				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		return doesPlayerMeetReq(player.getUUID(), 
 				getObjectSkillMap(ObjectType.BIOME, RegistryUtil.getId(biome), type, new CompoundTag()));
 	}
 	public boolean isActionPermitted(ReqType type, ResourceKey<Level> dimension, Player player) {
 		if (type != ReqType.TRAVEL) return false;
-		if (!Config.reqEnabled(type).get()) return true;
+		if (player instanceof FakePlayer
+				|| !Config.reqEnabled(type).get()
+				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		return doesPlayerMeetReq(player.getUUID(),
 				getObjectSkillMap(ObjectType.DIMENSION, dimension.location(), type, new CompoundTag()));
 	}
