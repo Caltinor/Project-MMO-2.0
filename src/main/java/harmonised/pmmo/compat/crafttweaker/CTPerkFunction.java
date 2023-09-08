@@ -21,7 +21,6 @@ public interface CTPerkFunction {
 	 * 
 	 * @param player perk executor
 	 * @param nbt data provided by PMMO
-	 * @param level the current level of the player in the skill configured
 	 * @return output data. not all events use output data, and your perk may not
 	 * have anything to return.  In this case an empty map is sufficient.
 	 */

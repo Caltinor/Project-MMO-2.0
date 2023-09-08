@@ -101,12 +101,16 @@ public class PerkRegistry {
 		MsLoggy.DEBUG.log(LOG_CODE.PERKS, "Perk Tick Tracker:" +MsLoggy.listToString(tickTracker));
 		coolTracker.removeIf(tracker -> tracker.cooledDown(event.level));
 		new ArrayList<>(tickTracker).forEach(schedule -> {
-			if (schedule.shouldTick() && schedule.perk().canActivate(schedule.player(), schedule.src()))
-				schedule.tick();
-			else {
-				schedule.perk().stop(schedule.player(), schedule.src());
-				tickTracker.remove(schedule);
+			if (schedule.perk().canActivate(schedule.player(), schedule.src())) {
+				if (schedule.shouldTick())
+					schedule.tick();
+				else {
+					schedule.perk().stop(schedule.player(), schedule.src());
+					tickTracker.remove(schedule);
+				}
 			}
+			else
+				tickTracker.remove(schedule);
 		});
 	}
 
