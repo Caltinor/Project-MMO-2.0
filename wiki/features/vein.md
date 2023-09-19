@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 Vein Mining is a feature of PMMO that allows the player to break multiple blocks of the same kind all at once.  In previous versions of PMMO this ability scaled with your player skill level.  In this version of PMMO you gain vein charge and capacity based on the items equipped.
 
 ## How to Vein Mine
@@ -19,3 +21,4 @@ If a player has more charge than the items equipped allow, the player is "overch
 ## Block Consumption
 When blocks are broken they consume vein charge per block based on their configured consume amount.  If a block does not have a manual configuration, it uses the consume amount set in `pmmo-server.toml`.  You can also set the consume amount in the block's datapack json, which will override this setting.  for example, if the setting in `pmmo-server.toml` is set to 4, and you have 100 charge, a default block vein would break 25 blocks.  If that same block had a configured setting of 2, veining would break 50 blocks.
 
+[Home](../home.md)

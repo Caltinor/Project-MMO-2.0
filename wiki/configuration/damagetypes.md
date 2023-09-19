@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 ### All Vanilla Damage Types
 ```json
 [
@@ -47,3 +49,5 @@
   "minecraft:outside_border"
 ]
 ```
+
+[Home](../home.md)

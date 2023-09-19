@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 Project MMO has two types of configuration files: configs (`.toml`) and data (datapack jsons)
 
 ## Datapacks and JSONS
@@ -59,3 +61,5 @@ There are six server configs which are located in your minecraft directory at `/
 |pmmo-AntiCheese.toml| Contains controls for preventing users from utilizing XP exploits.                                        |
 
 *Note that server configs are unique to the world they are nested under.  If you want your configs to carry over between worlds, be sure to make a copy of your config and place it in the `/defaultconfigs/` folder.  This is a Forge folder that copies server configs over to new worlds when they are created.*
+
+[Home](../home.md)
