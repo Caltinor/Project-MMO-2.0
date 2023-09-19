@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 This page details the configuration details for jsons placed under `/data/namespace/pmmo/items/`.
 
 ## File Naming Convention
@@ -194,4 +196,5 @@ Vein Data lets you give this item vein charge and capacity.  This means that the
 |:---|:-----------------------------------------------------------------|
 |`"chargeCap"`| the max charge this item provides (whole numbers)                |
 |`"chargeRate"`| the rate at which this item recovers used charge (decimal value) |
-```
+
+[Home](../home.md)

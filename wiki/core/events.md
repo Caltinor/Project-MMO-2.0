@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 Award Events are all the different gameplay actions that PMMO watches for and provides XP to the player for.  In all cases, the xp awarded is based on the configuration of the item/block/entity relevant to that event.  Below are all of the events in PMMO.
 
 ## Event Configuration 
@@ -41,3 +43,5 @@ Event names are used to define when XP is awarded.  Certain events can be blocke
 |**SURFACING**| xp earned every 10 ticks while submerged but rising to the surface|None|defined in `pmmo-server.toml` multiplied by travel speed|
 |**SWIM_SPRINTING**| xp earned every 10 ticks while submerged and swimming at a sprint|None|defined in `pmmo-server.toml` multiplied by travel speed|
 |**TAMING**| awarded for successfully taming an animal.|`TAME`(entity)|defined in the tamed entity's data|
+
+[Home](../home.md)
