@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import harmonised.pmmo.core.IDataStorage;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.google.common.base.Preconditions;
@@ -125,6 +126,27 @@ public class APIUtils {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
 		return Core.get(player.level()).getData().setXpDiff(player.getUUID(), skill, change);
+	}
+
+	/**Supplies the player's entire skill map with raw xp
+	 * values.
+	 *
+	 * @param player the player being queried
+	 * @return a map of skills and raw xp
+	 */
+	public static Map<String, Long> getRawXpMap(Player player) {
+		return Core.get(player.level()).getData().getXpMap(player.getUUID());
+	}
+
+	/**Returns the player's entire skill map.
+	 *
+	 * @param player the player being queried
+	 * @return a map of skills and levels
+	 */
+	public static Map<String, Integer> getAllLevels(Player player) {
+		IDataStorage data = Core.get(player.level()).getData();
+		return getRawXpMap(player).entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, e -> data.getLevelFromXP(e.getValue())));
 	}
 	
 	/**<p>Obtains a map of the skills and experience amount that would be awarded for the provided
