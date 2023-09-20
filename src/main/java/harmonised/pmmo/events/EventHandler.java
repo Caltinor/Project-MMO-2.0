@@ -8,10 +8,12 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.events.impl.*;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.TickEvent.LevelTickEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
@@ -28,6 +30,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.level.PistonEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -59,7 +62,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
-			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.REACH_DISTANCE.get());
+			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get());
 			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.CREATIVE_REACH.get())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
@@ -67,13 +70,13 @@ public class EventHandler {
 			}
 		}
 		else {
-			event.getEntity().getAttribute(ForgeMod.REACH_DISTANCE.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
+			event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
 	}
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
 		Core core = Core.get(event.getEntity().level); 
-		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(), core.getSide());
+		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(), new CompoundTag());
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onSleep(SleepFinishedTimeEvent event) {
@@ -84,6 +87,16 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		PistonHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.HIGH)
+	public static void tickPerks(LevelTickEvent event) {
+		Core.get(event.level).getPerkRegistry().executePerkTicks(event);
+	}
+
+	@SubscribeEvent(priority = EventPriority.NORMAL)
+	public static void filterExplosions(ExplosionEvent.Detonate event) {
+		if (!event.isCanceled())
+			ExplosionHandler.handle(event);
 	}
 	
 	//==========================================================
