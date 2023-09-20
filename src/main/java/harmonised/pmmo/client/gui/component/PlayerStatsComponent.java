@@ -1,7 +1,6 @@
 package harmonised.pmmo.client.gui.component;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
@@ -44,6 +43,10 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     public static final int IMAGE_HEIGHT = 166;
     private static final int OFFSET_X_POSITION = 86;
     
+    public PlayerStatsComponent() {
+		super(0, 0, 0, 0, Component.empty());
+	}
+
     public void init(int width, int height, Minecraft minecraft, boolean widthTooNarrow) {
         this.minecraft = minecraft;
         this.width = width;
@@ -67,10 +70,8 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         if (this.isVisible()) {
-            poseStack.pushPose();
-            poseStack.translate(0.0D, 0.0D, 120.0D);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, TEXTURE_LOCATION);
+            graphics.pose().pushPose();
+            graphics.pose().translate(0.0D, 0.0D, 120.0D);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int i = (this.width - IMAGE_WIDTH) / 2 - this.xOffset;
             int j = (this.height - IMAGE_HEIGHT) / 2;
@@ -148,29 +149,37 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         public void populateAbilities(Core core, Minecraft minecraft) {
             IDataStorage dataStorage = core.getData();
             
-            skillsKeys.addAll(dataStorage.getXpMap(null).keySet());
-            skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXpRaw(null, skill)).reversed());
+            this.skillsKeys.addAll(dataStorage.getXpMap(null).keySet());
+            this.skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXpRaw(null, skill)).reversed());
             
-            for (String skillKey : skillsKeys) {
+            for (String skillKey : this.skillsKeys) {
                 SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault());
-                abilities.add(new StatComponent(minecraft, this.left + 1, this.top, skillKey, skillData));
+                this.abilities.add(new StatComponent(minecraft, this.left + 1, this.top, skillKey, skillData));
             }
         }
     
         @Override
         protected void drawPanel(PoseStack poseStack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
-            for (int i = 0; i < abilities.size(); i++) {
-                StatComponent component = abilities.get(i);
-                int y = (int) (relativeY + (i * (component.getHeight() + 1)) - scrollDistance);
-                
-                component.setPosition(component.x, y);
-                component.render(poseStack, mouseX, mouseY, Minecraft.getInstance().getFrameTime());
+            for (StatComponent component : this.abilities) {
+                component.setPosition(component.getX(), relativeY);
+                component.render(guiGraphics, mouseX, mouseY, Minecraft.getInstance().getPartialTick());
+
+                relativeY += StatComponent.BASE_HEIGHT + this.border;
             }
         }
         
         @Override
+        protected int getScrollAmount() {
+            return StatComponent.BASE_HEIGHT + this.border;
+        }
+        
+        @Override
         protected int getContentHeight() {
-            return (int) (abilities.size() * StatComponent.BASE_HEIGHT);
+            int height = this.abilities.size() * (StatComponent.BASE_HEIGHT + this.border);
+            if (height < this.bottom - this.top - 1) {
+                height = this.bottom - this.top - 1;
+            }
+            return height;
         }
         
         @Override @NotNull public NarrationPriority narrationPriority() { return NarrationPriority.NONE; }
@@ -186,6 +195,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         private final Color skillColor;
         private final int skillLevel;
         private final long skillCurrentXP;
+        private final long skillXpToNext;
         
         private static final int BASE_HEIGHT = 24;
         
@@ -198,32 +208,38 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
             this.skillColor = new Color(skillData.getColor());
             this.skillCurrentXP = core.getData().getXpRaw(null, skillKey);
             this.skillLevel = core.getData().getLevelFromXP(skillCurrentXP);
+            this.skillXpToNext = core.getData().getBaseXpForLevel(this.skillLevel+1)-this.skillCurrentXP;
         }
     
         @Override
-        public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-            super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
-            
-            RenderSystem.setShaderTexture(0, skillData.getIcon());
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            blit(pPoseStack, this.x + 3, this.y + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
-            
-            renderProgressBar(pPoseStack);
-            GuiComponent.drawString(pPoseStack, minecraft.font, skillName, this.x + 24, this.y + 5, skillColor.getRGB());
-            GuiComponent.drawString(pPoseStack, minecraft.font, String.valueOf(skillLevel), (this.x + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.y + 5, skillColor.getRGB());
+        public void renderWidget(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+            super.renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
+            graphics.blit(skillData.getIcon(), this.getX() + 3, this.getY() + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
+
+            renderProgressBar(graphics);
+            graphics.drawString(minecraft.font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
+            graphics.drawString(minecraft.font, String.valueOf(skillLevel), (this.getX() + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.getY() + 5, skillColor.getRGB());
         }
         
-        public void renderProgressBar(PoseStack pPoseStack) {
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, TEXTURE_LOCATION);
-            RenderSystem.setShaderColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
-            blit(pPoseStack, this.x + 24, this.y + (minecraft.font.lineHeight + 6), 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
-            
-            long baseXP = core.getData().getBaseXpForLevel(skillLevel);
-            long requiredXP = core.getData().getBaseXpForLevel(skillLevel + 1);
-            float percent = 100.0f / (requiredXP - baseXP);
-            int xp = (int) Math.min(Math.floor(percent * (skillCurrentXP - baseXP)), 94);
-            blit(pPoseStack, this.x + 24, this.y + (minecraft.font.lineHeight + 6), xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
+        public void renderProgressBar(GuiGraphics graphics) {
+            int renderX = this.getX() + 24;
+            int renderY = this.getY() + (minecraft.font.lineHeight + 6);
+            if (this.isHovered()) {
+                MutableComponent text = Component.literal("%s => %s".formatted(this.skillXpToNext, this.skillLevel +1));
+                graphics.drawString(minecraft.font, text, renderX, renderY-1, this.skillColor.getRGB());
+            }
+            else {
+                graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
+                graphics.blit(TEXTURE_LOCATION, renderX, renderY, 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
+
+                long baseXP = core.getData().getBaseXpForLevel(skillLevel);
+                long requiredXP = core.getData().getBaseXpForLevel(skillLevel + 1);
+                float percent = 100.0f / (requiredXP - baseXP);
+                int xp = (int) Math.min(Math.floor(percent * (skillCurrentXP - baseXP)), 94);
+                graphics.blit(TEXTURE_LOCATION, renderX, renderY, xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
+
+                graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            }
         }
     }
 }
