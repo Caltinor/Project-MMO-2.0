@@ -8,10 +8,12 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.events.impl.*;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.TickEvent.LevelTickEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
@@ -28,6 +30,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.PistonEvent;
 import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -84,6 +87,16 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		PistonHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.HIGH)
+	public static void tickPerks(LevelTickEvent event) {
+		Core.get(event.level).getPerkRegistry().executePerkTicks(event);
+	}
+
+	@SubscribeEvent(priority = EventPriority.NORMAL)
+	public static void filterExplosions(ExplosionEvent.Detonate event) {
+		if (!event.isCanceled())
+			ExplosionHandler.handle(event);
 	}
 	
 	//==========================================================
