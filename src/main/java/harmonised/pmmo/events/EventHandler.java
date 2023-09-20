@@ -30,6 +30,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.level.PistonEvent;
 import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -90,6 +91,12 @@ public class EventHandler {
 	@SubscribeEvent(priority=EventPriority.HIGH)
 	public static void tickPerks(LevelTickEvent event) {
 		Core.get(event.level).getPerkRegistry().executePerkTicks(event);
+	}
+
+	@SubscribeEvent(priority = EventPriority.NORMAL)
+	public static void filterExplosions(ExplosionEvent.Detonate event) {
+		if (!event.isCanceled())
+			ExplosionHandler.handle(event);
 	}
 	
 	//==========================================================
