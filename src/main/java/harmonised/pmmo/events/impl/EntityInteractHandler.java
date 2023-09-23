@@ -9,6 +9,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Messenger;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,6 +38,8 @@ public class EntityInteractHandler {
 			}
 		}
 		//Process perks
+		eventHookOutput.putString(APIUtils.TARGET, RegistryUtil.getId(event.getTarget()).toString());
+		eventHookOutput.putInt(APIUtils.ENTITY_ID, event.getTarget().getId());
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ENTITY,  event.getEntity(), eventHookOutput));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENTITY, event.getTarget(), event.getEntity(), perkOutput);

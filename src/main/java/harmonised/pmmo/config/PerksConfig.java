@@ -12,6 +12,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.util.TagBuilder;
+import jdk.jfr.Event;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -120,6 +121,12 @@ public class PerksConfig {
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:effect").withString(APIUtils.SKILLNAME, "swimming")
 				.withString("effect", "minecraft:night_vision").build());
 		defaultSettings.put(EventType.SUBMERGED, new ArrayList<>(bodyList));
+		bodyList.clear();
+
+		//=====================INTERACT DEFAULTS=========================
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:villager_boost")
+				.withString(APIUtils.SKILLNAME, "charisma").build());
+		defaultSettings.put(EventType.ENTITY, new ArrayList<>(bodyList));
 		bodyList.clear();
 		
 		//=====================FROM_IMPACT==============================

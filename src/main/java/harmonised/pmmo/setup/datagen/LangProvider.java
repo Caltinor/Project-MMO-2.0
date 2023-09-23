@@ -121,6 +121,14 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "%s from %s").build();
 	public static final Translation PERK_ATTRIBUTE_STATUS_3 = Translation.Builder.start("perk.pmmo.attribute.status3")
 			.addLocale(Locale.EN_US, "Current Modification: %s").build();
+	public static final Translation PERK_VILLAGER = Translation.Builder.start("perk.pmmo.villager_boost")
+			.addLocale(Locale.EN_US, "Villager Price Reduction").build();
+	public static final Translation PERK_VILLAGER_DESC = Translation.Builder.start("perk.pmmo.villager.description")
+			.addLocale(Locale.EN_US, "Periodically lets you reduce the price of villager trades.").build();
+	public static final Translation PERK_VILLAGE_STATUS_1 = Translation.Builder.start("perk.pmmo.villager.status_1")
+			.addLocale(Locale.EN_US, "Reputation increased by %s with each activation.").build();
+	public static final Translation PERK_VILLAGE_FEEDBACK = Translation.Builder.start("perk.pmmo.villager.notice")
+			.addLocale(Locale.EN_US, "You have convinced this villager to lower their prices").build();
 	
 	//=========SKILL NAMES=====================
 	public static final Translation SKILL_HEALTH = Translation.Builder.start("pmmo.health")
