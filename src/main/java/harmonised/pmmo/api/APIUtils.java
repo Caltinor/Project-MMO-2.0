@@ -734,7 +734,9 @@ public class APIUtils {
 	public static final String CHANCE = "chance";
 	public static final String COOLDOWN = "cooldown";
 	public static final String DURATION = "duration";
-	
+
+	public static final String TARGET = "target";
+	public static final String ENTITY_ID = "entity_id";
 	public static final String BLOCK_POS = "block_pos";
 	public static final String SKILLNAME = "skill";
 	public static final String SKILL_LEVEL = "level";

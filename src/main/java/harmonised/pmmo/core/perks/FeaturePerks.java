@@ -10,6 +10,7 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Functions;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
@@ -26,6 +27,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.village.ReputationEventType;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -260,4 +263,24 @@ public class FeaturePerks {
 				nbt.contains(FUNCTION) ? "Function" : "Command",
 				nbt.contains(FUNCTION) ? nbt.getString(FUNCTION) : nbt.getString(COMMAND)))).build();
 
+	public static final Perk VILLAGER_TRADING = Perk.begin()
+			.addConditions((player, tag) -> tag.getString(APIUtils.TARGET).equals("minecraft:villager"))
+			.addDefaults(TagBuilder.start()
+					.withString(APIUtils.TARGET, "missing")
+					.withInt(APIUtils.ENTITY_ID, -1)
+					.withDouble(APIUtils.PER_LEVEL, 0.05)
+					.withLong(APIUtils.COOLDOWN, 1000L).build())
+			.setStart((player, nbt) -> {
+				int villagerID = nbt.getInt(APIUtils.ENTITY_ID);
+				Villager villager = (Villager) player.level().getEntity(villagerID);
+				villager.onReputationEventFrom(ReputationEventType.ZOMBIE_VILLAGER_CURED, player);
+				player.sendSystemMessage(LangProvider.PERK_VILLAGE_FEEDBACK.asComponent());
+				return NONE;
+			})
+			.setDescription(LangProvider.PERK_VILLAGER_DESC.asComponent())
+			.setStatus((player, nbt) -> List.of(
+				LangProvider.PERK_VILLAGE_STATUS_1.asComponent(
+						nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)
+				)
+			)).build();
 }

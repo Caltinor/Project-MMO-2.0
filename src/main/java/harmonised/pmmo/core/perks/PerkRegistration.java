@@ -21,6 +21,7 @@ public class PerkRegistration {
 		APIUtils.registerPerk(rl("damage_reduce"), FeaturePerks.DAMAGE_REDUCE, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("damage_boost"),FeaturePerks.DAMAGE_BOOST, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("command"), FeaturePerks.RUN_COMMAND, PerkSide.SERVER);
+		APIUtils.registerPerk(rl("villager_boost"),FeaturePerks.VILLAGER_TRADING, PerkSide.SERVER);
 		//Effect Perks
 		APIUtils.registerPerk(rl("effect"), FeaturePerks.EFFECT, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("tame_boost"), PerksImpl.TAME_BOOST, PerkSide.SERVER);
