@@ -16,37 +16,38 @@ the basic structure of the config looks like
 ```toml
 [Perks]
     [Perks.For_Event]
-        [Perks.For_Event.EVENT_NAME]
+        [[Perks.For_Event.EVENT_NAME]]
             perk = "modid:perkid"
-        [Perks.For_Event.EVENT_NAME]
+        [[Perks.For_Event.EVENT_NAME]]
             perk = "modid:otherperkid"
-        [Perks.For_Event.EVENT_NAME]
-            perk = "modid:perkid"
-        [Perks.For_Event.OTHER_EVENT_NAME]
+        [[Perks.For_Event.OTHER_EVENT_NAME]]
             perk = "modid:perkid"
 ```
-*Note that multiple perks for the same skill have their own skillname section, and that you can have multiple skills in the same event even with the same perk.*
+*Note that an event can have multiple of the same perk with different configuration, such as to apply to different skills.*
 
 ### Individual Perk Configurations
 Perks are very dynamic and each perk can have any number of settings.  Because of this, you should consult with the perk author about what settings their perks have.  the PMMO default perk settings are shown at the bottom of this page.  Once you know what settings exist, you can define them in the config file.  for example let's use the perk `pmmo:health` which gives extra hearts to the player based on their skill level
 ```toml
-[Perks.For_Event.EVENT_NAME.endurance]
+[[Perks.For_Event.EVENT_NAME]]
     perk = "pmmo:attribute"
+    skill = "endurance"
     attribute = "minecraft:generic.max_health"
     per_level = 1
     max_boost = 10
 ```
-This perk has 3 settings `attribute`, `per_level` and `max_boost`.  Because we defined this perk under the "endurance" skill, when the `EVENT_NAME` event is triggered, this perk will be given the player's endurance level.  This particular perk is then going to give the player extra hearts according to the settings.  In this case it's one half-heart per 1 level of the skill.  So at 9 endurance, the player gets 4.5 hearts.  The max boost sets a cap on how much extra health the player can get from skills.  In this case it is set at 10, or 5 hearts.
+This perk has 4 settings `skill`, `attribute`, `per_level` and `max_boost`.  When the `EVENT_NAME` event is triggered, this perk will use the player's endurance level.  This particular perk is then going to give the player extra hearts according to the settings.  In this case it's one half-heart per 1 level of the skill.  So at 9 endurance, the player gets 4.5 hearts.  The max boost sets a cap on how much extra health the player can get from skills.  In this case it is set at 10, or 5 hearts.
 
 Suppose this was my configuration though
 ```toml
-[Perks.For_Event.EVENT_NAME.endurance]
+[[Perks.For_Event.EVENT_NAME]]
     perk = "pmmo:attribute"
+    skill = "endurance"
     attribute = "minecraft:generic.max_health"
     per_level = 1
     max_boost = 10
-[Perks.For_Event.EVENT_NAME.combat]
+[[Perks.For_Event.EVENT_NAME]]
     perk = "pmmo:attribute"
+    skill = "combat"
     attribute = "minecraft:generic.max_health"
     per_level = 1
     max_boost = 20
@@ -55,48 +56,154 @@ in this case the perk is calculated based on my endurance level AND my combat le
 
 As noted above, if you want two perks for the same event and skill, you need to define them separately.  example:
 ```toml
-[[Perks.For_Event.SKILL_UP.agility]]
+[[Perks.For_Event.SKILL_UP]]
     perk = "pmmo:attribute"
+    skill = "agility"
     attribute = "minecraft:generic.movement_speed"
-[[Perks.For_Event.SKILL_UP.agility]]
+[[Perks.For_Event.SKILL_UP]]
     skill = "agility"
     perk = "pmmo:fireworks"
 ```
 
 ### Event Configuration
-In the above section, we used a generic "EVENT_NAME", but you should be using actual event names.  The full list of event names can be found [HERE](https://github.com/Caltinor/Project-MMO-2.0/wiki/Award-Events#event-configuration).
+In the above section, we used a generic "EVENT_NAME", but you should be using actual event names.  The full list of event names can be found [HERE](events.md).
 
 It is important to know what your perks do, so that you know what events to put them under.  For example, it may not make sense to use "pmmo:jump_boost" under "BLOCK_BREAK" and have the player hop every time they break a block (as funny as that looks).
 
-### PMMO Perks
-These are all the perks PMMO provides without any addons.
+### Default Properties
+All perks are affected by the following properties.  The below table lists them and the effect it will have on your perk.
 
-- pmmo:attribute
-    - changes attributes about a player, much like the command does
-    - "attribute" the id of the attribute.  vanilla attributes look like "minecraft:attribute_id".  "attribute_id" can be found [HERE](https://minecraft.fandom.com/wiki/Attribute#Attributes_available_on_all_living_entities)
-    - "max_boost" the highest amount this attribute can reach
-    - "per_level" a multiplier per level of the skill for this attribute to be modified by
-- pmmo:jump_boost
-    - increases the jump height
-    - "per_level" how much boost per level of the skill
-    - "max_boost" the highest jump level permitted
-- pmmo:breath
-    - restores a portion of the health bar after the last breath bubble dissapears
-    - "cooldown" the time between when this perk should apply in miliseconds
-    - "per_level" how much extra breath should the player get per skill level
-- pmmo:damage_boost
-    - increases damage to attacks.  is duplicative to "pmmo:damage" for melee attacks.  this is the only damage booster for archery, magic, and gunslinging.
-    - "per_level" how much extra damage should be dealt per skill level
-    - "applies_to" a list of item IDs that should get this benefit.
-- pmmo:effect
-    - gives the player an effect for a specific time
-    - "per_level" sets duration of the effect times the skill level
-    - "modifier" sets the potion strength
-    - "ambient" if true makes the particles hidden
-    - "visible" if false makes the effect not show in the inventory screen
-- pmmo:command
-    - runs the specified command or function when triggered
-    - "command" a string containing the command to be run
-    - "function" the ID of the function to be run.  mutually exclusive to command and always takes precedence.
+| property      | effect                                                                                                                                                                                                                                                                 |
+|:--------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `cooldown`    | prevents this perk from activating until the duration has elapsed.  Note: this applies to all versions of this perk, not just the perk for that configuration.  For example a firework on level-up would not fire for the second skill if the cooldown had not elapsed |
+| `chance`      | a value between 0.0 and 1.0 for the likelihood this perk will execute.  0.1 = 10%                                                                                                                                                                                      |
+| `skill`       | specifies a skill to supply to this perk. When this is used, the player's level in the skill will be passed to the perk when executed.                                                                                                                                 |
+| `min_level`   | the minimum level in the specified skill the player must have for this perk to execute.  omitting the skill will negate this property                                                                                                                                  |
+| `max_level`   | the maximum level in the specified skill the player must have for this perk to execute.  omitting the skill will negate thsi property                                                                                                                                  |
+| `per_x_level` | Executes the perk only if the player's level is divisible by this value.  omitting the skill will negate this property                                                                                                                                                 |
+| `milestones`  | A list of levels that this perk executes for.  omitting the skill will negate this property                                                                                                                                                                            |
+
+### PMMO Perks
+These are all the perks PMMO provides without any addons.  The defaults listed below are the values if you omit the property in your configuration.  By using a property in your `pmmo-Perks.toml`, the default is ignored.
+
+### <u>pmmo:break_speed</u>
+Modifies the break-speed of blocks.  Only works with the `BREAK_SPEED` event.
+
+| property      | default | description                                                  |
+|:--------------|:-------:|:-------------------------------------------------------------|
+| `pickaxe_dig` |    0    | how much faster pickaxes should break blocks per skill level |
+| `axe_dig`     |    0    | how much faster axes should break blocks per skill level     |
+| `shovel_dig`  |    0    | how much faster shovels should break blocks per skill level  |
+| `hoe_dig`     |    0    | how much faster hoes should break blocks per skill level     |
+| `shears_dig`  |    0    | how much faster shears should break blocks per skill level   |
+| `sword_dig`   |    0    | how much faster swords should break blocks per skill level   |             
+
+### <u>pmmo:fireworks</u>
+Shoots a firework into the air above the player.  Only works with the `SKILL_UP` event.
+
+| property | default  | description                                  |
+|:---------|:--------:|:---------------------------------------------|
+| `skill`  | `"none"` | The skill this firework should activate for. |
+
+### <u>pmmo:attribute</u>
+Gives the player an attribute modifier.  This works with modded attributes.  For the full list of vanilla attribute IDs, go [HERE](https://minecraft.fandom.com/wiki/Attribute#Attributes_available_on_all_living_entities)
+
+| property         | default | description                                                                          |
+|:-----------------|:-------:|:-------------------------------------------------------------------------------------|
+| `attribute`      |  none   | The attribute ID being modified                                                      |
+| `max_boost`      |    0    | see above.                                                                           |
+| `per_level`      |    0    | multiplies the player's skill by this value to set the attribute value               |
+| `base`           |    0    | base value added to attribute value on top of `per_level` value                      |
+| `multiplicative` |  false  | if true uses the attribute MULTIPLY operation. If false, uses the ADDITION operation |
+
+### <u>pmmo:temp_attribute</u>
+Gives the player an attribute for a specific duration, then removes it.
+
+| property         | default | description                                                                          |
+|:-----------------|:-------:|:-------------------------------------------------------------------------------------|
+| `attribute`      |  none   | The attribute ID being modified                                                      |
+| `duration`       |    0    | How long the attribute should last.  Default would be an instantaneous removal       |
+| `max_boost`      |    0    | see above.                                                                           |
+| `per_level`      |    0    | multiplies the player's skill by this value to set the attribute value               |
+| `base`           |    0    | base value added to attribute value on top of `per_level` value                      |
+| `multiplicative` |  false  | if true uses the attribute MULTIPLY operation. If false, uses the ADDITION operation |
+
+
+### <u>pmmo:jump_boost</u>
+Gives the player a vertical boost.  If used with the JUMP event, will add to the jump, otherwise the perk will just launch the player into the air a certain amount.
+
+| property    | default | description                                              |
+|:------------|:-------:|:---------------------------------------------------------|
+| `max_boost` |  0.25   | The maximum height added to the jump                     |
+| `per_level` | 0.0005  | How much jump height each level of the skill contributes |
+
+### <u>pmmo:breath</u>
+Restores a portion of the breath bar after the last breath bubble dissapears
+
+| property    | default | description                                                                     |
+|:------------|:-------:|:--------------------------------------------------------------------------------|
+| `cooldown`  |   600   | How frequent the breath can refresh.  setting to zero will make breath infinite |
+| `per_level` |    1    | The amount of breath restored per level in the skill                            |
+
+### <u>pmmo:damage_reduce</u>
+Reduces damage received when used with the `RECEIVE_DAMAGE` event.
+
+| property     |   default   | description                                                                                                                                           |
+|:-------------|:-----------:|:------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `per_level`  |    0.025    | Amount of damage per level in the specified skill to reduce by                                                                                        |
+| `for_damage` | `"omitted"` | a Minecraft [Damage Type](../configuration/damagetypes.md) this reduction should apply to.  If using damage type tags, place a `#` before the tag ID. | 
+
+### <u>pmmo:damage_boost</u>
+Increases damage to attacks.  This is the only damage booster for archery, magic, and gunslinging.  Note that melee attack boosting should use `pmmo:attribute` and use the vanilla attack damage attribute.
+
+| property         |     default     | description                                                                                                                                                                                                                                                |
+|:-----------------|:---------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `applies_to`     | `["weapon:id"]` | Specifies which weapons will have boosted damage. The default is no weapons                                                                                                                                                                                |
+| `per_level`      |      0.05       | How much per, level in the skill will the damage be boosted by.  Omitting the skill in this perk will result in no damage boosted                                                                                                                          |
+| `base`           |        1        | Since damage is a multiplier by default, the base is added to make damage equal to at least 1x the base damage.  You could set this to zero to make players deal less damage before they reach a certain skill level, or if using `multiplicative = false` |
+| `multiplicative` |      true       | Makes damage a multiplier.  If false, adds to the damage by a flat amount                                                                                                                                                                                  |
+
+### <u>pmmo:effect</u>
+Gives the player an effect for a specific time
+
+| property    | default | description                                                                 |
+|:------------|:-------:|:----------------------------------------------------------------------------|
+| `duration`  |   100   | The number of ticks the effect should last per level                        |
+| `per_level` |    1    | multiplies the level by this value before multiplying by duration           |
+| `modifier`  |    0    | sets the level of the effect.  all effect levels are +1 than their modifier |
+| `ambient`   |  false  | should an effect's particles be hidden                                      |
+| `visible`   |  true   | should an effect show in the players inventory and hud                      |
+
+### <u>pmmo:command</u>
+Runs the specified command or function when triggered.  Note the Glossary entry for this perk will display the property literally.  It is advised to name your functions something intuitive, if using functions.
+
+| property   | default | description                                                               | Example                                   |
+|:-----------|:-------:|:--------------------------------------------------------------------------|:------------------------------------------|
+| `command`  |  none   | Runs a single command line                                                | `command = "give @s minecraft:diamond 10` |
+| `function` |  none   | Executes a function.  takes precedence over `command` if both are present | `function = "mypack:myfunction"`          |
+
+### <u>pmmo:villager_boost</u>
+Reduces the villager's trades when interacted with.  Only works with the `ENTITY` event.
+
+| property    | default | description                                                          |
+|:------------|:-------:|:---------------------------------------------------------------------|
+| `per_level` |  0.05   | the amount of reputation to increase per level in the skill          |
+| `cooldown`  |  1000   | the number of ticks before another reputation modification can occur |
+
+### <u>pmmo:tame_boost</u>
+Increases the attributes of the tamed animal.  Only works with the `TAMING` event.  Currently, all attributes modified are hardcoded to these values.
+
+| attribute     | value |
+|:--------------|:-----:|
+| jump strength | 0.005 |
+| health        |  1.0  |
+| speed         | 0.01  |
+| armor         | 0.01  |
+| damage        | 0.01  |
+
+| property    | default | description                                                                       |
+|:------------|:-------:|:----------------------------------------------------------------------------------|
+| `per_level` |  0.05   | Each attribute is increased by this value * the skill * the attribute value above |
+| `skill`     | taming  | a default skill provided                                                          |
 
 [Home](../home.md)
