@@ -27,7 +27,7 @@ Welcome to the Project-MMO-2.0 wiki!
     - [Salvaging](features/salvage.md)
     - [Vein Mining](features/vein.md)
     - [Logging](features/logging.md)
-## API
+## [API](api.md)
 - [Requirement, Xp Gain, and Bonus Overrides](api/overrides.md)
 - [Perks](api/perks.md)
 - [PMMO Custom Events](api/events.md)
