@@ -44,21 +44,12 @@ public class AutoValues {
 		if (reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).containsKey(objectID) && !(requirements = new HashMap<>(reqValues.get(reqType).get(objectID))).isEmpty())
 			return requirements;
 				
-		switch (autoValueType) {
-		case ITEM: {
-			requirements = AutoItem.processReqs(reqType, objectID);
-			break;
-		}
-		case BLOCK: {
-			requirements = AutoBlock.processReqs(reqType, objectID);
-			break;
-		}
-		case ENTITY: {
-			requirements = AutoEntity.processReqs(reqType, objectID);
-			break;
-		}
-		default: {}
-		}
+		requirements = switch (autoValueType) {
+		case ITEM -> AutoItem.processReqs(reqType, objectID);
+		case BLOCK -> AutoBlock.processReqs(reqType, objectID);
+		case ENTITY -> AutoEntity.processReqs(reqType, objectID);
+		default -> requirements;
+		};
 		Map<String, Integer> finalReqs = new HashMap<>();
 		requirements.forEach((skill, level) -> {
 			if (level > 0)
@@ -78,22 +69,12 @@ public class AutoValues {
 		if (xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).containsKey(objectID) && !(awards = new HashMap<>(xpGainValues.get(eventType).get(objectID))).isEmpty())
 			return awards;
 
-		
-		switch (autoValueType) {
-		case ITEM: {
-			awards = AutoItem.processXpGains(eventType, objectID);
-			break;
-		}
-		case BLOCK: {
-			awards = AutoBlock.processXpGains(eventType, objectID);
-			break;
-		}
-		case ENTITY: {
-			awards = AutoEntity.processXpGains(eventType, objectID);
-			break;
-		}
-		default: {}
-		}
+		awards = switch (autoValueType) {
+		case ITEM -> AutoItem.processXpGains(eventType, objectID);
+		case BLOCK -> AutoBlock.processXpGains(eventType, objectID);
+		case ENTITY -> AutoEntity.processXpGains(eventType, objectID);
+		default -> awards;
+		};
 		Map<String, Long> finalAwards = new HashMap<>();
 		awards.forEach((skill, value) -> {
 			if (value > 0)

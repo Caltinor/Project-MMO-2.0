@@ -3,7 +3,7 @@
 This page details the configuration details for json files placed under `/data/namespace/pmmo/blocks/`.
 
 ## File Naming Convention
-Like all datapack jsons, the file name corresponds to the object path under the nested namespace. this means that `data/minecraft/pmmo/items/stone.json` corresponds to `"minecraft:stone"`.
+Like all datapack jsons, the file name corresponds to the object path under the nested namespace. this means that `data/minecraft/pmmo/blocks/stone.json` corresponds to `"minecraft:stone"`.
 
 ## Base Template
 This template lists all root fields for this configuration. all fields are optional

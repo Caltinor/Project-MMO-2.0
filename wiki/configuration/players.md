@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 This page details the data format for json files in the `data/namespace/pmmo/players/` data folder.
 
 ## File Naming and Folders
@@ -8,11 +10,12 @@ Because players are a minecraft object, they only go under the minecraft namespa
 ## Example File
 ```json5
 {
-    //This file is expected to expand as features are added. for now there is one setting that lets the player ignore requirements
-    "ignoreReq": true,
+    "ignoreReq": true, //this player is not affected by requirements
     //this is a per-player bonus which means this player will always have the bonuses, but only this player.
     "bonuses": {
       "skillname": 1.5 // 50% increase
     }
 }
 ```
+
+[Home](../home.md)

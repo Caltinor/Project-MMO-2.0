@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 For those familiar with PMMO's features called "extra chance", "rare mob drops", "rare fish loot", and "treasure", This section covers how PMMO 2.0 implements those same features.  Instead of individual configs, you now have 4 new PMMO-related conditions you can use in loot tables and Global Loot Modifiers to define drops.  These conditions let you set specific any source of loot (entities, blocks, chests) to be conditional on a player's skill.  The most basic conditions are `pmmo:skill_level` and `pmmo:skill_level_kill`.  The latter works for kills, while the former works on everything else, including chest loot.  That's right, you can make chests give different loot based on a player's skills.  the format for this condition in the loot table is:
 ```json5
 {"condition":"pmmo:skill_level",
@@ -30,3 +32,5 @@ or
 }
 ```
 "tag" and "block" are mutually exclusive. If you do use both, however, the tag always takes precedence and the block is ignored.  In the above example this loot condition makes it so that if any member of the forge stone tag is broken, this loot pool or GLM will be applied.  In the second example this only applies specifically to minecraft's stone block.
+
+[Home](../home.md)

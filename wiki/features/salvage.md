@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 Salvaging is a feature that lets you recover items from items based on skill and chance.
 
 ## How to Salvage
@@ -10,3 +12,5 @@ If you view and item using the "P" (default) menu, you can see all of its salvag
 - "Chance x% x%" The chance you will obtain a drop from this entry. The first number is the chance based on skill. the second number is the chance cap for this entry.  If the first number is higher than the second, the second will be used.  This means if the second number is 80%, the item at max chance will still have a 20% chance of failure.
 - "Chance boost based on level" What skills give extra salvage chance, and how much.  This is cumulative
 - "Xp award on success" what skills and XP are awarded if this entry drops.
+
+[Home](../home.md)

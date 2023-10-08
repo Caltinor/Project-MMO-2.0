@@ -1,18 +1,20 @@
+[Home](../home.md)
+
 # Anti-Cheese
-Is an xp abuse control system.  Anti-Cheese allows you to control certain exploitable elements of XP gains to reduce the xp gained when using exploits.  This system is intended to be open and flexible to allow you as the configurator flexible control.
+Is an experience abuse control system.  Anti-Cheese allows you to control certain exploitable elements of XP gains to reduce the xp gained when using exploits.  This system is intended to be open and flexible to allow you as the configurator flexible control.
 
 ### Anti-Cheese has 3 types of trackers:
 1. AFK Tracking
 2. Diminuation Tracking
 3. Normalization Tracking
 
-All tracker types are Event-based.  this means that you control how certain events are dealt with.  This also means you can have different configuration for each event type and each event type will have it's own tracker to manage that player's restrictions.
+All tracker types are Event-based.  this means that you control how certain events are dealt with.  This also means you can have different configuration for each event type and each event type will have its own tracker to manage that player's restrictions.
 
 ## AFK Tracking
 When players are not moving, they will begin to accrue AFK time.  when that time reaches the configured threshold, they are considered AFK and will be penalized accordingly.  The longer they remain AFK, the greater the penalty.
 ```toml
 [AntiCheese]
-  #if set to true, being AFK can take away XP.  Otherwise, the player eventually just earns nothing.
+  #if set to true, being AFK can take away XP.  Otherwise, the player eventually earns nothing.
   AFK_Can_Subtract = false
   [AntiCheese.AFK]
     [AntiCheese.AFK.EVENT_TYPE]
@@ -29,11 +31,11 @@ When players are not moving, they will begin to accrue AFK time.  when that time
     [AntiCheese.AFK.OTHER_EVENT_TYPE]
       min_time_to_apply = 20 #one second
       reduction = 1.0 #immediate complete loss of xp
-      cooloff_amount = 1 #2 seconds of afk time reduced every 2 seconds
+      cooloff_amount = 1 #2 seconds of afk time reduced every second
 ```
 
 ## Diminuation Tracking
-Is when a player earns the same type of xp in rapid succession.  Common examples include riding, and submersion.  When configured, diminishing xp causes xp to become less and less over time.  Additionally, the reduction will persist for a set duration so the user has to wait before gaining that xp at full strength again.  This can be used in a similar fashion to AFK tracking but does not require the user to be still.  Both can be used together if needed.
+Is when a player earns the same type of xp in rapid succession.  Common examples include riding, and submersion.  When configured, diminishing xp causes xp to become less and less, over time.  Additionally, the reduction will persist for a set duration so the user has to wait before gaining that xp at full strength again.  This can be used in a similar fashion to AFK tracking but does not require the user to be still.  Both can be used together if needed.
 ```toml
 [AntiCheese]
   [AntiCheese.DiminishingXP]
@@ -72,3 +74,5 @@ Is the prevention of extreme values.  Examples include sprinting and swimming wh
       tolerance_flat = 15
       tolerance_percent = 0.1
 ```
+
+[Home](../home.md)
