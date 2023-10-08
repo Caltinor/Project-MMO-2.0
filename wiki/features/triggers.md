@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 This page details the configuration details for jsons placed under `/data/namespace/advancements/`.
 
 ## Advancements
@@ -66,3 +68,5 @@ The real special sauce here is in using functions as a reward. Functions can int
 -Changing stages using game stages.
 
 to name just a very few. Advancements with functions that can modify the game or player in countless ways and opens up a lot of options for you to customize your game.
+
+[Home](../home.md)

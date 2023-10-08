@@ -17,7 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class AutoBlock {
 	private static final double BASE_HARDNESS = 4;
 	
-	public static final ReqType[] REQTYPES = {ReqType.BREAK, ReqType.PLACE};
+	public static final ReqType[] REQTYPES = {ReqType.BREAK};
 	public static final EventType[] EVENTTYPES = {EventType.BLOCK_BREAK, EventType.BLOCK_PLACE, EventType.GROW};
 	
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation blockID) {

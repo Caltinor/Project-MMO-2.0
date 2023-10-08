@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 PMMO 2.0 adds a very simple solution to the previous systems of Treasure, Extra Drops, Rare Mob Drops, and Rare Fish Pool. Using Forge's "Global Loot Modifier" functionality, pmmo adds an on-chance means of adding an extra drop to any loot drop.
 
 In your datapack, under any namespace, add a folder called loot_modifiers. Within this folder add json files with any name you like (must still conform to [datapack naming rules](https://minecraft.fandom.com/wiki/Resource_location#Legal_characters))
@@ -64,3 +66,6 @@ The following would add a 1% chance to find Netherite Scrap when mining Netherra
   ],
   "replace": false
 }
+```
+
+[Home](../home.md)
