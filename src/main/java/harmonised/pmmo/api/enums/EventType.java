@@ -29,7 +29,11 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 	FISH(true, false, false, "fishing"),					
 	SMELT(true, false, false, "smithing"),
 	GROW(false, true, false, "farming"),					
-	HEALTH_CHANGE(false, false, false, ""),						
+	/**Use either of the INCREASE/DECREASE variants for future implementations.*/
+	@Deprecated(forRemoval = true, since = "1.20")
+	HEALTH_CHANGE(false, false, false, ""),
+		HEALTH_INCREASE(false, false, false, ""),
+		HEALTH_DECREASE(false, false, false, ""),
 	JUMP(false, false, true, "agility"),					
 		SPRINT_JUMP(false, false, true, "agility"),			
 		CROUCH_JUMP(false, false, true, "agility"),
