@@ -53,8 +53,12 @@ public class PlayerTickHandler {
 		
 		if (player.getAirSupply() != airLast.getOrDefault(player.getUUID(), 0))
 			processEvent(EventType.BREATH_CHANGE, core, event);
-		if (player.getHealth() != healthLast.getOrDefault(player.getUUID(), 0f))
+		float healthDiff = player.getHealth() - healthLast.getOrDefault(player.getUUID(), 0f);
+		if (healthDiff != 0) {
 			processEvent(EventType.HEALTH_CHANGE, core, event);
+			if (healthDiff > 0) processEvent(EventType.HEALTH_INCREASE, core, event);
+			if (healthDiff < 0) processEvent(EventType.HEALTH_DECREASE, core, event);
+		}
 		if (player.isPassenger())
 			processEvent(EventType.RIDING, core, event);
 		if (!player.getActiveEffects().isEmpty())
@@ -110,12 +114,13 @@ public class PlayerTickHandler {
 				});
 			}
 			case HEALTH_CHANGE -> {
-				float diff = Math.abs(healthLast.getOrDefault(event.player.getUUID(), 0f) - event.player.getHealth());
-				Map<String, Double> ratio = Config.HEALTH_CHANGE_XP.get();
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
+				proccessHealthChange(Config.HEALTH_CHANGE_XP.get(), core, event.player, xpAward);
+			}
+			case HEALTH_INCREASE -> {
+				proccessHealthChange(Config.HEALTH_INCREASE_XP.get(), core, event.player, xpAward);
+			}
+			case HEALTH_DECREASE -> {
+				proccessHealthChange(Config.HEALTH_DECREASE_XP.get(), core, event.player, xpAward);
 			}
 			case RIDING -> {
 				source = RegistryUtil.getId(event.player.getVehicle());
@@ -191,5 +196,13 @@ public class PlayerTickHandler {
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.player);
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
+	}
+
+	private static void proccessHealthChange(Map<String, Double> ratio, Core core, Player player, Map<String, Long> xpAward) {
+		float diff = Math.abs(healthLast.getOrDefault(player.getUUID(), 0f) - player.getHealth());
+		ratio.keySet().forEach((skill) -> {
+			Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
+			xpAward.put(skill, value.longValue());
+		});
 	}
 }

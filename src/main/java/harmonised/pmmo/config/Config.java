@@ -393,6 +393,8 @@ public class Config {
 	
 	public static ConfigObject<Map<String, Double>> BREATH_CHANGE_XP;
 	public static ConfigObject<Map<String, Double>> HEALTH_CHANGE_XP;
+	public static ConfigObject<Map<String, Double>> HEALTH_INCREASE_XP;
+	public static ConfigObject<Map<String, Double>> HEALTH_DECREASE_XP;
 	public static ConfigObject<Map<String, Double>> SPRINTING_XP;
 	public static ConfigObject<Map<String, Double>> SUBMERGED_XP;
 	public static ConfigObject<Map<String, Double>> SWIMMING_XP;
@@ -436,7 +438,11 @@ public class Config {
 			BREATH_CHANGE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 					
 					"BREATH_CHANGE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 1d));
 			HEALTH_CHANGE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"HEALTH_CHANGE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
+					"HEALTH_CHANGE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 0d));
+			HEALTH_INCREASE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder,
+				"HEALTH_INCREASE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
+			HEALTH_DECREASE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder,
+				"HEALTH_DECREASE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
 			SPRINTING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
 					"SPRINTING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 100d));
 			SUBMERGED_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
