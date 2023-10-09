@@ -243,6 +243,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
 	public static ForgeConfigSpec.ConfigValue<String> SALVAGE_BLOCK;
 	public static ForgeConfigSpec.BooleanValue TREASURE_ENABLED;
+	public static ForgeConfigSpec.BooleanValue BREWING_TRACKED;
 	
 	private static void buildBasics(ForgeConfigSpec.Builder builder) {
 		builder.comment("General settings on the server").push("General");
@@ -253,6 +254,11 @@ public class Config {
 				.define("Salvage Block", "minecraft:smithing_table");
 		TREASURE_ENABLED = builder.comment("if false, all pmmo loot conditions will be turned off")
 				.define("Treasure Enabled", true);
+		BREWING_TRACKED = builder.comment("If false, pmmo will not track if a potion was previously brewed.",
+				"this helps with stacking potions from other mods, but ",
+				"does not prevent users from pick-placing potions in the",
+				"brewing stand for free XP. Toggle at your discretion.")
+				.define("brewing_tracked", true);
 		
 		builder.pop();
 	}
