@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,6 +42,7 @@ import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,7 +53,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class PackGenerator {
 	public static final String PACKNAME = "generated_pack";
-	public static final String DISABLER = "pmmo_disabler_pack";
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	public static boolean applyOverride = false, applyDefaults = false, applyDisabler = false, applySimple = false;
 	public static List<String> namespaceFilter = new ArrayList<>();
@@ -70,66 +71,130 @@ public class PackGenerator {
 								: new HashMap<>()))
 						.entrySet().stream()
 						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
-						.collect(Collectors.toMap(e -> e.getKey(), e -> (Map<String, Integer>)e.getValue())),
+						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
 					Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> 
 							applyDefaults
 								? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
 								: new ArrayList<>()))
 						.entrySet().stream()
 						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
-						.collect(Collectors.toMap(e -> e.getKey(), e -> (List<LogicEntry>)e.getValue())),
+						.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					applyDefaults ? existing.negativeEffects() : new HashMap<>(),
 					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> 
 						applyDefaults 
 							? existing.xpValues().getOrDefault(e, AutoValues.getExperienceAward(e, id, ObjectType.ITEM))
 							: new HashMap<>()))
 						.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
-						.collect(Collectors.toMap(e -> e.getKey(), e -> (Map<String, Long>)e.getValue())),
+						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
+					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.damageXpValues().getOrDefault(e, new HashMap<>())
+									: new HashMap<>())),
 					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> 
 							applyDefaults
 								? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
 								: new ArrayList<>()))
 						.entrySet().stream()
 						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
-						.collect(Collectors.toMap(e -> e.getKey(), e -> (List<LogicEntry>)e.getValue())),
+						.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					Arrays.stream(new ModifierDataType[] {ModifierDataType.WORN, ModifierDataType.HELD})
 						.collect(Collectors.toMap(m -> m, m -> applyDefaults ? existing.bonuses().getOrDefault(m, new HashMap<>()) : new HashMap<>()))
 						.entrySet().stream()
 						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
-						.collect(Collectors.toMap(e -> e.getKey(), e -> (Map<String, Double>)e.getValue())),
+						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Double>)e.getValue())),
 					Arrays.stream(new ModifierDataType[] {ModifierDataType.WORN, ModifierDataType.HELD})
 						.collect(Collectors.toMap(m -> m, m -> applyDefaults ? existing.nbtBonuses().getOrDefault(m, new ArrayList<>()) : new ArrayList<>()))
 						.entrySet().stream()
 						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
-						.collect(Collectors.toMap(m -> m.getKey(), m -> (List<LogicEntry>)m.getValue())),
+						.collect(Collectors.toMap(Map.Entry::getKey, m -> (List<LogicEntry>)m.getValue())),
 					applyDefaults ? existing.salvage() : Map.of(new ResourceLocation("modid:item"), SalvageBuilder.start().build()),
 					applyDefaults ? existing.veinData() : VeinData.EMPTY);
-			JsonElement raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get();
+			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
 		BLOCKS("pmmo/blocks", server -> ForgeRegistries.BLOCKS.getKeys(), (id) -> {
+			Core core = Core.get(LogicalSide.SERVER);
+			ObjectData existing = core.getLoader().BLOCK_LOADER.getData(id);
+
 			ObjectData data = new ObjectData(applyOverride, new HashSet<>(),
-					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new HashMap<>())),
-					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new ArrayList<>())),
+					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r ->
+						applyDefaults
+							? existing.reqs().getOrDefault(r, AutoValues.getRequirements(r, id, ObjectType.BLOCK))
+							: new HashMap<>()))
+						.entrySet().stream()
+							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
+					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r ->
+							applyDefaults
+									? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
+									: new ArrayList<>()))
+							.entrySet().stream()
+							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					new HashMap<>(), //negative effects
-					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new HashMap<>())),
-					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new ArrayList<>())),
+					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.xpValues().getOrDefault(e, AutoValues.getExperienceAward(e, id, ObjectType.BLOCK))
+									: new HashMap<>()))
+							.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
+					new HashMap<>(), //damage events
+					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
+									: new ArrayList<>()))
+							.entrySet().stream()
+							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					new HashMap<>(), //bonuses
 					new HashMap<>(), //nbt bonuses
 					new HashMap<>(), //salvage
-					new VeinData(Optional.empty(), Optional.empty(), Optional.of(1)));
+					applyDefaults ? existing.veinData() : new VeinData(Optional.empty(), Optional.empty(), Optional.of(1)));
 			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			raw.remove("negative_effect");
 			raw.remove("bonuses");
+			raw.remove("dealt_damage_xp");
+			raw.remove("received_damage_xp");
 			raw.remove("nbt_bonuses");
 			raw.remove("salvage");
 			return gson.toJson(raw);}),
+
 		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITIES.getKeys(), (id) -> {
+			Core core = Core.get(LogicalSide.SERVER);
+			ObjectData existing = core.getLoader().ENTITY_LOADER.getData(id);
+
 			ObjectData data = new ObjectData(applyOverride, new HashSet<>(),
-					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new HashMap<>())),
-					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> new ArrayList<>())),
+					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r ->
+							applyDefaults
+									? existing.reqs().getOrDefault(r, AutoValues.getRequirements(r, id, ObjectType.ENTITY))
+									: new HashMap<>()))
+							.entrySet().stream()
+							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
+					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r ->
+							applyDefaults
+									? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
+									: new ArrayList<>()))
+							.entrySet().stream()
+							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					new HashMap<>(), //negative effects
-					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new HashMap<>())),
-					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> new ArrayList<>())),
+					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.xpValues().getOrDefault(e, AutoValues.getExperienceAward(e, id, ObjectType.ENTITY))
+									: new HashMap<>()))
+							.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
+					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.damageXpValues().getOrDefault(e, new HashMap<>())
+									: new HashMap<>())),
+					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
+									: new ArrayList<>()))
+							.entrySet().stream()
+							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					new HashMap<>(), //bonuses
 					new HashMap<>(), //nbt bonuses
 					new HashMap<>(), //salvage
@@ -143,29 +208,48 @@ public class PackGenerator {
 			return gson.toJson(raw);}),
 		DIMENSIONS("pmmo/dimensions", server -> new HashSet<>(server.levelKeys().stream().map(key -> key.location()).toList()), 
 				(id) -> {
+				Core core = Core.get(LogicalSide.SERVER);
+				LocationData existing = core.getLoader().DIMENSION_LOADER.getData(id);
+
 				LocationData data = new LocationData(applyOverride, new HashSet<>(),
-						Map.of(ModifierDataType.DIMENSION, new HashMap<>()),
+						applyDefaults ? existing.bonusMap() : Map.of(ModifierDataType.DIMENSION, new HashMap<>()),
 						new HashMap<>(),
 						new HashMap<>(),
-						new ArrayList<>(),
-						new HashMap<>(),
-						new HashMap<>());				
+						applyDefaults ? existing.veinBlacklist() : new ArrayList<>(),
+						applyDefaults ? existing.travelReq() : new HashMap<>(),
+						applyDefaults ? existing.mobModifiers() : new HashMap<>());
 				JsonObject raw = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 				raw.remove("positive_effect");
 				raw.remove("negative_effect");
 				return gson.toJson(raw);}),
-		BIOMES("pmmo/biomes", server -> ForgeRegistries.BIOMES.getKeys(), (id) -> {
-			LocationData data = new LocationData(applyOverride, new HashSet<>(),	Map.of(ModifierDataType.BIOME, new HashMap<>()),
-					new HashMap<>(), new HashMap<>(),new ArrayList<>(),	new HashMap<>(), new HashMap<>());				
+		BIOMES("pmmo/biomes", server -> server.registryAccess().registryOrThrow(Registries.BIOME).keySet(), (id) -> {
+			Core core = Core.get(LogicalSide.SERVER);
+			LocationData existing = core.getLoader().BIOME_LOADER.getData(id);
+
+			LocationData data = new LocationData(applyOverride, new HashSet<>(),
+					applyDefaults ? existing.bonusMap() : Map.of(ModifierDataType.BIOME, new HashMap<>()),
+					applyDefaults ? existing.positive() : new HashMap<>(),
+					applyDefaults ? existing.negative() : new HashMap<>(),
+					applyDefaults ? existing.veinBlacklist() : new ArrayList<>(),
+					applyDefaults ? existing.travelReq() : new HashMap<>(),
+					applyDefaults ? existing.mobModifiers() : new HashMap<>());
 			JsonObject raw = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
 		ENCHANTMENTS("pmmo/enchantments", server -> ForgeRegistries.ENCHANTMENTS.getKeys(), (id) -> {
+			Core core = Core.get(LogicalSide.SERVER);
+			EnhancementsData existing = core.getLoader().ENCHANTMENT_LOADER.getData(id);
+
 			return gson.toJson(EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, 
-					new EnhancementsData(applyOverride, new HashMap<>())).result().get());
+					new EnhancementsData(applyOverride,
+							applyDefaults ? existing.skillArray() : new HashMap<>())).result().get());
 			}),
 		EFFECTS("pmmo/effects", server -> ForgeRegistries.MOB_EFFECTS.getKeys(), (id) -> {
+			Core core = Core.get(LogicalSide.SERVER);
+			EnhancementsData existing = core.getLoader().EFFECT_LOADER.getData(id);
+
 			return gson.toJson(EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, 
-					new EnhancementsData(applyOverride, new HashMap<>())).result().get());
+					new EnhancementsData(applyOverride,
+							applyDefaults ? existing.skillArray() : new HashMap<>())).result().get());
 			}),
 		TAGS("tags", server -> {
                 Set<ResourceLocation> tags = new HashSet<>(Set.of(
@@ -238,37 +322,7 @@ public class PackGenerator {
 				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
 			}			
 		}
-		return 0;
-	}
-	
-	public static int generateEmptyPack(MinecraftServer server, boolean withOverride) {		
-		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME);
-		filepath.toFile().mkdirs();
-		try {
-		Files.writeString(
-			filepath.resolve("pack.mcmeta"), 
-			gson.toJson(getPackObject(applyDisabler)), 
-			Charset.defaultCharset(),
-			StandardOpenOption.CREATE_NEW,
-			StandardOpenOption.WRITE);
-		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
-		
-		for (Category category : Category.values()) {
-			for (ResourceLocation id : category.valueList.apply(server)) {
-				int index = id.getPath().lastIndexOf('/');
-				String pathRoute = id.getPath().substring(0, Math.max(index, 0));
-				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route+"/"+pathRoute);
-				finalPath.toFile().mkdirs();
-				try {
-				Files.writeString(
-						finalPath.resolve(id.getPath().substring(id.getPath().lastIndexOf('/')+1)+".json"), 
-						category.defaultData.apply(id),
-						Charset.defaultCharset(),
-						StandardOpenOption.CREATE_NEW,
-						StandardOpenOption.WRITE);
-				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
-			}			
-		}
+		generatePlayerConfigs(server, players);
 		return 0;
 	}
 	
