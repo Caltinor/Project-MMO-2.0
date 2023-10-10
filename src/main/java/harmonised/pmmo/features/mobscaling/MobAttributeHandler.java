@@ -1,10 +1,8 @@
 package harmonised.pmmo.features.mobscaling;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.LocationData;
@@ -30,7 +28,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MobAttributeHandler {
 	private static final UUID MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
-	/**Used for balancing purposes to ensure configurations do not exceen known limits.*/
+	/**Used for balancing purposes to ensure configurations do not exceed known limits.*/
 	private static final Map<ResourceLocation, Float> CAPS = Map.of(
 		new ResourceLocation("generic.max_health"), 1024f,
 		new ResourceLocation("generic.movement_speed"), 1.5f,
@@ -55,33 +53,34 @@ public class MobAttributeHandler {
 			//get values for biome and dimension scaling
 			Core core = Core.get(event.getLevel().getLevel());
 			LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(event.getLevel().getLevel().dimension().location());
-			LocationData bioData = core.getLoader().BIOME_LOADER.getData(event.getLevel().getBiome(event.getEntity().getOnPos()).unwrapKey().get().location());
+			LocationData bioData = core.getLoader().BIOME_LOADER.getData(RegistryUtil.getId(event.getLevel().getBiome(event.getEntity().getOnPos())));
 
 			var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
 			var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
+			var multipliers = Config.MOB_SCALING.get();
+
+			Set<ResourceLocation> attributeKeys = Stream.of(dimMods.keySet(), bioMods.keySet(), multipliers.keySet())
+					.flatMap(Set::stream)
+					.map(ResourceLocation::new)
+					.collect(Collectors.toSet());
 
 			//Set each Modifier type
-			Config.MOB_SCALING.get().forEach((id, config) -> {
-				ResourceLocation attributeID = new ResourceLocation(id);
+			attributeKeys.forEach(attributeID -> {
 				Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeID);
 				if (attribute == null) return;
+
+				Map<String, Double> config = multipliers.getOrDefault(attributeID.toString(), new HashMap<>());
 				AttributeInstance attributeInstance = entity.getAttribute(attribute);				
 				if (attributeInstance != null) {
-					double base = baseValue(entity, id, attributeInstance);
+					double base = baseValue(entity, attributeID, attributeInstance);
 					float cap = CAPS.getOrDefault(attributeID, Float.MAX_VALUE);
 					float bonus = getBonus(nearbyPlayers, config, diffScale, base, cap);
-					bonus *= Core.get(entity.level()).getLoader().DIMENSION_LOADER.getData(entity.level().dimension().location()).mobModifiers()
-								.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
-									.getOrDefault(id, 1d);
-					bonus *= Core.get(entity.level()).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level().getBiome(entity.blockPosition()))).mobModifiers()
-							 	.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
-							 		.getOrDefault(id, 1d);
-					bonus += dimMods.getOrDefault(id, 0d).floatValue();
-					bonus += bioMods.getOrDefault(id, 0d).floatValue();
+					bonus += dimMods.getOrDefault(attributeID.toString(), 0d).floatValue();
+					bonus += bioMods.getOrDefault(attributeID.toString(), 0d).floatValue();
 					AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
 					attributeInstance.removeModifier(MODIFIER_ID);
 					attributeInstance.addPermanentModifier(modifier);
-					MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Entity={} Attribute={} value={}", entity.getDisplayName().getString(), id.toString(), bonus);
+					MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Entity={} Attribute={} value={}", entity.getDisplayName().getString(), attributeID.toString(), bonus);
 				}
 			});
 			//sets health to max if max HP was modified.  This is a case catch.
@@ -99,7 +98,7 @@ public class MobAttributeHandler {
 	 * @param ai
 	 * @return
 	 */
-	private static double baseValue(LivingEntity entity, String id, AttributeInstance ai) {
+	private static double baseValue(LivingEntity entity, ResourceLocation id, AttributeInstance ai) {
 		return switch (id.toString()) {
 		case "minecraft:generic.attack_damage" -> 1f;
 		case "minecraft:generic.movement_speed" -> entity.getSpeed();
@@ -124,8 +123,9 @@ public class MobAttributeHandler {
 		//pass through case for dim/biome bonuses to still apply.
 		if (nearbyPlayers.size() == 0) return 0f;
 		nearbyPlayers.forEach(player -> {
-			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getPlayerSkillLevel(str, player.getUUID()))).forEach((skill, level) -> {
-				totalLevel.merge(skill, level, (o, n) -> o + n);
+			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getPlayerSkillLevel(str, player.getUUID())))
+					.forEach((skill, level) -> {
+				totalLevel.merge(skill, level, Integer::sum);
 			});
 		});
 		//get the average level for each skill and calculate its modifier from the configuration formula
