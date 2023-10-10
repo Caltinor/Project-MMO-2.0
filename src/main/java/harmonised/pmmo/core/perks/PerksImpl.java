@@ -39,8 +39,9 @@ public class PerksImpl {
 			.setStart((player, nbt) -> {
 				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
 				if (speedBonus == 0) return NONE;
-				
-				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus);
+
+				float existingSpeedModification = nbt.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE);
+				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus) + existingSpeedModification;
 				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			})
 			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())
