@@ -1,12 +1,10 @@
 # Changelog
 
-## [1.20.1-1.2.6] - 2023-09-20
+## [1.20.1-1.2.7] - 2023-10-11
 ### Bugfixes / Tweaks
-- Updated: Perk stop behavior to be more consistent
-- Added: FBTQ compat back in
-- Added: API Hooks for getting the player's XP map
-- Added: Skill up advancement trigger
-- Added: ignoreReq command for admins to toggle reqs
-- Added: check for BREAK and KILL from explosions
-- Added: skills in the inventory menu now show XP to next level when hovered
-- Fixed: crash from qualified NBT compounds when the ID has a colon in it
+- Added Villager Boost Perk defaulting to Charisma
+- Added toggle to turn of potion tracking.  This makes stackable potions work again.
+- Updated HEALTH_CHANGE to be HEALTH_INCREASE and HEALTH_DECREASE.  the original event, HEALTH_CHANGE, will be removed in 1.20.1
+- Fixed `genData withDefaults` now properly writes all objects.
+- Fixed mob modifiers not applying for dimensions and biomes.
+- Fixed Break speed perk only working for one configuration.  Now stacks.
