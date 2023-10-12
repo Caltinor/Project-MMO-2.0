@@ -135,7 +135,7 @@ public class APIUtils {
 	 * @return a map of skills and raw xp
 	 */
 	public static Map<String, Long> getRawXpMap(Player player) {
-		return Core.get(player.level()).getData().getXpMap(player.getUUID());
+		return Core.get(player.getLevel()).getData().getXpMap(player.getUUID());
 	}
 
 	/**Returns the player's entire skill map.
@@ -144,7 +144,7 @@ public class APIUtils {
 	 * @return a map of skills and levels
 	 */
 	public static Map<String, Integer> getAllLevels(Player player) {
-		IDataStorage data = Core.get(player.level()).getData();
+		IDataStorage data = Core.get(player.getLevel()).getData();
 		return getRawXpMap(player).entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> data.getLevelFromXP(e.getValue())));
 	}

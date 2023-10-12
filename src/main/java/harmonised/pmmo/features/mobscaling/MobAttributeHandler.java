@@ -53,7 +53,7 @@ public class MobAttributeHandler {
 			//get values for biome and dimension scaling
 			Core core = Core.get(event.getLevel().getLevel());
 			LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(event.getLevel().getLevel().dimension().location());
-			LocationData bioData = core.getLoader().BIOME_LOADER.getData(RegistryUtil.getId(event.getLevel().getBiome(event.getEntity().getOnPos())));
+			LocationData bioData = core.getLoader().BIOME_LOADER.getData(RegistryUtil.getId(event.getLevel().getBiome(event.getEntity().getOnPos()).value()));
 
 			var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
 			var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
@@ -123,7 +123,7 @@ public class MobAttributeHandler {
 		//pass through case for dim/biome bonuses to still apply.
 		if (nearbyPlayers.size() == 0) return 0f;
 		nearbyPlayers.forEach(player -> {
-			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getPlayerSkillLevel(str, player.getUUID())))
+			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.getLevel()).getData().getPlayerSkillLevel(str, player.getUUID())))
 					.forEach((skill, level) -> {
 				totalLevel.merge(skill, level, Integer::sum);
 			});

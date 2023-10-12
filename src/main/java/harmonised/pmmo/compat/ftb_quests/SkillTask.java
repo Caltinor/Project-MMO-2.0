@@ -3,12 +3,12 @@ package harmonised.pmmo.compat.ftb_quests;
 
 import java.util.stream.Collectors;
 
-import dev.ftb.mods.ftblibrary.config.ConfigGroup;
-import dev.ftb.mods.ftblibrary.config.NameMap;
-import dev.ftb.mods.ftbquests.quest.Quest;
-import dev.ftb.mods.ftbquests.quest.TeamData;
-import dev.ftb.mods.ftbquests.quest.task.Task;
-import dev.ftb.mods.ftbquests.quest.task.TaskType;
+//import dev.ftb.mods.ftblibrary.config.ConfigGroup;
+//import dev.ftb.mods.ftblibrary.config.NameMap;
+//import dev.ftb.mods.ftbquests.quest.Quest;
+//import dev.ftb.mods.ftbquests.quest.TeamData;
+//import dev.ftb.mods.ftbquests.quest.task.Task;
+//import dev.ftb.mods.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
@@ -23,8 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class SkillTask extends Task
-{
+public class SkillTask// extends Task
+{/*
     public static TaskType SKILL = FTBQHandler.SKILL;
     public String skill;
     public int requiredLevel;
@@ -115,5 +115,5 @@ public class SkillTask extends Task
     @Override
     public Component getAltTitle() {
         return LangProvider.FTBQ_SKILL_TITLE.asComponent(requiredLevel, LangProvider.skill(skill));
-    }
+    }*/
 }

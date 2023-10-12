@@ -9,6 +9,7 @@ import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,11 +22,11 @@ public class EffectManager {
 
 	public static void applyEffects(Core core, Player player) {
 		//BIOME/DIM Efects
-		Biome biome = player.level.getBiome(player.blockPosition()).get();
+		Holder<Biome> biome = player.level.getBiome(player.blockPosition());
 		ResourceKey<Level> dimension = player.level.dimension();
 		List<MobEffectInstance> effects = core.isActionPermitted(ReqType.TRAVEL, biome, player)
-				? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getPositiveEffect(), false)
-				: CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getNegativeEffect(), true);
+				? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome.value())).getPositiveEffect(), false)
+				: CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome.value())).getNegativeEffect(), true);
 		if (core.isActionPermitted(ReqType.TRAVEL, dimension, player))
 			effects.addAll(CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.DIMENSION).getData(dimension.location()).getPositiveEffect(), false));
 		

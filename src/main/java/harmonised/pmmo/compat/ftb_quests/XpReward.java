@@ -1,12 +1,12 @@
 package harmonised.pmmo.compat.ftb_quests;
 
 
-import dev.ftb.mods.ftblibrary.config.ConfigGroup;
-import dev.ftb.mods.ftblibrary.config.NameMap;
-import dev.ftb.mods.ftbquests.quest.Quest;
-import dev.ftb.mods.ftbquests.quest.reward.Reward;
-import dev.ftb.mods.ftbquests.quest.reward.RewardAutoClaim;
-import dev.ftb.mods.ftbquests.quest.reward.RewardType;
+//import dev.ftb.mods.ftblibrary.config.ConfigGroup;
+//import dev.ftb.mods.ftblibrary.config.NameMap;
+//import dev.ftb.mods.ftbquests.quest.Quest;
+//import dev.ftb.mods.ftbquests.quest.reward.Reward;
+//import dev.ftb.mods.ftbquests.quest.reward.RewardAutoClaim;
+//import dev.ftb.mods.ftbquests.quest.reward.RewardType;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -17,8 +17,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class XpReward extends Reward
-{
+public class XpReward// extends Reward
+{/*
     public static RewardType XP_REWARD = FTBQHandler.XP_REWARD;
     public String skill = "mining";
     public long amount = 83;
@@ -91,5 +91,5 @@ public class XpReward extends Reward
     @Override
     public Component getAltTitle() {
         return LangProvider.FTBQ_XP_TITLE.asComponent(amount, LangProvider.skill(skill));
-    }
+    }*/
 }

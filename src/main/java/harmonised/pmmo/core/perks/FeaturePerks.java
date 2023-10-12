@@ -272,7 +272,7 @@ public class FeaturePerks {
 					.withLong(APIUtils.COOLDOWN, 1000L).build())
 			.setStart((player, nbt) -> {
 				int villagerID = nbt.getInt(APIUtils.ENTITY_ID);
-				Villager villager = (Villager) player.level().getEntity(villagerID);
+				Villager villager = (Villager) player.getLevel().getEntity(villagerID);
 				villager.onReputationEventFrom(ReputationEventType.ZOMBIE_VILLAGER_CURED, player);
 				player.sendSystemMessage(LangProvider.PERK_VILLAGE_FEEDBACK.asComponent());
 				return NONE;

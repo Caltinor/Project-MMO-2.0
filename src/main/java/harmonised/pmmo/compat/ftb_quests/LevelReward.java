@@ -1,10 +1,10 @@
 package harmonised.pmmo.compat.ftb_quests;
 
 
-import dev.ftb.mods.ftblibrary.config.ConfigGroup;
-import dev.ftb.mods.ftblibrary.config.NameMap;
-import dev.ftb.mods.ftbquests.quest.Quest;
-import dev.ftb.mods.ftbquests.quest.reward.*;
+//import dev.ftb.mods.ftblibrary.config.ConfigGroup;
+//import dev.ftb.mods.ftblibrary.config.NameMap;
+//import dev.ftb.mods.ftbquests.quest.Quest;
+//import dev.ftb.mods.ftbquests.quest.reward.*;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.core.Core;
@@ -16,8 +16,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class LevelReward extends Reward
-{
+public class LevelReward //extends Reward
+{/*
     public static RewardType LEVEL_REWARD = FTBQHandler.LEVEL_REWARD;
     public String skill = "mining";
     public int amount = 1;
@@ -85,5 +85,5 @@ public class LevelReward extends Reward
     @Override
     public Component getAltTitle() {
         return LangProvider.FTBQ_LVL_TITLE.asComponent(amount, LangProvider.skill(skill));
-    }
+    }*/
 }
