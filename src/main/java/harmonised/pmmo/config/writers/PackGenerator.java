@@ -42,7 +42,7 @@ import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -86,10 +86,6 @@ public class PackGenerator {
 							: new HashMap<>()))
 						.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
 						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
-					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
-							applyDefaults
-									? existing.damageXpValues().getOrDefault(e, new HashMap<>())
-									: new HashMap<>())),
 					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> 
 							applyDefaults
 								? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
@@ -137,7 +133,6 @@ public class PackGenerator {
 									: new HashMap<>()))
 							.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
-					new HashMap<>(), //damage events
 					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
 									? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
@@ -184,10 +179,6 @@ public class PackGenerator {
 									: new HashMap<>()))
 							.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
-					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
-							applyDefaults
-									? existing.damageXpValues().getOrDefault(e, new HashMap<>())
-									: new HashMap<>())),
 					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
 									? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
@@ -222,7 +213,7 @@ public class PackGenerator {
 				raw.remove("positive_effect");
 				raw.remove("negative_effect");
 				return gson.toJson(raw);}),
-		BIOMES("pmmo/biomes", server -> server.registryAccess().registryOrThrow(Registries.BIOME).keySet(), (id) -> {
+		BIOMES("pmmo/biomes", server -> server.registryAccess().registryOrThrow(BuiltinRegistries.BIOME.key()).keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			LocationData existing = core.getLoader().BIOME_LOADER.getData(id);
 

@@ -9,6 +9,7 @@ import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,7 +22,7 @@ public class EffectManager {
 
 	public static void applyEffects(Core core, Player player) {
 		//BIOME/DIM Efects
-		Biome biome = player.level.getBiome(player.blockPosition()).value();
+		Holder<Biome> biome = player.level.getBiome(player.blockPosition());
 		ResourceKey<Level> dimension = player.level.dimension();
 		List<MobEffectInstance> effects = core.isActionPermitted(ReqType.TRAVEL, biome, player)
 				? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getPositiveEffect(), false)
