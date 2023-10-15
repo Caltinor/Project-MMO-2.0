@@ -39,7 +39,7 @@ public class KeyPressHandler {
             			.getData(mc.player.level.dimension().location())
             			.veinBlacklist().contains(RegistryUtil.getId(block))
             		&& !Core.get(LogicalSide.CLIENT).getLoader().BIOME_LOADER
-            			.getData(RegistryUtil.getId(mc.player.level.getBiome(mc.player.blockPosition()).get()))
+            			.getData(RegistryUtil.getId(mc.player.level.getBiome(mc.player.blockPosition())))
             			.veinBlacklist().contains(RegistryUtil.getId(block))) {
 	            	VeinTracker.setTarget(bhr.getBlockPos());
 	            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));

@@ -73,7 +73,7 @@ public class MobAttributeHandler {
 					bonus *= Core.get(entity.level).getLoader().DIMENSION_LOADER.getData(entity.level.dimension().location()).mobModifiers()
 								.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
 									.getOrDefault(id.toString(), 1d);
-					bonus *= Core.get(entity.level).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level.getBiome(entity.blockPosition()).get())).mobModifiers()
+					bonus *= Core.get(entity.level).getLoader().BIOME_LOADER.getData(RegistryUtil.getId(entity.level.getBiome(entity.blockPosition()))).mobModifiers()
 							 	.getOrDefault(RegistryUtil.getId(entity), new HashMap<>())
 							 		.getOrDefault(id.toString(), 1d);
 					bonus += dimMods.getOrDefault(attributeID, 0d).floatValue();

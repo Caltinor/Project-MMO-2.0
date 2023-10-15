@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.component;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +46,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     private static final int OFFSET_X_POSITION = 86;
     
     public PlayerStatsComponent() {
-		super(0, 0, 0, 0, Component.empty());
+		super();
 	}
 
     public void init(int width, int height, Minecraft minecraft, boolean widthTooNarrow) {
@@ -70,8 +72,10 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         if (this.isVisible()) {
-            graphics.pose().pushPose();
-            graphics.pose().translate(0.0D, 0.0D, 120.0D);
+            poseStack.pushPose();
+            poseStack.translate(0.0D, 0.0D, 120.0D);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, TEXTURE_LOCATION);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int i = (this.width - IMAGE_WIDTH) / 2 - this.xOffset;
             int j = (this.height - IMAGE_HEIGHT) / 2;
@@ -159,9 +163,9 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         }
     
         @Override
-        protected void drawPanel(GuiGraphics guiGraphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
+        protected void drawPanel(PoseStack guiGraphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
             for (StatComponent component : this.abilities) {
-                component.setPosition(component.getX(), relativeY);
+                component.setPosition(component.x, relativeY);
                 component.render(guiGraphics, mouseX, mouseY, Minecraft.getInstance().getPartialTick());
 
                 relativeY += StatComponent.BASE_HEIGHT + this.border;
@@ -212,33 +216,36 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         }
     
         @Override
-        public void renderWidget(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-            super.renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
-            graphics.blit(skillData.getIcon(), this.getX() + 3, this.getY() + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
+        public void renderButton(PoseStack graphics, int pMouseX, int pMouseY, float pPartialTick) {
+            super.renderButton(graphics, pMouseX, pMouseY, pPartialTick);
+
+            RenderSystem.setShaderTexture(0, skillData.getIcon());
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            blit(graphics, this.x + 3, this.y + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
 
             renderProgressBar(graphics);
-            graphics.drawString(minecraft.font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
-            graphics.drawString(minecraft.font, String.valueOf(skillLevel), (this.getX() + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.getY() + 5, skillColor.getRGB());
+            GuiComponent.drawString(graphics, minecraft.font, skillName, this.x + 24, this.y + 5, skillColor.getRGB());
+            GuiComponent.drawString(graphics, minecraft.font, String.valueOf(skillLevel), (this.x + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.y + 5, skillColor.getRGB());
         }
         
-        public void renderProgressBar(GuiGraphics graphics) {
-            int renderX = this.getX() + 24;
-            int renderY = this.getY() + (minecraft.font.lineHeight + 6);
-            if (this.isHovered()) {
+        public void renderProgressBar(PoseStack graphics) {
+            int renderX = this.x + 24;
+            int renderY = this.y + (minecraft.font.lineHeight + 6);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, TEXTURE_LOCATION);
+            if (this.isHovered) {
                 MutableComponent text = Component.literal("%s => %s".formatted(this.skillXpToNext, this.skillLevel +1));
-                graphics.drawString(minecraft.font, text, renderX, renderY-1, this.skillColor.getRGB());
+                GuiComponent.drawString(graphics, minecraft.font, text, renderX, renderY-1, this.skillColor.getRGB());
             }
             else {
-                graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
-                graphics.blit(TEXTURE_LOCATION, renderX, renderY, 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
+                RenderSystem.setShaderColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
+                GuiComponent.blit(graphics, renderX, renderY, 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
 
                 long baseXP = core.getData().getBaseXpForLevel(skillLevel);
                 long requiredXP = core.getData().getBaseXpForLevel(skillLevel + 1);
                 float percent = 100.0f / (requiredXP - baseXP);
                 int xp = (int) Math.min(Math.floor(percent * (skillCurrentXP - baseXP)), 94);
-                graphics.blit(TEXTURE_LOCATION, renderX, renderY, xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
-
-                graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                GuiComponent.blit(graphics, renderX, renderY, xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
             }
         }
     }

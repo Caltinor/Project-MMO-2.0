@@ -62,7 +62,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
-			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get());
+			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.REACH_DISTANCE.get());
 			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.CREATIVE_REACH.get())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
@@ -70,13 +70,13 @@ public class EventHandler {
 			}
 		}
 		else {
-			event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
+			event.getEntity().getAttribute(ForgeMod.REACH_DISTANCE.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
 	}
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
 		Core core = Core.get(event.getEntity().level); 
-		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(), new CompoundTag());
+		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(), new CompoundTag(), core.getSide());
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onSleep(SleepFinishedTimeEvent event) {
@@ -87,10 +87,6 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		PistonHandler.handle(event);
-	}
-	@SubscribeEvent(priority=EventPriority.HIGH)
-	public static void tickPerks(LevelTickEvent event) {
-		Core.get(event.level).getPerkRegistry().executePerkTicks(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
