@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import harmonised.pmmo.features.fireworks.FireworkHandler;
 import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
@@ -212,6 +213,11 @@ public class FeaturePerks {
 	private static final String FUNCTION = "function";
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> RUN_COMMAND = (p, nbt, level) -> {
 		if (!(p instanceof ServerPlayer)) return NONE;
+		//skill up command context to filter by skill
+		if (nbt.contains(APIUtils.SKILLNAME)
+				&& nbt.contains(FireworkHandler.FIREWORK_SKILL)
+				&& !nbt.getString(APIUtils.SKILLNAME).equals(nbt.getString(FireworkHandler.FIREWORK_SKILL)))
+			return NONE;
 		ServerPlayer player = (ServerPlayer) p;
 		if (nbt.contains(FUNCTION)) {
 			player.getServer().getFunctions().execute(
