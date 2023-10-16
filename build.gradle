@@ -45,7 +45,7 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.19.2-3.3.5'
+version = '1.19.2-3.3.6'
 group = 'harmonised.pmmo'
 archivesBaseName = 'pmmo'
 
