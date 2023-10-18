@@ -18,8 +18,10 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ScrollPanel;
+import net.minecraftforge.client.gui.ScrollPanel;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
 
@@ -166,7 +168,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         protected void drawPanel(PoseStack guiGraphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
             for (StatComponent component : this.abilities) {
                 component.setPosition(component.x, relativeY);
-                component.render(guiGraphics, mouseX, mouseY, Minecraft.getInstance().getPartialTick());
+                component.render(guiGraphics, mouseX, mouseY, Minecraft.getInstance().getDeltaFrameTime());
 
                 relativeY += StatComponent.BASE_HEIGHT + this.border;
             }
@@ -206,7 +208,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         public StatComponent(Minecraft minecraft, int pX, int pY, String skillKey, SkillData skillData) {
             super(pX, pY, 123, 24, 0, 167, 25, TEXTURE_LOCATION, pButton -> {});
             this.minecraft = minecraft;
-            this.skillName = Component.translatable("pmmo." + skillKey).getString();
+            this.skillName = new TranslatableComponent("pmmo." + skillKey).getString();
             this.skillData = skillData;
             
             this.skillColor = new Color(skillData.getColor());
@@ -234,7 +236,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, TEXTURE_LOCATION);
             if (this.isHovered) {
-                MutableComponent text = Component.literal("%s => %s".formatted(this.skillXpToNext, this.skillLevel +1));
+                MutableComponent text = new TextComponent("%s => %s".formatted(this.skillXpToNext, this.skillLevel +1));
                 GuiComponent.drawString(graphics, minecraft.font, text, renderX, renderY-1, this.skillColor.getRGB());
             }
             else {

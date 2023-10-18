@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 public class KeyPressHandler {
 
 	@SubscribeEvent
-    public static void keyPressEvent(net.minecraftforge.client.event.InputEvent.Key event)
+    public static void keyPressEvent(net.minecraftforge.client.event.InputEvent event)
     {
 		Minecraft mc = Minecraft.getInstance();
         if(mc.player != null)
@@ -45,7 +45,7 @@ public class KeyPressHandler {
 	            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));
             	}
             	else
-            		mc.player.sendSystemMessage(LangProvider.VEIN_BLACKLIST.asComponent());
+            		mc.player.sendMessage(LangProvider.VEIN_BLACKLIST.asComponent(), mc.player.getUUID());
             }
             if (ClientSetup.SHOW_LIST.isDown()) {
             	Config.SKILL_LIST_DISPLAY.set(!Config.SKILL_LIST_DISPLAY.get());

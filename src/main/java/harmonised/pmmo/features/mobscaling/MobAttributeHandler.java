@@ -43,19 +43,19 @@ public class MobAttributeHandler {
 	    if (!Config.MOB_SCALING_ENABLED.get())
 	        return;
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
-			LivingEntity entity = event.getEntity();
-			int diffScale = event.getLevel().getDifficulty().getId();
+			LivingEntity entity = event.getEntityLiving();
+			int diffScale = event.getWorld().getDifficulty().getId();
 			Vec3 spawnPos = new Vec3(event.getX(), event.getY(), event.getZ());
 			int range = Config.MOB_SCALING_AOE.get();
 			TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(Math.pow(range, 2)*3);
-			List<Player> nearbyPlayers = event.getLevel().getNearbyPlayers(targetCondition, entity, AABB.ofSize(spawnPos, range, range, range));
+			List<Player> nearbyPlayers = event.getWorld().getNearbyPlayers(targetCondition, entity, AABB.ofSize(spawnPos, range, range, range));
 			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
 			if (nearbyPlayers.isEmpty()) return;
 
 			//get values for biome and dimension scaling
 			Core core = Core.get(event.getEntity().getLevel());
 			LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(event.getEntity().getLevel().dimension().location());
-			LocationData bioData = core.getLoader().BIOME_LOADER.getData(event.getLevel().getBiome(event.getEntity().getOnPos()).unwrapKey().get().location());
+			LocationData bioData = core.getLoader().BIOME_LOADER.getData(event.getWorld().getBiome(event.getEntity().getOnPos()).unwrapKey().get().location());
 
 			var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
 			var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
