@@ -12,7 +12,7 @@ import java.util.List;
 @FunctionalInterface
 @ZenRegister
 @ZenCodeType.Name("mods.pmmo.CTDescriptionFunction")
-@Document("mods/pmmo/CTDescriptionFunction")
+@Document("mods/PMMO/CTDescriptionFunction")
 public interface CTDescriptionFunction {
 	/**This function consumes information about the perk
 	 * and outputs text lines which give users specific
