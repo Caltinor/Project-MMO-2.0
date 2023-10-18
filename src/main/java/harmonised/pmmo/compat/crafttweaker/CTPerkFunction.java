@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 @FunctionalInterface
 @ZenRegister
 @ZenCodeType.Name("mods.pmmo.CTPerkFunction")
-@Document("mods/pmmo/CTPerkFunction")
+@Document("mods/PMMO/CTPerkFunction")
 public interface CTPerkFunction {
 	/**This function represents the logic being executed
 	 * for a perk.  All perks are provided the player this

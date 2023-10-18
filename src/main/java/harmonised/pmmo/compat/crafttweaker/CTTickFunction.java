@@ -9,7 +9,7 @@ import org.openzen.zencode.java.ZenCodeType;
 @FunctionalInterface
 @ZenRegister
 @ZenCodeType.Name("mods.pmmo.CTTickFunction")
-@Document("mods/pmmo/CTTickFunction")
+@Document("mods/PMMO/CTTickFunction")
 public interface CTTickFunction {
 	/**This function represents the logic being executed
 	 * for a perk during the tick stage.  If a perk has a

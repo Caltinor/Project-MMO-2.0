@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 @FunctionalInterface
 @ZenRegister
 @ZenCodeType.Name("mods.pmmo.CTPerkPredicate")
-@Document("mods/pmmo/CTPerkPredicate")
+@Document("mods/PMMO/CTPerkPredicate")
 public interface CTPerkPredicate {
 	/**PMMO checks certain default conditions such as 
 	 * level requirements, and chance.  If you have 

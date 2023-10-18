@@ -36,7 +36,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
 
 @ZenRegister
-@Document("mods/pmmo/CTUtils")
+@Document("mods/PMMO/CTUtils")
 @ZenCodeType.Name("mods.pmmo.CTUtils")
 public class CTUtils implements IRuntimeAction{
 	@Override
@@ -269,7 +269,7 @@ public class CTUtils implements IRuntimeAction{
 	 *
 	 */
 	@ZenRegister
-	@Document("mods/pmmo/SalvageBuilder")
+	@Document("mods/PMMO/SalvageBuilder")
 	@ZenCodeType.Name("mods.pmmo.SalvageBuilder")
 	public static class SalvageBuilder {
 		private Map<String, Double> chancePerLevel = new HashMap<>();
