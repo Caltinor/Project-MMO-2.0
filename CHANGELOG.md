@@ -1,18 +1,14 @@
 # Changelog
 
-## [1.18.2-6.2.3] - 2023-08-03
-### Minor version changes
-- Removed `EatFoodEvent` which wasn't capturing all CONSUME cases
-- Added seagrass to default data, so it doesn't give mining xp
-- Fixed default data which used the legacy "KILL" xp event to now use "DEATH"
+## [1.18.2-6.2.4] - 2023-10-18
 ### Bugfixes / Tweaks
-- Added comment to mob-scaling config section to inform users about TOML bug
-- Added Compound filtering to NBT configs (eg. "foo{"bar":1}.baz")
-- Added config options for inventory stats button positioning
-- Fixed pmmo.dat bloat (includes feature to clean up old files)
-- Fixed vein marker showing veinable air after using
-- Fixed default jump max boost to be actually noticable
-- Fixed skill groups not distributing XP to member skills
-- Fixed skill groups not being detected by certain events
-- Fixed 0% bonuses showing in tooltips
+- Added admin command to ignore reqs for targeted player
+- Added hover behavior to inventory skill list to show xp to next level
+- Added API hooks for obtaining a player's full xp map
+- Added potion tracking toggle.  this makes stacking potions work for compat sake at the expense of exploitable potion xp from brewing stands.
+- Updated `HEALTH_CHANGED` to have sub-events `HEALTH_INCREASED` and `HEALTH_DECREASED`, which fire in addition to the base event but for their respective HP change direction.
+- Updated `pmmo:command` to accept a skill like fireworks do to only fire the command for the specified skill.  only works on the `SKILL_UP` event
+- Fixed explosions not respecting BREAK and KILL reqs
+- Fixed compound qualifiers not working with paths that included colons
+- Fixed `genData withDefaults` not including data from non-items
 
