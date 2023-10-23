@@ -105,7 +105,7 @@ public class PathReader {
 	
 	private static boolean isCompound(String node) {return node.contains("{");}
 
-	private static boolean isQualifiedNode(String node) {return node.contains(":") && !node.contains("{}");}
+	private static boolean isQualifiedNode(String node) {return node.matches("\\{.*:.*}");}
 
 	private static boolean isQualifiedCompound(String node, CompoundTag nbt) {
 		String root = rawNode(node);
