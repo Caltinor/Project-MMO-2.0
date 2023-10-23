@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.18.2-6.2.5] - 2023-10-23
+### Hotfix
+- Fix qualified compound edge case
+
 ## [1.18.2-6.2.4] - 2023-10-18
 ### Bugfixes / Tweaks
 - Added admin command to ignore reqs for targeted player
