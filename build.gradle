@@ -1,25 +1,25 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '[6.0,6.2)', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'maven-publish'
-apply plugin: 'eclipse'
+
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
+}
 
 mixin {
-    config "${modid}.mixins.json"
-    add sourceSets.main, "${modid}.refmap.json"
+    config "${mod_id}.mixins.json"
+    add sourceSets.main, "${mod_id}.refmap.json"
     disableEclipseAddon = true
 
     debug.export = true
@@ -41,16 +41,17 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = "${mcver}-${modver}"
-group = "harmonised.${modid}"
-archivesBaseName = "${modid}"
+version = "${minecraft_version}-${mod_version}"
+group = "harmonised.${mod_id}"
+archivesBaseName = "${mod_id}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'parchment', version: '1.19.3-2023.03.12-1.19.4'
+    mappings channel: 'parchment', version: "2023.07.30-${minecraft_version}"
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    copyIdeResources = true
 
     runs {
         configureEach {
@@ -58,7 +59,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                "${modid}" {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -74,7 +75,7 @@ minecraft {
 
         data {
             workingDirectory project.file('run/client')
-            args '--mod', modid, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
 }
@@ -82,44 +83,66 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mcver}-45.0.64"
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
-    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
-    annotationProcessor "net.minecraftforge:forge:${mcver}-45.0.64"
-    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${mcver}:${ct_version}"
+    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
+    annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mcver}-${curio_ver}:api")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api")
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
-  	//compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
-  	//compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
-  	//compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
-  	//compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
-  	//compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mcver}-${curio_ver}:api")
-  	compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${mcver}:${ct_version}")
+  	compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
+  	compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
+  	compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+  	compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
+  	compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
+  	compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
   	
-  	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mcver}-${curio_ver}")
+  	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
   	//runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
   	//runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
   	//runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
   	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
   	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mcver}:${ct_version}")
+  	//runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
   	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
   	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
+  	//runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
+    //runtimeOnly fg.deobf('curse.maven:mmmmmmm-225738:4816636')
+    //runtimeOnly fg.deobf('curse.maven:mmmdep-499980:4806893s')
+}
+
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def replaceProperties = [
+    minecraft_version      : minecraft_version,
+    minecraft_version_range: minecraft_version_range,
+    forge_version          : forge_version,
+    forge_version_range    : forge_version_range,
+    loader_version_range   : loader_version_range,
+    mod_id                 : mod_id,
+    mod_name               : mod_name,
+    mod_version            : mod_version
+]
+processResources {
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
 }
 
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "Project MMO 2.0",
-                "Specification-Vendor"    : "Project PMMO",
+                "Specification-Title"     : "${mod_name} 2.0",
+                "Specification-Vendor"    : "${mod_name}",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "Project PMMO",
+                "Implementation-Vendor"   : "${mod_name}",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
