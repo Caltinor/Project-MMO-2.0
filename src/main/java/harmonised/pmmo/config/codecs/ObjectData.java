@@ -241,13 +241,14 @@ public record ObjectData(
 		
 		@Override
 		public boolean isUnconfigured() {
-			return reqs().values().stream().allMatch(map -> map.isEmpty()) 
-					&& nbtReqs().values().stream().allMatch(map -> map.isEmpty()) 
+			return reqs().values().stream().allMatch(Map::isEmpty)
+					&& nbtReqs().values().stream().allMatch(List::isEmpty)
 					&& negativeEffects().isEmpty()
-					&& xpValues().values().stream().allMatch(map -> map.isEmpty())
-					&& nbtXpValues().values().stream().allMatch(map -> map.isEmpty())
-					&& bonuses().values().stream().allMatch(map -> map.isEmpty())
-					&& nbtBonuses().values().stream().allMatch(map -> map.isEmpty())
+					&& xpValues().values().stream().allMatch(Map::isEmpty)
+					&& nbtXpValues().values().stream().allMatch(List::isEmpty)
+					&& damageXpValues().values().stream().allMatch(Map::isEmpty)
+					&& bonuses().values().stream().allMatch(Map::isEmpty)
+					&& nbtBonuses().values().stream().allMatch(List::isEmpty)
 					&& salvage().keySet().stream().allMatch(rl -> rl.equals(new ResourceLocation("item")))
 					&& veinData().isUnconfigured();
 		}

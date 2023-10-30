@@ -110,6 +110,8 @@ dependencies {
   	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
   	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
   	//runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
+    //runtimeOnly fg.deobf('curse.maven:mmmmmmm-225738:4816636')
+    //runtimeOnly fg.deobf('curse.maven:mmmdep-499980:4806893s')
 }
 
 def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
