@@ -345,6 +345,25 @@ public class APIUtils {
 		raw.setXpValues(type, award);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
+
+	/**Registers a configuration for an entity or item for damage dealt
+	 * and received xp events.  <i>Note: passing other object types into
+	 * this method will be ignored, and have no effect.</i>
+	 *
+	 * @param oType use only ITEM or ENTITY
+	 * @param objectID the key for the object being configured
+	 * @param isDealt is Dealt Daamge config else if false will be received damage
+	 * @param damageType the id or tag string for damage type
+	 * @param award a map of skills and experience values to be awarded
+	 * @param asOverride should this apply after datapacks as an override
+	 */
+	public static void registerDamageXpAward(ObjectType oType, ResourceLocation objectID, boolean isDealt, String damageType, Map<String, Long> award, boolean asOverride) {
+		if (oType == ObjectType.ENTITY || oType == ObjectType.ITEM) {
+			ObjectData raw = new ObjectData();
+			raw.damageXpValues().put(isDealt ? EventType.DEAL_DAMAGE : EventType.RECEIVE_DAMAGE, Map.of(damageType, award));
+			registerConfiguration(asOverride, oType, objectID, raw);
+		}
+	}
 	/**registers a configuration setting for bonuses to xp gains.
 	 * 
 	 * @param objectID the object linked to the bonus
