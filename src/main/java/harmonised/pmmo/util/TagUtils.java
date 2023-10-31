@@ -73,10 +73,9 @@ public class TagUtils {
 	  * @param entity the entity whose NBT is being obtained
 	  * @return an associated tag or new instance
 	  */
-	public static CompoundTag entityTag(Entity entity) {		
-		return entity == null || entity.getPersistentData() == null 
-				? new CompoundTag() 
-				: entity.getPersistentData();
+	public static CompoundTag entityTag(Entity entity) {
+		CompoundTag data = new CompoundTag();
+		return entity == null ? data : entity.saveWithoutId(data);
 	}
 	
 	/**safely obtain the NBT tag or get a new instance
@@ -85,9 +84,7 @@ public class TagUtils {
 	 * @return an associated tag or new instance
 	 */
 	public static CompoundTag tileTag(BlockEntity tile) {
-		return tile == null || tile.getPersistentData() == null 
-				? new CompoundTag() 
-				: tile.getPersistentData();
+		return tile == null	? new CompoundTag()	: tile.saveWithFullMetadata();
 	}
 	
 	public static CompoundTag stateTag(BlockState state) {

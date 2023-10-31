@@ -30,7 +30,7 @@ public class NBTUtils {
 		return evaluateEntries(nbt, new LinkedHashSet<>(logic));
 	}
 	
-	private static record LogicTier (BehaviorToPrevious behavior, boolean isSummative, List<Result> results) {}
+	private record LogicTier (BehaviorToPrevious behavior, boolean isSummative, List<Result> results) {}
 	
 	private static final Map<Pair<CompoundTag, Set<LogicEntry>>, Map<String, Double>> cache = new HashMap<>();
 	
@@ -47,45 +47,40 @@ public class NBTUtils {
 		}
 		//This section iterates through the logical tiers and processes the summative attribute
 		List<Map<String, Double>> interMap = new ArrayList<>();
-		for (int i = 0; i < logicSequence.size(); i++) {
-			Map<String, Double> combinedMap = new HashMap<>();
-			List<Result> data = logicSequence.get(i).results;
-			boolean isSummative = logicSequence.get(i).isSummative;
-			for (Result r : data) {
-				if (r == null) continue;
-				if (!r.compares()) continue;
-				Map<String, Double> value = r.values();					
-				for (Map.Entry<String, Double> val : value.entrySet()) {
-					combinedMap.merge(val.getKey(), val.getValue(), (in1, in2) -> {
-						return isSummative ? (in1 + in2)
-								: (in1 > in2 ? in1 : in2);});
-				}
-			}
-			interMap.add(combinedMap);
-		}
+        for (LogicTier logicTier : logicSequence) {
+            Map<String, Double> combinedMap = new HashMap<>();
+            List<Result> data = logicTier.results;
+            boolean isSummative = logicTier.isSummative;
+            for (Result r : data) {
+                if (r == null) continue;
+                if (!r.compares()) continue;
+                Map<String, Double> value = r.values();
+                for (Map.Entry<String, Double> val : value.entrySet()) {
+                    combinedMap.merge(val.getKey(), val.getValue(), isSummative ? Double::sum : Double::max);
+                }
+            }
+            interMap.add(combinedMap);
+        }
 		//this section iterates through the logical tiers and processes the relational attribute
 		for (int i = 0; i < logicSequence.size(); i++) {
 			switch (logicSequence.get(i).behavior()) {
 			case SUB_FROM -> {
 				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
-					if (output.getOrDefault(value.getKey(), 0d) - value.getValue() <= 0) output.remove(value.getKey());
+					if (output.getOrDefault(value.getKey(), 0d) - value.getValue() <= 0)
+						output.remove(value.getKey());
 					else 
 						output.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue - newValue);
 				}
 			}
 			case HIGHEST -> {
 				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
-					output.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue > newValue ? oldValue : newValue);
+					output.merge(value.getKey(), value.getValue(), Double::max);
 				}
 			}
-			case REPLACE -> {
-				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
-					output.put(value.getKey(), value.getValue());
-				}
-			}
+			case REPLACE -> output.putAll(interMap.get(i));
 			default -> { //Includes ADD_TO by default
 				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
-					output.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue + newValue);
+					output.merge(value.getKey(), value.getValue(), Double::sum);
 				}
 			}}
 		}
@@ -95,31 +90,23 @@ public class NBTUtils {
 	
 	private static List<Result> processCases(List<Case> cases, CompoundTag nbt) {
 		List<Result> results = new ArrayList<>();
-		for (int i = 0; i < cases.size(); i++) {
-			Case caseIterant = cases.get(i);
-			List<String> paths = caseIterant.paths();
-			List<Criteria> criteria = caseIterant.criteria();
-			for (int p = 0; p < paths.size(); p++) {
-				for (int c = 0; c < criteria.size(); c++) {
-					Criteria critObj = criteria.get(c);
-					Map<String, Double> values = critObj.skillMap();
-					Operator operator = critObj.operator();					
-					List<String> comparison = PathReader.getNBTValues(getActualPath(paths.get(p)), nbt);
-					for (int j = 0; j < comparison.size(); j++) {
-						List<String> comparators = new ArrayList<>();
-						if (!operator.equals(Operator.EXISTS)) {
-							comparators = critObj.comparators().orElseGet(() -> new ArrayList<>());
-							for (int l = 0; l < comparators.size(); l++) {
-								String comparator = getActualConstant(comparators.get(l));
-								results.add(new Result(operator, comparator, comparison.get(j), values));
-							}
-						}
-						else results.add(new Result(operator, "", comparison.get(j), values));
-					}
-					
-				}
-			}
-		}
+        for (Case caseIterant : cases) {
+            for (String path : caseIterant.paths()) {
+                for (Criteria critObj : caseIterant.criteria()) {
+                    Map<String, Double> values = critObj.skillMap();
+                    Operator operator = critObj.operator();
+                    List<String> comparison = PathReader.getNBTValues(getActualPath(path), nbt);
+                    for (String compare : comparison) {
+                        if (!operator.equals(Operator.EXISTS)) {
+                            for (String comparators : critObj.comparators().orElseGet(ArrayList::new)) {
+                                String comparator = getActualConstant(comparators);
+                                results.add(new Result(operator, comparator, compare, values));
+                            }
+                        } else results.add(new Result(operator, "", compare, values));
+                    }
+                }
+            }
+        }
 		return results;
 	}
 	
