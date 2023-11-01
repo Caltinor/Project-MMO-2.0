@@ -225,9 +225,12 @@ public record ObjectData(
 			Functions.biPermutation(this, two, this.override(), two.override(), (o, t) -> {
 				tagValues.addAll(o.tagValues().isEmpty() ? t.tagValues() : o.tagValues());
 				xpValues.putAll(o.xpValues().isEmpty() ? t.xpValues() : o.xpValues());
+				nbtXp.putAll(o.nbtXpValues().isEmpty() ? t.nbtXpValues() : o.nbtXpValues());
 				damageXP.putAll(o.damageXpValues().isEmpty() ? t.damageXpValues() : o.damageXpValues());
 				bonuses.putAll(o.bonuses().isEmpty() ? t.bonuses() : o.bonuses());
+				nbtBonus.putAll(o.nbtBonuses().isEmpty() ? t.nbtBonuses() : o.nbtBonuses());
 				reqs.putAll(o.reqs().isEmpty() ? t.reqs() : o.reqs());
+				nbtReq.putAll(o.nbtReqs().isEmpty() ? t.nbtReqs() : o.nbtReqs());
 				reqEffects.putAll(o.negativeEffects().isEmpty() ? t.negativeEffects() : o.negativeEffects());
 				salvage.putAll(o.salvage().isEmpty() ? t.salvage() : o.salvage());
 				combinedVein[0] = o.veinData().isUnconfigured() ? t.veinData() : o.veinData();
