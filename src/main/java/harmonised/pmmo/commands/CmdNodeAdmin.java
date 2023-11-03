@@ -4,14 +4,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.PlayerData;
@@ -36,6 +42,12 @@ public class CmdNodeAdmin {
 	private static final String TARGET_ARG = "Target";
 	private static final String TYPE_ARG = "Change Type";
 	private static final String VALUE_ARG = "New Value";
+	private static SuggestionProvider<CommandSourceStack> SKILL_SUGGESTIONS = new SuggestionProvider<>() {
+		@Override
+		public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) throws CommandSyntaxException {
+			return SharedSuggestionProvider.suggest(SkillsConfig.SKILLS.get().keySet(), builder);
+		}
+	};
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		return Commands.literal("admin")
@@ -43,14 +55,14 @@ public class CmdNodeAdmin {
 				.then(Commands.argument(TARGET_ARG, EntityArgument.players())
 						.then(Commands.literal("set")
 								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
-										.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(SkillsConfig.SKILLS.get().keySet(), builder))
+										.suggests(SKILL_SUGGESTIONS)
 										.then(Commands.argument(TYPE_ARG, StringArgumentType.word())
 												.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("level", "xp"), builder))
 												.then(Commands.argument(VALUE_ARG, LongArgumentType.longArg())
 														.executes(ctx -> adminSetOrAdd(ctx, true))))))
 						.then(Commands.literal("add")
 								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
-										.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(SkillsConfig.SKILLS.get().keySet(), builder))
+										.suggests(SKILL_SUGGESTIONS)
 										.then(Commands.argument(TYPE_ARG, StringArgumentType.word())
 												.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("level", "xp"), builder))
 												.then(Commands.argument(VALUE_ARG, LongArgumentType.longArg())
@@ -59,6 +71,11 @@ public class CmdNodeAdmin {
 								.executes(CmdNodeAdmin::adminClear))
 						.then(Commands.literal("ignoreReqs")
 								.executes(CmdNodeAdmin::exemptAdmin))
+						.then(Commands.literal("adminBonus")
+								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
+										.suggests(SKILL_SUGGESTIONS)
+										.then(Commands.argument(VALUE_ARG, DoubleArgumentType.doubleArg(0.0))
+												.executes(CmdNodeAdmin::adminBonuses))))
 						.executes(ctx -> displayPlayer(ctx)));
 	}
 	
@@ -123,6 +140,25 @@ public class CmdNodeAdmin {
 		PlayerData existing = core.getLoader().PLAYER_LOADER.getData().get(playerID);
 		boolean exists = existing != null;
 		PlayerData updated = new PlayerData(true, exists ? !existing.ignoreReq() : true, exists ? existing.bonuses() : Map.of());
+		core.getLoader().PLAYER_LOADER.getData().put(playerID, updated);
+		Networking.sendToClient(new CP_SyncData(ObjectType.PLAYER, core.getLoader().PLAYER_LOADER.getData()), player);
+		return 0;
+	}
+
+	public static int adminBonuses(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		double bonus = DoubleArgumentType.getDouble(ctx, VALUE_ARG);
+		String skill = StringArgumentType.getString(ctx, SKILL_ARG);
+
+		Core core = Core.get(ctx.getSource().getLevel());
+		ServerPlayer player = EntityArgument.getPlayer(ctx, TARGET_ARG);
+		ResourceLocation playerID = new ResourceLocation(player.getUUID().toString());
+		PlayerData existing = core.getLoader().PLAYER_LOADER.getData().get(playerID);
+		boolean exists = existing != null;
+		Map<String, Double> bonuses = exists ? new HashMap<>(existing.bonuses()) : new HashMap<>();
+		bonuses.put(skill, bonus);
+		if (skill.equals("clear"))
+			bonuses.clear();
+		PlayerData updated = new PlayerData(true, exists ? !existing.ignoreReq() : true, bonuses);
 		core.getLoader().PLAYER_LOADER.getData().put(playerID, updated);
 		Networking.sendToClient(new CP_SyncData(ObjectType.PLAYER, core.getLoader().PLAYER_LOADER.getData()), player);
 		return 0;
