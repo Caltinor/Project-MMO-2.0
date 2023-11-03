@@ -484,6 +484,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_LINEAR_PER_LEVEL;
 	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_POWER_BASE;
 	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_LEVEL_MOD;
+	public static ForgeConfigSpec.ConfigValue<Double> BOSS_SCALING_RATIO;
 
 	public static ConfigObject<Map<String, Map<String, Double>>> MOB_SCALING;
 	
@@ -496,6 +497,9 @@ public class Config {
 				.defineInRange("Scaling AOE", 150, 0, Integer.MAX_VALUE);
 		MOB_SCALING_BASE_LEVEL = builder.comment("what is the minimum level for scaling to kick in")
 				.defineInRange("Base Level", 0, 0, Integer.MAX_VALUE);
+		BOSS_SCALING_RATIO = builder.comment("a multiplier on top of final scaling values that",
+				"applies only to entities in the forge:bosses tag.")
+						.define("boss_scaling", 1.1);
 		
 			builder.comment("How should mob attributes be calculated with respect to the player's level.").push("Formula");
 				MOB_USE_EXPONENTIAL_FORMULA = builder.comment("should levels be determined using an exponential formula?")
