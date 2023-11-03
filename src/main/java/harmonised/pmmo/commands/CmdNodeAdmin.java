@@ -28,6 +28,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.level.NoteBlockEvent;
 import net.minecraftforge.fml.LogicalSide;
 
 public class CmdNodeAdmin {
@@ -119,7 +120,10 @@ public class CmdNodeAdmin {
 		Core core = Core.get(ctx.getSource().getLevel());
 		ServerPlayer player = EntityArgument.getPlayer(ctx, TARGET_ARG);
 		ResourceLocation playerID = new ResourceLocation(player.getUUID().toString());
-		core.getLoader().PLAYER_LOADER.getData().put(playerID, new PlayerData(true, true, Map.of()));
+		PlayerData existing = core.getLoader().PLAYER_LOADER.getData().get(playerID);
+		boolean exists = existing != null;
+		PlayerData updated = new PlayerData(true, exists ? !existing.ignoreReq() : true, exists ? existing.bonuses() : Map.of());
+		core.getLoader().PLAYER_LOADER.getData().put(playerID, updated);
 		Networking.sendToClient(new CP_SyncData(ObjectType.PLAYER, core.getLoader().PLAYER_LOADER.getData()), player);
 		return 0;
 	}
