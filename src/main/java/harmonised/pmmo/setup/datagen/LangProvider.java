@@ -1981,7 +1981,7 @@ public class LangProvider extends LanguageProvider{
 	public static final Translation DENIAL_ENTITY_INTERACT = Translation.Builder.start("pmmo.msg.denial.entity_interact")
 		.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
 	public static final Translation DENIAL_SALVAGE = Translation.Builder.start("pmmo.msg.denial.salvage")
-		.addLocale(Locale.EN_US, "You cannot salvage this item. Either it cannot be salvaged or you are not skilled enough yet.").build();
+		.addLocale(Locale.EN_US, "You cannot salvage %s. Either it cannot be salvaged or you are not skilled enough yet.").build();
 	public static final Translation DENIAL_INTERACT = Translation.Builder.start("pmmo.msg.denial.interact")
 	    .addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
 	

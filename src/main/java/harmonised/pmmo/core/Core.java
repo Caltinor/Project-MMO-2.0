@@ -51,12 +51,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -440,7 +442,9 @@ public class Core {
 				? player.getMainHandItem() 
 				: salvageOffHand 
 					? player.getOffhandItem()
-					: ItemStack.EMPTY ;		
+					: ItemStack.EMPTY ;
+		if (salvageItem == ItemStack.EMPTY || salvageItem.is(Items.AIR))
+			return;
 		if (!loader.ITEM_LOADER.getData().containsKey(RegistryUtil.getId(salvageItem))) return;
 		Map<String, Long> playerXp = getData().getXpMap(player.getUUID());
 		
@@ -480,7 +484,7 @@ public class Core {
 			awardXP(party, xpAwards);
 		}	
 		else
-			player.sendMessage(LangProvider.DENIAL_SALVAGE.asComponent(), player.getUUID());
+			player.sendMessage(LangProvider.DENIAL_SALVAGE.asComponent(salvageItem.getDisplayName()), player.getUUID());
 	}
 	
 	/**stores the designated block marked for each player*/
