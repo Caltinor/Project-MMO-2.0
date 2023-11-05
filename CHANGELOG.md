@@ -1,11 +1,15 @@
 # Changelog
 
-## [1.20.1-1.2.8] - 2023-10-12
+## [1.20.1-1.2.9] - 2023-11-05
 ### Bugfixes / Tweaks
-- HOTFIX: health change not working as intended.
-- Added Villager Boost Perk defaulting to Charisma
-- Added toggle to turn of potion tracking.  This makes stackable potions work again.
-- Updated HEALTH_CHANGE to be HEALTH_INCREASE and HEALTH_DECREASE.  the original event, HEALTH_CHANGE, will be removed in 1.20.1
-- Fixed `genData withDefaults` now properly writes all objects.
-- Fixed mob modifiers not applying for dimensions and biomes.
-- Fixed Break speed perk only working for one configuration.  Now stacks.
+- Added Necronium to Default Tinker configs
+- Added API Hook for registering damage configurations
+- Added Mob Scaling ratio for bosses.  Uses `forge:bosses` tag to identify mobs
+- Added admin command to give bonuses to players.  use "clear" as the skill name to wipe all admin bonuses
+- Updated ignoreReq command to function like a toggle
+- Fixed entity damage xp data not being read
+- Fixed entity NBT not being detectable by NBT configs
+- Fixed NBT Overrides not applying 
+- Fixed Salvage giving denial message even if successful
+- Fixed Effect duration being exponential
+- Fixed firework spam on respawn
