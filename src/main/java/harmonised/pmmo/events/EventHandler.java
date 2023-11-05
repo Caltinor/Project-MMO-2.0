@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.EnchantEvent;
 import harmonised.pmmo.api.events.FurnaceBurnEvent;
@@ -8,6 +9,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.events.impl.*;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -75,8 +77,9 @@ public class EventHandler {
 	}
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
-		Core core = Core.get(event.getEntity().level); 
-		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(), new CompoundTag());
+		Core core = Core.get(event.getEntity().level()); 
+		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(),
+				TagBuilder.start().withString(APIUtils.SKILLNAME, "respawn").build());
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onSleep(SleepFinishedTimeEvent event) {
