@@ -101,15 +101,18 @@ public class FeaturePerks {
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
 		MobEffect effect;
 		if ((effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString("effect")))) != null) {
+			int skillLevel = nbt.getInt(APIUtils.SKILL_LEVEL);
 			int configDuration = nbt.getInt(APIUtils.DURATION);
-			int duration = player.hasEffect(effect) && player.getEffect(effect).getDuration() > configDuration 
+			double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
+			int calculatedDuration = (int)((double)skillLevel * (double) configDuration * perLevel);
+			int duration = player.hasEffect(effect) && player.getEffect(effect).getDuration() > calculatedDuration
 					? player.getEffect(effect).getDuration() 
-					: configDuration;
-			int perLevel = nbt.getInt(APIUtils.PER_LEVEL);
+					: calculatedDuration;
+
 			int amplifier = nbt.getInt(APIUtils.MODIFIER);
 			boolean ambient = nbt.getBoolean(APIUtils.AMBIENT);
 			boolean visible = nbt.getBoolean(APIUtils.VISIBLE);
-			player.addEffect(new MobEffectInstance(effect, perLevel * duration, amplifier, ambient, visible));
+			player.addEffect(new MobEffectInstance(effect, duration, amplifier, ambient, visible));
 		}
 		return NONE;
 	};
@@ -126,7 +129,8 @@ public class FeaturePerks {
 			.setDescription(LangProvider.PERK_EFFECT_DESC.asComponent())
 			.setStatus((player, nbt) -> List.of(
 					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString("effect"))).getDescriptionId())),
-					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER), nbt.getInt(APIUtils.DURATION))))
+					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER),
+							(nbt.getInt(APIUtils.DURATION) * nbt.getDouble(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL))/20)))
 			.build();
 	
 	private static BiFunction<Player, CompoundTag, List<MutableComponent>> JUMP_LINES = (player, nbt) -> 
