@@ -21,7 +21,7 @@ public class FireworkHandler {
 	public static final String FIREWORK_SKILL = "firework_skill";
 	
 	public static final Perk FIREWORK = Perk.begin()
-			.addDefaults(TagBuilder.start().withString(APIUtils.SKILLNAME, "none").build())
+			.addDefaults(TagBuilder.start().withString(FIREWORK_SKILL, "none").build())
 			.setStart((player, nbt) -> {
 				BlockPos pos = player.blockPosition();
 				spawnRocket(player.level(), new Vec3(pos.getX(), pos.getY(), pos.getZ()), nbt.getString(FIREWORK_SKILL));
