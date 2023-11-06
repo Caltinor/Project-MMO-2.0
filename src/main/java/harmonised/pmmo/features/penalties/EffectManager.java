@@ -25,8 +25,8 @@ public class EffectManager {
 		Holder<Biome> biome = player.level.getBiome(player.blockPosition());
 		ResourceKey<Level> dimension = player.level.dimension();
 		List<MobEffectInstance> effects = core.isActionPermitted(ReqType.TRAVEL, biome, player)
-				? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome.value())).getPositiveEffect(), false)
-				: CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome.value())).getNegativeEffect(), true);
+				? CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getPositiveEffect(), false)
+				: CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.BIOME).getData(RegistryUtil.getId(biome)).getNegativeEffect(), true);
 		if (core.isActionPermitted(ReqType.TRAVEL, dimension, player))
 			effects.addAll(CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.DIMENSION).getData(dimension.location()).getPositiveEffect(), false));
 		

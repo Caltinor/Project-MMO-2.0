@@ -144,7 +144,7 @@ public class MobAttributeHandler {
 		//pass through case for dim/biome bonuses to still apply.
 		if (nearbyPlayers.isEmpty()) return 0f;
 		nearbyPlayers.forEach(player -> {
-			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getPlayerSkillLevel(str, player.getUUID())))
+			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level).getData().getPlayerSkillLevel(str, player.getUUID())))
 					.forEach((skill, level) -> {
 				totalLevel.merge(skill, level, Integer::sum);
 			});

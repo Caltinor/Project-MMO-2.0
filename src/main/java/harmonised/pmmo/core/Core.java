@@ -241,7 +241,7 @@ public class Core {
 		if (player instanceof FakePlayer) return mapOut;		
 		
 		//BIOME Modification
-		ResourceLocation biomeID = RegistryUtil.getId(player.getLevel().getBiome(player.blockPosition()).value());
+		ResourceLocation biomeID = RegistryUtil.getId(player.getLevel().getBiome(player.blockPosition()));
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {
 			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 		}
@@ -329,7 +329,7 @@ public class Core {
 				|| !Config.reqEnabled(type).get()
 				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		return doesPlayerMeetReq(player.getUUID(), 
-				getObjectSkillMap(ObjectType.BIOME, RegistryUtil.getId(biome.value()), type, new CompoundTag()));
+				getObjectSkillMap(ObjectType.BIOME, RegistryUtil.getId(biome), type, new CompoundTag()));
 	}
 	public boolean isActionPermitted(ReqType type, ResourceKey<Level> dimension, Player player) {
 		if (type != ReqType.TRAVEL) return false;

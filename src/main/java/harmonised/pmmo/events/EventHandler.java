@@ -77,7 +77,7 @@ public class EventHandler {
 	}
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
-		Core core = Core.get(event.getEntity().level()); 
+		Core core = Core.get(event.getEntity().level);
 		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(),
 				TagBuilder.start().withString(APIUtils.SKILLNAME, "respawn").build());
 	}
