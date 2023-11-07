@@ -1,13 +1,11 @@
 # Changelog
 
-## [1.19.2-3.3.6] - 2023-10-16
+## [1.19.2-3.3.7] - 2023-11-07
 ### Bugfixes / Tweaks
-- Added admin command to ignore reqs for targeted player
-- Added hover behavior to inventory skill list to show xp to next level
-- Added API hooks for obtaining a player's full xp map
-- Added potion tracking toggle.  this makes stacking potions work for compat sake at the expense of exploitable potion xp from brewing stands.
-- Updated `HEALTH_CHANGED` to have sub-events `HEALTH_INCREASED` and `HEALTH_DECREASED`, which fire in addition to the base event but for their respective HP change direction.
-- Updated `pmmo:command` to accept a skill like fireworks do to only fire the command for the specified skill.  only works on the `SKILL_UP` event
-- Fixed explosions not respecting BREAK and KILL reqs
-- Fixed compound qualifiers not working with paths that included colons
-- Fixed `genData withDefaults` not including data from non-items
+- Added Necronuim to default Tinkers data
+- Added mob scaling for bosses.  mobs under the `forge:bosses` tag will apply the new ratio
+- Added admin bonus command.  using "clear" as the skill parameter will clear all admin bonuses
+- Updated admin ignoreReq command to be a toggle
+- Fixed NBT Overrides being lost entirely
+- Fixed Salvage fail message even on success
+- Fixed fireworks spam on respawn
