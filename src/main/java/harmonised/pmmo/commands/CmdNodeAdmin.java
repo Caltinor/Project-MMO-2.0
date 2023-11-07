@@ -34,7 +34,6 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.level.NoteBlockEvent;
 import net.minecraftforge.fml.LogicalSide;
 
 public class CmdNodeAdmin {
