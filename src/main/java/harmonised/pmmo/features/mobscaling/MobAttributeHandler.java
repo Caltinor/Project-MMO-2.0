@@ -56,7 +56,7 @@ public class MobAttributeHandler {
 	}
 	@SuppressWarnings("resource")
 	@SubscribeEvent
-	public static void onMobSpawn(LivingSpawnEvent event) {
+	public static void onMobSpawn(LivingSpawnEvent.SpecialSpawn event) {
 	    if (!Config.MOB_SCALING_ENABLED.get())
 	        return;
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
