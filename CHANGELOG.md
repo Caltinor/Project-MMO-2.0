@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.19.2-3.3.9] - 2023-11-07
+### Bugfixes / Tweaks
+- HOTFIX: fixes unkillable mobs
+
 ## [1.19.2-3.3.8] - 2023-11-07
 ### Bugfixes / Tweaks
 - HOTFIX: fixes crash from mob scaling
