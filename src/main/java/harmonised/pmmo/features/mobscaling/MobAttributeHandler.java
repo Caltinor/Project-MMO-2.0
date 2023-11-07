@@ -24,10 +24,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.MobSpawnEvent.FinalizeSpawn;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.core.jmx.Server;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MobAttributeHandler {
@@ -54,11 +55,11 @@ public class MobAttributeHandler {
 	}
 	@SuppressWarnings("resource")
 	@SubscribeEvent
-	public static void onMobSpawn(FinalizeSpawn event) {
+	public static void onMobSpawn(LivingSpawnEvent event) {
 	    if (!Config.MOB_SCALING_ENABLED.get())
 	        return;
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
-			handle(event.getEntity(), event.getLevel().getLevel()
+			handle(event.getEntity(), (ServerLevel)event.getLevel()
 					, new Vec3(event.getX(), event.getY(), event.getZ())
 					, event.getLevel().getDifficulty().getId());
 		}
@@ -144,7 +145,7 @@ public class MobAttributeHandler {
 		//pass through case for dim/biome bonuses to still apply.
 		if (nearbyPlayers.isEmpty()) return 0f;
 		nearbyPlayers.forEach(player -> {
-			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getPlayerSkillLevel(str, player.getUUID())))
+			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level).getData().getPlayerSkillLevel(str, player.getUUID())))
 					.forEach((skill, level) -> {
 				totalLevel.merge(skill, level, Integer::sum);
 			});
