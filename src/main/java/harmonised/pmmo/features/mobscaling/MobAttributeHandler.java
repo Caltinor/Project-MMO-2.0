@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -59,21 +60,21 @@ public class MobAttributeHandler {
 	    if (!Config.MOB_SCALING_ENABLED.get())
 	        return;
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
-			handle(event.getEntity(), (ServerLevel)event.getLevel()
+			handle(event.getEntity(), event.getLevel()
 					, new Vec3(event.getX(), event.getY(), event.getZ())
 					, event.getLevel().getDifficulty().getId());
 		}
 	}
 
-	private static void handle(LivingEntity entity, ServerLevel level, Vec3 spawnPos, int diffScale) {
+	private static void handle(LivingEntity entity, LevelAccessor level, Vec3 spawnPos, int diffScale) {
 		int range = Config.MOB_SCALING_AOE.get();
 		TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(Math.pow(range, 2)*3);
 		List<Player> nearbyPlayers = level.getNearbyPlayers(targetCondition, entity, AABB.ofSize(spawnPos, range, range, range));
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
 
 		//get values for biome and dimension scaling
-		Core core = Core.get(level.getLevel());
-		LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(level.getLevel().dimension().location());
+		Core core = Core.get(entity.getLevel());
+		LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(entity.getLevel().dimension().location());
 		LocationData bioData = core.getLoader().BIOME_LOADER.getData(RegistryUtil.getId(level.getBiome(entity.getOnPos())));
 
 		var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
