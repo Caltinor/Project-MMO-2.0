@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.19.2-3.3.8] - 2023-11-07
+### Bugfixes / Tweaks
+- HOTFIX: fixes crash from mob scaling
+
 ## [1.19.2-3.3.7] - 2023-11-07
 ### Bugfixes / Tweaks
 - Added Necronuim to default Tinkers data
