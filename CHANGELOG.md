@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.19.2-3.3.10] - 2023-11-09
+### Bugfixes / Tweaks
+- HOTFIX: completely revert boss scaling feature.
+
 ## [1.19.2-3.3.9] - 2023-11-07
 ### Bugfixes / Tweaks
 - HOTFIX: fixes unkillable mobs
