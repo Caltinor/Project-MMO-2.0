@@ -16,11 +16,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+
 
 public class PlaceHandler {
 	@SuppressWarnings("resource")
-	public static void handle(EntityPlaceEvent event) {
+	public static void handle(BlockEvent.EntityPlaceEvent event) {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		Core core = Core.get(event.getEntity().level());

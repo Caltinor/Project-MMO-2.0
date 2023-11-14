@@ -7,25 +7,25 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.features.anticheese.CheeseTracker.Setting;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class AntiCheeseConfig {
-	public static ForgeConfigSpec SERVER_CONFIG;
+	public static ModConfigSpec SERVER_CONFIG;
 	
 	private static final Codec<Map<EventType, Setting>> CODEC = Codec.unboundedMap(EventType.CODEC, Setting.CODEC);	
 	
 	static {
-		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 		setupServer(SERVER_BUILDER);		
 		SERVER_CONFIG = SERVER_BUILDER.build();
 	}	
 	
-	public static ForgeConfigSpec.BooleanValue AFK_CAN_SUBTRACT;
+	public static ModConfigSpec.BooleanValue AFK_CAN_SUBTRACT;
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_AFK;
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_DIMINISHING;
 	public static ConfigObject<Map<EventType, Setting>> SETTINGS_NORMALIZED;
 	
-	private static void setupServer(ForgeConfigSpec.Builder builder) {
+	private static void setupServer(ModConfigSpec.Builder builder) {
 		builder.comment("Anti-Cheese is a system for managing how XP is gained.",
 				"There are various ways in which players can exploit",
 				"features of various mods and mechanics to gain xp at",

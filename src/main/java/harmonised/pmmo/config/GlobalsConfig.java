@@ -7,14 +7,14 @@ import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class GlobalsConfig {
-	public static ForgeConfigSpec SERVER_CONFIG;
+	public static ModConfigSpec SERVER_CONFIG;
 	
 	static {
 		generateDefaults();
-		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 
 		buildGlobals(SERVER_BUILDER);
 		
@@ -27,7 +27,7 @@ public class GlobalsConfig {
 	private static Map<String, String> pathDefaults;
 	private static Map<String, String> constantDefaults;
 	
-	private static void buildGlobals(ForgeConfigSpec.Builder builder) {
+	private static void buildGlobals(ModConfigSpec.Builder builder) {
 		builder.comment("Configuration for commonly used NBT global variables").push("Globals");
 		
 		PATHS = TomlConfigHelper.defineObject(builder, "paths", Codec.unboundedMap(Codec.STRING, Codec.STRING), pathDefaults);

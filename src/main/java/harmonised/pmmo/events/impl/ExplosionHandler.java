@@ -4,7 +4,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.level.ExplosionEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
 
 public class ExplosionHandler {
     public static void handle(ExplosionEvent.Detonate event) {

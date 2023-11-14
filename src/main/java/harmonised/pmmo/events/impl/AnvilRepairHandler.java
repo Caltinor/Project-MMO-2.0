@@ -9,7 +9,7 @@ import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.entity.player.AnvilRepairEvent;
+import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
 
 public class AnvilRepairHandler {
 

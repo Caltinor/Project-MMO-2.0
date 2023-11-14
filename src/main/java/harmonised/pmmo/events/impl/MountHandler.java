@@ -5,7 +5,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.Messenger;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.EntityMountEvent;
+import net.neoforged.neoforge.event.entity.EntityMountEvent;
 
 public class MountHandler {
 

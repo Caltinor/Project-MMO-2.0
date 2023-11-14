@@ -21,12 +21,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ToolActions;
 
 public class PerksImpl {
 	private static Set<ToolAction> DIG_ACTIONS = Set.of(
-			ToolActions.PICKAXE_DIG, 
+			ToolActions.PICKAXE_DIG,
 			ToolActions.AXE_DIG, 
 			ToolActions.SHOVEL_DIG, 
 			ToolActions.HOE_DIG, 

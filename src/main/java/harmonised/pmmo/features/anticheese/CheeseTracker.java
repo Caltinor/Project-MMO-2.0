@@ -18,11 +18,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.TickEvent.ServerTickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.TickEvent;
 
 /**This class was originally implemented as a successor feature to the anti-cheese
  * behavior in legacy PMMO.  The intent behind the feature was to implement countermeasures
@@ -44,7 +43,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
  * @author Caltinor
  *
  */
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CheeseTracker {
 
 	public static void applyAntiCheese(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
@@ -60,8 +59,8 @@ public class CheeseTracker {
 	}
 	
 	@SubscribeEvent
-	public static void playerWatcher(ServerTickEvent event) {
-		if (event.phase == TickEvent.Phase.END || event.side == LogicalSide.CLIENT) 
+	public static void playerWatcher(TickEvent.ServerTickEvent event) {
+		if (event.phase == TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
 			return;
 		
 		AFK_DATA.forEach((player, map) -> map.forEach((type, tracker) -> {

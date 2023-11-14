@@ -1,14 +1,12 @@
 package harmonised.pmmo.network.clientpackets;
 
-import java.util.function.Supplier;
-
 import harmonised.pmmo.client.events.ClientTickHandler;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class CP_UpdateExperience {
 	String skill;
@@ -27,8 +25,8 @@ public class CP_UpdateExperience {
 		buf.writeUtf(skill);
 	}
 	
-	public void handle(Supplier<NetworkEvent.Context> ctx ) {
-		ctx.get().enqueueWork(() -> {
+	public void handle(NetworkEvent.Context ctx ) {
+		ctx.enqueueWork(() -> {
 			long currentXPraw = Core.get(LogicalSide.CLIENT).getData().getXpRaw(null, skill);
 			//fixes #18: do not add a skill to the player map with zero xp
 			//this causes a skill to display with zero xp and clutters the screen.
@@ -38,6 +36,6 @@ public class CP_UpdateExperience {
 				MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating experience of "+skill+"["+xp+"]");
 			}
 		});		
-		ctx.get().setPacketHandled(true);
+		ctx.setPacketHandled(true);
 	}
 }

@@ -24,15 +24,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.event.TickEvent;
 
 public class PlayerTickHandler {
 	private static final Map<UUID, Integer> airLast = new HashMap<>();
 	private static final Map<UUID, Float> healthLast = new HashMap<>();
 	private static short ticksIgnoredSinceLastProcess = 0;
 
-	public static void handle(PlayerTickEvent event) {
+	public static void handle(TickEvent.PlayerTickEvent event) {
 		ticksIgnoredSinceLastProcess++;
 		if (ticksIgnoredSinceLastProcess < 10) return;
 
@@ -55,7 +55,6 @@ public class PlayerTickHandler {
 			processEvent(EventType.BREATH_CHANGE, core, event);
 		float healthDiff = player.getHealth() - healthLast.getOrDefault(player.getUUID(), 0f);
 		if (Math.abs(healthDiff) >= 0.01) {
-			processEvent(EventType.HEALTH_CHANGE, core, event);
 			processEvent(healthDiff > 0 ? EventType.HEALTH_INCREASE : EventType.HEALTH_DECREASE, core, event);
 		}
 		if (player.isPassenger())
@@ -90,9 +89,9 @@ public class PlayerTickHandler {
 		ticksIgnoredSinceLastProcess = 0;
 	}
 	
-	private static void processEvent(EventType type, Core core, PlayerTickEvent event) {
+	private static void processEvent(EventType type, Core core, TickEvent.PlayerTickEvent event) {
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = core.getSide().equals(LogicalSide.SERVER); 
+		boolean serverSide = core.getSide().equals(LogicalSide.SERVER);
 		if (serverSide){			
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
 		}
@@ -110,9 +109,6 @@ public class PlayerTickHandler {
 					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
-			}
-			case HEALTH_CHANGE -> {
-				processHealthChange(Config.HEALTH_CHANGE_XP.get(), core, event.player, xpAward);
 			}
 			case HEALTH_INCREASE -> {
 				processHealthChange(Config.HEALTH_INCREASE_XP.get(), core, event.player, xpAward);

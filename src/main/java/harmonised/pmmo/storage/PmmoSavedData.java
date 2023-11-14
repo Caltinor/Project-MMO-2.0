@@ -29,9 +29,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class PmmoSavedData extends SavedData implements IDataStorage{
 	
@@ -62,7 +62,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		}
 		//If player is online proceed with xp events, perks and committing xp to master map
 		XpEvent gainXpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
-		if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
+		if (NeoForge.EVENT_BUS.post(gainXpEvent).isCanceled())
 			return false;
 
 		setXpRaw(playerID, gainXpEvent.skill, oldValue + gainXpEvent.amountAwarded);
@@ -114,7 +114,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			
 		if (player != null) {
 			XpEvent gainXpEvent = new XpEvent(player, skill, oldXp, newXp - oldXp, TagBuilder.start().build());
-			if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
+			if (NeoForge.EVENT_BUS.post(gainXpEvent).isCanceled())
 				return false;
 			
 			if (gainXpEvent.isLevelUp()) 
@@ -141,6 +141,10 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		scheduledXP = new HashMap<>(XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(SCHEDULED_KEY)).result().orElse(new HashMap<>()));
 	}
 
+	public static Factory<PmmoSavedData> dataFactory() {
+		return new SavedData.Factory<PmmoSavedData>(PmmoSavedData::new, PmmoSavedData::new, null);
+	}
+
 	@Override
 	public CompoundTag save(CompoundTag nbt) {
 		//This filter exists to scrub the data from empty values to reduce file bloat.
@@ -155,7 +159,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	@Override
 	public IDataStorage get() { 
 		if (ServerLifecycleHooks.getCurrentServer() != null)
-			return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
+			return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(dataFactory(), NAME);
 		else
 			return new PmmoSavedData();
     }

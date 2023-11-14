@@ -25,12 +25,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.event.level.BlockEvent.BreakEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+
 
 public class BreakHandler {
 	
 	@SuppressWarnings("resource")
-	public static void handle(BreakEvent event) {
+	public static void handle(BlockEvent.BreakEvent event) {
 		Core core = Core.get(event.getPlayer().level());
 		boolean serverSide = !event.getPlayer().level().isClientSide;
 		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
@@ -72,7 +73,7 @@ public class BreakHandler {
 		}
 	}
 	
-	private static Map<String, Long> calculateXpAward(Core core, BreakEvent event, CompoundTag dataIn) {
+	private static Map<String, Long> calculateXpAward(Core core, BlockEvent.BreakEvent event, CompoundTag dataIn) {
 		Map<String, Long> outMap = core.getExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getLevel(), event.getPlayer(), dataIn); 
 		LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
 		IChunkData cap = chunk.getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);

@@ -10,35 +10,26 @@ import harmonised.pmmo.events.impl.*;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.TickEvent.LevelTickEvent;
-import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
-import net.minecraftforge.event.entity.EntityMountEvent;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.player.AnvilRepairEvent;
-import net.minecraftforge.event.entity.player.ItemFishedEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.*;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
-import net.minecraftforge.event.level.BlockEvent.BreakEvent;
-import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
-import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
-import net.minecraftforge.event.level.ExplosionEvent;
-import net.minecraftforge.event.level.PistonEvent;
-import net.minecraftforge.event.level.SleepFinishedTimeEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.brewing.PlayerBrewedPotionEvent;
+import net.neoforged.neoforge.event.entity.EntityMountEvent;
+import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
+import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
+import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
+import net.neoforged.neoforge.event.level.PistonEvent;
+import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
 
 /**This class manages the dictation of logic to methods
  * designed to handle the method on the server or the 
@@ -48,23 +39,23 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
  * @author Caltinor
  *
  */
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus= Mod.EventBusSubscriber.Bus.FORGE)
 public class EventHandler {
 	//==========================================================
 	//                 CORE MOD EVENTS
 	//==========================================================
-	@SubscribeEvent(priority=EventPriority.LOW)
-	public static void onPlayerJoin(PlayerLoggedInEvent event) {
+	@SubscribeEvent(priority= EventPriority.LOW)
+	public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		LoginHandler.handle(event);
 	}
 	@SubscribeEvent
-	public static void onPlayerLeave(PlayerLoggedOutEvent event) {
+	public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
 		PartyUtils.removeFromParty(event.getEntity());
 	}
 	@SubscribeEvent
-	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {
+	public static void onGamemodeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
-			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get());
+			AttributeInstance reachAttribute = event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.get());
 			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.CREATIVE_REACH.get())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
@@ -72,11 +63,11 @@ public class EventHandler {
 			}
 		}
 		else {
-			event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
+			event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
 	}
 	@SubscribeEvent
-	public static void onRespawn(PlayerRespawnEvent event) {
+	public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
 		Core core = Core.get(event.getEntity().level()); 
 		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(),
 				TagBuilder.start().withString(APIUtils.SKILLNAME, "respawn").build());
@@ -92,43 +83,40 @@ public class EventHandler {
 		PistonHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.HIGH)
-	public static void tickPerks(LevelTickEvent event) {
+	public static void tickPerks(TickEvent.LevelTickEvent event) {
 		Core.get(event.level).getPerkRegistry().executePerkTicks(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void filterExplosions(ExplosionEvent.Detonate event) {
-		if (!event.isCanceled())
-			ExplosionHandler.handle(event);
+		ExplosionHandler.handle(event);
 	}
 	
 	//==========================================================
 	//                 GAMEPLAY EVENTS
 	//==========================================================
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onBlockBreak(BreakEvent event) {
+	public static void onBlockBreak(BlockEvent.BreakEvent event) {
 		if (event.isCanceled())
 			return;
 		//NOTE Fires only on server
 		BreakHandler.handle(event);
 	}	
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onBlockPlace(EntityPlaceEvent event) {
+	public static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
 		if (event.isCanceled())
 			return;
 		PlaceHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onBreakSpeed(BreakSpeed event) {
+	public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		if (event.isCanceled())
 			return;
 		//NOTE fires on both sides
 		BreakSpeedHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onCraft(ItemCraftedEvent event) {
-		if (event.isCanceled())
-			return;
+	public static void onCraft(PlayerEvent.ItemCraftedEvent event) {
 		//NOTE fires on both sides
 		CraftHandler.handle(event);
 	}
@@ -151,15 +139,13 @@ public class EventHandler {
 		DamageDealtHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onEntityInteract(EntityInteract event) {
+	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
 		if (event.isCanceled())
 			return;
 		EntityInteractHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onJump(LivingJumpEvent event) {
-		if (event.isCanceled())
-			return;
+	public static void onJump(LivingEvent.LivingJumpEvent event) {
 		JumpHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
@@ -193,7 +179,7 @@ public class EventHandler {
 		FishHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST) 
-	public static void onCropGrow(CropGrowEvent.Post event){
+	public static void onCropGrow(BlockEvent.CropGrowEvent.Post event){
 		CropGrowHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
@@ -213,19 +199,19 @@ public class EventHandler {
 		AnvilRepairHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onBlockHit(LeftClickBlock event) {
+	public static void onBlockHit(PlayerInteractEvent.LeftClickBlock event) {
 		PlayerClickHandler.leftClickBlock(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onBlockActivate(RightClickBlock event) {
+	public static void onBlockActivate(PlayerInteractEvent.RightClickBlock event) {
 		PlayerClickHandler.rightClickBlock(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onItemActivate(RightClickItem event) {
+	public static void onItemActivate(PlayerInteractEvent.RightClickItem event) {
 		PlayerClickHandler.rightClickItem(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onPlayerTick(PlayerTickEvent event) {
+	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		PlayerTickHandler.handle(event);
 	}
 	@SubscribeEvent

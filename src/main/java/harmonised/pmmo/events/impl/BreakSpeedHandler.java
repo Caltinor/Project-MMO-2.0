@@ -16,7 +16,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+
 
 public class BreakSpeedHandler {
 	private static Map<UUID, DetailsCache> resultCache = new HashMap<>();
@@ -28,7 +29,7 @@ public class BreakSpeedHandler {
 	}
 	
 	@SuppressWarnings("resource")
-	public static void handle(BreakSpeed event) {
+	public static void handle(PlayerEvent.BreakSpeed event) {
 		Core core = Core.get(event.getEntity().level());
 		//First, check the cache for a repeat event trigger
 		if (resultCache.containsKey(event.getEntity().getUUID())) {
@@ -79,7 +80,7 @@ public class BreakSpeedHandler {
 		}			
 	}
 
-	private static boolean usingCache(BreakSpeed event) {
+	private static boolean usingCache(PlayerEvent.BreakSpeed event) {
 		DetailsCache cachedData = resultCache.get(event.getEntity().getUUID());
 		if (event.getEntity().onGround() == cachedData.isPlayerStanding()
 			&&event.getPosition().orElse(new BlockPos(0,0,0)).equals(cachedData.pos)

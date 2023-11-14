@@ -12,11 +12,11 @@ public class CurioCompat {
 	//provide curio data to various methods
 	public static List<ItemStack> getItems(Player player) {
 		List<ItemStack> curioItems = new ArrayList<>();
-		CuriosApi.getCuriosHelper().getEquippedCurios(player).ifPresent((handler) -> {
-			for (int i = 0; i < handler.getSlots(); i++) {
-				curioItems.add(handler.getStackInSlot(i));
-			}
-		});
+//		CuriosApi.getCuriosHelper().getEquippedCurios(player).ifPresent((handler) -> {
+//			for (int i = 0; i < handler.getSlots(); i++) {
+//				curioItems.add(handler.getStackInSlot(i));
+//			}
+//		});
 		return curioItems;
 	}
 }

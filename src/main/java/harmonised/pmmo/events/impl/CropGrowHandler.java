@@ -16,11 +16,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 public class CropGrowHandler {
 
-	public static void handle(CropGrowEvent.Post event) {
+	public static void handle(BlockEvent.CropGrowEvent.Post event) {
 		Level level = (Level) event.getLevel();
 		if (!level.isClientSide) {
 			Core core = Core.get(level);
@@ -53,7 +53,7 @@ public class CropGrowHandler {
 	
 	/**Checks if the block at the provided position is a cascading growth crop.
 	 * If true, looks to see if the source of the growth is above or below the
-	 * current position and returns that location.  This is used in {@link handle}
+	 * current position and returns that location.  This is used in the handle method
 	 * to get the owner data from the source block so the new growth can properly
 	 * supply XP to the player
 	 * 

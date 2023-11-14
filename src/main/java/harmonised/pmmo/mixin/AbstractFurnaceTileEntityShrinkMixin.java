@@ -1,14 +1,14 @@
 package harmonised.pmmo.mixin;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
+import net.neoforged.neoforge.common.NeoForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,11 +27,11 @@ public class AbstractFurnaceTileEntityShrinkMixin
     @Inject(at = @At(
             	value = "INVOKE",
             	target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"),
-            method = "burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/Recipe;Lnet/minecraft/core/NonNullList;I)Z")
-    public void projectmmo$$handleSmeltingShrink(RegistryAccess p_266740_, @Nullable Recipe<?> p_266780_, NonNullList<ItemStack> p_267073_, int p_267157_, CallbackInfoReturnable<?> info)
+            method = "burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/RecipeHolder;Lnet/minecraft/core/NonNullList;I)Z")
+    public void projectmmo$$handleSmeltingShrink(RegistryAccess p_266740_, @Nullable RecipeHolder<?> p_266780_, NonNullList<ItemStack> p_267073_, int p_267157_, CallbackInfoReturnable<?> info)
     {
         Level world = ((AbstractFurnaceBlockEntity)(Object)this).getLevel();
         BlockPos pos = ((AbstractFurnaceBlockEntity)(Object)this).getBlockPos();
-        MinecraftForge.EVENT_BUS.post(new FurnaceBurnEvent(items.get(0), world, pos));
+        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(items.get(0), world, pos));
     }
 }

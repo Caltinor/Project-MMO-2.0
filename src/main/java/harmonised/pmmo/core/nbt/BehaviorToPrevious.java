@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.util.StringRepresentable;
-import net.minecraftforge.common.IExtensibleEnum;
+import net.neoforged.neoforge.common.IExtensibleEnum;
 
-public enum BehaviorToPrevious implements StringRepresentable, IExtensibleEnum{
+public enum BehaviorToPrevious implements StringRepresentable, IExtensibleEnum {
 	ADD_TO,
 	SUB_FROM,
 	HIGHEST,

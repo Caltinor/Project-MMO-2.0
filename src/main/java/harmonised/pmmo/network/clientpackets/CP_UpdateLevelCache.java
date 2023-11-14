@@ -2,15 +2,14 @@ package harmonised.pmmo.network.clientpackets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class CP_UpdateLevelCache {
 	List<Long> levelCache = new ArrayList<>();
@@ -29,11 +28,11 @@ public class CP_UpdateLevelCache {
 		}
 	}
 	
-	public void handle(Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> {
+	public void handle(NetworkEvent.Context ctx) {
+		ctx.enqueueWork(() -> {
 			((DataMirror)Core.get(LogicalSide.CLIENT).getData()).setLevelCache(levelCache);
 			MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating levelCache");
 		});
-		ctx.get().setPacketHandled(true);
+		ctx.setPacketHandled(true);
 	}
 }

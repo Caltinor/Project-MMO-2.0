@@ -7,9 +7,10 @@ import java.util.stream.Collectors;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.util.StringRepresentable;
-import net.minecraftforge.common.IExtensibleEnum;
+import net.neoforged.neoforge.common.IExtensibleEnum;
 
-public enum ObjectType implements StringRepresentable, IExtensibleEnum{
+
+public enum ObjectType implements StringRepresentable, IExtensibleEnum {
 	ITEM,
 	BLOCK,
 	ENTITY,

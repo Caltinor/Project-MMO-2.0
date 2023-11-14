@@ -61,11 +61,11 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.gui.widget.ScrollPanel;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 
-public class StatScrollWidget extends ScrollPanel{
+public class StatScrollWidget extends ScrollPanel {
 	private static interface Element {public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess);}
 	
 	private static record TextElement(ClientTooltipComponent text, int xOffset, int color, boolean isHeader, int headerColor) implements Element{
@@ -123,7 +123,7 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 			else if (entity != null && entity instanceof LivingEntity) {
 				int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
-				InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, x+width - 20, y+12, scale, 0f, 0f, (LivingEntity) entity);
+				InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, x+width - 20, y+12, scale, 0, 0,  0f, 0f, 0f, (LivingEntity) entity);
 				graphics.drawString(font, this.entity.getDisplayName(), x, y, 0xFFFFFF);
 			}
 		}
@@ -688,8 +688,8 @@ public class StatScrollWidget extends ScrollPanel{
 	protected int getContentHeight() {return content.size() * 12;}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
-		return super.mouseScrolled(mouseX, mouseY, scroll);
+	public boolean mouseScrolled(double mouseX, double mouseY, double scroll, double delta) {
+		return super.mouseScrolled(mouseX, mouseY, scroll, delta);
 	}
 	
 	@Override

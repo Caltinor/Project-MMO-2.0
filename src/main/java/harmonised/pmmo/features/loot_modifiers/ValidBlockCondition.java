@@ -4,7 +4,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -13,19 +16,23 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
+
+import java.util.Optional;
 
 public class ValidBlockCondition implements LootItemCondition{
 	
-	public TagKey<Block> tag;
-	public Block block;
-	
-	public ValidBlockCondition(TagKey<Block> tag) {
+	public Optional<TagKey<Block>> tag = Optional.empty();
+	public Optional<Block> block = Optional.empty();
+
+	public ValidBlockCondition(Optional<TagKey<Block>> tag, Optional<Block> block) {
 		this.tag = tag;
-	}
-	public ValidBlockCondition(Block block) {
 		this.block = block;
 	}
+	public ValidBlockCondition(TagKey<Block> tag) {
+		this.tag = Optional.of(tag);
+	}
+	public ValidBlockCondition(Block block) {this.block = Optional.of(block);}
 
 	@Override
 	public boolean test(LootContext t) {
@@ -33,10 +40,10 @@ public class ValidBlockCondition implements LootItemCondition{
 			return false;
 		BlockState brokenBlock = t.getParamOrNull(LootContextParams.BLOCK_STATE);
 		if (brokenBlock != null) {
-			if (tag != null)
-				return ForgeRegistries.BLOCKS.tags().getTag(tag).contains(brokenBlock.getBlock());
-			if (block != null)
-				return brokenBlock.getBlock().equals(block);
+			if (tag.isPresent())
+				return ForgeRegistries.BLOCKS.tags().getTag(tag.get()).contains(brokenBlock.getBlock());
+			if (block.isPresent())
+				return brokenBlock.getBlock().equals(block.get());
 		}
 		return false;
 	}
@@ -45,23 +52,13 @@ public class ValidBlockCondition implements LootItemCondition{
 	public LootItemConditionType getType() {
 		return GLMRegistry.VALID_BLOCK.get();
 	}
-	
-	public static final class Serializer implements net.minecraft.world.level.storage.loot.Serializer<ValidBlockCondition> {
-		@Override
-		public void serialize(JsonObject pJson, ValidBlockCondition pValue, JsonSerializationContext pSerializationContext) {
-			if (pValue.tag != null)
-				pJson.addProperty("tag", pValue.tag.location().toString());
-			if (pValue.block != null)
-				pJson.addProperty("block", RegistryUtil.getId(pValue.block).toString());			
-		}
-		@Override
-		public ValidBlockCondition deserialize(JsonObject pJson, JsonDeserializationContext pSerializationContext) {
-			if (pJson.get("tag") != null)
-				return new ValidBlockCondition(TagKey.create(ForgeRegistries.Keys.BLOCKS, new ResourceLocation(pJson.get("tag").getAsString())));
-			if (pJson.get("block") != null)
-				return new ValidBlockCondition(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(pJson.get("block").getAsString())));
-			return null;
-		}		
-	}
 
+	public static final Codec<ValidBlockCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.STRING.optionalFieldOf("tag")
+					.xmap(s -> s.map(v -> TagKey.create(Registries.BLOCK, new ResourceLocation(v))), t -> t.map(k -> k.location().toString()))
+					.forGetter(c -> c.tag),
+			Codec.STRING.optionalFieldOf("block")
+					.xmap(s -> s.map(v -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(v))), t -> t.map(k -> RegistryUtil.getId(k).toString()))
+					.forGetter(c -> c.block)
+	).apply(instance, ValidBlockCondition::new));
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import net.neoforged.neoforge.event.TickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.common.base.Preconditions;
@@ -15,15 +17,12 @@ import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.TagUtils;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent.LevelTickEvent;
-import org.jline.utils.Log;
 
 public class PerkRegistry {
 	public PerkRegistry() {}
@@ -97,7 +96,7 @@ public class PerkRegistry {
 	private final List<TickSchedule> tickTracker = new ArrayList<>();
 	private final List<PerkCooldown> coolTracker = new ArrayList<>();
 	
-	public void executePerkTicks(LevelTickEvent event) {
+	public void executePerkTicks(TickEvent.LevelTickEvent event) {
 		MsLoggy.DEBUG.log(LOG_CODE.PERKS, "Perk Tick Tracker:" +MsLoggy.listToString(tickTracker));
 		coolTracker.removeIf(tracker -> tracker.cooledDown(event.level));
 		new ArrayList<>(tickTracker).forEach(schedule -> {

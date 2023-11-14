@@ -5,7 +5,7 @@ import java.util.HashMap;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 public class PlayerDeathHandler {
 

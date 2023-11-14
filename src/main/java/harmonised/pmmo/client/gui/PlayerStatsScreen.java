@@ -44,7 +44,7 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
     
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
         if (this.playerStatsComponent.isVisible() && this.widthTooNarrow) {
             this.renderBg(graphics, pPartialTick, pMouseX, pMouseY);
             this.playerStatsComponent.render(graphics, pMouseX, pMouseY, pPartialTick);
@@ -64,12 +64,12 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
     }
     
     @Override
-    protected void renderBg(GuiGraphics graphics, float p_97788_, int p_97789_, int p_97790_) {
+    protected void renderBg(GuiGraphics graphics, float partial, int mouseX, int mouseY) {
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         int i = this.leftPos;
         int j = this.topPos;
         graphics.blit(INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, i + 51, j + 75, 30, (float)(i + 51) - this.xMouse, (float)(j + 75 - 50) - this.yMouse, this.minecraft.player);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, i + 51, j + 75, 30, 0, 0, (float)mouseX, (float)mouseY, partial, this.minecraft.player);
     }
     
     protected boolean isHovering(int pX, int pY, int pWidth, int pHeight, double pMouseX, double pMouseY) {
@@ -94,11 +94,11 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
     }
     
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
-        if (this.playerStatsComponent.mouseScrolled(pMouseX, pMouseY, pDelta)) {
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta, double other) {
+        if (this.playerStatsComponent.mouseScrolled(pMouseX, pMouseY, pDelta, other)) {
             return true;
         }
-        return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+        return super.mouseScrolled(pMouseX, pMouseY, pDelta, other);
     }
     
     public PlayerStatsComponent getPlayerStatsComponent() {

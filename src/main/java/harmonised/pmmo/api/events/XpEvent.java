@@ -3,10 +3,10 @@ package harmonised.pmmo.api.events;
 import harmonised.pmmo.core.Core;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.neoforged.bus.api.ICancellableEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-public class XpEvent extends PlayerEvent
-{
+public class XpEvent extends PlayerEvent implements ICancellableEvent {
     public String skill;
     public long amountAwarded; 
     private long currentSkillXp;
@@ -18,11 +18,6 @@ public class XpEvent extends PlayerEvent
         this.currentSkillXp = currentSkillXp;
         this.amountAwarded = amountAwarded;
         this.context = context;
-    }
-
-    @Override
-    public boolean isCancelable() {
-        return true;
     }
 
     public int startLevel() {

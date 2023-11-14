@@ -16,20 +16,18 @@ import harmonised.pmmo.config.readers.ConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.*;
 
 public class Config {
-	public static ForgeConfigSpec CLIENT_CONFIG;
-	public static ForgeConfigSpec COMMON_CONFIG;
-	public static ForgeConfigSpec SERVER_CONFIG;
+	public static ModConfigSpec CLIENT_CONFIG;
+	public static ModConfigSpec COMMON_CONFIG;
+	public static ModConfigSpec SERVER_CONFIG;
 	
 	static {
-		ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-		ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
+		ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
+		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 		
 		setupClient(CLIENT_BUILDER);
 		setupCommon(COMMON_BUILDER);
@@ -42,7 +40,7 @@ public class Config {
 	
 	//====================CLIENT SETTINGS===============================
 	
-	private static void setupClient(ForgeConfigSpec.Builder builder) {
+	private static void setupClient(ModConfigSpec.Builder builder) {
 		builder.comment("PMMO Client Configuration").push("Client");
 		
 		buildGUI(builder);
@@ -53,25 +51,25 @@ public class Config {
 		builder.pop();
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_Y;
-	public static ForgeConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_Y;
-	public static ForgeConfigSpec.ConfigValue<Double> GAIN_LIST_OFFSET_X;
-	public static ForgeConfigSpec.ConfigValue<Double> GAIN_LIST_OFFSET_Y;
-	public static ForgeConfigSpec.ConfigValue<Boolean> SKILL_LIST_DISPLAY;
-	public static ForgeConfigSpec.ConfigValue<Boolean> GAIN_LIST_DISPLAY;
-	public static ForgeConfigSpec.ConfigValue<Boolean> VEIN_GAUGE_DISPLAY;
-	public static ForgeConfigSpec.ConfigValue<Integer> SECTION_HEADER_COLOR;
-	public static ForgeConfigSpec.ConfigValue<Integer> SALVAGE_ITEM_COLOR;
-	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_SIZE;
-	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_LINGER_DURATION;
-	public static ConfigValue<List<? extends String>> GAIN_BLACKLIST;
-	public static ForgeConfigSpec.BooleanValue HIDE_SKILL_BUTTON;
-	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_X;
-	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_Y;
+	public static ModConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_X;
+	public static ModConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_Y;
+	public static ModConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_X;
+	public static ModConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_Y;
+	public static ModConfigSpec.ConfigValue<Double> GAIN_LIST_OFFSET_X;
+	public static ModConfigSpec.ConfigValue<Double> GAIN_LIST_OFFSET_Y;
+	public static ModConfigSpec.ConfigValue<Boolean> SKILL_LIST_DISPLAY;
+	public static ModConfigSpec.ConfigValue<Boolean> GAIN_LIST_DISPLAY;
+	public static ModConfigSpec.ConfigValue<Boolean> VEIN_GAUGE_DISPLAY;
+	public static ModConfigSpec.ConfigValue<Integer> SECTION_HEADER_COLOR;
+	public static ModConfigSpec.ConfigValue<Integer> SALVAGE_ITEM_COLOR;
+	public static ModConfigSpec.ConfigValue<Integer> GAIN_LIST_SIZE;
+	public static ModConfigSpec.ConfigValue<Integer> GAIN_LIST_LINGER_DURATION;
+	public static ModConfigSpec.ConfigValue<List<? extends String>> GAIN_BLACKLIST;
+	public static ModConfigSpec.BooleanValue HIDE_SKILL_BUTTON;
+	public static ModConfigSpec.ConfigValue<Integer> SKILL_BUTTON_X;
+	public static ModConfigSpec.ConfigValue<Integer> SKILL_BUTTON_Y;
 	
-	private static void buildGUI(ForgeConfigSpec.Builder builder) {
+	private static void buildGUI(ModConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
 		
 		SKILL_LIST_OFFSET_X = builder.comment("how far right from the top left corner the skill list should be")
@@ -112,7 +110,7 @@ public class Config {
 		builder.pop();
 	}
 	
-	public static BooleanValue HIDE_MET_REQS;
+	public static ModConfigSpec.BooleanValue HIDE_MET_REQS;
 	
 	private static BooleanValue[] TOOLTIP_REQ_ENABLED;
 	private static BooleanValue[] TOOLTIP_XP_ENABLED;
@@ -124,7 +122,7 @@ public class Config {
 	public static BooleanValue tooltipXpEnabled(EventType type) {return TOOLTIP_XP_ENABLED[type.ordinal()];}
 	public static BooleanValue tooltipBonusEnabled(ModifierDataType type) {return TOOLTIP_BONUS_ENABLED[type.ordinal()];}
 	
-	private static void buildTooltips(ForgeConfigSpec.Builder builder) {
+	private static void buildTooltips(ModConfigSpec.Builder builder) {
 		builder.comment("Generic Tooltip Settings").push("ToolTip_Settings");
 		HIDE_MET_REQS = builder.comment("Should met reqs be hidden on the tooltip.")
 						.define("Hide Met Req Tooltips", true);
@@ -157,7 +155,7 @@ public class Config {
 	
 	public static IntValue VEIN_LIMIT;
 	
-	private static void buildVein(ForgeConfigSpec.Builder builder) {
+	private static void buildVein(ModConfigSpec.Builder builder) {
 		builder.comment("Client Settings Related to the Vein Mining Ability").push("Vein_Miner");
 		
 		VEIN_LIMIT = builder.comment("The max blocks a vein activation should consume regardless of charge")
@@ -170,7 +168,7 @@ public class Config {
 	public static BooleanValue BLOCK_OWNER_HIGHLIGHTS;
 	public static BooleanValue SALVAGE_HIGHLIGHTS;
 	
-	private static void buildTutorial(ForgeConfigSpec.Builder builder) {
+	private static void buildTutorial(ModConfigSpec.Builder builder) {
 		builder.comment("Toggles for helpful features related to mechanics").push("Tutorial");
 		
 		BREAK_NERF_HIGHLIGHTS = builder.comment("Should blocks affected by Reuse Penalty show a red outline?")
@@ -185,7 +183,7 @@ public class Config {
 	
 	//====================COMMON SETTINGS===============================
 	
-	private static void setupCommon(ForgeConfigSpec.Builder builder) {
+	private static void setupCommon(ModConfigSpec.Builder builder) {
 		builder.comment("===============================================","","",
 				"Most Configurations are found in the server config",
 				"You can find that in worldname/serverconfig/",
@@ -202,7 +200,7 @@ public class Config {
 	public static ConfigValue<List<? extends String>> ERROR_LOGGING;
 	public static ConfigValue<List<? extends String>> FATAL_LOGGING;
 	
-	private static void buildMsLoggy(ForgeConfigSpec.Builder builder) {
+	private static void buildMsLoggy(ModConfigSpec.Builder builder) {
 		builder.comment("PMMO Error Logging Configuration","",
 				"===================================================",
 				"To enable Logging with MsLoggy, enter a logging",
@@ -230,7 +228,7 @@ public class Config {
 	}
 	
 	//====================SERVER SETTINGS===============================	
-	private static void setupServer(ForgeConfigSpec.Builder builder) {
+	private static void setupServer(ModConfigSpec.Builder builder) {
 		buildBasics(builder);
 		buildLevels(builder);
 		buildRequirements(builder);
@@ -240,12 +238,12 @@ public class Config {
 		buildVeinMinerSettings(builder);
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
-	public static ForgeConfigSpec.ConfigValue<String> SALVAGE_BLOCK;
-	public static ForgeConfigSpec.BooleanValue TREASURE_ENABLED;
-	public static ForgeConfigSpec.BooleanValue BREWING_TRACKED;
+	public static ModConfigSpec.ConfigValue<Double> CREATIVE_REACH;
+	public static ModConfigSpec.ConfigValue<String> SALVAGE_BLOCK;
+	public static ModConfigSpec.BooleanValue TREASURE_ENABLED;
+	public static ModConfigSpec.BooleanValue BREWING_TRACKED;
 	
-	private static void buildBasics(ForgeConfigSpec.Builder builder) {
+	private static void buildBasics(ModConfigSpec.Builder builder) {
 		builder.comment("General settings on the server").push("General");
 		
 		CREATIVE_REACH = builder.comment("how much extra reach should a player get in creative mode")
@@ -263,21 +261,21 @@ public class Config {
 		builder.pop();
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Integer> 	MAX_LEVEL;
-	public static ForgeConfigSpec.ConfigValue<Double> 	LOSS_ON_DEATH;
-	public static ForgeConfigSpec.ConfigValue<Boolean>	LOSE_LEVELS_ON_DEATH;
-	public static ForgeConfigSpec.ConfigValue<Boolean> 	LOSE_ONLY_EXCESS;
-	public static ForgeConfigSpec.ConfigValue<Boolean> USE_EXPONENTIAL_FORMULA;
-	public static ForgeConfigSpec.ConfigValue<Double> 	GLOBAL_MODIFIER;
+	public static ModConfigSpec.ConfigValue<Integer> 	MAX_LEVEL;
+	public static ModConfigSpec.ConfigValue<Double> 	LOSS_ON_DEATH;
+	public static ModConfigSpec.ConfigValue<Boolean>	LOSE_LEVELS_ON_DEATH;
+	public static ModConfigSpec.ConfigValue<Boolean> 	LOSE_ONLY_EXCESS;
+	public static ModConfigSpec.ConfigValue<Boolean> USE_EXPONENTIAL_FORMULA;
+	public static ModConfigSpec.ConfigValue<Double> 	GLOBAL_MODIFIER;
 	public static TomlConfigHelper.ConfigObject<Map<String, Double>> SKILL_MODIFIERS;
-	public static ForgeConfigSpec.ConfigValue<Long> 	LINEAR_BASE_XP;
-	public static ForgeConfigSpec.ConfigValue<Double> 	LINEAR_PER_LEVEL;
-	public static ForgeConfigSpec.ConfigValue<Integer> 	EXPONENTIAL_BASE_XP;
-	public static ForgeConfigSpec.ConfigValue<Double> 	EXPONENTIAL_POWER_BASE;
-	public static ForgeConfigSpec.ConfigValue<Double> 	EXPONENTIAL_LEVEL_MOD;
+	public static ModConfigSpec.ConfigValue<Long> 	LINEAR_BASE_XP;
+	public static ModConfigSpec.ConfigValue<Double> 	LINEAR_PER_LEVEL;
+	public static ModConfigSpec.ConfigValue<Integer> 	EXPONENTIAL_BASE_XP;
+	public static ModConfigSpec.ConfigValue<Double> 	EXPONENTIAL_POWER_BASE;
+	public static ModConfigSpec.ConfigValue<Double> 	EXPONENTIAL_LEVEL_MOD;
 	public static ConfigHelper.ConfigObject<List<Long>> STATIC_LEVELS;
 	
-	private static void buildLevels(ForgeConfigSpec.Builder builder) {
+	private static void buildLevels(ModConfigSpec.Builder builder) {
 		builder.comment("Settings related level gain").push("Levels");
 		
 		MAX_LEVEL = builder.comment("The highest level a player can achieve in any skill."
@@ -349,7 +347,7 @@ public class Config {
 	
 	public static BooleanValue reqEnabled(ReqType type) {return REQ_ENABLED[type.ordinal()];}
 	
-	private static void buildRequirements(ForgeConfigSpec.Builder builder) {
+	private static void buildRequirements(ModConfigSpec.Builder builder) {
 		List<ReqType> rawReqList = new ArrayList<>(Arrays.asList(ReqType.values()));
 		
 		builder.comment("Should requirements apply for the applicable action type").push("Requirements");		
@@ -362,10 +360,10 @@ public class Config {
 		
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Double> REUSE_PENALTY;
-	public static ForgeConfigSpec.ConfigValue<Boolean> SUMMATED_MAPS;
+	public static ModConfigSpec.ConfigValue<Double> REUSE_PENALTY;
+	public static ModConfigSpec.ConfigValue<Boolean> SUMMATED_MAPS;
 	
-	private static void buildXpGains(ForgeConfigSpec.Builder builder) {
+	private static void buildXpGains(ModConfigSpec.Builder builder) {
 		builder.comment("All settings related to the gain of experience").push("XP_Gains");
 		
 		REUSE_PENALTY = builder.comment("how much of the original XP should be awarded when a player breaks a block they placed")
@@ -397,7 +395,7 @@ public class Config {
 	public static ConfigObject<Map<String, Double>> SURFACING_XP;
 	public static ConfigObject<Map<String, Double>> SWIM_SPRINTING_XP;
 	
-	private static void buildEventBasedXPSettings(ForgeConfigSpec.Builder builder) {
+	private static void buildEventBasedXPSettings(ModConfigSpec.Builder builder) {
 		builder.comment("Settings related to certain default event XP awards.").push("Event_XP_Specifics");
 		
 		builder.push("Damage").comment(
@@ -453,10 +451,10 @@ public class Config {
 		builder.pop();
 	}
 	
-	public static ForgeConfigSpec.IntValue PARTY_RANGE;
-	public static ForgeConfigSpec.DoubleValue PARTY_BONUS;
+	public static ModConfigSpec.IntValue PARTY_RANGE;
+	public static ModConfigSpec.DoubleValue PARTY_BONUS;
 	
-	private static void buildPartySettings(ForgeConfigSpec.Builder builder) {
+	private static void buildPartySettings(ModConfigSpec.Builder builder) {
 		builder.comment("All settings governing party behavior").push("Party");
 			PARTY_RANGE = builder.comment("How close do party members have to be to share experience.")
 					.defineInRange("Party Range", 50, 0, Integer.MAX_VALUE);
@@ -466,19 +464,19 @@ public class Config {
 		builder.pop();
 	}
 	
-	public static ForgeConfigSpec.BooleanValue MOB_SCALING_ENABLED;
+	public static ModConfigSpec.BooleanValue MOB_SCALING_ENABLED;
 	
-	public static ForgeConfigSpec.ConfigValue<Boolean> MOB_USE_EXPONENTIAL_FORMULA;
-	public static ForgeConfigSpec.ConfigValue<Integer>  MOB_SCALING_AOE;
-	public static ForgeConfigSpec.ConfigValue<Integer> 	MOB_SCALING_BASE_LEVEL;
-	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_LINEAR_PER_LEVEL;
-	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_POWER_BASE;
-	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_LEVEL_MOD;
-	public static ForgeConfigSpec.ConfigValue<Double> BOSS_SCALING_RATIO;
+	public static ModConfigSpec.ConfigValue<Boolean> MOB_USE_EXPONENTIAL_FORMULA;
+	public static ModConfigSpec.ConfigValue<Integer>  MOB_SCALING_AOE;
+	public static ModConfigSpec.ConfigValue<Integer> 	MOB_SCALING_BASE_LEVEL;
+	public static ModConfigSpec.ConfigValue<Double> 	MOB_LINEAR_PER_LEVEL;
+	public static ModConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_POWER_BASE;
+	public static ModConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_LEVEL_MOD;
+	public static ModConfigSpec.ConfigValue<Double> BOSS_SCALING_RATIO;
 
 	public static ConfigObject<Map<String, Map<String, Double>>> MOB_SCALING;
 	
-	private static void buildMobScalingSettings(ForgeConfigSpec.Builder builder) {
+	private static void buildMobScalingSettings(ModConfigSpec.Builder builder) {
 		builder.comment("settings related to how strong mobs get based on player level.").push("Mob_Scaling");
 		
 		MOB_SCALING_ENABLED = builder.comment("Should mob scaling be turned on.")
@@ -525,15 +523,15 @@ public class Config {
 		builder.pop(); //Mob_Scaling
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Boolean> VEIN_ENABLED;
-	public static ForgeConfigSpec.ConfigValue<Boolean> REQUIRE_SETTING;
-	public static ForgeConfigSpec.ConfigValue<Integer> DEFAULT_CONSUME;
-	public static ForgeConfigSpec.DoubleValue VEIN_CHARGE_MODIFIER;
+	public static ModConfigSpec.ConfigValue<Boolean> VEIN_ENABLED;
+	public static ModConfigSpec.ConfigValue<Boolean> REQUIRE_SETTING;
+	public static ModConfigSpec.ConfigValue<Integer> DEFAULT_CONSUME;
+	public static ModConfigSpec.DoubleValue VEIN_CHARGE_MODIFIER;
 	public static ConfigValue<List<? extends String>> VEIN_BLACKLIST;
-	public static ForgeConfigSpec.DoubleValue BASE_CHARGE_RATE;
-	public static ForgeConfigSpec.IntValue BASE_CHARGE_CAP;
+	public static ModConfigSpec.DoubleValue BASE_CHARGE_RATE;
+	public static ModConfigSpec.IntValue BASE_CHARGE_CAP;
 	
-	private static void buildVeinMinerSettings(ForgeConfigSpec.Builder builder) {
+	private static void buildVeinMinerSettings(ModConfigSpec.Builder builder) {
 		builder.comment("Settings related to the Vein Miner").push("Vein_Miner");
 		VEIN_ENABLED = builder.comment("setting to false disables all vein features")
 				.define("vein enabled", true);

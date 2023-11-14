@@ -8,14 +8,14 @@ import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class SkillsConfig {
-	public static ForgeConfigSpec SERVER_CONFIG;
+	public static ModConfigSpec SERVER_CONFIG;
 	
 	static {
 		generateDefaults();
-		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 
 		buildGlobals(SERVER_BUILDER);
 		
@@ -26,7 +26,7 @@ public class SkillsConfig {
 	
 	private static Map<String, SkillData> defaultSkills;
 	
-	private static void buildGlobals(ForgeConfigSpec.Builder builder) {
+	private static void buildGlobals(ModConfigSpec.Builder builder) {
 		builder.comment("========================================================================","",
 						" All skills in pmmo are defined when they are used anywhere in PMMO.",
 						" You do not need to define a skill here to use it. However, defining",

@@ -12,20 +12,20 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.util.TagBuilder;
-import jdk.jfr.Event;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
+
 
 public class PerksConfig {
-	public static ForgeConfigSpec SERVER_CONFIG;
+	public static ModConfigSpec SERVER_CONFIG;
 	
 	private static final Codec<Map<EventType, List<CompoundTag>>> CODEC = 
 			Codec.unboundedMap(EventType.CODEC, CompoundTag.CODEC.listOf());
 	
 	static {
 		generateDefaults();
-		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 
 		buildPerkSettings(SERVER_BUILDER);
 		
@@ -35,7 +35,7 @@ public class PerksConfig {
 	public static ConfigObject<Map<EventType, List<CompoundTag>>> PERK_SETTINGS;
 	private static Map<EventType, List<CompoundTag>> defaultSettings;
 	
-	private static void buildPerkSettings(ForgeConfigSpec.Builder builder) {
+	private static void buildPerkSettings(ModConfigSpec.Builder builder) {
 		builder.comment("These settings define which perks are used and the settings which govern them.").push("Perks");
 		
 		PERK_SETTINGS = TomlConfigHelper.defineObject(builder, "For_Event", CODEC, defaultSettings);

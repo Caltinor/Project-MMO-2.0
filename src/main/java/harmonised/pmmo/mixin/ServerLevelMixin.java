@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,8 +19,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
 
 /**This mixin is named "ServerLevel" Mixin because we are checking first and 
  * foremost if the instance of level is an instance of ServerLevel before 
@@ -49,7 +49,7 @@ public class ServerLevelMixin {
 				UUID playerID = cap.getBreaker(neighbor);
 				if (playerID != null) {
 					Player player = level.getServer().getPlayerList().getPlayer(playerID);
-					MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
+					NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
 					cap.setBreaker(pos, playerID);
 					break;
 				}

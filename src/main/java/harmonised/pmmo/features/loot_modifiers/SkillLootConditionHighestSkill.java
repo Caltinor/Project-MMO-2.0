@@ -1,18 +1,12 @@
 package harmonised.pmmo.features.loot_modifiers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -45,30 +39,16 @@ public class SkillLootConditionHighestSkill implements LootItemCondition{
 		return true;
 	}
 
+	public String getTargetSkill() {return targetSkill;}
+
+	public List<String> getComparables() {return comparables;}
 	@Override
 	public LootItemConditionType getType() {
 		return GLMRegistry.HIGHEST_SKILL.get();
 	}
 
-	public static final class Serializer implements net.minecraft.world.level.storage.loot.Serializer<SkillLootConditionHighestSkill> {
-        public void serialize(JsonObject json, SkillLootConditionHighestSkill itemCondition, @Nonnull JsonSerializationContext context) {
-            json.addProperty("target_skill", itemCondition.targetSkill);
-            JsonArray list = new JsonArray();
-            for (String skill : itemCondition.comparables) {
-            	list.add(skill);
-            }
-            json.add("comparable_skills", list);
-        }
-
-        @Nonnull
-        public SkillLootConditionHighestSkill deserialize(JsonObject json, @Nonnull JsonDeserializationContext context) {
-        	String targetSkill = GsonHelper.getAsString(json, "target_skill");
-        	JsonArray list = GsonHelper.getAsJsonArray(json, "comparable_skills");
-        	List<String> comparables = new ArrayList<>();
-        	for (int i = 0; i < list.size(); i++) {
-        		comparables.add(list.get(i).getAsString());
-        	}
-            return new SkillLootConditionHighestSkill(targetSkill, comparables);
-        }
-    }
+	public static final Codec<SkillLootConditionHighestSkill> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.STRING.fieldOf("target_skill").forGetter(SkillLootConditionHighestSkill::getTargetSkill),
+			Codec.list(Codec.STRING).fieldOf("comparable_skills").forGetter(SkillLootConditionHighestSkill::getComparables)
+	).apply(instance, SkillLootConditionHighestSkill::new));
 }

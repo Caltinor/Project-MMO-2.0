@@ -2,6 +2,8 @@ package harmonised.pmmo.setup.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import harmonised.pmmo.util.Reference;
@@ -11,8 +13,6 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ItemTagProvider extends ItemTagsProvider{
 

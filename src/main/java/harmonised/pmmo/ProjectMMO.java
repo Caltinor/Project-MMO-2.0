@@ -1,10 +1,5 @@
 package harmonised.pmmo;
 
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;
@@ -14,6 +9,10 @@ import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.loot_modifiers.GLMRegistry;
 import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.util.Reference;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(Reference.MOD_ID)
 public class ProjectMMO {

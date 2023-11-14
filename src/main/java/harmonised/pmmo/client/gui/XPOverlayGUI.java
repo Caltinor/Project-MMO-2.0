@@ -21,9 +21,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
 public class XPOverlayGUI implements IGuiOverlay
 {
@@ -33,13 +33,13 @@ public class XPOverlayGUI implements IGuiOverlay
 	private Font fontRenderer;
 
 	@Override
-	public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+	public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)
 			fontRenderer = mc.font;
 		
-		if(!mc.options.renderDebug){	
+		if(!mc.getDebugOverlay().showDebugScreen()){
 			guiGraphics.pose().pushPose();
 			RenderSystem.enableBlend();
 			

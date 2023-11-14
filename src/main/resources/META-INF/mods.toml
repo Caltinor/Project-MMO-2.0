@@ -1,7 +1,9 @@
-modLoader="javafml" 
-loaderVersion="${loader_version_range}" 
-license="All rights reserved"
-issueTrackerURL="https://github.com/Caltinor/Project-MMO-2.0/issues/"
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mixins]]
+config = "${mod_id}.mixins.json"
 
 [[mods]]
 modId="${mod_id}"
@@ -9,21 +11,20 @@ version="${mod_version}"
 displayName="${mod_name}"
 logoFile="star.png"
 credits="MMD were there when this mod needed them, including the start"
-authors="Caltinor"
-description='''
-Adds many different skills and benefits thanks to the skills to the game!
-'''
-
-[[dependencies.${mod_id}]] #optional
-    modId="forge"
-    mandatory=true
-    versionRange="${forge_version_range}"
-    ordering="NONE"
-    side="BOTH"  
+authors="${mod_authors}"
+description='''${mod_description}'''
 
 [[dependencies.${mod_id}]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="${minecraft_version_range}"
-    ordering="NONE"
-    side="BOTH"
+modId="neoforge"
+mandatory=true
+versionRange="${neo_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+

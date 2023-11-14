@@ -17,6 +17,7 @@ import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -35,7 +36,7 @@ public class FurnaceHandler {
 			Optional<GameProfile> playerProfile = event.getLevel().getServer().getProfileCache().get(pid);
 			if (playerProfile.isEmpty()) 
 				return;
-			player = new ServerPlayer(event.getLevel().getServer(), (ServerLevel) event.getLevel(), playerProfile.get());
+			player = new ServerPlayer(event.getLevel().getServer(), (ServerLevel) event.getLevel(), playerProfile.get(), ClientInformation.createDefault());
 		}
 		
 		//core logic 

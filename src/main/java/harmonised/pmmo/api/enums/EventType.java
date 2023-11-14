@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import net.minecraft.util.StringRepresentable;
-import net.minecraftforge.common.IExtensibleEnum;
+import net.neoforged.neoforge.common.IExtensibleEnum;
 
 public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
 	ANVIL_REPAIR(true, false, false, "smithing"),  			
@@ -28,12 +28,9 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 	EFFECT(false, false, true, "magic"),
 	FISH(true, false, false, "fishing"),					
 	SMELT(true, false, false, "smithing"),
-	GROW(false, true, false, "farming"),					
-	/**Use either of the INCREASE/DECREASE variants for future implementations.*/
-	@Deprecated(forRemoval = true, since = "1.20")
-	HEALTH_CHANGE(false, false, false, ""),
-		HEALTH_INCREASE(false, false, false, ""),
-		HEALTH_DECREASE(false, false, false, ""),
+	GROW(false, true, false, "farming"),
+	HEALTH_INCREASE(false, false, false, ""),
+	HEALTH_DECREASE(false, false, false, ""),
 	JUMP(false, false, true, "agility"),					
 		SPRINT_JUMP(false, false, true, "agility"),			
 		CROUCH_JUMP(false, false, true, "agility"),

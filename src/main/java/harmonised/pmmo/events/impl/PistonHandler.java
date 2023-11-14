@@ -10,7 +10,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.piston.PistonStructureResolver;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.event.level.PistonEvent;
+import net.neoforged.neoforge.event.level.PistonEvent;
+
 
 public class PistonHandler {
 	

@@ -28,3 +28,4 @@ forge*changelog.txt
 
 #Ignore CT's docsFolder     
 docsOut
+/runs/

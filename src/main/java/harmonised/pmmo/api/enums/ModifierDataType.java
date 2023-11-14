@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import net.minecraft.util.StringRepresentable;
-import net.minecraftforge.common.IExtensibleEnum;
+import net.neoforged.neoforge.common.IExtensibleEnum;
 
 public enum ModifierDataType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
     BIOME,

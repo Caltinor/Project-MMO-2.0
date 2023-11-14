@@ -16,13 +16,13 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.capabilities.CapabilityManager;
+import net.neoforged.neoforge.common.capabilities.CapabilityToken;
+import net.neoforged.neoforge.common.capabilities.ICapabilitySerializable;
+import net.neoforged.neoforge.common.util.LazyOptional;
 
-public class ChunkDataProvider implements ICapabilitySerializable<CompoundTag>{
+public class ChunkDataProvider implements ICapabilitySerializable<CompoundTag> {
 	public static final ResourceLocation CHUNK_CAP_ID = new ResourceLocation(Reference.MOD_ID, "placed_data");
 	public static final Capability<IChunkData> CHUNK_CAP = CapabilityManager.get(new CapabilityToken<IChunkData>() {});
 	

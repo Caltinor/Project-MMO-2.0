@@ -22,23 +22,24 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SwordItem;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.*;
+
 
 public class AutoValueConfig {
-	public static ForgeConfigSpec SERVER_CONFIG;
+	public static ModConfigSpec SERVER_CONFIG;
 	
 	static {
-		ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 
 		setupServer(SERVER_BUILDER);
 		
 		SERVER_CONFIG = SERVER_BUILDER.build();
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_AUTO_VALUES;
+	public static ModConfigSpec.ConfigValue<Boolean> ENABLE_AUTO_VALUES;
 	
-	public static void setupServer(ForgeConfigSpec.Builder builder) {
+	public static void setupServer(ModConfigSpec.Builder builder) {
 		builder.comment("Auto Values estimate values based on item/block/entity properties", 
 				"and apply when no other defined requirement or xp value is present").push("Auto_Values");
 
@@ -59,7 +60,7 @@ public class AutoValueConfig {
 	
 	private static BooleanValue[] REQS_ENABLED;	
 	public static boolean isReqEnabled(ReqType type) {return REQS_ENABLED[type.ordinal()].get();}	
-	private static void setupReqToggles(ForgeConfigSpec.Builder builder) {
+	private static void setupReqToggles(ModConfigSpec.Builder builder) {
 		builder.comment("These settings turn auto-values on/off for the specific requirement type.  These are global settings").push("Req_Toggles");
 		
 		List<ReqType> rawReqList = new ArrayList<>(Arrays.asList(ReqType.values()));
@@ -72,7 +73,7 @@ public class AutoValueConfig {
 	
 	private static BooleanValue[] EVENTS_ENABLED;	
 	public static boolean isXpGainEnabled(EventType type) {return EVENTS_ENABLED[type.ordinal()].get();}	
-	private static void setupXpGainToggles(ForgeConfigSpec.Builder builder) {
+	private static void setupXpGainToggles(ModConfigSpec.Builder builder) {
 		builder.comment("These settings turn auto-values xp awards on/off for the specific event type.  These are global settings").push("XpGain_Toggles");
 		
 		List<EventType> rawReqList = new ArrayList<>(Arrays.asList(EventType.values()));
@@ -89,7 +90,7 @@ public class AutoValueConfig {
 	public static ConfigObject<Map<String, Long>> AXE_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> HOE_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> SHOVEL_OVERRIDE;
-	public static ForgeConfigSpec.DoubleValue RARITIES_MODIFIER;
+	public static ModConfigSpec.DoubleValue RARITIES_MODIFIER;
 	public static ConfigObject<Map<String, Long>> BREWABLES_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> SMELTABLES_OVERRIDE;
 	
@@ -106,7 +107,7 @@ public class AutoValueConfig {
 		return configEntry == null ? new HashMap<>() : configEntry.get(); 
 	}
 	
-	private static void setupXpGainMaps(ForgeConfigSpec.Builder builder) {
+	private static void setupXpGainMaps(ModConfigSpec.Builder builder) {
 		builder.comment("what skills and xp amount should applicable objects be granted").push("Xp_Awards");
 		
 		builder.push("Items");
@@ -187,7 +188,7 @@ public class AutoValueConfig {
 		else return getItemReq(ReqType.TOOL);
 	}
 	
-	private static void setupReqMaps(ForgeConfigSpec.Builder builder) {
+	private static void setupReqMaps(ModConfigSpec.Builder builder) {
 		builder.comment("what skills and level should be required to perform the specified action").push("Requirements");
 		
 		builder.push("Items");
@@ -286,9 +287,9 @@ public class AutoValueConfig {
 	public static double getUtensilAttribute(UtensilTypes tool, AttributeKey key) {return UTENSIL_ATTRIBUTES.get(tool).get().getOrDefault(key.key, 0d);}
 	public static double getWearableAttribute(WearableTypes piece, AttributeKey key) {return WEARABLE_ATTRIBUTES.get(piece).get().getOrDefault(key.key, 0d);}
 	
-	public static ForgeConfigSpec.ConfigValue<Double> HARDNESS_MODIFIER;
+	public static ModConfigSpec.ConfigValue<Double> HARDNESS_MODIFIER;
 	
-	private static void configureItemTweaks(ForgeConfigSpec.Builder builder) {		
+	private static void configureItemTweaks(ModConfigSpec.Builder builder) {		
 		builder.comment("Configuration tweaks specific to items."
 				,"'"+AttributeKey.DUR.key+"' determines how much item durability affects auto value calculations"
 				,"Default: 0.01 is equal to 1 per hundred durability"
@@ -316,7 +317,7 @@ public class AutoValueConfig {
 	
 	public static ConfigObject<Map<String, Double>> ENTITY_ATTRIBUTES;
 	
-	private static void configureEntityTweaks(ForgeConfigSpec.Builder builder) {		
+	private static void configureEntityTweaks(ModConfigSpec.Builder builder) {		
 		builder.comment("Configuration tweaks specific to entities."
 				,"'"+AttributeKey.HEALTH.key+"' Determines how much entity health affects auto value calculations"
 				,"'"+AttributeKey.SPEED.key+"' Determines how much entity speed affects auto value calculations"

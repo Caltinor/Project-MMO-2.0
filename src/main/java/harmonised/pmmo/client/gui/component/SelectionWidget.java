@@ -24,6 +24,7 @@ import net.minecraft.util.Mth;
 public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extends AbstractWidget
 {
     private static final ResourceLocation ICONS = new ResourceLocation("textures/gui/resource_packs.png");
+    private static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation("textures/gui/widgets.png");
     private static final int ENTRY_HEIGHT = 20;
     private final Component title;
     private final Consumer<T> selectCallback;
@@ -44,7 +45,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
         graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        graphics.blitNineSliced(WIDGETS_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, 66);
+        graphics.blitInscribed(WIDGETS_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4);//, 200, 20, 0, 66);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (selected != null)
@@ -126,7 +127,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta, double other) {
         int maxY = getY() + ENTRY_HEIGHT * Math.min(entries.size() + 1, 5);
         if (extended && mouseX >= getX() && mouseX <= getX() + width && mouseY > getY() + ENTRY_HEIGHT && mouseY < maxY) {
             if (delta < 0 && scrollOffset < entries.size() - 4)
@@ -135,7 +136,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
                 scrollOffset--;
             return true;
         }
-        return super.mouseScrolled(mouseX, mouseY, delta);
+        return super.mouseScrolled(mouseX, mouseY, delta, other);
     }
 
     @Override

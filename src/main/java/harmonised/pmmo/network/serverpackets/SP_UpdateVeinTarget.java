@@ -7,8 +7,8 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class SP_UpdateVeinTarget {
 	BlockPos pos;
@@ -17,11 +17,11 @@ public class SP_UpdateVeinTarget {
 	public SP_UpdateVeinTarget(FriendlyByteBuf buf) {pos = BlockPos.of(buf.readLong());}
 	public void toBytes(FriendlyByteBuf buf) {buf.writeLong(pos.asLong());}
 	
-	public void handle(Supplier<NetworkEvent.Context> ctx) {
-		ctx.get().enqueueWork(() -> {
+	public void handle(NetworkEvent.Context ctx) {
+		ctx.enqueueWork(() -> {
 			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Target sent to Server for pos: "+pos.toString());
-			Core.get(LogicalSide.SERVER).setMarkedPos(ctx.get().getSender().getUUID(), pos);
+			Core.get(LogicalSide.SERVER).setMarkedPos(ctx.getSender().getUUID(), pos);
 		});
-		ctx.get().setPacketHandled(true);
+		ctx.setPacketHandled(true);
 	}
 }

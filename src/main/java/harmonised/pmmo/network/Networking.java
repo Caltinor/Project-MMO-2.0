@@ -20,10 +20,10 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.PlayNetworkDirection;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 public class Networking {
 	private static SimpleChannel INSTANCE;
@@ -113,7 +113,7 @@ public class Networking {
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {
-		INSTANCE.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+		INSTANCE.sendTo(packet, player.connection.connection, PlayNetworkDirection.PLAY_TO_CLIENT);
 	}
 	public static void sendToServer(Object packet) {
 		INSTANCE.sendToServer(packet);

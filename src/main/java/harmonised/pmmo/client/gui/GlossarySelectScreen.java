@@ -88,26 +88,26 @@ public class GlossarySelectScreen extends Screen{
 
 	@Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(graphics);
+		renderBackground(graphics, mouseX, mouseY, partialTicks);
 		super.render(graphics, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
-    public void renderBackground(GuiGraphics graphics) {
+    public void renderBackground(GuiGraphics graphics, int i, int j, float k) {
         graphics.blit(GUI_BG,  renderX, renderY, 0, 0,  256, 256);
 	}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scrolled) {
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrolled, double other) {
 		if (selectSection.isExtended())
-			return selectSection.mouseScrolled(mouseX, mouseY, scrolled) || super.mouseScrolled(mouseX, mouseY, scrolled);
+			return selectSection.mouseScrolled(mouseX, mouseY, scrolled, other) || super.mouseScrolled(mouseX, mouseY, scrolled, other);
 		if (selectObject.isExtended())
-			return selectObject.mouseScrolled(mouseX, mouseY, scrolled) || super.mouseScrolled(mouseX, mouseY, scrolled);
+			return selectObject.mouseScrolled(mouseX, mouseY, scrolled, other) || super.mouseScrolled(mouseX, mouseY, scrolled, other);
 		if (selectSkills.isExtended())
-			return selectSkills.mouseScrolled(mouseX, mouseY, scrolled) || super.mouseScrolled(mouseX, mouseY, scrolled);
+			return selectSkills.mouseScrolled(mouseX, mouseY, scrolled, other) || super.mouseScrolled(mouseX, mouseY, scrolled, other);
 		if (selectEnum.isExtended())
-			return selectEnum.mouseScrolled(mouseX, mouseY, scrolled) || super.mouseScrolled(mouseX, mouseY, scrolled);
-		return super.mouseScrolled(mouseX, mouseY, scrolled);
+			return selectEnum.mouseScrolled(mouseX, mouseY, scrolled, other) || super.mouseScrolled(mouseX, mouseY, scrolled, other);
+		return super.mouseScrolled(mouseX, mouseY, scrolled, other);
 	}
 	
 	@Override

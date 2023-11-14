@@ -70,7 +70,7 @@ public class StatsScreen extends Screen{
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 //		renderX = this.width/2 - 128;
 //		renderY = this.height/2 - 128;
-		renderBackground(graphics);
+		renderBackground(graphics, mouseX, mouseY, partialTicks);
 		super.render(graphics, mouseX, mouseY, partialTicks);
 		if (this.stack != null || block != null) {
 			ItemStack renderStack = this.stack == null ? new ItemStack(Minecraft.getInstance().player.level().getBlockState(block).getBlock().asItem()) : this.stack;
@@ -78,19 +78,19 @@ public class StatsScreen extends Screen{
 			graphics.drawString(font, renderStack.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}
 		else if (entity != null && entity instanceof LivingEntity) {
-			InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, this.renderX+width - 20, this.renderY+12, 10, (float)(this.renderX+ 51) - 100, (float)(this.renderY + 75 - 50) - 100, (LivingEntity) entity);
+			InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, this.renderX+width - 20, this.renderY+12, 10, 0, 0, 0f, (float)(this.renderX+ 51) - 100, (float)(this.renderY + 75 - 50) - 100, (LivingEntity) entity);
 			graphics.drawString(font, this.entity.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}			
 	}
 	
 	@Override
-    public void renderBackground(GuiGraphics graphics) {
+    public void renderBackground(GuiGraphics graphics, int i, int j, float k) {
         graphics.blit(GUI_BG, renderX, renderY, 0, 0,  256, 256);
 	}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scrolled) {
-		return scrollWidget.mouseScrolled(mouseX, mouseY, scrolled)  || super.mouseScrolled(mouseX, mouseY, scrolled);
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrolled, double delta) {
+		return scrollWidget.mouseScrolled(mouseX, mouseY, scrolled, delta)  || super.mouseScrolled(mouseX, mouseY, scrolled, delta);
 	}
 	
 	@Override

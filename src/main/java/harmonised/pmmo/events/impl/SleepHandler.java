@@ -1,6 +1,7 @@
 package harmonised.pmmo.events.impl;
 
-import net.minecraftforge.event.level.SleepFinishedTimeEvent;
+
+import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
 
 public class SleepHandler {
 

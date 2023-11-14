@@ -40,11 +40,13 @@ import javax.annotation.Nonnull;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.codecs.ObjectData;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -64,12 +66,6 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.OnDatapackSyncEvent;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.PacketDistributor.PacketTarget;
-import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.IForgeRegistry;
 
 /**
  * Generic data loader for Codec-parsable data.
@@ -343,13 +339,13 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	public <PACKET> MergeableCodecDataManager<T, V> subscribeAsSyncable(final SimpleChannel channel,
 		final Function<Map<ResourceLocation, T>, PACKET> packetFactory)
 	{
-		MinecraftForge.EVENT_BUS.addListener(this.getDatapackSyncListener(channel, packetFactory));
+		NeoForge.EVENT_BUS.addListener(this.getDatapackSyncListener(channel, packetFactory));
 		return this;
 	}
 	
 	/** Generate an event listener function for the on-datapack-sync event **/
 	private <PACKET> Consumer<OnDatapackSyncEvent> getDatapackSyncListener(final SimpleChannel channel,
-		final Function<Map<ResourceLocation, T>, PACKET> packetFactory)
+																		   final Function<Map<ResourceLocation, T>, PACKET> packetFactory)
 	{
 		return event -> {
 			ServerPlayer player = event.getPlayer();
@@ -359,7 +355,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 				packets.add(packetFactory.apply(Map.of(entry.getKey(), entry.getValue())));
 			}
 
-			PacketTarget target = player == null
+			PacketDistributor.PacketTarget target = player == null
 				? PacketDistributor.ALL.noArg()
 				: PacketDistributor.PLAYER.with(() -> player);
 			packets.forEach(packet -> channel.send(target, packet));

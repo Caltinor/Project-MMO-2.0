@@ -11,12 +11,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ScrollPanel;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
@@ -121,9 +122,9 @@ public class PlayerStatsComponent extends AbstractWidget {
     }
     
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta, double delta) {
         if (!this.isVisible()) return false;
-        return this.statsScroller.mouseScrolled(pMouseX, pMouseY, pDelta) || super.mouseScrolled(pMouseX, pMouseY, pDelta);
+        return this.statsScroller.mouseScrolled(pMouseX, pMouseY, pDelta, delta) || super.mouseScrolled(pMouseX, pMouseY, pDelta, delta);
     }
     
     @Override
@@ -198,7 +199,7 @@ public class PlayerStatsComponent extends AbstractWidget {
         private static final int BASE_HEIGHT = 24;
         
         public StatComponent(Minecraft minecraft, int pX, int pY, String skillKey, SkillData skillData) {
-            super(pX, pY, 123, 24, 0, 167, 25, TEXTURE_LOCATION, pButton -> {});
+            super(pX, pY, 123, 24, /*0, 167, 25,*/ new WidgetSprites(TEXTURE_LOCATION, TEXTURE_LOCATION), pButton -> {});
             this.minecraft = minecraft;
             this.skillName = Component.translatable("pmmo." + skillKey).getString();
             this.skillData = skillData;

@@ -3,10 +3,9 @@ package harmonised.pmmo.api.events;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
-public class FurnaceBurnEvent extends Event{
+public class FurnaceBurnEvent extends Event {
 	ItemStack input;
 	Level level;
 	BlockPos pos;
@@ -14,7 +13,7 @@ public class FurnaceBurnEvent extends Event{
 	/**A Project MMO event for capturing when items are smelted in any sort
 	 * of furnace or similar action.  For compatibility with your mod, whenever
 	 * your smelting behavior successfully executes, post a new instance of this
-	 * event to the {@link MinecraftForge.EVENT_BUS} and PMMO will handle the rest.
+	 * event to the EVENT_BUS and PMMO will handle the rest.
 	 * <br><br>
 	 * The Level and BlockPos arguments are used to check if the block at this
 	 * location belongs to the player so that all experience gained is attributed
@@ -30,9 +29,6 @@ public class FurnaceBurnEvent extends Event{
 		this.level = level;
 		this.pos = pos;
 	}
-	
-	@Override
-	public boolean isCancelable() {return false;}
 	
 	public ItemStack getInput() {return input;}
 	public Level getLevel() {return level;}

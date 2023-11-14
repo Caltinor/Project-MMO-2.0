@@ -7,11 +7,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.OnDatapackSyncEvent;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.PacketDistributor.PacketTarget;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 public class ExecutableListener extends SimplePreparableReloadListener<Boolean> {
 	private Runnable executor;
@@ -40,17 +39,17 @@ public class ExecutableListener extends SimplePreparableReloadListener<Boolean> 
 	public <PACKET> ExecutableListener subscribeAsSyncable(final SimpleChannel channel,
 		final Supplier<PACKET> packetFactory)
 	{
-		MinecraftForge.EVENT_BUS.addListener(this.getDatapackSyncListener(channel, packetFactory));
+		NeoForge.EVENT_BUS.addListener(this.getDatapackSyncListener(channel, packetFactory));
 		return this;
 	}
 	
 	/** Generate an event listener function for the on-datapack-sync event **/
 	private <PACKET> Consumer<OnDatapackSyncEvent> getDatapackSyncListener(final SimpleChannel channel,
-		final Supplier<PACKET> packetFactory)
+																		   final Supplier<PACKET> packetFactory)
 	{
 		return event -> {
 			ServerPlayer player = event.getPlayer();
-			PacketTarget target = player == null
+			PacketDistributor.PacketTarget target = player == null
 				? PacketDistributor.ALL.noArg()
 				: PacketDistributor.PLAYER.with(() -> player);
 			channel.send(target, packetFactory.get());

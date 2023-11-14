@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.util.StringRepresentable;
-import net.minecraftforge.common.IExtensibleEnum;
+import net.neoforged.neoforge.common.IExtensibleEnum;
 
-public enum Operator implements StringRepresentable, IExtensibleEnum{
+public enum Operator implements StringRepresentable, IExtensibleEnum {
 	EQUALS,
 	GREATER_THAN,
 	LESS_THAN,

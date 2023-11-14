@@ -13,12 +13,12 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
 public class JumpHandler {
 
 	@SuppressWarnings("resource")
-	public static void handle(LivingJumpEvent event) {
+	public static void handle(LivingEvent.LivingJumpEvent event) {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		
@@ -31,10 +31,6 @@ public class JumpHandler {
 		boolean serverSide = !player.level().isClientSide; 
 		if (serverSide){			
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
-			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
-				event.setCanceled(true);
-				return;
-			}
 		}
 		//Process perks
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, eventHookOutput));

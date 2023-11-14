@@ -14,7 +14,7 @@ import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
 
 /**This class serves as a run-time cache of data that
  * PmmoSavedData typicaly stores.  

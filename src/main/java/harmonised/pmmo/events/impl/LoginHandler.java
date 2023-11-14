@@ -14,12 +14,12 @@ import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 public class LoginHandler {
 
-	public static void handle(PlayerLoggedInEvent event) {		
+	public static void handle(PlayerEvent.PlayerLoggedInEvent event) {
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
 		

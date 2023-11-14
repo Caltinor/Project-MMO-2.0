@@ -1,104 +1,76 @@
-buildscript {
-    repositories {
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
+    id 'java-library'
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.26'
 }
 
-mixin {
-    config "${mod_id}.mixins.json"
-    add sourceSets.main, "${mod_id}.refmap.json"
-    disableEclipseAddon = true
-
-    debug.export = true
-}
+version = mod_version
+group = mod_group_id
 
 repositories {
+    mavenLocal()
     maven { url "https://maven.theillusivec4.top/" }
+    maven { url "https://maven.blamejared.com" }
     maven {
-    	url 'https://cursemaven.com'
-    	content { includeGroup 'curse.maven' }
-	}
-    maven {
-        name = "ModMaven"
-        url = "https://modmaven.dev"
+        url 'https://cursemaven.com'
+        content { includeGroup 'curse.maven' }
     }
-    maven {
-        url "https://maven.blamejared.com"
-    }
-    flatDir { dirs 'libs' }
 }
 
-version = "${minecraft_version}-${mod_version}"
-group = "harmonised.${mod_id}"
-archivesBaseName = "${mod_id}"
+base {
+    archivesName = mod_id
+}
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-minecraft {
-    mappings channel: 'parchment', version: "2023.07.30-${minecraft_version}"
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    copyIdeResources = true
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
+//minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+        modSource project.sourceSets.main
+    }
 
-    runs {
-        configureEach {
-            jvmArg "-Dterminal.ansi=true"
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
-        client {
-            workingDirectory project.file('run/client')
-        }
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
+    }
 
-        server {
-            workingDirectory project.file('run/server')
-        }
+    gameTestServer {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
 
-        data {
-            workingDirectory project.file('run/client')
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
+    data {
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    implementation "net.neoforged:neoforge:${neo_version}"
+//    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
-    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
-    annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
+//    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
+//    annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+//    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api")
-    //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
-  	compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
-  	compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
-  	compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
-  	compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
-  	compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
-  	
+    compileOnly "top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api"
+    //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")
+//  	compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
+//  	compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
+//  	compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+//  	compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
+//  	compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
+//  	compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
+
   	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
   	//runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
@@ -114,67 +86,216 @@ dependencies {
     //runtimeOnly fg.deobf('curse.maven:mmmdep-499980:4806893s')
 }
 
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
-def replaceProperties = [
-    minecraft_version      : minecraft_version,
-    minecraft_version_range: minecraft_version_range,
-    forge_version          : forge_version,
-    forge_version_range    : forge_version_range,
-    loader_version_range   : loader_version_range,
-    mod_id                 : mod_id,
-    mod_name               : mod_name,
-    mod_version            : mod_version
-]
-processResources {
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+            neo_version         : neo_version, neo_version_range: neo_version_range,
+            loader_version_range: loader_version_range,
+            mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_authors         : mod_authors, mod_description: mod_description, pack_format_number: pack_format_number,
+    ]
     inputs.properties replaceProperties
-    replaceProperties.put 'project', project
 
-    filesMatching(resourceTargets) {
-        expand replaceProperties
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
     }
-}
-
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : "${mod_name} 2.0",
-                "Specification-Vendor"    : "${mod_name}",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "${mod_name}",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
 }
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact reobfArtifact
+        register('mavenJava', MavenPublication) {
+            from components.java
         }
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url "file://${project.projectDir}/repo"
         }
     }
 }
 
-tasks.withType(Copy).all {
-    duplicatesStrategy 'exclude'
-}
-
 tasks.withType(JavaCompile).configureEach {
-    compileJava.options.encoding = 'UTF-8' 
+    options.encoding = 'UTF-8'
 }
 
-compileJava {
-    options.compilerArgs << "-Acrafttweaker.processor.document.output_directory=${file('docsOut')}"
-}
+//
+//buildscript {
+//    repositories {
+//        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+//    }
+//}
+//
+//plugins {
+//    id 'eclipse'
+//    id 'idea'
+//    id 'maven-publish'
+//    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+//    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+//    id 'org.spongepowered.mixin' version '0.7.+'
+//}
+//
+//mixin {
+//    config "${mod_id}.mixins.json"
+//    add sourceSets.main, "${mod_id}.refmap.json"
+//    disableEclipseAddon = true
+//
+//    debug.export = true
+//}
+//
+//repositories {
+//    maven { url "https://maven.theillusivec4.top/" }
+//    maven {
+//    	url 'https://cursemaven.com'
+//    	content { includeGroup 'curse.maven' }
+//	}
+//    maven {
+//        name = "ModMaven"
+//        url = "https://modmaven.dev"
+//    }
+//    maven {
+//        url "https://maven.blamejared.com"
+//    }
+//    flatDir { dirs 'libs' }
+//}
+//
+//version = "${minecraft_version}-${mod_version}"
+//group = "harmonised.${mod_id}"
+//archivesBaseName = "${mod_id}"
+//
+//java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+//
+//println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+//minecraft {
+//    mappings channel: 'parchment', version: "2023.07.30-${minecraft_version}"
+//    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+//    copyIdeResources = true
+//
+//    runs {
+//        configureEach {
+//            jvmArg "-Dterminal.ansi=true"
+//            property 'forge.logging.markers', 'REGISTRIES'
+//            property 'forge.logging.console.level', 'debug'
+//            mods {
+//                "${mod_id}" {
+//                    source sourceSets.main
+//                }
+//            }
+//        }
+//
+//        client {
+//            workingDirectory project.file('run/client')
+//        }
+//
+//        server {
+//            workingDirectory project.file('run/server')
+//        }
+//
+//        data {
+//            workingDirectory project.file('run/client')
+//            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+//        }
+//    }
+//}
+//
+//sourceSets.main.resources { srcDir 'src/generated/resources' }
+//
+//dependencies {
+//    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+//    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+//    //CT Processors
+//    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
+//    annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+//    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
+//
+//    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api")
+//    //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")
+//  	compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
+//  	compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
+//  	compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+//  	compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
+//  	compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
+//  	compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
+//
+//  	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}")
+//  	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
+//  	//runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
+//  	//runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
+//  	//runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+//  	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
+//  	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
+//  	//runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
+//  	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
+//  	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
+//  	//runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
+//    //runtimeOnly fg.deobf('curse.maven:mmmmmmm-225738:4816636')
+//    //runtimeOnly fg.deobf('curse.maven:mmmdep-499980:4806893s')
+//}
+//
+//def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+//def replaceProperties = [
+//    minecraft_version      : minecraft_version,
+//    minecraft_version_range: minecraft_version_range,
+//    forge_version          : forge_version,
+//    forge_version_range    : forge_version_range,
+//    loader_version_range   : loader_version_range,
+//    mod_id                 : mod_id,
+//    mod_name               : mod_name,
+//    mod_version            : mod_version
+//]
+//processResources {
+//    inputs.properties replaceProperties
+//    replaceProperties.put 'project', project
+//
+//    filesMatching(resourceTargets) {
+//        expand replaceProperties
+//    }
+//}
+//
+//jar {
+//    manifest {
+//        attributes([
+//                "Specification-Title"     : "${mod_name} 2.0",
+//                "Specification-Vendor"    : "${mod_name}",
+//                "Specification-Version"   : "1", // We are version 1 of ourselves
+//                "Implementation-Title"    : project.name,
+//                "Implementation-Version"  : project.jar.archiveVersion,
+//                "Implementation-Vendor"   : "${mod_name}",
+//                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+//        ])
+//    }
+//}
+//
+//def reobfFile = file("$buildDir/reobfJar/output.jar")
+//def reobfArtifact = artifacts.add('default', reobfFile) {
+//    type 'jar'
+//    builtBy 'reobfJar'
+//}
+//
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            artifact reobfArtifact
+//        }
+//    }
+//    repositories {
+//        maven {
+//            url "file://${project.projectDir}/mcmodsrepo"
+//        }
+//    }
+//}
+//
+//tasks.withType(Copy).all {
+//    duplicatesStrategy 'exclude'
+//}
+//
+//tasks.withType(JavaCompile).configureEach {
+//    compileJava.options.encoding = 'UTF-8'
+//}
+//
+//compileJava {
+//    options.compilerArgs << "-Acrafttweaker.processor.document.output_directory=${file('docsOut')}"
+//}

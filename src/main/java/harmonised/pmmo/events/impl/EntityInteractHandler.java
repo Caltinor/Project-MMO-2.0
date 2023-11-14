@@ -14,12 +14,12 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 public class EntityInteractHandler {
 	
 	@SuppressWarnings("resource")
-	public static void handle(EntityInteract event) {
+	public static void handle(PlayerInteractEvent.EntityInteract event) {
 		Core core = Core.get(event.getEntity().level());
 		if (!core.isActionPermitted(ReqType.ENTITY_INTERACT, event.getTarget(), event.getEntity())) {
 			event.setCanceled(true);

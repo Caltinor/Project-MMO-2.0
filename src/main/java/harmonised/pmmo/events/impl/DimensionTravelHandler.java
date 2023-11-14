@@ -9,7 +9,7 @@ import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 
 public class DimensionTravelHandler {
 

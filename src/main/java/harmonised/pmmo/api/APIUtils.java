@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import harmonised.pmmo.core.IDataStorage;
+import net.neoforged.bus.api.Event;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.google.common.base.Preconditions;
@@ -40,9 +43,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class APIUtils {
 	/* NOTES
@@ -79,7 +79,7 @@ public class APIUtils {
 	 * providing a negative value in @{link levelChange} will reduce the player's
 	 * level.
 	 * 
-	 * @param skill skill name.  Skills are case sensitive and usually lowercase.
+	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose level is being changed
 	 * @param levelChange the number of levels being changed by.  negative values will reduce the player level.
 	 * @return true if the level was in fact changed.
@@ -92,7 +92,7 @@ public class APIUtils {
 	
 	/**Gets the raw xp value associated with the specified skill and player.
 	 * 
-	 * @param skill skill name.  Skills are case sensitive and usually lowercase.
+	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose experience is being sought.
 	 * @return the raw experience earned in the specified skill.
 	 */
@@ -104,7 +104,7 @@ public class APIUtils {
 	
 	/**Sets the raw XP value for the player in the skill specified.
 	 * 
-	 * @param skill skill name.  Skills are case sensitive and usually lowercase.
+	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose skill is being set.
 	 * @param xpRaw the new experience amount to be set for this skill
 	 */
@@ -117,7 +117,7 @@ public class APIUtils {
 	/**Changes the player's current experience in the specified skill by the amount.
 	 * Negative values will reduce current experience.
 	 * 
-	 * @param skill skill name. Skills are case sensitive and usually lowercase.
+	 * @param skill skill name. Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose experience is being changed.
 	 * @param change the amount being changed by.  Negative values reduce experience.
 	 * @return true if the modification was successful.

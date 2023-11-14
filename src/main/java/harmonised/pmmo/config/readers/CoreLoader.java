@@ -2,6 +2,11 @@ package harmonised.pmmo.config.readers;
 
 import java.util.List;
 import java.util.Map;
+
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -24,12 +29,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.event.TagsUpdatedEvent.UpdateCause;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CoreLoader {
@@ -37,7 +37,7 @@ public class CoreLoader {
 	
 	@SubscribeEvent
 	public static void onTagLoad(TagsUpdatedEvent event) {
-		Core core = Core.get(event.getUpdateCause() == UpdateCause.CLIENT_PACKET_RECEIVED ? LogicalSide.CLIENT : LogicalSide.SERVER);
+		Core core = Core.get(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED ? LogicalSide.CLIENT : LogicalSide.SERVER);
 		core.getLoader().ITEM_LOADER.postProcess(event.getRegistryAccess());
 		core.getLoader().BLOCK_LOADER.postProcess(event.getRegistryAccess());
 		core.getLoader().ENTITY_LOADER.postProcess(event.getRegistryAccess());
