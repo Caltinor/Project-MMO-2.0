@@ -49,6 +49,8 @@ public class LangProvider extends LanguageProvider {
 	}
 
 	//=========PERK NAMES======================
+	public static final Translation PERK_SKILL_SRC = Translation.Builder.start("perk.pmmo.skill_source")
+		.addLocale(Locale.EN_US, "For Skill: %s").build();
 	public static final Translation PERK_BREAK_SPEED = Translation.Builder.start("perk.pmmo.break_speed")
 		.addLocale(Locale.EN_US, "Break Speed Modifier").build();
 	public static final Translation PERK_BREAK_SPEED_DESC = Translation.Builder.start("perk.pmmo.break_speed.description")
@@ -97,12 +99,16 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Effect: %s").build();
 	public static final Translation PERK_EFFECT_STATUS_2 = Translation.Builder.start("perk.pmmo.effect.status2")
 			.addLocale(Locale.EN_US, "Lvl:%s for %ss").build();
-	public static final Translation PERK_FALL_SAVE = Translation.Builder.start("perk.pmmo.fall_save")
-		.addLocale(Locale.EN_US, "Reduce Fall Damage").build();
+	public static final Translation PERK_FALL_SAVE = Translation.Builder.start("perk.pmmo.damage_reduce")
+		.addLocale(Locale.EN_US, "Reduce Received Damage").build();
 	public static final Translation PERK_FALL_SAVE_DESC = Translation.Builder.start("perk.pmmo.fall_save.description")
 		.addLocale(Locale.EN_US, "Prevents damage when not on cooldown").build();
 	public static final Translation PERK_FALL_SAVE_STATUS_1 = Translation.Builder.start("perk.pmmo.fall_save.status1")
 		.addLocale(Locale.EN_US, "Damage Prevented: %s").build();
+	public static final Translation PERK_FALL_SAVE_STATUS_2 = Translation.Builder.start("perk.pmmo.fall_save.status2")
+			.addLocale(Locale.EN_US, "For Damage: %s").build();
+	public static final Translation PERK_FALL_SAVE_STATUS_3 = Translation.Builder.start("perk.pmmo.fall_save.status3")
+			.addLocale(Locale.EN_US, "Max Reduction: %s").build();
 	public static final Translation PERK_TAME_BOOST = Translation.Builder.start("perk.pmmo.tame_boost")
 		.addLocale(Locale.EN_US, "Tamed Animal Boost").build();
 	public static final Translation PERK_TAME_BOOST_DESC = Translation.Builder.start("perk.pmmo.tame_boost.description")
@@ -1483,37 +1489,9 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation ENUM_CONSUME = Translation.Builder.start("pmmo.enum.CONSUME")
 		.addLocale(Locale.EN_US, "Eat/Drink").build();
 	public static final Translation ENUM_RECEIVE_DAMAGE = Translation.Builder.start("pmmo.enum.RECEIVE_DAMAGE")
-		.addLocale(Locale.EN_US, "Receive Damage (Unspecified)").build();
-	public static final Translation ENUM_FROM_MOBS = Translation.Builder.start("pmmo.enum.FROM_MOBS")
-		.addLocale(Locale.EN_US, "Receive Mob Damage").build();
-	public static final Translation ENUM_FROM_PLAYERS = Translation.Builder.start("pmmo.enum.FROM_PLAYERS")
-		.addLocale(Locale.EN_US, "Receive Player Damage").build();
-	public static final Translation ENUM_FROM_ANIMALS = Translation.Builder.start("pmmo.enum.FROM_ANIMALS")
-		.addLocale(Locale.EN_US, "Receive Animal Damage").build();
-	public static final Translation ENUM_FROM_PROJECTILES = Translation.Builder.start("pmmo.enum.FROM_PROJECTILES")
-		.addLocale(Locale.EN_US, "Receive Projectile Damage").build();
-	public static final Translation ENUM_FROM_MAGIC = Translation.Builder.start("pmmo.enum.FROM_MAGIC")
-		.addLocale(Locale.EN_US, "Receive Magic Damage").build();
-	public static final Translation ENUM_FROM_ENVIRONMENT = Translation.Builder.start("pmmo.enum.FROM_ENVIRONMENT")
-		.addLocale(Locale.EN_US, "Receive Environmental Damage").build();
-	public static final Translation ENUM_FROM_IMPACT = Translation.Builder.start("pmmo.enum.FROM_IMPACT")
-		.addLocale(Locale.EN_US, "Receive Impact Damage").build();
-	public static final Translation ENUM_DEAL_MELEE_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_MELEE_DAMAGE")
-		.addLocale(Locale.EN_US, "Deal Melee Damage (Unspecified)").build();
-	public static final Translation ENUM_MELEE_TO_MOBS = Translation.Builder.start("pmmo.enum.MELEE_TO_MOBS")
-		.addLocale(Locale.EN_US, "Deal Melee Damage to Mobs").build();
-	public static final Translation ENUM_MELEE_TO_PLAYERS = Translation.Builder.start("pmmo.enum.MELEE_TO_PLAYERS")
-		.addLocale(Locale.EN_US, "Deal Melee Damage to Players").build();
-	public static final Translation ENUM_MELEE_TO_ANIMALS = Translation.Builder.start("pmmo.enum.MELEE_TO_ANIMALS")
-		.addLocale(Locale.EN_US, "Deal Melee Damage to Animals").build();
-	public static final Translation ENUM_DEAL_RANGED_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_RANGED_DAMAGE")
-		.addLocale(Locale.EN_US, "Deal Ranged Damage (Unspecified)").build();
-	public static final Translation ENUM_RANGED_TO_MOBS = Translation.Builder.start("pmmo.enum.RANGED_TO_MOBS")
-		.addLocale(Locale.EN_US, "Deal Ranged Damage to Mobs").build();
-	public static final Translation ENUM_RANGED_TO_PLAYERS = Translation.Builder.start("pmmo.enum.RANGED_TO_PLAYERS")
-		.addLocale(Locale.EN_US, "Deal Ranged Damage to Players").build();
-	public static final Translation ENUM_RANGED_TO_ANIMALS = Translation.Builder.start("pmmo.enum.RANGED_TO_ANIMALS")
-		.addLocale(Locale.EN_US, "Deal Ranged Damage to Animals").build();
+		.addLocale(Locale.EN_US, "Receive Damage").build();
+	public static final Translation ENUM_DEAL_MELEE_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_DAMAGE")
+		.addLocale(Locale.EN_US, "Deal Damage").build();
 	public static final Translation ENUM_DEATH = Translation.Builder.start("pmmo.enum.DEATH")
 		.addLocale(Locale.EN_US, "Death").build();
 	public static final Translation ENUM_ENCHANT = Translation.Builder.start("pmmo.enum.ENCHANT")

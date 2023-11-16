@@ -84,6 +84,9 @@ dependencies {
   	//runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
     //runtimeOnly fg.deobf('curse.maven:mmmmmmm-225738:4816636')
     //runtimeOnly fg.deobf('curse.maven:mmmdep-499980:4806893s')
+    //runtimeOnly fg.deobf('curse.maven:pst-850298:4745035')
+    //runtimeOnly fg.deobf('curse.maven:attributefix-280510:4844658')
+    //runtimeOnly fg.deobf('curse.maven:maxhealthfix-492246:4714765')
 }
 
 tasks.withType(ProcessResources).configureEach {

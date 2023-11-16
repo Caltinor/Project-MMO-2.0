@@ -9,10 +9,7 @@ import java.util.function.BiFunction;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.setup.datagen.LangProvider;
-import harmonised.pmmo.util.Functions;
-import harmonised.pmmo.util.Reference;
-import harmonised.pmmo.util.RegistryUtil;
-import harmonised.pmmo.util.TagBuilder;
+import harmonised.pmmo.util.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
@@ -179,20 +176,37 @@ public class FeaturePerks {
 			.addDefaults(TagBuilder.start()
 					.withDouble(APIUtils.PER_LEVEL, 0.025)
 					.withFloat(APIUtils.DAMAGE_IN, 0)
+					.withBool(APIUtils.MULTIPLICATIVE, false)
 					.withString(APIUtils.DAMAGE_TYPE, "missing")
 					.withString(APIUtils.DAMAGE_TYPE_IN, "omitted").build())
 			.setStart((player, nbt) -> {
-				float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+				float saved = getSavedAmount(nbt);
 				float baseDamage = nbt.contains(APIUtils.DAMAGE_OUT)
 						? nbt.getFloat(APIUtils.DAMAGE_OUT)
 						: nbt.getFloat(APIUtils.DAMAGE_IN);
-				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, Math.max(baseDamage - saved, 0)).build();
+				float finalDamage = nbt.getBoolean(APIUtils.MULTIPLICATIVE)
+						? Math.max(baseDamage - (baseDamage * saved), 0)
+						: Math.max(baseDamage - saved, 0);
+				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, finalDamage).build();
 			})
 			.setDescription(LangProvider.PERK_FALL_SAVE_DESC.asComponent())
 			.setStatus((player, nbt) -> List.of(
-					LangProvider.PERK_FALL_SAVE_STATUS_1.asComponent(nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)),
+					LangProvider.PERK_SKILL_SRC.asComponent(nbt.getString(APIUtils.SKILLNAME)),
+					LangProvider.PERK_FALL_SAVE_STATUS_1.asComponent(nbt.getBoolean(APIUtils.MULTIPLICATIVE)
+							? getSavedAmount(nbt)*100 + "%"
+							: getSavedAmount(nbt)),
+					LangProvider.PERK_FALL_SAVE_STATUS_3.asComponent(nbt.getBoolean(APIUtils.MULTIPLICATIVE)
+							? nbt.getDouble(APIUtils.MAX_BOOST)*100 + "%"
+							: nbt.getDouble(APIUtils.MAX_BOOST)),
+					LangProvider.PERK_FALL_SAVE_STATUS_2.asComponent(nbt.getString(APIUtils.DAMAGE_TYPE_IN)),
 					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
 
+	private static float getSavedAmount(CompoundTag nbt) {
+		float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+		if (nbt.contains(APIUtils.MAX_BOOST))
+			saved = Math.min(nbt.getFloat(APIUtils.MAX_BOOST), saved);
+		return saved;
+	}
 	public static final String APPLICABLE_TO = "applies_to";
 	public static final Perk DAMAGE_BOOST = Perk.begin()
 			.addConditions((player, nbt) -> {
