@@ -9,7 +9,7 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.minecraftforge.common.data.LanguageProvider;
 
 public class LangProvider extends LanguageProvider {
 	private String locale;
