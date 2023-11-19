@@ -266,8 +266,8 @@ public class Core {
 		//WORN Modification
 		List<ItemStack> wornItems = new ArrayList<>();
 		player.getArmorSlots().forEach(wornItems::add);
-		if (CurioCompat.hasCurio)
-			CurioCompat.getItems(player).forEach(wornItems::add);
+		/*if (CurioCompat.hasCurio)
+			CurioCompat.getItems(player).forEach(wornItems::add);*/
 		wornItems.forEach((stack) -> {
 			ResourceLocation itemID = RegistryUtil.getId(stack);
 			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?

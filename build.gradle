@@ -56,32 +56,32 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-//    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    //annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
-//    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
-//    annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-//    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
+    //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
+    //annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    //annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
 
-    compileOnly "top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api"
+    //compileOnly "top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api"
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")
-//  	compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
-//  	compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
-//  	compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
-//  	compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
-//  	compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-//  	compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
+    //compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
+    //compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
+    //compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+    //compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
+    //compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
+    //compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
 
-  	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}")
-  	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
-  	//runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
-  	//runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
-  	//runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
-  	//runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
-  	//runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-  	//runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
-  	//runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
-  	//runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
-  	//runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
+    //runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}")
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
+    //runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
+    //runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
+    //runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+    //runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
+    //runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
+    //runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
+    //runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
+    //runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
+    //runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
     //runtimeOnly fg.deobf('curse.maven:mmmmmmm-225738:4816636')
     //runtimeOnly fg.deobf('curse.maven:mmmdep-499980:4806893s')
     //runtimeOnly fg.deobf('curse.maven:pst-850298:4745035')

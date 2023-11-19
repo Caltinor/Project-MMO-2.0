@@ -52,7 +52,7 @@ public class CommonSetup {
 		
 		event.enqueueWork(() -> CriteriaTriggers.register("pmmo:skill_up", SkillUpTrigger.SKILL_UP));
 		//=========COMPAT=============
-		CurioCompat.hasCurio = ModList.get().isLoaded("curios");
+		// CurioCompat.hasCurio = ModList.get().isLoaded("curios");
 		if (ModList.get().isLoaded("ftbquests")) FTBQHandler.init();
 	}
 	
