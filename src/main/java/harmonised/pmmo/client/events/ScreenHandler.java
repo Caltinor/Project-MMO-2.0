@@ -18,7 +18,7 @@ public class ScreenHandler {
         Screen screen = event.getScreen();
     
         if (screen instanceof InventoryScreen inv && !Config.HIDE_SKILL_BUTTON.get()) {
-            event.addListener(new PMMOButton(inv, inv.getGuiLeft() + 126, inv.height / 2 - 22, 20, 18, 148, 0, 19));
+            event.addListener(new PMMOButton(inv, inv.getGuiLeft() + 126, inv.height / 2 - 22, 20, 18));
         }
     }
     

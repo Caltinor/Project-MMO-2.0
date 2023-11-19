@@ -13,7 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 
 public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryMenu> {
-    public static final ResourceLocation PLAYER_STATS_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/player_stats.png");
     private final PlayerStatsComponent playerStatsComponent = new PlayerStatsComponent();
     
     public float xMouse;
@@ -34,7 +33,7 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
         this.playerStatsComponent.toggleVisibility();
         this.leftPos = this.playerStatsComponent.updateScreenPosition(this.width, this.imageWidth);
         
-        this.addRenderableWidget(new PMMOButton(this, this.leftPos + Config.SKILL_BUTTON_X.get() - 22, this.height / 2 +Config.SKILL_BUTTON_Y.get(), 20, 18, 148, 0, 19));
+        this.addRenderableWidget(new PMMOButton(this, this.leftPos + Config.SKILL_BUTTON_X.get() - 22, this.height / 2 +Config.SKILL_BUTTON_Y.get(), 20, 18));
         this.addWidget(this.playerStatsComponent);
     }
     
@@ -69,7 +68,7 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
         int i = this.leftPos;
         int j = this.topPos;
         graphics.blit(INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, i + 51, j + 75, 30, 0, 0, (float)mouseX, (float)mouseY, partial, this.minecraft.player);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, i + 26, j + 8, i + 75, j + 78, 30, 0.06F, (float) mouseX, (float) mouseY, this.minecraft.player);
     }
     
     protected boolean isHovering(int pX, int pY, int pWidth, int pHeight, double pMouseX, double pMouseY) {
