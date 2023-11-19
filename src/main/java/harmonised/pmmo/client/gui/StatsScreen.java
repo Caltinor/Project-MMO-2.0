@@ -59,9 +59,9 @@ public class StatsScreen extends Screen{
 	
 	@Override
 	protected void init() {
-		renderX = this.width/2 - 128;
-		renderY = this.height/2 - 128;
-		addRenderableWidget(scrollSupplier.apply(renderX+25, renderY+30));
+		renderX = this.width / 2 - 128;
+		renderY = this.height / 2 - 128;
+		addRenderableWidget(scrollSupplier.apply(renderX + 25, renderY + 30));
 		addRenderableWidget(Button.builder(LangProvider.OPEN_GLOSSARY.asComponent(), b -> Minecraft.getInstance().setScreen(new GlossarySelectScreen()))
 				.bounds(this.width-84, 4, 80, 20).build());
 	}
@@ -78,7 +78,8 @@ public class StatsScreen extends Screen{
 			graphics.drawString(font, renderStack.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}
 		else if (entity != null && entity instanceof LivingEntity) {
-			InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, this.renderX+width - 20, this.renderY+12, 10, 0, 0, 0f, (float)(this.renderX+ 51) - 100, (float)(this.renderY + 75 - 50) - 100, (LivingEntity) entity);
+			InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, this.renderX, this.renderY, this.renderX + 65, this.renderY + 40,
+				10, 0.06F, mouseX, mouseY, (LivingEntity) entity);
 			graphics.drawString(font, this.entity.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}			
 	}
