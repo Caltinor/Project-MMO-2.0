@@ -186,6 +186,11 @@ public class PlayerStatsComponent extends AbstractWidget {
     }
     
     static class StatComponent extends ImageButton {
+        private static final WidgetSprites BACKGROUND_SPRITES = new WidgetSprites(
+            new ResourceLocation(Reference.MOD_ID, "stat_background"),
+            new ResourceLocation(Reference.MOD_ID, "stat_background_highlighted")
+        );
+        
         private final Minecraft minecraft;
     
         private final String skillName;
@@ -199,7 +204,7 @@ public class PlayerStatsComponent extends AbstractWidget {
         private static final int BASE_HEIGHT = 24;
         
         public StatComponent(Minecraft minecraft, int pX, int pY, String skillKey, SkillData skillData) {
-            super(pX, pY, 123, 24, /*0, 167, 25,*/ new WidgetSprites(TEXTURE_LOCATION, TEXTURE_LOCATION), pButton -> {});
+            super(pX, pY, 123, 24, BACKGROUND_SPRITES, pButton -> {});
             this.minecraft = minecraft;
             this.skillName = Component.translatable("pmmo." + skillKey).getString();
             this.skillData = skillData;

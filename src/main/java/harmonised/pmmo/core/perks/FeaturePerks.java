@@ -56,8 +56,10 @@ public class FeaturePerks {
 				
 				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
 				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, operation);
-				instance.removeModifier(attributeID);
-				instance.addPermanentModifier(modifier);
+				if (instance != null) {
+					instance.removeModifier(attributeID);
+					instance.addPermanentModifier(modifier);
+				}
 				return NONE;
 			})
 			.setDescription(LangProvider.PERK_ATTRIBUTE_DESC.asComponent())
@@ -66,9 +68,10 @@ public class FeaturePerks {
 				String skillname = settings.getString(APIUtils.SKILLNAME);
 				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
 				return List.of(
-				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
-				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
-				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
+					LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
+					LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo." + skillname)),
+					LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel)
+				);
 			}).build();
 
 	public static final Perk TEMP_ATTRIBUTE = Perk.begin()
@@ -82,9 +85,12 @@ public class FeaturePerks {
 
 				UUID attributeID = Functions.getReliableUUID("temp/"+nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
 				AttributeModifier modifier = new AttributeModifier(attributeID, "temporary PMMO-modifier based on user skill", boost, operation);
-				if (instance.hasModifier(modifier))
-					instance.removeModifier(attributeID);
-				instance.addTransientModifier(modifier);
+				if (instance != null) {
+					if (instance.hasModifier(modifier)) {
+						instance.removeModifier(attributeID);
+					}
+					instance.addTransientModifier(modifier);
+				}
 				return NONE;
 			})
 			.setStop((player, nbt) -> {

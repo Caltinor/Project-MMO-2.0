@@ -1,16 +1,11 @@
 package harmonised.pmmo.client.gui.component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderType;
@@ -21,10 +16,21 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
-public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extends AbstractWidget
-{
-    private static final ResourceLocation ICONS = new ResourceLocation("textures/gui/resource_packs.png");
-    private static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation("textures/gui/widgets.png");
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extends AbstractWidget {
+    protected static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(
+        new ResourceLocation("widget/button"),
+        new ResourceLocation("widget/button_disabled"),
+        new ResourceLocation("widget/button_highlighted")
+    );
+    private static final ResourceLocation SORT_UP_SPRITE = new ResourceLocation("statistics/sort_up");
+    private static final ResourceLocation SORT_DOWN_SPRITE = new ResourceLocation("statistics/sort_down");
+    
     private static final int ENTRY_HEIGHT = 20;
     private final Component title;
     private final Consumer<T> selectCallback;
@@ -45,7 +51,8 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
         graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        graphics.blitInscribed(WIDGETS_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4);//, 200, 20, 0, 66);
+        ResourceLocation location = BUTTON_SPRITES.get(this.isActive(), this.isMouseOver(mouseX, mouseY));
+        graphics.blitSprite(location, this.getX(), this.getY(), this.getWidth(), this.getHeight()/*, 20, 4, 200, 20, 0, 66*/);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (selected != null)
@@ -62,7 +69,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
             graphics.fill(RenderType.gui(), getX(),     getY() + ENTRY_HEIGHT - 1, getX() + width,     getY() + ENTRY_HEIGHT + boxHeight - 1, 0xFFFFFFFF);
             graphics.fill(RenderType.gui(), getX() + 1, getY() + ENTRY_HEIGHT,     getX() + width - 1, getY() + ENTRY_HEIGHT + boxHeight - 2, 0xFF000000);
 
-            graphics.blit(ICONS, getX() + width - 17, getY() + 6, 114, 5, 11, 7);
+            graphics.blitSprite(SORT_UP_SPRITE, getX() + width - 22, getY() + 1, 20, 18);
 
             T hoverEntry = getEntryAtPosition(mouseX, mouseY);
 
@@ -89,18 +96,19 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
             graphics.pose().popPose();
         }
         else {
-            graphics.blit(ICONS, getX() + width - 17, getY() + 6, 82, 20, 11, 7);
+            graphics.blitSprite(SORT_DOWN_SPRITE, getX() + width - 22, getY() + 1, 20, 18);
         }
     }
 
     @Override
     public int getHeight() {
-        if (extended)
+        if (extended) {
             return ENTRY_HEIGHT * (Math.min(entries.size(), 4) + 1) + 1;
+        }
         return ENTRY_HEIGHT;
     }
     
-    public boolean isExtended() {return extended;}
+    public boolean isExtended() { return extended; }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
