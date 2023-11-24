@@ -173,7 +173,8 @@ public class AutoItem {
 					@SuppressWarnings("deprecation")
 					FoodProperties properties = stack.getItem().getFoodProperties();
 					Float nutritionScale = (float)properties.getNutrition() * properties.getSaturationModifier();
-					outMap.put(skill, xp * nutritionScale.longValue());
+					Float xpAward = nutritionScale * (float) xp;
+					outMap.put(skill, xpAward.longValue());
 				});
 			}
 		}
