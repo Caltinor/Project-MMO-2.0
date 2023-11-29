@@ -1,6 +1,7 @@
 package harmonised.pmmo.util;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -13,7 +14,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class RegistryUtil {
 	public static ResourceLocation getId(ItemStack stack) {
@@ -21,7 +21,7 @@ public class RegistryUtil {
 	}
 
 	public static ResourceLocation getId(Item item) {
-		return ForgeRegistries.ITEMS.getKey(item);
+		return BuiltInRegistries.ITEM.getKey(item);
 	}
 
 	public static ResourceLocation getId(BlockState blockState) {
@@ -29,7 +29,7 @@ public class RegistryUtil {
 	}
 
 	public static ResourceLocation getId(Block block) {
-		return ForgeRegistries.BLOCKS.getKey(block);
+		return BuiltInRegistries.BLOCK.getKey(block);
 	}
 
 	public static ResourceLocation getId(Holder<Biome> biome) {
@@ -37,7 +37,7 @@ public class RegistryUtil {
 	}
 
 	public static ResourceLocation getId(SoundEvent sound) {
-		return ForgeRegistries.SOUND_EVENTS.getKey(sound);
+		return BuiltInRegistries.SOUND_EVENT.getKey(sound);
 	}
 
 	public static ResourceLocation getId(Entity entity) {
@@ -45,15 +45,15 @@ public class RegistryUtil {
 	}
 
 	public static ResourceLocation getId(EntityType<?> entity) {
-		return ForgeRegistries.ENTITY_TYPES.getKey(entity);
+		return BuiltInRegistries.ENTITY_TYPE.getKey(entity);
 	}
 	
 	public static ResourceLocation getId(Enchantment enchant) {
-		return ForgeRegistries.ENCHANTMENTS.getKey(enchant);
+		return BuiltInRegistries.ENCHANTMENT.getKey(enchant);
 	}
 
 	public static ResourceLocation getId(MobEffect effect) {
-		return ForgeRegistries.MOB_EFFECTS.getKey(effect);
+		return BuiltInRegistries.MOB_EFFECT.getKey(effect);
 	}
 
 	public static ResourceLocation getId(DamageSource source) {

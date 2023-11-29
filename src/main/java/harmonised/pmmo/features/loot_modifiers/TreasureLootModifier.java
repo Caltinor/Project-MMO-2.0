@@ -1,8 +1,8 @@
 package harmonised.pmmo.features.loot_modifiers;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.serialization.Codec;
@@ -39,7 +39,7 @@ public class TreasureLootModifier extends LootModifier {
 		this.chance = chance;
 		this.drop = lootItemID.equals(new ResourceLocation("air"))
 				? Items.AIR.getDefaultInstance() 
-				: new ItemStack(ForgeRegistries.ITEMS.getValue(lootItemID));
+				: new ItemStack(BuiltInRegistries.ITEM.get(lootItemID));
 		this.drop.setCount(count);
 		this.count = count;
 	}

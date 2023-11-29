@@ -22,11 +22,11 @@ import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.core.nbt.NBTUtils;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.Functions;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 
 public record ObjectData(
@@ -50,7 +50,7 @@ public record ObjectData(
 
 		public Map<ResourceLocation, SalvageData> salvage() {
 			return salvage.entrySet().stream()
-					.filter(entry -> !ForgeRegistries.ITEMS.getValue(entry.getKey()).equals(Items.AIR))
+					.filter(entry -> !BuiltInRegistries.ITEM.get(entry.getKey()).equals(Items.AIR))
 					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		}
 		@Override

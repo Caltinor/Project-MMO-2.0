@@ -40,13 +40,13 @@ import javax.annotation.Nonnull;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.codecs.ObjectData;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.simple.SimpleChannel;
-import net.neoforged.neoforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -92,7 +92,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	private final Consumer<Map<ResourceLocation, T>> finalizer;
 	private final Gson gson;
 	private final Supplier<T> defaultImpl;
-	private final IForgeRegistry<V> registry;
+	private final Registry<V> registry;
 	private Map<ResourceLocation, T> defaultSettings = new HashMap<>();
 	private Map<ResourceLocation, T> overrideSettings = new HashMap<>();
 	
@@ -111,7 +111,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
 	 */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
-			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, IForgeRegistry<V> registry)
+			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, Registry<V> registry)
 	{
 		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON, defaultImpl, registry);
 	}
@@ -134,7 +134,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * raw json to a JsonElement, which the Codec then parses into a proper java object.
 	 */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
-			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, IForgeRegistry<V> registry)
+			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, Registry<V> registry)
 	{
 		this.folderName = folderName;
 		this.logger = logger;
@@ -282,14 +282,14 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			for (String str : dataValue.getTagValues()) {
 				MsLoggy.INFO.log(LOG_CODE.DATA, "Applying Setting to Tag: {}", str);
 				if (str.startsWith("#")) {
-					tags.addAll(registry.tags()
-							.getTag(TagKey.create(registry.getRegistryKey(), new ResourceLocation(str.substring(1))))
+					tags.addAll(registry
+							.getTag(TagKey.create(registry.key(), new ResourceLocation(str.substring(1))))
 							.stream()
-							.map(item -> registry.getKey(item))
+							.map(item -> item.key().location())
 							.toList());
 				}
 				else if (str.endsWith(":*")) {
-					tags.addAll(registry.getKeys()
+					tags.addAll(registry.keySet()
 							.stream()
 							.filter(key -> key.getNamespace().equals(str.replace(":*", "")))
 							.toList());

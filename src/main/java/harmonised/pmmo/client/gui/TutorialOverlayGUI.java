@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.joml.Matrix4f;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -59,7 +59,7 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 		if (!mc.getDebugOverlay().showDebugScreen()) {
 			// IDENTIFY LINES
 			if (mc.level.getBlockState(bhr.getBlockPos()).getBlock()
-					.equals(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Config.SALVAGE_BLOCK.get())))) {
+					.equals(BuiltInRegistries.BLOCK.get(new ResourceLocation(Config.SALVAGE_BLOCK.get())))) {
 				lines = new ArrayList<>(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent()
 						.withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), tooltipWidth));
 				if (mc.player.isCrouching()
@@ -148,7 +148,7 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 		for (Map.Entry<ResourceLocation, SalvageData> entry : Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER
 				.getData(RegistryUtil.getId(stack)).salvage().entrySet()) {
 			outList.add(MutableComponent.create(
-					new ItemStack(ForgeRegistries.ITEMS.getValue(entry.getKey())).getDisplayName().getContents()));
+					new ItemStack(BuiltInRegistries.ITEM.get(entry.getKey())).getDisplayName().getContents()));
 			SalvageData data = entry.getValue();
 			if (!data.levelReq().isEmpty()) {
 				outList.add(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE));

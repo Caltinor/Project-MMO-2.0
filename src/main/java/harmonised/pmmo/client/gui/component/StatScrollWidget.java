@@ -46,6 +46,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -63,7 +64,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class StatScrollWidget extends ScrollPanel {
 	private static interface Element {public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess);}
@@ -183,7 +183,7 @@ public class StatScrollWidget extends ScrollPanel {
 				break;}
 			case BLOCKS: {
 				populateBlocks(
-					ForgeRegistries.BLOCKS.getValues(),
+						BuiltInRegistries.BLOCK.stream().toList(),
 					events,
 					type == null ? ReqType.BLOCK_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
 					false,
@@ -191,7 +191,7 @@ public class StatScrollWidget extends ScrollPanel {
 				break;}
 			case ENTITY: {
 				populateEntity(
-					ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(mc.level)).filter(entity -> entity != null).toList(),
+					BuiltInRegistries.ENTITY_TYPE.stream().map(entityType -> entityType.create(mc.level)).filter(entity -> entity != null).toList(),
 					events,
 					type == null ? ReqType.ENTITY_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
 					false,
@@ -206,7 +206,7 @@ public class StatScrollWidget extends ScrollPanel {
 					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, true, false, false);
 				break;}
 			case ENCHANTS: {
-				populateEnchants(ForgeRegistries.ENCHANTMENTS.getValues().stream().map(ench -> RegistryUtil.getId(ench)).toList(), skill);
+				populateEnchants(BuiltInRegistries.ENCHANTMENT.stream().map(ench -> RegistryUtil.getId(ench)).toList(), skill);
 				break;}
 			default:{}
 			}
@@ -224,19 +224,19 @@ public class StatScrollWidget extends ScrollPanel {
 				break;}
 			case BLOCKS: {
 				populateBlocks(
-						ForgeRegistries.BLOCKS.getValues(),
+						BuiltInRegistries.BLOCK.stream().toList(),
 						type == null ? EventType.BLOCK_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
 						reqs, false, skill);
 				break;}
 			case ENTITY: {
 				populateEntity(
-						ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(Minecraft.getInstance().level)).filter(entity -> entity != null).toList(),
+						BuiltInRegistries.ENTITY_TYPE.stream().map(entityType -> entityType.create(Minecraft.getInstance().level)).filter(entity -> entity != null).toList(),
 						type == null ? EventType.ENTITY_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
 						reqs, false, skill);
 				break;}
 			case EFFECTS: {
 				populateEffects(
-						ForgeRegistries.MOB_EFFECTS.getValues(),
+						BuiltInRegistries.MOB_EFFECT.stream().toList(),
 						new EventType[] {EventType.EFFECT},
 						reqs, skill);
 				break;}
@@ -285,7 +285,7 @@ public class StatScrollWidget extends ScrollPanel {
 				break;}
 			case BLOCKS: {
 				populateBlocks(
-						ForgeRegistries.BLOCKS.getValues(),
+						BuiltInRegistries.BLOCK.stream().toList(),
 						events,	reqs, true, skill);
 				break;}
 			case DIMENSIONS: {
@@ -417,7 +417,7 @@ public class StatScrollWidget extends ScrollPanel {
 					}
 				}
 			}
-			if (holder.size() > 0) {
+			if (!holder.isEmpty()) {
 				content.addAll(TextElement.build(LangProvider.EVENT_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 				content.addAll(holder);
 			}
@@ -462,7 +462,7 @@ public class StatScrollWidget extends ScrollPanel {
 			if (enchants.size() > 1)
 				content.addAll(TextElement.build(Component.literal(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
-			for (int i = 0; i <= ForgeRegistries.ENCHANTMENTS.getValue(ench).getMaxLevel(); i++) {
+			for (int i = 0; i <= BuiltInRegistries.ENCHANTMENT.get(ench).getMaxLevel(); i++) {
 				Map<String, Integer> reqMap = core.getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 					holder.addAll(TextElement.build(Component.literal(String.valueOf(i)), this.width, 1, 0xFFFFFF, false, 0));
@@ -580,7 +580,7 @@ public class StatScrollWidget extends ScrollPanel {
 			content.addAll(TextElement.build(LangProvider.SALVAGE_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 			for (Map.Entry<ResourceLocation, SalvageData> salvageEntry : salvage.entrySet()) {
 				SalvageData data = salvageEntry.getValue();
-				ItemStack resultStack = new ItemStack(ForgeRegistries.ITEMS.getValue(salvageEntry.getKey()));
+				ItemStack resultStack = new ItemStack(BuiltInRegistries.ITEM.get(salvageEntry.getKey()));
 				content.addAll(TextElement.build(resultStack.getDisplayName(), this.width, step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
 				if (!data.levelReq().isEmpty()) {
 					content.addAll(TextElement.build(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE), this.width, step(1), 0xFFFFFF, false, 0));
@@ -666,10 +666,10 @@ public class StatScrollWidget extends ScrollPanel {
 		if (!loader.mobModifiers().isEmpty()) {
 			content.addAll(TextElement.build(LangProvider.MOB_MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, step(1), 0xFFFFFF, false, 0));
 			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : loader.mobModifiers().entrySet()) {
-				Entity entity = ForgeRegistries.ENTITY_TYPES.getValue(mobMap.getKey()).create(mc.level);
+				Entity entity = BuiltInRegistries.ENTITY_TYPE.get(mobMap.getKey()).create(mc.level);
 				content.add(new RenderableElement(entity.getName(), step(1), 0xFFFFFF, Config.SALVAGE_ITEM_COLOR.get(), entity));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
-					Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(map.getKey()));
+					Attribute attribute = BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(map.getKey()));
 					MutableComponent text = attribute == null ? Component.literal(map.getKey()) : Component.translatable(attribute.getDescriptionId());
 					text.append(Component.literal(": "+map.getValue()));
 					content.addAll(TextElement.build(text, this.width, step(2), 0xFFFFFF, false, 0xFFFFFF));

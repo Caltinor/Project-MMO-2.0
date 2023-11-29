@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -16,7 +17,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 
@@ -41,7 +41,7 @@ public class ValidBlockCondition implements LootItemCondition{
 		BlockState brokenBlock = t.getParamOrNull(LootContextParams.BLOCK_STATE);
 		if (brokenBlock != null) {
 			if (tag.isPresent())
-				return ForgeRegistries.BLOCKS.tags().getTag(tag.get()).contains(brokenBlock.getBlock());
+				return brokenBlock.is(tag.get());
 			if (block.isPresent())
 				return brokenBlock.getBlock().equals(block.get());
 		}
@@ -58,7 +58,7 @@ public class ValidBlockCondition implements LootItemCondition{
 					.xmap(s -> s.map(v -> TagKey.create(Registries.BLOCK, new ResourceLocation(v))), t -> t.map(k -> k.location().toString()))
 					.forGetter(c -> c.tag),
 			Codec.STRING.optionalFieldOf("block")
-					.xmap(s -> s.map(v -> ForgeRegistries.BLOCKS.getValue(new ResourceLocation(v))), t -> t.map(k -> RegistryUtil.getId(k).toString()))
+					.xmap(s -> s.map(v -> BuiltInRegistries.BLOCK.get(new ResourceLocation(v))), t -> t.map(k -> RegistryUtil.getId(k).toString()))
 					.forGetter(c -> c.block)
 	).apply(instance, ValidBlockCondition::new));
 }

@@ -42,6 +42,7 @@ import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -49,7 +50,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagFile;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class PackGenerator {
 	public static final String PACKNAME = "generated_pack";
@@ -60,7 +60,7 @@ public class PackGenerator {
 	
 	private enum Category {
 		@SuppressWarnings("unchecked")
-		ITEMS("pmmo/items", server -> ForgeRegistries.ITEMS.getKeys(), (id) -> {
+		ITEMS("pmmo/items", server -> BuiltInRegistries.ITEM.keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			ObjectData existing = core.getLoader().ITEM_LOADER.getData(id);
 			
@@ -111,7 +111,7 @@ public class PackGenerator {
 					applyDefaults ? existing.veinData() : VeinData.EMPTY);
 			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
-		BLOCKS("pmmo/blocks", server -> ForgeRegistries.BLOCKS.getKeys(), (id) -> {
+		BLOCKS("pmmo/blocks", server -> BuiltInRegistries.BLOCK.keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			ObjectData existing = core.getLoader().BLOCK_LOADER.getData(id);
 
@@ -157,7 +157,7 @@ public class PackGenerator {
 			raw.remove("nbt_bonuses");
 			raw.remove("salvage");
 			return gson.toJson(raw);}),
-		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITY_TYPES.getKeys(), (id) -> {
+		ENTITIES("pmmo/entities", server -> BuiltInRegistries.ENTITY_TYPE.keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			ObjectData existing = core.getLoader().ENTITY_LOADER.getData(id);
 
@@ -234,7 +234,7 @@ public class PackGenerator {
 					applyDefaults ? existing.mobModifiers() : new HashMap<>());
 			JsonObject raw = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
-		ENCHANTMENTS("pmmo/enchantments", server -> ForgeRegistries.ENCHANTMENTS.getKeys(), (id) -> {
+		ENCHANTMENTS("pmmo/enchantments", server -> BuiltInRegistries.ENCHANTMENT.keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			EnhancementsData existing = core.getLoader().ENCHANTMENT_LOADER.getData(id);
 
@@ -242,7 +242,7 @@ public class PackGenerator {
 					new EnhancementsData(applyOverride,
 							applyDefaults ? existing.skillArray() : new HashMap<>())).result().get());
 			}),
-		EFFECTS("pmmo/effects", server -> ForgeRegistries.MOB_EFFECTS.getKeys(), (id) -> {
+		EFFECTS("pmmo/effects", server -> BuiltInRegistries.MOB_EFFECT.keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			EnhancementsData existing = core.getLoader().EFFECT_LOADER.getData(id);
 

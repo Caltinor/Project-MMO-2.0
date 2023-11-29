@@ -1,8 +1,8 @@
 package harmonised.pmmo.features.loot_modifiers;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.serialization.Codec;
@@ -31,7 +31,7 @@ public class RareDropModifier extends LootModifier {
 	public RareDropModifier(LootItemCondition[] conditionsIn, ResourceLocation lootItemID, int count, double chance) {
 		super(conditionsIn);
 		this.chance = chance;
-		this.drop = new ItemStack(ForgeRegistries.ITEMS.getValue(lootItemID));
+		this.drop = new ItemStack(BuiltInRegistries.ITEM.get(lootItemID));
 		this.drop.setCount(count);
 	}
 

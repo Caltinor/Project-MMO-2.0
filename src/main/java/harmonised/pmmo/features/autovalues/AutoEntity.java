@@ -7,6 +7,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.AttributeKey;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class AutoEntity {
 	public static final EventType[] EVENTTYPES = {EventType.BREED, EventType.DEATH, EventType.ENTITY, EventType.RIDING,
@@ -30,7 +30,7 @@ public class AutoEntity {
 			return new HashMap<>();
 				
 		Map<String, Long> outMap = new HashMap<>();
-		EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(entityID);
+		EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.get(entityID);
 		switch (type) {
 		case RIDING: {
 			if (entityType.is(Reference.RIDEABLE_TAG)) {
@@ -63,7 +63,7 @@ public class AutoEntity {
 	
 	//========================GETTER METHODS==============================
 	private static Map<String, Long> getXpMap(ResourceLocation entityID, EventType type) {
-		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(entityID);
+		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) BuiltInRegistries.ENTITY_TYPE.get(entityID);
 		Map<String, Long> outMap = new HashMap<>();
 		double healthScale = getAttribute(entity, Attributes.MAX_HEALTH) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH.key, 0d);
 		double speedScale = getAttribute(entity, Attributes.MOVEMENT_SPEED) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED.key, 0d);

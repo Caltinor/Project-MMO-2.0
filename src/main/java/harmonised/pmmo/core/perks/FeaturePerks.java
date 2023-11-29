@@ -10,6 +10,8 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.*;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
@@ -29,7 +31,6 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
@@ -38,7 +39,7 @@ public class FeaturePerks {
 	
 	private static Attribute getAttribute(CompoundTag nbt) {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
-				name -> ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(name)));
+				name -> BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(name)));
 	}
 	
 	public static final Perk ATTRIBUTE = Perk.begin()
@@ -103,7 +104,7 @@ public class FeaturePerks {
 	
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
 		MobEffect effect;
-		if ((effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString("effect")))) != null) {
+		if ((effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(nbt.getString("effect")))) != null) {
 			int skillLevel = nbt.getInt(APIUtils.SKILL_LEVEL);
 			int configDuration = nbt.getInt(APIUtils.DURATION);
 			double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
@@ -131,7 +132,7 @@ public class FeaturePerks {
 			.setTick((player, nbt, ticks) -> EFFECT_SETTER.apply(player, nbt))
 			.setDescription(LangProvider.PERK_EFFECT_DESC.asComponent())
 			.setStatus((player, nbt) -> List.of(
-					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString("effect"))).getDescriptionId())),
+					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(nbt.getString("effect"))).getDescriptionId())),
 					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER),
 							(nbt.getInt(APIUtils.DURATION) * nbt.getDouble(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL))/20)))
 			.build();
@@ -218,12 +219,12 @@ public class FeaturePerks {
 			.addConditions((player, nbt) -> {
 				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
 				for (String key : type) {
-					if (key.startsWith("#") && ForgeRegistries.ITEMS.tags()
-							.getTag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation(key.substring(1))))
+					if (key.startsWith("#") && BuiltInRegistries.ITEM
+							.getTag(TagKey.create(Registries.ITEM, new ResourceLocation(key.substring(1))))
 							.stream().anyMatch(item -> player.getMainHandItem().getItem().equals(item))) {
 						return true;
 					}
-					else if (key.endsWith(":*") && ForgeRegistries.ITEMS.getValues().stream()
+					else if (key.endsWith(":*") && BuiltInRegistries.ITEM.stream()
 							.anyMatch(item -> player.getMainHandItem().getItem().equals(item))) {
 						return true;
 					}
@@ -251,7 +252,7 @@ public class FeaturePerks {
 				List<MutableComponent> lines = new ArrayList<>();
 				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
 				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
-					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entry.getAsString()));
+					Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(entry.getAsString()));
 					line1.append(item.equals(Items.AIR) ? Component.literal(entry.getAsString()) : item.getDescription());
 					line1.append(Component.literal(", "));
 				}

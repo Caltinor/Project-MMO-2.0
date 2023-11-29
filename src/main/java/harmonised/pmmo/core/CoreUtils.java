@@ -12,6 +12,7 @@ import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Style;
@@ -19,7 +20,6 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class CoreUtils {
 
@@ -152,7 +152,7 @@ public class CoreUtils {
 		if (applyDefaultNegatives && config.isEmpty())
 			config = AutoValueConfig.ITEM_PENALTIES.get();
 		for (Map.Entry<ResourceLocation, Integer> effect : config.entrySet()) {
-			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());
+			MobEffect effectRoot = BuiltInRegistries.MOB_EFFECT.get(effect.getKey());
 			if (effectRoot != null)
 				effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue(), true, true));
 		}

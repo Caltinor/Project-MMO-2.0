@@ -42,6 +42,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -60,7 +61,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 /**<p>This class bridges the gap between various systems within Project MMO.
@@ -469,7 +469,7 @@ public class Core {
 			//conduct random check for the total count possible and add each succcess to the output
 			for (int i = 0; i < result.getValue().salvageMax(); i++) {
 				if (player.getRandom().nextDouble() < Math.min(max, base + bonus)) {
-					player.drop(new ItemStack(ForgeRegistries.ITEMS.getValue(result.getKey())), false, true);
+					player.drop(new ItemStack(BuiltInRegistries.ITEM.get(result.getKey())), false, true);
 					for (Map.Entry<String, Long> award : result.getValue().xpAward().entrySet()) {
 						xpAwards.merge(award.getKey(), award.getValue(), (o, n) -> o + n);
 					}

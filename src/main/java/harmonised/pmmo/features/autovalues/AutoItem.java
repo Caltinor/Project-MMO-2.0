@@ -13,6 +13,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,7 +35,6 @@ import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 public class AutoItem {
 	//Default values set by MC or used by wooden items
@@ -52,7 +52,7 @@ public class AutoItem {
 			return new HashMap<>();
 		
 		final Map<String, Integer> outMap = new HashMap<>();
-		ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(stackID));
+		ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(stackID));
 		switch (type) {
 		case WEAR: {
 			if (stack.getItem() instanceof TieredItem) {
@@ -130,7 +130,7 @@ public class AutoItem {
 			return new HashMap<>();
 		
 		Map<String, Long> outMap = new HashMap<>();
-		ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(stackID));
+		ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(stackID));
 		switch (type) {
 		case ANVIL_REPAIR: {
 			if (stack.isRepairable()) {
@@ -178,12 +178,12 @@ public class AutoItem {
 			}
 		}
 		case BREW: {
-			if (ForgeRegistries.ITEMS.tags().getTag(Reference.BREWABLES).contains(stack.getItem()))
+			if (stack.is(Reference.BREWABLES))
 				outMap.putAll(AutoValueConfig.BREWABLES_OVERRIDE.get());
 			break;
 		}		
 		case SMELT: {
-			if (ForgeRegistries.ITEMS.tags().getTag(Reference.SMELTABLES).contains(stack.getItem()))
+			if (stack.is(Reference.SMELTABLES))
 				outMap.putAll(AutoValueConfig.SMELTABLES_OVERRIDE.get());
 			break;
 		}

@@ -55,7 +55,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
-			AttributeInstance reachAttribute = event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.get());
+			AttributeInstance reachAttribute = event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.value());
 			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.CREATIVE_REACH.get())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
@@ -63,7 +63,7 @@ public class EventHandler {
 			}
 		}
 		else {
-			event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
+			event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.value()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
 	}
 	@SubscribeEvent
