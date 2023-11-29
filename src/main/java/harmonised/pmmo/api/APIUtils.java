@@ -779,6 +779,7 @@ public class APIUtils {
 	
 	public static final String AMBIENT = "ambient";
 	public static final String VISIBLE = "visible";
+	public static final String SHOW_ICON = "show_icon";
 	
 	public static final String EFFECTS = "effects";
 	

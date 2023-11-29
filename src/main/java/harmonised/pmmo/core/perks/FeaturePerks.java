@@ -112,7 +112,8 @@ public class FeaturePerks {
 			int amplifier = nbt.getInt(APIUtils.MODIFIER);
 			boolean ambient = nbt.getBoolean(APIUtils.AMBIENT);
 			boolean visible = nbt.getBoolean(APIUtils.VISIBLE);
-			player.addEffect(new MobEffectInstance(effect, duration, amplifier, ambient, visible));
+			boolean showIcon = nbt.getBoolean(APIUtils.SHOW_ICON);
+			player.addEffect(new MobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon));
 		}
 		return NONE;
 	};
@@ -123,7 +124,8 @@ public class FeaturePerks {
 					.withInt(APIUtils.PER_LEVEL, 1)
 					.withInt(APIUtils.MODIFIER, 0)
 					.withBool(APIUtils.AMBIENT, false)
-					.withBool(APIUtils.VISIBLE, true).build())
+					.withBool(APIUtils.VISIBLE, true)
+					.withBool(APIUtils.SHOW_ICON, true).build())
 			.setStart(EFFECT_SETTER)
 			.setTick((player, nbt, ticks) -> EFFECT_SETTER.apply(player, nbt))
 			.setDescription(LangProvider.PERK_EFFECT_DESC.asComponent())
