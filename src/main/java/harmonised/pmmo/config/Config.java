@@ -314,9 +314,11 @@ public class Config {
 						, "for example if level 3 is 1000k xp and the player has 1020 and dies.  the player will only lose"
 						, "the [Loss On Death] of the 20 xp above the level's base.")
 						.define("Lose Only Excess", true);
-		GLOBAL_MODIFIER = builder.comment("Modifies how much xp is earned.  This is multiplicative to the XP.")
+		GLOBAL_MODIFIER = builder.comment("Modifies how much xp is earned.  This is multiplicative to the XP.",
+						"(Mutually Exclusive to [Skill Modifiers])")
 						.define("Global Modifier", 1.0);
-		SKILL_MODIFIERS = TomlConfigHelper.defineObject(builder.comment("Modifies xp gains for specific skills.  This is multiplicative to the XP.")
+		SKILL_MODIFIERS = TomlConfigHelper.defineObject(builder.comment("Modifies xp gains for specific skills.  This is multiplicative to the XP.",
+						"(Mutuallyl Exclusive to [Global Modifier])")
 							, "Skill Modifiers"
 							, CodecTypes.DOUBLE_CODEC
 							, Collections.singletonMap("agility", 1.0)); 			
