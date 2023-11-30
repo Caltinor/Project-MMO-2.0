@@ -28,7 +28,8 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 	EFFECT(false, false, true, "magic"),
 	FISH(true, false, false, "fishing"),					
 	SMELT(true, false, false, "smithing"),
-	GROW(false, true, false, "farming"),					
+	GROW(false, true, false, "farming"),
+	GIVEN_AS_TRADE(true, false, false, "charisma"),
 	/**Use either of the INCREASE/DECREASE variants for future implementations.*/
 	@Deprecated(forRemoval = true, since = "1.20")
 	HEALTH_CHANGE(false, false, false, ""),
@@ -41,6 +42,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 	ACTIVATE_BLOCK(false, true, false, "dexterity"),		
 	ACTIVATE_ITEM(true, false, false, "dexterity"),			
 	ENTITY(false, false, true, "charisma"),
+	RECEIVED_AS_TRADE(true, false, false, "charisma"),
 	RIDING(false, false, true, "taming"),						
 	SHIELD_BLOCK(false, false, true, "combat"),				
 	SKILL_UP(false, false, false, ""),								

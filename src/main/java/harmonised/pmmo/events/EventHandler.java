@@ -29,6 +29,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
+import net.minecraftforge.event.entity.player.TradeWithVillagerEvent;
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
@@ -244,4 +245,6 @@ public class EventHandler {
 	public static void onEnchant(EnchantEvent event) {
 		EnchantHandler.handle(event);
 	}
+	@SubscribeEvent
+	public static void onTrade(TradeWithVillagerEvent event) {TradeHandler.handle(event);}
 }
