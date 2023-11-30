@@ -230,4 +230,6 @@ public class EventHandler {
 	public static void onEnchant(EnchantEvent event) {
 		EnchantHandler.handle(event);
 	}
+	@SubscribeEvent
+	public static void onTrade(TradeWithVillagerEvent event) {TradeHandler.handle(event);}
 }
