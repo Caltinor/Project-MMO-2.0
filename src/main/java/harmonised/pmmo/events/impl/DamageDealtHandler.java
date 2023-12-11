@@ -32,14 +32,13 @@ public class DamageDealtHandler {
 		//Check the source entity isn't null.  This should also reduce
 		//the number of events processed.
 		if (event.getSource().getEntity() == null) return;
-		
+
 		//Execute actual logic only if the source is a player
-		if (event.getSource().getEntity() instanceof Player) {
+		if (event.getSource().getEntity() instanceof Player player) {
 			LivingEntity target = event.getEntity();
 			//Confirm our target is a living entity
 			if (target == null) return;
-			
-			Player player = (Player) event.getSource().getEntity();
+
 			if (target.equals(player))
 				return;
 			Core core = Core.get(player.level());
@@ -74,11 +73,10 @@ public class DamageDealtHandler {
 	public static void handle(LivingDamageEvent event) {
 		if (event.getSource().getEntity() == null) return;
 		//Execute actual logic only if the source is a player
-		if (event.getSource().getEntity() instanceof Player) {
+		if (event.getSource().getEntity() instanceof Player player) {
 			LivingEntity target = event.getEntity();
 			if (target == null) return;
-			
-			Player player = (Player) event.getSource().getEntity();
+
 			if (target.equals(player)) return;
 			
 			Core core = Core.get(player.level());

@@ -126,6 +126,7 @@ public class FeaturePerks {
 			.addDefaults(TagBuilder.start().withString("effect", "modid:effect")
 					.withInt(APIUtils.DURATION, 100)
 					.withInt(APIUtils.PER_LEVEL, 1)
+					.withInt(APIUtils.MIN_LEVEL, 1)
 					.withInt(APIUtils.MODIFIER, 0)
 					.withBool(APIUtils.AMBIENT, false)
 					.withBool(APIUtils.VISIBLE, true)
