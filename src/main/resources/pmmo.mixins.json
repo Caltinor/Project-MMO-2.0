@@ -1,19 +1,20 @@
 {
-    "required": true,
-    "minVersion": "0.7",
-    "package": "harmonised.pmmo.mixin",
-    "compatibilityLevel": "JAVA_17",
-    "refmap": "pmmo.refmap.json",
-    "mixins": [
-        "AbstractFurnaceTileEntityShrinkMixin",
-        "EnchantApplyMixin",
-        "ServerLevelMixin"
-    ],
-    "server": [
-    ],
-    "client": [
-    ],
-    "injectors": {
-        "defaultRequire": 1
+  "required": true,
+  "minVersion": "0.7",
+  "package": "harmonised.pmmo.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "pmmo.refmap.json",
+  "mixins": [
+    "AbstractFurnaceTileEntityShrinkMixin",
+    "CampfireMixin",
+    "EnchantApplyMixin",
+    "ServerLevelMixin"
+  ],
+  "server": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
   }
 }
