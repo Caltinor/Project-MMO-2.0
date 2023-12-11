@@ -119,7 +119,8 @@ public class PerksConfig {
 		//=====================SUBMERGED DEFAULTS========================
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:breath").withString(APIUtils.SKILLNAME, "swimming").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:effect").withString(APIUtils.SKILLNAME, "swimming")
-				.withString("effect", "minecraft:night_vision").build());
+				.withString("effect", "minecraft:night_vision")
+				.withInt(APIUtils.MIN_LEVEL, 25).build());
 		defaultSettings.put(EventType.SUBMERGED, new ArrayList<>(bodyList));
 		bodyList.clear();
 
@@ -147,15 +148,6 @@ public class PerksConfig {
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging")
 				.withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build());
 		defaultSettings.put(EventType.DEAL_DAMAGE, new ArrayList<>(bodyList));
-		bodyList.clear();
-
-		//=====================SPRINTING================================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:effect").withString(APIUtils.SKILLNAME, "agility")
-				.withString("effect", "minecraft:speed")
-				.withInt(APIUtils.MODIFIER, 2)
-				.withInt(APIUtils.PER_LEVEL, 1)
-				.withInt(APIUtils.DURATION, 20).build());
-		defaultSettings.put(EventType.SPRINTING, new ArrayList<>(bodyList));
 	}
 	
 	
