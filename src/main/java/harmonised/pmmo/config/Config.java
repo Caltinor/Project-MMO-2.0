@@ -316,10 +316,10 @@ public class Config {
 						"(Mutually Exclusive to [Skill Modifiers])")
 						.define("Global Modifier", 1.0);
 		SKILL_MODIFIERS = TomlConfigHelper.defineObject(builder.comment("Modifies xp gains for specific skills.  This is multiplicative to the XP.",
-						"(Mutuallyl Exclusive to [Global Modifier])")
+						"(Mutually Exclusive to [Global Modifier])")
 							, "Skill Modifiers"
 							, CodecTypes.DOUBLE_CODEC
-							, Collections.singletonMap("agility", 1.0)); 			
+							, Collections.singletonMap("example_skill", 1.0));
 					
 		
 		//========LINEAR SECTION===============
