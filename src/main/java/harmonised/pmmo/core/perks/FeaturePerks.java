@@ -9,9 +9,10 @@ import java.util.function.BiFunction;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.setup.datagen.LangProvider;
-import harmonised.pmmo.util.*;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import harmonised.pmmo.util.Functions;
+import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
@@ -39,7 +41,7 @@ public class FeaturePerks {
 	
 	private static Attribute getAttribute(CompoundTag nbt) {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
-				name -> BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(name)));
+				name -> ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(name)));
 	}
 	
 	public static final Perk ATTRIBUTE = Perk.begin()
@@ -57,10 +59,8 @@ public class FeaturePerks {
 				
 				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
 				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, operation);
-				if (instance != null) {
-					instance.removeModifier(attributeID);
-					instance.addPermanentModifier(modifier);
-				}
+				instance.removeModifier(attributeID);
+				instance.addPermanentModifier(modifier);
 				return NONE;
 			})
 			.setDescription(LangProvider.PERK_ATTRIBUTE_DESC.asComponent())
@@ -69,10 +69,9 @@ public class FeaturePerks {
 				String skillname = settings.getString(APIUtils.SKILLNAME);
 				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
 				return List.of(
-					LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
-					LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo." + skillname)),
-					LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel)
-				);
+				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
+				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
+				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
 			}).build();
 
 	public static final Perk TEMP_ATTRIBUTE = Perk.begin()
@@ -86,12 +85,9 @@ public class FeaturePerks {
 
 				UUID attributeID = Functions.getReliableUUID("temp/"+nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
 				AttributeModifier modifier = new AttributeModifier(attributeID, "temporary PMMO-modifier based on user skill", boost, operation);
-				if (instance != null) {
-					if (instance.hasModifier(modifier)) {
-						instance.removeModifier(attributeID);
-					}
-					instance.addTransientModifier(modifier);
-				}
+				if (instance.hasModifier(modifier))
+					instance.removeModifier(attributeID);
+				instance.addTransientModifier(modifier);
 				return NONE;
 			})
 			.setStop((player, nbt) -> {
@@ -104,11 +100,12 @@ public class FeaturePerks {
 	
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
 		MobEffect effect;
-		if ((effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(nbt.getString("effect")))) != null) {
+		if ((effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString("effect")))) != null) {
 			int skillLevel = nbt.getInt(APIUtils.SKILL_LEVEL);
 			int configDuration = nbt.getInt(APIUtils.DURATION);
 			double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
 			int calculatedDuration = (int)((double)skillLevel * (double) configDuration * perLevel);
+			calculatedDuration = Math.min(nbt.getInt(APIUtils.MAX_BOOST), calculatedDuration);
 			int duration = player.hasEffect(effect) && player.getEffect(effect).getDuration() > calculatedDuration
 					? player.getEffect(effect).getDuration() 
 					: calculatedDuration;
@@ -127,6 +124,7 @@ public class FeaturePerks {
 					.withInt(APIUtils.DURATION, 100)
 					.withInt(APIUtils.PER_LEVEL, 1)
 					.withInt(APIUtils.MIN_LEVEL, 1)
+					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 					.withInt(APIUtils.MODIFIER, 0)
 					.withBool(APIUtils.AMBIENT, false)
 					.withBool(APIUtils.VISIBLE, true)
@@ -135,7 +133,7 @@ public class FeaturePerks {
 			.setTick((player, nbt, ticks) -> EFFECT_SETTER.apply(player, nbt))
 			.setDescription(LangProvider.PERK_EFFECT_DESC.asComponent())
 			.setStatus((player, nbt) -> List.of(
-					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(nbt.getString("effect"))).getDescriptionId())),
+					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString("effect"))).getDescriptionId())),
 					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER),
 							(nbt.getInt(APIUtils.DURATION) * nbt.getDouble(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL))/20)))
 			.build();
@@ -169,9 +167,13 @@ public class FeaturePerks {
 	
 	public static final Perk BREATH = Perk.begin()
 			.addConditions((player, nbt) -> player.getAirSupply() < 2)
-			.addDefaults(TagBuilder.start().withLong(APIUtils.COOLDOWN, 600l).withDouble(APIUtils.PER_LEVEL, 1d).build())
+			.addDefaults(TagBuilder.start()
+					.withLong(APIUtils.COOLDOWN, 600l)
+					.withDouble(APIUtils.PER_LEVEL, 1d)
+					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE).build())
 			.setStart((player, nbt) -> {
 				int perLevel = Math.max(1, (int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)));
+				perLevel = Math.min(nbt.getInt(APIUtils.MAX_BOOST), perLevel);
 				player.setAirSupply(player.getAirSupply() + perLevel);
 				player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
 				return NONE;
@@ -186,48 +188,33 @@ public class FeaturePerks {
 			.addDefaults(TagBuilder.start()
 					.withDouble(APIUtils.PER_LEVEL, 0.025)
 					.withFloat(APIUtils.DAMAGE_IN, 0)
-					.withBool(APIUtils.MULTIPLICATIVE, false)
 					.withString(APIUtils.DAMAGE_TYPE, "missing")
+					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 					.withString(APIUtils.DAMAGE_TYPE_IN, "omitted").build())
 			.setStart((player, nbt) -> {
-				float saved = getSavedAmount(nbt);
+				float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+				saved = Math.min(nbt.getInt(APIUtils.MAX_BOOST), saved);
 				float baseDamage = nbt.contains(APIUtils.DAMAGE_OUT)
 						? nbt.getFloat(APIUtils.DAMAGE_OUT)
 						: nbt.getFloat(APIUtils.DAMAGE_IN);
-				float finalDamage = nbt.getBoolean(APIUtils.MULTIPLICATIVE)
-						? Math.max(baseDamage - (baseDamage * saved), 0)
-						: Math.max(baseDamage - saved, 0);
-				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, finalDamage).build();
+				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, Math.max(baseDamage - saved, 0)).build();
 			})
 			.setDescription(LangProvider.PERK_FALL_SAVE_DESC.asComponent())
 			.setStatus((player, nbt) -> List.of(
-					LangProvider.PERK_SKILL_SRC.asComponent(nbt.getString(APIUtils.SKILLNAME)),
-					LangProvider.PERK_FALL_SAVE_STATUS_1.asComponent(nbt.getBoolean(APIUtils.MULTIPLICATIVE)
-							? getSavedAmount(nbt)*100 + "%"
-							: getSavedAmount(nbt)),
-					LangProvider.PERK_FALL_SAVE_STATUS_3.asComponent(nbt.getBoolean(APIUtils.MULTIPLICATIVE)
-							? nbt.getDouble(APIUtils.MAX_BOOST)*100 + "%"
-							: nbt.getDouble(APIUtils.MAX_BOOST)),
-					LangProvider.PERK_FALL_SAVE_STATUS_2.asComponent(nbt.getString(APIUtils.DAMAGE_TYPE_IN)),
+					LangProvider.PERK_FALL_SAVE_STATUS_1.asComponent(nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)),
 					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
 
-	private static float getSavedAmount(CompoundTag nbt) {
-		float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
-		if (nbt.contains(APIUtils.MAX_BOOST))
-			saved = Math.min(nbt.getFloat(APIUtils.MAX_BOOST), saved);
-		return saved;
-	}
 	public static final String APPLICABLE_TO = "applies_to";
 	public static final Perk DAMAGE_BOOST = Perk.begin()
 			.addConditions((player, nbt) -> {
 				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
 				for (String key : type) {
-					if (key.startsWith("#") && BuiltInRegistries.ITEM
-							.getTag(TagKey.create(Registries.ITEM, new ResourceLocation(key.substring(1))))
+					if (key.startsWith("#") && ForgeRegistries.ITEMS.tags()
+							.getTag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation(key.substring(1))))
 							.stream().anyMatch(item -> player.getMainHandItem().getItem().equals(item))) {
 						return true;
 					}
-					else if (key.endsWith(":*") && BuiltInRegistries.ITEM.stream()
+					else if (key.endsWith(":*") && ForgeRegistries.ITEMS.getValues().stream()
 							.anyMatch(item -> player.getMainHandItem().getItem().equals(item))) {
 						return true;
 					}
@@ -242,9 +229,11 @@ public class FeaturePerks {
 				.withList(FeaturePerks.APPLICABLE_TO, StringTag.valueOf("weapon:id"))
 				.withDouble(APIUtils.PER_LEVEL, 0.05)
 				.withDouble(APIUtils.BASE, 1d)
+				.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 				.withBool(APIUtils.MULTIPLICATIVE, true).build())
 			.setStart((player, nbt) -> {
 				float damageModification = (float)(nbt.getDouble(APIUtils.BASE) + nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+				damageModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), damageModification);
 				float damage = nbt.getBoolean(APIUtils.MULTIPLICATIVE) 
 						? nbt.getFloat(APIUtils.DAMAGE_IN) * damageModification
 						: nbt.getFloat(APIUtils.DAMAGE_IN) + damageModification;
@@ -255,7 +244,7 @@ public class FeaturePerks {
 				List<MutableComponent> lines = new ArrayList<>();
 				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
 				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
-					Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(entry.getAsString()));
+					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entry.getAsString()));
 					line1.append(item.equals(Items.AIR) ? Component.literal(entry.getAsString()) : item.getDescription());
 					line1.append(Component.literal(", "));
 				}

@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -42,6 +43,7 @@ public class PerksImpl {
 
 				float existingSpeedModification = nbt.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE);
 				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus) + existingSpeedModification;
+				speedModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), speedModification);
 				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			})
 			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())
@@ -67,6 +69,7 @@ public class PerksImpl {
 	
 	public static CompoundTag getDefaults() {
 		TagBuilder builder = TagBuilder.start();
+		builder.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE);
 		for (ToolAction action : DIG_ACTIONS) {
 			builder.withFloat(action.name(), 0f);
 		}
@@ -83,7 +86,10 @@ public class PerksImpl {
 	public static final String ANIMAL_ID = "tamed";
 	
 	public static final Perk TAME_BOOST = Perk.begin()
-			.addDefaults(TagBuilder.start().withString(APIUtils.SKILLNAME, "taming").withDouble(APIUtils.PER_LEVEL, 1d).build())
+			.addDefaults(TagBuilder.start()
+					.withString(APIUtils.SKILLNAME, "taming")
+					.withDouble(APIUtils.PER_LEVEL, 1d)
+					.withDouble(APIUtils.MAX_BOOST, Double.MAX_VALUE).build())
 			.setStart((player, nbt) -> {
 				if (player.level() instanceof ServerLevel) {
 					ServerLevel world = (ServerLevel) player.level();
@@ -95,7 +101,8 @@ public class PerksImpl {
 					for (Map.Entry<Attribute, Double> atr : ANIMAL_ATTRIBUTES.entrySet()) {
 						AttributeInstance instance = animal.getAttribute(atr.getKey());
 						if (instance == null) continue;
-						AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "Taming boost", perLevel * atr.getValue() * nbt.getInt(APIUtils.SKILL_LEVEL), Operation.ADDITION);
+						double boost = Mth.clamp(perLevel * atr.getValue() * nbt.getInt(APIUtils.SKILL_LEVEL), 0, nbt.getDouble(APIUtils.MAX_BOOST));
+						AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "Taming boost", boost, Operation.ADDITION);
 						instance.addPermanentModifier(modifier);
 					}
 				}
