@@ -13,14 +13,19 @@ import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -184,7 +189,19 @@ public class FeaturePerks {
 					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
 
 	public static final Perk DAMAGE_REDUCE = Perk.begin()
-			.addConditions((player, nbt) -> nbt.getString(APIUtils.DAMAGE_TYPE).equals(nbt.getString(APIUtils.DAMAGE_TYPE_IN)))
+			.addConditions((player, nbt) -> {
+				String perkApplicableDamageType = nbt.getString(APIUtils.DAMAGE_TYPE_IN);
+				Registry<DamageType> damageRegistry = player.level().registryAccess().registry(Registries.DAMAGE_TYPE).get();
+				ResourceKey<DamageType> resourceKey = ResourceKey.create(damageRegistry.key(), new ResourceLocation(nbt.getString(APIUtils.DAMAGE_TYPE)));
+				if (perkApplicableDamageType.startsWith("#") && damageRegistry
+						.getTag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(perkApplicableDamageType.substring(1)))
+								).stream().anyMatch(typeTag -> typeTag.contains(damageRegistry.getHolder(resourceKey).get())))
+					return true;
+				else if (perkApplicableDamageType.endsWith(":*") && perkApplicableDamageType.substring(0, perkApplicableDamageType.indexOf(':'))
+						.equals(nbt.getString(APIUtils.DAMAGE_TYPE).substring(0, nbt.getString(APIUtils.DAMAGE_TYPE).indexOf(':'))))
+					return true;
+				return perkApplicableDamageType.equals(nbt.getString(APIUtils.DAMAGE_TYPE));
+			})
 			.addDefaults(TagBuilder.start()
 					.withDouble(APIUtils.PER_LEVEL, 0.025)
 					.withFloat(APIUtils.DAMAGE_IN, 0)
