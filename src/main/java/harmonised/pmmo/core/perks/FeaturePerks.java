@@ -105,6 +105,7 @@ public class FeaturePerks {
 			int configDuration = nbt.getInt(APIUtils.DURATION);
 			double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
 			int calculatedDuration = (int)((double)skillLevel * (double) configDuration * perLevel);
+			calculatedDuration = Math.min(nbt.getInt(APIUtils.MAX_BOOST), calculatedDuration);
 			int duration = player.hasEffect(effect) && player.getEffect(effect).getDuration() > calculatedDuration
 					? player.getEffect(effect).getDuration() 
 					: calculatedDuration;
@@ -123,6 +124,7 @@ public class FeaturePerks {
 					.withInt(APIUtils.DURATION, 100)
 					.withInt(APIUtils.PER_LEVEL, 1)
 					.withInt(APIUtils.MIN_LEVEL, 1)
+					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 					.withInt(APIUtils.MODIFIER, 0)
 					.withBool(APIUtils.AMBIENT, false)
 					.withBool(APIUtils.VISIBLE, true)
@@ -165,9 +167,13 @@ public class FeaturePerks {
 	
 	public static final Perk BREATH = Perk.begin()
 			.addConditions((player, nbt) -> player.getAirSupply() < 2)
-			.addDefaults(TagBuilder.start().withLong(APIUtils.COOLDOWN, 600l).withDouble(APIUtils.PER_LEVEL, 1d).build())
+			.addDefaults(TagBuilder.start()
+					.withLong(APIUtils.COOLDOWN, 600l)
+					.withDouble(APIUtils.PER_LEVEL, 1d)
+					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE).build())
 			.setStart((player, nbt) -> {
 				int perLevel = Math.max(1, (int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)));
+				perLevel = Math.min(nbt.getInt(APIUtils.MAX_BOOST), perLevel);
 				player.setAirSupply(player.getAirSupply() + perLevel);
 				player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
 				return NONE;
@@ -183,9 +189,11 @@ public class FeaturePerks {
 					.withDouble(APIUtils.PER_LEVEL, 0.025)
 					.withFloat(APIUtils.DAMAGE_IN, 0)
 					.withString(APIUtils.DAMAGE_TYPE, "missing")
+					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 					.withString(APIUtils.DAMAGE_TYPE_IN, "omitted").build())
 			.setStart((player, nbt) -> {
 				float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+				saved = Math.min(nbt.getInt(APIUtils.MAX_BOOST), saved);
 				float baseDamage = nbt.contains(APIUtils.DAMAGE_OUT)
 						? nbt.getFloat(APIUtils.DAMAGE_OUT)
 						: nbt.getFloat(APIUtils.DAMAGE_IN);
@@ -221,9 +229,11 @@ public class FeaturePerks {
 				.withList(FeaturePerks.APPLICABLE_TO, StringTag.valueOf("weapon:id"))
 				.withDouble(APIUtils.PER_LEVEL, 0.05)
 				.withDouble(APIUtils.BASE, 1d)
+				.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 				.withBool(APIUtils.MULTIPLICATIVE, true).build())
 			.setStart((player, nbt) -> {
 				float damageModification = (float)(nbt.getDouble(APIUtils.BASE) + nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+				damageModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), damageModification);
 				float damage = nbt.getBoolean(APIUtils.MULTIPLICATIVE) 
 						? nbt.getFloat(APIUtils.DAMAGE_IN) * damageModification
 						: nbt.getFloat(APIUtils.DAMAGE_IN) + damageModification;
