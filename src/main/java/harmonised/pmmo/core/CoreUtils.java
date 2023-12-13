@@ -1,5 +1,6 @@
 package harmonised.pmmo.core;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -138,8 +139,17 @@ public class CoreUtils {
 	 * @param skill the skill being 
 	 * @return
 	 */
-	public static Style getSkillStyle(String skill) {
-		return Style.EMPTY.withColor(TextColor.fromRgb(getSkillColor(skill)));
+	public static Style getSkillStyle(String skill, double transparency) {
+		int skillColor = getSkillColor(skill);
+		skillColor = setTransparency(skillColor, transparency);
+		return Style.EMPTY.withColor(skillColor);
+	}
+
+	public static Style getSkillStyle(String skill) {return getSkillStyle(skill, 1d);}
+
+	public static int setTransparency(int color, double transparency) {
+		int alpha = (int)(transparency * 255d);
+		return  (color & 0xffffff) | (alpha << 24) ;
 	}
 	
 	/**Converts a configuration setting for effects into an effect instance list

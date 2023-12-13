@@ -33,9 +33,8 @@ public class ClientTickHandler {
 	}
 	
 	public static void tickDownGainList() {
-		for (GainEntry gain : xpGains) {
-			gain.downTick();
-		}
+		xpGains.forEach(GainEntry::downTick);
+		xpGains.removeIf(entry -> entry.duration <= 0);
 	}
 	
 	public static void addToGainList(String skill, long amount) {
@@ -43,27 +42,30 @@ public class ClientTickHandler {
 		if (Config.GAIN_BLACKLIST.get().contains(skill) 
 				|| (skillData.isSkillGroup() && skillData.getGroup().containsKey(skill)))
 			return;
-		if (xpGains.size() >= Config.GAIN_LIST_SIZE.get()) 
-			xpGains.remove(0);
 		xpGains.add(new GainEntry(skill, amount));
 	}
 	
 	public static class GainEntry {
 		public int duration;
-		public final Component display;
+		private final String skill;
+		private final long value;
 		public GainEntry(String skill, long value) {
+			this.skill = skill;
 			this.duration = MsLoggy.DEBUG.logAndReturn(Config.GAIN_LIST_LINGER_DURATION.get()
 								, LOG_CODE.GUI, "Gain Duration Set as: {}");
-			display = Component.literal((value >= 0 ? "+" : "")+value+" ")
-					.append(Component.translatable("pmmo."+skill))
-					.setStyle(CoreUtils.getSkillStyle(skill));
+			this.value = value;
 		}
-		public void downTick() {
-			duration--;
+		public void downTick() {duration--;}
+
+		public Component display() {
+			double fade = (double)duration/(double)Config.GAIN_LIST_LINGER_DURATION.get();
+			return Component.literal((value >= 0 ? "+" : "")+value+" ")
+					.append(Component.translatable("pmmo."+skill))
+					.setStyle(CoreUtils.getSkillStyle(skill, fade));
 		}
 		@Override
 		public String toString() {
-			return "Duration:"+duration+"|"+display.toString();
+			return "Duration:"+duration+"|"+display().toString();
 		}
 	}
 }
