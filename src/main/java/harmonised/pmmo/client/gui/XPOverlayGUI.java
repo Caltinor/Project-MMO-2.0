@@ -1,6 +1,8 @@
 package harmonised.pmmo.client.gui;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import harmonised.pmmo.client.events.ClientTickHandler;
@@ -61,8 +63,7 @@ public class XPOverlayGUI implements IGuiOverlay
 	private List<String> skillsKeys = new ArrayList<>();
 	private LinkedHashMap<String, SkillLine> lineRenderers = new LinkedHashMap<>();
 
-	private void renderSkillList(GuiGraphics graphics, double skillListX, double skillListY)
-	{
+	private void renderSkillList(GuiGraphics graphics, double skillListX, double skillListY) {
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * skillListX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* skillListY);
 		if (ClientTickHandler.isRefreshTick()) {
@@ -111,8 +112,9 @@ public class XPOverlayGUI implements IGuiOverlay
 	private void renderGains(GuiGraphics graphics, double listX, double listY) {
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * listX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* listY);
-		for (int i = 0; i < ClientTickHandler.xpGains.size(); i++) {			
-			graphics.drawString(fontRenderer, ClientTickHandler.xpGains.get(i).display, renderX, 3+renderY+ (i*9), i);
+		for (int i = 0; i < ClientTickHandler.xpGains.size(); i++) {
+			ClientTickHandler.GainEntry entry = ClientTickHandler.xpGains.get(i);
+			graphics.drawString(fontRenderer, entry.display(), renderX, 3+renderY+ (i*9), entry.display().getStyle().getColor().getValue());
 		}
 	}
 	

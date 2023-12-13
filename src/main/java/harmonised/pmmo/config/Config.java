@@ -50,7 +50,7 @@ public class Config {
 		
 		builder.pop();
 	}
-	
+
 	public static ModConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_X;
 	public static ModConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_Y;
 	public static ModConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_X;
@@ -62,7 +62,6 @@ public class Config {
 	public static ModConfigSpec.ConfigValue<Boolean> VEIN_GAUGE_DISPLAY;
 	public static ModConfigSpec.ConfigValue<Integer> SECTION_HEADER_COLOR;
 	public static ModConfigSpec.ConfigValue<Integer> SALVAGE_ITEM_COLOR;
-	public static ModConfigSpec.ConfigValue<Integer> GAIN_LIST_SIZE;
 	public static ModConfigSpec.ConfigValue<Integer> GAIN_LIST_LINGER_DURATION;
 	public static ModConfigSpec.ConfigValue<List<? extends String>> GAIN_BLACKLIST;
 	public static ModConfigSpec.BooleanValue HIDE_SKILL_BUTTON;
@@ -94,8 +93,6 @@ public class Config {
 				.define("Section Header Color", 0x1504B520);
 		SALVAGE_ITEM_COLOR = builder.comment("What color should the background be for the salvage item lines in the glossary")
 				.define("Salvage Item Color", 0x15D2A319);
-		GAIN_LIST_SIZE = builder.comment("how much xp gain history should display")
-				.define("Gain List Size", 3);
 		GAIN_LIST_LINGER_DURATION = builder.comment("How long, in ticks, items on the gain list should stay on screen before disappearing")
 				.define("Gain List Linger Duration", 100);
 		GAIN_BLACKLIST = builder.comment("skills that should now show their gains in the gain list.  this can be used to limit spammy skills")
