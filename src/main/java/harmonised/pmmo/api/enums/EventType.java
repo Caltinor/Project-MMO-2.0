@@ -30,6 +30,8 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 	FISH(true, false, false, "fishing"),					
 	SMELT(true, false, false, "smithing"),
 	GROW(false, true, false, "farming"),
+	HEALTH_INCREASE(false, false, false, ""),
+	HEALTH_DECREASE(false, false, false, ""),
 	GIVEN_AS_TRADE(true, false, false, "charisma"),
 	JUMP(false, false, true, "agility"),					
 		SPRINT_JUMP(false, false, true, "agility"),			

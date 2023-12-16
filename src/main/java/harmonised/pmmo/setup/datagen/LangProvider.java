@@ -1478,6 +1478,8 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Break Speed").build();
 	public static final Translation ENUM_BLOCK_PLACE = Translation.Builder.start("pmmo.enum.BLOCK_PLACE")
 		.addLocale(Locale.EN_US, "Place Block").build();
+	public static final Translation ENUM_TOOL_BREAKING = Translation.Builder.start("pmmo.enum.TOOL_BREAKING")
+		.addLocale(Locale.EN_US, "On Tool Break").build();
 	public static final Translation ENUM_BREATH_CHANGE = Translation.Builder.start("pmmo.enum.BREATH_CHANGE")
 		.addLocale(Locale.EN_US, "Breath Change").build();
 	public static final Translation ENUM_BREED = Translation.Builder.start("pmmo.enum.BREED")
