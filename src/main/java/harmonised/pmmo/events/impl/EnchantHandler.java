@@ -23,7 +23,7 @@ public class EnchantHandler {
 		boolean serverSide = !event.getEntity().level().isClientSide; 
 		if (serverSide) {
 			CompoundTag dataIn = TagBuilder.start()
-					.withString(APIUtils.STACK, event.getItem().serializeNBT().getAsString())
+					.withString(APIUtils.STACK, event.getItem().save(new CompoundTag()).getAsString())
 					.withString(APIUtils.PLAYER_ID, event.getEntity().getUUID().toString())
 					.withInt(APIUtils.ENCHANT_LEVEL, event.getEnchantment().level)
 					.withString(APIUtils.ENCHANT_NAME, event.getEnchantment().enchantment.getDescriptionId()).build();

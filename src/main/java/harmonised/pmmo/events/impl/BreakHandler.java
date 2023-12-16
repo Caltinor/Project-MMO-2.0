@@ -11,9 +11,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
-import harmonised.pmmo.storage.ChunkDataHandler;
-import harmonised.pmmo.storage.ChunkDataProvider;
-import harmonised.pmmo.storage.IChunkData;
+import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
@@ -56,11 +54,9 @@ public class BreakHandler {
 			//update ChunkData to remove the block from the placed map
 			//if a cascading breaking crop block, add the breaker value.
 			LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
-			chunk.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
-				cap.delPos(event.getPos());
-				if (event.getLevel().getBlockState(event.getPos()).is(Reference.CASCADING_BREAKABLES))
-					cap.setBreaker(event.getPos(), event.getPlayer().getUUID());
-			});;
+			chunk.getData(DataAttachmentTypes.PLACED_MAP.get()).remove(event.getPos());
+			if (event.getLevel().getBlockState(event.getPos()).is(Reference.CASCADING_BREAKABLES))
+				chunk.getData(DataAttachmentTypes.BREAK_MAP.get()).put(event.getPos(), event.getPlayer().getUUID());
 			chunk.setUnsaved(true);
 		}
 		//==============Process Vein Miner Logic==================
@@ -76,8 +72,8 @@ public class BreakHandler {
 	private static Map<String, Long> calculateXpAward(Core core, BlockEvent.BreakEvent event, CompoundTag dataIn) {
 		Map<String, Long> outMap = core.getExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getLevel(), event.getPlayer(), dataIn); 
 		LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
-		IChunkData cap = chunk.getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
-		if (cap.playerMatchesPos(event.getPlayer(), event.getPos())) {
+		var placeMap = chunk.getData(DataAttachmentTypes.PLACED_MAP);
+		if (placeMap.containsKey(event.getPos()) && placeMap.get(event.getPos()).equals(event.getPlayer().getUUID())) {
 			//Do not apply self-place penalty to crops
 			BlockState cropState = event.getLevel().getBlockState(event.getPos()); 
 			if (cropState.getBlock() instanceof CropBlock && ((CropBlock)cropState.getBlock()).isMaxAge(cropState))

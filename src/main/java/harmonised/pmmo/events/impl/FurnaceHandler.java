@@ -12,9 +12,8 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
-import harmonised.pmmo.storage.ChunkDataHandler;
-import harmonised.pmmo.storage.ChunkDataProvider;
-import harmonised.pmmo.storage.IChunkData;
+import harmonised.pmmo.storage.DataAttachmentTypes;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ClientInformation;
@@ -24,12 +23,12 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class FurnaceHandler {
 
-	@SuppressWarnings("resource")
 	public static void handle(FurnaceBurnEvent event) {
 		//Checkers to exit early for non-applicable conditions
 		if (event.getLevel().isClientSide) return;
-		IChunkData cap = event.getLevel().getChunkAt(event.getPos()).getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
-		UUID pid = cap.checkPos(event.getPos());
+		UUID pid = event.getLevel().getChunkAt(event.getPos())
+				.getData(DataAttachmentTypes.PLACED_MAP.get())
+				.getOrDefault(event.getPos(), Reference.NIL);
 		if (pid == null) return;
 		ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(pid);
 		if (player == null) {
@@ -42,7 +41,7 @@ public class FurnaceHandler {
 		//core logic 
 		Core core = Core.get(event.getLevel());
 		CompoundTag eventHook = core.getEventTriggerRegistry().executeEventListeners(EventType.SMELT, event, new CompoundTag());
-		eventHook.putString(APIUtils.STACK, event.getInput().serializeNBT().getAsString());
+		eventHook.putString(APIUtils.STACK, event.getInput().save(new CompoundTag()).getAsString());
 		eventHook = TagUtils.mergeTags(eventHook, core.getPerkRegistry().executePerk(EventType.SMELT, player, eventHook));
 		Map<String, Long> xpAwards = core.getExperienceAwards(EventType.SMELT, event.getInput(), player, eventHook);
 		List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);

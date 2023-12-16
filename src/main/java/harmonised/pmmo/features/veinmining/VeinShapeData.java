@@ -11,10 +11,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class VeinShapeData {
-	public static enum ShapeType {AOE, TUNNEL, BIG_TUNNEL}
+	public enum ShapeType {AOE, TUNNEL, BIG_TUNNEL}
 	
-	private Level level;
-	private BlockPos center;
+	private final Level level;
+	private final BlockPos center;
 	private int maxBlocks;
 	private final Map<BlockPos, Node> map = new HashMap<>();
 	private final ShapeType mode;
@@ -60,9 +60,7 @@ public class VeinShapeData {
 			}
 			map.remove(center);
 			yield map.keySet();
-		}
-		default -> map.keySet();};
-		
+		}};
 	}
 	
 	private void addNodesForRing(int ring, Block block) {
@@ -162,10 +160,11 @@ public class VeinShapeData {
 	
 	private BlockPos getAdjacent(BlockPos pos, boolean left) {
 		return switch (face) {
-		case NORTH -> {yield left ? pos.west() : pos.east();}
-		case SOUTH -> {yield left ? pos.east() : pos.west();}
-		case WEST -> {yield left ? pos.south() : pos.north();}
-		case EAST -> {yield left ? pos.north() : pos.south();}
-		default -> {yield pos;}};
+		case NORTH -> left ? pos.west() : pos.east();
+		case SOUTH -> left ? pos.east() : pos.west();
+		case WEST -> left ? pos.south() : pos.north();
+		case EAST -> left ? pos.north() : pos.south();
+		default -> pos;
+		};
 	}
 }

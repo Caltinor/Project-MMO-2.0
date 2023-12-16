@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import harmonised.pmmo.storage.DataAttachmentTypes;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import harmonised.pmmo.storage.ChunkDataProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -44,17 +44,17 @@ public class ServerLevelMixin {
 	
 	private static void execute(BlockPos pos, Level level) {
 		BlockState state = level.getBlockState(pos);
-		level.getChunkAt(pos).getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
-			for (BlockPos neighbor : getNeighbors(pos)) {
-				UUID playerID = cap.getBreaker(neighbor);
-				if (playerID != null) {
-					Player player = level.getServer().getPlayerList().getPlayer(playerID);
-					NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
-					cap.setBreaker(pos, playerID);
-					break;
-				}
-			}		
-		});
+		var breakMap = level.getChunkAt(pos).getData(DataAttachmentTypes.BREAK_MAP.get());
+		for (BlockPos neighbor : getNeighbors(pos)) {
+			UUID playerID = breakMap.get(neighbor);
+			if (playerID != null) {
+				Player player = level.getServer().getPlayerList().getPlayer(playerID);
+				NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
+				breakMap.put(neighbor, playerID);
+				level.getChunkAt(pos).setUnsaved(true);
+				break;
+			}
+		}
 	}
 	
 	private static Set<BlockPos> getNeighbors(BlockPos src) {

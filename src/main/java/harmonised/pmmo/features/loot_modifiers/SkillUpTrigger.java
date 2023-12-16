@@ -1,39 +1,31 @@
 package harmonised.pmmo.features.loot_modifiers;
 
-import com.google.gson.JsonObject;
-
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
-public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.TriggerInstance>{	
+public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.TriggerInstance>{
 	public static final SkillUpTrigger SKILL_UP = new SkillUpTrigger();
-	private static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "skill_up");
-	
-	public SkillUpTrigger() {}
-
-	public ResourceLocation getId() {return ID;}
 
 	@Override
-	protected TriggerInstance createInstance(JsonObject jsonObject, Optional<ContextAwarePredicate> optional, DeserializationContext deserializationContext) {
-		return new TriggerInstance(optional);
+	public Codec<TriggerInstance> codec() {
+		return TriggerInstance.CODEC;
 	}
-
 	public void trigger(ServerPlayer player) {
 		this.trigger(player, p -> true);
 	}
-	
-	public static class TriggerInstance extends AbstractCriterionTriggerInstance {
-
-		public TriggerInstance(Optional<ContextAwarePredicate> pPlayer) {
-			super(pPlayer);
-		}
-		
+	public record TriggerInstance(Optional<ContextAwarePredicate> player, MinMaxBounds.Ints level) implements SimpleCriterionTrigger.SimpleInstance {
+		public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+				MinMaxBounds.Ints.CODEC.optionalFieldOf("level").forGetter(ti -> Optional.of(ti.level()))
+		).apply(instance, (p,l) -> new TriggerInstance(p, l.orElse(MinMaxBounds.Ints.ANY))));
 	}
 }

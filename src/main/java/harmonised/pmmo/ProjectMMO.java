@@ -4,20 +4,26 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.anticheese.AntiCheeseConfig;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
+import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.loot_modifiers.GLMRegistry;
 import harmonised.pmmo.setup.CommonSetup;
+import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.Reference;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.event.config.ModConfigEvent;
 
 @Mod(Reference.MOD_ID)
 public class ProjectMMO {
 	
-    public ProjectMMO() {
+    public ProjectMMO(IEventBus modbus) {
     	ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
     	ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG); 
@@ -26,12 +32,24 @@ public class ProjectMMO {
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, GlobalsConfig.SERVER_CONFIG, "pmmo-Globals.toml");
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SkillsConfig.SERVER_CONFIG, "pmmo-Skills.toml");
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, PerksConfig.SERVER_CONFIG, "pmmo-Perks.toml");
+		modbus.addListener(this::onConfigReload);
     	
-    	GLMRegistry.CONDITIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    	GLMRegistry.GLM.register(FMLJavaModLoadingContext.get().getModEventBus());
+    	GLMRegistry.CONDITIONS.register(modbus);
+    	GLMRegistry.GLM.register(modbus);
+		DataAttachmentTypes.ATTACHMENT_TYPES.register(modbus);
+		CommonSetup.TRIGGERS.register(modbus);
 
-    	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
-    	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::onCapabilityRegister);
-    	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::gatherData);
+    	modbus.addListener(CommonSetup::init);
+    	modbus.addListener(CommonSetup::gatherData);
     }
+
+	@SubscribeEvent
+	public void onConfigReload(ModConfigEvent.Reloading event) {
+		if (event.getConfig().getType().equals(ModConfig.Type.SERVER)) {
+			if (event.getConfig().getFileName().equalsIgnoreCase("pmmo-server.toml"))
+				Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
+			if (event.getConfig().getFileName().equalsIgnoreCase("pmmo-autovalues.toml"))
+				AutoValues.resetCache();
+		}
+	}
 }

@@ -17,6 +17,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.StatAwardEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.brewing.PlayerBrewedPotionEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
@@ -232,4 +233,11 @@ public class EventHandler {
 	}
 	@SubscribeEvent
 	public static void onTrade(TradeWithVillagerEvent event) {TradeHandler.handle(event);}
+
+	@SubscribeEvent
+	public static void onStatAward(StatAwardEvent event) {
+		if (event.isCanceled())
+			return;
+		StatsHandler.handle(event);
+	}
 }
