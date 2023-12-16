@@ -8,7 +8,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
-import harmonised.pmmo.storage.ChunkDataProvider;
+import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -46,9 +46,7 @@ public class PlaceHandler {
 			core.awardXP(partyMembersInRange, xpAward);
 			//Add the newly placed block to the ChunkDataHandler
 			LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
-			chunk.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
-				cap.addPos(event.getPos(), player.getUUID());
-			});;
+			chunk.getData(DataAttachmentTypes.PLACED_MAP.get()).put(event.getPos(), player.getUUID());
 			chunk.setUnsaved(true);
 		}
 	}

@@ -8,7 +8,7 @@ import net.neoforged.neoforge.event.level.ExplosionEvent;
 
 public class ExplosionHandler {
     public static void handle(ExplosionEvent.Detonate event) {
-        if (event.getExplosion().getDamageSource().getEntity() instanceof Player player) {
+        if (event.getExplosion().getIndirectSourceEntity() instanceof Player player) {
             Level level = event.getLevel();
             Core core = Core.get(level);
             event.getAffectedBlocks().removeIf(pos -> !core.isActionPermitted(ReqType.BREAK, pos, player));

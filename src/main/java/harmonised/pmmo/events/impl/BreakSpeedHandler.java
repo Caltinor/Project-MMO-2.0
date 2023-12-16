@@ -85,7 +85,7 @@ public class BreakSpeedHandler {
 		if (event.getEntity().onGround() == cachedData.isPlayerStanding()
 			&&event.getPosition().orElse(new BlockPos(0,0,0)).equals(cachedData.pos)
 			&& event.getState().equals(cachedData.state)
-			&& event.getEntity().getMainHandItem().equals(cachedData.item, false)) {			
+			&& event.getEntity().getMainHandItem().equals(cachedData.item)) {
 			if (cachedData.cancelled) 
 				event.setCanceled(true);
 			else 

@@ -44,8 +44,7 @@ public class CmdNodeStore {
 		MinecraftServer server = ctx.getSource().getServer();
 		for (ServerPlayer player : players) {
 			int skillLevel = getSkillLevel(skillName, player.getUUID());
-			server.getScoreboard().getOrCreatePlayerScore(player.getScoreboardName(), getOrCreate(server, skillName))
-			.setScore(skillLevel);;
+			server.getScoreboard().getOrCreatePlayerScore(player, getOrCreate(server, skillName)).set(skillLevel);
 		}
 		return 0;
 	}
@@ -53,7 +52,9 @@ public class CmdNodeStore {
 	private static Objective getOrCreate(MinecraftServer server, String objective) {
 		Objective obtainedObjective = server.getScoreboard().getObjective(objective);
 		if (obtainedObjective == null)
-			obtainedObjective = server.getScoreboard().addObjective(objective, ObjectiveCriteria.DUMMY, Component.translatable("pmmo."+objective), ObjectiveCriteria.RenderType.INTEGER);
+			obtainedObjective = server.getScoreboard().addObjective(objective, ObjectiveCriteria.DUMMY,
+					Component.translatable("pmmo."+objective),
+					ObjectiveCriteria.RenderType.INTEGER, true, null);
 		return obtainedObjective;
 	}
 	

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import harmonised.pmmo.storage.ChunkDataProvider;
+import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -25,27 +25,22 @@ public class PistonHandler {
 
 		 for (BlockPos destroyed : structure.getToDestroy()) {
 			 LevelChunk ck = level.getChunkAt(destroyed);
-			 ck.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
-				 cap.delPos(destroyed);
-			 });
+			 ck.getData(DataAttachmentTypes.PLACED_MAP.get()).remove(destroyed);
 			 ck.setUnsaved(true);
 		 }		 
 		 Map<BlockPos, UUID> updateToMap = new HashMap<>();
 		 for (BlockPos moved : structure.getToPush()) {
-			 LevelChunk oldCK = level.getChunkAt(moved);			 
-			 UUID currentID = oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).map(cap -> cap.checkPos(moved)).orElse(Reference.NIL);
+			 LevelChunk oldCK = level.getChunkAt(moved);
+			 var placedData = oldCK.getData(DataAttachmentTypes.PLACED_MAP.get());
+			 UUID currentID = placedData.getOrDefault(moved, Reference.NIL);
 			 if (currentID.equals(Reference.NIL)) continue;
-			 oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
-				 cap.delPos(moved);
-			 });
+			 placedData.remove(moved);
 			 updateToMap.put( moved.relative(event.getStructureHelper().getPushDirection()), currentID);
 			 oldCK.setUnsaved(true);
 		 }
 		 for (Map.Entry<BlockPos, UUID> map : updateToMap.entrySet()) {
 			 LevelChunk toCK = level.getChunkAt(map.getKey());
-			 toCK.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
-				 cap.addPos(map.getKey(), map.getValue());
-			 });
+			 toCK.getData(DataAttachmentTypes.PLACED_MAP.get()).put(map.getKey(), map.getValue());
 			 toCK.setUnsaved(true);
 		 }
 	 }

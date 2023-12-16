@@ -11,9 +11,9 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinShapeData.ShapeType;
-import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
+import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -43,9 +43,9 @@ public class VeinMiningLogic {
 		Block block = level.getBlockState(pos).getBlock();
 		int cost = Core.get(level).getBlockConsume(block);
 		if (cost <= 0) return; 
-		int charge = getCurrentCharge(player);
+		double charge = player.getData(DataAttachmentTypes.VEIN_CHARGE.get());
 		int consumed = 0;			
-		int maxBlocks = Math.min(charge/cost, maxBlocksPerPlayer.computeIfAbsent(player.getUUID(), id -> 64));
+		int maxBlocks = Math.min((int)charge/cost, maxBlocksPerPlayer.computeIfAbsent(player.getUUID(), id -> 64));
 		ShapeType mode = shapePerPlayer.computeIfAbsent(player.getUUID(), id -> ShapeType.AOE);
 		VeinShapeData veinData = new VeinShapeData(level, pos, maxBlocks, mode, player.getDirection());
 		for (BlockPos veinable : veinData.getVein()) {
@@ -70,7 +70,7 @@ public class VeinMiningLogic {
 //		}
 		//================================
 		Core core = Core.get(player.level());
-		double currentCharge = getCurrentCharge(player);
+		double currentCharge = player.getData(DataAttachmentTypes.VEIN_CHARGE.get());
 		int chargeCap = Config.BASE_CHARGE_CAP.get();
 		double chargeRate = Config.BASE_CHARGE_RATE.get();
 		for (ItemStack stack : items) {
@@ -86,33 +86,28 @@ public class VeinMiningLogic {
 		final int fCap = chargeCap;
 		final double fRate = chargeRate * Config.VEIN_CHARGE_MODIFIER.get();
 		if ((currentCharge + fRate) >= fCap) {
-			player.getCapability(VeinProvider.VEIN_CAP).ifPresent(vein -> {
-				vein.setCharge(fCap);
-				MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen at Cap: "+fCap);
-				Networking.sendToClient(new CP_SyncVein(fCap), player);
-			});
-			
+			player.setData(DataAttachmentTypes.VEIN_CHARGE.get(), (double)fCap);
+			MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen at Cap: "+fCap);
 		}
 		else {
-			player.getCapability(VeinProvider.VEIN_CAP).ifPresent(vein -> {
-				vein.setCharge(vein.getCharge() + fRate);
-				MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen: "+(vein.getCharge()+fRate));
-				Networking.sendToClient(new CP_SyncVein(vein.getCharge() + fRate),player);
-			});	
-			
+			player.setData(DataAttachmentTypes.VEIN_CHARGE.get(), currentCharge + fRate);
+			MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen: "+(currentCharge+fRate));
 		}
+		Networking.sendToClient(new CP_SyncVein(player.getData(DataAttachmentTypes.VEIN_CHARGE.get())), player);
 	}
 	
 	//=========================UTILITY METHODS=============================
 	
-	public static int getCurrentCharge(Player player) {
-		return player.getCapability(VeinProvider.VEIN_CAP).map(vein -> (int)vein.getCharge()).orElse(0); 
-	}
-	
 	@SuppressWarnings("resource")
 	public static int getMaxChargeFromAllItems(Player player) {
 		Inventory inv = player.getInventory();		
-		List<ItemStack> items = List.of(inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39), player.getMainHandItem(), player.getOffhandItem());
+		List<ItemStack> items = List.of(
+				inv.getItem(36),
+				inv.getItem(37),
+				inv.getItem(38),
+				inv.getItem(39),
+				player.getMainHandItem(),
+				player.getOffhandItem());
 		//========== CURIOS ==============
 //		if (CurioCompat.hasCurio) {
 //			items = new ArrayList<>(items);
@@ -128,7 +123,7 @@ public class VeinMiningLogic {
 	}
 	
 	private static void applyChargeCost(ServerPlayer player, int cost, double currentCharge) {
-		player.getCapability(VeinProvider.VEIN_CAP).ifPresent(vein -> vein.setCharge(currentCharge-cost));
+		player.setData(DataAttachmentTypes.VEIN_CHARGE.get(), currentCharge-cost);
 		Networking.sendToClient(new CP_SyncVein(currentCharge-cost), player);
 	}
 }
