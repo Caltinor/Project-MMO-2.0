@@ -1,15 +1,16 @@
 # Changelog
 
-## [1.20.1-1.2.9] - 2023-11-05
+## [1.20.1-1.2.11] - 2023-12-17
 ### Bugfixes / Tweaks
-- Added Necronium to Default Tinker configs
-- Added API Hook for registering damage configurations
-- Added Mob Scaling ratio for bosses.  Uses `forge:bosses` tag to identify mobs
-- Added admin command to give bonuses to players.  use "clear" as the skill name to wipe all admin bonuses
-- Updated ignoreReq command to function like a toggle
-- Fixed entity damage xp data not being read
-- Fixed entity NBT not being detectable by NBT configs
-- Fixed NBT Overrides not applying 
-- Fixed Salvage giving denial message even if successful
-- Fixed Effect duration being exponential
-- Fixed firework spam on respawn
+- Added Trade events.  Items now give XP based on whether they are given or received
+- Added campfires to smelt event
+- Updated xp modifier config comments to explain mutual exclusivity
+- Updated skill xp modifier to use a dummy skill by default
+- Updated effect perk to include visibility property
+- Updated default Perks config to not include lvl 3 speed boost with sprinting
+- Updated all perks with level scaling to respect `max_level` property
+- Updated damage reduce perk to use damage tags
+- Updated gains list to use a fade effect (removed the cap in the config)
+- Fixed autovalues on food not scaling based on nutrition
+- Fixed effect perk jerking effect at level zero
+- Fixed Tetra/SG/Tinkers not being able to vein mine
