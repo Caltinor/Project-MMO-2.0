@@ -6,7 +6,6 @@ import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
-import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.setup.datagen.BlockTagProvider;
@@ -19,18 +18,19 @@ import harmonised.pmmo.setup.datagen.LangProvider.Locale;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -60,8 +60,6 @@ public class CommonSetup {
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
 	}
-	
-
 	
 	@SubscribeEvent
 	public static void onCommandRegister(RegisterCommandsEvent event) {

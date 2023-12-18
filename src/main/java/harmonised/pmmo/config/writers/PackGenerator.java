@@ -316,7 +316,7 @@ public class PackGenerator {
 	}
 	
 	public static int generatePlayerConfigs(MinecraftServer server, Collection<ServerPlayer> players) {
-		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME+"/data/minecraft/pmmo/players/");
+		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME+ "/resourcepacks/default/data/minecraft/pmmo/players/");
 		filepath.toFile().mkdirs();
 		for (ServerPlayer player : players) {
 			String idString = player.getUUID().toString();

@@ -1,0 +1,25 @@
+{
+    "override": true,
+    "xp_values":{
+        "CRAFT": {
+            "crafting": 2000,
+            "smithing": 300
+        }
+    },
+    "salvage":{
+        "minecraft:gold_ingot": {
+            "salvageMax": 2,
+            "baseChance": 0.0,
+            "maxChance": 0.9,
+            "chancePerLevel": {
+                "smithing": 0.005
+            },
+            "levelReq": {
+                "smithing": 5
+            },
+            "xpPerItem": {
+                "smithing": 30
+            }
+        }
+    }
+}

@@ -2264,7 +2264,15 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.ZH_CN, "需求等级")
 			.addLocale(Locale.ZH_TW, "需求等級")
 			.addLocale(Locale.EN_US, "Required Level").build();
-	
+
+	//====================PACK TRANSLATIONS============================
+	public static final Translation PACK_DEFAULT = Translation.Builder.start("resource_pack.default.name")
+			.addLocale(Locale.EN_US, "Default Project MMO Pack").build();
+	public static final Translation PACK_EASY = Translation.Builder.start("resource_pack.easy.name")
+			.addLocale(Locale.EN_US, "Easy Project MMO Pack").build();
+	public static final Translation PACK_HARD = Translation.Builder.start("resource_pack.hardcore.name")
+			.addLocale(Locale.EN_US, "Hardcore Project MMO Pack").build();
+
 	@Override
 	protected void addTranslations() {
 		for (Field entry : this.getClass().getDeclaredFields()) {

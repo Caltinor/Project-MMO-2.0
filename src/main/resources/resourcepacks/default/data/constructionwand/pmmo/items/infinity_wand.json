@@ -1,0 +1,59 @@
+{
+    "override": true,
+    "xp_values":{
+        "ANVIL_REPAIR" :{
+            "smithing": 7000
+        },
+        "CRAFT": {
+            "crafting": 7000,
+            "smithing": 1000
+        },
+        "ACTIVATE_ITEM":{
+            "building": 1000
+        },
+        "ENCHANT": {
+            "magic": 180
+        }
+    },
+    "requirements":{
+        "INTERACT":{
+            "building": 90
+        },
+        "USE":{
+            "building": 90
+        }
+    },
+    "bonuses":{
+        "HELD":{
+            "building": 2.0
+        }
+    },
+    "salvage":{
+        "minecraft:nether_star": {
+            "salvageMax": 1,
+            "baseChance": 0.0,
+            "maxChance": 0.9,
+            "chancePerLevel": {
+                "smithing": 0.002
+            },
+            "levelReq": {
+                "smithing": 10
+            },
+            "xpPerItem": {
+                "smithing": 30
+            }
+        },
+        "minecraft:stick": {
+            "salvageMax": 2,
+            "baseChance": 0.15,
+            "maxChance": 1,
+            "chancePerLevel": {
+                "smithing": 0.05
+            },
+            "levelReq": {},
+            "xpPerItem": {
+                "smithing": 10
+            }
+        }
+    }
+}
