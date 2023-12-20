@@ -241,14 +241,14 @@ public class Config {
 	public static ModConfigSpec.BooleanValue BREWING_TRACKED;
 	
 	private static void buildBasics(ModConfigSpec.Builder builder) {
-		builder.comment("General settings on the server").push("General");
+		builder.comment("General settings on the server").push("general");
 		
 		CREATIVE_REACH = builder.comment("how much extra reach should a player get in creative mode")
-				.defineInRange("Creative Reach", 50d, 4d, Double.MAX_VALUE);
+				.defineInRange("creative_reach", 50d, 4d, Double.MAX_VALUE);
 		SALVAGE_BLOCK = builder.comment("Which block should be used for salvaging")
-				.define("Salvage Block", "minecraft:smithing_table");
+				.define("salvage_block", "minecraft:smithing_table");
 		TREASURE_ENABLED = builder.comment("if false, all pmmo loot conditions will be turned off")
-				.define("Treasure Enabled", true);
+				.define("treasure_enabled", true);
 		BREWING_TRACKED = builder.comment("If false, pmmo will not track if a potion was previously brewed.",
 				"this helps with stacking potions from other mods, but ",
 				"does not prevent users from pick-placing potions in the",
@@ -273,7 +273,7 @@ public class Config {
 	public static ConfigHelper.ConfigObject<List<Long>> STATIC_LEVELS;
 	
 	private static void buildLevels(ModConfigSpec.Builder builder) {
-		builder.comment("Settings related level gain").push("Levels");
+		builder.comment("Settings related level gain").push("levels");
 		
 		MAX_LEVEL = builder.comment("The highest level a player can achieve in any skill."
 						, "NOTE: if this is changing on you to a lower value, that's intentional"
@@ -281,7 +281,7 @@ public class Config {
 						, "pmmo can store, pmmo will replace your value with the actual max.")
 						.defineInRange("Max Level", 1523, 1, Integer.MAX_VALUE);
 		USE_EXPONENTIAL_FORMULA = builder.comment("should levels be determined using an exponential formula?")
-						.define("Use Exponential Formula", true);
+						.define("use_exponential_formula", true);
 		STATIC_LEVELS = ConfigHelper.<List<Long>>defineObject(builder
 				.comment("=====LEAVE -1 VALUE UNLESS YOU WANT STATIC LEVELS====="
 				, "Replacing the -1 and adding values to this list will set the xp required to advance for each"
@@ -292,49 +292,49 @@ public class Config {
 				, "As a technical note, if you enter values that are not greater than their previous"
 				, "value, the entire list will be ignored and revert back to the selected exponential"
 				, "or linear formulaic calculation"),
-				"Static_Levels",
+				"static_levels",
 				Codec.LONG.listOf(), 
 				new ArrayList<Long>(List.of(-1L)));
 
 		LOSS_ON_DEATH = builder.comment("How much experience should players lose when they die?"
 						, "zero is no loss, one is lose everything")
-						.defineInRange("Loss on death", 0.05, 0d, 1d);
+						.defineInRange("loss_on_death", 0.05, 0d, 1d);
 		LOSE_LEVELS_ON_DEATH = builder.comment("should loss of experience cross levels?"
 						, "for example, if true, a player with 1 xp above their current level would lose the"
 						, "[Loss on death] percentage of xp and fall below their current level.  However,"
 						, "if false, the player would lose only 1 xp as that would put them at the base xp of their current level")
-						.define("Lose Levels On Death", false);
+						.define("lose_levels_on_death", false);
 		LOSE_ONLY_EXCESS = builder.comment("This setting only matters if [Lose Level On Death] is set to false."
 						, "If this is true the [Loss On Death] applies only to the experience above the current level"
 						, "for example if level 3 is 1000k xp and the player has 1020 and dies.  the player will only lose"
 						, "the [Loss On Death] of the 20 xp above the level's base.")
-						.define("Lose Only Excess", true);
+						.define("lose_only_excess", true);
 		GLOBAL_MODIFIER = builder.comment("Modifies how much xp is earned.  This is multiplicative to the XP.",
 						"(Mutually Exclusive to [Skill Modifiers])")
-						.define("Global Modifier", 1.0);
+						.define("global_modifier", 1.0);
 		SKILL_MODIFIERS = TomlConfigHelper.defineObject(builder.comment("Modifies xp gains for specific skills.  This is multiplicative to the XP.",
 						"(Mutually Exclusive to [Global Modifier])")
-							, "Skill Modifiers"
+							, "skill_modifiers"
 							, CodecTypes.DOUBLE_CODEC
 							, Collections.singletonMap("example_skill", 1.0));
 					
 		
 		//========LINEAR SECTION===============
-		builder.comment("Settings for Linear XP configuration").push("LINEAR LEVELS");
+		builder.comment("Settings for Linear XP configuration").push("linear_levels");
 		LINEAR_BASE_XP = builder.comment("what is the base xp to reach level 2 (this + level * xpPerLevel)")
-							.defineInRange("Base XP", 250L, 0L, Long.MAX_VALUE);
+							.defineInRange("base_xp", 250L, 0L, Long.MAX_VALUE);
 		LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level (baseXp + level * this)")
-							.defineInRange("Per Level", 500d, 0d, Double.MAX_VALUE);		
+							.defineInRange("per_level", 500d, 0d, Double.MAX_VALUE);		
 		builder.pop(); //COMPLETE LINEAR BLOCK
 		
 		//========EXPONENTIAL SECTION==========
-		builder.comment("Settings for Exponential XP configuration").push("EXPONENTIAL LEVELS");
+		builder.comment("Settings for Exponential XP configuration").push("exponential_levels");
 		EXPONENTIAL_BASE_XP = builder.comment("What is the x in: x * ([Power Base]^([Per Level] * level))")
-							.defineInRange("Base XP", 250, 1, Integer.MAX_VALUE);
+							.defineInRange("base_xp", 250, 1, Integer.MAX_VALUE);
 		EXPONENTIAL_POWER_BASE = builder.comment("What is the x in: [Base XP] * (x^([Per Level] * level))")
-							.defineInRange("Power Base", 1.104088404342588d, 0d, Double.MAX_VALUE);
+							.defineInRange("power_base", 1.104088404342588d, 0d, Double.MAX_VALUE);
 		EXPONENTIAL_LEVEL_MOD = builder.comment("What is the x in: [Base XP] * ([Power Base]^(x * level))")
-							.defineInRange("Per Level", 1.1, 0d, Double.MAX_VALUE);
+							.defineInRange("per_level", 1.1, 0d, Double.MAX_VALUE);
 		builder.pop(); //COMPLETE EXPONENTIAL BLOCK
 		builder.pop(); //COMPLETE LEVELS BLOCK
 		
@@ -349,7 +349,7 @@ public class Config {
 	private static void buildRequirements(ModConfigSpec.Builder builder) {
 		List<ReqType> rawReqList = new ArrayList<>(Arrays.asList(ReqType.values()));
 		
-		builder.comment("Should requirements apply for the applicable action type").push("Requirements");		
+		builder.comment("Should requirements apply for the applicable action type").push("requirements");		
 		
 		REQ_ENABLED = rawReqList.stream().map((t) -> {
 			return builder.define(t.toString()+REQ_ENABLED_SUFFIX, true);
@@ -363,12 +363,12 @@ public class Config {
 	public static ModConfigSpec.ConfigValue<Boolean> SUMMATED_MAPS;
 	
 	private static void buildXpGains(ModConfigSpec.Builder builder) {
-		builder.comment("All settings related to the gain of experience").push("XP_Gains");
+		builder.comment("All settings related to the gain of experience").push("xp_gains");
 		
 		REUSE_PENALTY = builder.comment("how much of the original XP should be awarded when a player breaks a block they placed")
-				.defineInRange("Reuse Penalty", 0d, 0d, Double.MAX_VALUE);
+				.defineInRange("reuse_penalty", 0d, 0d, Double.MAX_VALUE);
 		SUMMATED_MAPS = builder.comment("Should xp Gains from perks be added onto by configured xp values")
-				.define("Perks Plus Configs", false);
+				.define("perks_plus_config", false);
 		
 		buildEventBasedXPSettings(builder);
 		
@@ -395,9 +395,9 @@ public class Config {
 	public static ConfigObject<Map<String, Double>> SWIM_SPRINTING_XP;
 	
 	private static void buildEventBasedXPSettings(ModConfigSpec.Builder builder) {
-		builder.comment("Settings related to certain default event XP awards.").push("Event_XP_Specifics");
+		builder.comment("Settings related to certain default event XP awards.").push("event_xp_specifics");
 		
-		builder.push("Damage").comment(
+		builder.push("damage").comment(
 				"damage dealt and received is defined by the damage type",
 				"or damage type tag preceding it.  xp is awarded based on",
 				"the value below multiplied by the damage applied.");
@@ -415,36 +415,36 @@ public class Config {
 							"#minecraft:is_projectile", Map.of("endurance", 15l)));
 		builder.pop();
 		
-		builder.push("Jumps");
+		builder.push("jumps");
 			JUMP_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"JUMP Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
+					"JUMP_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
 			SPRINT_JUMP_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SPRINT_JUMP Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
+					"SPRINT_JUMP_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
 			CROUCH_JUMP_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"CROUCH_JUMP Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
+					"CROUCH_JUMP_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
 		builder.pop();
 		
-		builder.push("Player_Actions");
+		builder.push("player_actions");
 			BREATH_CHANGE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 					
-					"BREATH_CHANGE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 1d));
+					"BREATH_CHANGE_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 1d));
 			HEALTH_CHANGE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"HEALTH_CHANGE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 0d));
+					"HEALTH_CHANGE_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 0d));
 			HEALTH_INCREASE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder,
-				"HEALTH_INCREASE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
+				"HEALTH_INCREASE_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
 			HEALTH_DECREASE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder,
-				"HEALTH_DECREASE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
+				"HEALTH_DECREASE_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
 			SPRINTING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SPRINTING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 100d));
+					"SPRINTING_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 100d));
 			SUBMERGED_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SUBMERGED Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 1d));
+					"SUBMERGED_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 1d));
 			SWIMMING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SWIMMING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 100d));
+					"SWIMMING_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 100d));
 			DIVING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"DIVING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 150d));
+					"DIVING_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 150d));
 			SURFACING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SURFACING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 50d));
+					"SURFACING_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 50d));
 			SWIM_SPRINTING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SWIM_SPRINTING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 200d));
+					"SWIM_SPRINTING_skills_and_ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 200d));
 		builder.pop();
 			
 		builder.pop();
@@ -454,12 +454,12 @@ public class Config {
 	public static ModConfigSpec.DoubleValue PARTY_BONUS;
 	
 	private static void buildPartySettings(ModConfigSpec.Builder builder) {
-		builder.comment("All settings governing party behavior").push("Party");
+		builder.comment("All settings governing party behavior").push("party");
 			PARTY_RANGE = builder.comment("How close do party members have to be to share experience.")
-					.defineInRange("Party Range", 50, 0, Integer.MAX_VALUE);
+					.defineInRange("party_range", 50, 0, Integer.MAX_VALUE);
 			PARTY_BONUS = builder.comment("How much bonus xp should parties earn.",
 					"This value is multiplied by the party size.")
-					.defineInRange("Party Bonus", 1.05, 1.0, Double.MAX_VALUE);
+					.defineInRange("party_bonus", 1.05, 1.0, Double.MAX_VALUE);
 		builder.pop();
 	}
 	
@@ -476,33 +476,33 @@ public class Config {
 	public static ConfigObject<Map<String, Map<String, Double>>> MOB_SCALING;
 	
 	private static void buildMobScalingSettings(ModConfigSpec.Builder builder) {
-		builder.comment("settings related to how strong mobs get based on player level.").push("Mob_Scaling");
+		builder.comment("settings related to how strong mobs get based on player level.").push("mob_scaling");
 		
 		MOB_SCALING_ENABLED = builder.comment("Should mob scaling be turned on.")
-				.define("Enable Mob Scaling", true);
+				.define("enable_mob_scaling", true);
 		MOB_SCALING_AOE = builder.comment("How far should players be from spawning mobs to affect scaling?")
-				.defineInRange("Scaling AOE", 150, 0, Integer.MAX_VALUE);
+				.defineInRange("scaling_aoe", 150, 0, Integer.MAX_VALUE);
 		MOB_SCALING_BASE_LEVEL = builder.comment("what is the minimum level for scaling to kick in")
-				.defineInRange("Base Level", 0, 0, Integer.MAX_VALUE);
+				.defineInRange("base_level", 0, 0, Integer.MAX_VALUE);
 		BOSS_SCALING_RATIO = builder.comment("a multiplier on top of final scaling values that",
 				"applies only to entities in the forge:bosses tag.")
 						.define("boss_scaling", 1.1);
 		
 			builder.comment("How should mob attributes be calculated with respect to the player's level.").push("Formula");
 				MOB_USE_EXPONENTIAL_FORMULA = builder.comment("should levels be determined using an exponential formula?")
-						.define("Use Exponential Formula", true);
+						.define("use_exponential_formula", true);
 				//========LINEAR SECTION===============
 				builder.comment("Settings for Linear scaling configuration").push("LINEAR_LEVELS");				
 				MOB_LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level ((level - base_level) * this)")
-									.defineInRange("Per Level", 1d, 0d, Double.MAX_VALUE);		
+									.defineInRange("per_level", 1d, 0d, Double.MAX_VALUE);
 				builder.pop(); //COMPLETE LINEAR BLOCK
 				
 				//========EXPONENTIAL SECTION==========
 				builder.comment("Settings for Exponential scaling configuration").push("EXPONENTIAL_LEVELS");
 				MOB_EXPONENTIAL_POWER_BASE = builder.comment("What is the x in: (x^([Per Level] * level))")
-									.defineInRange("Power Base", 1.104088404342588d, 0d, Double.MAX_VALUE);
+									.defineInRange("power_base", 1.104088404342588d, 0d, Double.MAX_VALUE);
 				MOB_EXPONENTIAL_LEVEL_MOD = builder.comment("What is the x in: ([Power Base]^(x * level))")
-									.defineInRange("Per Level", 1d, 0d, Double.MAX_VALUE);
+									.defineInRange("per_level", 1d, 0d, Double.MAX_VALUE);
 				builder.pop();
 			builder.pop(); //Formula
 			builder.comment("These settings control which skills affect scaling and the ratio for each skill"
@@ -513,7 +513,7 @@ public class Config {
 					, "NOTE: TOML WILL MOVE THE QUOTATIONS OF YOUR ATTRIBUTE ID AND BREAK YOUR CONFIG."
 					, "ENSURE YOU HAVE FORCIBLY PUT YOUR QUOTES AROUND YOUR ATTRIBUTE ID BEFORE SAVING.").push("Scaling_Settings");
 				MOB_SCALING = TomlConfigHelper.<Map<String, Map<String, Double>>>defineObject(builder,
-						"Mob Scaling IDs and Ratios", Codec.unboundedMap(Codec.STRING, CodecTypes.DOUBLE_CODEC), Map.of(
+						"mob_scaling_ids_and_ratios", Codec.unboundedMap(Codec.STRING, CodecTypes.DOUBLE_CODEC), Map.of(
 								"minecraft:generic.max_health", Map.of("combat", 0.001),
 								"minecraft:generic.movement_speed", Map.of("combat", 0.000001),
 								"minecraft:generic.attack_damage", Map.of("combat", 0.0001)
@@ -531,24 +531,24 @@ public class Config {
 	public static ModConfigSpec.IntValue BASE_CHARGE_CAP;
 	
 	private static void buildVeinMinerSettings(ModConfigSpec.Builder builder) {
-		builder.comment("Settings related to the Vein Miner").push("Vein_Miner");
+		builder.comment("Settings related to the Vein Miner").push("vein_miner");
 		VEIN_ENABLED = builder.comment("setting to false disables all vein features")
-				.define("vein enabled", true);
+				.define("vein_enabled", true);
 		REQUIRE_SETTING = builder.comment("If true, default consume will be ignored in favor of only allowing"
 				, "veining blocks with declared values.")
-				.define("Require Settings", false);
+				.define("require_settings", false);
 		DEFAULT_CONSUME = builder.comment("how much a block should consume if no setting is defined.")
-				.define("Vein Mine Default Consume", 1);
+				.define("vein_mine_default_consume", 1);
 		VEIN_CHARGE_MODIFIER = builder.comment("a multiplier to all vein charge rates.")
-				.defineInRange("Vein Charge Modifier", 1.0, 0.0, Double.MAX_VALUE);
+				.defineInRange("vein_charge_modifier", 1.0, 0.0, Double.MAX_VALUE);
 		VEIN_BLACKLIST = builder.comment("Tools in this list do not cause the vein miner to trigger")
-				.defineList("Vein_Blacklist", new ArrayList<>(List.of("silentgear:saw")) , s -> s instanceof String);
+				.defineList("vein_blacklist", new ArrayList<>(List.of("silentgear:saw")) , s -> s instanceof String);
 		BASE_CHARGE_RATE = builder.comment("A constant charge rate given to all players regardless of equipment.",
 				"Items worn will add to this amount, not replace it.")
-				.defineInRange("base charge rate", 0.01, 0.0, Double.MAX_VALUE);
+				.defineInRange("base_charge_rate", 0.01, 0.0, Double.MAX_VALUE);
 		BASE_CHARGE_CAP = builder.comment("A minimum capacity given to all players regardless of equipment.",
 				"Items worn will add to this amount, not replace it.")
-				.defineInRange("base vein capacity", 0, 0, Integer.MAX_VALUE);
+				.defineInRange("base_vein_capacity", 0, 0, Integer.MAX_VALUE);
 		builder.pop();
 	}
 }
