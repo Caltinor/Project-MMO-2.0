@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.20.1-1.2.12] - 2023-12-20
+### HOTFIX
+- Fixed Crash from CampfireMixin.
+
 ## [1.20.1-1.2.11] - 2023-12-17
 ### Bugfixes / Tweaks
 - Added Trade events.  Items now give XP based on whether they are given or received

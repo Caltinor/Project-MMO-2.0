@@ -21,7 +21,7 @@ public class CampfireMixin {
             target = "Lnet/minecraft/world/Containers;dropItemStack(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;)V"),
     method = "cookTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/CampfireBlockEntity;)V",
     locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void projectmmo$handleCampfireCook(Level pLevel, BlockPos pPos, BlockState pState, CampfireBlockEntity pBlockEntity, CallbackInfo ci, boolean flag, int i, ItemStack itemstack, int j, Container container, ItemStack itemstack1) {
+    private static void projectmmo$handleCampfireCook(Level pLevel, BlockPos pPos, BlockState pState, CampfireBlockEntity pBlockEntity, CallbackInfo ci, boolean flag, int i, ItemStack itemstack, Container container, ItemStack itemstack1) {
         MinecraftForge.EVENT_BUS.post(new FurnaceBurnEvent(itemstack1, pLevel, pPos));
     }
 }
