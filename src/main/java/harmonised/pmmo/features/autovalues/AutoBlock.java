@@ -52,8 +52,10 @@ public class AutoBlock {
 		if (!type.blockApplicable || isWorldSensitive(blockID))
 			return new HashMap<>();
 		
-		Holder.Reference<Block> block = BuiltInRegistries.BLOCK.getHolder(ResourceKey.create(Registries.BLOCK, blockID)).get();
+		Holder.Reference<Block> block = BuiltInRegistries.BLOCK.getHolder(ResourceKey.create(Registries.BLOCK, blockID)).orElse(null);
 		Map<String, Long> outMap = new HashMap<>();
+		if (block == null) return outMap;
+
 		switch (type) {
 		case BLOCK_BREAK: case BLOCK_PLACE: {
 			if (block.is(Reference.CROPS))
