@@ -25,6 +25,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 @Mod(Reference.MOD_ID)
 public class ProjectMMO {
@@ -53,7 +54,9 @@ public class ProjectMMO {
 	@SubscribeEvent
 	public void onConfigReload(ModConfigEvent.Reloading event) {
 		if (event.getConfig().getType().equals(ModConfig.Type.SERVER)) {
-			if (event.getConfig().getFileName().equalsIgnoreCase("pmmo-server.toml"))
+			if (event.getConfig().getFileName().equalsIgnoreCase("pmmo-server.toml")
+					&& ServerLifecycleHooks.getCurrentServer() != null)
+				//TODO remove this as part of the XP rework
 				Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
 			if (event.getConfig().getFileName().equalsIgnoreCase("pmmo-autovalues.toml"))
 				AutoValues.resetCache();
@@ -65,7 +68,7 @@ public class ProjectMMO {
 		GameplayPacks.getPacks().stream().filter(holder -> holder.type().equals(event.getPackType())).forEach(holder -> {
 			var resourcePath = ModList.get().getModFileById(Reference.MOD_ID).getFile().findResource("resourcepacks/%s".formatted(holder.id().getPath()));
 			var pack = Pack.readMetaAndCreate("builtin/%s".formatted(holder.id().getPath()), holder.titleKey().asComponent(), holder.required(),
-					new PathPackResources.PathResourcesSupplier(resourcePath,true), holder.type(), Pack.Position.BOTTOM, PackSource.FEATURE);
+					new PathPackResources.PathResourcesSupplier(resourcePath,true), holder.type(), Pack.Position.BOTTOM, holder.source());
 			event.addRepositorySource(consumer -> consumer.accept(pack));
 		});
 	}
