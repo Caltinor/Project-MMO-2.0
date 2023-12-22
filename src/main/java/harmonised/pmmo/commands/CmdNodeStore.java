@@ -43,8 +43,8 @@ public class CmdNodeStore {
 		String skillName = StringArgumentType.getString(ctx, SKILL_ARG);
 		MinecraftServer server = ctx.getSource().getServer();
 		for (ServerPlayer player : players) {
-			int skillLevel = getSkillLevel(skillName, player.getUUID());
-			server.getScoreboard().getOrCreatePlayerScore(player, getOrCreate(server, skillName)).set(skillLevel);
+			Long skillLevel = getSkillLevel(skillName, player.getUUID());
+			server.getScoreboard().getOrCreatePlayerScore(player, getOrCreate(server, skillName)).set(skillLevel.intValue());
 		}
 		return 0;
 	}
@@ -58,18 +58,18 @@ public class CmdNodeStore {
 		return obtainedObjective;
 	}
 	
-	private static int getSkillLevel(String skill, UUID pid) {
+	private static long getSkillLevel(String skill, UUID pid) {
 		Core core = Core.get(LogicalSide.SERVER);
 		SkillData skillData = SkillsConfig.SKILLS.get().get(skill);
 		if (skillData == null) return 0;
 		if (skillData.isSkillGroup()) {
-			int groupLevel = 0;
+			long groupLevel = 0;
 			double proportionModifier = skillData.getUseTotalLevels() ? 1d : skillData.groupedSkills().get().values().stream().collect(Collectors.summingDouble(Double::doubleValue));
 			for (Map.Entry<String, Double> portion : skillData.groupedSkills().get().entrySet()) {
-				groupLevel += (core.getData().getPlayerSkillLevel(portion.getKey(), pid) * (portion.getValue()/proportionModifier));
+				groupLevel += (core.getData().getLevel(portion.getKey(), pid) * (portion.getValue()/proportionModifier));
 			}
 			return groupLevel;
 		}
-		else return core.getData().getPlayerSkillLevel(skill, pid);
+		else return core.getData().getLevel(skill, pid);
 	}
 }

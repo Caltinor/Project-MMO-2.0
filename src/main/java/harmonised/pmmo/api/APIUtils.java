@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.storage.Experience;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -53,26 +54,26 @@ public class APIUtils {
 	//===============CORE HOOKS======================================
 	/**get the player's current level in the skill provided
 	 * 
-	 * @param skill skill name.  Skills are case sensitive and usually all lowercase
+	 * @param skill skill name.  Skills are case-sensitive and usually all lowercase
 	 * @param player the player whose skills are being obtained.
 	 * @return the current skill level of the player
 	 */
-	public static int getLevel(String skill, Player player) {
+	public static long getLevel(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level()).getData().getPlayerSkillLevel(skill, player.getUUID());
+		return Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 	}
 	
 	/**Sets the player's current level in the skill provided
 	 * 
-	 * @param skill skill's name.  skills are case sensitive and usually all lowercase
+	 * @param skill skill's name.  skills are case-sensitive and usually all lowercase
 	 * @param player the player whose skills are being set
 	 * @param level the new level being applied to the skill
 	 */
 	public static void setLevel(String skill, Player player, int level) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		Core.get(player.level()).getData().setPlayerSkillLevel(skill, player.getUUID(), level);
+		Core.get(player.level()).getData().setLevel(skill, player.getUUID(), level);
 	}
 	
 	/**changes the player's level in the specified skill by a specific amount.
@@ -82,12 +83,11 @@ public class APIUtils {
 	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose level is being changed
 	 * @param levelChange the number of levels being changed by.  negative values will reduce the player level.
-	 * @return true if the level was in fact changed.
 	 */
-	public static boolean addLevel(String skill, Player player, int levelChange) {
+	public static void addLevel(String skill, Player player, int levelChange) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level()).getData().changePlayerSkillLevel(skill, player.getUUID(), levelChange);
+		Core.get(player.level()).getData().addLevel(skill, player.getUUID(), levelChange);
 	}
 	
 	/**Gets the raw xp value associated with the specified skill and player.
@@ -99,7 +99,7 @@ public class APIUtils {
 	public static long getXp(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level()).getData().getXpRaw(player.getUUID(), skill);
+		return Core.get(player.level()).getData().getXp(player.getUUID(), skill);
 	}
 	
 	/**Sets the raw XP value for the player in the skill specified.
@@ -111,7 +111,7 @@ public class APIUtils {
 	public static void setXp(String skill, Player player, long xpRaw) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		Core.get(player.level()).getData().setXpRaw(player.getUUID(), skill, xpRaw);
+		Core.get(player.level()).getData().setXp(player.getUUID(), skill, xpRaw);
 	}
 	
 	/**Changes the player's current experience in the specified skill by the amount.
@@ -120,12 +120,11 @@ public class APIUtils {
 	 * @param skill skill name. Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose experience is being changed.
 	 * @param change the amount being changed by.  Negative values reduce experience.
-	 * @return true if the modification was successful.
 	 */
-	public static boolean addXp(String skill, Player player, long change) {
+	public static void addXp(String skill, Player player, long change) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level()).getData().setXpDiff(player.getUUID(), skill, change);
+		Core.get(player.level()).getData().addXp(player.getUUID(), skill, change);
 	}
 
 	/**Supplies the player's entire skill map with raw xp
@@ -134,7 +133,7 @@ public class APIUtils {
 	 * @param player the player being queried
 	 * @return a map of skills and raw xp
 	 */
-	public static Map<String, Long> getRawXpMap(Player player) {
+	public static Map<String, Experience> getRawXpMap(Player player) {
 		return Core.get(player.level()).getData().getXpMap(player.getUUID());
 	}
 
@@ -143,10 +142,9 @@ public class APIUtils {
 	 * @param player the player being queried
 	 * @return a map of skills and levels
 	 */
-	public static Map<String, Integer> getAllLevels(Player player) {
-		IDataStorage data = Core.get(player.level()).getData();
+	public static Map<String, Long> getAllLevels(Player player) {
 		return getRawXpMap(player).entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, e -> data.getLevelFromXP(e.getValue())));
+				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getLevel().getLevel()));
 	}
 	
 	/**<p>Obtains a map of the skills and experience amount that would be awarded for the provided
@@ -709,7 +707,7 @@ public class APIUtils {
 	 * @param provider the function providing the new player level
 	 * @param event required to ensure event process correctly during lifecycle
 	 */
-	public static void registerLevelProvider(BiFunction<String, Integer, Integer> provider, FMLCommonSetupEvent event) {
+	public static void registerLevelProvider(BiFunction<String, Long, Long> provider, FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
 			Core.get(LogicalSide.SERVER).getLevelProvider().registerLevelProvider(provider);
 			Core.get(LogicalSide.CLIENT).getLevelProvider().registerLevelProvider(provider);

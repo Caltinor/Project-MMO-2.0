@@ -6,6 +6,7 @@ import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -149,7 +150,7 @@ public class PlayerStatsComponent extends AbstractWidget {
             IDataStorage dataStorage = core.getData();
             
             this.skillsKeys.addAll(dataStorage.getXpMap(null).keySet());
-            this.skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXpRaw(null, skill)).reversed());
+            this.skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXp(null, skill)).reversed());
             
             for (String skillKey : this.skillsKeys) {
                 SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault());
@@ -197,7 +198,7 @@ public class PlayerStatsComponent extends AbstractWidget {
         private final SkillData skillData;
         
         private final Color skillColor;
-        private final int skillLevel;
+        private final long skillLevel;
         private final long skillCurrentXP;
         private final long skillXpToNext;
         
@@ -210,9 +211,9 @@ public class PlayerStatsComponent extends AbstractWidget {
             this.skillData = skillData;
             
             this.skillColor = new Color(skillData.getColor());
-            this.skillCurrentXP = core.getData().getXpRaw(null, skillKey);
-            this.skillLevel = core.getData().getLevelFromXP(skillCurrentXP);
-            this.skillXpToNext = core.getData().getBaseXpForLevel(this.skillLevel+1)-this.skillCurrentXP;
+            this.skillCurrentXP = core.getData().getXp(null, skillKey);
+            this.skillLevel = core.getData().getLevel(skillKey, null);
+            this.skillXpToNext = core.getData().getXpMap(null).getOrDefault(skillKey, new Experience()).getLevel().getXpToNext();
         }
     
         @Override
@@ -236,10 +237,8 @@ public class PlayerStatsComponent extends AbstractWidget {
                 graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
                 graphics.blit(TEXTURE_LOCATION, renderX, renderY, 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
 
-                long baseXP = core.getData().getBaseXpForLevel(skillLevel);
-                long requiredXP = core.getData().getBaseXpForLevel(skillLevel + 1);
-                float percent = 100.0f / (requiredXP - baseXP);
-                int xp = (int) Math.min(Math.floor(percent * (skillCurrentXP - baseXP)), 94);
+                float percent = 100.0f / skillXpToNext;
+                int xp = (int) Math.min(Math.floor(percent * skillCurrentXP), 94);
                 graphics.blit(TEXTURE_LOCATION, renderX, renderY, xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
 
                 graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);

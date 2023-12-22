@@ -17,7 +17,7 @@ public record SkillData (
 	Optional<Boolean> displayGroupName,
 	Optional<Boolean> useTotalLevels,
 	Optional<Map<String, Double>> groupedSkills,
-	Optional<Integer> maxLevel,
+	Optional<Long> maxLevel,
 	Optional<ResourceLocation> icon,
 	Optional<Integer> iconSize) {
 	
@@ -27,7 +27,7 @@ public record SkillData (
 			Codec.BOOL.optionalFieldOf("displayGroupName").forGetter(SkillData::displayGroupName),
 			Codec.BOOL.optionalFieldOf("useTotalLevels").forGetter(SkillData::useTotalLevels),
 			CodecTypes.DOUBLE_CODEC.optionalFieldOf("groupFor").forGetter(SkillData::groupedSkills),
-			Codec.INT.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel),
+			Codec.LONG.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel),
 			ResourceLocation.CODEC.optionalFieldOf("icon").forGetter(SkillData::icon),
 			Codec.INT.optionalFieldOf("iconSize").forGetter(SkillData::iconSize)
 			).apply(instance, SkillData::new));
@@ -36,7 +36,7 @@ public record SkillData (
 	public boolean getAfkExempt() { return afkExempt.orElse(false); }
 	public boolean getDisplayGroupName() { return displayGroupName.orElse(false); }
 	public boolean getUseTotalLevels() { return useTotalLevels.orElse(false); }
-	public int getMaxLevel() { return maxLevel.orElse(Config.MAX_LEVEL.get()); }
+	public long getMaxLevel() { return maxLevel.orElse(Config.MAX_LEVEL.get()); }
 	public ResourceLocation getIcon() { return icon.orElse(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")); }
 	public int getIconSize() { return iconSize.orElse(18); }
 	
@@ -72,7 +72,8 @@ public record SkillData (
 	}
 	
 	public static class Builder {
-		int color, maxLevel, iconSize;
+		int color, iconSize;
+		long maxLevel;
 		boolean afkExempt, displayName, useTotal;
 		ResourceLocation icon;
 		Map<String, Double> groupOf;

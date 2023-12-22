@@ -1,6 +1,5 @@
 package harmonised.pmmo.client.gui;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,6 +17,7 @@ import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.setup.datagen.LangProvider;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.storage.Experience;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Font;
@@ -29,7 +29,7 @@ import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
 public class XPOverlayGUI implements IGuiOverlay
 {
-	private Core core = Core.get(LogicalSide.CLIENT);
+	private final Core core = Core.get(LogicalSide.CLIENT);
 	private int skillGap = 0;
 	private Minecraft mc;
 	private Font fontRenderer;
@@ -50,7 +50,7 @@ public class XPOverlayGUI implements IGuiOverlay
 			if(Config.VEIN_ENABLED.get() && Config.VEIN_GAUGE_DISPLAY.get())
 				renderVeinGauge(guiGraphics, Config.VEIN_GAUGE_OFFSET_X.get(), Config.VEIN_GAUGE_OFFSET_Y.get());
 			if(Config.GAIN_LIST_DISPLAY.get()) {
-				if (ClientTickHandler.xpGains.size() >= 1 && ClientTickHandler.xpGains.get(0).duration <= 0)
+				if (!ClientTickHandler.xpGains.isEmpty() && ClientTickHandler.xpGains.get(0).duration <= 0)
 					ClientTickHandler.xpGains.remove(0);
 				renderGains(guiGraphics, Config.GAIN_LIST_OFFSET_X.get(), Config.GAIN_LIST_OFFSET_Y.get());
 			}
@@ -60,16 +60,15 @@ public class XPOverlayGUI implements IGuiOverlay
 	}
 	
 	private Map<String, Double> modifiers = new HashMap<>();
-	private List<String> skillsKeys = new ArrayList<>();
-	private LinkedHashMap<String, SkillLine> lineRenderers = new LinkedHashMap<>();
+	private final LinkedHashMap<String, SkillLine> lineRenderers = new LinkedHashMap<>();
 
 	private void renderSkillList(GuiGraphics graphics, double skillListX, double skillListY) {
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * skillListX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* skillListY);
 		if (ClientTickHandler.isRefreshTick()) {
-			modifiers = core.getConsolidatedModifierMap(mc.player);	
-			skillsKeys = core.getData().getXpMap(null).keySet().stream()
-					.sorted(Comparator.<String>comparingLong(a -> core.getData().getXpRaw(null, a)).reversed())
+			modifiers = core.getConsolidatedModifierMap(mc.player);
+			List<String> skillsKeys = core.getData().getXpMap(null).keySet().stream()
+					.sorted(Comparator.<String>comparingLong(a -> core.getData().getLevel(a, null)).reversed())
 					.toList();
 			var holderMap = lineRenderers;
 			lineRenderers.clear();
@@ -78,7 +77,7 @@ public class XPOverlayGUI implements IGuiOverlay
 					.map(skill -> fontRenderer.width(Component.translatable("pmmo."+skill).getString()))
 					.max(Comparator.comparingInt(t -> t)).orElse(0);
 			skillsKeys.forEach((skillKey)-> {
-				var xpRaw = core.getData().getXpRaw(null, skillKey);
+				var xpRaw = core.getData().getXpMap(null).getOrDefault(skillKey, new Experience());
 				lineRenderers.put(skillKey, 
 					xpRaw != holderMap.getOrDefault(skillKey, SkillLine.DEFAULT).xpValue()
 					? new SkillLine(skillKey, modifiers.getOrDefault(skillKey, 1.0), xpRaw, yOffset.get(), skillGap)
@@ -118,9 +117,9 @@ public class XPOverlayGUI implements IGuiOverlay
 		}
 	}
 	
-	private record SkillLine(String xpRaw, MutableComponent skillName, String bonusLine, long xpValue, int color, int yOffset, int skillGap) {
-		public static SkillLine DEFAULT = new SkillLine("", Component.literal(""), "", -1, 0xFFFFFF, 0, 0);
-		public SkillLine(String skillName, double bonus, long xpValue, int yOffset, int skillGap) {
+	private record SkillLine(String xpRaw, MutableComponent skillName, String bonusLine, Experience xpValue, int color, int yOffset, int skillGap) {
+		public static SkillLine DEFAULT = new SkillLine("", Component.literal(""), "", new Experience(), 0xFFFFFF, 0, 0);
+		public SkillLine(String skillName, double bonus, Experience xpValue, int yOffset, int skillGap) {
 			this(rawXpLine(xpValue, skillName), 
 				Component.translatable("pmmo."+skillName), 
 				bonusLine(bonus), 
@@ -133,13 +132,14 @@ public class XPOverlayGUI implements IGuiOverlay
 			this(src.xpRaw(), src.skillName(), src.bonusLine(), src.xpValue(), src.color, yOffset * 9, src.skillGap());
 		}
 		
-		private static String rawXpLine(long xpValue, String skillKey) {
+		private static String rawXpLine(Experience xpValue, String skillKey) {
 			double level = ((DataMirror)Core.get(LogicalSide.CLIENT).getData()).getXpWithPercentToNextLevel(xpValue);
-			int skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault()).getMaxLevel();
-			level = level > skillMaxLevel ? skillMaxLevel : level;
-			return level >= Config.MAX_LEVEL.get() 
-					? "" + Config.MAX_LEVEL.get() 
-					: DP.dp(Math.floor(level * 100D) / 100D);
+			if (level > SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault()).getMaxLevel())
+				return "" + SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault()).getMaxLevel();
+			if (level > Config.MAX_LEVEL.get())
+				return "" + Config.MAX_LEVEL.get();
+			else
+				return DP.dpCustom(Math.floor(level * 100D) / 100D, 2);
 		}
 		private static String bonusLine(double bonus) {
 			if (bonus != 1d) {
@@ -153,8 +153,7 @@ public class XPOverlayGUI implements IGuiOverlay
 			int levelGap = fontRenderer.width(xpRaw());
 			graphics.drawString(fontRenderer, xpRaw(), skillListX, skillListY + 3 + yOffset(), color());
 			graphics.drawString(fontRenderer, " | " + skillName.getString(), skillListX + levelGap, skillListY + 3 + yOffset(), color());
-			graphics.drawString(fontRenderer, " | " + DP.dprefix(xpValue()), skillListX + levelGap + skillGap() + 9, skillListY + 3 + yOffset(), color());
-			graphics.drawString(fontRenderer, bonusLine, skillListX + levelGap + skillGap() + 46, skillListY + 3 + yOffset(), color());
+			graphics.drawString(fontRenderer, bonusLine, skillListX + levelGap + skillGap() + 9, skillListY + 3 + yOffset(), color());
 		}
 	}
 }

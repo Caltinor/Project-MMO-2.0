@@ -26,6 +26,7 @@ import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.storage.Experience;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -81,27 +82,28 @@ public class CmdNodeAdmin {
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(ctx, TARGET_ARG);
 		String skillName = StringArgumentType.getString(ctx, SKILL_ARG);
 		boolean isLevel = StringArgumentType.getString(ctx, TYPE_ARG).equalsIgnoreCase("level");
-		Long value = LongArgumentType.getLong(ctx, VALUE_ARG);
+		long value = LongArgumentType.getLong(ctx, VALUE_ARG);
 		IDataStorage data = Core.get(LogicalSide.SERVER).getData();
 		
 		for (ServerPlayer player : players) {
+			Experience exp = data.getXpMap(player.getUUID()).computeIfAbsent(skillName, s -> new Experience());
 			if (isSet) {
 				if (isLevel) {
-					data.setPlayerSkillLevel(skillName, player.getUUID(), value.intValue());
+					exp.setLevel(value);
 					ctx.getSource().sendSuccess(() -> LangProvider.SET_LEVEL.asComponent(skillName, value, player.getName()), true);
 				}
 				else {
-					data.setXpRaw(player.getUUID(), skillName, value);
+					exp.setXp(value);
 					ctx.getSource().sendSuccess(() -> LangProvider.SET_XP.asComponent(skillName, value, player.getName()), true);
 				}
 			}
 			else {
 				if (isLevel) {
-					data.changePlayerSkillLevel(skillName, player.getUUID(), value.intValue());
+					exp.addLevel(value);
 					ctx.getSource().sendSuccess(() -> LangProvider.ADD_LEVEL.asComponent(skillName, value, player.getName()), true);
 				}
 				else {
-					data.setXpDiff(player.getUUID(), skillName, value);
+					exp.addXp(value);
 					ctx.getSource().sendSuccess(() -> LangProvider.ADD_XP.asComponent(skillName, value, player.getName()), true);
 				}
 			}
@@ -123,8 +125,8 @@ public class CmdNodeAdmin {
 		IDataStorage data = Core.get(LogicalSide.SERVER).getData();
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
 			ctx.getSource().sendSuccess(() -> player.getName(), false);
-			for (Map.Entry<String, Long> skillMap : data.getXpMap(player.getUUID()).entrySet()) {
-				int level = data.getLevelFromXP(skillMap.getValue());
+			for (Map.Entry<String, Experience> skillMap : data.getXpMap(player.getUUID()).entrySet()) {
+				long level = skillMap.getValue().getLevel().getLevel();
 				ctx.getSource().sendSuccess(() -> Component.literal(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
 			}
 		}

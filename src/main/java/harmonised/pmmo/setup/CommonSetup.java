@@ -56,8 +56,6 @@ public class CommonSetup {
 	public static void onServerStartup(ServerStartingEvent event) {
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Loading PMMO Saved Data");
 		Core.get(LogicalSide.SERVER).getData();
-		MsLoggy.INFO.log(LOG_CODE.LOADING, "Computing data for cache");
-		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
 	}
 	

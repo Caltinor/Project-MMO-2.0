@@ -174,17 +174,17 @@ public class TooltipHandler {
 		//remove values that meet the requirement
 		new HashMap<>(map).forEach((skill, level) -> {
 			if (SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).isSkillGroup()) {
-				int total = SkillsConfig.SKILLS.get().get(skill)
+				long total = SkillsConfig.SKILLS.get().get(skill)
 						.getGroup()
 						.keySet()
 						.stream()
-						.map(groupskill-> core.getData().getPlayerSkillLevel(groupskill, null))
-						.collect(Collectors.summingInt(Integer::intValue));
+						.map(groupskill-> core.getData().getLevel(groupskill, null))
+						.mapToLong(Long::longValue).sum();
 				if (level <= total) {
 					map.remove(skill);
 				}
 			}
-			else if (core.getData().getPlayerSkillLevel(skill, null) >= level)
+			else if (core.getData().getLevel(skill, null) >= level)
 				map.remove(skill);
 		});
 		

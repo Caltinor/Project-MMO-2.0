@@ -139,19 +139,19 @@ public class MobAttributeHandler {
 	 */
 	private static float getBonus(List<Player> nearbyPlayers, Map<String, Double> config, int scale, double ogValue, float cap) {
 		//summate all levels from the configured skills for each nearby player
-		Map<String, Integer> totalLevel = new HashMap<>();
+		Map<String, Long> totalLevel = new HashMap<>();
 		//pass through case for dim/biome bonuses to still apply.
 		if (nearbyPlayers.isEmpty()) return 0f;
 		nearbyPlayers.forEach(player -> {
-			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getPlayerSkillLevel(str, player.getUUID())))
+			config.keySet().stream().collect(Collectors.toMap(str -> str, str -> Core.get(player.level()).getData().getLevel(str, player.getUUID())))
 					.forEach((skill, level) -> {
-				totalLevel.merge(skill, level, Integer::sum);
+				totalLevel.merge(skill, level, Long::sum);
 			});
 		});
 		//get the average level for each skill and calculate its modifier from the configuration formula
 		float outValue = 0f;
 		for (Map.Entry<String, Double> configEntry : config.entrySet()) {
-			int averageLevel = totalLevel.getOrDefault(configEntry.getKey(), 0)/nearbyPlayers.size();
+			long averageLevel = totalLevel.getOrDefault(configEntry.getKey(), 0L)/nearbyPlayers.size();
 			if (averageLevel < Config.MOB_SCALING_BASE_LEVEL.get()) continue;
 			outValue += Config.MOB_USE_EXPONENTIAL_FORMULA.get()
 					? Math.pow(Config.MOB_EXPONENTIAL_POWER_BASE.get(), (Config.MOB_EXPONENTIAL_LEVEL_MOD.get() * (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get())))

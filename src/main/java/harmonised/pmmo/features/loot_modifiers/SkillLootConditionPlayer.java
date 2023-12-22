@@ -1,16 +1,9 @@
 package harmonised.pmmo.features.loot_modifiers;
 
-import javax.annotation.Nonnull;
-
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -33,7 +26,7 @@ public class SkillLootConditionPlayer implements LootItemCondition{
 		Entity player = t.getParamOrNull(LootContextParams.THIS_ENTITY);
 		if (player == null || skill == null) return false;
 		
-		int actualLevel = Core.get(player.level()).getData().getPlayerSkillLevel(skill, player.getUUID());
+		long actualLevel = Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 		
 		return (levelMin == null || actualLevel >= levelMin) && (levelMax == null || actualLevel <= levelMax);
 	}

@@ -34,6 +34,7 @@ import harmonised.pmmo.registry.PerkRegistry;
 import harmonised.pmmo.registry.PredicateRegistry;
 import harmonised.pmmo.registry.TooltipRegistry;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
@@ -152,7 +153,7 @@ public class Core {
 				long xpAward = award.getValue();
 				if (players.size() > 1)
 					xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
-				getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
+				getData().addXp(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
 			}
 		}
 	  }
@@ -343,11 +344,11 @@ public class Core {
 		//convert skill groups which do not use total levels into constituent skills
 		CoreUtils.processSkillGroupReqs(requirements);
 		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
-			int skillLevel = getData().getPlayerSkillLevel(req.getKey(), playerID);
+			long skillLevel = getData().getLevel(req.getKey(), playerID);
 			if (SkillsConfig.SKILLS.get().getOrDefault(req.getKey(), SkillData.Builder.getDefault()).isSkillGroup()) {	
 				SkillData skillData = SkillsConfig.SKILLS.get().get(req.getKey());
 				if (skillData.getUseTotalLevels()) {
-					int total = skillData.getGroup().keySet().stream().map(skill-> getData().getPlayerSkillLevel(skill, playerID)).collect(Collectors.summingInt(Integer::intValue));
+					long total = skillData.getGroup().keySet().stream().map(skill -> getData().getLevel(skill, playerID)).mapToLong(Long::longValue).sum();
 					if (req.getValue() > total) {
 						return false;
 					}
@@ -445,7 +446,7 @@ public class Core {
 		if (salvageItem == ItemStack.EMPTY || salvageItem.is(Items.AIR))
 			return;
 		if (!loader.ITEM_LOADER.getData().containsKey(RegistryUtil.getId(salvageItem))) return;
-		Map<String, Long> playerXp = getData().getXpMap(player.getUUID());
+		Map<String, Experience> playerXp = getData().getXpMap(player.getUUID());
 		
 		Map<String, Long> xpAwards = new HashMap<>();
 		boolean validAttempt = false;
@@ -454,7 +455,7 @@ public class Core {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met. 
 			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {
-				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l))) continue entry;
+				if (skill.getValue() > playerXp.getOrDefault(skill.getKey(), new Experience()).getLevel().getLevel()) continue entry;
 			}
 			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption
 			validAttempt = true;
@@ -463,7 +464,7 @@ public class Core {
 			double max = result.getValue().maxChance();
 			double bonus = 0d;
 			for (Map.Entry<String, Double> skill : result.getValue().chancePerLevel().entrySet()) {
-				bonus += skill.getValue() * Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l));
+				bonus += skill.getValue() * playerXp.getOrDefault(skill.getKey(), new Experience()).getLevel().getLevel();
 			}
 			
 			//conduct random check for the total count possible and add each succcess to the output

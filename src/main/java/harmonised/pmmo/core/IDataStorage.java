@@ -1,19 +1,18 @@
 package harmonised.pmmo.core;
 
+import harmonised.pmmo.storage.Experience;
+
 import java.util.Map;
 import java.util.UUID;
 
 public interface IDataStorage {
-	public long getXpRaw(UUID playerID, String skillName);
-	public default boolean setXpDiff(UUID playerID, String skillName, long change) {return false;}
-	public void setXpRaw(UUID playerID, String skillName, long value);
-	public Map<String, Long> getXpMap(UUID playerID);
-	public void setXpMap(UUID playerID, Map<String, Long> map);
-	public int getPlayerSkillLevel(String skill, UUID player);
-	public default void setPlayerSkillLevel(String skill, UUID player, int level) {}
-	public default boolean changePlayerSkillLevel(String skill, UUID playerID, int change) {return false;}
-	public int getLevelFromXP(long xp);
+	public long getXp(UUID playerID, String skillName);
+	public default void addXp(UUID playerID, String skillName, long change) {}
+	public void setXp(UUID playerID, String skillName, long value);
+	public Map<String, Experience> getXpMap(UUID playerID);
+	public void setXpMap(UUID playerID, Map<String, Experience> map);
+	public long getLevel(String skill, UUID player);
+	public default void setLevel(String skill, UUID player, long level) {}
+	public default void addLevel(String skill, UUID playerID, long change) {}
 	public IDataStorage get();
-	public default void computeLevelsForCache() {}
-	public long getBaseXpForLevel(int level);
 }

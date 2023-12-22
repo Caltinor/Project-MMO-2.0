@@ -1,9 +1,11 @@
 package harmonised.pmmo.events.impl;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.storage.Experience;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
@@ -18,15 +20,30 @@ public class PlayerDeathHandler {
 		Core core = Core.get(player.level());
 
 		new HashMap<>(core.getData().getXpMap(player.getUUID())).forEach((skill, xp) -> {
-			int currentLevel = core.getData().getLevelFromXP(xp);
-			long levelXpThreshold = core.getData().getBaseXpForLevel(currentLevel);
-			long safeXP = Config.LOSE_LEVELS_ON_DEATH.get() ? 0L : levelXpThreshold;
-			long xpToCalculateLoss = Config.LOSE_ONLY_EXCESS.get() ? xp - safeXP : xp;
-
-			long rawLoss = Double.valueOf((double)xpToCalculateLoss * Config.LOSS_ON_DEATH.get()).longValue();
-			long finalXp = Math.max(safeXP, xp - rawLoss);
-
-			core.getData().setXpRaw(player.getUUID(), skill, finalXp);
+			long lossExp = 0;
+			long lossLvl = 0;
+			long lossScaled = Double.valueOf(Config.LOSS_ON_DEATH.get() * 10000d).longValue();
+			if (Config.LOSE_ONLY_EXCESS.get()) {
+				lossExp = (xp.getXp() * lossScaled)/10000L;
+				xp.addXp(-lossExp);
+			}
+			else if (Config.LOSE_LEVELS_ON_DEATH.get()) {
+				BigInteger totalXp = BigInteger.valueOf(0L);
+				for (long i = 0; i < xp.getLevel().getLevel(); i++) {
+					totalXp = totalXp.add(BigInteger.valueOf(Experience.XpLevel.getXpForNextLevel(i)));
+				}
+				totalXp = totalXp.multiply(BigInteger.valueOf(lossScaled));
+				totalXp = totalXp.divide(BigInteger.valueOf(10000L));
+				while (totalXp.longValue() > xp.getXp()) {
+					long currentXp = xp.getXp();
+					long upperLimit = xp.getLevel().getXpToGain() - 1;
+					xp.getLevel().decrement();
+					xp.setXp(upperLimit);
+					totalXp.subtract(BigInteger.valueOf(currentXp));
+				}
+				xp.setXp(totalXp.longValue());
+			}
+			core.getData().getXpMap(player.getUUID()).put(skill, xp);
 		});
 	}
 }

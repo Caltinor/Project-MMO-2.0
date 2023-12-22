@@ -1,8 +1,6 @@
 package harmonised.pmmo.storage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -10,7 +8,6 @@ import java.util.stream.Collectors;
 import com.mojang.serialization.Codec;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.SkillData;
@@ -20,7 +17,6 @@ import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
-import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
@@ -32,103 +28,101 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
 
 public class PmmoSavedData extends SavedData implements IDataStorage{
 	
-	private static String NAME = Reference.MOD_ID;
+	private static final String NAME = Reference.MOD_ID;
 	
-	private Map<UUID, Map<String, Long>> xp = new HashMap<>();
-	private Map<UUID, Map<String, Long>> scheduledXP = new HashMap<>();
+	private Map<UUID, Map<String, Experience>> xp = new HashMap<>();
+	private Map<UUID, Map<String, Experience>> scheduledXP = new HashMap<>();
 	
-	private static final Codec<Map<UUID, Map<String, Long>>> XP_CODEC = 
+	private static final Codec<Map<UUID, Map<String, Experience>>> XP_CODEC =
 			Codec.unboundedMap(CodecTypes.UUID_CODEC, 
-					Codec.unboundedMap(Codec.STRING, Codec.LONG)
+					Codec.unboundedMap(Codec.STRING, Experience.CODEC)
 						.xmap(HashMap::new, HashMap::new));
 	
 	//===========================GETTERS AND SETTERS================
 	@Override
-	public long getXpRaw(UUID playerID, String skillName) {
-		return xp.getOrDefault(playerID, new HashMap<>()).getOrDefault(skillName, 0L);
+	public long getXp(UUID playerID, String skillName) {
+		return xp.getOrDefault(playerID, new HashMap<>()).getOrDefault(skillName, new Experience()).getXp();
 	}
 	@Override
-	public boolean setXpDiff(UUID playerID, String skillName, long change) {
-		long oldValue = getXpRaw(playerID, skillName);
+	public void addXp(UUID playerID, String skillName, long change) {
 		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
-		
+
 		//if player is not online, schedule the XP for player join.
 		if (player == null) {
-			scheduledXP.computeIfAbsent(playerID, (id) -> new HashMap<>()).merge(skillName, change, (o, n) -> o + n);
-			return true;
+			scheduledXP.computeIfAbsent(playerID, (id) -> new HashMap<>()).merge(skillName, new Experience(change), Experience::merge);
+			return;
 		}
 		//If player is online proceed with xp events, perks and committing xp to master map
-		XpEvent gainXpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
+		XpEvent gainXpEvent = new XpEvent(player, skillName
+				, Core.get(player.level()).getData().getXpMap(playerID).getOrDefault(skillName, new Experience())
+				, change, TagBuilder.start().build());
 		if (NeoForge.EVENT_BUS.post(gainXpEvent).isCanceled())
-			return false;
-
-		setXpRaw(playerID, gainXpEvent.skill, oldValue + gainXpEvent.amountAwarded);
-		return true;
-	}
-	@Override
-	public void setXpRaw(UUID playerID, String skillName, long value) {
-		long formerRaw = getLevelFromXP(getXpRaw(playerID, skillName));
-		xp.computeIfAbsent(playerID, s -> new HashMap<>()).put(skillName, value);
-		this.setDirty();
-		ServerPlayer player;
-		if ((player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID)) != null) {
-			Networking.sendToClient(new CP_UpdateExperience(skillName, value), player);
-			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
-			//capture command cases for XP gain which should prompt a skillup event
-			if (formerRaw != getLevelFromXP(value)) {
-				SkillUpTrigger.SKILL_UP.trigger(player);
-				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+			return;
+		if (xp.computeIfAbsent(playerID, i -> new HashMap<>())
+				.computeIfAbsent(gainXpEvent.skill, s -> new Experience())
+				.addXp(gainXpEvent.amountAwarded)) {
+			SkillUpTrigger.SKILL_UP.trigger(player);
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
-			}
 		}
+		this.setDirty();
+		Networking.sendToClient(new CP_UpdateExperience(skillName, xp.get(playerID).get(skillName), gainXpEvent.amountAwarded), player);
 	}
 	@Override
-	public Map<String, Long> getXpMap(UUID playerID) {
+	public void setXp(UUID playerID, String skillName, long value) {
+		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
+		if (xp.computeIfAbsent(playerID, i -> new HashMap<>()).computeIfAbsent(skillName, s -> new Experience()).setXp(value)
+			&& player != null) {
+			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
+			SkillUpTrigger.SKILL_UP.trigger(player);
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
+		}
+		this.setDirty();
+		if (player != null)
+			Networking.sendToClient(new CP_UpdateExperience(skillName, xp.get(playerID).get(skillName), 0), player);
+	}
+	@Override
+	public Map<String, Experience> getXpMap(UUID playerID) {
 		return xp.getOrDefault(playerID, new HashMap<>());
 	}
 	@Override
-	public void setXpMap(UUID playerID, Map<String, Long> map) {
+	public void setXpMap(UUID playerID, Map<String, Experience> map) {
 		xp.put(playerID, map != null ? map : new HashMap<>());
 		this.setDirty();
 	}
 	@Override
-	public int getPlayerSkillLevel(String skill, UUID player) {
-		int rawLevel = Core.get(LogicalSide.SERVER).getLevelProvider().process(skill, getLevelFromXP(getXpRaw(player, skill)));
-		int skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
+	public long getLevel(String skill, UUID player) {
+		long rawLevel = Core.get(LogicalSide.SERVER).getLevelProvider().process(skill
+				,getXpMap(player).getOrDefault(skill, new Experience()).getLevel().getLevel());
+		long skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
 		return Math.min(rawLevel, skillMaxLevel);
 	}
 	@Override
-	public void setPlayerSkillLevel(String skill, UUID player, int level) {
-		long xpRaw = level > 0 ? levelCache.get(level-1) : 0;
-		setXpRaw(player, skill, xpRaw);
+	public void setLevel(String skill, UUID playerID, long level) {
+		xp.computeIfAbsent(playerID, p -> new HashMap<>())
+				.computeIfAbsent(skill, s -> new Experience())
+				.setLevel(level > 0 ? level: 0);
+		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
+		if (player != null)
+			Networking.sendToClient(new CP_UpdateExperience(skill, xp.get(playerID).get(skill), 0), player);
 	}
 	@Override
-	public boolean changePlayerSkillLevel(String skill, UUID playerID, int change) {
-		int currentLevel = getPlayerSkillLevel(skill, playerID);
-		long oldXp = getXpRaw(playerID, skill);
-		long newXp = (currentLevel - 1 + change) >= 0 ? levelCache.get(currentLevel + change - 1) : 0L;
-		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);	
-			
+	public void addLevel(String skill, UUID playerID, long change) {
+		xp.computeIfAbsent(playerID, p -> new HashMap<>())
+				.computeIfAbsent(skill, s -> new Experience())
+				.addLevel(change);
+		ServerPlayer player  = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
 		if (player != null) {
-			XpEvent gainXpEvent = new XpEvent(player, skill, oldXp, newXp - oldXp, TagBuilder.start().build());
-			if (NeoForge.EVENT_BUS.post(gainXpEvent).isCanceled())
-				return false;
-			
-			if (gainXpEvent.isLevelUp()) 
+			if (change > 0)
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
-			setPlayerSkillLevel(gainXpEvent.skill, playerID, gainXpEvent.endLevel());
+			Networking.sendToClient(new CP_UpdateExperience(skill, xp.get(playerID).get(skill), 0), player);
 		}
-		else 
-			setPlayerSkillLevel(skill, playerID, currentLevel + change);
-		return true;
-	}
-	@Override
-	public long getBaseXpForLevel(int level) {
-		return level > 0 && (level -1) < levelCache.size() ? levelCache.get(level - 1) : 0l;
 	}
 	//===========================CORE WSD LOGIC=====================
 	public PmmoSavedData() {}
@@ -146,13 +140,13 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag nbt) {
+	public @NotNull CompoundTag save(CompoundTag nbt) {
 		//This filter exists to scrub the data from empty values to reduce file bloat.
-		Map<UUID, Map<String, Long>> cleanXP = xp.entrySet().stream()
+		Map<UUID, Map<String, Experience>> cleanXP = xp.entrySet().stream()
 				.filter(entry -> !entry.getValue().isEmpty())
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-		nbt.put(XP_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, cleanXP).result().orElse(new CompoundTag()))));
-		nbt.put(SCHEDULED_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, scheduledXP).result().orElse(new CompoundTag()))));
+		nbt.put(XP_KEY, XP_CODEC.encodeStart(NbtOps.INSTANCE, cleanXP).result().orElse(new CompoundTag()));
+		nbt.put(SCHEDULED_KEY, XP_CODEC.encodeStart(NbtOps.INSTANCE, scheduledXP).result().orElse(new CompoundTag()));
 		return nbt;
 	}
 	
@@ -165,73 +159,16 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
     }
 
 	//============================UTILITY METHODS===========================
-	@Override
-	public int getLevelFromXP(long xp) {
-		for (int i = 0; i < levelCache.size(); i++) {
-			if (levelCache.get(i) > xp)
-				return Core.get(LogicalSide.SERVER).getLevelProvider().process("", i);
-		}
-		return Config.MAX_LEVEL.get();
-	}	
-	
-	
-	private List<Long> levelCache = new ArrayList<>();
-	
-	public List<Long> getLevelCache() {return levelCache;}
-	
-	public void computeLevelsForCache() {
-		if (Config.STATIC_LEVELS.get().size() > 0 && Config.STATIC_LEVELS.get().get(0) != -1) {
-			List<Long> values = new ArrayList<>(Config.STATIC_LEVELS.get());
-			boolean validList = true;
-			//Iterate through the list and ensure all values are greater than their preceding value.
-			for (int i = 1; i < values.size(); i++) {
-				if (values.get(i) <= values.get(i-1)) {
-					validList = false;
-					break;
-				}					
-			}
-			//If all values are valid, set the cache and exit the function
-			if (validList) {
-				Config.MAX_LEVEL.set(values.size());
-				levelCache = values;
-				return;
-			}
-		}
-		
-		boolean exponential = Config.USE_EXPONENTIAL_FORMULA.get();
-		
-		long linearBase = Config.LINEAR_BASE_XP.get();
-		double linearPer = Config.LINEAR_PER_LEVEL.get();
-		
-		int exponentialBase = Config.EXPONENTIAL_BASE_XP.get();
-		double exponentialRoot = Config.EXPONENTIAL_POWER_BASE.get();
-		double exponentialRate = Config.EXPONENTIAL_LEVEL_MOD.get();
-		
-		long current = 0;
-		for (int i = 1; i <= Config.MAX_LEVEL.get(); i++) {
-			current += exponential?
-					exponentialBase * Math.pow(exponentialRoot, exponentialRate * (i)) :
-					linearBase + (i) * linearPer;
-			if (current >= Long.MAX_VALUE) {
-				Config.MAX_LEVEL.set(i-1);
-				break;
-			}
-			levelCache.add(current);
-		}
-		for (ServerPlayer player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
-			Networking.sendToClient(new CP_UpdateLevelCache(levelCache), player);
-		}
-	}
-	
 	public void awardScheduledXP(UUID playerID) {
 		//Clone the original scheduled XP so that we can remove the original
 		//This is vital because a disconnect while this is running would result in 
 		//the player having their scheduledXP rescheduled, and we cannot modify
 		//a collection whilst iterating over it.
-		Map<String, Long> queue = new HashMap<>(scheduledXP.getOrDefault(playerID, new HashMap<>()));
+		Map<String, Experience> queue = new HashMap<>(scheduledXP.getOrDefault(playerID, new HashMap<>()));
 		scheduledXP.remove(playerID);
-		for (Map.Entry<String, Long> scheduledValue : queue.entrySet()) {
-			setXpDiff(playerID, scheduledValue.getKey(), scheduledValue.getValue());
+		for (Map.Entry<String, Experience> scheduledValue : queue.entrySet()) {
+			addXp(playerID, scheduledValue.getKey(), scheduledValue.getValue().getXp());
+			addLevel(scheduledValue.getKey(), playerID, scheduledValue.getValue().getLevel().getLevel());
 		}
 	}
 }

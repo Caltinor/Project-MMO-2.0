@@ -10,7 +10,6 @@ import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
-import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
@@ -36,11 +35,6 @@ public class Networking {
 		
 		int ID = 0;
 		//CLIENT BOUND PACKETS
-		INSTANCE.messageBuilder(CP_UpdateLevelCache.class, ID++)
-			.encoder(CP_UpdateLevelCache::toBytes)
-			.decoder(CP_UpdateLevelCache::new)
-			.consumerNetworkThread(CP_UpdateLevelCache::handle)
-			.add();
 		INSTANCE.messageBuilder(CP_UpdateExperience.class, ID++)
 			.encoder(CP_UpdateExperience::toBytes)
 			.decoder(CP_UpdateExperience::new)

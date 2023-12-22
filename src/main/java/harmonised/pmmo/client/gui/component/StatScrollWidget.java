@@ -34,6 +34,7 @@ import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.ChatFormatting;
@@ -488,8 +489,8 @@ public class StatScrollWidget extends ScrollPanel {
 			Player player = Minecraft.getInstance().player;
 			PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new ArrayList<>()).forEach(nbt -> {
 				ResourceLocation perkID = new ResourceLocation(nbt.getString("perk"));
-				nbt.putInt(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME) 
-						? Core.get(player.level()).getData().getPlayerSkillLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
+				nbt.putLong(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME)
+						? Core.get(player.level()).getData().getLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
 						: 0);
 				holder.addAll(TextElement.build(Component.translatable("perk."+perkID.getNamespace()+"."+perkID.getPath()), 
 						this.width,	step(1), 0x00ff00, false, 0x00ff00));
@@ -636,15 +637,15 @@ public class StatScrollWidget extends ScrollPanel {
 		}
 		
 		//Section for skills
-		Map<String, Long> rawXp = core.getData().getXpMap(entity.getUUID());
-		LinkedHashMap<String, Integer> orderedMap = new LinkedHashMap<>();
+		Map<String, Experience> rawXp = core.getData().getXpMap(entity.getUUID());
+		LinkedHashMap<String, Long> orderedMap = new LinkedHashMap<>();
 		List<String> skillKeys = new ArrayList<>(rawXp.keySet().stream().toList());
-		skillKeys.sort(Comparator.<String>comparingLong(a -> rawXp.get(a)).reversed());
+		skillKeys.stream().sorted(Comparator.<String>comparingLong(a -> rawXp.get(a).getLevel().getLevel()).reversed());
 		skillKeys.forEach(skill -> {
-			orderedMap.put(skill, core.getData().getLevelFromXP(rawXp.get(skill)));
+			orderedMap.put(skill, core.getData().getLevel(skill, null));
 		});
 		content.addAll(TextElement.build(LangProvider.SKILL_LIST_HEADER.asComponent(), step(1), this.width, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-		for (Map.Entry<String, Integer> rawMap : orderedMap.entrySet()) {
+		for (Map.Entry<String, Long> rawMap : orderedMap.entrySet()) {
 			content.addAll(TextElement.build(rawMap.getKey(), rawMap.getValue(), this.width, step(2), CoreUtils.getSkillColor(rawMap.getKey())));
 		}
 	}
