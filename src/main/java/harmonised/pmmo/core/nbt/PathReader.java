@@ -48,7 +48,7 @@ public class PathReader {
 		if (nbt.isEmpty() || nbt == null) return list;
 		String nodeEntry = nodes.get(0);
 
-		if (isQualifiedNode(nodeEntry) && !isQualifiedCompound(nodeEntry, nbt))
+		if (!isList(nodeEntry) && isQualifiedNode(nodeEntry) && !isQualifiedCompound(nodeEntry, nbt))
 			return list;
 		
 		if (isList(nodeEntry)) {	
