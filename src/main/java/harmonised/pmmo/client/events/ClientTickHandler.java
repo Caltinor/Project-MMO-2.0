@@ -42,7 +42,13 @@ public class ClientTickHandler {
 		if (Config.GAIN_BLACKLIST.get().contains(skill) 
 				|| (skillData.isSkillGroup() && skillData.getGroup().containsKey(skill)))
 			return;
-		xpGains.add(new GainEntry(skill, amount));
+		if (xpGains.stream().anyMatch(entry -> entry.skill.equals(skill))) {
+			GainEntry existingEntry = xpGains.stream().filter(entry -> entry.skill.equals(skill)).findFirst().get();
+			xpGains.remove(existingEntry);
+			xpGains.add(new GainEntry(skill, existingEntry.value+amount));
+		}
+		else
+			xpGains.add(new GainEntry(skill, amount));
 	}
 	
 	public static class GainEntry {
