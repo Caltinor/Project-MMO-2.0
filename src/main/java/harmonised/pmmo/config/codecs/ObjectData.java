@@ -256,4 +256,87 @@ public record ObjectData(
 					&& salvage().keySet().stream().allMatch(rl -> rl.equals(new ResourceLocation("item")))
 					&& veinData().isUnconfigured();
 		}
+
+		public static Builder build() {return new Builder();}
+		public static class Builder {
+			boolean override = false;
+			Set<String> tagValues = new HashSet<>();
+			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
+			Map<ReqType, List<LogicEntry>> nbtReqs = new HashMap<>();
+			Map<ResourceLocation, Integer> negativeEffects = new HashMap<>();
+			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
+			Map<EventType, Map<String, Map<String, Long>>> damageXpValues = new HashMap<>();
+			Map<EventType, List<LogicEntry>> nbtXpValues = new HashMap<>();
+			Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
+			Map<ModifierDataType, List<LogicEntry>> nbtBonuses = new HashMap<>();
+			Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
+			public Optional<Integer> chargeCap = Optional.empty();
+			public Optional<Double> chargeRate = Optional.empty();
+			public Optional<Integer> consumeAmount = Optional.empty();
+			public Builder() {}
+			public Builder setOverride(boolean override) {
+				this.override = override;
+				return this;
+			}
+			public Builder addTag(String id) {
+				this.tagValues.add(id);
+				return this;
+			}
+			public Builder addReq(ReqType type, Map<String, Integer> req) {
+				this.reqs.put(type, req);
+				return this;
+			}
+			public Builder addNBTReq(ReqType type, List<LogicEntry> req) {
+				this.nbtReqs.put(type, req);
+				return this;
+			}
+			public Builder addNegativeEffect(ResourceLocation id, int level) {
+				this.negativeEffects.put(id, level);
+				return this;
+			}
+			public Builder addXpValues(EventType type, Map<String, Long> awards) {
+				this.xpValues.put(type, awards);
+				return this;
+			}
+			public Builder addDealDamageXp(String damageID, Map<String, Long> award) {
+				this.damageXpValues.computeIfAbsent(EventType.DEAL_DAMAGE, t -> new HashMap<>()).put(damageID, award);
+				return this;
+			}
+			public Builder addReceiveDamageXp(String damageID, Map<String, Long> award) {
+				this.damageXpValues.computeIfAbsent(EventType.RECEIVE_DAMAGE, t -> new HashMap<>()).put(damageID, award);
+				return this;
+			}
+			public Builder addNBTXp(EventType type, List<LogicEntry> logic) {
+				this.nbtXpValues.put(type, logic);
+				return this;
+			}
+			public Builder addBonus(ModifierDataType type, Map<String, Double> bonus) {
+				this.bonuses.put(type, bonus);
+				return this;
+			}
+			public Builder addNBTBonus(ModifierDataType type, List<LogicEntry> bonus) {
+				this.nbtBonuses.put(type, bonus);
+				return this;
+			}
+			public Builder addSalvage(ResourceLocation outputID, SalvageData details) {
+				this.salvage.put(outputID, details);
+				return this;
+			}
+			public Builder setVeinRate(double rate) {
+				this.chargeRate = Optional.of(rate);
+				return this;
+			}
+			public Builder setVeinCap(int cap) {
+				this.chargeCap = Optional.of(cap);
+				return this;
+			}
+			public Builder setVeinConsume(int consumed) {
+				this.consumeAmount = Optional.of(consumed);
+				return this;
+			}
+			public ObjectData end() {
+				return new ObjectData(override, tagValues, reqs, nbtReqs, negativeEffects, xpValues, damageXpValues,
+						nbtXpValues, bonuses, nbtBonuses, salvage, new VeinData(chargeCap, chargeRate, consumeAmount));
+			}
+		}
 }

@@ -15,6 +15,10 @@ import harmonised.pmmo.setup.datagen.GLMProvider;
 import harmonised.pmmo.setup.datagen.ItemTagProvider;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.setup.datagen.LangProvider.Locale;
+import harmonised.pmmo.setup.datagen.defaultpacks.DefaultGLMProvider;
+import harmonised.pmmo.setup.datagen.defaultpacks.EasyGLMProvider;
+import harmonised.pmmo.setup.datagen.defaultpacks.EasyItemConfigProvider;
+import harmonised.pmmo.setup.datagen.defaultpacks.HardcoreGLMProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -85,7 +89,15 @@ public class CommonSetup {
 			}
 		}
 		if (event.includeServer()) {
-			generator.addProvider(true, new GLMProvider(generator.getPackOutput()));
+			//Easy Feature Pack Generators
+			generator.addProvider(true, new EasyGLMProvider(generator.getPackOutput()));
+			generator.addProvider(true, new EasyItemConfigProvider(generator.getPackOutput()));
+			//Default Feature Pack Generators
+			generator.addProvider(true, new DefaultGLMProvider(generator.getPackOutput()));
+			//Hardcore Feature Pack Generators
+			generator.addProvider(true, new HardcoreGLMProvider(generator.getPackOutput()));
+
+			//Common mod data
 			BlockTagProvider blockProvider = new BlockTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper());
 			generator.addProvider(true, blockProvider);
 			generator.addProvider(true, new EntityTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
