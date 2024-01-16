@@ -13,29 +13,36 @@ import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.bus.api.Event;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
+import net.minecraftforge.eventbus.api.Event.Result;
 
 public class PlayerClickHandler {
 
 	@SuppressWarnings("resource")
-	public static void leftClickBlock(PlayerInteractEvent.LeftClickBlock event ) {
+	public static void leftClickBlock(LeftClickBlock event ) {
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
 		boolean serverSide = !player.level().isClientSide;
 		
-		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
-			event.setUseBlock(Event.Result.DENY);
+		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), player)) {
+			event.setUseBlock(Result.DENY);
+			Messenger.sendDenialMsg(ReqType.BREAK, player, new ItemStack(player.level().getBlockState(event.getPos()).getBlock().asItem()).getDisplayName());
+
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
-			event.setUseItem(Event.Result.DENY);
+			event.setUseItem(Result.DENY);
+			Messenger.sendDenialMsg(ReqType.INTERACT, player, player.getMainHandItem().getDisplayName());
 		}
-		if (event.getUseBlock().equals(Event.Result.DENY)) return;
+		if (event.getUseBlock().equals(Result.DENY)) return;
 		
 		CompoundTag hookOutput = new CompoundTag();
 		if (serverSide) {
@@ -45,9 +52,9 @@ public class PlayerClickHandler {
 				return;
 			}
 			if (hookOutput.getBoolean(APIUtils.DENY_BLOCK_USE))
-				event.setUseBlock(Event.Result.DENY);
+				event.setUseBlock(Result.DENY);
 			if (hookOutput.getBoolean(APIUtils.DENY_ITEM_USE))
-				event.setUseItem(Event.Result.DENY);
+				event.setUseItem(Result.DENY);
 		}
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.HIT_BLOCK, player, new CompoundTag()));
@@ -59,18 +66,18 @@ public class PlayerClickHandler {
 	}
 	
 	@SuppressWarnings("resource")
-	public static void rightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+	public static void rightClickBlock(RightClickBlock event) {
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
 		boolean serverSide = !player.level().isClientSide;
 		
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
-			event.setUseBlock(Event.Result.DENY);
+			event.setUseBlock(Result.DENY);
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
-			event.setUseItem(Event.Result.DENY);
+			event.setUseItem(Result.DENY);
 		}
-		if (event.getUseBlock().equals(Event.Result.DENY) && !serverSide && event.getHand().equals(InteractionHand.MAIN_HAND)) {
+		if (event.getUseBlock().equals(Result.DENY) && !serverSide && event.getHand().equals(InteractionHand.MAIN_HAND)) {
 			Messenger.sendDenialMsg(ReqType.INTERACT, player, event.getLevel().getBlockState(event.getPos()).getBlock().getName());
 			return;
 		}
@@ -98,7 +105,7 @@ public class PlayerClickHandler {
 	}
 	
 	@SuppressWarnings("resource")
-	public static void rightClickItem(PlayerInteractEvent.RightClickItem event) {
+	public static void rightClickItem(RightClickItem event) {
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
 		boolean serverSide = !player.level().isClientSide;

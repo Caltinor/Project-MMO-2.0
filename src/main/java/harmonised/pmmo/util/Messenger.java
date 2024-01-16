@@ -9,10 +9,7 @@ public class Messenger {
 	
 	public static void sendDenialMsg(ReqType type, Player player, Object... name) {
 		MutableComponent text = Component.translatable("pmmo.msg.denial."+type.name().toLowerCase(), name);
-		send(text, player);		
+		send(text, player);
 	}
-	
-	private static void send(Component text, Player player) {
-		player.sendSystemMessage(text);
-	}
+	private static void send(Component text, Player player) {player.displayClientMessage(text, true);}
 }
