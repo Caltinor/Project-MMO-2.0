@@ -1,11 +1,15 @@
 package harmonised.pmmo.client.events;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
+import com.mojang.datafixers.util.Pair;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
@@ -60,50 +64,26 @@ public class TooltipHandler {
                 Minecraft.getInstance().setScreen(new StatsScreen(stack));
                 return;
             }
-            //TODO make this generate via loop
-            Map<String, Integer> wearReq = getReqData(core, ReqType.WEAR, stack);
-            Map<String, Integer> toolReq = getReqData(core, ReqType.TOOL, stack);
-            Map<String, Integer> weaponReq = getReqData(core, ReqType.WEAPON, stack);
-            Map<String, Integer> useReq = getReqData(core, ReqType.USE, stack);
-            Map<String, Integer> useEnchantmentReq = getReqData(core, ReqType.USE_ENCHANTMENT, stack);
-            Map<String, Integer> placeReq = getReqData(core, ReqType.PLACE, stack);
-            Map<String, Integer> breakReq = getReqData(core, ReqType.BREAK, stack);
-            Map<String, Long> xpValueBreaking = getXpData(core, EventType.BLOCK_BREAK, player, stack);
-            Map<String, Long> xpValueCrafting = getXpData(core, EventType.CRAFT, player, stack);
-            Map<String, Long> xpValueSmelting = getXpData(core, EventType.SMELT, player, stack);
-            Map<String, Long> xpValueBrewing = getXpData(core, EventType.BREW, player, stack);
-            Map<String, Long> xpValueGrowing = getXpData(core, EventType.GROW, player, stack);
-            Map<String, Long> xpValuePlacing = getXpData(core, EventType.BLOCK_PLACE, player, stack);
-            //Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
-            //Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
-            Map<String, Double> heldItemXpBoost = core.getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack));
-            Map<String, Double> wornItemXpBoost = core.getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN, TagUtils.stackTag(stack));
+			Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS)
+					.filter(type -> Config.tooltipReqEnabled(type).get())
+					.map(type -> Pair.of(type, getReqData(core, type, stack)))
+					.filter(pair -> !pair.getSecond().isEmpty())
+					.forEach(pair -> addRequirementTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond(), core));
+			Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS)
+					.filter(type -> Config.tooltipXpEnabled(type).get())
+					.map(type -> Pair.of(type, getXpData(core, type, player, stack)))
+					.filter(pair -> !pair.getSecond().isEmpty())
+					.forEach(pair -> addXpValueTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond(), core));
+			Stream.of(ModifierDataType.HELD, ModifierDataType.WORN)
+					.filter(type -> Config.tooltipBonusEnabled(type).get())
+					.map(type -> Pair.of(type, core.getObjectModifierMap(ObjectType.ITEM, itemID, type, TagUtils.stackTag(stack))))
+					.filter(pair -> !pair.getSecond().isEmpty())
+					.forEach(pair -> addModifierTooltip(pair.getFirst().tooltip, event, pair.getSecond(), core));
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
-            VeinData veinData = VeinData.EMPTY;
-            if (!core.getLoader().ITEM_LOADER.getData(itemID).veinData().isUnconfigured()) {
-            	veinData = core.getLoader().ITEM_LOADER.getData(itemID).veinData();
-            }
-            
-            //=====================REQUIREMENTS=========================
-            if (wearReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAR).get())	 {addRequirementTooltip(LangProvider.REQ_WEAR, event, wearReq, core);}
-            if (toolReq.size() > 0 && Config.tooltipReqEnabled(ReqType.TOOL).get())  {addRequirementTooltip(LangProvider.REQ_TOOL, event, toolReq, core);}
-            if (weaponReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAPON).get()){addRequirementTooltip(LangProvider.REQ_WEAPON, event, weaponReq, core);}
-            if (useReq.size() > 0 && Config.tooltipReqEnabled(ReqType.USE).get())   {addRequirementTooltip(LangProvider.REQ_USE, event, useReq, core);}
-            if (useEnchantmentReq.size() > 0 && Config.tooltipReqEnabled(ReqType.USE_ENCHANTMENT).get()) {addRequirementTooltip(LangProvider.REQ_ENCHANT, event, useEnchantmentReq, core);}
-            if (placeReq.size() > 0 && Config.tooltipReqEnabled(ReqType.PLACE).get()) {addRequirementTooltip(LangProvider.REQ_PLACE, event, placeReq, core);}
-            if (breakReq.size() > 0 && Config.tooltipReqEnabled(ReqType.BREAK).get()) {addRequirementTooltip(LangProvider.REQ_BREAK, event, breakReq, core);}
-            //=====================XP VALUES============================
-            if (xpValueBreaking.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_BREAK).get()){addXpValueTooltip(LangProvider.XP_VALUE_BREAK, event, xpValueBreaking, core);}
-            if (xpValueCrafting.size() > 0 && Config.tooltipXpEnabled(EventType.CRAFT).get()){addXpValueTooltip(LangProvider.XP_VALUE_CRAFT, event, xpValueCrafting, core);}
-            if (xpValueSmelting.size() > 0 && Config.tooltipXpEnabled(EventType.SMELT).get()){addXpValueTooltip(LangProvider.XP_VALUE_SMELT, event, xpValueSmelting, core);}
-            if (xpValueBrewing.size() > 0 && Config.tooltipXpEnabled(EventType.BREW).get()) {addXpValueTooltip(LangProvider.XP_VALUE_BREW, event, xpValueBrewing, core);}
-            if (xpValueGrowing.size() > 0 && Config.tooltipXpEnabled(EventType.GROW).get()) {addXpValueTooltip(LangProvider.XP_VALUE_GROW, event, xpValueGrowing, core);}
-            if (xpValuePlacing.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_PLACE).get()) {addXpValueTooltip(LangProvider.XP_VALUE_PLACE, event, xpValuePlacing, core);}
-            //=====================MODIFIERS============================
-            if (heldItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.HELD).get()) {addModifierTooltip(LangProvider.BOOST_HELD, event, heldItemXpBoost, core);}
-            if (wornItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.WORN).get()) {addModifierTooltip(LangProvider.BOOST_WORN, event, wornItemXpBoost, core);}
-            //=====================VEIN DATA============================
-            if (!veinData.equals(VeinData.EMPTY) && Config.VEIN_ENABLED.get()) {addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, stack.getItem() instanceof BlockItem);}
+            VeinData veinData = core.getLoader().ITEM_LOADER.getData(itemID).veinData();
+            if (!veinData.isUnconfigured() && !veinData.equals(VeinData.EMPTY) && Config.VEIN_ENABLED.get()) {
+				addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, stack.getItem() instanceof BlockItem);
+			}
          }
 	}
 	
@@ -123,7 +103,7 @@ public class TooltipHandler {
 	
 	private static void addModifierTooltip(Translation header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
 		event.getToolTip().add(header.asComponent());
-		values.entrySet().stream().filter(entry -> entry.getValue() != 0.0).forEach(modifier -> {
+		values.entrySet().stream().filter(entry -> entry.getValue() != 0.0 && entry.getValue() != 1.0).forEach(modifier -> {
 			event.getToolTip().add(Component.translatable("pmmo."+modifier.getKey()).append(Component.literal(" "+modifierPercent(modifier.getValue()))).setStyle(CoreUtils.getSkillStyle(modifier.getKey())));
 		});
 	}

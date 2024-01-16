@@ -1490,6 +1490,8 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Craft").build();
 	public static final Translation ENUM_CONSUME = Translation.Builder.start("pmmo.enum.CONSUME")
 		.addLocale(Locale.EN_US, "Eat/Drink").build();
+	public static final Translation ENUM_CROUCH = Translation.Builder.start("pmmo.enum.CROUCH")
+			.addLocale(Locale.EN_US, "Crouch").build();
 	public static final Translation ENUM_RECEIVE_DAMAGE = Translation.Builder.start("pmmo.enum.RECEIVE_DAMAGE")
 		.addLocale(Locale.EN_US, "Receive Damage").build();
 	public static final Translation ENUM_DEAL_MELEE_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_DAMAGE")
@@ -1524,6 +1526,8 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Activate Item").build();
 	public static final Translation ENUM_ENTITY = Translation.Builder.start("pmmo.enum.ENTITY")
 		.addLocale(Locale.EN_US, "Interact with Entity").build();
+	public static final Translation ENUM_EFFECT = Translation.Builder.start("pmmo.enum.EFFECT")
+			.addLocale(Locale.EN_US, "Active Effect").build();
 	public static final Translation ENUM_RESPAWN = Translation.Builder.start("pmmo.enum.RESPAWN")
 		.addLocale(Locale.EN_US, "Respawn").build();
 	public static final Translation ENUM_RIDING = Translation.Builder.start("pmmo.enum.RIDING")
@@ -1774,6 +1778,8 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "To Place").build();
 	public static final Translation REQ_ENCHANT = Translation.Builder.start("pmmo.use_enchant")
 			.addLocale(Locale.EN_US, "Use Enchantment").build();
+	public static final Translation REQ_INTERACT = Translation.Builder.start("pmmo.req_interact")
+			.addLocale(Locale.EN_US, "Interact with Block").build();
 	public static final Translation REQ_BREAK = Translation.Builder.start("pmmo.break")
 			.addLocale(Locale.HU, "Break")
 			.addLocale(Locale.JA, "Break")
@@ -1801,12 +1807,32 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.ZH_CN, "破坏需求等级")
 			.addLocale(Locale.ZH_TW, "破壞需求等級")
 			.addLocale(Locale.EN_US, "To Break").build();
+	public static final Translation XP_VALUE_ANVIL = Translation.Builder.start("pmmo.xpValueAnvil")
+			.addLocale(Locale.EN_US, "Anvil Repair Xp Value").build();
 	public static final Translation XP_VALUE_BREAK = Translation.Builder.start("pmmo.xpValueBreak")
 		.addLocale(Locale.EN_US, "Break Xp Value").build();
 	public static final Translation XP_VALUE_CRAFT = Translation.Builder.start("pmmo.xpValueCraft")
 		.addLocale(Locale.EN_US, "Craft Xp Value").build();
+	public static final Translation XP_VALUE_CONSUME = Translation.Builder.start("pmmo.xpValueConsume")
+			.addLocale(Locale.EN_US, "Consume Xp Value").build();
+	public static final Translation XP_VALUE_DEAL_DAMAGE = Translation.Builder.start("pmmo.xpValueDealDamage")
+			.addLocale(Locale.EN_US, "Deal Damage with Item Xp").build();
+	public static final Translation XP_VALUE_ENCHANT = Translation.Builder.start("pmmo.xpValueEnchant")
+			.addLocale(Locale.EN_US, "Enchant Xp Value").build();
+	public static final Translation XP_VALUE_FISH = Translation.Builder.start("pmmo.xpValueFish")
+			.addLocale(Locale.EN_US, "Fishing Loot Xp Value").build();
 	public static final Translation XP_VALUE_SMELT = Translation.Builder.start("pmmo.xpValueSmelt")
 		.addLocale(Locale.EN_US, "Smelt Xp Value").build();
+	public static final Translation XP_VALUE_TRADE_GIVE = Translation.Builder.start("pmmo.xpValueTradeGive")
+			.addLocale(Locale.EN_US, "Given in Trade Xp Value").build();
+	public static final Translation XP_VALUE_TRADE_GET = Translation.Builder.start("pmmo.xpValueTradeGet")
+			.addLocale(Locale.EN_US, "Received in Trade Xp Value").build();
+	public static final Translation XP_VALUE_HIT_BLOCK = Translation.Builder.start("pmmo.xpValueHitBlock")
+			.addLocale(Locale.EN_US, "Hit Block Xp Value").build();
+	public static final Translation XP_VALUE_ACTIVATE_BLOCK = Translation.Builder.start("pmmo.xpValueActivateBlock")
+			.addLocale(Locale.EN_US, "Activate Block Xp Value").build();
+	public static final Translation XP_VALUE_USE= Translation.Builder.start("pmmo.xpValueUse")
+			.addLocale(Locale.EN_US, "Use Item Xp Value").build();
 	public static final Translation XP_VALUE_BREW = Translation.Builder.start("pmmo.xpValueBrew")
 		.addLocale(Locale.EN_US, "Brew Xp Value").build();
 	public static final Translation XP_VALUE_GROW = Translation.Builder.start("pmmo.xpValueGrow")
