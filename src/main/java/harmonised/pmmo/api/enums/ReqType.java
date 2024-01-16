@@ -7,37 +7,40 @@ import java.util.stream.Collectors;
 import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 
 public enum ReqType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
-    WEAR(true, false, false, "endurance"),				//PLAYER TICK
-    USE_ENCHANTMENT(true, false, false, "magic"),		//PLAYER TICK
-    TOOL(true, false, false, "mining"),					//IMPLEMENTED IN ACTIONS
-    WEAPON(true, false, false, "combat"),				//IMPLEMENTED IN ACTIONS
-    USE(true, false, false, "crafting"),					//IMPLEMENTED IN ACTIONS
-    PLACE(true, true, false, "building"),				//IMPLEMENTED IN ACTIONS
-    BREAK(true, true, false, "mining"),					//IMPLEMENTED IN ACTIONS
-    KILL(false, false, true, "combat"),					//IMPLEMENTED IN ACTIONS
-    TRAVEL(false, false, false,"agility"), 				//TRAVEL EVENT
-    RIDE(false, false, true, "farming"),				//IMPLEMENTED IN EVENT
-    TAME(false, false, true, "taming"),					//IMPLEMENTED IN ACTIONS
-    BREED(false, false, true, "farming"),				//IMPLEMENTED IN ACTIONS
-    INTERACT(true, true, false, "engineering"),			//IMPLEMENTED IN ACTOINS
-    ENTITY_INTERACT(false, false, true, "farming");		//IMPLEMENTED IN ACTIONS
+    WEAR(true, false, false, "endurance", LangProvider.REQ_WEAR),				//PLAYER TICK
+    USE_ENCHANTMENT(true, false, false, "magic", LangProvider.REQ_ENCHANT),		//PLAYER TICK
+    TOOL(true, false, false, "mining", LangProvider.REQ_TOOL),					//IMPLEMENTED IN ACTIONS
+    WEAPON(true, false, false, "combat", LangProvider.REQ_WEAPON),				//IMPLEMENTED IN ACTIONS
+    USE(true, false, false, "crafting", LangProvider.REQ_USE),					//IMPLEMENTED IN ACTIONS
+    PLACE(true, true, false, "building", LangProvider.REQ_PLACE),				//IMPLEMENTED IN ACTIONS
+    BREAK(true, true, false, "mining", LangProvider.REQ_BREAK),					//IMPLEMENTED IN ACTIONS
+    KILL(false, false, true, "combat", LangProvider.ENUM_KILL),					//IMPLEMENTED IN ACTIONS
+    TRAVEL(false, false, false,"agility", LangProvider.ENUM_TRAVEL), 				//TRAVEL EVENT
+    RIDE(false, false, true, "farming", LangProvider.ENUM_RIDE),				//IMPLEMENTED IN EVENT
+    TAME(false, false, true, "taming", LangProvider.ENUM_TAME),					//IMPLEMENTED IN ACTIONS
+    BREED(false, false, true, "farming", LangProvider.ENUM_BREED),				//IMPLEMENTED IN ACTIONS
+    INTERACT(true, true, false, "engineering", LangProvider.REQ_INTERACT),			//IMPLEMENTED IN ACTOINS
+    ENTITY_INTERACT(false, false, true, "farming", LangProvider.ENUM_ENTITY_INTERACT);		//IMPLEMENTED IN ACTIONS
 	
 	
-	ReqType(boolean itemApplicable, boolean blockApplicable, boolean entityApplicable, String defaultSkill) {
+	ReqType(boolean itemApplicable, boolean blockApplicable, boolean entityApplicable, String defaultSkill, LangProvider.Translation tooltipTranslation) {
 		this.itemApplicable = itemApplicable;
 		this.blockApplicable = blockApplicable;
 		this.entityApplicable = entityApplicable;
 		this.defaultSkill = defaultSkill;
+		this.tooltipTranslation = tooltipTranslation;
 	}
 	
 	public final boolean itemApplicable;
 	public final boolean blockApplicable;
 	public final boolean entityApplicable;
 	public final String defaultSkill;
+	public final LangProvider.Translation tooltipTranslation;
 	
 	public static final ReqType[] ITEM_APPLICABLE_EVENTS = Arrays.asList(ReqType.values()).stream().filter((type) -> type.itemApplicable).toArray(ReqType[]::new);
 	public static final ReqType[] BLOCK_APPLICABLE_EVENTS = Arrays.asList(ReqType.values()).stream().filter((type) -> type.blockApplicable).toArray(ReqType[]::new);
@@ -49,7 +52,7 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum, GuiEnumGrou
 	public static ReqType byName(String name) {return BY_NAME.get(name);}
 	@Override
 	public String getSerializedName() {return this.name();}
-	public static ReqType create(String name, boolean itemApplicable, boolean blockApplicable, boolean entityApplicable, String defaultSkill) {throw new IllegalStateException("Enum not extended");}
+	public static ReqType create(String name, boolean itemApplicable, boolean blockApplicable, boolean entityApplicable, String defaultSkill, LangProvider.Translation translation) {throw new IllegalStateException("Enum not extended");}
 
 	@Override
 	public String getName() {return name();}
