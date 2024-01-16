@@ -56,7 +56,7 @@ public class TooltipHandler {
             if(itemID == null)
                 return;
 
-            if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), ClientSetup.OPEN_MENU.getKey().getValue())) {
+            if(!ClientSetup.OPEN_MENU.isUnbound() && InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), ClientSetup.OPEN_MENU.getKey().getValue())) {
                 Minecraft.getInstance().setScreen(new StatsScreen(stack));
                 return;
             }
