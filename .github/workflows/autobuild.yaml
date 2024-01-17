@@ -87,8 +87,7 @@ jobs:
 
           files: |
             ${{ needs.setup.outputs.file_path }}
-            build/libs/!(*-@(dev|sources|javadoc)).jar
-            build/libs/*-@(dev|sources|javadoc).jar
+            build/libs/*.jar
 
           name: ${{ needs.setup.outputs.mod_name }}-1.20.1-${{ needs.setup.outputs.mod_version }}
           version: ${{ needs.setup.outputs.mod_version }}
@@ -110,8 +109,7 @@ jobs:
 
           files: |
             ${{ needs.setup.outputs.file_path }}
-            build/libs/!(*-@(dev|sources|javadoc)).jar
-            build/libs/*-@(dev|sources|javadoc).jar
+            build/libs/*.jar
 
           name: ${{ needs.setup.outputs.mod_name }}-1.20.1-${{ needs.setup.outputs.mod_version }}
           version: 1.20.1-${{ needs.setup.outputs.mod_version }}
