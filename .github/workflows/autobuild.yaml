@@ -103,7 +103,7 @@ jobs:
             ${{ needs.setup.outputs.java_version }}
       - name: Upload to Modrinth
         if: ${{ vars.MODREPO == 'modrinth' || vars.MODREPO == 'both' }}
-        uses: Kir-Antipov/mc-publish@v3.3
+        uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           modrinth-id: KFQYC1Uy
           modrinth-token: ${{ secrets.modrinth_api }}
