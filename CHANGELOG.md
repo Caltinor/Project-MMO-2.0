@@ -7,3 +7,4 @@
 - Fixed log spam from unbound keybind issue
 - Overhauled tooltips to include all possible reqs and xp sources
   - all are enabled by default but can be disabled in pmmo-client.toml
+- Fixed bonuses for damage not applying to XP awards

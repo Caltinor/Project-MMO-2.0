@@ -80,7 +80,7 @@ jobs:
           key: ${{ github.sha }}
       - name: Upload to CurseForge
         if: ${{ vars.MODREPO == 'curseforge' || vars.MODREPO == 'both' }}
-        uses: Kir-Antipov/mc-publish@v3.3
+        uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           curseforge-id: 353935
           curseforge-token: ${{ secrets.curseforge_api }}
@@ -90,7 +90,7 @@ jobs:
             build/libs/!(*-@(dev|sources|javadoc)).jar
             build/libs/*-@(dev|sources|javadoc).jar
 
-          name: ${{ needs.setup.outputs.mod_name }}-${{ needs.setup.outputs.mod_version }}
+          name: ${{ needs.setup.outputs.mod_name }}-1.20.1-${{ needs.setup.outputs.mod_version }}
           version: ${{ needs.setup.outputs.mod_version }}
           changelog-file: CHANGELOG.md
 
@@ -113,7 +113,7 @@ jobs:
             build/libs/!(*-@(dev|sources|javadoc)).jar
             build/libs/*-@(dev|sources|javadoc).jar
 
-          name: ${{ needs.setup.outputs.mod_name }}-${{ needs.setup.outputs.mod_version }}
+          name: ${{ needs.setup.outputs.mod_name }}-1.20.1-${{ needs.setup.outputs.mod_version }}
           version: ${{ needs.setup.outputs.mod_version }}
           changelog-file: CHANGELOG.md
 
