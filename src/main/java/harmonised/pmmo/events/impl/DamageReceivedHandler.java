@@ -9,6 +9,7 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.*;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -82,6 +83,7 @@ public class DamageReceivedHandler {
 		Map<String, Long> tagXp = tags.stream().map(str -> config.get(str)).reduce((mapA, mapB) -> Functions.mergeMaps(mapA, mapB)).orElse(new HashMap<>());
 		Functions.mergeMaps(config.getOrDefault(RegistryUtil.getId(source).toString(), new HashMap<>()), tagXp)
 				.forEach((skill, xp) -> mapOut.putIfAbsent(skill, (long)(xp.floatValue() * ultimateDamage)));
+		CoreUtils.applyXpModifiers(mapOut, core.getConsolidatedModifierMap(player));
 		return mapOut;
 	}
 }
