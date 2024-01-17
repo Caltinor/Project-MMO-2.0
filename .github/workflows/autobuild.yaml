@@ -85,9 +85,7 @@ jobs:
           curseforge-id: 353935
           curseforge-token: ${{ secrets.curseforge_api }}
 
-          files: |
-            ${{ needs.setup.outputs.file_path }}
-            build/libs/*.jar
+          files: ${{ needs.setup.outputs.file_path }}
 
           name: ${{ needs.setup.outputs.mod_name }}-1.20.1-${{ needs.setup.outputs.mod_version }}
           version: ${{ needs.setup.outputs.mod_version }}
@@ -107,9 +105,7 @@ jobs:
           modrinth-id: KFQYC1Uy
           modrinth-token: ${{ secrets.modrinth_api }}
 
-          files: |
-            ${{ needs.setup.outputs.file_path }}
-            build/libs/*.jar
+          files: ${{ needs.setup.outputs.file_path }}
 
           name: ${{ needs.setup.outputs.mod_name }}-1.20.1-${{ needs.setup.outputs.mod_version }}
           version: 1.20.1-${{ needs.setup.outputs.mod_version }}
