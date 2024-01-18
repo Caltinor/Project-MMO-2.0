@@ -85,12 +85,9 @@ jobs:
           curseforge-id: 353935
           curseforge-token: ${{ secrets.curseforge_api }}
 
-          files: |
-            ${{ needs.setup.outputs.file_path }}
-            build/libs/!(*-@(dev|sources|javadoc)).jar
-            build/libs/*-@(dev|sources|javadoc).jar
+          files: ${{ needs.setup.outputs.file_path }}
 
-          name: ${{ needs.setup.outputs.mod_name }}-${{ needs.setup.outputs.mod_version }}
+          name: ${{ needs.setup.outputs.mod_name }}-1.21-${{ needs.setup.outputs.mod_version }}
           version: ${{ needs.setup.outputs.mod_version }}
           changelog-file: CHANGELOG.md
 
@@ -108,12 +105,9 @@ jobs:
           modrinth-id: KFQYC1Uy
           modrinth-token: ${{ secrets.modrinth_api }}
 
-          files: |
-            ${{ needs.setup.outputs.file_path }}
-            build/libs/!(*-@(dev|sources|javadoc)).jar
-            build/libs/*-@(dev|sources|javadoc).jar
+          files: ${{ needs.setup.outputs.file_path }}
 
-          name: ${{ needs.setup.outputs.mod_name }}-${{ needs.setup.outputs.mod_version }}
+          name: ${{ needs.setup.outputs.mod_name }}-1.21-${{ needs.setup.outputs.mod_version }}
           version: ${{ needs.setup.outputs.mod_version }}
           changelog-file: CHANGELOG.md
 
