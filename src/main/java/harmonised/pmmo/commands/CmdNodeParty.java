@@ -4,17 +4,21 @@ import java.util.List;
 import java.util.UUID;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.UuidArgument;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
 
 public class CmdNodeParty {
 	//CREATE, LEAVE, INVITE, ACCEPT, DECLINE
@@ -23,40 +27,43 @@ public class CmdNodeParty {
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		return Commands.literal("party")
 				.then(Commands.literal("create")
-						.executes(c -> partyCreate(c)))
+						.then(Commands.argument("name", StringArgumentType.word())
+						.executes(CmdNodeParty::partyCreate)))
 				.then(Commands.literal("leave")
-						.executes(c -> partyLeave(c)))
+						.executes(CmdNodeParty::partyLeave))
 				.then(Commands.literal("invite")
 						.then(Commands.argument("player", EntityArgument.player())
-								.executes(c -> partyInvite(c))))
+								.executes(CmdNodeParty::partyInvite)))
 				.then(Commands.literal("uninvite")
 						.then(Commands.argument("player", EntityArgument.player())
-								.executes(c -> partyUninvite(c))))
+								.executes(CmdNodeParty::partyUninvite)))
 				.then(Commands.literal("list")
-						.executes(c -> listParty(c)))
+						.executes(CmdNodeParty::listParty))
 				.then(Commands.literal("accept")
 						.then(Commands.argument(REQUEST_ID, UuidArgument.uuid())
-								.executes(c -> partyAccept(c))))
+								.executes(CmdNodeParty::partyAccept)))
 				.then(Commands.literal("decline")
 						.then(Commands.argument(REQUEST_ID, UuidArgument.uuid())
-								.executes(c -> partyDecline(c))))
+								.executes(CmdNodeParty::partyDecline)))
 				.executes(c -> {System.out.println(PartyUtils.isInParty(c.getSource().getPlayerOrException())); return 0;});
 	}
 	
 	public static int partyCreate(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-		ServerPlayer player = ctx.getSource().getPlayerOrException();		
-		if (PartyUtils.isInParty(player)) {
-			ctx.getSource().sendFailure(LangProvider.PARTY_ALREADY_IN.asComponent());
-			return 1;
-		}
-		PartyUtils.createParty(player);
-		ctx.getSource().sendSuccess(() -> LangProvider.PARTY_CREATED.asComponent(), false);
+		ServerPlayer player = ctx.getSource().getPlayerOrException();
+		String name = StringArgumentType.getString(ctx, "name");
+		Scoreboard board = player.getScoreboard();
+		board.addPlayerTeam(name);
+		board.addPlayerToTeam(player.getScoreboardName(), board.getPlayerTeam(name));
+		ctx.getSource().sendSuccess(LangProvider.PARTY_CREATED::asComponent, false);
 		return 0;
 	}
 	
 	public static int partyLeave(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-		PartyUtils.removeFromParty(ctx.getSource().getPlayerOrException());
-		ctx.getSource().sendSuccess(() -> LangProvider.PARTY_LEFT.asComponent(), false);
+		PlayerTeam team = ctx.getSource().getScoreboard().getPlayersTeam(ctx.getSource().getPlayerOrException().getScoreboardName());
+		ctx.getSource().getScoreboard().removePlayerFromTeam(ctx.getSource().getPlayerOrException().getScoreboardName());
+		if (team != null && team.getPlayers().isEmpty())
+			ctx.getSource().getScoreboard().removePlayerTeam(team);
+		ctx.getSource().sendSuccess(LangProvider.PARTY_LEFT::asComponent, false);
 		return 0;
 	}
 	
@@ -82,9 +89,10 @@ public class CmdNodeParty {
 			ctx.getSource().sendFailure(LangProvider.PARTY_NOT_IN.asComponent());
 			return 1;
 		}
-		List<String> memberNames = PartyUtils.getPartyMembers(ctx.getSource().getPlayerOrException()).stream().map(s -> s.getName().getString()).toList();
+		List<String> memberNames = PartyUtils.getPartyMembers(ctx.getSource().getPlayerOrException())
+				.stream().map(s -> s.getName().getString()).toList();
 		ctx.getSource().sendSuccess(() -> LangProvider.PARTY_MEMBER_TOTAL.asComponent(memberNames.size()), false);
-		ctx.getSource().sendSuccess(() -> LangProvider.PARTY_MEMBER_LIST.asComponent(memberNames), false);
+		ctx.getSource().sendSuccess(() -> LangProvider.PARTY_MEMBER_LIST.asComponent(MsLoggy.listToString(memberNames)), false);
 		return 0;
 	}
 	
@@ -97,11 +105,11 @@ public class CmdNodeParty {
 	public static int partyDecline(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		UUID requestID = UuidArgument.getUuid(ctx, REQUEST_ID);
 		if (PartyUtils.declineInvite(requestID)) {
-			ctx.getSource().sendSuccess(() -> LangProvider.PARTY_DECLINE.asComponent(), false);
+			ctx.getSource().sendSuccess(LangProvider.PARTY_DECLINE::asComponent, false);
 			return 1;
 		}
 		else {
-			ctx.getSource().sendSuccess(() -> LangProvider.PARTY_NO_INVITES.asComponent(), false);
+			ctx.getSource().sendSuccess(LangProvider.PARTY_NO_INVITES::asComponent, false);
 			return 0;
 		}
 	}
