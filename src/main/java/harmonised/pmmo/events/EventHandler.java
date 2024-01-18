@@ -59,10 +59,6 @@ public class EventHandler {
 		LoginHandler.handle(event);
 	}
 	@SubscribeEvent
-	public static void onPlayerLeave(PlayerLoggedOutEvent event) {
-		PartyUtils.removeFromParty(event.getEntity());
-	}
-	@SubscribeEvent
 	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
 			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.BLOCK_REACH.get());
