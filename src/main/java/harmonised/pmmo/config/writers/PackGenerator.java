@@ -253,9 +253,8 @@ public class PackGenerator {
 		TAGS("tags", server -> Set.of(
 				Functions.pathPrepend(Reference.CROPS.location(), "blocks"),
 				Functions.pathPrepend(Reference.CASCADING_BREAKABLES.location(), "blocks"),
-				Functions.pathPrepend(Reference.ANIMAL_TAG.location(), "entity_types"),
 				Functions.pathPrepend(Reference.BREEDABLE_TAG.location(), "entity_types"),
-				Functions.pathPrepend(Reference.MOB_TAG.location(), "entity_types"),
+				Functions.pathPrepend(Reference.NO_XP_DAMAGE_DEALT.location(), "entity_types"),
 				Functions.pathPrepend(Reference.RIDEABLE_TAG.location(), "entity_types"),
 				Functions.pathPrepend(Reference.TAMABLE_TAG.location(), "entity_types"),
 				Functions.pathPrepend(Reference.BREWABLES.location(), "items"),

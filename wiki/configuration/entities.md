@@ -73,6 +73,10 @@ In 1.19.4, Mojang made damage a datapack object, which allowed users to add thei
   } 
 }
 ```
+### Preventing damage Xp when dealing damage to specific entities
+In certain cases, you may have invulnerable entities in the world.  While you can explicitly set their XP values to zero for all damage types, doing so does not prevent xp settings from the projectile or weapon being awarded.  Thus, players can exploit this fact to gain an infinite source of experience.  
+
+To prevent all xp from being awarded when a specific entity is dealt damage, add the entity to the tag `pmmo:noxp_damage_dealt`.
 
 ## "requirements":{} and "nbt_requirements":{}
 These settings determine whether an entity action is permitted.  These two settings are mutually exclusive.  If you have them both it won't crash anything, but the NBT setting will always supersede the regular one.  An example default implementation for "requirements" looks as follows:

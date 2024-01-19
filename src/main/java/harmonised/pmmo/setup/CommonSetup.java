@@ -9,7 +9,6 @@ import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.setup.datagen.BlockTagProvider;
-import harmonised.pmmo.setup.datagen.DamageTagProvider;
 import harmonised.pmmo.setup.datagen.EntityTagProvider;
 import harmonised.pmmo.setup.datagen.GLMProvider;
 import harmonised.pmmo.setup.datagen.ItemTagProvider;
@@ -102,7 +101,6 @@ public class CommonSetup {
 			generator.addProvider(true, blockProvider);
 			generator.addProvider(true, new EntityTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
 			generator.addProvider(true, new ItemTagProvider(generator.getPackOutput(), event.getLookupProvider(), blockProvider.contentsGetter(), event.getExistingFileHelper()));
-			generator.addProvider(true, new DamageTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
 		}
 	}
 }
