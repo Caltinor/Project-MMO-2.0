@@ -43,10 +43,10 @@ import harmonised.pmmo.config.codecs.ObjectData;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -331,25 +331,22 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * This should be called at most once, during construction of your mod (static init of your main mod class is fine)
 	 * (FMLCommonSetupEvent *may* work as well)
 	 * Calling this method automatically subscribes a packet-sender to {@link OnDatapackSyncEvent}.
-	 * @param <PACKET> the packet type that will be sent on the given channel
-	 * @param channel The networking channel of your mod
 	 * @param packetFactory  A packet constructor or factory method that converts the given map to a packet object to send on the given channel
 	 * @return this manager object
 	 */
-	public <PACKET> MergeableCodecDataManager<T, V> subscribeAsSyncable(final SimpleChannel channel,
-		final Function<Map<ResourceLocation, T>, PACKET> packetFactory)
+	public MergeableCodecDataManager<T, V> subscribeAsSyncable(
+		final Function<Map<ResourceLocation, T>, CustomPacketPayload> packetFactory)
 	{
-		NeoForge.EVENT_BUS.addListener(this.getDatapackSyncListener(channel, packetFactory));
+		NeoForge.EVENT_BUS.addListener(this.getDatapackSyncListener(packetFactory));
 		return this;
 	}
 	
 	/** Generate an event listener function for the on-datapack-sync event **/
-	private <PACKET> Consumer<OnDatapackSyncEvent> getDatapackSyncListener(final SimpleChannel channel,
-																		   final Function<Map<ResourceLocation, T>, PACKET> packetFactory)
+	private Consumer<OnDatapackSyncEvent> getDatapackSyncListener(final Function<Map<ResourceLocation, T>, CustomPacketPayload> packetFactory)
 	{
 		return event -> {
 			ServerPlayer player = event.getPlayer();
-			List<PACKET> packets = new ArrayList<>();
+			List<CustomPacketPayload> packets = new ArrayList<>();
 			for (Map.Entry<ResourceLocation, T> entry : new HashMap<>(this.data).entrySet()) {
 				if (entry.getKey() == null) continue;
 				packets.add(packetFactory.apply(Map.of(entry.getKey(), entry.getValue())));
@@ -357,8 +354,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 
 			PacketDistributor.PacketTarget target = player == null
 				? PacketDistributor.ALL.noArg()
-				: PacketDistributor.PLAYER.with(() -> player);
-			packets.forEach(packet -> channel.send(target, packet));
+				: PacketDistributor.PLAYER.with(player);
+			packets.forEach(target::send);
 		};
 	}
 }

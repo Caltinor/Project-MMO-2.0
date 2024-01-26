@@ -47,7 +47,6 @@ public class CommonSetup {
 	private static final Supplier<SkillUpTrigger> SKILL_UP_TRIGGER = TRIGGERS.register("skill_up", SkillUpTrigger::new);
 
 	public static void init(final FMLCommonSetupEvent event) {
-		Networking.registerMessages();
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
 		//=========COMPAT=============

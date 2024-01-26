@@ -5,42 +5,35 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public class CP_UpdateExperience {
-	String skill;
-	Experience xp;
-long change;
+public record CP_UpdateExperience(String skill, Experience xp, long change) implements CustomPacketPayload {
+	public static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "s2c_update_xp");
 
-	
-	public CP_UpdateExperience(String skill, Experience xp, long change) {
-		this.skill = skill;
-		this.xp = xp;
-		this.change = change;
-	}
 	public CP_UpdateExperience(FriendlyByteBuf buf) {
-		skill = buf.readUtf();
-		long rawXP = buf.readLong();
-		long level = buf.readLong();
-		change = buf.readLong();
-		xp = new Experience(new Experience.XpLevel(level), rawXP);
+		this(buf.readUtf(), new Experience(new Experience.XpLevel(buf.readLong()), buf.readLong()), buf.readLong());
 	}
-	public void toBytes(FriendlyByteBuf buf) {
+	public void write(FriendlyByteBuf buf) {
 		buf.writeUtf(skill);
-		buf.writeLong(xp.getXp());
 		buf.writeLong(xp.getLevel().getLevel());
+		buf.writeLong(xp.getXp());
 		buf.writeLong(change);
 	}
-	
-	public void handle(NetworkEvent.Context ctx ) {
-		ctx.enqueueWork(() -> {
-			Core.get(LogicalSide.CLIENT).getData().getXpMap(null).put(skill, xp);
-			if (change > 0)
-				ClientTickHandler.addToGainList(skill, change); //TODO maybe update this to display level increase + xp gained
-			MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating experience of "+skill+"["+xp+"]");
-		});		
-		ctx.setPacketHandled(true);
+
+	@Override
+	public ResourceLocation id() {return ID;}
+
+	public static void handle(CP_UpdateExperience packet, PlayPayloadContext ctx) {
+		ctx.workHandler().execute(() -> {
+			Core.get(LogicalSide.CLIENT).getData().getXpMap(null).put(packet.skill(), packet.xp());
+			if (packet.change() > 0)
+				ClientTickHandler.addToGainList(packet.skill(), packet.change()); //TODO maybe update this to display level increase + xp gained
+			MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating experience of "+packet.skill()+"["+packet.xp()+"]");
+		});
 	}
 }

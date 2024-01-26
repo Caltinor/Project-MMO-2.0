@@ -9,6 +9,7 @@ import harmonised.pmmo.features.anticheese.AntiCheeseConfig;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.loot_modifiers.GLMRegistry;
+import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.setup.GameplayPacks;
 import harmonised.pmmo.storage.DataAttachmentTypes;
@@ -41,6 +42,7 @@ public class ProjectMMO {
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, PerksConfig.SERVER_CONFIG, "pmmo-Perks.toml");
 		modbus.addListener(this::onConfigReload);
 		modbus.addListener(this::onPackFind);
+		modbus.addListener(Networking::registerMessages);
     	
     	GLMRegistry.CONDITIONS.register(modbus);
     	GLMRegistry.GLM.register(modbus);

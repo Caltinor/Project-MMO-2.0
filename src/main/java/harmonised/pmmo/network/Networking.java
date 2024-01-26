@@ -17,100 +17,53 @@ import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkRegistry;
-import net.neoforged.neoforge.network.PlayNetworkDirection;
-import net.neoforged.neoforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 public class Networking {
-	private static SimpleChannel INSTANCE;
+	@SubscribeEvent
+	public static void registerMessages(RegisterPayloadHandlerEvent event) {
+		final IPayloadRegistrar registrar = event.registrar(Reference.MOD_ID);
 
-	public static void registerMessages() { 
-		INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Reference.MOD_ID, "net"),
-				() -> "1.1", 
-				s -> true, 
-				s -> true);
-		
-		int ID = 0;
+		registrar
 		//CLIENT BOUND PACKETS
-		INSTANCE.messageBuilder(CP_UpdateExperience.class, ID++)
-			.encoder(CP_UpdateExperience::toBytes)
-			.decoder(CP_UpdateExperience::new)
-			.consumerNetworkThread(CP_UpdateExperience::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData.class, ID++)
-			.encoder(CP_SyncData::encode)
-			.decoder(CP_SyncData::decode)
-			.consumerNetworkThread(CP_SyncData::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
-			.encoder((packet, buf) -> {})
-			.decoder(buf -> new CP_SyncData_ClearXp())
-			.consumerNetworkThread(CP_SyncData_ClearXp::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_ClearData.class, ID++)
-			.encoder((packet, buf) -> {})
-			.decoder(buf -> new CP_ClearData())
-			.consumerNetworkThread(CP_ClearData::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SetOtherExperience.class, ID++)
-			.encoder(CP_SetOtherExperience::toBytes)
-			.decoder(CP_SetOtherExperience::new)
-			.consumerNetworkThread(CP_SetOtherExperience::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_ResetXP.class, ID++)
-			.encoder((packet, buf) -> {})
-			.decoder(buf -> new CP_ResetXP())
-			.consumerNetworkThread(CP_ResetXP::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncVein.class, ID++)
-			.encoder(CP_SyncVein::encode)
-			.decoder(CP_SyncVein::new)
-			.consumerNetworkThread(CP_SyncVein::handle)
-			.add();
+		.play(CP_UpdateExperience.ID, CP_UpdateExperience::new, h -> h.client(CP_UpdateExperience::handle))
+		.play(CP_SyncData.ID, CP_SyncData::decode, h -> h.client(CP_SyncData::handle))
+		.play(CP_SyncData_ClearXp.ID, CP_SyncData_ClearXp::new, h -> h.client(CP_SyncData_ClearXp::handle))
+		.play(CP_ClearData.ID, CP_ClearData::new, h -> h.client(CP_ClearData::handle))
+		.play(CP_SetOtherExperience.ID, CP_SetOtherExperience::new, h -> h.client(CP_SetOtherExperience::handle))
+		.play(CP_ResetXP.ID, CP_ResetXP::new, h -> h.client(CP_ResetXP::handle))
+		.play(CP_SyncVein.ID, CP_SyncVein::new, h -> h.client(CP_SyncVein::handle))
 		//SERVER BOUND PACKETS
-		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
-			.encoder(SP_UpdateVeinTarget::toBytes)
-			.decoder(SP_UpdateVeinTarget::new)
-			.consumerNetworkThread(SP_UpdateVeinTarget::handle)
-			.add();
-		INSTANCE.messageBuilder(SP_OtherExpRequest.class, ID++)
-			.encoder(SP_OtherExpRequest::toBytes)
-			.decoder(SP_OtherExpRequest::new)
-			.consumerNetworkThread(SP_OtherExpRequest::handle)
-			.add();
-		INSTANCE.messageBuilder(SP_SetVeinLimit.class, ID++)
-			.encoder(SP_SetVeinLimit::encode)
-			.decoder(SP_SetVeinLimit::new)
-			.consumerNetworkThread(SP_SetVeinLimit::handle)
-			.add();
-		INSTANCE.messageBuilder(SP_SetVeinShape.class, ID++)
-			.encoder(SP_SetVeinShape::encode)
-			.decoder(SP_SetVeinShape::new)
-			.consumerNetworkThread(SP_SetVeinShape::handle)
-			.add();
+		.play(SP_UpdateVeinTarget.ID, SP_UpdateVeinTarget::new, h -> h.server(SP_UpdateVeinTarget::handle))
+		.play(SP_OtherExpRequest.ID, SP_OtherExpRequest::new, h -> h.server(SP_OtherExpRequest::handle))
+		.play(SP_SetVeinLimit.ID, SP_SetVeinLimit::new, h -> h.server(SP_SetVeinLimit::handle))
+		.play(SP_SetVeinShape.ID, SP_SetVeinShape::new, h -> h.server(SP_SetVeinShape::handle));
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}
 	
 	public static void registerDataSyncPackets() {
-		CoreLoader.RELOADER.subscribeAsSyncable(INSTANCE, () -> new CP_ClearData());
-		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.ITEM, o));
-		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.BLOCK, o));
-		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.ENTITY, o));
-		Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.BIOME, o));
-		Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.DIMENSION, o));
-		Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.ENCHANTMENT, o));
-		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.EFFECT, o));
-		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(INSTANCE, o -> new CP_SyncData(ObjectType.PLAYER, o));
+		CoreLoader.RELOADER.subscribeAsSyncable(CP_ClearData::new);
+		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.ITEM, o));
+		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.BLOCK, o));
+		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.ENTITY, o));
+		Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.BIOME, o));
+		Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.DIMENSION, o));
+		Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.subscribeAsSyncable(o -> new CP_SyncData(ObjectType.ENCHANTMENT, o));
+		Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.subscribeAsSyncable(o -> new CP_SyncData(ObjectType.EFFECT, o));
+		Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER.subscribeAsSyncable(o -> new CP_SyncData(ObjectType.PLAYER, o));
 	}
 
-	public static void sendToClient(Object packet, ServerPlayer player) {
-		INSTANCE.sendTo(packet, player.connection.connection, PlayNetworkDirection.PLAY_TO_CLIENT);
+	public static void sendToClient(CustomPacketPayload packet, ServerPlayer player) {
+		PacketDistributor.PLAYER.with(player).send(packet);
 	}
-	public static void sendToServer(Object packet) {
-		INSTANCE.sendToServer(packet);
+	public static void sendToServer(CustomPacketPayload packet) {
+		PacketDistributor.SERVER.with(null).send(packet);
 	}
 
 }

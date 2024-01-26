@@ -1,7 +1,6 @@
 package harmonised.pmmo.storage;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
@@ -28,12 +27,12 @@ public class DataAttachmentTypes {
      * track player breaks to prevent players from cycling through place and break actions to farm xp from
      * high-xp blocks*/
     public static final Supplier<AttachmentType<Map<BlockPos, UUID>>> PLACED_MAP = ATTACHMENT_TYPES.register(
-            "placed_data", () -> AttachmentType.<Map<BlockPos, UUID>>builder(HashMap::new)
+            "placed_data", () -> AttachmentType.<Map<BlockPos, UUID>>builder(() -> new HashMap<>())
                     .serialize(Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, CodecTypes.UUID_CODEC)
                             .xmap(HashMap::new, HashMap::new)).build());
 
     /**Break data stores in chunks during runtime to track blocks with cascading break behavior.  No
      * serialization is necessary since the effects are largely instantaneous and inconsequential to store*/
     public static final Supplier<AttachmentType<Map<BlockPos, UUID>>> BREAK_MAP = ATTACHMENT_TYPES.register(
-            "break_data", () -> AttachmentType.<Map<BlockPos, UUID>>builder(HashMap::new).build());
+            "break_data", () -> AttachmentType.<Map<BlockPos, UUID>>builder(() -> new HashMap<>()).build());
 }
