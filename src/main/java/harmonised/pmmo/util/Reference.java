@@ -33,4 +33,7 @@ public class Reference {
 	public static final TagKey<Block> MINABLE_SHOVEL = TagKey.create(Registries.BLOCK, new ResourceLocation("mineable/shovel"));
 	public static final TagKey<Item> BREWABLES = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "brewables"));
 	public static final TagKey<Item> SMELTABLES = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "smeltables"));
+	public static final TagKey<DamageType> FROM_ENVIRONMENT = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "environment"));
+	public static final TagKey<DamageType> FROM_IMPACT = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "impact"));
+	public static final TagKey<DamageType> FROM_MAGIC = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "magic"));
 }
