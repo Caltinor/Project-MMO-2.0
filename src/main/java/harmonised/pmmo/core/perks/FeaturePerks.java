@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
+
+import com.google.common.collect.LinkedListMultimap;
 import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.perks.Perk;
+import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
@@ -37,7 +41,13 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
+@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
 	
@@ -78,6 +88,30 @@ public class FeaturePerks {
 				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
 			}).build();
 
+	private static final LinkedListMultimap<Player, AttributeRecord> respawnAttributes = LinkedListMultimap.create();
+	private static record AttributeRecord(Attribute attribute, AttributeModifier modifier) {}
+	@SubscribeEvent
+	public static void saveAttributesOnDeath(LivingDeathEvent event) {
+		if (event.getEntity() instanceof Player player) {
+			for (CompoundTag nbt : PerksConfig.PERK_SETTINGS.get().get(EventType.SKILL_UP).stream()
+					.filter(tag -> tag.getString("perk").equals("pmmo:attribute")).toList()) {
+				Attribute attribute = getAttribute(nbt);
+				player.getAttributes().getInstance(attribute).getModifiers().stream()
+						.filter(mod -> mod.getId().equals(Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME))))
+						.forEach(mod -> respawnAttributes.put(player, new AttributeRecord(attribute, mod)));
+			}
+
+		}
+	}
+
+	@SubscribeEvent
+	public static void restoreAttributesOnSpawn(PlayerEvent.PlayerRespawnEvent event) {
+		if (respawnAttributes.containsKey(event.getEntity())) {
+			respawnAttributes.get(event.getEntity()).forEach(mod ->
+					event.getEntity().getAttributes().getInstance(mod.attribute()).addPermanentModifier(mod.modifier()));
+			respawnAttributes.get(event.getEntity()).clear();
+		}
+	}
 	public static final Perk TEMP_ATTRIBUTE = Perk.begin()
 			.addDefaults(ATTRIBUTE.propertyDefaults())
 			.setStart((player, nbt) -> {
