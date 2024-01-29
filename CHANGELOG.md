@@ -1,10 +1,7 @@
 # Changelog
 
-## [1.20.1-1.2.15] - 2024-01-16
+## [1.20.1-1.2.16] - 2024-01-29
 ### Bugfixes / Tweaks
-- Fixed chat spam when looking at blocks with Jade installed
-  - Also changes how denial messages display in general for better UX
-- Fixed log spam from unbound keybind issue
-- Overhauled tooltips to include all possible reqs and xp sources
-  - all are enabled by default but can be disabled in pmmo-client.toml
-- Fixed bonuses for damage not applying to XP awards
+- Added `pmmo:noxp_damage_dealt` tag for entities that should never award XP when damaged
+- Added damage type tags back into genData
+- Fixed attributes from perks being lost on death.
