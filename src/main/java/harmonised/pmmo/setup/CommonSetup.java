@@ -11,11 +11,7 @@ import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
 import harmonised.pmmo.features.veinmining.capability.VeinHandler;
 import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
-import harmonised.pmmo.setup.datagen.BlockTagProvider;
-import harmonised.pmmo.setup.datagen.EntityTagProvider;
-import harmonised.pmmo.setup.datagen.GLMProvider;
-import harmonised.pmmo.setup.datagen.ItemTagProvider;
-import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.setup.datagen.*;
 import harmonised.pmmo.setup.datagen.LangProvider.Locale;
 import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
@@ -121,6 +117,7 @@ public class CommonSetup {
 			generator.addProvider(true, blockProvider);
 			generator.addProvider(true, new EntityTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
 			generator.addProvider(true, new ItemTagProvider(generator.getPackOutput(), event.getLookupProvider(), blockProvider.contentsGetter(), event.getExistingFileHelper()));
+			generator.addProvider(true, new DamageTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
 		}
 	}
 }
