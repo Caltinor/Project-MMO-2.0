@@ -1,0 +1,14 @@
+{
+  "xp_values": {
+    "ENCHANT": {
+      "magic": 0
+    },
+    "CRAFT": {
+      "crafting": 0
+    },
+    "FISH": {
+      "fishing": 0
+    }
+  },
+  "isTagFor": ["tetra:modular_bow", "tetra:modular_crossbow", "tetra:modular_double", "tetra:modular_shield", "tetra:modular_single", "tetra:modular_sword"]
+}
