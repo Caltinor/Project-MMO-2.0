@@ -70,15 +70,19 @@ public class DataMirror implements IDataStorage{
 	
 	@Override
 	public long getXpRaw(UUID playerID, String skillName) {
-		return me(playerID) ? mySkills.getOrDefault(skillName, 0l) : otherSkills.getOrDefault(skillName, 0l);
+		return me(playerID) ? mySkills.getOrDefault(skillName, 0L) : otherSkills.getOrDefault(skillName, 0L);
 	}
 	@Override
 	public void setXpRaw(UUID playerID, String skillName, long value) {
 		if (!me(playerID)) return;
 		long oldValue = getXpRaw(playerID, skillName);
 		if (value > oldValue)
-			scheduledXp.merge(skillName, value-oldValue, (e, n) -> e + n);
+			scheduledXp.merge(skillName, value-oldValue, Long::sum);
 		mySkills.put(skillName, value);
+		int newLevel = getLevelFromXP(value);
+		int oldLevel = getLevelFromXP(oldValue);
+		if (oldLevel < newLevel)
+			ClientUtils.sendLevelUpUnlocks(skillName, oldLevel, newLevel);
 		MsLoggy.DEBUG.log(LOG_CODE.XP,"Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
 	}
 	@Override

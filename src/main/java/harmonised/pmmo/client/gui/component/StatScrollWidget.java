@@ -96,7 +96,7 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 		
 		private static List<TextElement> format(MutableComponent component, int width, int xOffset, int color, boolean isHeader, int headerColor) {
-			return ClientUtils.ctc(Minecraft.getInstance(), component.withStyle(component.getStyle().withColor(color)), width).stream()
+			return ClientUtils.ctc(component.withStyle(component.getStyle().withColor(color)), width).stream()
 					.map(line -> new TextElement(line, xOffset, color, isHeader, headerColor)).toList();
 		}
 	}
@@ -531,7 +531,7 @@ public class StatScrollWidget extends ScrollPanel{
 		if (reqs.length > 0) {
 			List<TextElement> holder = new ArrayList<>();
 			for (ReqType reqType: reqs) {
-				Map<String, Integer> reqMap = CoreUtils.processSkillGroupReqs(reqSrc.apply(reqType)).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+				Map<String, Integer> reqMap = CoreUtils.processSkillGroupReqs(reqSrc.apply(reqType)).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 					holder.addAll(TextElement.build(reqType, this.width, 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
@@ -540,7 +540,7 @@ public class StatScrollWidget extends ScrollPanel{
 					}
 				}
 			}
-			if (holder.size() > 0) {
+			if (!holder.isEmpty()) {
 				content.addAll(TextElement.build(LangProvider.REQ_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 				content.addAll(holder);
 				addReqEffectSection(reqEffects, true);

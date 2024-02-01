@@ -69,6 +69,7 @@ public class Config {
 	public static ForgeConfigSpec.BooleanValue HIDE_SKILL_BUTTON;
 	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_X;
 	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_Y;
+	public static ForgeConfigSpec.BooleanValue SKILLUP_UNLOCKS;
 	
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
@@ -105,6 +106,8 @@ public class Config {
 				.define("skill_button_x", 126);
 		SKILL_BUTTON_Y = builder.comment("the vertical location (from center) of the skill button in the inventory.","Default = -22")
 				.define("skill_button_y", -22);
+		SKILLUP_UNLOCKS = builder.comment("If enabled, lists in chat all features unlocked when a skill levels up.")
+				.define("skillup_unlocks", true);
 
 		builder.pop();
 	}
