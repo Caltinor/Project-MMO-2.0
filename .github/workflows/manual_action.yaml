@@ -19,4 +19,3 @@ jobs:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_TEST_URL }}
           username: Project MMO Updates
           content: ${{ steps.changelog.outputs.content }}
-          avatar-url: https://github.com/Caltinor/Project-MMO-2.0/blob/main/src/main/resources/star.png

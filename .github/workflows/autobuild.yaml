@@ -120,16 +120,17 @@ jobs:
             ${{ needs.setup.outputs.java_version }}
   message:
     runs-on: ubuntu-latest
-    needs: [ setup,build,upload ]
     steps:
-      - name: Restore Cache
-        uses: actions/cache@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Read changelog
+        id: changelog
+        uses: juliangruber/read-file-action@v1
         with:
           path: CHANGELOG.md
-          key: ${{ github.sha }}
-      - name: Discord Update Notification
+      - name: Discord Webhook Action
         uses: tsickert/discord-webhook@v5.3.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          content: CHANGELOG.md
-          embed-title: Project MMO release 1.21-${{ needs.setup.outputs.mod_version }}
+          username: Project MMO Updates
+          content: ${{ steps.changelog.outputs.content }}
