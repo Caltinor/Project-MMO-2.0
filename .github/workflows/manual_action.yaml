@@ -1,0 +1,14 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Discord Webhook Action
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_TEST_URL }}
+          filename: CHANGELOG.md
