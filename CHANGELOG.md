@@ -7,34 +7,14 @@ A lot has changed with Project MMO since 1.20.1.  This changelog serves as both 
 One major detail is the dropped support for Forge.  Project MMO will now only be releasing on NeoForge going forward.  NeoForge as a platform has better adapted to the community's needs and has shown greater agility in making relevant changes to the codebase that will keep modding fun and easy to work with into the future.  Additionally, NeoForge exists because of the toxicity of LexManos who runs Forge and this is my part in rejecting his toxicity.  My apologies for any inconvenience caused by other mods that have not yet made the switch to NeoForge and the impact that has on your modpacks.
 
 ### Major Changes
-- Block Placed History and Vein Data moved to Data Attachments (see below)
-- XP formulas have been revamped (see below)
+- Block Placed History and Vein Data moved to Data Attachments
+- XP formulas have been revamped
 
 ### Minor Changes
-- Default Data moved to optional Feature Packs (see below)
+- Default Data moved to optional Feature Packs
 - Field names in all configs have been standardized.  This will break old configs if you attempt to carry them over.
 - 
 
 ### Bugfixes / Tweaks
 - Added TOOL_BREAKING event which fires when an item with durability breaks.
 - Added new feature packs for Easy, Default, and Hardcore.
-
-
-### Block Placed History and Vein Data moved to Data Attachments
-If you want to update a world from 1.20 to 1.21, you will lose all stored data related to which players placed blocks and their current vein.  This means furnaces and crops that are awarding XP for players will stop doing so.  If your vein charges are relatively fast, you won't notice the loss, but you configure vein to be a rare ability, this may be an inconvenience to your players.
-
-This was caused by NeoForge's revamp of the capability system.
-
-### XP formulas have been revamped
-Internally, XP now has a separate value for XP and Level.  This means nothing to end users, except for this now makes it possible to use the 9 Quadrillion total XP limit from 1.20 as the limit for a single level and makes that same value an option for max level.  In short, it is practically impossible now to have a max level that pmmo caps.  
-
-The formula also changed.  
-<u>Old Formula</u>
-`base_xp * power_base ^ (per_level * level)`
-<u>New Formula</u>
-`xp_min + xp_base ^ (per_lvl * level)`
-
-### Default Data moved to optional Feature Packs
-The built-in default data was somewhat annoying to work around.  The disabler pack was helpful, but added the additional problem of having to make sure your pack loaded before other packs with pmmo data.  
-
-To solve this problem, all default data was moved to "feature packs", which Mojang uses for things like Bundles, Villager update, Sniffers, etc.  By default the "default" pack is enabled.  When you create a new world, go to the datapacks menu.  You will see you now have the option to toggle this datapack off.  Additionally, you can enable either the Easy or Hardcore pack in its place.  If you would like pmmo to provide no default data, disable all 3.  Note that pmmo still populates its internal tags, but all data and treasure are now compartmentalized into these feature packs.
