@@ -79,6 +79,14 @@ public class Experience {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "Experience{" +
+                "level=" + level +
+                ", xp=" + xp +
+                '}';
+    }
+
     public static class XpLevel {
         long level = 0;
         long xpToNext;
@@ -141,6 +149,15 @@ public class Experience {
             double base = Config.XP_BASE.get();
             double lvl = Config.XP_PER_LEVEL.get();
             return min + Double.valueOf(Math.pow(base, lvl * level)).longValue();
+        }
+
+        @Override
+        public String toString() {
+            return "XpLevel{" +
+                    "level=" + level +
+                    ", xpToNext=" + xpToNext +
+                    ", xpToGain=" + xpToGain +
+                    '}';
         }
     }
 }

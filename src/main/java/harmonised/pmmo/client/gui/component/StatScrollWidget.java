@@ -97,7 +97,7 @@ public class StatScrollWidget extends ScrollPanel {
 		}
 		
 		private static List<TextElement> format(MutableComponent component, int width, int xOffset, int color, boolean isHeader, int headerColor) {
-			return ClientUtils.ctc(Minecraft.getInstance(), component.withStyle(component.getStyle().withColor(color)), width).stream()
+			return ClientUtils.ctc(component.withStyle(component.getStyle().withColor(color)), width).stream()
 					.map(line -> new TextElement(line, xOffset, color, isHeader, headerColor)).toList();
 		}
 	}

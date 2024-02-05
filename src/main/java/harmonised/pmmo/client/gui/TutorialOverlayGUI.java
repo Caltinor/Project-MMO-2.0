@@ -60,16 +60,16 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 			// IDENTIFY LINES
 			if (mc.level.getBlockState(bhr.getBlockPos()).getBlock()
 					.equals(BuiltInRegistries.BLOCK.get(new ResourceLocation(Config.SALVAGE_BLOCK.get())))) {
-				lines = new ArrayList<>(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent()
+				lines = new ArrayList<>(ClientUtils.ctc(LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent()
 						.withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), tooltipWidth));
 				if (mc.player.isCrouching()
 						&& (!mc.player.getMainHandItem().isEmpty() || !mc.player.getOffhandItem().isEmpty())) {
 					ItemStack salvageStack = mc.player.getMainHandItem().isEmpty() ? mc.player.getOffhandItem()
 							: mc.player.getMainHandItem();
 					gatherSalvageData(salvageStack)
-							.forEach(line -> lines.addAll(ClientUtils.ctc(mc, line, tooltipWidth)));
+							.forEach(line -> lines.addAll(ClientUtils.ctc(line, tooltipWidth)));
 				} else
-					lines.addAll(ClientUtils.ctc(mc, LangProvider.SALVAGE_TUTORIAL_USAGE.asComponent(), tooltipWidth));
+					lines.addAll(ClientUtils.ctc(LangProvider.SALVAGE_TUTORIAL_USAGE.asComponent(), tooltipWidth));
 			} else
 				return; // stop render if none of the viewing cases are met.
 

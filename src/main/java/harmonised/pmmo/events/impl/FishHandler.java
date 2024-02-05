@@ -41,7 +41,6 @@ public class FishHandler {
 		if (serverSide) {
 			Map<String, Long> xpAward = new HashMap<>(); 
 			for (ItemStack stack : event.getDrops()) {
-				System.out.println(stack.toString());//TODO REMOVE
 				core.getExperienceAwards(EventType.FISH, stack, (Player) event.getEntity(), perkOutput).forEach((skill, value) -> {
 					xpAward.merge(skill, value, Long::sum);
 				});;

@@ -46,7 +46,6 @@ public class DataMirror implements IDataStorage{
 	@Override
 	public void setXp(UUID playerID, String skillName, long value) {
 		if (!me(playerID)) return;
-		long oldValue = getXp(playerID, skillName);
 		mySkills.computeIfAbsent(skillName, s -> new Experience()).setXp(value);
 		MsLoggy.DEBUG.log(LOG_CODE.XP,"Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
 	}

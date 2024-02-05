@@ -1666,6 +1666,8 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Vein Shape Set To: %s").build();
 	
 	//=========TOOLTIP HEADERS=================
+	public static final Translation LEVEL_UP_HEADER = Translation.Builder.start("pmmo.levelup")
+			.addLocale(Locale.EN_US, "You have reached level %s in %s and unlocked:").build();
 	public static final Translation REQ_WEAR = Translation.Builder.start("pmmo.toWear")
 		.addLocale(Locale.EN_US, "To Wear").build();
 	public static final Translation REQ_TOOL = Translation.Builder.start("pmmo.tool")
