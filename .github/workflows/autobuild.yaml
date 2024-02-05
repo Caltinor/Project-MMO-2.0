@@ -119,7 +119,9 @@ jobs:
           java: |
             ${{ needs.setup.outputs.java_version }}
   message:
+    name: send discord update messaage
     runs-on: ubuntu-latest
+    needs: [ setup,build,upload ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
