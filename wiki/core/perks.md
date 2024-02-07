@@ -175,6 +175,7 @@ Gives the player an effect for a specific time
 | `modifier`  |    0    | sets the level of the effect.  all effect levels are +1 than their modifier |
 | `ambient`   |  false  | should an effect's particles be hidden                                      |
 | `visible`   |  true   | should an effect show in the players inventory and hud                      |
+| `max_boost` |   n/a   | the number of ticks the effect's duration should be limited to              |
 
 ### <u>pmmo:command</u>
 Runs the specified command or function when triggered.  Note the Glossary entry for this perk will display the property literally.  It is advised to name your functions something intuitive, if using functions.
