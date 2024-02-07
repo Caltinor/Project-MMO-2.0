@@ -120,6 +120,7 @@ public class PerksConfig {
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:breath").withString(APIUtils.SKILLNAME, "swimming").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:effect").withString(APIUtils.SKILLNAME, "swimming")
 				.withString("effect", "minecraft:night_vision")
+				.withInt(APIUtils.MAX_BOOST, 160)
 				.withInt(APIUtils.MIN_LEVEL, 25).build());
 		defaultSettings.put(EventType.SUBMERGED, new ArrayList<>(bodyList));
 		bodyList.clear();
