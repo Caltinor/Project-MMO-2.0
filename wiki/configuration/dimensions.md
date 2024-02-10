@@ -26,7 +26,7 @@ This page details the data format for json files in the `data/namespace/pmmo/dim
         "minecraft:ancient_debris"
     ],
     //Which mobs, and by how much, should be modified in this dimension. 
-    "mob_multiplier":{
+    "mob_modifier":{
           "minecraft:zombie": {
             "minecraft:generic.max_health": 0.5, //half health
             "minecraft:generic.movement_speed": 2.0, //double speed
