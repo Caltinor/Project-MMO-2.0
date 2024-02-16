@@ -63,9 +63,9 @@ Unlocking recipes based on certain skill level advancements can be an interestin
 
 The real special sauce here is in using functions as a reward. Functions can integrate into other mods and vanilla minecraft itself in extremely interesting and almost limitless ways. Things like:
 
--Enabling or disabling features (ex: Parcool parkour abilities can be enabled and disabled through advancement functions, tying the unlocking of new parkour abilities through an agility skill level up on top of the pmmo perks is just awesome and rewarding).
--Unlocking titles for players to equip in a title mod (I'm actually not sure if this exists but I'd bet so) So they can equip that they've mastered a skill.
--Changing stages using game stages.
+- Enabling or disabling features (ex: Parcool parkour abilities can be enabled and disabled through advancement functions, tying the unlocking of new parkour abilities through an agility skill level up on top of the pmmo perks is just awesome and rewarding).
+- Unlocking titles for players to equip in a title mod (I'm actually not sure if this exists but I'd bet so) So they can equip that they've mastered a skill.
+- Changing stages using game stages.
 
 to name just a very few. Advancements with functions that can modify the game or player in countless ways and opens up a lot of options for you to customize your game.
 
