@@ -1,471 +1,2279 @@
 {
-    "vein_data":{
-        "chargeCap": 30,
-        "chargeRate": 0.1
-    },
-	"nbt_requirements": {
-		"TOOL": [
-            {
-				"behavior_to_previous": "REPLACE",
-				"should_cases_add": false,
-				"cases": [
-                    {
-						"paths": ["double/basic_pickaxe_left_material", "double/basic_pickaxe_right_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/oak", "basic_pickaxe/birch", "basic_pickaxe/acacia", "basic_pickaxe/jungle", "basic_pickaxe/spruce", "basic_pickaxe/dark_oak"],
-								"value": {
-									"mining": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/stone"],
-								"value": {
-									"mining": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/andesite", "basic_pickaxe/diorite", "basic_pickaxe/granite", "basic_pickaxe/copper"],
-								"value": {
-									"mining": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/flint"],
-								"value": {
-									"mining": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/iron"],
-								"value": {
-									"mining": 30
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/gold"],
-								"value": {
-									"mining": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/blackstone", "basic_pickaxe/obsidian"],
-								"value": {
-									"mining": 25
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/netherite"],
-								"value": {
-									"mining": 90
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/emerald"],
-								"value": {
-									"mining": 40
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_pickaxe/diamond"],
-								"value": {
-									"mining": 60
-								}
-							}
-						]
-					}, 
-                    {
-						"paths": ["double/basic_axe_left_material", "double/basic_axe_right_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/oak", "basic_axe/birch", "basic_axe/acacia", "basic_axe/jungle", "basic_axe/spruce", "basic_axe/dark_oak"],
-								"value": {
-									"woodcutting": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/stone"],
-								"value": {
-									"woodcutting": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/andesite", "basic_axe/diorite", "basic_axe/granite", "basic_axe/copper"],
-								"value": {
-									"woodcutting": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/flint"],
-								"value": {
-									"woodcutting": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/iron"],
-								"value": {
-									"woodcutting": 30
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/gold"],
-								"value": {
-									"woodcutting": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/blackstone", "basic_axe/obsidian"],
-								"value": {
-									"woodcutting": 25
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/netherite"],
-								"value": {
-									"woodcutting": 90
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/emerald"],
-								"value": {
-									"woodcutting": 40
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_axe/diamond"],
-								"value": {
-									"woodcutting": 60
-								}
-							}
-						]
-					}, 
-                    {
-						"paths": ["double/basic_hammer_left_material", "double/basic_hammer_right_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/oak", "basic_hammer/birch", "basic_hammer/acacia", "basic_hammer/jungle", "basic_hammer/spruce", "basic_hammer/dark_oak"],
-								"value": {
-									"crafting": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/stone"],
-								"value": {
-									"crafting": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/andesite", "basic_hammer/diorite", "basic_hammer/granite", "basic_hammer/copper"],
-								"value": {
-									"crafting": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/flint"],
-								"value": {
-									"crafting": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/iron"],
-								"value": {
-									"crafting": 30
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/gold"],
-								"value": {
-									"crafting": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/blackstone", "basic_hammer/obsidian"],
-								"value": {
-									"crafting": 25
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/netherite"],
-								"value": {
-									"crafting": 90
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/emerald"],
-								"value": {
-									"crafting": 40
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_hammer/diamond"],
-								"value": {
-									"crafting": 60
-								}
-							}
-						]
-					}, 
-                    {
-						"paths": ["double/claw_left_material", "double/claw_right_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["claw/oak", "claw/birch", "claw/acacia", "claw/jungle", "claw/spruce", "claw/dark_oak"],
-								"value": {
-									"crafting": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/stone"],
-								"value": {
-									"crafting": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/andesite", "claw/diorite", "claw/granite", "claw/copper"],
-								"value": {
-									"crafting": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/flint"],
-								"value": {
-									"crafting": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/iron"],
-								"value": {
-									"crafting": 30
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/gold"],
-								"value": {
-									"crafting": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/blackstone", "claw/obsidian"],
-								"value": {
-									"crafting": 25
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/netherite"],
-								"value": {
-									"crafting": 90
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/emerald"],
-								"value": {
-									"crafting": 40
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["claw/diamond"],
-								"value": {
-									"crafting": 60
-								}
-							}
-						]
-					}, 
-                    {
-						"paths": ["double/adze_left_material", "double/adze_right_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["adze/oak", "adze/birch", "adze/acacia", "adze/jungle", "adze/spruce", "adze/dark_oak"],
-								"value": {
-									"excavation": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/stone"],
-								"value": {
-									"excavation": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/andesite", "adze/diorite", "adze/granite", "adze/copper"],
-								"value": {
-									"excavation": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/flint"],
-								"value": {
-									"excavation": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/iron"],
-								"value": {
-									"excavation": 30
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/gold"],
-								"value": {
-									"excavation": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/blackstone", "adze/obsidian"],
-								"value": {
-									"excavation": 25
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/netherite"],
-								"value": {
-									"excavation": 90
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/emerald"],
-								"value": {
-									"excavation": 40
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["adze/diamond"],
-								"value": {
-									"excavation": 60
-								}
-							}
-						]
-					}, 
-                    {
-						"paths": ["double/butt_left_material", "double/butt_right_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["butt/oak", "butt/birch", "butt/acacia", "butt/jungle", "butt/spruce", "butt/dark_oak"],
-								"value": {
-									"woodcutting": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/stone"],
-								"value": {
-									"woodcutting": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/andesite", "butt/diorite", "butt/granite", "butt/copper"],
-								"value": {
-									"woodcutting": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/flint"],
-								"value": {
-									"woodcutting": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/iron"],
-								"value": {
-									"woodcutting": 30
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/gold"],
-								"value": {
-									"woodcutting": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/blackstone", "butt/obsidian"],
-								"value": {
-									"woodcutting": 25
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/netherite"],
-								"value": {
-									"woodcutting": 90
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/emerald"],
-								"value": {
-									"woodcutting": 40
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["butt/diamond"],
-								"value": {
-									"woodcutting": 60
-								}
-							}
-						]
-					}, 
-                    {
-						"paths": ["double/hoe_left_material", "double/hoe_right_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["hoe/oak", "hoe/birch", "hoe/acacia", "hoe/jungle", "hoe/spruce", "hoe/dark_oak"],
-								"value": {
-									"farming": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/stone"],
-								"value": {
-									"farming": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/andesite", "hoe/diorite", "hoe/granite", "hoe/copper"],
-								"value": {
-									"farming": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/flint"],
-								"value": {
-									"farming": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/iron"],
-								"value": {
-									"farming": 30
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/gold"],
-								"value": {
-									"farming": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/blackstone", "hoe/obsidian"],
-								"value": {
-									"farming": 25
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/netherite"],
-								"value": {
-									"farming": 90
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/emerald"],
-								"value": {
-									"farming": 40
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["hoe/diamond"],
-								"value": {
-									"farming": 60
-								}
-							}
-						]
-					}
-				]
-			}
-		]
-	}
+  "vein_data": {
+    "chargeCap": 30,
+    "chargeRate": 0.1
+  },
+  "nbt_requirements": {
+    "WEAR": [
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "double/basic_pickaxe_left_material",
+              "double/basic_pickaxe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/oak",
+                  "basic_pickaxe/birch",
+                  "basic_pickaxe/acacia",
+                  "basic_pickaxe/jungle",
+                  "basic_pickaxe/spruce",
+                  "basic_pickaxe/dark_oak"
+                ],
+                "value": {
+                  "mining": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/stone"
+                ],
+                "value": {
+                  "mining": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/andesite",
+                  "basic_pickaxe/diorite",
+                  "basic_pickaxe/granite",
+                  "basic_pickaxe/copper"
+                ],
+                "value": {
+                  "mining": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/flint"
+                ],
+                "value": {
+                  "mining": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/iron"
+                ],
+                "value": {
+                  "mining": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/gold"
+                ],
+                "value": {
+                  "mining": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/blackstone",
+                  "basic_pickaxe/obsidian"
+                ],
+                "value": {
+                  "mining": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/netherite"
+                ],
+                "value": {
+                  "mining": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/emerald"
+                ],
+                "value": {
+                  "mining": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/diamond"
+                ],
+                "value": {
+                  "mining": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/basic_axe_left_material",
+              "double/basic_axe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/oak",
+                  "basic_axe/birch",
+                  "basic_axe/acacia",
+                  "basic_axe/jungle",
+                  "basic_axe/spruce",
+                  "basic_axe/dark_oak"
+                ],
+                "value": {
+                  "woodcutting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/stone"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/andesite",
+                  "basic_axe/diorite",
+                  "basic_axe/granite",
+                  "basic_axe/copper"
+                ],
+                "value": {
+                  "woodcutting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/flint"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/iron"
+                ],
+                "value": {
+                  "woodcutting": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/gold"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/blackstone",
+                  "basic_axe/obsidian"
+                ],
+                "value": {
+                  "woodcutting": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/netherite"
+                ],
+                "value": {
+                  "woodcutting": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/emerald"
+                ],
+                "value": {
+                  "woodcutting": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/diamond"
+                ],
+                "value": {
+                  "woodcutting": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/basic_hammer_left_material",
+              "double/basic_hammer_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/oak",
+                  "basic_hammer/birch",
+                  "basic_hammer/acacia",
+                  "basic_hammer/jungle",
+                  "basic_hammer/spruce",
+                  "basic_hammer/dark_oak"
+                ],
+                "value": {
+                  "crafting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/stone"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/andesite",
+                  "basic_hammer/diorite",
+                  "basic_hammer/granite",
+                  "basic_hammer/copper"
+                ],
+                "value": {
+                  "crafting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/flint"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/iron"
+                ],
+                "value": {
+                  "crafting": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/gold"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/blackstone",
+                  "basic_hammer/obsidian"
+                ],
+                "value": {
+                  "crafting": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/netherite"
+                ],
+                "value": {
+                  "crafting": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/emerald"
+                ],
+                "value": {
+                  "crafting": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/diamond"
+                ],
+                "value": {
+                  "crafting": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/claw_left_material",
+              "double/claw_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/oak",
+                  "claw/birch",
+                  "claw/acacia",
+                  "claw/jungle",
+                  "claw/spruce",
+                  "claw/dark_oak"
+                ],
+                "value": {
+                  "crafting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/stone"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/andesite",
+                  "claw/diorite",
+                  "claw/granite",
+                  "claw/copper"
+                ],
+                "value": {
+                  "crafting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/flint"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/iron"
+                ],
+                "value": {
+                  "crafting": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/gold"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/blackstone",
+                  "claw/obsidian"
+                ],
+                "value": {
+                  "crafting": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/netherite"
+                ],
+                "value": {
+                  "crafting": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/emerald"
+                ],
+                "value": {
+                  "crafting": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/diamond"
+                ],
+                "value": {
+                  "crafting": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/adze_left_material",
+              "double/adze_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/oak",
+                  "adze/birch",
+                  "adze/acacia",
+                  "adze/jungle",
+                  "adze/spruce",
+                  "adze/dark_oak"
+                ],
+                "value": {
+                  "excavation": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/stone"
+                ],
+                "value": {
+                  "excavation": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/andesite",
+                  "adze/diorite",
+                  "adze/granite",
+                  "adze/copper"
+                ],
+                "value": {
+                  "excavation": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/flint"
+                ],
+                "value": {
+                  "excavation": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/iron"
+                ],
+                "value": {
+                  "excavation": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/gold"
+                ],
+                "value": {
+                  "excavation": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/blackstone",
+                  "adze/obsidian"
+                ],
+                "value": {
+                  "excavation": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/netherite"
+                ],
+                "value": {
+                  "excavation": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/emerald"
+                ],
+                "value": {
+                  "excavation": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/diamond"
+                ],
+                "value": {
+                  "excavation": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/butt_left_material",
+              "double/butt_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/oak",
+                  "butt/birch",
+                  "butt/acacia",
+                  "butt/jungle",
+                  "butt/spruce",
+                  "butt/dark_oak"
+                ],
+                "value": {
+                  "woodcutting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/stone"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/andesite",
+                  "butt/diorite",
+                  "butt/granite",
+                  "butt/copper"
+                ],
+                "value": {
+                  "woodcutting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/flint"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/iron"
+                ],
+                "value": {
+                  "woodcutting": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/gold"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/blackstone",
+                  "butt/obsidian"
+                ],
+                "value": {
+                  "woodcutting": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/netherite"
+                ],
+                "value": {
+                  "woodcutting": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/emerald"
+                ],
+                "value": {
+                  "woodcutting": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/diamond"
+                ],
+                "value": {
+                  "woodcutting": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/hoe_left_material",
+              "double/hoe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/oak",
+                  "hoe/birch",
+                  "hoe/acacia",
+                  "hoe/jungle",
+                  "hoe/spruce",
+                  "hoe/dark_oak"
+                ],
+                "value": {
+                  "farming": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/stone"
+                ],
+                "value": {
+                  "farming": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/andesite",
+                  "hoe/diorite",
+                  "hoe/granite",
+                  "hoe/copper"
+                ],
+                "value": {
+                  "farming": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/flint"
+                ],
+                "value": {
+                  "farming": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/iron"
+                ],
+                "value": {
+                  "farming": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/gold"
+                ],
+                "value": {
+                  "farming": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/blackstone",
+                  "hoe/obsidian"
+                ],
+                "value": {
+                  "farming": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/netherite"
+                ],
+                "value": {
+                  "farming": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/emerald"
+                ],
+                "value": {
+                  "farming": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/diamond"
+                ],
+                "value": {
+                  "farming": 60.0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "WEAPON": [
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "double/basic_pickaxe_left_material",
+              "double/basic_pickaxe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/oak",
+                  "basic_pickaxe/birch",
+                  "basic_pickaxe/acacia",
+                  "basic_pickaxe/jungle",
+                  "basic_pickaxe/spruce",
+                  "basic_pickaxe/dark_oak"
+                ],
+                "value": {
+                  "combat": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/stone"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/andesite",
+                  "basic_pickaxe/diorite",
+                  "basic_pickaxe/granite",
+                  "basic_pickaxe/copper"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/flint"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/iron"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/gold"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/blackstone",
+                  "basic_pickaxe/obsidian"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/netherite"
+                ],
+                "value": {
+                  "combat": 60.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/emerald"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/diamond"
+                ],
+                "value": {
+                  "combat": 30.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/basic_axe_left_material",
+              "double/basic_axe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/oak",
+                  "basic_axe/birch",
+                  "basic_axe/acacia",
+                  "basic_axe/jungle",
+                  "basic_axe/spruce",
+                  "basic_axe/dark_oak"
+                ],
+                "value": {
+                  "combat": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/stone"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/andesite",
+                  "basic_axe/diorite",
+                  "basic_axe/granite",
+                  "basic_axe/copper"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/flint"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/iron"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/gold"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/blackstone",
+                  "basic_axe/obsidian"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/netherite"
+                ],
+                "value": {
+                  "combat": 60.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/emerald"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/diamond"
+                ],
+                "value": {
+                  "combat": 30.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/basic_hammer_left_material",
+              "double/basic_hammer_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/oak",
+                  "basic_hammer/birch",
+                  "basic_hammer/acacia",
+                  "basic_hammer/jungle",
+                  "basic_hammer/spruce",
+                  "basic_hammer/dark_oak"
+                ],
+                "value": {
+                  "crafting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/stone"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/andesite",
+                  "basic_hammer/diorite",
+                  "basic_hammer/granite",
+                  "basic_hammer/copper"
+                ],
+                "value": {
+                  "crafting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/flint"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/iron"
+                ],
+                "value": {
+                  "crafting": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/gold"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/blackstone",
+                  "basic_hammer/obsidian"
+                ],
+                "value": {
+                  "crafting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/netherite"
+                ],
+                "value": {
+                  "crafting": 60.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/emerald"
+                ],
+                "value": {
+                  "crafting": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/diamond"
+                ],
+                "value": {
+                  "crafting": 30.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/claw_left_material",
+              "double/claw_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/oak",
+                  "claw/birch",
+                  "claw/acacia",
+                  "claw/jungle",
+                  "claw/spruce",
+                  "claw/dark_oak"
+                ],
+                "value": {
+                  "crafting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/stone"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/andesite",
+                  "claw/diorite",
+                  "claw/granite",
+                  "claw/copper"
+                ],
+                "value": {
+                  "crafting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/flint"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/iron"
+                ],
+                "value": {
+                  "crafting": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/gold"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/blackstone",
+                  "claw/obsidian"
+                ],
+                "value": {
+                  "crafting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/netherite"
+                ],
+                "value": {
+                  "crafting": 60.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/emerald"
+                ],
+                "value": {
+                  "crafting": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/diamond"
+                ],
+                "value": {
+                  "crafting": 30.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/adze_left_material",
+              "double/adze_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/oak",
+                  "adze/birch",
+                  "adze/acacia",
+                  "adze/jungle",
+                  "adze/spruce",
+                  "adze/dark_oak"
+                ],
+                "value": {
+                  "combat": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/stone"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/andesite",
+                  "adze/diorite",
+                  "adze/granite",
+                  "adze/copper"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/flint"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/iron"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/gold"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/blackstone",
+                  "adze/obsidian"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/netherite"
+                ],
+                "value": {
+                  "combat": 60.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/emerald"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/diamond"
+                ],
+                "value": {
+                  "combat": 30.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/butt_left_material",
+              "double/butt_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/oak",
+                  "butt/birch",
+                  "butt/acacia",
+                  "butt/jungle",
+                  "butt/spruce",
+                  "butt/dark_oak"
+                ],
+                "value": {
+                  "combat": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/stone"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/andesite",
+                  "butt/diorite",
+                  "butt/granite",
+                  "butt/copper"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/flint"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/iron"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/gold"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/blackstone",
+                  "butt/obsidian"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/netherite"
+                ],
+                "value": {
+                  "combat": 60.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/emerald"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/diamond"
+                ],
+                "value": {
+                  "combat": 30.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/hoe_left_material",
+              "double/hoe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/oak",
+                  "hoe/birch",
+                  "hoe/acacia",
+                  "hoe/jungle",
+                  "hoe/spruce",
+                  "hoe/dark_oak"
+                ],
+                "value": {
+                  "combat": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/stone"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/andesite",
+                  "hoe/diorite",
+                  "hoe/granite",
+                  "hoe/copper"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/flint"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/iron"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/gold"
+                ],
+                "value": {
+                  "combat": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/blackstone",
+                  "hoe/obsidian"
+                ],
+                "value": {
+                  "combat": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/netherite"
+                ],
+                "value": {
+                  "combat": 60.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/emerald"
+                ],
+                "value": {
+                  "combat": 20.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/diamond"
+                ],
+                "value": {
+                  "combat": 30.0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "TOOL": [
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "double/basic_pickaxe_left_material",
+              "double/basic_pickaxe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/oak",
+                  "basic_pickaxe/birch",
+                  "basic_pickaxe/acacia",
+                  "basic_pickaxe/jungle",
+                  "basic_pickaxe/spruce",
+                  "basic_pickaxe/dark_oak"
+                ],
+                "value": {
+                  "mining": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/stone"
+                ],
+                "value": {
+                  "mining": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/andesite",
+                  "basic_pickaxe/diorite",
+                  "basic_pickaxe/granite",
+                  "basic_pickaxe/copper"
+                ],
+                "value": {
+                  "mining": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/flint"
+                ],
+                "value": {
+                  "mining": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/iron"
+                ],
+                "value": {
+                  "mining": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/gold"
+                ],
+                "value": {
+                  "mining": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/blackstone",
+                  "basic_pickaxe/obsidian"
+                ],
+                "value": {
+                  "mining": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/netherite"
+                ],
+                "value": {
+                  "mining": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/emerald"
+                ],
+                "value": {
+                  "mining": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_pickaxe/diamond"
+                ],
+                "value": {
+                  "mining": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/basic_axe_left_material",
+              "double/basic_axe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/oak",
+                  "basic_axe/birch",
+                  "basic_axe/acacia",
+                  "basic_axe/jungle",
+                  "basic_axe/spruce",
+                  "basic_axe/dark_oak"
+                ],
+                "value": {
+                  "woodcutting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/stone"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/andesite",
+                  "basic_axe/diorite",
+                  "basic_axe/granite",
+                  "basic_axe/copper"
+                ],
+                "value": {
+                  "woodcutting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/flint"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/iron"
+                ],
+                "value": {
+                  "woodcutting": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/gold"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/blackstone",
+                  "basic_axe/obsidian"
+                ],
+                "value": {
+                  "woodcutting": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/netherite"
+                ],
+                "value": {
+                  "woodcutting": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/emerald"
+                ],
+                "value": {
+                  "woodcutting": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_axe/diamond"
+                ],
+                "value": {
+                  "woodcutting": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/basic_hammer_left_material",
+              "double/basic_hammer_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/oak",
+                  "basic_hammer/birch",
+                  "basic_hammer/acacia",
+                  "basic_hammer/jungle",
+                  "basic_hammer/spruce",
+                  "basic_hammer/dark_oak"
+                ],
+                "value": {
+                  "crafting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/stone"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/andesite",
+                  "basic_hammer/diorite",
+                  "basic_hammer/granite",
+                  "basic_hammer/copper"
+                ],
+                "value": {
+                  "crafting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/flint"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/iron"
+                ],
+                "value": {
+                  "crafting": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/gold"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/blackstone",
+                  "basic_hammer/obsidian"
+                ],
+                "value": {
+                  "crafting": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/netherite"
+                ],
+                "value": {
+                  "crafting": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/emerald"
+                ],
+                "value": {
+                  "crafting": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_hammer/diamond"
+                ],
+                "value": {
+                  "crafting": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/claw_left_material",
+              "double/claw_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/oak",
+                  "claw/birch",
+                  "claw/acacia",
+                  "claw/jungle",
+                  "claw/spruce",
+                  "claw/dark_oak"
+                ],
+                "value": {
+                  "crafting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/stone"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/andesite",
+                  "claw/diorite",
+                  "claw/granite",
+                  "claw/copper"
+                ],
+                "value": {
+                  "crafting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/flint"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/iron"
+                ],
+                "value": {
+                  "crafting": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/gold"
+                ],
+                "value": {
+                  "crafting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/blackstone",
+                  "claw/obsidian"
+                ],
+                "value": {
+                  "crafting": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/netherite"
+                ],
+                "value": {
+                  "crafting": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/emerald"
+                ],
+                "value": {
+                  "crafting": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "claw/diamond"
+                ],
+                "value": {
+                  "crafting": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/adze_left_material",
+              "double/adze_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/oak",
+                  "adze/birch",
+                  "adze/acacia",
+                  "adze/jungle",
+                  "adze/spruce",
+                  "adze/dark_oak"
+                ],
+                "value": {
+                  "excavation": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/stone"
+                ],
+                "value": {
+                  "excavation": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/andesite",
+                  "adze/diorite",
+                  "adze/granite",
+                  "adze/copper"
+                ],
+                "value": {
+                  "excavation": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/flint"
+                ],
+                "value": {
+                  "excavation": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/iron"
+                ],
+                "value": {
+                  "excavation": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/gold"
+                ],
+                "value": {
+                  "excavation": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/blackstone",
+                  "adze/obsidian"
+                ],
+                "value": {
+                  "excavation": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/netherite"
+                ],
+                "value": {
+                  "excavation": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/emerald"
+                ],
+                "value": {
+                  "excavation": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "adze/diamond"
+                ],
+                "value": {
+                  "excavation": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/butt_left_material",
+              "double/butt_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/oak",
+                  "butt/birch",
+                  "butt/acacia",
+                  "butt/jungle",
+                  "butt/spruce",
+                  "butt/dark_oak"
+                ],
+                "value": {
+                  "woodcutting": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/stone"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/andesite",
+                  "butt/diorite",
+                  "butt/granite",
+                  "butt/copper"
+                ],
+                "value": {
+                  "woodcutting": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/flint"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/iron"
+                ],
+                "value": {
+                  "woodcutting": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/gold"
+                ],
+                "value": {
+                  "woodcutting": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/blackstone",
+                  "butt/obsidian"
+                ],
+                "value": {
+                  "woodcutting": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/netherite"
+                ],
+                "value": {
+                  "woodcutting": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/emerald"
+                ],
+                "value": {
+                  "woodcutting": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "butt/diamond"
+                ],
+                "value": {
+                  "woodcutting": 60.0
+                }
+              }
+            ]
+          },
+          {
+            "paths": [
+              "double/hoe_left_material",
+              "double/hoe_right_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/oak",
+                  "hoe/birch",
+                  "hoe/acacia",
+                  "hoe/jungle",
+                  "hoe/spruce",
+                  "hoe/dark_oak"
+                ],
+                "value": {
+                  "farming": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/stone"
+                ],
+                "value": {
+                  "farming": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/andesite",
+                  "hoe/diorite",
+                  "hoe/granite",
+                  "hoe/copper"
+                ],
+                "value": {
+                  "farming": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/flint"
+                ],
+                "value": {
+                  "farming": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/iron"
+                ],
+                "value": {
+                  "farming": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/gold"
+                ],
+                "value": {
+                  "farming": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/blackstone",
+                  "hoe/obsidian"
+                ],
+                "value": {
+                  "farming": 25.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/netherite"
+                ],
+                "value": {
+                  "farming": 90.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/emerald"
+                ],
+                "value": {
+                  "farming": 40.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "hoe/diamond"
+                ],
+                "value": {
+                  "farming": 60.0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
