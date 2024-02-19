@@ -2,7 +2,7 @@
   "nbt_requirements": {
     "WEAR": [
       {
-        "behavior_to_previous": "REPLACE",
+        "behavior_to_previous": "HIGHEST",
         "should_cases_add": false,
         "cases": [
           {
@@ -78,7 +78,7 @@
         ]
       },
       {
-        "behavior_to_previous": "REPLACE",
+        "behavior_to_previous": "HIGHEST",
         "should_cases_add": false,
         "cases": [
           {
@@ -143,7 +143,7 @@
         ]
       },
       {
-        "behavior_to_previous": "REPLACE",
+        "behavior_to_previous": "HIGHEST",
         "should_cases_add": false,
         "cases": [
           {
@@ -208,7 +208,7 @@
         ]
       },
       {
-        "behavior_to_previous": "REPLACE",
+        "behavior_to_previous": "HIGHEST",
         "should_cases_add": false,
         "cases": [
           {
@@ -273,7 +273,7 @@
         ]
       },
       {
-        "behavior_to_previous": "REPLACE",
+        "behavior_to_previous": "HIGHEST",
         "should_cases_add": false,
         "cases": [
           {
@@ -331,7 +331,7 @@
         ]
       },
       {
-        "behavior_to_previous": "REPLACE",
+        "behavior_to_previous": "HIGHEST",
         "should_cases_add": false,
         "cases": [
           {
