@@ -1,146 +1,436 @@
 {
-	"nbt_requirements": {
-		"TOOL": [
-            {
-				"behavior_to_previous": "REPLACE",
-				"should_cases_add": false,
-				"cases": [
-                    {
-						"paths": ["crossbow/basic_string_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["basic_string/string", "basic_string/weeping_vine", "basic_string/vine", "basic_string/twisting_vine", "basic_string/leather", "basic_string/hide"],
-								"value": {
-									"archery": 1
-                                }
-                            }, {
-								"operator": "EQUALS",
-								"comparators": ["basic_string/phantom_membrane", "basic_string/dragon_sinew"],
-								"value": {
-									"archery": 2
-								}
-							}
-						]
-					}
-				]
-			},
-            {
-				"behavior_to_previous": "REPLACE",
-				"should_cases_add": false,
-				"cases": [
-                    {
-						"paths": ["crossbow/basic_stave_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["basic_stave/oak", "basic_stave/birch", "basic_stave/acacia", "basic_stave/jungle", "basic_stave/spruce", "basic_stave/dark_oak", "basic_stave/stick"],
-								"value": {
-									"archery": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_stave/copper"],
-								"value": {
-									"archery": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_stave/iron"],
-								"value": {
-									"archery": 30
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_stave/gold"],
-								"value": {
-									"archery": 10
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_stave/netherite"],
-								"value": {
-									"archery": 90
-								}
-							}
-						]
-					}
-				]
-			},
-            {
-				"behavior_to_previous": "REPLACE",
-				"should_cases_add": false,
-				"cases": [
-                    {
-						"paths": ["crossbow/basic_stock_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["basic_stock/oak", "basic_stock/birch", "basic_stock/acacia", "basic_stock/jungle", "basic_stock/spruce", "basic_stock/dark_oak", "basic_stock/stick"],
-								"value": {
-									"archery": 0
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_stock/copper"],
-								"value": {
-									"archery": 7
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_stock/iron"],
-								"value": {
-									"archery": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_stock/gold"],
-								"value": {
-									"archery": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["basic_stock/netherite"],
-								"value": {
-									"archery": 45
-								}
-							}
-						]
-					}
-				]
-			},
-            {
-				"behavior_to_previous": "REPLACE",
-				"should_cases_add": false,
-				"cases": [
-                    {
-						"paths": ["crossbow/stirrup_material"],
-						"criteria": [{
-								"operator": "EQUALS",
-								"comparators": ["stirrup/copper"],
-								"value": {
-									"archery": 7
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["stirrup/iron"],
-								"value": {
-									"archery": 15
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["stirrup/gold"],
-								"value": {
-									"archery": 5
-								}
-							}, {
-								"operator": "EQUALS",
-								"comparators": ["stirrup/netherite"],
-								"value": {
-									"archery": 45
-								}
-							}
-						]
-					}
-				]
-			}
-		]
-	}
+  "nbt_requirements": {
+    "WEAR": [
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "crossbow/basic_string_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_string/string",
+                  "basic_string/weeping_vine",
+                  "basic_string/vine",
+                  "basic_string/twisting_vine",
+                  "basic_string/leather",
+                  "basic_string/hide"
+                ],
+                "value": {
+                  "archery": 1.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_string/phantom_membrane",
+                  "basic_string/dragon_sinew"
+                ],
+                "value": {
+                  "archery": 2.0
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "crossbow/basic_stave_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/oak",
+                  "basic_stave/birch",
+                  "basic_stave/acacia",
+                  "basic_stave/jungle",
+                  "basic_stave/spruce",
+                  "basic_stave/dark_oak",
+                  "basic_stave/stick"
+                ],
+                "value": {
+                  "archery": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/copper"
+                ],
+                "value": {
+                  "archery": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/iron"
+                ],
+                "value": {
+                  "archery": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/gold"
+                ],
+                "value": {
+                  "archery": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/netherite"
+                ],
+                "value": {
+                  "archery": 90.0
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "crossbow/basic_stock_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/oak",
+                  "basic_stock/birch",
+                  "basic_stock/acacia",
+                  "basic_stock/jungle",
+                  "basic_stock/spruce",
+                  "basic_stock/dark_oak",
+                  "basic_stock/stick"
+                ],
+                "value": {
+                  "archery": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/copper"
+                ],
+                "value": {
+                  "archery": 7.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/iron"
+                ],
+                "value": {
+                  "archery": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/gold"
+                ],
+                "value": {
+                  "archery": 5.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/netherite"
+                ],
+                "value": {
+                  "archery": 45.0
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "crossbow/stirrup_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "stirrup/copper"
+                ],
+                "value": {
+                  "archery": 7.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "stirrup/iron"
+                ],
+                "value": {
+                  "archery": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "stirrup/gold"
+                ],
+                "value": {
+                  "archery": 5.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "stirrup/netherite"
+                ],
+                "value": {
+                  "archery": 45.0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "WEAPON": [
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "crossbow/basic_string_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_string/string",
+                  "basic_string/weeping_vine",
+                  "basic_string/vine",
+                  "basic_string/twisting_vine",
+                  "basic_string/leather",
+                  "basic_string/hide"
+                ],
+                "value": {
+                  "archery": 1.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_string/phantom_membrane",
+                  "basic_string/dragon_sinew"
+                ],
+                "value": {
+                  "archery": 2.0
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "crossbow/basic_stave_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/oak",
+                  "basic_stave/birch",
+                  "basic_stave/acacia",
+                  "basic_stave/jungle",
+                  "basic_stave/spruce",
+                  "basic_stave/dark_oak",
+                  "basic_stave/stick"
+                ],
+                "value": {
+                  "archery": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/copper"
+                ],
+                "value": {
+                  "archery": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/iron"
+                ],
+                "value": {
+                  "archery": 30.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/gold"
+                ],
+                "value": {
+                  "archery": 10.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stave/netherite"
+                ],
+                "value": {
+                  "archery": 90.0
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "crossbow/basic_stock_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/oak",
+                  "basic_stock/birch",
+                  "basic_stock/acacia",
+                  "basic_stock/jungle",
+                  "basic_stock/spruce",
+                  "basic_stock/dark_oak",
+                  "basic_stock/stick"
+                ],
+                "value": {
+                  "archery": 0.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/copper"
+                ],
+                "value": {
+                  "archery": 7.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/iron"
+                ],
+                "value": {
+                  "archery": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/gold"
+                ],
+                "value": {
+                  "archery": 5.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "basic_stock/netherite"
+                ],
+                "value": {
+                  "archery": 45.0
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "behavior_to_previous": "HIGHEST",
+        "should_cases_add": false,
+        "cases": [
+          {
+            "paths": [
+              "crossbow/stirrup_material"
+            ],
+            "criteria": [
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "stirrup/copper"
+                ],
+                "value": {
+                  "archery": 7.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "stirrup/iron"
+                ],
+                "value": {
+                  "archery": 15.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "stirrup/gold"
+                ],
+                "value": {
+                  "archery": 5.0
+                }
+              },
+              {
+                "operator": "EQUALS",
+                "comparators": [
+                  "stirrup/netherite"
+                ],
+                "value": {
+                  "archery": 45.0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
