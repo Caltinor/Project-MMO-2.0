@@ -9,3 +9,4 @@
 - Fixed both hands salvaging on a single click
 - Fixed salvage blocks gui activation during salvage
 - Fixed enchantment configs respecting first entry as level 1
+- Fixed mob scaling not applying to mobs not in the pmmo:mobs tag
