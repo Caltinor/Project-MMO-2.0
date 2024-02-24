@@ -1,10 +1,6 @@
 package harmonised.pmmo.features.anticheese;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -76,21 +72,24 @@ public class CheeseTracker {
 	private static final Map<Player, Map<EventType, NormTracker>> NORMALIZED_DATA = new HashMap<>();
 	
 	private static class AFKTracker {
-		int durationAFK = 0, minDuration = 0, cooldownBy = 1;
+		int durationAFK = 0, minDuration = 0, cooldownBy = 1, tolerance = 0;
+		boolean strictFacing;
 		BlockPos lastPos;
 		Vec3 lastLookAngle;
 		
-		public AFKTracker(Player player, int minDuration, int cooldownBy) {
+		public AFKTracker(Player player, int minDuration, int cooldownBy, int tolerance, boolean strictFacing) {
 			this.lastPos = player.blockPosition();
 			this.lastLookAngle = player.getLookAngle();
 			this.minDuration = minDuration;
 			this.cooldownBy = cooldownBy;
+			this.tolerance = tolerance;
+			this.strictFacing = strictFacing;
 		}
 		
 		public AFKTracker update(Player player) {
 			if (meetsAFKCriteria(player))
 				durationAFK++;
-			else {
+			else if (durationAFK <= 0){
 				lastLookAngle = player.getLookAngle();
 				lastPos = player.blockPosition();
 			}
@@ -102,7 +101,11 @@ public class CheeseTracker {
 				durationAFK -= cooldownBy;
 		}
 		public boolean meetsAFKCriteria(Player player) {
-			return lastLookAngle.equals(player.getLookAngle()) && lastPos.equals(player.blockPosition());
+			BlockPos curPos = player.blockPosition();
+			return (!strictFacing || lastLookAngle.equals(player.getLookAngle()))
+					&& Math.abs(lastPos.getX() - curPos.getX()) < tolerance
+					&& Math.abs(lastPos.getY() - curPos.getY()) < tolerance
+					&& Math.abs(lastPos.getZ() - curPos.getZ()) < tolerance;
 		}
 		
 		public boolean isAFK() {
@@ -146,25 +149,27 @@ public class CheeseTracker {
 			int toleranceFlat,
 			double reduction,
 			int cooloff,
-			double tolerancePercent) {
+			double tolerancePercent,
+			boolean strictTolerance) {
 		
 		public static Builder build() {return new Builder();}
 		
 		public static class Builder {
-			private List<String> source = new ArrayList<>();
+			private final List<String> source = new ArrayList<>();
 			private int minTime = 0;
 			private int retention = 0;
 			private int toleranceFlat = 0;
 			private double reduction = 0.0;
 			private int cooloff = 0;
 			private double tolerancePercent = 0.0;
+			private boolean strictTolerance = true;
 			protected Builder() {}
 			public Builder source(String entry) {
 				source.add(entry);
 				return this;
 			}
 			public Builder source(String...entries) {
-				source.addAll(source);
+				source.addAll(Arrays.asList(entries));
 				return this;
 			}
 			public Builder minTime(int min) {
@@ -191,8 +196,12 @@ public class CheeseTracker {
 				this.tolerancePercent = percent;
 				return this;
 			}
+			public Builder setStrictness(boolean isStrict) {
+				this.strictTolerance = isStrict;
+				return this;
+			}
 			public Setting build() {
-				return new Setting(source, minTime, retention, toleranceFlat, reduction, cooloff, tolerancePercent);
+				return new Setting(source, minTime, retention, toleranceFlat, reduction, cooloff, tolerancePercent, strictTolerance);
 			}
 		}
 		
@@ -203,6 +212,7 @@ public class CheeseTracker {
 		public static final String TOLERANCE_PERCENT = "tolerance_percent";
 		public static final String TOLERANCE_FLAT = "tolerance_flat";
 		public static final String RETENTION = "retention_duration";
+		public static final String STRICT = "strict_tolerance";
 		
 		public static final Codec<Setting> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.STRING.listOf().optionalFieldOf(SOURCE).forGetter(s -> Optional.of(s.source)),
@@ -211,20 +221,22 @@ public class CheeseTracker {
 				Codec.INT.optionalFieldOf(TOLERANCE_FLAT).forGetter(s -> Optional.of(s.toleranceFlat)),
 				Codec.DOUBLE.optionalFieldOf(REDUCTION).forGetter(s -> Optional.of(s.reduction)),
 				Codec.INT.optionalFieldOf(COOLOFF).forGetter(s -> Optional.of(s.cooloff)),
-				Codec.DOUBLE.optionalFieldOf(TOLERANCE_PERCENT).forGetter(s -> Optional.of(s.tolerancePercent))
-				).apply(instance, (src, min, ret, flat, red, cool, per) -> new Setting(
+				Codec.DOUBLE.optionalFieldOf(TOLERANCE_PERCENT).forGetter(s -> Optional.of(s.tolerancePercent)),
+				Codec.BOOL.optionalFieldOf(STRICT).forGetter(s -> Optional.of(s.strictTolerance))
+				).apply(instance, (src, min, ret, flat, red, cool, per, strict) -> new Setting(
 						src.orElse(new ArrayList<>()),
 						min.orElse(0),
 						ret.orElse(0),
 						flat.orElse(0),
 						red.orElse(1.0),
 						cool.orElse(1),
-						per.orElse(0.0)
+						per.orElse(0.0),
+						strict.orElse(true)
 				)));
 		
 		public void applyAFK(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
 			AFKTracker afkData = AFK_DATA.computeIfAbsent(player, p -> new HashMap<>())
-					.computeIfAbsent(event, e -> new AFKTracker(player, minTime, cooloff)).update(player);
+					.computeIfAbsent(event, e -> new AFKTracker(player, minTime(), cooloff(), toleranceFlat(), strictTolerance())).update(player);
 			if ((this.source().isEmpty() || this.source().contains(source.toString())) && afkData.isAFK()) {
 				awardIn.keySet().forEach(skill -> {
 					MsLoggy.DEBUG.log(LOG_CODE.XP, "AFK reduction factor: {}", reduction * (double)afkData.getAFKDuration());
