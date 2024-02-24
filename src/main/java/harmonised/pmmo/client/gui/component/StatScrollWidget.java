@@ -334,7 +334,7 @@ public class StatScrollWidget extends ScrollPanel{
 				return map;
 				}), events, skillFilter);
 			addReqSection((reqType -> {
-				Map<String, Integer> reqMap = core.getReqMap(reqType, stack);
+				Map<String, Integer> reqMap = core.getReqMap(reqType, stack, true);
 				if (reqType == ReqType.USE_ENCHANTMENT)
 					core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
 				if (stack.getItem() instanceof BlockItem)

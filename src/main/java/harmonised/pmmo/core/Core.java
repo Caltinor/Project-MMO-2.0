@@ -302,7 +302,7 @@ public class Core {
 		
 		return (predicates.predicateExists(itemID, type)) 
 			? predicates.checkPredicateReq(player, stack, type)
-			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, stack));
+			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, stack, false));
 	}
 	public boolean isActionPermitted(ReqType type, BlockPos pos, Player player) {
 		if (player instanceof FakePlayer
@@ -359,21 +359,18 @@ public class Core {
 		}
 		return true;
 	}
-	//======DATA OBTAINING METHODS=======
-	
+
 	//======DATA OBTAINING METHODS=======
 	public Map<String, Integer> getObjectSkillMap(ObjectType type, ResourceLocation objectID, ReqType reqType, CompoundTag nbt) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
 		return new HashMap<>(data != null ? data.getReqs(reqType, nbt) : new HashMap<>()); 
 	}
-	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
+	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack, boolean ignoreEnchants) {
 		ResourceLocation itemID = RegistryUtil.getId(stack);
-		Map<String, Integer> reqMap = (reqType == ReqType.USE_ENCHANTMENT)
-			? getEnchantReqs(stack)
-			: new HashMap<>();
+		Map<String, Integer> reqMap = ignoreEnchants ? new HashMap<>() : getEnchantReqs(stack);
 		if (tooltips.requirementTooltipExists(itemID, reqType)) 
 			tooltips.getItemRequirementTooltipData(itemID, reqType, stack).forEach((skill, lvl) -> {
-				reqMap.merge(skill, lvl, (o, n) -> o > n ? o : n);
+				reqMap.merge(skill, lvl, Integer::max);
 			});;
 		return getCommonReqData(reqMap, ObjectType.ITEM, itemID, reqType, TagUtils.stackTag(stack));
 	}
@@ -382,7 +379,7 @@ public class Core {
 		if (!stack.isEnchanted() || !Config.reqEnabled(ReqType.USE_ENCHANTMENT).get()) return outMap;
 		for (Map.Entry<Enchantment, Integer> enchant : EnchantmentHelper.getEnchantments(stack).entrySet()) {			
 			getEnchantmentReqs(RegistryUtil.getId(enchant.getKey()), enchant.getValue()).forEach((skill, level) -> {
-				outMap.merge(skill, level, (o, n) -> o > n ? o : n);
+				outMap.merge(skill, level, Integer::max);
 			});
 		}
 		return outMap;

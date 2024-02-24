@@ -1,5 +1,7 @@
 # Changelog
 
-## [1.20.1-1.2.17] - 2024-02-01
+## [1.20.1-1.3.18] - 2024-02-01
+### Minor Version Changes
+- Fixed The first entry in an enchantment configuration now refers to level 1 enchants
 ### Bugfixes / Tweaks
-- Added unlock messages when leveling up
+- Fixed enchant reqs not being enforced.

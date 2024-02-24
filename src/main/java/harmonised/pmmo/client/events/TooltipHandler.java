@@ -139,7 +139,7 @@ public class TooltipHandler {
 		//Gather req data and populate a map for return
 		Map<String, Integer> map = type == ReqType.USE_ENCHANTMENT 
 				? core.getEnchantReqs(stack)
-				: core.getReqMap(type, stack);
+				: core.getReqMap(type, stack, true);
 		
 		if (stack.getItem() instanceof BlockItem)
 			map.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), type, TagUtils.stackTag(stack)));
