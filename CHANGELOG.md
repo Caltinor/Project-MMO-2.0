@@ -6,3 +6,5 @@
 ### Bugfixes / Tweaks
 - Fixed enchant reqs not being enforced.
 - Added `tolerance_flat` and `strict_tolerance` properties to AFK Anti-Cheese
+- Fixed both hands salvaging on a single click
+- Fixed salvage blocks gui activation during salvage
