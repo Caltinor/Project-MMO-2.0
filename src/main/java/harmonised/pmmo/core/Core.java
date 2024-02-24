@@ -378,7 +378,7 @@ public class Core {
 		Map<String, Integer> outMap = new HashMap<>();
 		if (!stack.isEnchanted() || !Config.reqEnabled(ReqType.USE_ENCHANTMENT).get()) return outMap;
 		for (Map.Entry<Enchantment, Integer> enchant : EnchantmentHelper.getEnchantments(stack).entrySet()) {			
-			getEnchantmentReqs(RegistryUtil.getId(enchant.getKey()), enchant.getValue()).forEach((skill, level) -> {
+			getEnchantmentReqs(RegistryUtil.getId(enchant.getKey()), enchant.getValue()-1).forEach((skill, level) -> {
 				outMap.merge(skill, level, Integer::max);
 			});
 		}
