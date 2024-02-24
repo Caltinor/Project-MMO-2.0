@@ -28,6 +28,15 @@ When players are not moving, they will begin to accrue AFK time.  when that time
       #when the player is not afk, how much of their accrued time 
       #is reduced each half-second they are not afk.
       cooloff_amount = 10
+      #tolerance determines how far from their last position a player
+      #must be to no longer be considered AFK.  zero means they are 
+      #only considered AFK if in the exact same location
+      tolerance_flat = 0
+      #Determines if the player's facing is factored into whether they
+      #are AFK.  If set to false, a player can stand in one place but
+      #move their camera angle and still be considered AFK.  If true,
+      #moving the camera is considered not AFK.
+      strict_tolerance = true
     [AntiCheese.AFK.OTHER_EVENT_TYPE]
       min_time_to_apply = 20 #one second
       reduction = 1.0 #immediate complete loss of xp
