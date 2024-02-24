@@ -80,6 +80,8 @@ public class PlayerClickHandler {
 		}
 		
 		CompoundTag hookOutput = new CompoundTag();
+		boolean isSalvage = player.isCrouching()
+				&& RegistryUtil.getId(event.getLevel().getBlockState(event.getPos()).getBlock()).equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()));
 		if (serverSide) {
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ACTIVATE_BLOCK, event, hookOutput);
 			if (hookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
@@ -87,11 +89,13 @@ public class PlayerClickHandler {
 				return;
 			}
 			//======================SALVAGE DROP LOGIC=======================================
-			if (player.isCrouching() && RegistryUtil.getId(event.getLevel().getBlockState(event.getPos()).getBlock()).equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
+			if (isSalvage && event.getHand().equals(InteractionHand.MAIN_HAND))
 				core.getSalvage((ServerPlayer) player);
-			}
 			//=======================END SALVAGE============================================
-		}		
+		}
+		if (isSalvage)
+			event.setCanceled(true);
+		//prevent salvage blocks from opening their gui
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_BLOCK, player, new CompoundTag()));
 		if (serverSide) {
