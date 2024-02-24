@@ -251,7 +251,7 @@ public class APIUtils {
 		Preconditions.checkNotNull(item);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);
-		return Core.get(side).getReqMap(type, item);
+		return Core.get(side).getReqMap(type, item, true);
 	}
 	
 	/**Returns a skill-level map for the requirements of the block and the requirement type passed.
