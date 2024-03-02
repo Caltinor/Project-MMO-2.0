@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.loot_modifiers;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.core.Core;
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.serialization.Codec;
@@ -23,19 +24,29 @@ import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Optional;
+
 public class TreasureLootModifier extends LootModifier{
 	
 	public static final Codec<TreasureLootModifier> CODEC = RecordCodecBuilder.create(instance -> codecStart(instance).and(instance.group(
 			ResourceLocation.CODEC.fieldOf("item").forGetter(tlm -> RegistryUtil.getId(tlm.drop)),
 			Codec.INT.fieldOf("count").forGetter(tlm -> tlm.count),
-			Codec.DOUBLE.fieldOf("chance").forGetter(tlm -> tlm.chance)
+			Codec.DOUBLE.fieldOf("chance").forGetter(tlm -> tlm.chance),
+			Codec.BOOL.optionalFieldOf("per_level").forGetter(tlm -> Optional.of(tlm.perLevel)),
+			Codec.STRING.optionalFieldOf("skill").forGetter(tlm -> Optional.of(tlm.skill))
 			)).apply(instance, TreasureLootModifier::new));
 
 	public ItemStack drop;
 	private final int count;
 	public double chance;
-	
+	public boolean perLevel;
+	public String skill;
+
 	public TreasureLootModifier(LootItemCondition[] conditionsIn, ResourceLocation lootItemID, int count, double chance) {
+		this(conditionsIn, lootItemID, count, chance, Optional.of(false), Optional.empty());
+	}
+	public TreasureLootModifier(LootItemCondition[] conditionsIn, ResourceLocation lootItemID, int count,
+								double chance, Optional<Boolean> perLevel, Optional<String> skill) {
 		super(conditionsIn);
 		this.chance = chance;
 		this.drop = lootItemID.equals(new ResourceLocation("air"))
@@ -43,6 +54,8 @@ public class TreasureLootModifier extends LootModifier{
 				: new ItemStack(ForgeRegistries.ITEMS.getValue(lootItemID));
 		this.drop.setCount(count);
 		this.count = count;
+		this.perLevel = perLevel.orElse(false);
+		this.skill = skill.orElse("");
 	}
 
 	@Override
@@ -53,6 +66,9 @@ public class TreasureLootModifier extends LootModifier{
 	@Override
 	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,	LootContext context) {
 		if (!Config.TREASURE_ENABLED.get()) return generatedLoot;
+		if (perLevel && context.getParam(LootContextParams.THIS_ENTITY) instanceof Player player) {
+			chance *= Core.get(player.level()).getData().getPlayerSkillLevel(skill, player.getUUID());
+		}
 		if (context.getRandom().nextDouble() <= chance) {
 			
 			//this section checks if the drop is air and replaces it with the block

@@ -1,11 +1,7 @@
 # Changelog
 
-## [1.20.1-1.3.18] - 2024-02-24
-### Minor Version Changes
-- Fixed The first entry in an enchantment configuration now refers to level 1 enchants
+## [1.20.1-1.3.19] - 2024-03-02
 ### Bugfixes / Tweaks
-- Fixed enchant reqs not being enforced.
-- Added `tolerance_flat` and `strict_tolerance` properties to AFK Anti-Cheese
-- Fixed both hands salvaging on a single click
-- Fixed salvage blocks gui activation during salvage
-- Fixed mob scaling not applying to mobs not in the pmmo:mobs tag
+- Fixed treasure config toggle disabling conditions instead of loot
+- Fixed Tetra configs using REPLACE instead of HIGHER.
+- Added per_level option to treasure and rare drop configurations
