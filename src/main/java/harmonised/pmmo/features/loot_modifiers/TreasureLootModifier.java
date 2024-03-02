@@ -3,6 +3,7 @@ package harmonised.pmmo.features.loot_modifiers;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
+import harmonised.pmmo.config.Config;
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.serialization.Codec;
@@ -51,6 +52,7 @@ public class TreasureLootModifier extends LootModifier {
 
 	@Override
 	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,	LootContext context) {
+		if (!Config.TREASURE_ENABLED.get()) return generatedLoot;
 		if (context.getRandom().nextDouble() <= chance) {
 			
 			//this section checks if the drop is air and replaces it with the block

@@ -25,7 +25,6 @@ public class SkillLootConditionHighestSkill implements LootItemCondition{
 	
 	@Override
 	public boolean test(LootContext t) {
-		if (!Config.TREASURE_ENABLED.get()) return false;
 		Entity player = t.getParamOrNull(LootContextParams.THIS_ENTITY);
 		if (player == null || targetSkill == null || comparables.isEmpty()) return false;
 		
