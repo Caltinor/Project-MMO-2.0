@@ -12,12 +12,15 @@ Your file will then have these required components
   "conditions":[], //we'll get to these soon
   "item":"minecraft:apple", //any item ID from a loaded mod
   "count": 1, //how many of this item will drop
-  "chance": 0.25 //how likely it is to drop once conditions are met
+  "chance": 0.25, //how likely it is to drop once conditions are met
+  //OPTIONAL Properties.  If set, will modify the behavior of the loot.  omit if not desired.
+  "per_level": false, //if set to true makes loot drop based on the chance * skill level of the specified skill
+  "skill": "farming" //sets the skill for the per_level drop chance.
 }
 ```
 
-In this example, we have a 25% chance of getting a single apple when loot is dropped. Since we do not have any conditions, this will apply to all loot tables including chests.
-Conditions
+In this example, we have a 25% chance of getting a single apple when loot is dropped. Since we do not have any conditions, this will apply to all loot tables including chests.  If `per_level` were set to true this would instead give us 25% chance per level in farming.  This would mean at level 4 farming you would get a 100% chance of apples.
+### Conditions
 
 Adding conditions specifies when this treasure is to be attempted. Minecraft provides many conditions (called "Predicates") that are used for existing loot tables, and you can use those in this section as well. You can read about thos on [The Minecraft Wiki](https://minecraft.fandom.com/wiki/Predicate). PMMO also adds 4 conditions as well such as player level requirements, and specific block targets. You can read about those [HERE](https://github.com/Caltinor/Project-MMO-2.0/wiki/Loot-Predicates)
 
