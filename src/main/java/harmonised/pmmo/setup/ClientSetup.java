@@ -39,8 +39,8 @@ public class ClientSetup {
     
     @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
-    	event.registerAboveAll("stats_overlay", new XPOverlayGUI());
-    	event.registerAboveAll("tutorial", new TutorialOverlayGUI());
-    	event.registerAbove(new ResourceLocation("crosshair"), "overlay_icons", new IndicatorsOverlayGUI());
+    	event.registerAboveAll(new ResourceLocation(Reference.MOD_ID, "stats_overlay"), new XPOverlayGUI());
+    	event.registerAboveAll(new ResourceLocation(Reference.MOD_ID, "tutorial"), new TutorialOverlayGUI());
+    	event.registerAbove(new ResourceLocation("crosshair"), new ResourceLocation(Reference.MOD_ID, "overlay_icons"), new IndicatorsOverlayGUI());
     }
 }
