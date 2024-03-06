@@ -136,6 +136,7 @@ public class StatScrollWidget extends ScrollPanel {
 
 	private StatScrollWidget(int width, int height, int top, int left) {
 		super(Minecraft.getInstance(), width, height, top, left, 4);
+		CreativeModeTabs.tryRebuildTabContents(mc.player.connection.enabledFeatures(), mc.player.canUseGameMasterBlocks(), mc.player.clientLevel.registryAccess());
 	}
 	public StatScrollWidget(int width, int height, int top, int left, int pointless) {
 		this(width, height, top, left);
@@ -321,8 +322,7 @@ public class StatScrollWidget extends ScrollPanel {
 		default:{}
 		}
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	private void populateItems(List<ItemStack> items, EventType[] events, ReqType[] reqs, ModifierDataType[] modifiers, String skillFilter, boolean includeSalvage, boolean includeVein) {
 		for (ItemStack stack : items) {
 			int lengthBeforeProcessing = content.size() + 1;
