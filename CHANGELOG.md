@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.20.1-1.3.20] - 2024-03-04
+## [1.20.1-1.3.21] - 2024-03-06
 ### Bugfixes / Tweaks
-- Fixed APIUtils#addXp not parsing skillgroups into component skills
+- Fixed glossary not showing items
