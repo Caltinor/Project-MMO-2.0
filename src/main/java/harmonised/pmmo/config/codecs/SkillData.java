@@ -8,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 
@@ -49,6 +50,16 @@ public record SkillData (
 		getGroup().forEach((skill, ratio) -> {
 			outMap.put(skill, Double.valueOf((ratio / denominator) * xp).longValue());
 		});
+		//iterate over the map for groups within the member map
+		new HashMap<>(outMap).forEach((skill, value) -> {
+			SkillData skillCheck = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			if (skillCheck.isSkillGroup()) {
+				outMap.remove(skill);
+				skillCheck.getGroupXP(value).forEach((s, x) -> {
+					outMap.merge(s, x, Long::sum);
+				});
+			}
+		});
 		return outMap;
 	}
 	
@@ -57,6 +68,15 @@ public record SkillData (
 		double denominator = getGroup().values().stream().mapToDouble(value -> value).sum();
 		getGroup().forEach((skill, ratio) -> {
 			outMap.put(skill, (int)((ratio / denominator) * (double)level));
+		});
+		new HashMap<>(outMap).forEach((skill, value) -> {
+			SkillData skillCheck = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			if (skillCheck.isSkillGroup()) {
+				outMap.remove(skill);
+				skillCheck.getGroupReq(value).forEach((s, x) -> {
+					outMap.merge(s, x, Integer::sum);
+				});
+			}
 		});
 		return outMap;
 	}
@@ -67,6 +87,15 @@ public record SkillData (
 		double gainLossModifier = bonus >= 1d ? 1d : 0d;
 		getGroup().forEach((skill, ratio) -> {
 			outMap.put(skill, gainLossModifier + (ratio / denominator) * bonus);
+		});
+		new HashMap<>(outMap).forEach((skill, value) -> {
+			SkillData skillCheck = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			if (skillCheck.isSkillGroup()) {
+				outMap.remove(skill);
+				skillCheck.getGroupBonus(value).forEach((s, x) -> {
+					outMap.merge(s, x, Double::sum);
+				});
+			}
 		});
 		return outMap;
 	}

@@ -18,3 +18,4 @@ One major detail is the dropped support for Forge.  Project MMO will now only be
 ### Bugfixes / Tweaks
 - Added TOOL_BREAKING event which fires when an item with durability breaks.
 - Added new feature packs for Easy, Default, and Hardcore.
+
