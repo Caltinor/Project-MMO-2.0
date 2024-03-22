@@ -204,6 +204,7 @@ public class Core {
 	}
 	
 	public Map<String, Long> getCommonXpAwardData(Map<String, Long> xpGains, EventType type, ResourceLocation objectID, Player player, ObjectType oType, CompoundTag tag) {
+		String[] loggables = new String[4];
 		if (xpGains.isEmpty()) {
 			xpGains = CoreUtils.mergeXpMapsWithSummateCondition(				
 					tag.contains(APIUtils.SERIALIZED_AWARD_MAP) 
@@ -215,14 +216,17 @@ public class Core {
 				xpGains = AutoValues.getExperienceAward(type, objectID, oType);
 			
 		}
-		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains: "+MsLoggy.mapToString(xpGains));
+		loggables[0] = type.name();
+		loggables[1] = MsLoggy.mapToString(xpGains);
 		
 		if (player != null && !(player instanceof FakePlayer))
 			CoreUtils.applyXpModifiers(xpGains, getConsolidatedModifierMap(player));
-		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterBonus): "+MsLoggy.mapToString(xpGains));
+		loggables[2] = MsLoggy.mapToString(xpGains);
 		
 		CheeseTracker.applyAntiCheese(type, objectID, player, xpGains);
-		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(xpGains));
+
+		loggables[3] = MsLoggy.mapToString(xpGains);
+		MsLoggy.INFO.log(LOG_CODE.XP, "XP: {} base:{}, afterBonus:{}, afterAntiCheese:{}", loggables);
 
 		return xpGains;
 	}	
