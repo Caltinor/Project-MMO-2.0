@@ -185,7 +185,6 @@ public class PlayerTickHandler {
 			}
 			
 			CheeseTracker.applyAntiCheese(type, source, event.player, xpAward);
-			MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(xpAward));
 			
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.player);
 			core.awardXP(partyMembersInRange, xpAward);	
