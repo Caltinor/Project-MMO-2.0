@@ -14,9 +14,7 @@ import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.features.penalties.EffectManager;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
-import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +28,7 @@ import net.minecraftforge.fml.LogicalSide;
 public class PlayerTickHandler {
 	private static final Map<UUID, Integer> airLast = new HashMap<>();
 	private static final Map<UUID, Float> healthLast = new HashMap<>();
+	private static final Map<UUID, Vec3> moveLast = new HashMap<>();
 	private static short ticksIgnoredSinceLastProcess = 0;
 
 	public static void handle(PlayerTickEvent event) {
@@ -87,6 +86,7 @@ public class PlayerTickHandler {
 		//update tracker variables
 		airLast.put(player.getUUID(), player.getAirSupply());
 		healthLast.put(player.getUUID(), player.getHealth());
+		moveLast.put(player.getUUID(), player.position());
 		ticksIgnoredSinceLastProcess = 0;
 	}
 	
@@ -135,8 +135,12 @@ public class PlayerTickHandler {
 				}
 			}
 			case SPRINTING -> {
-				Vec3 vec = event.player.getDeltaMovement();
-				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
+				Vec3 vec = event.player.position();
+				Vec3 old = moveLast.getOrDefault(event.player.getUUID(), vec);
+				double magnitude = Math.sqrt(
+						Math.pow(Math.abs(vec.x()-old.x()), 2) +
+						Math.pow(Math.abs(vec.y()-old.y()), 2) +
+						Math.pow(Math.abs(vec.z()-old.z()), 2));
 				Map<String, Double> ratio = Config.SPRINTING_XP.get();
 				ratio.keySet().forEach((skill) -> {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
