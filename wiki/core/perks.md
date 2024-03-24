@@ -152,7 +152,6 @@ Reduces damage received when used with the `RECEIVE_DAMAGE` event.
 |:-----------------|:-----------:|:------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `per_level`      |    0.025    | Amount of damage per level in the specified skill to reduce by                                                                                        |
 | `for_damage`     | `"omitted"` | a Minecraft [Damage Type](../configuration/damagetypes.md) this reduction should apply to.  If using damage type tags, place a `#` before the tag ID. | 
-| `multiplicative` |    false    | should the per_level * skillLevel subtract from (false) or multiply (true) by the damage received                                                     |
 | `max_boost`      |     n/a     | limits the max reduction that can be achieved                                                                                                         |
 
 ### <u>pmmo:damage_boost</u>
