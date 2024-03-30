@@ -141,7 +141,8 @@ public class FeaturePerks {
 			int skillLevel = nbt.getInt(APIUtils.SKILL_LEVEL);
 			int configDuration = nbt.getInt(APIUtils.DURATION);
 			double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
-			int calculatedDuration = (int)((double)skillLevel * (double) configDuration * perLevel);
+			int base = nbt.getInt(APIUtils.BASE);
+			int calculatedDuration = (int)((double)skillLevel * (double) configDuration * perLevel) + base;
 			calculatedDuration = Math.min(nbt.getInt(APIUtils.MAX_BOOST), calculatedDuration);
 			int duration = player.hasEffect(effect) && player.getEffect(effect).getDuration() > calculatedDuration
 					? player.getEffect(effect).getDuration() 
@@ -159,6 +160,7 @@ public class FeaturePerks {
 	public static final Perk EFFECT = Perk.begin()
 			.addDefaults(TagBuilder.start().withString("effect", "modid:effect")
 					.withInt(APIUtils.DURATION, 100)
+					.withDouble(APIUtils.BASE, 0d)
 					.withInt(APIUtils.PER_LEVEL, 1)
 					.withInt(APIUtils.MIN_LEVEL, 1)
 					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
@@ -179,13 +181,14 @@ public class FeaturePerks {
 			List.of(LangProvider.PERK_JUMP_BOOST_STATUS_1.asComponent(
 			nbt.getInt(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL)));
 	private static CompoundTag JUMP_DEFAULTS = TagBuilder.start()
+			.withDouble(APIUtils.BASE, 0d)
 			.withDouble(APIUtils.PER_LEVEL, 0.0005)
 			.withDouble(APIUtils.MAX_BOOST, 0.25).build();
 	
 	public static final Perk JUMP_CLIENT = Perk.begin()
 		.addDefaults(JUMP_DEFAULTS)
 		.setStart((player, nbt) -> {
-	        double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL));
+	        double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)) + nbt.getDouble(APIUtils.BASE);
 	        player.setDeltaMovement(player.getDeltaMovement().add(0, jumpBoost, 0));
 	        player.hurtMarked = true; 
 	        return NONE;
@@ -196,7 +199,7 @@ public class FeaturePerks {
 	public static final Perk JUMP_SERVER = Perk.begin()
 		.addDefaults(JUMP_DEFAULTS)
 		.setStart((player, nbt) -> {
-			double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL));
+			double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)) + nbt.getDouble(APIUtils.BASE);
 	        return TagBuilder.start().withDouble(APIUtils.JUMP_OUT, player.getDeltaMovement().y + jumpBoost).build();
 		})
 		.setDescription(LangProvider.PERK_JUMP_BOOST_DESC.asComponent())
@@ -206,10 +209,11 @@ public class FeaturePerks {
 			.addConditions((player, nbt) -> player.getAirSupply() < 2)
 			.addDefaults(TagBuilder.start()
 					.withLong(APIUtils.COOLDOWN, 600l)
+					.withDouble(APIUtils.BASE, 0d)
 					.withDouble(APIUtils.PER_LEVEL, 1d)
 					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE).build())
 			.setStart((player, nbt) -> {
-				int perLevel = Math.max(1, (int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)));
+				int perLevel = Math.max(1, (int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL))) + nbt.getInt(APIUtils.BASE);
 				perLevel = Math.min(nbt.getInt(APIUtils.MAX_BOOST), perLevel);
 				player.setAirSupply(player.getAirSupply() + perLevel);
 				player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
@@ -236,12 +240,13 @@ public class FeaturePerks {
 			})
 			.addDefaults(TagBuilder.start()
 					.withDouble(APIUtils.PER_LEVEL, 0.025)
+					.withDouble(APIUtils.BASE, 0d)
 					.withFloat(APIUtils.DAMAGE_IN, 0)
 					.withString(APIUtils.DAMAGE_TYPE, "missing")
 					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 					.withString(APIUtils.DAMAGE_TYPE_IN, "omitted").build())
 			.setStart((player, nbt) -> {
-				float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
+				float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL)) + nbt.getInt(APIUtils.BASE);
 				saved = Math.min(nbt.getInt(APIUtils.MAX_BOOST), saved);
 				float baseDamage = nbt.contains(APIUtils.DAMAGE_OUT)
 						? nbt.getFloat(APIUtils.DAMAGE_OUT)
@@ -333,6 +338,7 @@ public class FeaturePerks {
 			.addConditions((player, tag) -> tag.getString(APIUtils.TARGET).equals("minecraft:villager"))
 			.addDefaults(TagBuilder.start()
 					.withString(APIUtils.TARGET, "missing")
+					.withDouble(APIUtils.BASE, 0d)
 					.withInt(APIUtils.ENTITY_ID, -1)
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
 					.withLong(APIUtils.COOLDOWN, 1000L).build())
