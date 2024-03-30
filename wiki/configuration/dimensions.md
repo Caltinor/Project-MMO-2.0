@@ -5,10 +5,8 @@ This page details the data format for json files in the `data/namespace/pmmo/dim
 ## Example File
 ```json5
 {
-    "isTagFor":[ //use to have settings copied to all below members. the filename is ignored and is not automatically added.
-        "minecraft:overworld",
-        "minecraft:nether"
-    ],
+    //DO NOT USE.  Does not work
+    "isTagFor":[],
     //When in the dimension, what bonuses does the player get
     "bonus":{ //if not adding bonuses, you can remove the entire section
         "DIMENSION":{

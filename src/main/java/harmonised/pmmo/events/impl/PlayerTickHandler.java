@@ -145,7 +145,7 @@ public class PlayerTickHandler {
 				ratio.keySet().forEach((skill) -> {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
-				});;
+				});
 			}
 			case SUBMERGED -> {
 				Map<String, Double> ratio = Config.SUBMERGED_XP.get();
