@@ -136,6 +136,7 @@ Gives the player a vertical boost.  If used with the JUMP event, will add to the
 |:------------|:-------:|:---------------------------------------------------------|
 | `max_boost` |  0.25   | The maximum height added to the jump                     |
 | `per_level` | 0.0005  | How much jump height each level of the skill contributes |
+| `base`      |    0    | A flat amount to add to the jump amount                  |
 
 ### <u>pmmo:breath</u>
 Restores a portion of the breath bar after the last breath bubble dissapears
@@ -144,6 +145,7 @@ Restores a portion of the breath bar after the last breath bubble dissapears
 |:------------|:-------:|:--------------------------------------------------------------------------------|
 | `cooldown`  |   600   | How frequent the breath can refresh.  setting to zero will make breath infinite |
 | `per_level` |    1    | The amount of breath restored per level in the skill                            |
+| `base`      |    0    | A flat amount to add to the amount of breath restored~~~~                           |
 
 ### <u>pmmo:damage_reduce</u>
 Reduces damage received when used with the `RECEIVE_DAMAGE` event.
@@ -152,6 +154,7 @@ Reduces damage received when used with the `RECEIVE_DAMAGE` event.
 |:-------------|:-----------:|:------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `per_level`  |    0.025    | Amount of damage per level in the specified skill to reduce by                                                                                        |
 | `for_damage` | `"omitted"` | a Minecraft [Damage Type](../configuration/damagetypes.md) this reduction should apply to.  If using damage type tags, place a `#` before the tag ID. | 
+| `base`       |      0      | A flat amount added to the per_level amount for the damage reduced                                                                                    |
 
 ### <u>pmmo:damage_boost</u>
 Increases damage to attacks.  This is the only damage booster for archery, magic, and gunslinging.  Note that melee attack boosting should use `pmmo:attribute` and use the vanilla attack damage attribute.
@@ -173,6 +176,7 @@ Gives the player an effect for a specific time
 | `modifier`  |    0    | sets the level of the effect.  all effect levels are +1 than their modifier |
 | `ambient`   |  false  | should an effect's particles be hidden                                      |
 | `visible`   |  true   | should an effect show in the players inventory and hud                      |
+| `base`      |    0    | A flat amount to add to the duration                                        |
 
 ### <u>pmmo:command</u>
 Runs the specified command or function when triggered.  Note the Glossary entry for this perk will display the property literally.  It is advised to name your functions something intuitive, if using functions.
@@ -189,6 +193,7 @@ Reduces the villager's trades when interacted with.  Only works with the `ENTITY
 |:------------|:-------:|:---------------------------------------------------------------------|
 | `per_level` |  0.05   | the amount of reputation to increase per level in the skill          |
 | `cooldown`  |  1000   | the number of ticks before another reputation modification can occur |
+| `base`      |    0    | A flat amount to add to the reputation                               |
 
 ### <u>pmmo:tame_boost</u>
 Increases the attributes of the tamed animal.  Only works with the `TAMING` event.  Currently, all attributes modified are hardcoded to these values.
