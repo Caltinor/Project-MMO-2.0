@@ -40,6 +40,7 @@ import javax.annotation.Nonnull;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.codecs.ObjectData;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -47,6 +48,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraft.resources.ResourceKey;
+
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -92,7 +95,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	private final Consumer<Map<ResourceLocation, T>> finalizer;
 	private final Gson gson;
 	private final Supplier<T> defaultImpl;
-	private final Registry<V> registry;
+	private final ResourceKey<Registry<V>> registry;
+
 	private Map<ResourceLocation, T> defaultSettings = new HashMap<>();
 	private Map<ResourceLocation, T> overrideSettings = new HashMap<>();
 	
@@ -111,7 +115,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
 	 */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
-			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, Registry<V> registry)
+			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
 	{
 		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON, defaultImpl, registry);
 	}
@@ -134,7 +138,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * raw json to a JsonElement, which the Codec then parses into a proper java object.
 	 */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
-			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, Registry<V> registry)
+			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
 	{
 		this.folderName = folderName;
 		this.logger = logger;
@@ -273,6 +277,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	
 	@SuppressWarnings("unchecked")
 	public void postProcess(RegistryAccess registryAccess) {
+		Registry<V> activeRegistry = registryAccess.registryOrThrow(registry);
 		MsLoggy.DEBUG.log(LOG_CODE.DATA, "Begin PostProcessing for {}", folderName);
 		for (Map.Entry<ResourceLocation, T> dataRaw : new HashMap<>(this.data).entrySet()) {
 			DataSource<T> dataValue = dataRaw.getValue();
@@ -282,14 +287,15 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			for (String str : dataValue.getTagValues()) {
 				MsLoggy.INFO.log(LOG_CODE.DATA, "Applying Setting to Tag: {}", str);
 				if (str.startsWith("#")) {
-					tags.addAll(registry
-							.getTag(TagKey.create(registry.key(), new ResourceLocation(str.substring(1))))
-							.stream()
-							.map(item -> item.key().location())
+					HolderSet.Named<V> tag = activeRegistry
+							.getTag(TagKey.create(registry, new ResourceLocation(str.substring(1))))
+							.get();
+					if (tag != null)
+						tags.addAll(tag.stream().map(holder -> holder.unwrapKey().get().location())
 							.toList());
 				}
 				else if (str.endsWith(":*")) {
-					tags.addAll(registry.keySet()
+					tags.addAll(activeRegistry.keySet()
 							.stream()
 							.filter(key -> key.getNamespace().equals(str.replace(":*", "")))
 							.toList());
