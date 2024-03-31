@@ -43,6 +43,8 @@ When players are not moving, they will begin to accrue AFK time.  when that time
       cooloff_amount = 1 #2 seconds of afk time reduced every second
 ```
 
+***Note: RECIEVE_DAMAGE and DEAL_DAMAGE events will only work with damage from entities.  Damage from other sources such as cactus or drowning will not be detected by AFK anti-cheese.***
+
 ## Diminuation Tracking
 Is when a player earns the same type of xp in rapid succession.  Common examples include riding, and submersion.  When configured, diminishing xp causes xp to become less and less, over time.  Additionally, the reduction will persist for a set duration so the user has to wait before gaining that xp at full strength again.  This can be used in a similar fashion to AFK tracking but does not require the user to be still.  Both can be used together if needed.
 ```toml
