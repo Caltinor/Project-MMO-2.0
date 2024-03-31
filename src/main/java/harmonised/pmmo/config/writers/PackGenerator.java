@@ -220,6 +220,7 @@ public class PackGenerator {
 				JsonObject raw = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 				raw.remove("positive_effect");
 				raw.remove("negative_effect");
+				raw.remove("isTagFor");
 				return gson.toJson(raw);}),
 		BIOMES("pmmo/biomes", server -> server.registryAccess().registryOrThrow(Registries.BIOME).keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
