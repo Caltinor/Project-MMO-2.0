@@ -33,7 +33,11 @@ By default, skills display in white.  If that is okay with you, then you don't n
     color = 16777215
     noAfkPenalty = false
 ```
-The color is a hex color in integer form.  if you know your hex color you can get the int value [HERE](https://www.scadacore.com/tools/programming-calculators/online-hex-converter/).  You want the value from `UINT32 - Little Endian (DCBA)`
+The color is a hex color in integer form.  if you know your hex color you can get the int value [HERE](https://www.programiz.com/javascript/online-compiler/) using the following code.  the output will be the number for your config. 
+```js
+let color = 0xE7EE48 // put your hex after the 0x
+console.log(color);
+```
 
 `noAfkPenalty` lets you decide if this skill is exempt from the afk penalty applied by the anti-cheese system.  If set to true, an afk player will not be given reduced XP in this skill if they go afk for too long.
 
