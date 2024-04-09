@@ -51,8 +51,4 @@ public abstract class PmmoDataProvider<T extends DataSource<?>> implements DataP
         }));
         return CompletableFuture.allOf(futuresBuilder.build().toArray(CompletableFuture[]::new));
     }
-    @Override
-    public String getName() {
-        return "Project MMO Object Data : " + Reference.MOD_ID;
-    }
 }

@@ -9,11 +9,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
@@ -44,4 +41,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
 
     private ObjectData.Builder get(Item item) {
         return data.computeIfAbsent(RegistryUtil.getId(item), i -> ObjectData.build());}
+
+    @Override
+    public String getName() {return "Project MMO Easy Item Generator";}
 }

@@ -44,6 +44,7 @@ import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -70,21 +71,21 @@ public class PackGenerator {
 								? existing.reqs().getOrDefault(r, AutoValues.getRequirements(r, id, ObjectType.ITEM))
 								: new HashMap<>()))
 						.entrySet().stream()
-						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
 					Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> 
 							applyDefaults
 								? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
 								: new ArrayList<>()))
 						.entrySet().stream()
-						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 						.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					applyDefaults ? existing.negativeEffects() : new HashMap<>(),
 					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> 
 						applyDefaults 
 							? existing.xpValues().getOrDefault(e, AutoValues.getExperienceAward(e, id, ObjectType.ITEM))
 							: new HashMap<>()))
-						.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.entrySet().stream().filter(entry -> !applySimple || !entry.getValue().isEmpty())
 						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
 					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
@@ -95,17 +96,17 @@ public class PackGenerator {
 								? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
 								: new ArrayList<>()))
 						.entrySet().stream()
-						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 						.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					Arrays.stream(new ModifierDataType[] {ModifierDataType.WORN, ModifierDataType.HELD})
 						.collect(Collectors.toMap(m -> m, m -> applyDefaults ? existing.bonuses().getOrDefault(m, new HashMap<>()) : new HashMap<>()))
 						.entrySet().stream()
-						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Double>)e.getValue())),
 					Arrays.stream(new ModifierDataType[] {ModifierDataType.WORN, ModifierDataType.HELD})
 						.collect(Collectors.toMap(m -> m, m -> applyDefaults ? existing.nbtBonuses().getOrDefault(m, new ArrayList<>()) : new ArrayList<>()))
 						.entrySet().stream()
-						.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+						.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 						.collect(Collectors.toMap(Map.Entry::getKey, m -> (List<LogicEntry>)m.getValue())),
 					applyDefaults ? existing.salvage() : Map.of(new ResourceLocation("modid:item"), SalvageBuilder.start().build()),
 					applyDefaults ? existing.veinData() : VeinData.EMPTY);
@@ -121,21 +122,21 @@ public class PackGenerator {
 							? existing.reqs().getOrDefault(r, AutoValues.getRequirements(r, id, ObjectType.BLOCK))
 							: new HashMap<>()))
 						.entrySet().stream()
-							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
 					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r ->
 							applyDefaults
 									? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
 									: new ArrayList<>()))
 							.entrySet().stream()
-							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					new HashMap<>(), //negative effects
 					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
 									? existing.xpValues().getOrDefault(e, AutoValues.getExperienceAward(e, id, ObjectType.BLOCK))
 									: new HashMap<>()))
-							.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.entrySet().stream().filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
 					new HashMap<>(), //damage events
 					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
@@ -143,7 +144,7 @@ public class PackGenerator {
 									? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
 									: new ArrayList<>()))
 							.entrySet().stream()
-							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					new HashMap<>(), //bonuses
 					new HashMap<>(), //nbt bonuses
@@ -167,21 +168,21 @@ public class PackGenerator {
 									? existing.reqs().getOrDefault(r, AutoValues.getRequirements(r, id, ObjectType.ENTITY))
 									: new HashMap<>()))
 							.entrySet().stream()
-							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
 					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r ->
 							applyDefaults
 									? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
 									: new ArrayList<>()))
 							.entrySet().stream()
-							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					new HashMap<>(), //negative effects
 					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
 									? existing.xpValues().getOrDefault(e, AutoValues.getExperienceAward(e, id, ObjectType.ENTITY))
 									: new HashMap<>()))
-							.entrySet().stream().filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.entrySet().stream().filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
 					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
@@ -192,7 +193,7 @@ public class PackGenerator {
 									? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
 									: new ArrayList<>()))
 							.entrySet().stream()
-							.filter(entry -> (applySimple && !entry.getValue().isEmpty()) || !applySimple)
+							.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (List<LogicEntry>)e.getValue())),
 					new HashMap<>(), //bonuses
 					new HashMap<>(), //nbt bonuses
@@ -205,7 +206,7 @@ public class PackGenerator {
 			raw.remove("salvage");
 			raw.remove(VeinMiningLogic.VEIN_DATA);
 			return gson.toJson(raw);}),
-		DIMENSIONS("pmmo/dimensions", server -> new HashSet<>(server.levelKeys().stream().map(key -> key.location()).toList()), 
+		DIMENSIONS("pmmo/dimensions", server -> new HashSet<>(server.levelKeys().stream().map(ResourceKey::location).toList()),
 				(id) -> {
 				Core core = Core.get(LogicalSide.SERVER);
 				LocationData existing = core.getLoader().DIMENSION_LOADER.getData(id);
@@ -264,7 +265,7 @@ public class PackGenerator {
 				Functions.pathPrepend(Reference.FROM_ENVIRONMENT.location(), "damage_type"),
 				Functions.pathPrepend(Reference.FROM_IMPACT.location(), "damage_type"),
 				Functions.pathPrepend(Reference.FROM_MAGIC.location(), "damage_type")),
-				(id) -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false)).result().get())); 
+				(id) -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false, List.of())).result().get()));
 
 		
 		public String route;
@@ -302,7 +303,7 @@ public class PackGenerator {
 					: category.valueList.apply(server).stream().filter(id -> namespaceFilter.contains(id.getNamespace())).toList();
 			for (ResourceLocation id : filteredList) {
 				int index = id.getPath().lastIndexOf('/');
-				String pathRoute = id.getPath().substring(0, index >= 0 ? index : 0);
+				String pathRoute = id.getPath().substring(0, Math.max(index, 0));
 				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route+"/"+pathRoute);
 				finalPath.toFile().mkdirs();
 				try {					
@@ -331,7 +332,7 @@ public class PackGenerator {
 						Charset.defaultCharset(),
 						StandardOpenOption.CREATE_NEW,
 						StandardOpenOption.WRITE);
-			} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+idString.toString()+" ("+e.toString()+")");}
+			} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+ idString +" ("+ e +")");}
 		}
 		return 0;
 	}
