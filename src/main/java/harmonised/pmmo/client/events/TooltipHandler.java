@@ -3,7 +3,6 @@ package harmonised.pmmo.client.events;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,6 +54,7 @@ public class TooltipHandler {
         if(player != null) {
         	Core core = Core.get(LogicalSide.CLIENT);
             ItemStack stack = event.getItemStack();
+			boolean isBlockItem = stack.getItem() instanceof BlockItem;
 			ResourceLocation itemID = RegistryUtil.getId(stack);
 
             if(itemID == null)
@@ -64,12 +64,12 @@ public class TooltipHandler {
                 Minecraft.getInstance().setScreen(new StatsScreen(stack));
                 return;
             }
-			Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS)
+			Arrays.stream(isBlockItem ? ReqType.BLOCKITEM_APPLICABLE_EVENTS : ReqType.ITEM_APPLICABLE_EVENTS)
 					.filter(type -> Config.tooltipReqEnabled(type).get())
 					.map(type -> Pair.of(type, getReqData(core, type, stack)))
 					.filter(pair -> !pair.getSecond().isEmpty())
 					.forEach(pair -> addRequirementTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond(), core));
-			Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS)
+			Arrays.stream(isBlockItem ? EventType.BLOCKITEM_APPLICABLE_EVENTS : EventType.ITEM_APPLICABLE_EVENTS)
 					.filter(type -> Config.tooltipXpEnabled(type).get())
 					.map(type -> Pair.of(type, getXpData(core, type, player, stack)))
 					.filter(pair -> !pair.getSecond().isEmpty())
@@ -82,7 +82,7 @@ public class TooltipHandler {
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
             VeinData veinData = core.getLoader().ITEM_LOADER.getData(itemID).veinData();
             if (!veinData.isUnconfigured() && !veinData.equals(VeinData.EMPTY) && Config.VEIN_ENABLED.get()) {
-				addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, stack.getItem() instanceof BlockItem);
+				addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, isBlockItem);
 			}
          }
 	}
