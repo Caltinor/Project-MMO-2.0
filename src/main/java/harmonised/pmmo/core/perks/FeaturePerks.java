@@ -106,8 +106,9 @@ public class FeaturePerks {
 	@SubscribeEvent
 	public static void restoreAttributesOnSpawn(PlayerEvent.PlayerRespawnEvent event) {
 		if (respawnAttributes.containsKey(event.getEntity())) {
-			respawnAttributes.get(event.getEntity()).forEach(mod ->
-					event.getEntity().getAttributes().getInstance(mod.attribute()).addPermanentModifier(mod.modifier()));
+			respawnAttributes.get(event.getEntity()).stream()
+					.filter(mod -> !event.getEntity().getAttribute(mod.attribute()).hasModifier(mod.modifier()))
+					.forEach(mod ->	event.getEntity().getAttributes().getInstance(mod.attribute()).addPermanentModifier(mod.modifier()));
 			respawnAttributes.get(event.getEntity()).clear();
 		}
 	}
