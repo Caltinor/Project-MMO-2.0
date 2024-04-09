@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.UUID;
 
 //import harmonised.pmmo.compat.curios.CurioCompat;
+import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
@@ -64,10 +66,10 @@ public class VeinMiningLogic {
 		items.add(inv.getSelected());
 		items.addAll(inv.offhand);
 		//========== CURIOS ==============
-//		if (CurioCompat.hasCurio) {
-//			items = new ArrayList<>(items);
-//			items.addAll(CurioCompat.getItems(player));
-//		}
+		if (CurioCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CurioCompat.getItems(player));
+		}
 		//================================
 		Core core = Core.get(player.level());
 		double currentCharge = player.getData(DataAttachmentTypes.VEIN_CHARGE.get());
@@ -75,6 +77,7 @@ public class VeinMiningLogic {
 		double chargeRate = Config.BASE_CHARGE_RATE.get();
 		for (ItemStack stack : items) {
 			VeinData data;
+			if (!core.isActionPermitted(ReqType.WEAR, stack, player)) continue;
 			if ((data = core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData()).chargeRate.isPresent()) {
 				chargeCap += data.chargeCap.orElse(0);
 				chargeRate += data.chargeRate.orElse(0d);
@@ -109,13 +112,14 @@ public class VeinMiningLogic {
 				player.getMainHandItem(),
 				player.getOffhandItem());
 		//========== CURIOS ==============
-//		if (CurioCompat.hasCurio) {
-//			items = new ArrayList<>(items);
-//			items.addAll(CurioCompat.getItems(player));
-//		}
+		if (CurioCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CurioCompat.getItems(player));
+		}
 		//================================
 		int totalCapacity = Config.BASE_CHARGE_CAP.get();
 		for (ItemStack stack : items) {
+			if (!Core.get(player.level()).isActionPermitted(ReqType.WEAR, stack, player)) continue;
 			totalCapacity += Core.get(player.level()).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0);
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
