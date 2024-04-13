@@ -1,9 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -24,6 +20,10 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.event.level.BlockEvent;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class BreakHandler {
@@ -63,7 +63,7 @@ public class BreakHandler {
 		if (core.getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			Item tool = event.getPlayer().getMainHandItem().getItem();
-			if (!Config.VEIN_BLACKLIST.get().contains(RegistryUtil.getId(tool).toString())) {
+			if (!Config.server().veinMiner().blacklist().contains(RegistryUtil.getId(tool))) {
 				VeinMiningLogic.applyVein((ServerPlayer) event.getPlayer(), event.getPos());
 			}
 		}
@@ -78,7 +78,7 @@ public class BreakHandler {
 			BlockState cropState = event.getLevel().getBlockState(event.getPos()); 
 			if (cropState.getBlock() instanceof CropBlock && ((CropBlock)cropState.getBlock()).isMaxAge(cropState))
 				return outMap;
-			double xpModifier = Config.REUSE_PENALTY.get();
+			double xpModifier = Config.server().xpGains().reusePenalty();
 			if (xpModifier == 0) return new HashMap<>();
 			Map<String, Long> modifiedOutMap = new HashMap<>();
 			outMap.forEach((k, v) -> modifiedOutMap.put(k, (long)((double)v * xpModifier)));

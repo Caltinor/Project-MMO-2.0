@@ -1,18 +1,15 @@
 package harmonised.pmmo.features.autovalues;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.AttributeKey;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.UtensilTypes;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.WearableTypes;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -35,6 +32,10 @@ import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Blocks;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AutoItem {
 	//Default values set by MC or used by wooden items
@@ -78,7 +79,7 @@ public class AutoItem {
 			for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()){
 				scale += entry.getValue() / entry.getKey().getMaxLevel();
 			}
-			for (Map.Entry<String, Integer> entry : AutoValueConfig.getItemReq(type).entrySet()) {
+			for (Map.Entry<String, Long> entry : Config.autovalue().reqs().req(type).entrySet()) {
 				outMap.put(entry.getKey(), (int)((double)entry.getValue() * scale));
 			}
 			break;
@@ -134,7 +135,7 @@ public class AutoItem {
 		switch (type) {
 		case ANVIL_REPAIR: {
 			if (stack.isRepairable()) {
-				AutoValueConfig.getItemXpAward(type).forEach((skill, xp) -> {
+				Config.autovalue().xpAwards().item(type).forEach((skill, xp) -> {
 					outMap.put(skill, (long) (xp * (stack.getMaxDamage()*0.25)));
 				});
 			}
@@ -164,12 +165,12 @@ public class AutoItem {
 			else if (stack.getItem() instanceof ElytraItem) 
 				outMap.putAll(getWearableData(type, stack, false));
 			else
-				outMap.putAll(AutoValueConfig.getItemXpAward(type));
+				outMap.putAll(Config.autovalue().xpAwards().item(type));
 			break;
 		}
 		case CONSUME: {
 			if (stack.isEdible()) {
-				AutoValueConfig.getItemXpAward(type).forEach((skill, xp) -> {
+				Config.autovalue().xpAwards().item(type).forEach((skill, xp) -> {
 					@SuppressWarnings("deprecation")
 					FoodProperties properties = stack.getItem().getFoodProperties();
 					Float nutritionScale = (float)properties.getNutrition() * properties.getSaturationModifier();
@@ -180,17 +181,17 @@ public class AutoItem {
 		}
 		case BREW: {
 			if (stack.is(Reference.BREWABLES))
-				outMap.putAll(AutoValueConfig.BREWABLES_OVERRIDE.get());
+				outMap.putAll(Config.autovalue().xpAwards().item(type));
 			break;
 		}		
 		case SMELT: {
 			if (stack.is(Reference.SMELTABLES))
-				outMap.putAll(AutoValueConfig.SMELTABLES_OVERRIDE.get());
+				outMap.putAll(Config.autovalue().xpAwards().item(type));
 			break;
 		}
 		case ENCHANT: case FISH: {
 			//The proportion calculation for enchant is handled in the event, we just need a default skill/value
-			outMap.putAll(AutoValueConfig.getItemXpAward(type));
+			outMap.putAll(Config.autovalue().xpAwards().item(type));
 			break;
 		}		
 		default:
@@ -206,11 +207,11 @@ public class AutoItem {
 			return outMap;
 		
 		final double scale = getUtensilAttributes(utensil, stack, asWeapon);
-		Map<String, Integer> configValue = type == ReqType.TOOL || (type == ReqType.WEAR && !asWeapon)
-				? AutoValueConfig.getToolReq(stack) 
+		Map<String, Long> configValue = type == ReqType.TOOL || (type == ReqType.WEAR && !asWeapon)
+				? Config.autovalue().reqs().getToolReq(stack)
 				: (type == ReqType.WEAR && asWeapon) 
-					? AutoValueConfig.getItemReq(ReqType.WEAPON)
-					: AutoValueConfig.getItemReq(type);					
+					? Config.autovalue().reqs().req(ReqType.WEAPON)
+					: Config.autovalue().reqs().req(type);
 		configValue.forEach((skill, level) -> {
 			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
 		});
@@ -220,7 +221,7 @@ public class AutoItem {
 	private static Map<String, Long> getUtensilData(UtensilTypes utensil, EventType type, ItemStack stack, boolean asWeapon) {
 		Map<String, Long> outMap = new HashMap<>();
 		final double scale = getUtensilAttributes(utensil, stack, asWeapon);
-		AutoValueConfig.getItemXpAward(type).forEach((skill, level) -> {
+		Config.autovalue().xpAwards().item(type).forEach((skill, level) -> {
 			outMap.put(skill, Double.valueOf(Math.max(0,(double)level * scale)).longValue());
 		});
 		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem XpGain Map: "+MsLoggy.mapToString(outMap));
@@ -233,7 +234,7 @@ public class AutoItem {
 			return outMap;
 		
 		final double scale = getWearableAttributes(WearableTypes.fromSlot(LivingEntity.getEquipmentSlotForItem(stack), !isArmor), stack, isArmor);
-		AutoValueConfig.getItemReq(type).forEach((skill, level) -> {
+		Config.autovalue().reqs().req(type).forEach((skill, level) -> {
 			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
 		});
 		return outMap;
@@ -241,7 +242,7 @@ public class AutoItem {
 	private static Map<String, Long> getWearableData(EventType type, ItemStack stack, boolean isArmor) {
 		Map<String, Long> outMap = new HashMap<>();
 		final double scale = getWearableAttributes(WearableTypes.fromSlot(LivingEntity.getEquipmentSlotForItem(stack), !isArmor), stack, isArmor);
-		AutoValueConfig.getItemXpAward(type).forEach((skill, level) -> {
+		Config.autovalue().xpAwards().item(type).forEach((skill, level) -> {
 			outMap.put(skill, Double.valueOf(Math.max(0, (double)level * scale)).longValue());
 		});
 		return outMap;
@@ -267,25 +268,25 @@ public class AutoItem {
 	
 	private static double getUtensilAttributes(UtensilTypes type, ItemStack stack, boolean asWeapon) {
 		//Universally Used Attributes
-		double durabilityScale = getDurability(stack) * AutoValueConfig.getUtensilAttribute(type, AttributeKey.DUR);		
-		double tierScale = getTier((TieredItem) stack.getItem()) * AutoValueConfig.getUtensilAttribute(type, AttributeKey.TIER);
+		double durabilityScale = getDurability(stack) * Config.autovalue().tweaks().utensil(type, AttributeKey.DUR);
+		double tierScale = getTier((TieredItem) stack.getItem()) * Config.autovalue().tweaks().utensil(type, AttributeKey.TIER);
 		//Weapon specific
-		double damageScale = asWeapon ? getDamage(stack) * AutoValueConfig.getUtensilAttribute(type, AttributeKey.DMG) : 0d;
-		double atkSpdScale = asWeapon ? getAttackSpeed(stack) * AutoValueConfig.getUtensilAttribute(type, AttributeKey.SPD) : 0d;
+		double damageScale = asWeapon ? getDamage(stack) * Config.autovalue().tweaks().utensil(type, AttributeKey.DMG) : 0d;
+		double atkSpdScale = asWeapon ? getAttackSpeed(stack) * Config.autovalue().tweaks().utensil(type, AttributeKey.SPD) : 0d;
 		//Tool specified
-		double digSpeedScale = asWeapon ? 0d : stack.getDestroySpeed(Blocks.COBWEB.defaultBlockState()) + AutoValueConfig.getUtensilAttribute(type, AttributeKey.DIG);
+		double digSpeedScale = asWeapon ? 0d : stack.getDestroySpeed(Blocks.COBWEB.defaultBlockState()) + Config.autovalue().tweaks().utensil(type, AttributeKey.DIG);
 		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Attributes: DUR="+durabilityScale+" TIER="+tierScale+" DMG="+damageScale+" SPD="+atkSpdScale+" DIG="+digSpeedScale);
 		return damageScale + atkSpdScale + digSpeedScale + durabilityScale + tierScale;
 	}
 	
 	private static double getWearableAttributes(WearableTypes type, ItemStack stack, boolean isArmor) {
 		//Universally Used Attributes
-		double durabilityScale = (double)stack.getMaxDamage() * AutoValueConfig.getWearableAttribute(type, AttributeKey.DUR);
+		double durabilityScale = (double)stack.getMaxDamage() * Config.autovalue().tweaks().wearable(type, AttributeKey.DUR);
 		//Armor Specific
 		ArmorMaterial material = isArmor ? ((ArmorItem)stack.getItem()).getMaterial() : null;
-		double armorScale = isArmor ? material.getDefenseForType(((ArmorItem)stack.getItem()).getType()) * AutoValueConfig.getWearableAttribute(type, AttributeKey.AMR) : 0d;
-		double toughnessScale = isArmor? material.getToughness() * AutoValueConfig.getWearableAttribute(type, AttributeKey.TUF) : 0d;
-		double knockbackScale = isArmor? material.getKnockbackResistance() * AutoValueConfig.getWearableAttribute(type, AttributeKey.KBR) : 0d;
+		double armorScale = isArmor ? material.getDefenseForType(((ArmorItem)stack.getItem()).getType()) * Config.autovalue().tweaks().wearable(type, AttributeKey.AMR) : 0d;
+		double toughnessScale = isArmor? material.getToughness() * Config.autovalue().tweaks().wearable(type, AttributeKey.TUF) : 0d;
+		double knockbackScale = isArmor? material.getKnockbackResistance() * Config.autovalue().tweaks().wearable(type, AttributeKey.KBR) : 0d;
 		//return and log output
 		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Attributes: DUR="+durabilityScale+" ARM="+armorScale+" TUF="+toughnessScale+" KBR="+knockbackScale);
 		return durabilityScale + armorScale + toughnessScale + knockbackScale;

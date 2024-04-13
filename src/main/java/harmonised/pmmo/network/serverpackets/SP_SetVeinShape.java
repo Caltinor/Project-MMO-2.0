@@ -1,7 +1,5 @@
 package harmonised.pmmo.network.serverpackets;
 
-import java.util.function.Supplier;
-
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.features.veinmining.VeinShapeData.ShapeType;
 import harmonised.pmmo.util.MsLoggy;

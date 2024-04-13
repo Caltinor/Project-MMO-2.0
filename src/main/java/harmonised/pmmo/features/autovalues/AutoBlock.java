@@ -1,11 +1,8 @@
 package harmonised.pmmo.features.autovalues;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,6 +13,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.neoforged.neoforge.common.Tags;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AutoBlock {
 	private static final double BASE_HARDNESS = 4;
@@ -39,8 +40,8 @@ public class AutoBlock {
 			if (block.equals(Blocks.WATER)) break;
 
 			float breakSpeed = block.defaultBlockState().getDestroySpeed(null, null);
-			AutoValueConfig.getBlockReq(type).forEach((skill, level) -> {
-				outMap.put(skill, (int)Math.max(0, (breakSpeed - BASE_HARDNESS) * AutoValueConfig.HARDNESS_MODIFIER.get()));
+			Config.autovalue().reqs().blockDefault().forEach((skill, level) -> {
+				outMap.put(skill, (int)Math.max(0, (breakSpeed - BASE_HARDNESS) * Config.autovalue().tweaks().hardnessModifier()));
 			});
 		}
 		default -> {}}
@@ -59,26 +60,26 @@ public class AutoBlock {
 		switch (type) {
 		case BLOCK_BREAK: case BLOCK_PLACE: {
 			if (block.is(Reference.CROPS))
-				outMap.putAll(AutoValueConfig.getBlockXpAward(EventType.GROW));
+				outMap.putAll(Config.autovalue().xpAwards().block(EventType.GROW));
 			else if (block.is(Reference.MINABLE_AXE))
-				outMap.putAll(AutoValueConfig.AXE_OVERRIDE.get());
+				outMap.putAll(Config.autovalue().xpAwards().axeOverride());
 			else if (block.is(Reference.MINABLE_HOE))
-				outMap.putAll(AutoValueConfig.HOE_OVERRIDE.get());
+				outMap.putAll(Config.autovalue().xpAwards().hoeOverride());
 			else if (block.is(Reference.MINABLE_SHOVEL))
-				outMap.putAll(AutoValueConfig.SHOVEL_OVERRIDE.get());
+				outMap.putAll(Config.autovalue().xpAwards().shovelOverride());
 			else
-				AutoValueConfig.getBlockXpAward(type).forEach((skill, level) -> {
+				Config.autovalue().xpAwards().block(type).forEach((skill, level) -> {
 					float breakSpeed = Math.max(1, block.value().defaultBlockState().getDestroySpeed(null, null));
-					long xpOut = Double.valueOf(Math.max(1, breakSpeed * AutoValueConfig.HARDNESS_MODIFIER.get() * level)).longValue();
+					long xpOut = Double.valueOf(Math.max(1, breakSpeed * Config.autovalue().tweaks().hardnessModifier() * level)).longValue();
 					if (block.is(Tags.Blocks.ORES))
-						xpOut *= AutoValueConfig.RARITIES_MODIFIER.get();
+						xpOut *= Config.autovalue().xpAwards().raritiesMultiplier().longValue();
 					outMap.put(skill, xpOut);
 				});
 			break;
 		}
 		case GROW: {
 			if (block.value() instanceof CropBlock) {
-				outMap.putAll(AutoValueConfig.getBlockXpAward(type));
+				outMap.putAll(Config.autovalue().xpAwards().block(type));
 			}
 			break;
 		}

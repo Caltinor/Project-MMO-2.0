@@ -1,24 +1,22 @@
 package harmonised.pmmo.registry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiFunction;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 import com.mojang.datafixers.util.Pair;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.TagBuilder;
 import harmonised.pmmo.util.TagUtils;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.Event;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
 
 public class EventTriggerRegistry {
 	public EventTriggerRegistry() {}

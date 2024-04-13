@@ -1,8 +1,5 @@
 package harmonised.pmmo.client.utils;
 
-import java.util.Collections;
-import java.util.Set;
-
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinShapeData;
 import harmonised.pmmo.features.veinmining.VeinShapeData.ShapeType;
@@ -12,6 +9,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.fml.LogicalSide;
+
+import java.util.Collections;
+import java.util.Set;
 
 public class VeinTracker {
 	private static Set<BlockPos> vein;

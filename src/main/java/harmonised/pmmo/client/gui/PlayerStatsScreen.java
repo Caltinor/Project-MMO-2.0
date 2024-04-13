@@ -3,12 +3,10 @@ package harmonised.pmmo.client.gui;
 import harmonised.pmmo.client.gui.component.PMMOButton;
 import harmonised.pmmo.client.gui.component.PlayerStatsComponent;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.util.Reference;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 

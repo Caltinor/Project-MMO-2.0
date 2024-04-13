@@ -1,17 +1,16 @@
 package harmonised.pmmo.config.codecs;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.util.Functions;
+import net.minecraft.nbt.CompoundTag;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
-
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import harmonised.pmmo.api.enums.ModifierDataType;
-import harmonised.pmmo.util.Functions;
-import net.minecraft.nbt.CompoundTag;
 
 public record PlayerData(
 		boolean override,

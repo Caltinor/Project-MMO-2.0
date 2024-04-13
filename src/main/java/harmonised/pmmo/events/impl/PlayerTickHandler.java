@@ -1,10 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
@@ -14,8 +9,8 @@ import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.features.penalties.EffectManager;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
-import harmonised.pmmo.util.TagUtils;
 import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,6 +19,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.event.TickEvent;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class PlayerTickHandler {
 	private static final Map<UUID, Integer> airLast = new HashMap<>();
@@ -97,6 +97,7 @@ public class PlayerTickHandler {
 		}
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.player, eventHookOutput));
 		if (serverSide) {
+			Map<String, Double> ratio = Config.server().xpGains().playerXp(type);
 			ResourceLocation source = new ResourceLocation("player");
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
@@ -104,30 +105,22 @@ public class PlayerTickHandler {
 			switch (type) {
 			case BREATH_CHANGE -> {
 				int diff = Math.abs(airLast.getOrDefault(event.player.getUUID(), 0) - event.player.getAirSupply());
-				Map<String, Double> ratio = Config.BREATH_CHANGE_XP.get();
 				ratio.keySet().forEach((skill) -> {
 					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 			}
-			case HEALTH_INCREASE -> {
-				processHealthChange(Config.HEALTH_INCREASE_XP.get(), core, event.player, xpAward);
-			}
-			case HEALTH_DECREASE -> {
-				processHealthChange(Config.HEALTH_DECREASE_XP.get(), core, event.player, xpAward);
+			case HEALTH_INCREASE, HEALTH_DECREASE -> {
+				processHealthChange(ratio, core, event.player, xpAward);
 			}
 			case RIDING -> {
 				source = RegistryUtil.getId(event.player.getVehicle());
-				core.getExperienceAwards(type, event.player.getVehicle(), event.player, perkOutput).forEach((skill, value) -> {
-					xpAward.put(skill, value);
-				});;
+				xpAward.putAll(core.getExperienceAwards(type, event.player.getVehicle(), event.player, perkOutput));
 			}
 			case EFFECT -> {
 				for (MobEffectInstance mei : event.player.getActiveEffects()) {	
 					source = RegistryUtil.getId(mei.getEffect());
-					core.getExperienceAwards(mei, event.player, perkOutput).forEach((skill, value) -> {
-						xpAward.put(skill, value);
-					});
+					xpAward.putAll(core.getExperienceAwards(mei, event.player, perkOutput));
 				}
 			}
 			case SPRINTING -> {
@@ -137,55 +130,25 @@ public class PlayerTickHandler {
 						Math.pow(Math.abs(vec.x()-old.x()), 2) +
 						Math.pow(Math.abs(vec.y()-old.y()), 2) +
 						Math.pow(Math.abs(vec.z()-old.z()), 2));
-				Map<String, Double> ratio = Config.SPRINTING_XP.get();
 				ratio.keySet().forEach((skill) -> {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 			}
 			case SUBMERGED -> {
-				Map<String, Double> ratio = Config.SUBMERGED_XP.get();
 				ratio.keySet().forEach((skill) -> {
 					xpAward.put(skill, ratio.getOrDefault(skill, 0d).longValue());
 				});
 			}
-			case SWIMMING -> {
+			case SWIMMING, DIVING, SURFACING, SWIM_SPRINTING -> {
 				Vec3 vec = event.player.getDeltaMovement();
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
-				Map<String, Double> ratio = Config.SWIMMING_XP.get();
 				ratio.keySet().forEach((skill) -> {
 					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 			}
-			case DIVING -> {
-				Vec3 vec = event.player.getDeltaMovement();
-				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
-				Map<String, Double> ratio = Config.DIVING_XP.get();
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
-			}
-			case SURFACING -> {
-				Vec3 vec = event.player.getDeltaMovement();
-				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
-				Map<String, Double> ratio = Config.SURFACING_XP.get();
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
-			}
-			case SWIM_SPRINTING -> {
-				Vec3 vec = event.player.getDeltaMovement();
-				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
-				Map<String, Double> ratio = Config.SWIM_SPRINTING_XP.get();
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
-			}
-			default -> {}
+                default -> {}
 			}
 			
 			CheeseTracker.applyAntiCheese(type, source, event.player, xpAward);

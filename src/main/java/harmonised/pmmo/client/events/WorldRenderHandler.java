@@ -21,7 +21,7 @@ public class WorldRenderHandler {
 			return;
 		Minecraft mc = Minecraft.getInstance();
 
-		if (Config.VEIN_ENABLED.get()
+		if (Config.server().veinMiner().enabled()
 				&& VeinTracker.isLookingAtVeinTarget(mc.hitResult)
 				&& !mc.player.level().getBlockState(((BlockHitResult)mc.hitResult).getBlockPos()).isAir()) {
 			VeinTracker.updateVein(mc.player);

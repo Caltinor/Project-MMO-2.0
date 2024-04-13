@@ -1,7 +1,5 @@
 package harmonised.pmmo.network.serverpackets;
 
-import java.util.function.Supplier;
-
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;

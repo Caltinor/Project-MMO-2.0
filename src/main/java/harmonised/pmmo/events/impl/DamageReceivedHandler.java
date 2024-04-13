@@ -1,17 +1,16 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.party.PartyUtils;
-import harmonised.pmmo.util.*;
+import harmonised.pmmo.util.Functions;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +20,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DamageReceivedHandler {
 
@@ -68,7 +71,7 @@ public class DamageReceivedHandler {
 		if (source.getEntity() != null)
 			core.getExperienceAwards(EventType.RECEIVE_DAMAGE, source.getEntity(), player, dataIn)
 					.forEach((skill, value) -> mapOut.put(skill, (long)(value.floatValue() * ultimateDamage)));
-		Map<String, Map<String, Long>> config = Config.RECEIVE_DAMAGE_XP.get();
+		Map<String, Map<String, Long>> config = Config.server().xpGains().receivedDamage();
 		List<String> tags = config.keySet().stream()
 				.filter(str -> {
 					if (!str.contains("#"))

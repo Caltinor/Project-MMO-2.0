@@ -1,16 +1,12 @@
 package harmonised.pmmo.features.mobscaling;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -28,6 +24,14 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MobAttributeHandler {
 	private static final UUID MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
@@ -41,7 +45,7 @@ public class MobAttributeHandler {
 
 	@SubscribeEvent
 	public static void onBossAdd(EntityJoinLevelEvent event) {
-		if (!Config.MOB_SCALING_ENABLED.get())
+		if (!Config.server().mobScaling().enabled())
 			return;
 		if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)
 				&& event.getEntity() instanceof LivingEntity entity
@@ -54,7 +58,7 @@ public class MobAttributeHandler {
 	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
-	    if (!Config.MOB_SCALING_ENABLED.get())
+	    if (!Config.server().mobScaling().enabled())
 	        return;
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
 			handle(event.getEntity(), event.getLevel().getLevel()
@@ -64,7 +68,7 @@ public class MobAttributeHandler {
 	}
 
 	private static void handle(LivingEntity entity, ServerLevel level, Vec3 spawnPos, int diffScale) {
-		int range = Config.MOB_SCALING_AOE.get();
+		int range = Config.server().mobScaling().aoe();
 		TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(Math.pow(range, 2)*3);
 		List<Player> nearbyPlayers = level.getNearbyPlayers(targetCondition, entity, AABB.ofSize(spawnPos, range, range, range));
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
@@ -74,15 +78,16 @@ public class MobAttributeHandler {
 		LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(level.getLevel().dimension().location());
 		LocationData bioData = core.getLoader().BIOME_LOADER.getData(RegistryUtil.getId(level.getBiome(entity.getOnPos())));
 
-		var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
-		var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
-		var multipliers = Config.MOB_SCALING.get();
-		final float bossMultiplier = entity.getType().is(Tags.EntityTypes.BOSSES) ? Config.BOSS_SCALING_RATIO.get().floatValue() : 1f;
+		Map<String, Double> dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
+		Map<String, Double> bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
+		Map<ResourceLocation, Map<String, Double>> multipliers = Config.server().mobScaling().ratios();
+		final float bossMultiplier = entity.getType().is(Tags.EntityTypes.BOSSES) ? Config.server().mobScaling().bossScaling().floatValue() : 1f;
 
-		Set<ResourceLocation> attributeKeys = Stream.of(dimMods.keySet(), bioMods.keySet(), multipliers.keySet())
+		Set<ResourceLocation> attributeKeys = Stream.of(dimMods.keySet(), bioMods.keySet())
 				.flatMap(Set::stream)
 				.map(ResourceLocation::new)
 				.collect(Collectors.toSet());
+		attributeKeys.addAll(multipliers.keySet());
 
 		//Set each Modifier type
 		attributeKeys.forEach(attributeID -> {
@@ -152,10 +157,10 @@ public class MobAttributeHandler {
 		float outValue = 0f;
 		for (Map.Entry<String, Double> configEntry : config.entrySet()) {
 			long averageLevel = totalLevel.getOrDefault(configEntry.getKey(), 0L)/nearbyPlayers.size();
-			if (averageLevel < Config.MOB_SCALING_BASE_LEVEL.get()) continue;
-			outValue += Config.MOB_USE_EXPONENTIAL_FORMULA.get()
-					? Math.pow(Config.MOB_EXPONENTIAL_POWER_BASE.get(), (Config.MOB_EXPONENTIAL_LEVEL_MOD.get() * (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get())))
-					: (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get()) * Config.MOB_LINEAR_PER_LEVEL.get();
+			if (averageLevel < Config.server().mobScaling().baseLevel()) continue;
+			outValue += Config.server().mobScaling().useExponential()
+					? Math.pow(Config.server().mobScaling().powerBase(), (Config.server().mobScaling().perLevel() * (averageLevel - Config.server().mobScaling().baseLevel())))
+					: (averageLevel - Config.server().mobScaling().baseLevel()) * Config.server().mobScaling().perLevel();
 			outValue *= configEntry.getValue();
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Modifier Value: "+outValue * scale);

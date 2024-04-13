@@ -1,50 +1,35 @@
 package harmonised.pmmo.config;
 
-import java.util.HashMap;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import harmonised.pmmo.config.codecs.ConfigData;
+import harmonised.pmmo.config.readers.ConfigListener;
+
 import java.util.Map;
 
-import com.mojang.serialization.Codec;
+public record GlobalsConfig(Map<String, String> paths,Map<String, String> constants) implements ConfigData<GlobalsConfig> {
+	public GlobalsConfig() {this(
+			Map.of(
+					"tmat0", "tic_materials[0]",
+					"tmat1", "tic_materials[1]",
+					"tmat2", "tic_materials[2]",
+					"tmat3", "tic_materials[3]",
+					"sgmats", "SGear_Data{}.Construction{}.Parts[].Item{}.tag{}.Materials[].ID"),
+			Map.of("example", "value")
+	);}
 
-import harmonised.pmmo.config.readers.TomlConfigHelper;
-import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
-import net.neoforged.neoforge.common.ModConfigSpec;
+	public static final Codec<GlobalsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("paths").forGetter(GlobalsConfig::paths),
+			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("constants").forGetter(GlobalsConfig::constants)
+	).apply(instance, GlobalsConfig::new));
+	@Override
+	public Codec<GlobalsConfig> getCodec() {return CODEC;}
 
-public class GlobalsConfig {
-	public static ModConfigSpec SERVER_CONFIG;
-	
-	static {
-		generateDefaults();
-		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
+	@Override
+	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.GLOBALS;}
 
-		buildGlobals(SERVER_BUILDER);
-		
-		SERVER_CONFIG = SERVER_BUILDER.build();
-	}
-	
-	public static ConfigObject<Map<String, String>> PATHS;
-	public static ConfigObject<Map<String, String>> CONSTANTS;
-	
-	private static Map<String, String> pathDefaults;
-	private static Map<String, String> constantDefaults;
-	
-	private static void buildGlobals(ModConfigSpec.Builder builder) {
-		builder.comment("Configuration for commonly used NBT global variables").push("Globals");
-		
-		PATHS = TomlConfigHelper.defineObject(builder, "paths", Codec.unboundedMap(Codec.STRING, Codec.STRING), pathDefaults);
-		CONSTANTS = TomlConfigHelper.defineObject(builder, "constants", Codec.unboundedMap(Codec.STRING, Codec.STRING), constantDefaults);
-		
-		builder.pop();
-	}
-	
-	private static void generateDefaults() {
-		pathDefaults = new HashMap<>();
-		pathDefaults.put("tmat0", "tic_materials[0]");
-		pathDefaults.put("tmat1", "tic_materials[1]");
-		pathDefaults.put("tmat2", "tic_materials[2]");
-		pathDefaults.put("tmat3", "tic_materials[3]");
-		pathDefaults.put("sgmats", "SGear_Data{}.Construction{}.Parts[].Item{}.tag{}.Materials[].ID");
-		
-		constantDefaults = new HashMap<>();
-		constantDefaults.put("example", "value");
-	}
+	@Override
+	public GlobalsConfig combine(GlobalsConfig two) {return two;}
+	@Override
+	public boolean isUnconfigured() {return false;}
 }

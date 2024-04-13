@@ -1,7 +1,5 @@
 package harmonised.pmmo.setup.datagen;
 
-import java.util.concurrent.CompletableFuture;
-
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.Registries;
@@ -11,6 +9,8 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import java.util.concurrent.CompletableFuture;
 
 public class DamageTagProvider extends TagsProvider<DamageType>{
 

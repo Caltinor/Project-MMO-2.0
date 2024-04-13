@@ -1,24 +1,6 @@
 package harmonised.pmmo.api;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
-import harmonised.pmmo.core.IDataStorage;
-import harmonised.pmmo.storage.Experience;
-import net.neoforged.bus.api.Event;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import com.google.common.base.Preconditions;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
@@ -33,6 +15,7 @@ import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
@@ -44,6 +27,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.bus.api.Event;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class APIUtils {
 	/* NOTES

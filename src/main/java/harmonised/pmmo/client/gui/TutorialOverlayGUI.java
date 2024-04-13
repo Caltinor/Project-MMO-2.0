@@ -1,21 +1,11 @@
 package harmonised.pmmo.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
-import org.joml.Matrix4f;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-
 import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
@@ -30,11 +20,20 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
+import org.joml.Matrix4f;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class TutorialOverlayGUI implements IGuiOverlay {
 	private Minecraft mc;
@@ -59,7 +58,7 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 		if (!mc.getDebugOverlay().showDebugScreen()) {
 			// IDENTIFY LINES
 			if (mc.level.getBlockState(bhr.getBlockPos()).getBlock()
-					.equals(BuiltInRegistries.BLOCK.get(new ResourceLocation(Config.SALVAGE_BLOCK.get())))) {
+					.equals(BuiltInRegistries.BLOCK.get(Config.server().general().salvageBlock()))) {
 				lines = new ArrayList<>(ClientUtils.ctc(LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent()
 						.withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), tooltipWidth));
 				if (mc.player.isCrouching()

@@ -1,50 +1,30 @@
 package harmonised.pmmo.config;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.config.codecs.ConfigData;
+import harmonised.pmmo.config.readers.ConfigListener;
+import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mojang.serialization.Codec;
 
-import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.config.readers.TomlConfigHelper;
-import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
-import harmonised.pmmo.util.TagBuilder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.StringTag;
-import net.neoforged.neoforge.common.ModConfigSpec;
+public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements ConfigData<PerksConfig> {
+	public PerksConfig() {this(PerksConfig.generateDefaults());}
+	
+	public static final Codec<PerksConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.unboundedMap(EventType.CODEC, CompoundTag.CODEC.listOf()).fieldOf("perks").forGetter(PerksConfig::perks)
+	).apply(instance, PerksConfig::new));
 
-
-public class PerksConfig {
-	public static ModConfigSpec SERVER_CONFIG;
-	
-	private static final Codec<Map<EventType, List<CompoundTag>>> CODEC = 
-			Codec.unboundedMap(EventType.CODEC, CompoundTag.CODEC.listOf());
-	
-	static {
-		generateDefaults();
-		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
-
-		buildPerkSettings(SERVER_BUILDER);
-		
-		SERVER_CONFIG = SERVER_BUILDER.build();
-	}
-	
-	public static ConfigObject<Map<EventType, List<CompoundTag>>> PERK_SETTINGS;
-	private static Map<EventType, List<CompoundTag>> defaultSettings;
-	
-	private static void buildPerkSettings(ModConfigSpec.Builder builder) {
-		builder.comment("These settings define which perks are used and the settings which govern them.").push("Perks");
-		
-		PERK_SETTINGS = TomlConfigHelper.defineObject(builder, "For_Event", CODEC, defaultSettings);
-		
-		builder.pop();
-	}
-	
-	private static void generateDefaults() {
-		defaultSettings = new HashMap<>();
+	private static Map<EventType, List<CompoundTag>> generateDefaults() {
+		Map<EventType, List<CompoundTag>> defaultSettings = new HashMap<>();
 		List<CompoundTag> bodyList = new ArrayList<>();
 		
 		//====================BREAK SPEED DEFAULTS========================
@@ -149,7 +129,18 @@ public class PerksConfig {
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging")
 				.withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build());
 		defaultSettings.put(EventType.DEAL_DAMAGE, new ArrayList<>(bodyList));
+		return defaultSettings;
 	}
-	
-	
+
+
+	@Override
+	public Codec<PerksConfig> getCodec() {return CODEC;}
+
+	@Override
+	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.PERKS;}
+
+	@Override
+	public PerksConfig combine(PerksConfig two) {return two;}
+	@Override
+	public boolean isUnconfigured() {return false;}
 }

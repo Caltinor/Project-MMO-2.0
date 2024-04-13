@@ -1,6 +1,5 @@
 package harmonised.pmmo.features.fireworks;
 
-import java.util.List;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.core.CoreUtils;
@@ -15,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class FireworkHandler {
 	/**A sorely misplaced key used by the SKILL_UP event to mark what skill leveled up.*/

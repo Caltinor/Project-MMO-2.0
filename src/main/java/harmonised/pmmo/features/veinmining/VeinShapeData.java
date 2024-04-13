@@ -1,14 +1,14 @@
 package harmonised.pmmo.features.veinmining;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class VeinShapeData {
 	public enum ShapeType {AOE, TUNNEL, BIG_TUNNEL}

@@ -2,7 +2,7 @@ package harmonised.pmmo.client.gui.component;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.Tesselator;
-import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
@@ -21,7 +21,7 @@ import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -153,7 +153,7 @@ public class PlayerStatsComponent extends AbstractWidget {
             this.skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXp(null, skill)).reversed());
             
             for (String skillKey : this.skillsKeys) {
-                SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault());
+                SkillData skillData = Config.skills().get(skillKey);
                 this.abilities.add(new StatComponent(minecraft, this.left + 1, this.top, skillKey, skillData));
             }
         }

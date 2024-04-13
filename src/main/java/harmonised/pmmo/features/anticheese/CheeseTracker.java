@@ -1,11 +1,9 @@
 package harmonised.pmmo.features.anticheese;
 
-import java.util.*;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
@@ -18,6 +16,13 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.TickEvent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**This class was originally implemented as a successor feature to the anti-cheese
  * behavior in legacy PMMO.  The intent behind the feature was to implement countermeasures
@@ -45,12 +50,12 @@ public class CheeseTracker {
 	public static void applyAntiCheese(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
 		if (player == null || event == null || !(player instanceof ServerPlayer))
 			return;
-		Setting setting = AntiCheeseConfig.SETTINGS_AFK.get().get(event); 
+		Setting setting = Config.anticheese().afk().get(event);
 		if (setting != null)
 			setting.applyAFK(event, source, player, awardIn);
-		if ((setting = AntiCheeseConfig.SETTINGS_DIMINISHING.get().get(event)) != null)
+		if ((setting =  Config.anticheese().diminish().get(event)) != null)
 			setting.applyDiminuation(event, source, player, awardIn);
-		if ((setting = AntiCheeseConfig.SETTINGS_NORMALIZED.get().get(event)) != null)
+		if ((setting = Config.anticheese().normal().get(event)) != null)
 			setting.applyNormalization(event, source, player, awardIn);
 	}
 	
@@ -242,7 +247,7 @@ public class CheeseTracker {
 					MsLoggy.DEBUG.log(LOG_CODE.XP, "AFK reduction factor: {}", reduction * (double)afkData.getAFKDuration());
 					awardIn.compute(skill, (key, xp) -> {
 						long reductionAmount = Double.valueOf(xp * (reduction * (double)afkData.getAFKDuration())).longValue();						
-						return xp - (AntiCheeseConfig.AFK_CAN_SUBTRACT.get()
+						return xp - (Config.anticheese().afkSubtract()
 									? reductionAmount
 									: reductionAmount > xp ? xp : reductionAmount);
 					});

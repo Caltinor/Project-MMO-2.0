@@ -1,18 +1,13 @@
 package harmonised.pmmo.features.loot_modifiers;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
-import net.neoforged.neoforge.common.loot.LootModifier;
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.core.Core;
-import org.jetbrains.annotations.NotNull;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +18,9 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -66,7 +64,7 @@ public class TreasureLootModifier extends LootModifier{
 
 	@Override
 	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,	LootContext context) {
-		if (!Config.TREASURE_ENABLED.get()) return generatedLoot;
+		if (!Config.server().general().treasureEnabled()) return generatedLoot;
 		if (perLevel && context.getParam(LootContextParams.THIS_ENTITY) instanceof Player player) {
 			chance *= Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 		}

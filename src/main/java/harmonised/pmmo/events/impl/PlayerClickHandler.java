@@ -1,8 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -13,7 +10,6 @@ import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -21,6 +17,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.Event.Result;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+
+import java.util.List;
+import java.util.Map;
 
 public class PlayerClickHandler {
 
@@ -81,7 +80,7 @@ public class PlayerClickHandler {
 		
 		CompoundTag hookOutput = new CompoundTag();
 		boolean isSalvage = player.isCrouching()
-				&& RegistryUtil.getId(event.getLevel().getBlockState(event.getPos()).getBlock()).equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()));
+				&& RegistryUtil.getId(event.getLevel().getBlockState(event.getPos()).getBlock()).equals(Config.server().general().salvageBlock());
 		if (serverSide) {
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ACTIVATE_BLOCK, event, hookOutput);
 			if (hookOutput.getBoolean(APIUtils.IS_CANCELLED)) {

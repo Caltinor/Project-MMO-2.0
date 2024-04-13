@@ -1,20 +1,14 @@
 package harmonised.pmmo.features.autovalues;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.mojang.serialization.Codec;
-
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes;
-import harmonised.pmmo.config.readers.TomlConfigHelper;
-import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
+import harmonised.pmmo.config.codecs.ConfigData;
+import harmonised.pmmo.config.readers.ConfigListener;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoeItem;
@@ -22,221 +16,198 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SwordItem;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.ModConfigSpec.*;
+import net.neoforged.neoforge.common.IExtensibleEnum;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
-public class AutoValueConfig {
-	public static ModConfigSpec SERVER_CONFIG;
-	
-	static {
-		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
+public record AutoValueConfig(
+		boolean enabled,
+		Map<ReqType, Boolean> reqEnabled,
+		Map<EventType, Boolean> xpEnabled,
+		XpAwards xpAwards,
+		Requirements reqs,
+		Tweaks tweaks
+) implements ConfigData<AutoValueConfig> {
+	public AutoValueConfig() {this (
+			true,
+			Arrays.stream(ReqType.values()).collect(Collectors.toMap(req -> req, r -> true)),
+			Arrays.stream(EventType.values()).collect(Collectors.toMap(event -> event, event -> true)),
+			new XpAwards(),
+			new Requirements(),
+			new Tweaks()
+	);}
+	public static final Codec<AutoValueConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.BOOL.fieldOf("enabled").forGetter(AutoValueConfig::enabled),
+			Codec.simpleMap(ReqType.CODEC, Codec.BOOL, StringRepresentable.keys(ReqType.values()))
+					.fieldOf("enabled_requirements").forGetter(AutoValueConfig::reqEnabled),
+			Codec.simpleMap(EventType.CODEC, Codec.BOOL, StringRepresentable.keys(EventType.values()))
+					.fieldOf("enabled_xp_awards").forGetter(AutoValueConfig::xpEnabled),
+			XpAwards.CODEC.fieldOf("xp_awards").forGetter(AutoValueConfig::xpAwards),
+			Requirements.CODEC.fieldOf("requirements").forGetter(AutoValueConfig::reqs),
+			Tweaks.CODEC.fieldOf("tweaks").forGetter(AutoValueConfig::tweaks)
+	).apply(instance, AutoValueConfig::new));
+	@Override
+	public Codec<AutoValueConfig> getCodec() {
+		return null;
+	}
+	@Override
+	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.AUTOVALUES;}
+	@Override
+	public AutoValueConfig combine(AutoValueConfig two) {return two;}
+	@Override
+	public boolean isUnconfigured() {return false;}
 
-		setupServer(SERVER_BUILDER);
-		
-		SERVER_CONFIG = SERVER_BUILDER.build();
-	}
-	
-	public static ModConfigSpec.ConfigValue<Boolean> ENABLE_AUTO_VALUES;
-	
-	public static void setupServer(ModConfigSpec.Builder builder) {
-		builder.comment("Auto Values estimate values based on item/block/entity properties", 
-				"and apply when no other defined requirement or xp value is present").push("Auto_Values");
+	public record XpAwards(
+			Double raritiesMultiplier,
+			Map<EventType, Map<String, Long>> itemXp,
+			Map<EventType, Map<String, Long>> blockXp,
+			Map<String, Long> axeOverride,
+			Map<String, Long> hoeOverride,
+			Map<String, Long> shovelOverride,
+			Map<EventType, Map<String, Long>> entityXp
+	) {
+		public XpAwards() {this(
+				10d,
+				Arrays.stream(AutoItem.EVENTTYPES).collect(Collectors
+						.toMap(event -> event, event -> Map.of(event.autoValueSkill, event == EventType.SMELT || event == EventType.BREW ? 100L : 10L))),
+				Arrays.stream(AutoBlock.EVENTTYPES).collect(Collectors.toMap(event -> event, event -> Map.of(event.autoValueSkill, 1L))),
+				Map.of("woodcutting", 10L),
+				Map.of("farming", 10L),
+				Map.of("excavation", 10L),
+				Arrays.stream(AutoEntity.EVENTTYPES).collect(Collectors.toMap(event -> event, event -> Map.of(event.autoValueSkill, 1L)))
+		);}
 
-		ENABLE_AUTO_VALUES = builder.comment("set this to false to disable the auto values system.")
-						.define("Auto Values Enabled", true);
-		
-		//call sub-sections from here
-		setupReqToggles(builder);
-		setupXpGainToggles(builder);
-		setupXpGainMaps(builder);
-		setupReqMaps(builder);
-		configureItemTweaks(builder);
-		configureEntityTweaks(builder);
-		//end subsections
+		public static final Codec<XpAwards> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.DOUBLE.fieldOf("rarities_multiplier").forGetter(XpAwards::raritiesMultiplier),
+				Codec.simpleMap(EventType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(EventType.values())).fieldOf("item_xp").forGetter(XpAwards::itemXp),
+				Codec.simpleMap(EventType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(EventType.values())).fieldOf("block_xp").forGetter(XpAwards::blockXp),
+				CodecTypes.LONG_CODEC.fieldOf("axe_breakable_override").forGetter(XpAwards::axeOverride),
+				CodecTypes.LONG_CODEC.fieldOf("hoe_breakable_override").forGetter(XpAwards::hoeOverride),
+				CodecTypes.LONG_CODEC.fieldOf("shovel_breakable_override").forGetter(XpAwards::shovelOverride),
+				Codec.simpleMap(EventType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(EventType.values())).fieldOf("entity_xp").forGetter(XpAwards::entityXp)
+		).apply(instance, XpAwards::new));
 
-		builder.pop();
+		public Map<String, Long> item(EventType type) {return itemXp().getOrDefault(type, new HashMap<>());}
+		public Map<String, Long> block(EventType type) {return blockXp().getOrDefault(type, new HashMap<>());}
+		public Map<String, Long> entity(EventType type) {return entityXp().getOrDefault(type, new HashMap<>());}
 	}
-	
-	private static BooleanValue[] REQS_ENABLED;	
-	public static boolean isReqEnabled(ReqType type) {return REQS_ENABLED[type.ordinal()].get();}	
-	private static void setupReqToggles(ModConfigSpec.Builder builder) {
-		builder.comment("These settings turn auto-values on/off for the specific requirement type.  These are global settings").push("Req_Toggles");
-		
-		List<ReqType> rawReqList = new ArrayList<>(Arrays.asList(ReqType.values()));
-		REQS_ENABLED = rawReqList.stream().map((t) -> {
-			return builder.define(t.toString()+" Req Values Generate", true);
-		}).toArray(BooleanValue[]::new);
-		
-		builder.pop();
-	}
-	
-	private static BooleanValue[] EVENTS_ENABLED;	
-	public static boolean isXpGainEnabled(EventType type) {return EVENTS_ENABLED[type.ordinal()].get();}	
-	private static void setupXpGainToggles(ModConfigSpec.Builder builder) {
-		builder.comment("These settings turn auto-values xp awards on/off for the specific event type.  These are global settings").push("XpGain_Toggles");
-		
-		List<EventType> rawReqList = new ArrayList<>(Arrays.asList(EventType.values()));
-		EVENTS_ENABLED = rawReqList.stream().map((t) -> {
-			return builder.define(t.toString()+" Xp Award Values Generate", true);
-		}).toArray(BooleanValue[]::new);
-		
-		builder.pop();
-	}
-	
-	private static Map<EventType, ConfigObject<Map<String, Long>>> ITEM_XP_AWARDS;
-	private static Map<EventType, ConfigObject<Map<String, Long>>> BLOCK_XP_AWARDS;
-	private static Map<EventType, ConfigObject<Map<String, Long>>> ENTITY_XP_AWARDS;
-	public static ConfigObject<Map<String, Long>> AXE_OVERRIDE;
-	public static ConfigObject<Map<String, Long>> HOE_OVERRIDE;
-	public static ConfigObject<Map<String, Long>> SHOVEL_OVERRIDE;
-	public static ModConfigSpec.DoubleValue RARITIES_MODIFIER;
-	public static ConfigObject<Map<String, Long>> BREWABLES_OVERRIDE;
-	public static ConfigObject<Map<String, Long>> SMELTABLES_OVERRIDE;
-	
-	public static Map<String, Long> getItemXpAward(EventType type) {
-		ConfigObject<Map<String, Long>> configEntry = ITEM_XP_AWARDS.get(type);
-		return configEntry == null ? new HashMap<>() : configEntry.get(); 
-	}
-	public static Map<String, Long> getBlockXpAward(EventType type) {
-		ConfigObject<Map<String, Long>> configEntry = BLOCK_XP_AWARDS.get(type);
-		return configEntry == null ? new HashMap<>() : configEntry.get(); 
-	}
-	public static Map<String, Long> getEntityXpAward(EventType type) {
-		ConfigObject<Map<String, Long>> configEntry = ENTITY_XP_AWARDS.get(type);
-		return configEntry == null ? new HashMap<>() : configEntry.get(); 
-	}
-	
-	private static void setupXpGainMaps(ModConfigSpec.Builder builder) {
-		builder.comment("what skills and xp amount should applicable objects be granted").push("Xp_Awards");
-		
-		builder.push("Items");
-		ITEM_XP_AWARDS = new HashMap<>();
-		for (EventType type : AutoItem.EVENTTYPES) {
-			ITEM_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 10l)));
-		}
-		BREWABLES_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
-				builder,
-				EventType.BREW.toString()+" Default Xp Award",
-				CodecTypes.LONG_CODEC,
-				Collections.singletonMap(EventType.BREW.autoValueSkill, 100l));
-		SMELTABLES_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
-				builder,
-				EventType.SMELT.toString()+" Default Xp Award",
-				CodecTypes.LONG_CODEC,
-				Collections.singletonMap(EventType.SMELT.autoValueSkill, 100l));
-		builder.pop();
-		builder.push("Blocks");
-		BLOCK_XP_AWARDS = new HashMap<>();
-		for (EventType type : AutoBlock.EVENTTYPES) {
-			BLOCK_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 1l)));
-		}
-		AXE_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
-				builder.comment("Special override for "+EventType.BLOCK_BREAK.toString()+" and "+EventType.BLOCK_PLACE.toString()+" events when breaking",
-						"blocks in the minecraft:mineable/axe tag."),
-				"Axe Breakable Block Action Override", 
-				CodecTypes.LONG_CODEC, 
-				Collections.singletonMap("woodcutting", 10l));
-		HOE_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
-				builder.comment("Special override for "+EventType.BLOCK_BREAK.toString()+" and "+EventType.BLOCK_PLACE.toString()+" events when breaking",
-						"blocks in the minecraft:mineable/hoe tag."),
-				"Hoe Breakable Block Action Override", 
-				CodecTypes.LONG_CODEC, 
-				Collections.singletonMap("farming", 10l));
-		SHOVEL_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
-				builder.comment("Special override for "+EventType.BLOCK_BREAK.toString()+" and "+EventType.BLOCK_PLACE.toString()+" events when breaking",
-						"blocks in the minecraft:mineable/shovel tag."),
-				"Shovel Breakable Block Action Override", 
-				CodecTypes.LONG_CODEC, 
-				Collections.singletonMap("excavation", 10l));
-		RARITIES_MODIFIER = builder.comment("How much should xp for rare blocks like ores be multiplied by.")
-				.defineInRange("Rarities Mulitplier", 10d, 0d, Double.MAX_VALUE);
-		builder.pop();
-		builder.push("Entities");
-		ENTITY_XP_AWARDS = new HashMap<>();
-		for (EventType type : AutoEntity.EVENTTYPES) {
-			ENTITY_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 1l)));
-		}
-		builder.pop();
-		
-		builder.pop();
-	}
-	
-	private static Map<ReqType, ConfigObject<Map<String, Integer>>> ITEM_REQS;
-	private static Map<ReqType, ConfigObject<Map<String, Integer>>> BLOCK_REQS;
-	public static TomlConfigHelper.ConfigObject<Map<ResourceLocation, Integer>> ITEM_PENALTIES;
-	private static ConfigObject<Map<String, Integer>> AXE_TOOL_OVERRIDE;
-	private static ConfigObject<Map<String, Integer>> SHOVEL_TOOL_OVERRIDE;
-	private static ConfigObject<Map<String, Integer>> HOE_TOOL_OVERRIDE;
-	private static ConfigObject<Map<String, Integer>> SWORD_TOOL_OVERRIDE;
-	
-	public static Map<String, Integer> getItemReq(ReqType type) {
-		ConfigObject<Map<String, Integer>> configEntry = ITEM_REQS.get(type);
-		return configEntry == null ? new HashMap<>() : configEntry.get();
-	}
-	public static Map<String, Integer> getBlockReq(ReqType type) {
-		ConfigObject<Map<String, Integer>> configEntry = BLOCK_REQS.get(type);
-		return configEntry == null ? new HashMap<>() : configEntry.get();
-	}
-	
-	public static Map<String, Integer> getToolReq(ItemStack stack) {
-		Item item = stack.getItem();
-		if (item instanceof ShovelItem) return SHOVEL_TOOL_OVERRIDE.get();
-		else if (item instanceof SwordItem) return SWORD_TOOL_OVERRIDE.get();
-		else if (item instanceof AxeItem) return AXE_TOOL_OVERRIDE.get();
-		else if (item instanceof HoeItem) return HOE_TOOL_OVERRIDE.get();
-		else return getItemReq(ReqType.TOOL);
-	}
-	
-	private static void setupReqMaps(ModConfigSpec.Builder builder) {
-		builder.comment("what skills and level should be required to perform the specified action").push("Requirements");
-		
-		builder.push("Items");
-		ITEM_REQS = new HashMap<>();
-		for (ReqType type : AutoItem.REQTYPES) {
-			ITEM_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
-		}
-		SHOVEL_TOOL_OVERRIDE = TomlConfigHelper.<Map<String, Integer>>defineObject(builder.comment("Tool requirments specifically for shovels.)"),
-				"Shovel TOOL Override", CodecTypes.INTEGER_CODEC, Map.of("excavation", 1));
-		SWORD_TOOL_OVERRIDE = TomlConfigHelper.<Map<String, Integer>>defineObject(builder.comment("Tool requirments specifically for swords.)"),
-				"Sword TOOL Override", CodecTypes.INTEGER_CODEC, Map.of("farming", 1));
-		AXE_TOOL_OVERRIDE = TomlConfigHelper.<Map<String, Integer>>defineObject(builder.comment("Tool requirments specifically for axes.)"),
-				"Axe TOOL Override", CodecTypes.INTEGER_CODEC, Map.of("woodcutting", 1));
-		HOE_TOOL_OVERRIDE = TomlConfigHelper.<Map<String, Integer>>defineObject(builder.comment("Tool requirments specifically for hoes.)"),
-				"Hoe TOOL Override", CodecTypes.INTEGER_CODEC, Map.of("farming", 1));
-		ITEM_PENALTIES = TomlConfigHelper.defineObject(builder.comment("What effects and levels should be applied if a player does not meet an item req")
-				, "Item Penalties"
-				, Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
-				, Map.of(new ResourceLocation("mining_fatigue"), 1,
+
+	public record Requirements(
+			Map<ReqType, Map<String, Long>> itemReqs,
+			Map<String, Long> shovelOverride,
+			Map<String, Long> swordOverride,
+			Map<String, Long> axeOverride,
+			Map<String, Long> hoeOverride,
+			Map<ResourceLocation, Integer> penalties,
+			Map<String, Long> blockDefault
+	) {
+		public Requirements() {this(
+				Map.of(
+						ReqType.WEAR, Map.of("endurance", 1L),
+						ReqType.USE_ENCHANTMENT, Map.of("magic", 1L),
+						ReqType.TOOL, Map.of("mining", 1L),
+						ReqType.WEAPON, Map.of("combat", 1L)
+				),
+				Map.of("excavation", 1L),
+				Map.of("farming", 1L),
+				Map.of("woodcutting", 1L),
+				Map.of("farming", 1L),
+				Map.of(
+						new ResourceLocation("mining_fatigue"), 1,
 						new ResourceLocation("weakness"), 1,
-						new ResourceLocation("slowness"), 1));
-		builder.pop();
-		builder.push("BLocks");
-		BLOCK_REQS = new HashMap<>();
-		for (ReqType type : AutoBlock.REQTYPES) {
-			BLOCK_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
+						new ResourceLocation("slowness"), 1
+				),
+				Map.of("mining", 1L));
 		}
-		builder.pop();
-		
-		builder.pop();
+		public static final Codec<Requirements> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.simpleMap(ReqType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(ReqType.values()))
+						.fieldOf("items").forGetter(Requirements::itemReqs),
+				CodecTypes.LONG_CODEC.fieldOf("shovel_override").forGetter(Requirements::shovelOverride),
+				CodecTypes.LONG_CODEC.fieldOf("sword_override").forGetter(Requirements::swordOverride),
+				CodecTypes.LONG_CODEC.fieldOf("axe_override").forGetter(Requirements::axeOverride),
+				CodecTypes.LONG_CODEC.fieldOf("hoe_override").forGetter(Requirements::hoeOverride),
+				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("penalties").forGetter(Requirements::penalties),
+				CodecTypes.LONG_CODEC.fieldOf("block_default").forGetter(Requirements::blockDefault)
+		).apply(instance, Requirements::new));
+
+		public Map<String, Long> req(ReqType type) {return itemReqs().getOrDefault(type, new HashMap<>());}
+
+		public Map<String, Long> getToolReq(ItemStack stack) {
+			Item item = stack.getItem();
+			if (item instanceof ShovelItem) return shovelOverride();
+			else if (item instanceof SwordItem) return swordOverride();
+			else if (item instanceof AxeItem) return axeOverride();
+			else if (item instanceof HoeItem) return hoeOverride();
+			else return req(ReqType.TOOL);
+		}
 	}
-	
-	private static Map<UtensilTypes, ConfigObject<Map<String, Double>>> UTENSIL_ATTRIBUTES;
-	private static Map<WearableTypes,ConfigObject<Map<String, Double>>> WEARABLE_ATTRIBUTES;
-	
-	public static enum UtensilTypes {
+
+	public record Tweaks(
+			double hardnessModifier,
+			Map<UtensilTypes, Map<String, Double>> utensilTweaks,
+			Map<WearableTypes, Map<String, Double>> wearableTweaks,
+			Map<String, Double> entityTweaks
+	) {
+		public Tweaks() {this(0.65,
+				Arrays.stream(UtensilTypes.values()).collect(Collectors.toMap(t -> t, t -> Map.of(
+						AttributeKey.DUR.key, AttributeKey.DUR.value,
+						AttributeKey.TIER.key, AttributeKey.TIER.value,
+						AttributeKey.DMG.key, AttributeKey.DMG.value,
+						AttributeKey.SPD.key, AttributeKey.SPD.value,
+						AttributeKey.DIG.key, AttributeKey.DIG.value))),
+				Arrays.stream(WearableTypes.values()).collect(Collectors.toMap(t -> t, t -> Map.of(
+						AttributeKey.DUR.key, AttributeKey.DUR.value,
+						AttributeKey.AMR.key, AttributeKey.AMR.value,
+						AttributeKey.KBR.key, AttributeKey.KBR.value,
+						AttributeKey.TUF.key, AttributeKey.TUF.value))),
+				Map.of(
+						AttributeKey.DMG.key, AttributeKey.DMG.value,
+						AttributeKey.HEALTH.key, AttributeKey.HEALTH.value,
+						AttributeKey.SPEED.key, AttributeKey.SPEED.value)
+		);}
+		public static final Codec<Tweaks> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.DOUBLE.fieldOf("hardness_modifier").forGetter(Tweaks::hardnessModifier),
+				Codec.simpleMap(UtensilTypes.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(UtensilTypes.values()))
+						.fieldOf("tool_tweaks").forGetter(Tweaks::utensilTweaks),
+				Codec.simpleMap(WearableTypes.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(WearableTypes.values()))
+						.fieldOf("wearable_tweaks").forGetter(Tweaks::wearableTweaks),
+				CodecTypes.DOUBLE_CODEC.fieldOf("entity_tweaks").forGetter(Tweaks::entityTweaks)
+		).apply(instance, Tweaks::new));
+
+		public Double utensil(UtensilTypes type, AttributeKey key) {
+			return utensilTweaks().getOrDefault(type, new HashMap<>()).getOrDefault(key.key, 0d);}
+		public Double wearable(WearableTypes type, AttributeKey key) {
+			return wearableTweaks().getOrDefault(type, new HashMap<>()).getOrDefault(key.key, 0d);}
+	}
+	public enum UtensilTypes implements StringRepresentable, IExtensibleEnum {
 		SWORD,
 		PICKAXE,
 		AXE,
 		SHOVEL,
 		HOE;
+		public static final Codec<UtensilTypes> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(UtensilTypes::values, UtensilTypes::byName);
+		public static final Map<String, UtensilTypes> BY_NAME = Arrays.stream(UtensilTypes.values()).collect(Collectors.toMap(UtensilTypes::getSerializedName, s -> s));
+		public static UtensilTypes byName(String name) {return BY_NAME.get(name);}
+		@Override
+		public String getSerializedName() {return this.name();}
+		public static UtensilTypes create(String name) {throw new IllegalStateException("Enum not extended");}
 	}
-	public static enum WearableTypes {
+	public enum WearableTypes implements StringRepresentable, IExtensibleEnum {
 		HEAD,
 		CHEST,
 		LEGS,
 		BOOTS,
 		WINGS;
+		public static final Codec<WearableTypes> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(WearableTypes::values, WearableTypes::byName);
+		public static final Map<String, WearableTypes> BY_NAME = Arrays.stream(WearableTypes.values()).collect(Collectors.toMap(WearableTypes::getSerializedName, s -> s));
+		public static WearableTypes byName(String name) {return BY_NAME.get(name);}
+		@Override
+		public String getSerializedName() {return this.name();}
+		public static WearableTypes create(String name) {throw new IllegalStateException("Enum not extended");}
 		
 		public static WearableTypes fromSlot(EquipmentSlot slot, boolean isElytra) {
 			switch (slot) {
@@ -248,8 +219,7 @@ public class AutoValueConfig {
 			}
 		}
 	}
-	
-	public static enum AttributeKey {
+	public enum AttributeKey{
 		DUR("Durability", 0.01),
 		TIER("Tier", 10d),
 		DMG("Damage", 1.5d),
@@ -266,66 +236,5 @@ public class AutoValueConfig {
 		String key;
 		double value;
 		AttributeKey(String key, double value) {this.key = key; this.value = value;}
-		
-		public static final Map<String, Double> DEFAULT_ITEM_MAP = Map.of(
-			AttributeKey.DUR.key, AttributeKey.DUR.value,
-			AttributeKey.TIER.key, AttributeKey.TIER.value,
-			AttributeKey.DMG.key, AttributeKey.DMG.value,
-			AttributeKey.SPD.key, AttributeKey.SPD.value,
-			AttributeKey.DIG.key, AttributeKey.DIG.value);
-		public static Map<String, Double> DEFAULT_ARMOR_MAP = Map.of(
-			AttributeKey.DUR.key, AttributeKey.DUR.value,
-			AttributeKey.AMR.key, AttributeKey.AMR.value,
-			AttributeKey.KBR.key, AttributeKey.KBR.value,
-			AttributeKey.TUF.key, AttributeKey.TUF.value);
-		public static Map<String, Double> DEFAULT_ENTITY_MAP = Map.of(
-			AttributeKey.DMG.key, AttributeKey.DMG.value,
-			AttributeKey.HEALTH.key, AttributeKey.HEALTH.value,
-			AttributeKey.SPEED.key, AttributeKey.SPEED.value);
-	}
-	
-	public static double getUtensilAttribute(UtensilTypes tool, AttributeKey key) {return UTENSIL_ATTRIBUTES.get(tool).get().getOrDefault(key.key, 0d);}
-	public static double getWearableAttribute(WearableTypes piece, AttributeKey key) {return WEARABLE_ATTRIBUTES.get(piece).get().getOrDefault(key.key, 0d);}
-	
-	public static ModConfigSpec.ConfigValue<Double> HARDNESS_MODIFIER;
-	
-	private static void configureItemTweaks(ModConfigSpec.Builder builder) {		
-		builder.comment("Configuration tweaks specific to items."
-				,"'"+AttributeKey.DUR.key+"' determines how much item durability affects auto value calculations"
-				,"Default: 0.01 is equal to 1 per hundred durability"
-				,"'"+AttributeKey.DMG.key+"' determines how much item damage affects auto value calculations"
-				,"'"+AttributeKey.SPD.key+"' determines how much item attack speed affects auto value calculations"
-				,"'"+AttributeKey.TIER.key+"' multiplies the default req by this per teir."
-				,"'"+AttributeKey.DIG.key+"' Determines how much item block break speed affects auto value calculations"
-				,"'"+AttributeKey.AMR.key+"' Determines how much item armor amount affects auto value calculations"
-				,"'"+AttributeKey.KBR.key+"' Determines how much item knockback resistance affects auto value calculations"
-				,"'"+AttributeKey.TUF.key+"' Determines how much item armor toughness affects auto value calculations").push("Item_Tweaks");
-		
-		UTENSIL_ATTRIBUTES = new HashMap<>();
-		for (UtensilTypes utensil : UtensilTypes.values()) {
-			UTENSIL_ATTRIBUTES.put(utensil, TomlConfigHelper.<Map<String, Double>>defineObject(builder, utensil.toString()+"_Attributes", CodecTypes.DOUBLE_CODEC, AttributeKey.DEFAULT_ITEM_MAP));
-		}
-		WEARABLE_ATTRIBUTES = new HashMap<>();
-		for (WearableTypes piece : WearableTypes.values()) {
-			WEARABLE_ATTRIBUTES.put(piece, TomlConfigHelper.<Map<String, Double>>defineObject(builder, piece.toString()+"_Attributes", CodecTypes.DOUBLE_CODEC, AttributeKey.DEFAULT_ARMOR_MAP));
-		}
-		HARDNESS_MODIFIER = builder.comment("how much should block hardness contribute to value calculations")
-				.define("Block Hardness Modifier", 0.65d);
-		
-		builder.pop();
-	}
-	
-	public static ConfigObject<Map<String, Double>> ENTITY_ATTRIBUTES;
-	
-	private static void configureEntityTweaks(ModConfigSpec.Builder builder) {		
-		builder.comment("Configuration tweaks specific to entities."
-				,"'"+AttributeKey.HEALTH.key+"' Determines how much entity health affects auto value calculations"
-				,"'"+AttributeKey.SPEED.key+"' Determines how much entity speed affects auto value calculations"
-				,"'"+AttributeKey.DMG.key+"' Determines how much entity damage affects auto value calculations").push("Entity_Tweaks");
-		
-		ENTITY_ATTRIBUTES = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-				"Entity_Attributes", CodecTypes.DOUBLE_CODEC, AttributeKey.DEFAULT_ENTITY_MAP);
-		
-		builder.pop();
 	}
 }

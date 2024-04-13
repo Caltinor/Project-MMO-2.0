@@ -1,13 +1,12 @@
 package harmonised.pmmo.core.nbt;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.util.StringRepresentable;
+import net.neoforged.neoforge.common.IExtensibleEnum;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.mojang.serialization.Codec;
-
-import net.minecraft.util.StringRepresentable;
-import net.neoforged.neoforge.common.IExtensibleEnum;
 
 public enum Operator implements StringRepresentable, IExtensibleEnum {
 	EQUALS,

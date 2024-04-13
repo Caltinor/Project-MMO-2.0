@@ -1,12 +1,5 @@
 package harmonised.pmmo.features.veinmining;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-//import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
@@ -17,8 +10,8 @@ import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,6 +19,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class VeinMiningLogic {
 	public static final String VEIN_DATA = "vein_data";
@@ -40,7 +39,7 @@ public class VeinMiningLogic {
 	 * @param pos
 	 */
 	public static void applyVein(ServerPlayer player, BlockPos pos) {
-		if (!Config.VEIN_ENABLED.get()) return;
+		if (!Config.server().veinMiner().enabled()) return;
 		ServerLevel level = player.serverLevel();
 		Block block = level.getBlockState(pos).getBlock();
 		int cost = Core.get(level).getBlockConsume(block);
@@ -59,7 +58,7 @@ public class VeinMiningLogic {
 	}
 	
 	public static void regenerateVein(ServerPlayer player) {
-		if (!Config.VEIN_ENABLED.get()) return;
+		if (!Config.server().veinMiner().enabled()) return;
 		Inventory inv = player.getInventory();	
 		List<ItemStack> items = new ArrayList<>();
 		items.addAll(inv.armor);
@@ -73,8 +72,8 @@ public class VeinMiningLogic {
 		//================================
 		Core core = Core.get(player.level());
 		double currentCharge = player.getData(DataAttachmentTypes.VEIN_CHARGE.get());
-		int chargeCap = Config.BASE_CHARGE_CAP.get();
-		double chargeRate = Config.BASE_CHARGE_RATE.get();
+		int chargeCap = Config.server().veinMiner().baseVeinCapacity();
+		double chargeRate = Config.server().veinMiner().baseChargeRate();
 		for (ItemStack stack : items) {
 			VeinData data;
 			if (!core.isActionPermitted(ReqType.WEAR, stack, player)) continue;
@@ -87,7 +86,7 @@ public class VeinMiningLogic {
 			return;
 	
 		final int fCap = chargeCap;
-		final double fRate = chargeRate * Config.VEIN_CHARGE_MODIFIER.get();
+		final double fRate = chargeRate * Config.server().veinMiner().chargeModifier();
 		if ((currentCharge + fRate) >= fCap) {
 			player.setData(DataAttachmentTypes.VEIN_CHARGE.get(), (double)fCap);
 			MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen at Cap: "+fCap);
@@ -117,7 +116,7 @@ public class VeinMiningLogic {
 			items.addAll(CurioCompat.getItems(player));
 		}
 		//================================
-		int totalCapacity = Config.BASE_CHARGE_CAP.get();
+		int totalCapacity = Config.server().veinMiner().baseVeinCapacity();
 		for (ItemStack stack : items) {
 			if (!Core.get(player.level()).isActionPermitted(ReqType.WEAR, stack, player)) continue;
 			totalCapacity += Core.get(player.level()).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0);

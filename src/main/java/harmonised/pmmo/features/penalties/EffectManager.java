@@ -1,8 +1,5 @@
 package harmonised.pmmo.features.penalties;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.compat.curios.CurioCompat;
@@ -17,6 +14,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EffectManager {
 

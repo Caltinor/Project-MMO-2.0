@@ -1,8 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
@@ -14,6 +11,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+
+import java.util.List;
+import java.util.Map;
 
 public class FoodEatHandler {
 

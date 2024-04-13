@@ -1,17 +1,15 @@
 package harmonised.pmmo.features.loot_modifiers;
 
-import java.util.List;
-
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+
+import java.util.List;
 
 public class SkillLootConditionHighestSkill implements LootItemCondition{
 

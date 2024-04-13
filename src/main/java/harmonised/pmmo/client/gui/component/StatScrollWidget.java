@@ -1,19 +1,6 @@
 package harmonised.pmmo.client.gui.component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
 import com.mojang.blaze3d.vertex.Tesselator;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -24,7 +11,6 @@ import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
 import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.EnhancementsData;
@@ -65,6 +51,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class StatScrollWidget extends ScrollPanel {
 	private static interface Element {public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess);}
@@ -487,7 +485,7 @@ public class StatScrollWidget extends ScrollPanel {
 		for (EventType cause : EventType.values()) {
 			List<TextElement> holder = new ArrayList<>();
 			Player player = Minecraft.getInstance().player;
-			PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new ArrayList<>()).forEach(nbt -> {
+			Config.perks().perks().getOrDefault(cause, new ArrayList<>()).forEach(nbt -> {
 				ResourceLocation perkID = new ResourceLocation(nbt.getString("perk"));
 				nbt.putLong(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME)
 						? Core.get(player.level()).getData().getLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())

@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import harmonised.pmmo.config.writers.PackGenerator;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.commands.CommandSourceStack;
@@ -24,12 +23,16 @@ public class CmdPmmoRoot {
 						.requires(ctx -> ctx.hasPermission(2))
 						.then(Commands.literal("begin")
 								.executes(ctx -> set(ctx, Setting.RESET)))
+						.then(Commands.literal("withoutObjects")
+								.executes(ctx -> set(ctx, Setting.OBJECTS)))
 						.then(Commands.literal("withOverride")
 								.executes(ctx -> set(ctx, Setting.OVERRIDE)))
 						.then(Commands.literal("disabler")
 								.executes(ctx -> set(ctx, Setting.DISABLER)))
 						.then(Commands.literal("withDefaults")
 								.executes(ctx -> set(ctx, Setting.DEFAULT)))
+						.then(Commands.literal("withConfigs")
+								.executes(ctx -> set(ctx, Setting.CONFIG)))
 						.then(Commands.literal("simplified")
 								.executes(ctx -> set(ctx, Setting.SIMPLIFY)))
 						.then(Commands.literal("modFilter")
@@ -64,7 +67,7 @@ public class CmdPmmoRoot {
 		return 0;
 	}
 	
-	private static enum Setting{RESET, DEFAULT, OVERRIDE, DISABLER, PLAYER, SIMPLIFY, FILTER}
+	private static enum Setting{RESET, DEFAULT, OVERRIDE, DISABLER, PLAYER, SIMPLIFY, FILTER, CONFIG, OBJECTS}
 	public static int set(CommandContext<CommandSourceStack> context, Setting setting) throws CommandSyntaxException {
 		context.getSource().sendSuccess(() -> switch (setting) {
 		case RESET -> {
@@ -72,6 +75,8 @@ public class CmdPmmoRoot {
 			PackGenerator.applyOverride = false;
 			PackGenerator.applyDisabler = false;
 			PackGenerator.applySimple = false;
+			PackGenerator.applyObjects = true;
+			PackGenerator.applyConfigs = false;
 			PackGenerator.players.clear();
 			PackGenerator.namespaceFilter.clear();
 			yield LangProvider.PACK_BEGIN.asComponent();
@@ -99,6 +104,14 @@ public class CmdPmmoRoot {
 		case FILTER -> {
 			PackGenerator.namespaceFilter.add(StringArgumentType.getString(context, "namespace"));
 			yield LangProvider.PACK_FILTER.asComponent();
+		}
+		case OBJECTS -> {
+			PackGenerator.applyObjects = false;
+			yield LangProvider.PACK_OBJECTS.asComponent();
+		}
+		case CONFIG -> {
+			PackGenerator.applyConfigs = true;
+			yield LangProvider.PACK_CONFIGS.asComponent();
 		}}, true);
 		
 		return 0;

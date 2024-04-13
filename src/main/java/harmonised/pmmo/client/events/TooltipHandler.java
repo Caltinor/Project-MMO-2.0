@@ -1,13 +1,6 @@
 package harmonised.pmmo.client.events;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.mojang.blaze3d.platform.InputConstants;
-
 import com.mojang.datafixers.util.Pair;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -16,8 +9,6 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.SkillsConfig;
-import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
@@ -39,6 +30,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value= Dist.CLIENT)
 public class TooltipHandler {
@@ -81,7 +77,7 @@ public class TooltipHandler {
 					.forEach(pair -> addModifierTooltip(pair.getFirst().tooltip, event, pair.getSecond(), core));
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
             VeinData veinData = core.getLoader().ITEM_LOADER.getData(itemID).veinData();
-            if (!veinData.isUnconfigured() && !veinData.equals(VeinData.EMPTY) && Config.VEIN_ENABLED.get()) {
+            if (!veinData.isUnconfigured() && !veinData.equals(VeinData.EMPTY) && Config.server().veinMiner().enabled()) {
 				addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, isBlockItem);
 			}
          }
@@ -134,7 +130,7 @@ public class TooltipHandler {
 	private static Map<String, Integer> getReqData(Core core, ReqType type, ItemStack stack) {		
 		//if Reqs are not enabled, ignore the getters and return an empty map
 		//This will cause the map to be empty and result in no header being added.
-		if (!Config.reqEnabled(type).get()) return new HashMap<>();
+		if (!Config.server().requirements().isEnabled(type)) return new HashMap<>();
 		
 		//Gather req data and populate a map for return
 		Map<String, Integer> map = type == ReqType.USE_ENCHANTMENT 
@@ -153,8 +149,8 @@ public class TooltipHandler {
 		
 		//remove values that meet the requirement
 		new HashMap<>(map).forEach((skill, level) -> {
-			if (SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).isSkillGroup()) {
-				long total = SkillsConfig.SKILLS.get().get(skill)
+			if (Config.skills().skills().get(skill).isSkillGroup()) {
+				long total = Config.skills().get(skill)
 						.getGroup()
 						.keySet()
 						.stream()

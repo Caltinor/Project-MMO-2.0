@@ -1,15 +1,14 @@
 package harmonised.pmmo.api.enums;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.mojang.serialization.Codec;
-
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.util.StringRepresentable;
 import net.neoforged.neoforge.common.IExtensibleEnum;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
 	ANVIL_REPAIR(true, false, false, "smithing", LangProvider.XP_VALUE_ANVIL),

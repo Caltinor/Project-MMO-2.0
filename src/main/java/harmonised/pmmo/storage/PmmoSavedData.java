@@ -1,16 +1,10 @@
 package harmonised.pmmo.storage;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.mojang.serialization.Codec;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
-import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.CodecTypes;
-import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
@@ -29,6 +23,11 @@ import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PmmoSavedData extends SavedData implements IDataStorage{
 	
@@ -99,7 +98,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	public long getLevel(String skill, UUID player) {
 		long rawLevel = Core.get(LogicalSide.SERVER).getLevelProvider().process(skill
 				,getXpMap(player).getOrDefault(skill, new Experience()).getLevel().getLevel());
-		long skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
+		long skillMaxLevel = Config.skills().get(skill).getMaxLevel();
 		return Math.min(rawLevel, skillMaxLevel);
 	}
 	@Override

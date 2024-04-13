@@ -1,49 +1,23 @@
 package harmonised.pmmo.config;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import harmonised.pmmo.config.codecs.ConfigData;
+import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.config.readers.ConfigListener;
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.HashMap;
 import java.util.Map;
-import com.mojang.serialization.Codec;
 
-import harmonised.pmmo.config.codecs.SkillData;
-import harmonised.pmmo.config.readers.TomlConfigHelper;
-import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.ModConfigSpec;
-
-public class SkillsConfig {
-	public static ModConfigSpec SERVER_CONFIG;
-	
-	static {
-		generateDefaults();
-		ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
-
-		buildGlobals(SERVER_BUILDER);
-		
-		SERVER_CONFIG = SERVER_BUILDER.build();
-	}
-	
-	public static ConfigObject<Map<String, SkillData>> SKILLS;
-	
-	private static Map<String, SkillData> defaultSkills;
-	
-	private static void buildGlobals(ModConfigSpec.Builder builder) {
-		builder.comment("========================================================================","",
-						" All skills in pmmo are defined when they are used anywhere in PMMO.",
-						" You do not need to define a skill here to use it. However, defining",
-						" a skills attributes here will give you amore rounded skill list and",
-						" a cleaner looking mod. Note that all the defaults here can be replaced",
-						" if you wish. Also note that when using custom icon sizes they must be",
-						" a square image(eg. 16x16, 24x24, 32x32) and they default to 18x18.", "",
-						"========================================================================")
-						.push("Skills");
-		
-		SKILLS = TomlConfigHelper.defineObject(builder, "Entry", Codec.unboundedMap(Codec.STRING, SkillData.CODEC), defaultSkills);
-		
-		builder.pop();
-	}
-	
-	private static void generateDefaults() {
-		defaultSkills = new HashMap<>();
+public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<SkillsConfig> {
+	public SkillsConfig() {this(generateDefaults());}
+	public static final Codec<SkillsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.unboundedMap(Codec.STRING, SkillData.CODEC).fieldOf("skills").forGetter(SkillsConfig::skills)
+	).apply(instance, SkillsConfig::new));
+	public SkillData get(String skill) {return skills().getOrDefault(skill, SkillData.Builder.getDefault());}
+	private static Map<String, SkillData> generateDefaults() {
+		Map<String, SkillData> defaultSkills = new HashMap<>();
 		defaultSkills.put("mining", 	SkillData.Builder.start().withColor(0x00ffff).withIcon(new ResourceLocation("textures/mob_effect/haste.png")).build());
 		defaultSkills.put("building", 	SkillData.Builder.start().withColor(0x00ffff).withIcon(new ResourceLocation("pmmo:textures/skills/building.png")).withIconSize(32).build());
 		defaultSkills.put("excavation", SkillData.Builder.start().withColor(0xe69900).withIcon(new ResourceLocation("textures/item/iron_shovel.png")).withIconSize(16).build());
@@ -72,5 +46,17 @@ public class SkillsConfig {
 				"endurance", 0.3,
 				"archery", 0.2))
 				.build());
+		return defaultSkills;
 	}
+
+	@Override
+	public Codec<SkillsConfig> getCodec() {return CODEC;}
+
+	@Override
+	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.SKILLS;}
+
+	@Override
+	public SkillsConfig combine(SkillsConfig two) {return two;}
+	@Override
+	public boolean isUnconfigured() {return false;}
 }

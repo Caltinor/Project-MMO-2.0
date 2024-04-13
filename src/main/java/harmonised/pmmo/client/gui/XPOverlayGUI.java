@@ -1,31 +1,31 @@
 package harmonised.pmmo.client.gui;
 
-import java.util.*;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.client.events.ClientTickHandler;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.SkillsConfig;
-import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.setup.datagen.LangProvider;
-
-import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.storage.Experience;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class XPOverlayGUI implements IGuiOverlay
 {
@@ -47,7 +47,7 @@ public class XPOverlayGUI implements IGuiOverlay
 			
 			if(Config.SKILL_LIST_DISPLAY.get())
 				renderSkillList(guiGraphics, Config.SKILL_LIST_OFFSET_X.get(), Config.SKILL_LIST_OFFSET_Y.get());
-			if(Config.VEIN_ENABLED.get() && Config.VEIN_GAUGE_DISPLAY.get())
+			if(Config.server().veinMiner().enabled() && Config.VEIN_GAUGE_DISPLAY.get())
 				renderVeinGauge(guiGraphics, Config.VEIN_GAUGE_OFFSET_X.get(), Config.VEIN_GAUGE_OFFSET_Y.get());
 			if(Config.GAIN_LIST_DISPLAY.get()) {
 				if (!ClientTickHandler.xpGains.isEmpty() && ClientTickHandler.xpGains.get(0).duration <= 0)
@@ -134,10 +134,10 @@ public class XPOverlayGUI implements IGuiOverlay
 		
 		private static String rawXpLine(Experience xpValue, String skillKey) {
 			double level = ((DataMirror)Core.get(LogicalSide.CLIENT).getData()).getXpWithPercentToNextLevel(xpValue);
-			if (level > SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault()).getMaxLevel())
-				return "" + SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault()).getMaxLevel();
-			if (level > Config.MAX_LEVEL.get())
-				return "" + Config.MAX_LEVEL.get();
+			if (level > Config.skills().get(skillKey).getMaxLevel())
+				return "" + Config.skills().get(skillKey).getMaxLevel();
+			if (level > Config.server().levels().maxLevel())
+				return "" + Config.server().levels().maxLevel();
 			else
 				return DP.dpCustom(Math.floor(level * 100D) / 100D, 2);
 		}

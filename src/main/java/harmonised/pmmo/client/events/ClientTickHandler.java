@@ -1,20 +1,19 @@
 package harmonised.pmmo.client.events;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.TickEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value= Dist.CLIENT)
 public class ClientTickHandler {
@@ -38,7 +37,7 @@ public class ClientTickHandler {
 	}
 	
 	public static void addToGainList(String skill, long amount) {
-		SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+		SkillData skillData = Config.skills().get(skill);
 		if (Config.GAIN_BLACKLIST.get().contains(skill) 
 				|| (skillData.isSkillGroup() && skillData.getGroup().containsKey(skill)))
 			return;

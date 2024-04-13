@@ -1,7 +1,5 @@
 package harmonised.pmmo.features.party;
 
-import java.util.*;
-
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.MsLoggy;
@@ -13,7 +11,13 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.scores.PlayerTeam;
-import org.apache.logging.log4j.core.jmx.Server;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 public class PartyUtils {
 	private static final Map<UUID, Invite> invites = new HashMap<>();
@@ -23,7 +27,7 @@ public class PartyUtils {
 	public static List<ServerPlayer> getPartyMembersInRange(ServerPlayer player) {
 		List<ServerPlayer> inRange = new ArrayList<>();
 		for (ServerPlayer member : getPartyMembers(player)) {
-			if (player.position().distanceTo(member.position()) <= Config.PARTY_RANGE.get())
+			if (player.position().distanceTo(member.position()) <= Config.server().party().range())
 				inRange.add(member);
 		}
 		return inRange;

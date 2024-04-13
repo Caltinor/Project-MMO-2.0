@@ -1,15 +1,15 @@
 package harmonised.pmmo.setup.datagen;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LangProvider extends LanguageProvider {
 	private String locale;
@@ -2013,6 +2013,10 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Generated pack will exclude unused properties.").build();
 	public static final Translation PACK_FILTER = Translation.Builder.start("pmmo.cmd.pack.filter")
 		.addLocale(Locale.EN_US, "Generated pack will only include files from this namespace").build();
+	public static final Translation PACK_OBJECTS = Translation.Builder.start("pmmo.cmd.pack.filter")
+			.addLocale(Locale.EN_US, "Generated pack will no longer include files for configurable objects").build();
+	public static final Translation PACK_CONFIGS = Translation.Builder.start("pmmo.cmd.pack.filter")
+			.addLocale(Locale.EN_US, "Generated pack will include server configuration files").build();
 	
 	//=========DENIAL MESSAGES====================
 	public static final Translation DENIAL_WEAR = Translation.Builder.start("pmmo.msg.denial.wear")

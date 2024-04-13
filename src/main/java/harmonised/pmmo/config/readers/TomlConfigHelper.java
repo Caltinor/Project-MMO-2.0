@@ -22,6 +22,23 @@ SOFTWARE.
 */
 package harmonised.pmmo.config.readers;
 
+import com.electronwill.nightconfig.core.Config;
+import com.electronwill.nightconfig.core.NullObject;
+import com.electronwill.nightconfig.toml.TomlFormat;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DataResult.PartialResult;
+import com.mojang.serialization.DynamicOps;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,25 +48,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.ModConfigSpec.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.electronwill.nightconfig.core.Config;
-import com.electronwill.nightconfig.core.NullObject;
-import com.electronwill.nightconfig.toml.TomlFormat;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DataResult.PartialResult;
-import com.mojang.serialization.DynamicOps;
 
 
 /**

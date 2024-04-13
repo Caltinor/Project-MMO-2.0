@@ -1,10 +1,5 @@
 package harmonised.pmmo.api.perks;
 
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import org.apache.commons.lang3.function.TriFunction;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
@@ -14,6 +9,11 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
+import org.apache.commons.lang3.function.TriFunction;
+
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 /**A custom behavior executed by a player. The {@link CompoundTag} supplied 
  * to all functions contains the configuration and event context values.

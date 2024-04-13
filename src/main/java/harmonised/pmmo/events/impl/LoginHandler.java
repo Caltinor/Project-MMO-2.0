@@ -1,7 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.Map;
-
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
@@ -16,6 +14,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+
+import java.util.Map;
 
 public class LoginHandler {
 

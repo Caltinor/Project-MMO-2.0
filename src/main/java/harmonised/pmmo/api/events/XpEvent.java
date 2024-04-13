@@ -1,6 +1,5 @@
 package harmonised.pmmo.api.events;
 
-import harmonised.pmmo.core.Core;
 import harmonised.pmmo.storage.Experience;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;

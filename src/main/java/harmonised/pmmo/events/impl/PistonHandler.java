@@ -1,9 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
@@ -11,6 +7,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.piston.PistonStructureResolver;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.event.level.PistonEvent;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class PistonHandler {

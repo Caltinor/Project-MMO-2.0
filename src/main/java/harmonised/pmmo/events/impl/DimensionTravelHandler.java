@@ -1,7 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.Map;
-
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
@@ -10,6 +8,8 @@ import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
+
+import java.util.Map;
 
 public class DimensionTravelHandler {
 

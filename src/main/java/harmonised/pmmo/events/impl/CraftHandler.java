@@ -1,8 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
@@ -10,6 +7,9 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+
+import java.util.List;
+import java.util.Map;
 
 
 public class CraftHandler {

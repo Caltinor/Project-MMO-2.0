@@ -1,14 +1,15 @@
 package harmonised.pmmo.features.autovalues;
 
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ObjectType;
+import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.Config;
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.api.enums.ObjectType;
-import harmonised.pmmo.api.enums.ReqType;
-import net.minecraft.resources.ResourceLocation;
 
 public class AutoValues {
 	//============================DATA CACHES==============================================================
@@ -34,7 +35,7 @@ public class AutoValues {
 	//============================AUTO VALUE GETTERS=======================================================
 	public static Map<String, Integer> getRequirements(ReqType reqType, ResourceLocation objectID, ObjectType autoValueType) {
 		//ignore processing if individual req is disabled and clear the cache for this object
-		if (!AutoValueConfig.isReqEnabled(reqType)) {
+		if (!Config.autovalue().reqEnabled().getOrDefault(reqType, true)) {
 			reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).remove(objectID);
 			return new HashMap<>();
 		}
@@ -60,7 +61,7 @@ public class AutoValues {
 	
 	public static Map<String, Long> getExperienceAward(EventType eventType, ResourceLocation objectID, ObjectType autoValueType) {
 		//ignore processing if individual event is disabled and clear existing data
-		if (!AutoValueConfig.isXpGainEnabled(eventType)) {
+		if (!Config.autovalue().xpEnabled().getOrDefault(eventType, true)) {
 			xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).remove(objectID);
 			return new HashMap<>();
 		}

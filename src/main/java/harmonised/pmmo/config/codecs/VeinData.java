@@ -1,9 +1,9 @@
 package harmonised.pmmo.config.codecs;
 
-import java.util.Optional;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import java.util.Optional;
 
 public class VeinData  implements DataSource<VeinData>{
 		public Optional<Integer> chargeCap;

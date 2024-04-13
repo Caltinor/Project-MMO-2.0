@@ -1,7 +1,5 @@
 package harmonised.pmmo.network.clientpackets;
 
-import java.util.HashMap;
-
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,6 +7,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+import java.util.HashMap;
 
 public record CP_SyncData_ClearXp() implements CustomPacketPayload {
 	public static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "s2c_syncdata_clear_xp");

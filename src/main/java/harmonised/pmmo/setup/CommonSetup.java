@@ -3,33 +3,34 @@ package harmonised.pmmo.setup;
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
 import harmonised.pmmo.network.Networking;
-import harmonised.pmmo.setup.datagen.*;
+import harmonised.pmmo.setup.datagen.BlockTagProvider;
+import harmonised.pmmo.setup.datagen.DamageTagProvider;
+import harmonised.pmmo.setup.datagen.EntityTagProvider;
+import harmonised.pmmo.setup.datagen.ItemTagProvider;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.setup.datagen.LangProvider.Locale;
 import harmonised.pmmo.setup.datagen.defaultpacks.DefaultGLMProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.EasyGLMProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.EasyItemConfigProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.HardcoreGLMProvider;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.server.packs.PathPackResources;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -73,6 +74,7 @@ public class CommonSetup {
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
+		event.addListener(Config.CONFIG);
 	}
 	
 	public static void gatherData(GatherDataEvent event) {

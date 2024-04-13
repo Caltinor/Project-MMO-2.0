@@ -1,14 +1,14 @@
 package harmonised.pmmo.util;
 
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraft.resources.ResourceLocation;
 
 public class Functions<X, Y> {
 	

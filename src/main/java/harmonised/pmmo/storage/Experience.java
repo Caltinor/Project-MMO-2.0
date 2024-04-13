@@ -3,7 +3,8 @@ package harmonised.pmmo.storage;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
-import net.minecraft.world.entity.player.Player;
+
+import java.util.List;
 
 public class Experience {
     private XpLevel level = new XpLevel();
@@ -145,9 +146,12 @@ public class Experience {
         }
 
         public static long getXpForNextLevel(long level) {
-            long min = Config.XP_MIN.get();
-            double base = Config.XP_BASE.get();
-            double lvl = Config.XP_PER_LEVEL.get();
+            List<Long> staticLvls = Config.server().levels().staticLevels();
+            if (staticLvls.get(0) != -1)
+                return staticLvls.size() < level ? staticLvls.get((int)level) : Long.MAX_VALUE;
+            long min = Config.server().levels().xpMin();
+            double base = Config.server().levels().xpBase();
+            double lvl = Config.server().levels().perLevel();
             return min + Double.valueOf(Math.pow(base, lvl * level)).longValue();
         }
 

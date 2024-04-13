@@ -1,5 +1,39 @@
 package harmonised.pmmo.config.writers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import harmonised.pmmo.api.APIUtils.SalvageBuilder;
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ObjectType;
+import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.codecs.EnhancementsData;
+import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.ObjectData;
+import harmonised.pmmo.config.codecs.PlayerData;
+import harmonised.pmmo.config.codecs.VeinData;
+import harmonised.pmmo.config.readers.ConfigListener;
+import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.nbt.LogicEntry;
+import harmonised.pmmo.features.autovalues.AutoValues;
+import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.util.Functions;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagFile;
+import net.minecraft.world.level.storage.LevelResource;
+import net.neoforged.fml.LogicalSide;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -18,44 +52,16 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import harmonised.pmmo.api.APIUtils.SalvageBuilder;
-import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.api.enums.ModifierDataType;
-import harmonised.pmmo.api.enums.ObjectType;
-import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.codecs.EnhancementsData;
-import harmonised.pmmo.config.codecs.LocationData;
-import harmonised.pmmo.config.codecs.ObjectData;
-import harmonised.pmmo.config.codecs.PlayerData;
-import harmonised.pmmo.config.codecs.VeinData;
-import harmonised.pmmo.core.Core;
-import harmonised.pmmo.core.nbt.LogicEntry;
-import harmonised.pmmo.features.autovalues.AutoValues;
-import harmonised.pmmo.features.veinmining.VeinMiningLogic;
-import harmonised.pmmo.util.Functions;
-import harmonised.pmmo.util.Reference;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagFile;
-import net.minecraft.world.level.storage.LevelResource;
-import net.neoforged.fml.LogicalSide;
-
 public class PackGenerator {
 	public static final String PACKNAME = "generated_pack";
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	public static boolean applyOverride = false, applyDefaults = false, applyDisabler = false, applySimple = false;
+	public static boolean
+			applyOverride = false,
+			applyDefaults = false,
+			applyDisabler = false,
+			applySimple = false,
+			applyObjects = true,
+			applyConfigs = false;
 	public static List<String> namespaceFilter = new ArrayList<>();
 	public static Set<ServerPlayer> players = new HashSet<>();
 	
@@ -265,7 +271,13 @@ public class PackGenerator {
 				Functions.pathPrepend(Reference.FROM_ENVIRONMENT.location(), "damage_type"),
 				Functions.pathPrepend(Reference.FROM_IMPACT.location(), "damage_type"),
 				Functions.pathPrepend(Reference.FROM_MAGIC.location(), "damage_type")),
-				(id) -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false, List.of())).result().get()));
+				(id) -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false, List.of())).result().get())),
+		CONFIGS("config", server -> Arrays.stream(ConfigListener.ServerConfigs.values())
+				.map(sc -> new ResourceLocation(Reference.MOD_ID, sc.filename.substring(0, sc.filename.indexOf(".")))).collect(Collectors.toSet()),
+				id -> {
+					ConfigListener.ServerConfigs sc = ConfigListener.ServerConfigs.fromFilename(id.getPath());
+					return sc == null ? "" : gson.toJson(ConfigListener.ServerConfigs.MAPPER.encodeStart(JsonOps.INSTANCE, sc.defaultSupplier.get()).result().get());
+				});
 
 		
 		public String route;
@@ -298,6 +310,10 @@ public class PackGenerator {
 		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
 
 		for (Category category : Category.values()) {
+			if (category.equals(Category.CONFIGS) && !applyConfigs)
+				continue;
+			if ((!category.equals(Category.CONFIGS) && !category.equals(Category.TAGS) && !applyObjects))
+				continue;
 			Collection<ResourceLocation> filteredList = namespaceFilter.isEmpty() || category == Category.TAGS
 					? category.valueList.apply(server)
 					: category.valueList.apply(server).stream().filter(id -> namespaceFilter.contains(id.getNamespace())).toList();
@@ -320,8 +336,8 @@ public class PackGenerator {
 		return 0;
 	}
 	
-	public static int generatePlayerConfigs(MinecraftServer server, Collection<ServerPlayer> players) {
-		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME+ "/resourcepacks/default/data/minecraft/pmmo/players/");
+	public static void generatePlayerConfigs(MinecraftServer server, Collection<ServerPlayer> players) {
+		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME+ "/data/minecraft/pmmo/players/");
 		filepath.toFile().mkdirs();
 		for (ServerPlayer player : players) {
 			String idString = player.getUUID().toString();
@@ -334,7 +350,6 @@ public class PackGenerator {
 						StandardOpenOption.WRITE);
 			} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+ idString +" ("+ e +")");}
 		}
-		return 0;
 	}
 	
 	private static record Pack(String description, int format) {

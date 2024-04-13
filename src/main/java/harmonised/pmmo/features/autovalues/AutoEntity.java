@@ -1,10 +1,8 @@
 package harmonised.pmmo.features.autovalues;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.AttributeKey;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,6 +13,9 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AutoEntity {
 	public static final EventType[] EVENTTYPES = {EventType.BREED, EventType.DEATH, EventType.ENTITY, EventType.RIDING,
@@ -65,12 +66,12 @@ public class AutoEntity {
 	private static Map<String, Long> getXpMap(ResourceLocation entityID, EventType type) {
 		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) BuiltInRegistries.ENTITY_TYPE.get(entityID);
 		Map<String, Long> outMap = new HashMap<>();
-		double healthScale = getAttribute(entity, Attributes.MAX_HEALTH) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH.key, 0d);
-		double speedScale = getAttribute(entity, Attributes.MOVEMENT_SPEED) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED.key, 0d);
-		double damageScale = getAttribute(entity, Attributes.ATTACK_DAMAGE) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.DMG.key, 0d);
+		double healthScale = getAttribute(entity, Attributes.MAX_HEALTH) * Config.autovalue().tweaks().entityTweaks().getOrDefault(AttributeKey.HEALTH.key, 0d);
+		double speedScale = getAttribute(entity, Attributes.MOVEMENT_SPEED) * Config.autovalue().tweaks().entityTweaks().getOrDefault(AttributeKey.SPEED.key, 0d);
+		double damageScale = getAttribute(entity, Attributes.ATTACK_DAMAGE) * Config.autovalue().tweaks().entityTweaks().getOrDefault(AttributeKey.DMG.key, 0d);
 		double scale = healthScale + speedScale + damageScale;
-		
-		AutoValueConfig.getEntityXpAward(type).forEach((skill, value) -> {
+
+		Config.autovalue().xpAwards().entity(type).forEach((skill, value) -> {
 			outMap.put(skill, Double.valueOf(value * scale).longValue());
 		});
 		return outMap;

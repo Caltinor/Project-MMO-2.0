@@ -1,17 +1,10 @@
 package harmonised.pmmo.core.perks;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.BiFunction;
-
 import com.google.common.collect.LinkedListMultimap;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.perks.Perk;
-import harmonised.pmmo.config.PerksConfig;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
@@ -41,10 +34,17 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.BiFunction;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class FeaturePerks {
@@ -92,7 +92,7 @@ public class FeaturePerks {
 	@SubscribeEvent
 	public static void saveAttributesOnDeath(LivingDeathEvent event) {
 		if (event.getEntity() instanceof Player player) {
-			for (CompoundTag nbt : PerksConfig.PERK_SETTINGS.get().get(EventType.SKILL_UP).stream()
+			for (CompoundTag nbt : Config.perks().perks().get(EventType.SKILL_UP).stream()
 					.filter(tag -> tag.getString("perk").equals("pmmo:attribute")).toList()) {
 				Attribute attribute = getAttribute(nbt);
 				player.getAttributes().getInstance(attribute).getModifiers().stream()

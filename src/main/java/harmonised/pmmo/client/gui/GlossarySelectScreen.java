@@ -1,16 +1,12 @@
 package harmonised.pmmo.client.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import harmonised.pmmo.client.gui.component.SelectionWidget;
 import harmonised.pmmo.client.gui.component.SelectionWidget.SelectionEntry;
-import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
@@ -21,6 +17,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GlossarySelectScreen extends Screen{
 	private static final ResourceLocation GUI_BG = new ResourceLocation(Reference.MOD_ID, "textures/gui/screenboxy.png");
@@ -58,7 +58,7 @@ public class GlossarySelectScreen extends Screen{
 				LangProvider.GLOSSARY_DEFAULT_SKILL.asComponent(), 
 				sel -> skill = sel.reference);
 		
-		selectSkills.setEntries(SkillsConfig.SKILLS.get().keySet().stream()
+		selectSkills.setEntries(Config.skills().skills().keySet().stream()
 				.sorted()
 				.map(skill -> new SelectionEntry<>(
 						Component.translatable("pmmo."+skill).setStyle(CoreUtils.getSkillStyle(skill)), 

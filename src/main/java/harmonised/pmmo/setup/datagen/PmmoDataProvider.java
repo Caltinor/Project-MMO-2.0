@@ -2,25 +2,20 @@ package harmonised.pmmo.setup.datagen;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import cpw.mods.modlauncher.api.LamdbaExceptionUtils;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 public abstract class PmmoDataProvider<T extends DataSource<?>> implements DataProvider {
     private final Path destination;

@@ -1,13 +1,12 @@
 package harmonised.pmmo.registry;
 
+import com.google.common.base.Preconditions;
+import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-
-import com.google.common.base.Preconditions;
-
-import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 
 public class LevelRegistry {
 	private final List<BiFunction<String, Long, Long>> providers = new ArrayList<>();

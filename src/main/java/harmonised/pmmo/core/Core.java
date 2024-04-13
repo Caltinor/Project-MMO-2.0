@@ -1,13 +1,5 @@
 package harmonised.pmmo.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -16,14 +8,12 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.SkillData;
-import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.features.anticheese.CheeseTracker;
-import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.network.Networking;
@@ -63,6 +53,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
 
 /**<p>This class bridges the gap between various systems within Project MMO.
  * Methods within this class connect these distinct systems without 
@@ -142,17 +139,19 @@ public class Core {
 	 * @param xpValues the map of pre-global-modifier xp awards
 	 */
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
+		if (players.size() > 1)
+			xpValues.replaceAll((skill, value) -> Double.valueOf((double)value * Config.server().party().bonus()).longValue());
 		CoreUtils.processSkillGroupXP(xpValues);
 
 		new HashMap<>(xpValues).forEach((skill, value) -> {
-			xpValues.put(skill, (long)((double)value * Config.SKILL_MODIFIERS.get().getOrDefault(skill, Config.GLOBAL_MODIFIER.get())));
+			xpValues.put(skill, (long)((double)value * Config.server().levels().skillModifiers().getOrDefault(skill, Config.server().levels().globalModifier())));
 		});
 		for (int i = 0; i < players.size(); i++) {
 			if (players.get(i) instanceof FakePlayer || players.get(i).isDeadOrDying()) continue;
 			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
 				long xpAward = award.getValue();
 				if (players.size() > 1)
-					xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
+					xpAward = Double.valueOf((double)xpAward * (Config.server().party().bonus() * (double)players.size())).longValue();
 				getData().addXp(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
 			}
 		}
@@ -212,7 +211,7 @@ public class Core {
 						: new HashMap<>(),
 					getObjectExperienceMap(oType, objectID, type, tag));
 			
-			if (AutoValueConfig.ENABLE_AUTO_VALUES.get() && xpGains.isEmpty()) 
+			if (Config.autovalue().enabled() && xpGains.isEmpty())
 				xpGains = AutoValues.getExperienceAward(type, objectID, oType);
 			
 		}
@@ -300,7 +299,7 @@ public class Core {
   	
 	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
 		if (player instanceof FakePlayer
-			|| !Config.reqEnabled(type).get()
+			|| !Config.server().requirements().isEnabled(type)
 			|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		ResourceLocation itemID = RegistryUtil.getId(stack.getItem());
 		
@@ -310,7 +309,7 @@ public class Core {
 	}
 	public boolean isActionPermitted(ReqType type, BlockPos pos, Player player) {
 		if (player instanceof FakePlayer
-				|| !Config.reqEnabled(type).get()
+				|| !Config.server().requirements().isEnabled(type)
 				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		BlockEntity tile = player.level().getBlockEntity(pos);
 		ResourceLocation res = RegistryUtil.getId(player.level().getBlockState(pos));
@@ -320,7 +319,7 @@ public class Core {
 	}
 	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
 		if (player instanceof FakePlayer
-				|| !Config.reqEnabled(type).get()
+				|| !Config.server().requirements().isEnabled(type)
 				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
 		return (predicates.predicateExists(entityID, type))
@@ -330,7 +329,7 @@ public class Core {
 	public boolean isActionPermitted(ReqType type, Holder<Biome> biome, Player player) {
 		if (type != ReqType.TRAVEL) return false;
 		if (player instanceof FakePlayer
-				|| !Config.reqEnabled(type).get()
+				|| !Config.server().requirements().isEnabled(type)
 				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		return doesPlayerMeetReq(player.getUUID(), 
 				getObjectSkillMap(ObjectType.BIOME, RegistryUtil.getId(biome), type, new CompoundTag()));
@@ -338,7 +337,7 @@ public class Core {
 	public boolean isActionPermitted(ReqType type, ResourceKey<Level> dimension, Player player) {
 		if (type != ReqType.TRAVEL) return false;
 		if (player instanceof FakePlayer
-				|| !Config.reqEnabled(type).get()
+				|| !Config.server().requirements().isEnabled(type)
 				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
 		return doesPlayerMeetReq(player.getUUID(),
 				getObjectSkillMap(ObjectType.DIMENSION, dimension.location(), type, new CompoundTag()));
@@ -349,8 +348,8 @@ public class Core {
 		CoreUtils.processSkillGroupReqs(requirements);
 		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
 			long skillLevel = getData().getLevel(req.getKey(), playerID);
-			if (SkillsConfig.SKILLS.get().getOrDefault(req.getKey(), SkillData.Builder.getDefault()).isSkillGroup()) {	
-				SkillData skillData = SkillsConfig.SKILLS.get().get(req.getKey());
+			if (Config.skills().get(req.getKey()).isSkillGroup()) {
+				SkillData skillData = Config.skills().get(req.getKey());
 				if (skillData.getUseTotalLevels()) {
 					long total = skillData.getGroup().keySet().stream().map(skill -> getData().getLevel(skill, playerID)).mapToLong(Long::longValue).sum();
 					if (req.getValue() > total) {
@@ -380,7 +379,7 @@ public class Core {
 	}
 	public Map<String, Integer> getEnchantReqs(ItemStack stack) {
 		Map<String, Integer> outMap = new HashMap<>();
-		if (!stack.isEnchanted() || !Config.reqEnabled(ReqType.USE_ENCHANTMENT).get()) return outMap;
+		if (!stack.isEnchanted() || !Config.server().requirements().isEnabled(ReqType.USE_ENCHANTMENT)) return outMap;
 		for (Map.Entry<Enchantment, Integer> enchant : EnchantmentHelper.getEnchantments(stack).entrySet()) {			
 			getEnchantmentReqs(RegistryUtil.getId(enchant.getKey()), enchant.getValue()-1).forEach((skill, level) -> {
 				outMap.merge(skill, level, Integer::max);
@@ -418,7 +417,7 @@ public class Core {
 	public Map<String, Integer> getCommonReqData(Map<String, Integer> reqsIn, ObjectType oType, ResourceLocation objectID, ReqType type, CompoundTag tag) {
 		if (reqsIn.isEmpty()) {
 			reqsIn = getObjectSkillMap(oType, objectID, type, tag);
-			if (AutoValueConfig.ENABLE_AUTO_VALUES.get() && reqsIn.isEmpty())
+			if (Config.autovalue().enabled() && reqsIn.isEmpty())
 				reqsIn = AutoValues.getRequirements(type, objectID, oType);
 		}
 		return CoreUtils.processSkillGroupReqs(reqsIn);
@@ -503,7 +502,7 @@ public class Core {
 
 	public int getBlockConsume(Block block) {
 		return loader.BLOCK_LOADER.getData(RegistryUtil.getId(block)).veinData().consumeAmount.orElseGet(() -> {
-			return Config.REQUIRE_SETTING.get() ? -1 : Config.DEFAULT_CONSUME.get();
+			return Config.server().veinMiner().requireSettings() ? -1 : Config.server().veinMiner().defaultConsume();
 		});
 	}
 }

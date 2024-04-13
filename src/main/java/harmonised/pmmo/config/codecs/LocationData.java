@@ -1,5 +1,14 @@
 package harmonised.pmmo.config.codecs;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.util.Functions;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,16 +17,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
-
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import harmonised.pmmo.api.enums.ModifierDataType;
-import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.util.Functions;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.StringRepresentable;
 
 public record LocationData(
 		boolean override,

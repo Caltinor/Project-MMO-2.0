@@ -1,9 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -17,6 +13,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.living.ShieldBlockEvent;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ShieldBlockHandler {
 

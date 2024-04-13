@@ -1,26 +1,22 @@
 package harmonised.pmmo.core;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.SkillData;
-import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CoreUtils {
 
@@ -46,7 +42,7 @@ public class CoreUtils {
 	 * @return an award map
 	 */
 	public static Map<String, Long> mergeXpMapsWithSummateCondition(Map<String, Long> ogMap, Map<String, Long> newMap) {
-		boolean summate = Config.SUMMATED_MAPS.get();
+		boolean summate = Config.server().xpGains().perksPlusConfig();
 		if (!summate) return newMap;
 		for (Map.Entry<String, Long> entry : newMap.entrySet()) {
 			ogMap.merge(entry.getKey(), entry.getValue(), (a, b) -> a > b ? a : b);
@@ -76,7 +72,7 @@ public class CoreUtils {
 	 */
 	public static Map<String, Long> processSkillGroupXP(Map<String, Long> map) {
 		new HashMap<>(map).forEach((skill, baseXP) -> {
-			SkillData data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			SkillData data = Config.skills().get(skill);
 			if (data.isSkillGroup()) {
 				map.remove(skill);
 				data.getGroupXP(baseXP).forEach((member, xp) -> {
@@ -96,7 +92,7 @@ public class CoreUtils {
 	 */
 	public static Map<String, Integer> processSkillGroupReqs(Map<String, Integer> map) {
 		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			SkillData data = Config.skills().get(skill);
 			if (data.isSkillGroup() && !data.getUseTotalLevels()) {
 				map.remove(skill);
 				data.getGroupReq(level).forEach((member, xp) -> {
@@ -116,7 +112,7 @@ public class CoreUtils {
 	 */
 	public static Map<String, Double> processSkillGroupBonus(Map<String, Double> map) {
 		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			SkillData data = Config.skills().get(skill);
 			if (data.isSkillGroup()) {
 				map.remove(skill);
 				map.putAll(data.getGroupBonus(level));																					
@@ -131,7 +127,7 @@ public class CoreUtils {
 	 * @return the integer skill value
 	 */
 	public static int getSkillColor(String skill) {
-		return SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getColor();
+		return Config.skills().get(skill).getColor();
 	}
 	
 	/**Obtain a Component Style for the skill supplied
@@ -160,7 +156,7 @@ public class CoreUtils {
 	public static List<MobEffectInstance> getEffects(Map<ResourceLocation, Integer> config, boolean applyDefaultNegatives) {
 		List<MobEffectInstance> effects = new ArrayList<>();
 		if (applyDefaultNegatives && config.isEmpty())
-			config = AutoValueConfig.ITEM_PENALTIES.get();
+			config = Config.autovalue().reqs().penalties();
 		for (Map.Entry<ResourceLocation, Integer> effect : config.entrySet()) {
 			MobEffect effectRoot = BuiltInRegistries.MOB_EFFECT.get(effect.getKey());
 			if (effectRoot != null)

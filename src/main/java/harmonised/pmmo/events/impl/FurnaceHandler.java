@@ -1,12 +1,6 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
 import com.mojang.authlib.GameProfile;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.FurnaceBurnEvent;
@@ -19,6 +13,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 
 public class FurnaceHandler {

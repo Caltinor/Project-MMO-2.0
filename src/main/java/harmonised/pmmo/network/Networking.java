@@ -1,11 +1,13 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.api.enums.ObjectType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
+import harmonised.pmmo.network.clientpackets.CP_SyncConfig;
 import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
@@ -15,8 +17,8 @@ import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -39,6 +41,7 @@ public class Networking {
 		.play(CP_SetOtherExperience.ID, CP_SetOtherExperience::new, h -> h.client(CP_SetOtherExperience::handle))
 		.play(CP_ResetXP.ID, CP_ResetXP::new, h -> h.client(CP_ResetXP::handle))
 		.play(CP_SyncVein.ID, CP_SyncVein::new, h -> h.client(CP_SyncVein::handle))
+		.play(CP_SyncConfig.ID, CP_SyncConfig::decode, h -> h.client(CP_SyncConfig::handle))
 		//SERVER BOUND PACKETS
 		.play(SP_UpdateVeinTarget.ID, SP_UpdateVeinTarget::new, h -> h.server(SP_UpdateVeinTarget::handle))
 		.play(SP_OtherExpRequest.ID, SP_OtherExpRequest::new, h -> h.server(SP_OtherExpRequest::handle))
@@ -49,6 +52,7 @@ public class Networking {
 	
 	public static void registerDataSyncPackets() {
 		CoreLoader.RELOADER.subscribeAsSyncable(CP_ClearData::new);
+		Config.CONFIG.subscribeAsSyncable();
 		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.ITEM, o));
 		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.BLOCK, o));
 		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.ENTITY, o));

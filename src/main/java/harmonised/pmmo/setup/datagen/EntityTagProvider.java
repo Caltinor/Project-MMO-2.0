@@ -1,16 +1,15 @@
 package harmonised.pmmo.setup.datagen;
 
-import java.util.concurrent.CompletableFuture;
-
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
-
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
 
 
 public class EntityTagProvider extends EntityTypeTagsProvider{

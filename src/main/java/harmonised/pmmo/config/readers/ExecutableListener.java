@@ -1,8 +1,5 @@
 package harmonised.pmmo.config.readers;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -11,6 +8,9 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ExecutableListener extends SimplePreparableReloadListener<Boolean> {
 	private Runnable executor;

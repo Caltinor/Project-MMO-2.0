@@ -1,8 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -15,6 +12,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+
+import java.util.List;
+import java.util.Map;
 
 public class EntityInteractHandler {
 	

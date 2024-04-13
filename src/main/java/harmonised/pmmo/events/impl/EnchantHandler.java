@@ -1,9 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.EnchantEvent;
@@ -13,6 +9,10 @@ import harmonised.pmmo.util.TagBuilder;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class EnchantHandler {
 

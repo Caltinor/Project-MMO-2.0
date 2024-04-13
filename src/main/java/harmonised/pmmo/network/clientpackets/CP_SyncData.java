@@ -1,11 +1,7 @@
 package harmonised.pmmo.network.clientpackets;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.EnhancementsData;
@@ -25,6 +21,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public record CP_SyncData(ObjectType type, Map<ResourceLocation, ? extends DataSource<?>> data) implements CustomPacketPayload {
 	public static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "s2c_sync_data");

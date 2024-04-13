@@ -1,12 +1,5 @@
 package harmonised.pmmo.registry;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import harmonised.pmmo.api.enums.EventType;
@@ -18,6 +11,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 public class TooltipRegistry {
 	public TooltipRegistry() {}

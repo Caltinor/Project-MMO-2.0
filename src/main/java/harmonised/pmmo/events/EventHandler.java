@@ -6,8 +6,36 @@ import harmonised.pmmo.api.events.EnchantEvent;
 import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.events.impl.*;
-import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.events.impl.AnvilRepairHandler;
+import harmonised.pmmo.events.impl.BreakHandler;
+import harmonised.pmmo.events.impl.BreakSpeedHandler;
+import harmonised.pmmo.events.impl.BreedHandler;
+import harmonised.pmmo.events.impl.CraftHandler;
+import harmonised.pmmo.events.impl.CropGrowHandler;
+import harmonised.pmmo.events.impl.DamageDealtHandler;
+import harmonised.pmmo.events.impl.DamageReceivedHandler;
+import harmonised.pmmo.events.impl.DeathHandler;
+import harmonised.pmmo.events.impl.DimensionTravelHandler;
+import harmonised.pmmo.events.impl.EnchantHandler;
+import harmonised.pmmo.events.impl.EntityInteractHandler;
+import harmonised.pmmo.events.impl.ExplosionHandler;
+import harmonised.pmmo.events.impl.FishHandler;
+import harmonised.pmmo.events.impl.FoodEatHandler;
+import harmonised.pmmo.events.impl.FurnaceHandler;
+import harmonised.pmmo.events.impl.JumpHandler;
+import harmonised.pmmo.events.impl.LoginHandler;
+import harmonised.pmmo.events.impl.MountHandler;
+import harmonised.pmmo.events.impl.PistonHandler;
+import harmonised.pmmo.events.impl.PlaceHandler;
+import harmonised.pmmo.events.impl.PlayerClickHandler;
+import harmonised.pmmo.events.impl.PlayerDeathHandler;
+import harmonised.pmmo.events.impl.PlayerTickHandler;
+import harmonised.pmmo.events.impl.PotionHandler;
+import harmonised.pmmo.events.impl.ShieldBlockHandler;
+import harmonised.pmmo.events.impl.SleepHandler;
+import harmonised.pmmo.events.impl.StatsHandler;
+import harmonised.pmmo.events.impl.TameHandler;
+import harmonised.pmmo.events.impl.TradeHandler;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -22,8 +50,20 @@ import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.brewing.PlayerBrewedPotionEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
-import net.neoforged.neoforge.event.entity.living.*;
-import net.neoforged.neoforge.event.entity.player.*;
+import net.neoforged.neoforge.event.entity.living.AnimalTameEvent;
+import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.ShieldBlockEvent;
+import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
+import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.PistonEvent;
@@ -50,10 +90,10 @@ public class EventHandler {
 	public static void onGamemodeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
 			AttributeInstance reachAttribute = event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.value());
-			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.CREATIVE_REACH.get())
+			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.server().general().creativeReach())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
-				reachAttribute.addPermanentModifier(new AttributeModifier(Reference.CREATIVE_REACH_ATTRIBUTE, "PMMO Creative Reach Bonus", Config.CREATIVE_REACH.get(), AttributeModifier.Operation.ADDITION));
+				reachAttribute.addPermanentModifier(new AttributeModifier(Reference.CREATIVE_REACH_ATTRIBUTE, "PMMO Creative Reach Bonus", Config.server().general().creativeReach(), AttributeModifier.Operation.ADDITION));
 			}
 		}
 		else {

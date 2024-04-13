@@ -1,10 +1,7 @@
 package harmonised.pmmo.registry;
 
-import java.util.function.BiPredicate;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
-
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.MsLoggy;
@@ -15,6 +12,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import java.util.function.BiPredicate;
 
 public class PredicateRegistry {
 	public PredicateRegistry() {}

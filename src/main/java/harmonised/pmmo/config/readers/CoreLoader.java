@@ -1,27 +1,17 @@
 package harmonised.pmmo.config.readers;
 
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.event.TagsUpdatedEvent;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import net.minecraft.core.registries.Registries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
-import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.DataSource;
+import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -31,7 +21,15 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CoreLoader {
@@ -73,7 +71,7 @@ public class CoreLoader {
 		case ENCHANTMENT -> ENCHANTMENT_LOADER;
 		case EFFECT -> EFFECT_LOADER;
 		case PLAYER -> PLAYER_LOADER;
-		default -> null;};
+        };
 	}
 	
 	public MergeableCodecDataManager<?, ?> getLoader(ModifierDataType type) {
@@ -81,7 +79,7 @@ public class CoreLoader {
 		case WORN, HELD -> ITEM_LOADER;
 		case DIMENSION -> DIMENSION_LOADER;
 		case BIOME -> BIOME_LOADER;
-		default -> null;};
+        };
 	}
 	
 	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {
@@ -115,10 +113,9 @@ public class CoreLoader {
 			"pmmo/enchantments", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, Registries.ENCHANTMENT);
 	public final MergeableCodecDataManager<EnhancementsData, MobEffect> EFFECT_LOADER = new MergeableCodecDataManager<>(
 			"pmmo/effects", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, Registries.MOB_EFFECT);
-	
-	
+
 	private <T extends DataSource<T>> T mergeLoaderData(final List<T> raws) {
-		T out = raws.stream().reduce((existing, element) -> existing.combine(element)).get();
+		T out = raws.stream().reduce(DataSource::combine).get();
 		return out.isUnconfigured() ? null : out;
 	}
 	

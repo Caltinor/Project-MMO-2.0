@@ -1,17 +1,11 @@
 package harmonised.pmmo.commands;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import net.minecraft.commands.CommandSourceStack;
@@ -25,6 +19,11 @@ import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.neoforged.fml.LogicalSide;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 public class CmdNodeStore {
 	private static final String TARGET_ARG = "Target";
 	private static final String SKILL_ARG = "Skill Name";
@@ -34,7 +33,7 @@ public class CmdNodeStore {
 				.requires(p -> p.hasPermission(2))
 				.then(Commands.argument(TARGET_ARG, EntityArgument.players())
 						.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
-								.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(SkillsConfig.SKILLS.get().keySet(), builder))
+								.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(Config.skills().skills().keySet(), builder))
 								.executes(ctx -> store(ctx))));
 	}
 	
@@ -60,7 +59,7 @@ public class CmdNodeStore {
 	
 	private static long getSkillLevel(String skill, UUID pid) {
 		Core core = Core.get(LogicalSide.SERVER);
-		SkillData skillData = SkillsConfig.SKILLS.get().get(skill);
+		SkillData skillData = Config.skills().get(skill);
 		if (skillData == null) return 0;
 		if (skillData.isSkillGroup()) {
 			long groupLevel = 0;

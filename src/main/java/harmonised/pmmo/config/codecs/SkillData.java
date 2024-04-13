@@ -1,16 +1,14 @@
 package harmonised.pmmo.config.codecs;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.SkillsConfig;
-import harmonised.pmmo.util.Reference;
-import net.minecraft.resources.ResourceLocation;
 
 public record SkillData (
 	Optional<Integer> color,
@@ -37,7 +35,7 @@ public record SkillData (
 	public boolean getAfkExempt() { return afkExempt.orElse(false); }
 	public boolean getDisplayGroupName() { return displayGroupName.orElse(false); }
 	public boolean getUseTotalLevels() { return useTotalLevels.orElse(false); }
-	public long getMaxLevel() { return maxLevel.orElse(Config.MAX_LEVEL.get()); }
+	public long getMaxLevel() { return maxLevel.orElse(Config.server().levels().maxLevel()); }
 	public ResourceLocation getIcon() { return icon.orElse(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")); }
 	public int getIconSize() { return iconSize.orElse(18); }
 	
@@ -52,7 +50,7 @@ public record SkillData (
 		});
 		//iterate over the map for groups within the member map
 		new HashMap<>(outMap).forEach((skill, value) -> {
-			SkillData skillCheck = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			SkillData skillCheck = Config.skills().get(skill);
 			if (skillCheck.isSkillGroup()) {
 				outMap.remove(skill);
 				skillCheck.getGroupXP(value).forEach((s, x) -> {
@@ -70,7 +68,7 @@ public record SkillData (
 			outMap.put(skill, (int)((ratio / denominator) * (double)level));
 		});
 		new HashMap<>(outMap).forEach((skill, value) -> {
-			SkillData skillCheck = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			SkillData skillCheck = Config.skills().get(skill);
 			if (skillCheck.isSkillGroup()) {
 				outMap.remove(skill);
 				skillCheck.getGroupReq(value).forEach((s, x) -> {
@@ -89,7 +87,7 @@ public record SkillData (
 			outMap.put(skill, gainLossModifier + (ratio / denominator) * bonus);
 		});
 		new HashMap<>(outMap).forEach((skill, value) -> {
-			SkillData skillCheck = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
+			SkillData skillCheck = Config.skills().get(skill);
 			if (skillCheck.isSkillGroup()) {
 				outMap.remove(skill);
 				skillCheck.getGroupBonus(value).forEach((s, x) -> {
@@ -124,7 +122,7 @@ public record SkillData (
 				Optional.of(false),
 				Optional.of(false),
 				Optional.empty(), 
-				Optional.of(Config.MAX_LEVEL.get()),
+				Optional.of(Config.server().levels().maxLevel()),
 				Optional.of(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")),
 				Optional.of(18));
 		}

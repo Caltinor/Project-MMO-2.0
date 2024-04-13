@@ -1,11 +1,5 @@
 package harmonised.pmmo.commands;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
@@ -13,12 +7,11 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import harmonised.pmmo.api.enums.ObjectType;
-import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
@@ -36,6 +29,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.LogicalSide;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 public class CmdNodeAdmin {
 	private static final String SKILL_ARG = "Skill Name";
 	private static final String TARGET_ARG = "Target";
@@ -44,7 +43,7 @@ public class CmdNodeAdmin {
 	private static SuggestionProvider<CommandSourceStack> SKILL_SUGGESTIONS = new SuggestionProvider<>() {
 		@Override
 		public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) throws CommandSyntaxException {
-			return SharedSuggestionProvider.suggest(SkillsConfig.SKILLS.get().keySet(), builder);
+			return SharedSuggestionProvider.suggest(Config.skills().skills().keySet(), builder);
 		}
 	};
 

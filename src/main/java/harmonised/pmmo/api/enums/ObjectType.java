@@ -1,13 +1,12 @@
 package harmonised.pmmo.api.enums;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.util.StringRepresentable;
+import net.neoforged.neoforge.common.IExtensibleEnum;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.mojang.serialization.Codec;
-
-import net.minecraft.util.StringRepresentable;
-import net.neoforged.neoforge.common.IExtensibleEnum;
 
 
 public enum ObjectType implements StringRepresentable, IExtensibleEnum {

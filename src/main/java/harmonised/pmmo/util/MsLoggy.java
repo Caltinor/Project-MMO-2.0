@@ -1,11 +1,12 @@
 package harmonised.pmmo.util;
 
+import harmonised.pmmo.config.Config;
+import org.apache.logging.log4j.LogManager;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-import org.apache.logging.log4j.LogManager;
-import harmonised.pmmo.config.Config;
 
 public enum MsLoggy {
 	INFO(code -> Config.INFO_LOGGING.get().contains(code.code),

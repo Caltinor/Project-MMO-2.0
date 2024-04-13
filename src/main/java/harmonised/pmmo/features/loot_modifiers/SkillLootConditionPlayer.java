@@ -2,7 +2,6 @@ package harmonised.pmmo.features.loot_modifiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;

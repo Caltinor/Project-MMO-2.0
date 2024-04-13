@@ -1,9 +1,5 @@
 package harmonised.pmmo.network.clientpackets;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import com.mojang.serialization.Codec;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.storage.Experience;
@@ -17,6 +13,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public record CP_SetOtherExperience(Map<String, Experience> map) implements CustomPacketPayload {
 	public static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "s2c_set_other_xp");

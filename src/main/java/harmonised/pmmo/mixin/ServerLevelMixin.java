@@ -1,11 +1,12 @@
 package harmonised.pmmo.mixin;
 
-import java.util.Set;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import harmonised.pmmo.storage.DataAttachmentTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,12 +14,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
+import javax.annotation.Nullable;
+import java.util.Set;
+import java.util.UUID;
 
 /**This mixin is named "ServerLevel" Mixin because we are checking first and 
  * foremost if the instance of level is an instance of ServerLevel before 

@@ -1,14 +1,6 @@
 package harmonised.pmmo.client.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.SkillsConfig;
-import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.storage.Experience;
@@ -16,6 +8,10 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.client.Minecraft;
 import net.neoforged.fml.LogicalSide;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**This class serves as a run-time cache of data that
  * PmmoSavedData typicaly stores.  
@@ -63,7 +59,7 @@ public class DataMirror implements IDataStorage{
 		long rawLevel =  me(player) ? mySkills.getOrDefault(skill, new Experience()).getLevel().getLevel()
 			: otherSkills.getOrDefault(skill, new Experience()).getLevel().getLevel();
 		rawLevel = Core.get(LogicalSide.CLIENT).getLevelProvider().process(skill, rawLevel);
-		long skillMax = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
+		long skillMax = Config.skills().get(skill).getMaxLevel();
 		return Math.min(rawLevel, skillMax);
 	}
 	@Override

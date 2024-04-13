@@ -1,9 +1,5 @@
 package harmonised.pmmo.features.loot_modifiers;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.RegistryUtil;

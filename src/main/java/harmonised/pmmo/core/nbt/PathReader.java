@@ -1,13 +1,12 @@
 package harmonised.pmmo.core.nbt;
 
+import com.mojang.brigadier.StringReader;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mojang.brigadier.StringReader;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.ListTag;
 
 public class PathReader {
 	/**This method takes a raw NBT path (as syntactically defined by

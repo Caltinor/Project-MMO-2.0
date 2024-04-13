@@ -1,12 +1,11 @@
 package harmonised.pmmo.util;
 
-import java.util.Arrays;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Arrays;
 
 public class TagBuilder {
 	private CompoundTag nbt;

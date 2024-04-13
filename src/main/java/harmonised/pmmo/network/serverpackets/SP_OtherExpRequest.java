@@ -1,8 +1,5 @@
 package harmonised.pmmo.network.serverpackets;
 
-import java.util.UUID;
-import java.util.function.Supplier;
-
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
@@ -15,6 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+
+import java.util.UUID;
 
 public record SP_OtherExpRequest(UUID pid) implements CustomPacketPayload {
 	public static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "c2s_other_xp_request");

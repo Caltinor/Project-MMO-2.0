@@ -1,11 +1,11 @@
 package harmonised.pmmo.core.nbt;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public record LogicEntry (
 		BehaviorToPrevious behavior,

@@ -1,20 +1,19 @@
 package harmonised.pmmo.core.nbt;
 
+import com.mojang.datafixers.util.Pair;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.core.nbt.LogicEntry.Case;
+import harmonised.pmmo.core.nbt.LogicEntry.Criteria;
+import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.nbt.CompoundTag;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.mojang.datafixers.util.Pair;
-
-import harmonised.pmmo.config.GlobalsConfig;
-import harmonised.pmmo.core.nbt.LogicEntry.Case;
-import harmonised.pmmo.core.nbt.LogicEntry.Criteria;
-import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraft.nbt.CompoundTag;
 
 public class NBTUtils {
 	
@@ -122,9 +121,9 @@ public class NBTUtils {
 	}
 	
 	private static String getActualPath(String key) {
-		return key.contains("#") ? GlobalsConfig.PATHS.get().getOrDefault(key.replace("#", ""), "") : key;
+		return key.contains("#") ? Config.globals().paths().getOrDefault(key.replace("#", ""), "") : key;
 	}
 	private static String getActualConstant(String key) {
-		return key.contains("#") ? GlobalsConfig.CONSTANTS.get().getOrDefault(key.replace("#", ""), "") : key;
+		return key.contains("#") ? Config.globals().constants().getOrDefault(key.replace("#", ""), "") : key;
 	}
 }
