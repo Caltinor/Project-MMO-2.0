@@ -273,7 +273,7 @@ public class PackGenerator {
 				Functions.pathPrepend(Reference.FROM_MAGIC.location(), "damage_type")),
 				(id) -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false, List.of())).result().get())),
 		CONFIGS("config", server -> Arrays.stream(ConfigListener.ServerConfigs.values())
-				.map(sc -> new ResourceLocation(Reference.MOD_ID, sc.filename.substring(0, sc.filename.indexOf(".")))).collect(Collectors.toSet()),
+				.map(sc -> new ResourceLocation(Reference.MOD_ID, sc.filename)).collect(Collectors.toSet()),
 				id -> {
 					ConfigListener.ServerConfigs sc = ConfigListener.ServerConfigs.fromFilename(id.getPath());
 					return sc == null ? "" : gson.toJson(ConfigListener.ServerConfigs.MAPPER.encodeStart(JsonOps.INSTANCE, sc.defaultSupplier.get()).result().get());

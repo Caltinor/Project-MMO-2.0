@@ -42,12 +42,12 @@ import java.util.stream.Collectors;
 public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>> {
     private final Gson gson = new Gson();
     public enum ServerConfigs implements StringRepresentable, IExtensibleEnum {
-        SERVER(ServerData.CODEC, "server.json", ServerData::new),
-        AUTOVALUES(AutoValueConfig.CODEC, "autovalues.json", AutoValueConfig::new),
-        SKILLS(SkillsConfig.CODEC, "skills.json", SkillsConfig::new),
-        PERKS(PerksConfig.CODEC, "perks.json", PerksConfig::new),
-        GLOBALS(GlobalsConfig.CODEC, "globals.json", GlobalsConfig::new),
-        ANTICHEESE(AntiCheeseConfig.CODEC, "anticheese.json", AntiCheeseConfig::new);
+        SERVER(ServerData.CODEC, "server", ServerData::new),
+        AUTOVALUES(AutoValueConfig.CODEC, "autovalues", AutoValueConfig::new),
+        SKILLS(SkillsConfig.CODEC, "skills", SkillsConfig::new),
+        PERKS(PerksConfig.CODEC, "perks", PerksConfig::new),
+        GLOBALS(GlobalsConfig.CODEC, "globals", GlobalsConfig::new),
+        ANTICHEESE(AntiCheeseConfig.CODEC, "anticheese", AntiCheeseConfig::new);
 
         public Codec<? extends ConfigData<?>> codec;
         public String filename;
@@ -71,7 +71,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
         }
 
         public static final Codec<ConfigData<?>> MAPPER = ExtraCodecs.lazyInitializedCodec(() ->
-                ConfigListener.ServerConfigs.CODEC.dispatch("type", ConfigData::getType, ServerConfigs::codec));
+                ConfigListener.ServerConfigs.CODEC.dispatch("type", ConfigData::getType, x -> x.codec));
     }
     private Map<ServerConfigs, ConfigData<?>> configs = new HashMap<>();
 
