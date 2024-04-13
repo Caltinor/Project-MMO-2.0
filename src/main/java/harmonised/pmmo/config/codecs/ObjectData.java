@@ -36,6 +36,7 @@ public record ObjectData(
 		Map<ResourceLocation, Integer> negativeEffects,
 		Map<EventType, Map<String, Long>> xpValues,
 		Map<EventType, Map<String, Map<String, Long>>> damageXpValues,
+		Map<EventType, Map<String, List<LogicEntry>>> nbtDamageValues,
 		Map<EventType, List<LogicEntry>> nbtXpValues,
 		Map<ModifierDataType, Map<String, Double>> bonuses,
 		Map<ModifierDataType, List<LogicEntry>> nbtBonuses,
@@ -44,7 +45,7 @@ public record ObjectData(
 	
 		public ObjectData() {
 			this(false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-					new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY);
+					new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY);
 		}
 
 		public Map<ResourceLocation, SalvageData> salvage() {
@@ -54,15 +55,20 @@ public record ObjectData(
 		}
 		@Override
 		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
-			if (nbtXpValues().get(type) == null)
-				return switch (type) {
-					case RECEIVE_DAMAGE, DEAL_DAMAGE -> damageXpValues()
-							.getOrDefault(type, new HashMap<>())
-							.getOrDefault(nbt.getString(APIUtils.DAMAGE_TYPE), new HashMap<>());
-					default -> xpValues().getOrDefault(type, new HashMap<>());
-				};
-			else
-				return NBTUtils.getExperienceAward(nbtXpValues().get(type), nbt);
+			boolean isDamage = type == EventType.RECEIVE_DAMAGE || type == EventType.DEAL_DAMAGE;
+			if (nbtXpValues().get(type) == null && (isDamage && nbtDamageValues().get(type) == null)) {
+				return isDamage
+					? damageXpValues()
+						.getOrDefault(type, new HashMap<>())
+						.getOrDefault(nbt.getString(APIUtils.DAMAGE_TYPE), new HashMap<>())
+					: xpValues().getOrDefault(type, new HashMap<>());
+			}
+			else return isDamage
+					? NBTUtils.getExperienceAward(nbtDamageValues
+						.getOrDefault(type, new HashMap<>())
+						.getOrDefault(nbt.getString(APIUtils.DAMAGE_TYPE), new ArrayList<>()), nbt)
+					: NBTUtils.getExperienceAward(nbtXpValues().get(type), nbt);
+
 		}
 		@Override
 		public void setXpValues(EventType type, Map<String, Long> award) {
@@ -117,10 +123,12 @@ public record ObjectData(
 				Codec.optionalField("nbt_xp_values",
 					Codec.simpleMap(EventType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(EventType.values())).codec())
 					.forGetter(od -> Optional.of(od.nbtXpValues())),
-				Codec.optionalField("dealt_damage_xp",
-						CodecTypes.DAMAGE_XP_CODEC).forGetter(od -> Optional.of(od.damageXpValues().getOrDefault(EventType.DEAL_DAMAGE, new HashMap<>()))),
-				Codec.optionalField("received_damage_xp",
-						CodecTypes.DAMAGE_XP_CODEC).forGetter(od -> Optional.of(od.damageXpValues().getOrDefault(EventType.RECEIVE_DAMAGE, new HashMap<>()))),
+				Codec.optionalField("damage_type_xp",
+					Codec.simpleMap(EventType.CODEC, Codec.unboundedMap(Codec.STRING, CodecTypes.LONG_CODEC), StringRepresentable.keys(EventType.DAMAGE_TYPES)).codec())
+					.forGetter(od -> Optional.of(od.damageXpValues())),
+				Codec.optionalField("nbt_damage_type_xp",
+					Codec.simpleMap(EventType.CODEC, Codec.unboundedMap(Codec.STRING, LogicEntry.CODEC.listOf()), StringRepresentable.keys(EventType.DAMAGE_TYPES)).codec())
+					.forGetter(od -> Optional.of(od.nbtDamageValues())),
 				Codec.optionalField("bonuses",
 					Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).codec())
 					.forGetter(od -> Optional.of(od.bonuses())),
@@ -129,7 +137,7 @@ public record ObjectData(
 					.forGetter(od -> Optional.of(od.nbtBonuses())),
 				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).optionalFieldOf("salvage").forGetter(od -> Optional.of(od.salvage())),
 				VeinData.VEIN_DATA_CODEC.optionalFieldOf(VeinMiningLogic.VEIN_DATA).forGetter(od -> Optional.of(od.veinData()))
-				).apply(instance, (override, tags, reqs, nbtreqs, effects, xp, nbtXp, dealt, received, bonus, nbtbonus, salvage, vein) ->
+				).apply(instance, (override, tags, reqs, nbtreqs, effects, xp, nbtXp, dmg, nbtdmg, bonus, nbtbonus, salvage, vein) ->
 					new ObjectData(
 						override.orElse(false),
 						new HashSet<>(tags.orElse(List.of())),
@@ -137,8 +145,8 @@ public record ObjectData(
 						DataSource.clearEmptyValues(nbtreqs.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(effects.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(xp.orElse(new HashMap<>())),
-						Map.of(EventType.DEAL_DAMAGE, DataSource.clearEmptyValues(dealt.orElse(new HashMap<>())),
-								EventType.RECEIVE_DAMAGE, DataSource.clearEmptyValues(received.orElse(new HashMap<>()))),
+						DataSource.clearEmptyValues(dmg.orElse(new HashMap<>())),
+						DataSource.clearEmptyValues(nbtdmg.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(nbtXp.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(bonus.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(nbtbonus.orElse(new HashMap<>())),
@@ -152,6 +160,7 @@ public record ObjectData(
 			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
 			Map<EventType, List<LogicEntry>> nbtXp = new HashMap<>();
 			Map<EventType, Map<String, Map<String, Long>>> damageXP = new HashMap<>();
+			Map<EventType, Map<String, List<LogicEntry>>> nbtDamageXP = new HashMap<>();
 			Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
 			Map<ModifierDataType, List<LogicEntry>> nbtBonus = new HashMap<>();
 			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
@@ -164,6 +173,13 @@ public record ObjectData(
 				//combine NBT settings
 				nbtXp.putAll(o.nbtXpValues());
 				t.nbtXpValues().forEach((event, logic) -> nbtXp.merge(event, logic, (a, b) -> {var list = new ArrayList<>(a); list.addAll(b); return list;}));
+				nbtDamageXP.putAll(o.nbtDamageValues());
+				t.nbtDamageValues().forEach((event, map) ->
+					map.forEach((dmg, logic) ->
+						nbtDamageXP.computeIfAbsent(event, e -> new HashMap<>()).merge(dmg, logic, (oLogic, nLogic) ->
+							{var list = new ArrayList<>(oLogic); list.addAll(nLogic); return list;})
+					)
+				);
 				nbtBonus.putAll(o.nbtBonuses());
 				t.nbtBonuses().forEach((modifier, logic) -> nbtBonus.merge(modifier, logic, (a, b) -> {var list = new ArrayList<>(a); list.addAll(b); return list;}));
 				nbtReq.putAll(o.nbtReqs());
@@ -227,6 +243,7 @@ public record ObjectData(
 				xpValues.putAll(o.xpValues().isEmpty() ? t.xpValues() : o.xpValues());
 				nbtXp.putAll(o.nbtXpValues().isEmpty() ? t.nbtXpValues() : o.nbtXpValues());
 				damageXP.putAll(o.damageXpValues().isEmpty() ? t.damageXpValues() : o.damageXpValues());
+				nbtDamageXP.putAll(o.nbtDamageValues().isEmpty() ? t.nbtDamageValues() : o.nbtDamageValues());
 				bonuses.putAll(o.bonuses().isEmpty() ? t.bonuses() : o.bonuses());
 				nbtBonus.putAll(o.nbtBonuses().isEmpty() ? t.nbtBonuses() : o.nbtBonuses());
 				reqs.putAll(o.reqs().isEmpty() ? t.reqs() : o.reqs());
@@ -239,7 +256,7 @@ public record ObjectData(
 			bothOrNeither);
 			
 			return new ObjectData(this.override() || two.override(), tagValues, reqs, nbtReq, reqEffects
-					, xpValues, damageXP, nbtXp, bonuses, nbtBonus, salvage, combinedVein[0]);
+					, xpValues, damageXP, nbtDamageXP, nbtXp, bonuses, nbtBonus, salvage, combinedVein[0]);
 		}
 		
 		@Override
@@ -250,6 +267,7 @@ public record ObjectData(
 					&& xpValues().values().stream().allMatch(Map::isEmpty)
 					&& nbtXpValues().values().stream().allMatch(List::isEmpty)
 					&& damageXpValues().values().stream().allMatch(Map::isEmpty)
+					&& nbtDamageValues().values().stream().allMatch(Map::isEmpty)
 					&& bonuses().values().stream().allMatch(Map::isEmpty)
 					&& nbtBonuses().values().stream().allMatch(List::isEmpty)
 					&& salvage().keySet().stream().allMatch(rl -> rl.equals(new ResourceLocation("item")))
@@ -265,6 +283,7 @@ public record ObjectData(
 			Map<ResourceLocation, Integer> negativeEffects = new HashMap<>();
 			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
 			Map<EventType, Map<String, Map<String, Long>>> damageXpValues = new HashMap<>();
+			Map<EventType, Map<String, List<LogicEntry>>> nbtDamageXpValues = new HashMap<>();
 			Map<EventType, List<LogicEntry>> nbtXpValues = new HashMap<>();
 			Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
 			Map<ModifierDataType, List<LogicEntry>> nbtBonuses = new HashMap<>();
@@ -297,12 +316,12 @@ public record ObjectData(
 				this.xpValues.put(type, awards);
 				return this;
 			}
-			public Builder addDealDamageXp(String damageID, Map<String, Long> award) {
-				this.damageXpValues.computeIfAbsent(EventType.DEAL_DAMAGE, t -> new HashMap<>()).put(damageID, award);
+			public Builder addDamageXp(EventType type, String damageID, Map<String, Long> award) {
+				this.damageXpValues.computeIfAbsent(type, t -> new HashMap<>()).put(damageID, award);
 				return this;
 			}
-			public Builder addReceiveDamageXp(String damageID, Map<String, Long> award) {
-				this.damageXpValues.computeIfAbsent(EventType.RECEIVE_DAMAGE, t -> new HashMap<>()).put(damageID, award);
+			public Builder addNbtDamageXp(EventType type, String damageID, List<LogicEntry> logic) {
+				this.nbtDamageXpValues.computeIfAbsent(type, t -> new HashMap<>()).put(damageID, logic);
 				return this;
 			}
 			public Builder addNBTXp(EventType type, List<LogicEntry> logic) {
@@ -335,7 +354,8 @@ public record ObjectData(
 			}
 			public ObjectData end() {
 				return new ObjectData(override, tagValues, reqs, nbtReqs, negativeEffects, xpValues, damageXpValues,
-						nbtXpValues, bonuses, nbtBonuses, salvage, new VeinData(chargeCap, chargeRate, consumeAmount));
+						nbtDamageXpValues, nbtXpValues, bonuses, nbtBonuses, salvage,
+						new VeinData(chargeCap, chargeRate, consumeAmount));
 			}
 		}
 }

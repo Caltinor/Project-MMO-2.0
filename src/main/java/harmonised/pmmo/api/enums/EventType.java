@@ -65,10 +65,11 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 		this.tooltipTranslation = tooltipTranslation;
 	}
 	
-	public static final EventType[] ITEM_APPLICABLE_EVENTS = Arrays.asList(EventType.values()).stream().filter((type) -> type.itemApplicable).toArray(EventType[]::new);
-	public static final EventType[] BLOCK_APPLICABLE_EVENTS = Arrays.asList(EventType.values()).stream().filter((type) -> type.blockApplicable).toArray(EventType[]::new);
-	public static final EventType[] ENTITY_APPLICABLE_EVENTS = Arrays.asList(EventType.values()).stream().filter((type) -> type.entityApplicable).toArray(EventType[]::new);
-	public static final EventType[] BLOCKITEM_APPLICABLE_EVENTS = Arrays.asList(EventType.values()).stream().filter((type) -> type.itemApplicable || type.blockApplicable).toArray(EventType[]::new);
+	public static final EventType[] ITEM_APPLICABLE_EVENTS = Arrays.stream(EventType.values()).filter((type) -> type.itemApplicable).toArray(EventType[]::new);
+	public static final EventType[] BLOCK_APPLICABLE_EVENTS = Arrays.stream(EventType.values()).filter((type) -> type.blockApplicable).toArray(EventType[]::new);
+	public static final EventType[] ENTITY_APPLICABLE_EVENTS = Arrays.stream(EventType.values()).filter((type) -> type.entityApplicable).toArray(EventType[]::new);
+	public static final EventType[] BLOCKITEM_APPLICABLE_EVENTS = Arrays.stream(EventType.values()).filter((type) -> type.itemApplicable || type.blockApplicable).toArray(EventType[]::new);
+	public static final EventType[] DAMAGE_TYPES = Arrays.stream(EventType.values()).filter(type -> type == RECEIVE_DAMAGE || type == DEAL_DAMAGE).toArray(EventType[]::new);
 	
 	
 	public static final Codec<EventType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(EventType::values, EventType::byName);

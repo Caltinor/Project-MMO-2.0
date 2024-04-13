@@ -97,6 +97,10 @@ public class PackGenerator {
 							applyDefaults
 									? existing.damageXpValues().getOrDefault(e, new HashMap<>())
 									: new HashMap<>())),
+					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.nbtDamageValues().getOrDefault(e, new HashMap<>())
+									: new HashMap<>())),
 					Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e -> 
 							applyDefaults
 								? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
@@ -145,6 +149,7 @@ public class PackGenerator {
 							.entrySet().stream().filter(entry -> !applySimple || !entry.getValue().isEmpty())
 							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
 					new HashMap<>(), //damage events
+					new HashMap<>(), //nbt Damage events
 					Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
 									? existing.nbtXpValues().getOrDefault(e, new ArrayList<>())
@@ -159,8 +164,8 @@ public class PackGenerator {
 			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			raw.remove("negative_effect");
 			raw.remove("bonuses");
-			raw.remove("dealt_damage_xp");
-			raw.remove("received_damage_xp");
+			raw.remove("damage_type_xp");
+			raw.remove("nbt_damage_type_xp");
 			raw.remove("nbt_bonuses");
 			raw.remove("salvage");
 			return gson.toJson(raw);}),
@@ -193,6 +198,10 @@ public class PackGenerator {
 					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
 									? existing.damageXpValues().getOrDefault(e, new HashMap<>())
+									: new HashMap<>())),
+					Stream.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE).collect(Collectors.toMap(e -> e, e ->
+							applyDefaults
+									? existing.nbtDamageValues().getOrDefault(e, new HashMap<>())
 									: new HashMap<>())),
 					Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(e -> e, e ->
 							applyDefaults
