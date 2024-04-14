@@ -91,7 +91,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
         ){
             try (final Reader reader = entry.getValue().openAsReader()) {
                 String filename = entry.getKey().getPath().substring(entry.getKey().getPath().lastIndexOf("/")+1);
-                ServerConfigs type = ServerConfigs.fromFilename(filename);
+                ServerConfigs type = ServerConfigs.fromFilename(filename.substring(0, filename.indexOf(".")));
                 if (type == null) continue;
                 final JsonElement jsonElement = GsonHelper.fromJson(this.gson, reader, JsonElement.class);
                 type.codec.parse(JsonOps.INSTANCE, jsonElement)
@@ -108,6 +108,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
     @Override
     protected void apply(ConfigData<?> p_10793_, ResourceManager p_10794_, ProfilerFiller p_10795_) {
         MsLoggy.INFO.log(MsLoggy.LOG_CODE.DATA, "Beginning loading of data for CONFIG loader");
+        configs.forEach((type, config) -> MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.DATA, "{} config loaded with: {}", type, config));
     }
 
 
