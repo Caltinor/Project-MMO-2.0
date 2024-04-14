@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.21.0-2.2.2] - 2024-02-01
+## [1.21.0-2.3.2] - 2024-02-01
 ### Preface
 A lot has changed with Project MMO since 1.20.1.  This changelog serves as both a list of changes and a primer for updating to the new version.  
 
@@ -13,9 +13,11 @@ One major detail is the dropped support for Forge.  Project MMO will now only be
 ### Minor Changes
 - Default Data moved to optional Feature Packs
 - Field names in all configs have been standardized.  This will break old configs if you attempt to carry them over.
-- 
+- Server Configs now live in `/data/pmmo/config/` and can be generated via the genData command
 
 ### Bugfixes / Tweaks
 - Added TOOL_BREAKING event which fires when an item with durability breaks.
 - Added new feature packs for Easy, Default, and Hardcore.
+- Added damage type awareness for anticheese configurations
+- Fixed damage sources not having damage type configuration options
 
