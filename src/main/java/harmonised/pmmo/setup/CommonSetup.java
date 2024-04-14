@@ -16,6 +16,7 @@ import harmonised.pmmo.setup.datagen.ItemTagProvider;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.setup.datagen.LangProvider.Locale;
 import harmonised.pmmo.setup.datagen.defaultpacks.DefaultGLMProvider;
+import harmonised.pmmo.setup.datagen.defaultpacks.EasyConfigProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.EasyGLMProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.EasyItemConfigProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.HardcoreGLMProvider;
@@ -88,6 +89,7 @@ public class CommonSetup {
 			//Easy Feature Pack Generators
 			generator.addProvider(true, new EasyGLMProvider(generator.getPackOutput()));
 			generator.addProvider(true, new EasyItemConfigProvider(generator.getPackOutput()));
+			generator.addProvider(true, new EasyConfigProvider(generator.getPackOutput()));
 			//Default Feature Pack Generators
 			generator.addProvider(true, new DefaultGLMProvider(generator.getPackOutput()));
 			//Hardcore Feature Pack Generators
