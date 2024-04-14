@@ -67,6 +67,7 @@ public class FeaturePerks {
 				double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
 				double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
 				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
+				if (instance == null) return NONE;
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
 				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.MULTIPLY_BASE :  Operation.ADDITION;
 				
@@ -95,7 +96,9 @@ public class FeaturePerks {
 			for (CompoundTag nbt : Config.perks().perks().get(EventType.SKILL_UP).stream()
 					.filter(tag -> tag.getString("perk").equals("pmmo:attribute")).toList()) {
 				Attribute attribute = getAttribute(nbt);
-				player.getAttributes().getInstance(attribute).getModifiers().stream()
+				AttributeInstance instance = player.getAttributes().getInstance(attribute);
+				if (instance != null)
+						instance.getModifiers().stream()
 						.filter(mod -> mod.getId().equals(Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME))))
 						.forEach(mod -> respawnAttributes.put(player, new AttributeRecord(attribute, mod)));
 			}
@@ -107,8 +110,15 @@ public class FeaturePerks {
 	public static void restoreAttributesOnSpawn(PlayerEvent.PlayerRespawnEvent event) {
 		if (respawnAttributes.containsKey(event.getEntity())) {
 			respawnAttributes.get(event.getEntity()).stream()
-					.filter(mod -> !event.getEntity().getAttribute(mod.attribute()).hasModifier(mod.modifier()))
-					.forEach(mod ->	event.getEntity().getAttributes().getInstance(mod.attribute()).addPermanentModifier(mod.modifier()));
+					.filter(mod -> {
+						AttributeInstance instance = event.getEntity().getAttribute(mod.attribute());
+						return instance != null && !instance.hasModifier(mod.modifier());
+					})
+					.forEach(mod ->	{
+						AttributeInstance instance = event.getEntity().getAttribute(mod.attribute());
+						if (instance != null)
+							instance.addPermanentModifier(mod.modifier());
+					});
 			respawnAttributes.get(event.getEntity()).clear();
 		}
 	}
