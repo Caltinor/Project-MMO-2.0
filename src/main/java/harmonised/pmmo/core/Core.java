@@ -221,8 +221,10 @@ public class Core {
 		if (player != null && !(player instanceof FakePlayer))
 			CoreUtils.applyXpModifiers(xpGains, getConsolidatedModifierMap(player));
 		loggables[2] = MsLoggy.mapToString(xpGains);
-		
-		CheeseTracker.applyAntiCheese(type, objectID, player, xpGains);
+		List<ResourceLocation> source = new ArrayList<>();
+		source.add(objectID);
+		if (tag.contains(APIUtils.DAMAGE_TYPE)) source.add(new ResourceLocation(tag.getString(APIUtils.DAMAGE_TYPE)));
+		CheeseTracker.applyAntiCheese(type, source, player, xpGains);
 
 		loggables[3] = MsLoggy.mapToString(xpGains);
 		MsLoggy.INFO.log(LOG_CODE.XP, "XP: {} base:{}, afterBonus:{}, afterAntiCheese:{}", loggables);

@@ -48,15 +48,18 @@ import java.util.Optional;
 public class CheeseTracker {
 
 	public static void applyAntiCheese(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
-		if (player == null || event == null || !(player instanceof ServerPlayer))
+		applyAntiCheese(event, List.of(source), player, awardIn);
+	}
+	public static void applyAntiCheese(EventType event, List<ResourceLocation> source, Player player, Map<String, Long> awardIn) {
+		if (!(player instanceof ServerPlayer) || event == null)
 			return;
 		Setting setting = Config.anticheese().afk().get(event);
 		if (setting != null)
-			setting.applyAFK(event, source, player, awardIn);
+			for (ResourceLocation src : source) {setting.applyAFK(event, src, player, awardIn);}
 		if ((setting =  Config.anticheese().diminish().get(event)) != null)
-			setting.applyDiminuation(event, source, player, awardIn);
+			for (ResourceLocation src : source) {setting.applyDiminuation(event, src, player, awardIn);}
 		if ((setting = Config.anticheese().normal().get(event)) != null)
-			setting.applyNormalization(event, source, player, awardIn);
+			for (ResourceLocation src : source) {setting.applyNormalization(event, src, player, awardIn);}
 	}
 	
 	@SubscribeEvent
