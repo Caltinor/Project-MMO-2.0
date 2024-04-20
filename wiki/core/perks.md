@@ -97,6 +97,7 @@ Modifies the break-speed of blocks.  Only works with the `BREAK_SPEED` event.
 | `hoe_dig`     |    0    | how much faster hoes should break blocks per skill level     |
 | `shears_dig`  |    0    | how much faster shears should break blocks per skill level   |
 | `sword_dig`   |    0    | how much faster swords should break blocks per skill level   |             
+| `max_boost`   |  none   | see above.                                                   |  
 
 ### <u>pmmo:fireworks</u>
 Shoots a firework into the air above the player.  Only works with the `SKILL_UP` event.
