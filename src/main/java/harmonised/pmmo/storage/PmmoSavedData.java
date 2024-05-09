@@ -15,6 +15,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerPlayer;
@@ -129,7 +130,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	private static final String XP_KEY = "xp_data";
 	private static final String SCHEDULED_KEY = "scheduled_xp";
 	
-	public PmmoSavedData(CompoundTag nbt) {
+	public PmmoSavedData(CompoundTag nbt, HolderLookup.Provider provider) {
 		xp = new HashMap<>(XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(XP_KEY)).result().orElse(new HashMap<>()));
 		scheduledXP = new HashMap<>(XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(SCHEDULED_KEY)).result().orElse(new HashMap<>()));
 	}
@@ -139,7 +140,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	}
 
 	@Override
-	public @NotNull CompoundTag save(CompoundTag nbt) {
+	public @NotNull CompoundTag save(CompoundTag nbt, HolderLookup.Provider provider) {
 		//This filter exists to scrub the data from empty values to reduce file bloat.
 		Map<UUID, Map<String, Experience>> cleanXP = xp.entrySet().stream()
 				.filter(entry -> !entry.getValue().isEmpty())

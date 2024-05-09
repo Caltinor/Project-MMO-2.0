@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import cpw.mods.modlauncher.api.LamdbaExceptionUtils;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.data.CachedOutput;
@@ -31,7 +30,7 @@ public abstract class PmmoDataProvider<T extends DataSource<?>> implements DataP
     }
 
     public void add(ResourceLocation id, T instance) {
-        JsonElement json = codec.encodeStart(JsonOps.INSTANCE, instance).getOrThrow(false, s -> MsLoggy.WARN.log(MsLoggy.LOG_CODE.DATA, s));
+        JsonElement json = codec.encodeStart(JsonOps.INSTANCE, instance).resultOrPartial(s -> MsLoggy.WARN.log(MsLoggy.LOG_CODE.DATA, s)).get();
         this.toSerialize.put(id, json);
     }
     protected abstract void start();
@@ -40,7 +39,7 @@ public abstract class PmmoDataProvider<T extends DataSource<?>> implements DataP
         start();
         ImmutableList.Builder<CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
 
-        toSerialize.forEach(LamdbaExceptionUtils.rethrowBiConsumer((name, json) -> {
+        toSerialize.forEach(((name, json) -> {
             Path modifierPath = output.getOutputFolder().resolve(destination).resolve(name.getNamespace()).resolve(dataPath).resolve(name.getPath() + ".json");
             futuresBuilder.add(DataProvider.saveStable(cache, json, modifierPath));
         }));

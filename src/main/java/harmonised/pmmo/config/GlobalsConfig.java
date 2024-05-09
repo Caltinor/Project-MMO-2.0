@@ -1,6 +1,7 @@
 package harmonised.pmmo.config;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.readers.ConfigListener;
@@ -18,12 +19,12 @@ public record GlobalsConfig(Map<String, String> paths,Map<String, String> consta
 			Map.of("example", "value")
 	);}
 
-	public static final Codec<GlobalsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<GlobalsConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("paths").forGetter(GlobalsConfig::paths),
 			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("constants").forGetter(GlobalsConfig::constants)
 	).apply(instance, GlobalsConfig::new));
 	@Override
-	public Codec<GlobalsConfig> getCodec() {return CODEC;}
+	public MapCodec<GlobalsConfig> getCodec() {return CODEC;}
 
 	@Override
 	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.GLOBALS;}

@@ -27,7 +27,7 @@ public class EnchantApplyMixin {
 	        	value = "INVOKE", 
 	        	target = "Lnet/minecraft/world/item/ItemStack;enchant(Lnet/minecraft/world/item/enchantment/Enchantment;I)V"), 
 	        locals = LocalCapture.CAPTURE_FAILSOFT)
-	private void projectmmo$$enchantHandle(ItemStack $$stack, int $$1x, Player player, int $$3x, ItemStack $$4x, Level $$5, BlockPos $$6, CallbackInfo ci, ItemStack stack, List<?> $$8, boolean $$9, Iterator<?> $$11, EnchantmentInstance instance) {
+	private void projectmmo$$enchantHandle(ItemStack $$stack, int $$1x, Player player, int $$3x, ItemStack $$4x, Level $$5, BlockPos $$6, CallbackInfo ci, ItemStack stack, List<?> $$8, Iterator<?> $$11, EnchantmentInstance instance) {
 		NeoForge.EVENT_BUS.post(new EnchantEvent(player, stack, instance));
  	}
 }

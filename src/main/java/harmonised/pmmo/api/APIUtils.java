@@ -243,11 +243,11 @@ public class APIUtils {
 	 * @param side the side being queried.  this can be the actual setting on the server or the client mirror setting.
 	 * @return a map containing the skills and their required levels for this item and requirement type.
 	 */
-	public static Map<String, Integer> getRequirementMap(ItemStack item, ReqType type, LogicalSide side) {
+	public static Map<String, Integer> getRequirementMap(ItemStack item, Level level, ReqType type, LogicalSide side) {
 		Preconditions.checkNotNull(item);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);
-		return Core.get(side).getReqMap(type, item, true);
+		return Core.get(side).getReqMap(type, item, level, true);
 	}
 	
 	/**Returns a skill-level map for the requirements of the block and the requirement type passed.

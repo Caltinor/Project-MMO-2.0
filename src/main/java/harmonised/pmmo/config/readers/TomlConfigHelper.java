@@ -28,7 +28,6 @@ import com.electronwill.nightconfig.toml.TomlFormat;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DataResult.PartialResult;
 import com.mojang.serialization.DynamicOps;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
@@ -101,11 +100,11 @@ public record TomlConfigHelper(ModConfigSpec.Builder builder)
 		final ModConfigSpec spec = entry.getRight();
 		if (configName == null)
 		{
-			modContext.registerConfig(configType,spec);
+			modContext.getActiveContainer().registerConfig(configType,spec);
 		}
 		else
 		{
-			modContext.registerConfig(configType, spec, configName + ".toml");
+			modContext.getActiveContainer().registerConfig(configType, spec, configName + ".toml");
 		}
 		
 		return config;
@@ -124,7 +123,7 @@ public record TomlConfigHelper(ModConfigSpec.Builder builder)
 	public static <T> ConfigObject<T> defineObject(ModConfigSpec.Builder builder, String name, Codec<T> codec, T defaultObject)
 	{
 		DataResult<Object> encodeResult = codec.encodeStart(TomlConfigOps.INSTANCE, defaultObject);
-		Object encodedObject = encodeResult.getOrThrow(false, s -> LOGGER.error("Unable to encode default value: {}", s));
+		Object encodedObject = encodeResult.getOrThrow();
 		ConfigValue<Object> value = builder.define(name, encodedObject);
 		return new ConfigObject<>(value, codec, defaultObject, encodedObject);
 	}
@@ -165,13 +164,9 @@ public record TomlConfigHelper(ModConfigSpec.Builder builder)
 		private T getReparsedObject(Object obj)
 		{
 			DataResult<T> parseResult = this.codec.parse(TomlConfigOps.INSTANCE, obj);
-			return parseResult.get().map(
-				result -> result,
-				failure ->
-				{
-					LOGGER.error("Config failure: Using default config value due to parsing error: {}", failure.message());
-					return this.defaultObject;
-				});
+			return parseResult
+					.resultOrPartial(err -> LOGGER.error("Config failure: Using default config value due to parsing error: {}", err))
+					.orElseGet(() -> this.defaultObject);
 		}
 	}
 	
@@ -318,7 +313,7 @@ public record TomlConfigHelper(ModConfigSpec.Builder builder)
 				return DataResult.error(() -> "mergeToMap called with not a map: " + map, map);
 			}
 			DataResult<String> stringResult = this.getStringValue(key);
-			Optional<PartialResult<String>> badResult = stringResult.error();
+			Optional<DataResult.Error<String>> badResult = stringResult.error();
 			if (badResult.isPresent())
 			{
 				return DataResult.error(() -> "key is not a string: " + key, map);
@@ -351,7 +346,7 @@ public record TomlConfigHelper(ModConfigSpec.Builder builder)
 		public Object createMap(Stream<Pair<Object, Object>> map)
 		{
 			final Config result = TomlFormat.newConfig();
-			map.forEach(p -> result.add(this.getStringValue(p.getFirst()).getOrThrow(false, s -> {}), p.getSecond()));
+			map.forEach(p -> result.add(this.getStringValue(p.getFirst()).getOrThrow(), p.getSecond()));
 			return result;
 		}
 

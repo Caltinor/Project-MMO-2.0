@@ -120,7 +120,7 @@ public class PackGenerator {
 						.collect(Collectors.toMap(Map.Entry::getKey, m -> (List<LogicEntry>)m.getValue())),
 					applyDefaults ? existing.salvage() : Map.of(new ResourceLocation("modid:item"), SalvageBuilder.start().build()),
 					applyDefaults ? existing.veinData() : VeinData.EMPTY);
-			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
+			JsonObject raw = ObjectData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
 		BLOCKS("pmmo/blocks", server -> BuiltInRegistries.BLOCK.keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
@@ -161,7 +161,7 @@ public class PackGenerator {
 					new HashMap<>(), //nbt bonuses
 					new HashMap<>(), //salvage
 					applyDefaults ? existing.veinData() : new VeinData(Optional.empty(), Optional.empty(), Optional.of(1)));
-			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
+			JsonObject raw = ObjectData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			raw.remove("negative_effect");
 			raw.remove("bonuses");
 			raw.remove("damage_type_xp");
@@ -214,7 +214,7 @@ public class PackGenerator {
 					new HashMap<>(), //nbt bonuses
 					new HashMap<>(), //salvage
 					VeinData.EMPTY);
-			JsonObject raw = ObjectData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
+			JsonObject raw = ObjectData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			raw.remove("negative_effect");
 			raw.remove("bonuses");
 			raw.remove("nbt_bonuses");
@@ -233,7 +233,7 @@ public class PackGenerator {
 						applyDefaults ? existing.veinBlacklist() : new ArrayList<>(),
 						applyDefaults ? existing.travelReq() : new HashMap<>(),
 						applyDefaults ? existing.mobModifiers() : new HashMap<>());
-				JsonObject raw = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
+				JsonObject raw = LocationData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 				raw.remove("positive_effect");
 				raw.remove("negative_effect");
 				raw.remove("isTagFor");
@@ -249,13 +249,13 @@ public class PackGenerator {
 					applyDefaults ? existing.veinBlacklist() : new ArrayList<>(),
 					applyDefaults ? existing.travelReq() : new HashMap<>(),
 					applyDefaults ? existing.mobModifiers() : new HashMap<>());
-			JsonObject raw = LocationData.CODEC.encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
+			JsonObject raw = LocationData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
 		ENCHANTMENTS("pmmo/enchantments", server -> BuiltInRegistries.ENCHANTMENT.keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			EnhancementsData existing = core.getLoader().ENCHANTMENT_LOADER.getData(id);
 
-			return gson.toJson(EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, 
+			return gson.toJson(EnhancementsData.CODEC.codec().encodeStart(JsonOps.INSTANCE,
 					new EnhancementsData(applyOverride,
 							applyDefaults ? existing.skillArray() : new HashMap<>())).result().get());
 			}),
@@ -263,7 +263,7 @@ public class PackGenerator {
 			Core core = Core.get(LogicalSide.SERVER);
 			EnhancementsData existing = core.getLoader().EFFECT_LOADER.getData(id);
 
-			return gson.toJson(EnhancementsData.CODEC.encodeStart(JsonOps.INSTANCE, 
+			return gson.toJson(EnhancementsData.CODEC.codec().encodeStart(JsonOps.INSTANCE,
 					new EnhancementsData(applyOverride,
 							applyDefaults ? existing.skillArray() : new HashMap<>())).result().get());
 			}),
@@ -353,7 +353,7 @@ public class PackGenerator {
 			try {
 				Files.writeString(
 						filepath.resolve(idString+".json"), 
-						gson.toJson(PlayerData.CODEC.encodeStart(JsonOps.INSTANCE, new PlayerData()).result().get()),
+						gson.toJson(PlayerData.CODEC.codec().encodeStart(JsonOps.INSTANCE, new PlayerData()).result().get()),
 						Charset.defaultCharset(),
 						StandardOpenOption.CREATE_NEW,
 						StandardOpenOption.WRITE);

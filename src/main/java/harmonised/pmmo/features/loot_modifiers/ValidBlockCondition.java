@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.loot_modifiers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -49,7 +50,7 @@ public class ValidBlockCondition implements LootItemCondition{
 		return GLMRegistry.VALID_BLOCK.get();
 	}
 
-	public static final Codec<ValidBlockCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<ValidBlockCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.STRING.optionalFieldOf("tag")
 					.xmap(s -> s.map(v -> TagKey.create(Registries.BLOCK, new ResourceLocation(v))), t -> t.map(k -> k.location().toString()))
 					.forGetter(c -> c.tag),

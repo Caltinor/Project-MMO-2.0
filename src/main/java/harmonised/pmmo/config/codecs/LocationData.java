@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.codecs;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -70,11 +71,11 @@ public record LocationData(
 	@Override
 	public Set<String> getTagValues() {return tagValues();}
 	
-	public static final Codec<LocationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<LocationData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(ld -> Optional.of(ld.override())),
 			Codec.list(Codec.STRING).optionalFieldOf("isTagFor").forGetter(ld -> Optional.of(new ArrayList<>(ld.tagValues()))),
 			Codec.optionalField("bonus", 
-				Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).codec())
+				Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).codec(), false)
 				.forGetter(ld -> Optional.of(ld.bonusMap())),
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("positive_effect").forGetter(ld -> Optional.of(ld.positive())),
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("negative_effect").forGetter(ld -> Optional.of(ld.negative())),

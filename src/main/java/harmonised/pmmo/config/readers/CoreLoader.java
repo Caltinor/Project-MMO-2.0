@@ -23,6 +23,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +32,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class CoreLoader {
 	private static final Logger DATA_LOGGER = LogManager.getLogger();	
 	
@@ -115,8 +116,7 @@ public class CoreLoader {
 			"pmmo/effects", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, Registries.MOB_EFFECT);
 
 	private <T extends DataSource<T>> T mergeLoaderData(final List<T> raws) {
-		T out = raws.stream().reduce(DataSource::combine).get();
-		return out.isUnconfigured() ? null : out;
+		return raws.stream().filter(raw -> !raw.isUnconfigured()).reduce(DataSource::combine).orElse(null);
 	}
 	
 	private void printData(Map<ResourceLocation, ? extends Record> data) {

@@ -14,8 +14,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +45,7 @@ import java.util.Optional;
  * @author Caltinor
  *
  */
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class CheeseTracker {
 
 	public static void applyAntiCheese(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
@@ -63,10 +64,7 @@ public class CheeseTracker {
 	}
 	
 	@SubscribeEvent
-	public static void playerWatcher(TickEvent.ServerTickEvent event) {
-		if (event.phase == TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
-			return;
-		
+	public static void playerWatcher(ServerTickEvent.Pre event) {
 		AFK_DATA.forEach((player, map) -> map.forEach((type, tracker) -> {
 			if (player != null && !tracker.meetsAFKCriteria(player))
 				tracker.cooldown();

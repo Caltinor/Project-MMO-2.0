@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.loot_modifiers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.core.Core;
 import net.minecraft.world.entity.Entity;
@@ -44,7 +45,7 @@ public class SkillLootConditionHighestSkill implements LootItemCondition{
 		return GLMRegistry.HIGHEST_SKILL.get();
 	}
 
-	public static final Codec<SkillLootConditionHighestSkill> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<SkillLootConditionHighestSkill> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.STRING.fieldOf("target_skill").forGetter(SkillLootConditionHighestSkill::getTargetSkill),
 			Codec.list(Codec.STRING).fieldOf("comparable_skills").forGetter(SkillLootConditionHighestSkill::getComparables)
 	).apply(instance, SkillLootConditionHighestSkill::new));

@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.codecs;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.Functions;
 
@@ -17,7 +18,7 @@ public record EnhancementsData(
 	
 	public EnhancementsData() {this(false, new HashMap<>());}
 	
-	public static final Codec<EnhancementsData> CODEC = RecordCodecBuilder.create(instance -> instance.group( 
+	public static final MapCodec<EnhancementsData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(cme -> Optional.of(cme.override())),
 			CodecTypes.INTEGER_CODEC.listOf().xmap(list -> {
 				Map<Integer, Map<String, Integer>> dataOut = new HashMap<>();

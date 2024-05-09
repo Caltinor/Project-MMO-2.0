@@ -32,7 +32,7 @@ public class FoodEatHandler {
 		}
 	}
 	public static void handle(LivingEntityUseItemEvent.Finish event) {
-		if (event.getEntity() instanceof Player player && (event.getItem().isEdible() || event.getItem().getItem() instanceof PotionItem)) {
+		if (event.getEntity() instanceof Player player && (event.getItem().getFoodProperties(player) != null  || event.getItem().getItem() instanceof PotionItem)) {
 			internalHandle(event, player, event.getItem());
 		}
 	}

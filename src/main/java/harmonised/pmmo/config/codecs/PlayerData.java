@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.codecs;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.util.Functions;
@@ -29,7 +30,7 @@ public record PlayerData(
 		bonuses().putAll(bonuses);
 	}
 	
-	public static final Codec<PlayerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<PlayerData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("override").forGetter(pd -> Optional.of(pd.override())),
 			Codec.BOOL.optionalFieldOf("ignoreReq").forGetter(pd -> Optional.of(pd.ignoreReq())),
 			CodecTypes.DOUBLE_CODEC.optionalFieldOf("bonuses").forGetter(pd -> Optional.of(pd.bonuses()))

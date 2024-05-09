@@ -5,6 +5,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.AttributeKey;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -79,7 +80,7 @@ public class AutoEntity {
 	
 	//========================UTILITY METHODS=============================
 	@SuppressWarnings("unchecked")
-	private static double getAttribute(EntityType<? extends LivingEntity> entity, Attribute attribute) {
+	private static double getAttribute(EntityType<? extends LivingEntity> entity, Holder<Attribute> attribute) {
 		if (!DefaultAttributes.hasSupplier(entity)) return 0d;
 		AttributeSupplier attSup = DefaultAttributes.getSupplier(entity);
 		if (attSup == null) return 0d;

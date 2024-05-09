@@ -16,6 +16,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
@@ -27,22 +28,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TutorialOverlayGUI implements IGuiOverlay {
+public class TutorialOverlayGUI implements LayeredDraw.Layer {
 	private Minecraft mc;
 	private Font fontRenderer;
 	private List<ClientTooltipComponent> lines = new ArrayList<>();
 	private BlockHitResult bhr;
 
 	@Override
-	public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+	public void render(GuiGraphics guiGraphics, float partialTick) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (!(mc.hitResult instanceof BlockHitResult))
@@ -51,9 +50,9 @@ public class TutorialOverlayGUI implements IGuiOverlay {
 			bhr = (BlockHitResult) mc.hitResult;
 		if (fontRenderer == null)
 			fontRenderer = mc.font;
-		int renderLeft = (screenWidth / 8) * 5;
-		int renderTop = (screenHeight / 4);
-		int tooltipWidth = 3 * (screenWidth / 8);
+		int renderLeft = (guiGraphics.guiWidth() / 8) * 5;
+		int renderTop = (guiGraphics.guiHeight() / 4);
+		int tooltipWidth = 3 * (guiGraphics.guiWidth() / 8);
 
 		if (!mc.getDebugOverlay().showDebugScreen()) {
 			// IDENTIFY LINES

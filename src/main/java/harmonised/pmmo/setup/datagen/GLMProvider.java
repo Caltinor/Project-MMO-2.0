@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import cpw.mods.modlauncher.api.LamdbaExceptionUtils;
 import harmonised.pmmo.features.loot_modifiers.RareDropModifier;
 import harmonised.pmmo.features.loot_modifiers.SkillLootConditionKill;
 import harmonised.pmmo.features.loot_modifiers.SkillLootConditionPlayer;
@@ -14,6 +13,7 @@ import harmonised.pmmo.features.loot_modifiers.TreasureLootModifier;
 import harmonised.pmmo.features.loot_modifiers.ValidBlockCondition;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -45,13 +45,14 @@ public abstract class GLMProvider implements DataProvider {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private final PackOutput output;
 	private final String modid = Reference.MOD_ID;
-	private final Map<String, JsonElement> toSerialize = new HashMap<>();
-	private boolean replace = false;
-	private Path destination;
+	private final Map<String, WithConditions<IGlobalLootModifier>> toSerialize = new HashMap<>();
+	private final Path destination;
+	CompletableFuture<HolderLookup.Provider> registries;
 
-	public GLMProvider(PackOutput gen, Path destination) {
+	public GLMProvider(PackOutput gen, Path destination, CompletableFuture<HolderLookup.Provider> registries) {
 		this.output = gen;
 		this.destination = destination;
+		this.registries = registries;
 	}
 
 
@@ -96,7 +97,7 @@ public abstract class GLMProvider implements DataProvider {
 	public RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel, int maxLevel) {
 		return new RareDropModifier(
 				new LootItemCondition[] {
-						LootTableIdCondition.builder(BuiltInLootTables.FISHING).build(),
+						LootTableIdCondition.builder(BuiltInLootTables.FISHING.location()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
 				}, RegistryUtil.getId(drop), count, chance);
 	}
@@ -109,7 +110,7 @@ public abstract class GLMProvider implements DataProvider {
 		return new RareDropModifier(
 				new LootItemCondition[] {
 						LootItemKilledByPlayerCondition.killedByPlayer().build(),
-						LootTableIdCondition.builder(mob.getDefaultLootTable()).build(),
+						LootTableIdCondition.builder(mob.getDefaultLootTable().location()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
 				}, RegistryUtil.getId(drop), count, chance);
 	}
@@ -119,7 +120,10 @@ public abstract class GLMProvider implements DataProvider {
 	}
 
 	@Override
-	public CompletableFuture<?> run(CachedOutput cache) {
+	public final CompletableFuture<?> run(CachedOutput cache) {
+		return this.registries.thenCompose(registries -> this.run(cache, registries));
+	}
+	public CompletableFuture<?> run(CachedOutput cache, HolderLookup.Provider registries) {
 		start();
 
 		Path forgePath = output.getOutputFolder().resolve(destination).resolve("loot_modifiers").resolve("global_loot_modifiers.json");
@@ -128,14 +132,16 @@ public abstract class GLMProvider implements DataProvider {
 
 		ImmutableList.Builder<CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
 
-		toSerialize.forEach(LamdbaExceptionUtils.rethrowBiConsumer((name, json) -> {
+		for (var entry : toSerialize.entrySet()) {
+			var name = entry.getKey();
+			var lootModifier = entry.getValue();
 			entries.add(new ResourceLocation(modid, name));
 			Path modifierPath = modifierFolderPath.resolve(name + ".json");
-			futuresBuilder.add(DataProvider.saveStable(cache, json, modifierPath));
-		}));
+			futuresBuilder.add(DataProvider.saveStable(cache, registries, IGlobalLootModifier.CONDITIONAL_CODEC, Optional.of(lootModifier), modifierPath));
+		}
 
 		JsonObject forgeJson = new JsonObject();
-		forgeJson.addProperty("replace", this.replace);
+		forgeJson.addProperty("replace", false);
 		forgeJson.add("entries", GSON.toJsonTree(entries.stream().map(ResourceLocation::toString).collect(Collectors.toList())));
 
 		futuresBuilder.add(DataProvider.saveStable(cache, forgeJson, forgePath));
@@ -151,8 +157,7 @@ public abstract class GLMProvider implements DataProvider {
 	 * @param conditions a list of conditions to add to the GLM file
 	 */
 	public <T extends IGlobalLootModifier> void add(String modifier, T instance, List<ICondition> conditions) {
-		JsonElement json = IGlobalLootModifier.CONDITIONAL_CODEC.encodeStart(JsonOps.INSTANCE, Optional.of(new WithConditions<>(conditions, instance))).getOrThrow(false, s -> {});
-		this.toSerialize.put(modifier, json);
+		this.toSerialize.put(modifier, new WithConditions<>(conditions, instance));
 	}
 
 	/**

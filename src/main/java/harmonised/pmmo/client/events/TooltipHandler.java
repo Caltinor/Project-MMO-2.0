@@ -28,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
@@ -36,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value= Dist.CLIENT)
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value= Dist.CLIENT)
 public class TooltipHandler {
 	public static boolean tooltipOn = true;
 
@@ -62,7 +63,7 @@ public class TooltipHandler {
             }
 			Arrays.stream(isBlockItem ? ReqType.BLOCKITEM_APPLICABLE_EVENTS : ReqType.ITEM_APPLICABLE_EVENTS)
 					.filter(type -> Config.tooltipReqEnabled(type).get())
-					.map(type -> Pair.of(type, getReqData(core, type, stack)))
+					.map(type -> Pair.of(type, getReqData(core, type, stack, player)))
 					.filter(pair -> !pair.getSecond().isEmpty())
 					.forEach(pair -> addRequirementTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond(), core));
 			Arrays.stream(isBlockItem ? EventType.BLOCKITEM_APPLICABLE_EVENTS : EventType.ITEM_APPLICABLE_EVENTS)
@@ -72,7 +73,7 @@ public class TooltipHandler {
 					.forEach(pair -> addXpValueTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond(), core));
 			Stream.of(ModifierDataType.HELD, ModifierDataType.WORN)
 					.filter(type -> Config.tooltipBonusEnabled(type).get())
-					.map(type -> Pair.of(type, core.getObjectModifierMap(ObjectType.ITEM, itemID, type, TagUtils.stackTag(stack))))
+					.map(type -> Pair.of(type, core.getObjectModifierMap(ObjectType.ITEM, itemID, type, TagUtils.stackTag(stack, player.level()))))
 					.filter(pair -> !pair.getSecond().isEmpty())
 					.forEach(pair -> addModifierTooltip(pair.getFirst().tooltip, event, pair.getSecond(), core));
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
@@ -122,12 +123,12 @@ public class TooltipHandler {
 	private static Map<String, Long> getXpData(Core core, EventType type, Player player, ItemStack stack) {
 		Map<String, Long> map = core.getExperienceAwards(type, stack, player, new CompoundTag());
 		if (stack.getItem() instanceof BlockItem) 
-			map = core.getCommonXpAwardData(new HashMap<>(), type, RegistryUtil.getId(stack), player, ObjectType.BLOCK, TagUtils.stackTag(stack));
+			map = core.getCommonXpAwardData(new HashMap<>(), type, RegistryUtil.getId(stack), player, ObjectType.BLOCK, TagUtils.stackTag(stack, player.level()));
 		CoreUtils.processSkillGroupXP(map);
 		return map;
 	}
 	
-	private static Map<String, Integer> getReqData(Core core, ReqType type, ItemStack stack) {		
+	private static Map<String, Integer> getReqData(Core core, ReqType type, ItemStack stack, Player player) {
 		//if Reqs are not enabled, ignore the getters and return an empty map
 		//This will cause the map to be empty and result in no header being added.
 		if (!Config.server().requirements().isEnabled(type)) return new HashMap<>();
@@ -135,10 +136,10 @@ public class TooltipHandler {
 		//Gather req data and populate a map for return
 		Map<String, Integer> map = type == ReqType.USE_ENCHANTMENT 
 				? core.getEnchantReqs(stack)
-				: core.getReqMap(type, stack, true);
+				: core.getReqMap(type, stack, player.level(), true);
 		
 		if (stack.getItem() instanceof BlockItem)
-			map.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), type, TagUtils.stackTag(stack)));
+			map.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), type, TagUtils.stackTag(stack, player.level())));
 		
 		//splits skill groups that aren't using total levels
 		CoreUtils.processSkillGroupReqs(map);

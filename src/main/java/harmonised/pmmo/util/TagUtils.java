@@ -10,6 +10,7 @@ import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.ShortTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -59,16 +60,16 @@ public class TagUtils {
 		}
 		return output;
 	}
-	
+
 	/**safely obtain the NBT tag or get a new instance
-	 * 
+	 *
 	 * @param stack the item whose NBT is being obtained
 	 * @return an associated tag or new instance
 	 */
-	public static CompoundTag stackTag(ItemStack stack) {
-		return stack == null || stack.getTag() == null 
-				? new CompoundTag() 
-				: stack.getTag();
+	public static CompoundTag stackTag(ItemStack stack, Level level) {
+		return stack.isEmpty()
+				? new CompoundTag()
+				: (CompoundTag) stack.save(level.registryAccess());
 	}
 	 /**safely obtain the NBT tag or get a new instance
 	  * 
@@ -86,7 +87,7 @@ public class TagUtils {
 	 * @return an associated tag or new instance
 	 */
 	public static CompoundTag tileTag(BlockEntity tile) {
-		return tile == null	? new CompoundTag()	: tile.saveWithFullMetadata();
+		return tile == null	? new CompoundTag()	: tile.saveWithFullMetadata(tile.getLevel().registryAccess());
 	}
 	
 	public static CompoundTag stateTag(BlockState state) {

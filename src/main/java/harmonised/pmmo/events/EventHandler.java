@@ -40,13 +40,13 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.StatAwardEvent;
-import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.brewing.PlayerBrewedPotionEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
@@ -68,6 +68,8 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.PistonEvent;
 import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 /**This class manages the dictation of logic to methods
  * designed to handle the method on the server or the 
@@ -77,7 +79,7 @@ import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
  * @author Caltinor
  *
  */
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus= Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class EventHandler {
 	//==========================================================
 	//                 CORE MOD EVENTS
@@ -89,15 +91,15 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
-			AttributeInstance reachAttribute = event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.value());
-			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.server().general().creativeReach())
+			AttributeInstance reachAttribute = event.getEntity().getAttribute(Attributes.BLOCK_INTERACTION_RANGE);
+			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).amount() != Config.server().general().creativeReach())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
-				reachAttribute.addPermanentModifier(new AttributeModifier(Reference.CREATIVE_REACH_ATTRIBUTE, "PMMO Creative Reach Bonus", Config.server().general().creativeReach(), AttributeModifier.Operation.ADDITION));
+				reachAttribute.addPermanentModifier(new AttributeModifier(Reference.CREATIVE_REACH_ATTRIBUTE, "PMMO Creative Reach Bonus", Config.server().general().creativeReach(), AttributeModifier.Operation.ADD_VALUE));
 			}
 		}
 		else {
-			event.getEntity().getAttribute(NeoForgeMod.BLOCK_REACH.value()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
+			event.getEntity().getAttribute(Attributes.BLOCK_INTERACTION_RANGE).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
 	}
 	@SubscribeEvent
@@ -117,8 +119,8 @@ public class EventHandler {
 		PistonHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.HIGH)
-	public static void tickPerks(TickEvent.LevelTickEvent event) {
-		Core.get(event.level).getPerkRegistry().executePerkTicks(event);
+	public static void tickPerks(LevelTickEvent.Pre event) {
+		Core.get(event.getLevel()).getPerkRegistry().executePerkTicks(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
@@ -245,7 +247,7 @@ public class EventHandler {
 		PlayerClickHandler.rightClickItem(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+	public static void onPlayerTick(PlayerTickEvent.Post event) {
 		PlayerTickHandler.handle(event);
 	}
 	@SubscribeEvent

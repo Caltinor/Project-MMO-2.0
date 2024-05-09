@@ -10,6 +10,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -76,8 +77,8 @@ public class AutoItem {
 		}
 		case USE_ENCHANTMENT: {
 			double scale = 0;
-			for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()){
-				scale += entry.getValue() / entry.getKey().getMaxLevel();
+			for (var entry : stack.getEnchantments().entrySet()){
+				scale += (double) entry.getIntValue() / entry.getKey().value().getMaxLevel();
 			}
 			for (Map.Entry<String, Long> entry : Config.autovalue().reqs().req(type).entrySet()) {
 				outMap.put(entry.getKey(), (int)((double)entry.getValue() * scale));
@@ -169,11 +170,9 @@ public class AutoItem {
 			break;
 		}
 		case CONSUME: {
-			if (stack.isEdible()) {
+			if (stack.getFoodProperties(null) instanceof  FoodProperties properties) {
 				Config.autovalue().xpAwards().item(type).forEach((skill, xp) -> {
-					@SuppressWarnings("deprecation")
-					FoodProperties properties = stack.getItem().getFoodProperties();
-					Float nutritionScale = (float)properties.getNutrition() * properties.getSaturationModifier();
+					Float nutritionScale = (float)properties.nutrition() * properties.saturation();
 					Float xpAward = nutritionScale * (float) xp;
 					outMap.put(skill, xpAward.longValue());
 				});
@@ -249,12 +248,13 @@ public class AutoItem {
 	}
 
 	//=========================UTILITY METHODS==============================================
- 	private static double getAttributeAmount(ItemStack stack, EquipmentSlot slot, Attribute attribute) {
-		return stack.getAttributeModifiers(slot).get(attribute).stream().collect(Collectors.summingDouble(a -> a.getAmount()));
+ 	private static double getAttributeAmount(ItemStack stack, EquipmentSlot slot, Holder<Attribute> attribute) {
+		return stack.getItem().getAttributeModifiers(stack).modifiers().stream()
+				.filter(entry -> entry.attribute().is(attribute))
+				.mapToDouble(a -> a.modifier().amount()).sum();
 	}
-	@SuppressWarnings("deprecation")
 	private static double getTier(TieredItem item) {
-		return (double)item.getTier().getLevel();
+		return item.getTier().getAttackDamageBonus();
 	}
 	private static double getDamage(ItemStack stack) {
 		return (getAttributeAmount(stack, EquipmentSlot.MAINHAND, Attributes.ATTACK_DAMAGE) + EnchantmentHelper.getDamageBonus(stack, null) - BASE_DAMAGE);
@@ -283,10 +283,10 @@ public class AutoItem {
 		//Universally Used Attributes
 		double durabilityScale = (double)stack.getMaxDamage() * Config.autovalue().tweaks().wearable(type, AttributeKey.DUR);
 		//Armor Specific
-		ArmorMaterial material = isArmor ? ((ArmorItem)stack.getItem()).getMaterial() : null;
-		double armorScale = isArmor ? material.getDefenseForType(((ArmorItem)stack.getItem()).getType()) * Config.autovalue().tweaks().wearable(type, AttributeKey.AMR) : 0d;
-		double toughnessScale = isArmor? material.getToughness() * Config.autovalue().tweaks().wearable(type, AttributeKey.TUF) : 0d;
-		double knockbackScale = isArmor? material.getKnockbackResistance() * Config.autovalue().tweaks().wearable(type, AttributeKey.KBR) : 0d;
+		ArmorMaterial material = isArmor ? ((ArmorItem)stack.getItem()).getMaterial().value() : null;
+		double armorScale = isArmor ? material.getDefense(((ArmorItem)stack.getItem()).getType()) * Config.autovalue().tweaks().wearable(type, AttributeKey.AMR) : 0d;
+		double toughnessScale = isArmor? material.toughness() * Config.autovalue().tweaks().wearable(type, AttributeKey.TUF) : 0d;
+		double knockbackScale = isArmor? material.knockbackResistance() * Config.autovalue().tweaks().wearable(type, AttributeKey.KBR) : 0d;
 		//return and log output
 		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Attributes: DUR="+durabilityScale+" ARM="+armorScale+" TUF="+toughnessScale+" KBR="+knockbackScale);
 		return durabilityScale + armorScale + toughnessScale + knockbackScale;

@@ -1,6 +1,7 @@
 package harmonised.pmmo.config;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.SkillData;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<SkillsConfig> {
 	public SkillsConfig() {this(generateDefaults());}
-	public static final Codec<SkillsConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<SkillsConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.unboundedMap(Codec.STRING, SkillData.CODEC).fieldOf("skills").forGetter(SkillsConfig::skills)
 	).apply(instance, SkillsConfig::new));
 	public SkillData get(String skill) {return skills().getOrDefault(skill, SkillData.Builder.getDefault());}
@@ -50,7 +51,7 @@ public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<
 	}
 
 	@Override
-	public Codec<SkillsConfig> getCodec() {return CODEC;}
+	public MapCodec<SkillsConfig> getCodec() {return CODEC;}
 
 	@Override
 	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.SKILLS;}

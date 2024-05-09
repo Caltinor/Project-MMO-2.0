@@ -10,6 +10,7 @@ import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -35,6 +36,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -46,15 +48,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
 	
-	private static final Map<String, Attribute> attributeCache = new HashMap<>();
+	private static final Map<String, Holder.Reference<Attribute>> attributeCache = new HashMap<>();
 	
-	private static Attribute getAttribute(CompoundTag nbt) {
+	private static Holder.Reference<Attribute> getAttribute(CompoundTag nbt) {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
-				name -> BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(name)));
+				name -> BuiltInRegistries.ATTRIBUTE.getHolder(new ResourceLocation(name)).get());
 	}
 	
 	public static final Perk ATTRIBUTE = Perk.begin()
@@ -69,7 +71,7 @@ public class FeaturePerks {
 				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
 				if (instance == null) return NONE;
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
-				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.MULTIPLY_BASE :  Operation.ADDITION;
+				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 				
 				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
 				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, operation);
@@ -83,23 +85,23 @@ public class FeaturePerks {
 				String skillname = settings.getString(APIUtils.SKILLNAME);
 				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
 				return List.of(
-				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
+				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).value().getDescriptionId())),
 				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
 				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
 			}).build();
 
 	private static final LinkedListMultimap<Player, AttributeRecord> respawnAttributes = LinkedListMultimap.create();
-	private static record AttributeRecord(Attribute attribute, AttributeModifier modifier) {}
+	private static record AttributeRecord(Holder<Attribute> attribute, AttributeModifier modifier) {}
 	@SubscribeEvent
 	public static void saveAttributesOnDeath(LivingDeathEvent event) {
 		if (event.getEntity() instanceof Player player) {
 			for (CompoundTag nbt : Config.perks().perks().get(EventType.SKILL_UP).stream()
 					.filter(tag -> tag.getString("perk").equals("pmmo:attribute")).toList()) {
-				Attribute attribute = getAttribute(nbt);
+				Holder<Attribute> attribute = getAttribute(nbt);
 				AttributeInstance instance = player.getAttributes().getInstance(attribute);
 				if (instance != null)
 						instance.getModifiers().stream()
-						.filter(mod -> mod.getId().equals(Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME))))
+						.filter(mod -> mod.id().equals(Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME))))
 						.forEach(mod -> respawnAttributes.put(player, new AttributeRecord(attribute, mod)));
 			}
 
@@ -129,7 +131,7 @@ public class FeaturePerks {
 				double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
 				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
-				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.MULTIPLY_BASE :  Operation.ADDITION;
+				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 
 				UUID attributeID = Functions.getReliableUUID("temp/"+nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
 				AttributeModifier modifier = new AttributeModifier(attributeID, "temporary PMMO-modifier based on user skill", boost, operation);
@@ -147,8 +149,8 @@ public class FeaturePerks {
 			.setStatus(ATTRIBUTE.status()).build();
 	
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
-		MobEffect effect;
-		if ((effect = BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(nbt.getString("effect")))) != null) {
+		Holder<MobEffect> effect;
+		if ((effect = BuiltInRegistries.MOB_EFFECT.getHolder(new ResourceLocation(nbt.getString("effect"))).get()) != null) {
 			int skillLevel = nbt.getInt(APIUtils.SKILL_LEVEL);
 			int configDuration = nbt.getInt(APIUtils.DURATION);
 			double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);

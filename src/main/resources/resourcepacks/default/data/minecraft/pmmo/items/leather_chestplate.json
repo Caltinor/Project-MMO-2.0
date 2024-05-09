@@ -1,9 +1,11 @@
 {
     "requirements": {
-        "mining": 0,
-        "excavation": 0,
-        "farming": 0,
-        "woodcutting": 0
+		"WEAR": {
+			"mining": 0,
+			"excavation": 0,
+			"farming": 0,
+			"woodcutting": 0
+		}
     },
     "nbt_bonuses": {
         "WORN": [

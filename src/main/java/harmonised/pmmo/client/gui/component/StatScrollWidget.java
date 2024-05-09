@@ -33,6 +33,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -236,7 +237,7 @@ public class StatScrollWidget extends ScrollPanel {
 				break;}
 			case EFFECTS: {
 				populateEffects(
-						BuiltInRegistries.MOB_EFFECT.stream().toList(),
+						BuiltInRegistries.MOB_EFFECT.holders().collect(Collectors.toSet()),
 						new EventType[] {EventType.EFFECT},
 						reqs, skill);
 				break;}
@@ -325,26 +326,26 @@ public class StatScrollWidget extends ScrollPanel {
 		for (ItemStack stack : items) {
 			int lengthBeforeProcessing = content.size() + 1;
 			if (items.size() > 1) 
-				content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color.getColor(), Config.SECTION_HEADER_COLOR.get(), stack));
+				content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color().getColor(), Config.SECTION_HEADER_COLOR.get(), stack));
 			addEventSection((event -> {
 				Map<String, Long> map = core.getExperienceAwards(event, stack, mc.player, new CompoundTag());
 				if (stack.getItem() instanceof BlockItem)
-					map = core.getCommonXpAwardData(new HashMap<>(), event, RegistryUtil.getId(stack), mc.player, ObjectType.BLOCK, TagUtils.stackTag(stack));
+					map = core.getCommonXpAwardData(new HashMap<>(), event, RegistryUtil.getId(stack), mc.player, ObjectType.BLOCK, TagUtils.stackTag(stack, mc.level));
 				return map;
 				}), events, skillFilter);
 			addReqSection((reqType -> {
-				Map<String, Integer> reqMap = core.getReqMap(reqType, stack, true);
+				Map<String, Integer> reqMap = core.getReqMap(reqType, stack, mc.level, true);
 				if (reqType == ReqType.USE_ENCHANTMENT)
 					core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
 				if (stack.getItem() instanceof BlockItem)
-					reqMap.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), reqType, TagUtils.stackTag(stack)));
+					reqMap.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), reqType, TagUtils.stackTag(stack, mc.level)));
 				return reqMap;
 				}),	
 				CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect(), true), 
 				reqs, skillFilter);
 			addModifierSection((mod -> core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(stack), mod) ?
 						core.getTooltipRegistry().getBonusTooltipData(RegistryUtil.getId(stack), mod, stack) :
-						core.getObjectModifierMap(ObjectType.ITEM, RegistryUtil.getId(stack), mod, TagUtils.stackTag(stack))
+						core.getObjectModifierMap(ObjectType.ITEM, RegistryUtil.getId(stack), mod, TagUtils.stackTag(stack, mc.level))
 				), modifiers, skillFilter);
 			if (includeSalvage)
 				addSalvageSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).salvage());
@@ -369,7 +370,7 @@ public class StatScrollWidget extends ScrollPanel {
 			int lengthBeforeProcessing = content.size() + 1;
 			ItemStack stack = new ItemStack(block.asItem());
 			ResourceLocation id = RegistryUtil.getId(block);
-			content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color.getColor(), Config.SECTION_HEADER_COLOR.get(), block));
+			content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color().getColor(), Config.SECTION_HEADER_COLOR.get(), block));
 			addEventSection((event -> core.getTooltipRegistry().xpGainTooltipExists(id, event)
 					? Collections.singletonMap(PREDICATE_KEY, 0l)
 					: core.getObjectExperienceMap(ObjectType.BLOCK, id, event, new CompoundTag()))
@@ -400,11 +401,11 @@ public class StatScrollWidget extends ScrollPanel {
 		}
 	}
 	
-	private void populateEffects(Collection<MobEffect> effects, EventType[] events, ReqType[] reqs, String skillFilter) {
-		for (MobEffect effect : effects) {
+	private void populateEffects(Collection<Holder<MobEffect>> effects, EventType[] events, ReqType[] reqs, String skillFilter) {
+		for (Holder<MobEffect> effect : effects) {
 			int lengthBeforeProcessing = content.size() + 1;
 			if (effects.size() > 1)
-				content.addAll(TextElement.build(effect.getDisplayName(), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.addAll(TextElement.build(effect.value().getDisplayName(), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
 			for (int lvl = 0; lvl <= getEffectHighestConfiguration(effect); lvl++) {
 				Map<String, Long> xpMap = core.getExperienceAwards(new MobEffectInstance(effect, 30, lvl), null, new CompoundTag());
@@ -425,8 +426,8 @@ public class StatScrollWidget extends ScrollPanel {
 		}
 	}
 	
-	private int getEffectHighestConfiguration(MobEffect effect) {
-		DataSource<?> data = core.getLoader().getLoader(ObjectType.EFFECT).getData().get(RegistryUtil.getId(effect));
+	private int getEffectHighestConfiguration(Holder<MobEffect> effect) {
+		DataSource<?> data = core.getLoader().getLoader(ObjectType.EFFECT).getData().get(effect.unwrapKey().get().location());
 		return data == null ? 0 : ((EnhancementsData)data).skillArray().keySet().stream().max(Comparator.naturalOrder()).orElse(-1);
 	}
 	
@@ -551,7 +552,7 @@ public class StatScrollWidget extends ScrollPanel {
 		if (reqEffects.size() > 0) {
 			content.addAll(TextElement.build(isNegative ? LangProvider.REQ_EFFECTS_HEADER.asComponent() : LangProvider.BIOME_EFFECT_POS.asComponent(), this.width, 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 			for (MobEffectInstance mei : reqEffects) {
-				content.addAll(TextElement.build(mei.getEffect().getDisplayName(), this.width, step(1), 0xFFFFFF, false, 0));
+				content.addAll(TextElement.build(mei.getEffect().value().getDisplayName(), this.width, step(1), 0xFFFFFF, false, 0));
 			}
 		}
 	}

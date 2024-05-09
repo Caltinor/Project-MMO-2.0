@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.codecs;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -26,7 +27,7 @@ public record ServerData(
     public ServerData() {this(new General(), new Levels(), new Requirements(), new XpGains(), new Party(),
             new MobScaling(), new VeinMiner());}
 
-    public static final Codec<ServerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ServerData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             General.CODEC.fieldOf("general").forGetter(ServerData::general),
             Levels.CODEC.fieldOf("levels").forGetter(ServerData::levels),
             Requirements.CODEC.fieldOf("requirements").forGetter(ServerData::requirements),
@@ -37,7 +38,7 @@ public record ServerData(
     ).apply(instance, ServerData::new));
 
     @Override
-    public Codec<ServerData> getCodec() {return CODEC;}
+    public MapCodec<ServerData> getCodec() {return CODEC;}
 
     @Override
     public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.SERVER;}

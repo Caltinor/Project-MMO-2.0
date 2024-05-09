@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.autovalues;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -40,7 +41,7 @@ public record AutoValueConfig(
 			new Requirements(),
 			new Tweaks()
 	);}
-	public static final Codec<AutoValueConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<AutoValueConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.BOOL.fieldOf("enabled").forGetter(AutoValueConfig::enabled),
 			Codec.simpleMap(ReqType.CODEC, Codec.BOOL, StringRepresentable.keys(ReqType.values()))
 					.fieldOf("enabled_requirements").forGetter(AutoValueConfig::reqEnabled),
@@ -51,7 +52,7 @@ public record AutoValueConfig(
 			Tweaks.CODEC.fieldOf("tweaks").forGetter(AutoValueConfig::tweaks)
 	).apply(instance, AutoValueConfig::new));
 	@Override
-	public Codec<AutoValueConfig> getCodec() {
+	public MapCodec<AutoValueConfig> getCodec() {
 		return null;
 	}
 	@Override

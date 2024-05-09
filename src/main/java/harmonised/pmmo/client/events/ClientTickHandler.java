@@ -9,13 +9,14 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value= Dist.CLIENT)
+
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value= Dist.CLIENT)
 public class ClientTickHandler {
 	private static int ticksElapsed = 0;
 	
@@ -26,7 +27,7 @@ public class ClientTickHandler {
 	public static final List<GainEntry> xpGains = new ArrayList<>();
 	
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event) {
+	public static void onClientTick(ClientTickEvent.Pre event) {
 		ticksElapsed++;
 		tickDownGainList();
 	}

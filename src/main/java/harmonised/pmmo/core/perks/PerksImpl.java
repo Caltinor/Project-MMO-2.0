@@ -5,6 +5,7 @@ import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -78,7 +79,7 @@ public class PerksImpl {
 	}
 	
 	private static final UUID ATTRIBUTE_ID = UUID.fromString("b902b6aa-8393-4bdc-8f0d-b937268ef5af");
-	private static final Map<Attribute, Double> ANIMAL_ATTRIBUTES = Map.of(
+	private static final Map<Holder<Attribute>, Double> ANIMAL_ATTRIBUTES = Map.of(
 			Attributes.JUMP_STRENGTH, 0.005, 
 			Attributes.MAX_HEALTH, 1.0,
 			Attributes.MOVEMENT_SPEED, 0.01,
@@ -99,11 +100,11 @@ public class PerksImpl {
 					if (animal == null) return NONE;
 					double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
 					
-					for (Map.Entry<Attribute, Double> atr : ANIMAL_ATTRIBUTES.entrySet()) {
+					for (Map.Entry<Holder<Attribute>, Double> atr : ANIMAL_ATTRIBUTES.entrySet()) {
 						AttributeInstance instance = animal.getAttribute(atr.getKey());
 						if (instance == null) continue;
 						double boost = Mth.clamp(perLevel * atr.getValue() * nbt.getInt(APIUtils.SKILL_LEVEL), 0, nbt.getDouble(APIUtils.MAX_BOOST));
-						AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "Taming boost", boost, Operation.ADDITION);
+						AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "Taming boost", boost, Operation.ADD_VALUE);
 						instance.addPermanentModifier(modifier);
 					}
 				}
@@ -113,9 +114,9 @@ public class PerksImpl {
 			.setStatus((player, settings) -> {
 				List<MutableComponent> lines = new ArrayList<>();
 				double perLevel = settings.getDouble(APIUtils.PER_LEVEL);
-				for (Map.Entry<Attribute, Double> atr : ANIMAL_ATTRIBUTES.entrySet()) {
+				for (Map.Entry<Holder<Attribute>, Double> atr : ANIMAL_ATTRIBUTES.entrySet()) {
 					lines.add(LangProvider.PERK_TAME_BOOST_STATUS_1.asComponent(
-							Component.translatable(atr.getKey().getDescriptionId()),
+							Component.translatable(atr.getKey().value().getDescriptionId()),
 							DP.dpCustom(perLevel * atr.getValue(), 4)));
 				}
 				return lines;

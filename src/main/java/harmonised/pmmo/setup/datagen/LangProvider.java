@@ -2013,9 +2013,9 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Generated pack will exclude unused properties.").build();
 	public static final Translation PACK_FILTER = Translation.Builder.start("pmmo.cmd.pack.filter")
 		.addLocale(Locale.EN_US, "Generated pack will only include files from this namespace").build();
-	public static final Translation PACK_OBJECTS = Translation.Builder.start("pmmo.cmd.pack.filter")
+	public static final Translation PACK_OBJECTS = Translation.Builder.start("pmmo.cmd.pack.objects")
 			.addLocale(Locale.EN_US, "Generated pack will no longer include files for configurable objects").build();
-	public static final Translation PACK_CONFIGS = Translation.Builder.start("pmmo.cmd.pack.filter")
+	public static final Translation PACK_CONFIGS = Translation.Builder.start("pmmo.cmd.pack.configs")
 			.addLocale(Locale.EN_US, "Generated pack will include server configuration files").build();
 	
 	//=========DENIAL MESSAGES====================

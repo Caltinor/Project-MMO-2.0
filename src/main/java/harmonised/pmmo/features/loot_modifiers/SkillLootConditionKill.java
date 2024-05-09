@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.loot_modifiers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.core.Core;
 import net.minecraft.world.entity.Entity;
@@ -40,7 +41,7 @@ public class SkillLootConditionKill implements LootItemCondition{
 		return GLMRegistry.SKILL_KILL.get();
 	}
 
-	public static final Codec<SkillLootConditionKill> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<SkillLootConditionKill> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.INT.fieldOf("level_min").forGetter(SkillLootConditionKill::getLevelMin),
 			Codec.INT.fieldOf("level_max").forGetter(SkillLootConditionKill::getLevelMax),
 			Codec.STRING.fieldOf("skill").forGetter(SkillLootConditionKill::getSkill)

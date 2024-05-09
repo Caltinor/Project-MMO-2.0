@@ -1,6 +1,7 @@
 package harmonised.pmmo.config;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
@@ -19,7 +20,7 @@ import java.util.Map;
 public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements ConfigData<PerksConfig> {
 	public PerksConfig() {this(PerksConfig.generateDefaults());}
 	
-	public static final Codec<PerksConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<PerksConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.unboundedMap(EventType.CODEC, CompoundTag.CODEC.listOf()).fieldOf("perks").forGetter(PerksConfig::perks)
 	).apply(instance, PerksConfig::new));
 
@@ -134,7 +135,7 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 
 
 	@Override
-	public Codec<PerksConfig> getCodec() {return CODEC;}
+	public MapCodec<PerksConfig> getCodec() {return CODEC;}
 
 	@Override
 	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.PERKS;}

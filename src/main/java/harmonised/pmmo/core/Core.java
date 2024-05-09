@@ -160,7 +160,7 @@ public class Core {
 	//======DATA OBTAINING METHODS======
 	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
 		ResourceLocation itemID = RegistryUtil.getId(stack);
-		dataIn.merge(TagUtils.stackTag(stack));
+		dataIn.merge(TagUtils.stackTag(stack, player.level()));
   
 		Map<String, Long> xpGains = tooltips.xpGainTooltipExists(itemID, type)
 			? tooltips.getItemXpGainTooltipData(itemID, type, stack)
@@ -169,7 +169,7 @@ public class Core {
 		return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, dataIn);
 	}
 	public Map<String, Long> getExperienceAwards(MobEffectInstance mei, Player player, CompoundTag dataIn) {
-		ResourceLocation effectID = RegistryUtil.getId(mei.getEffect());
+		ResourceLocation effectID = RegistryUtil.getId(mei.getEffect().value());
 		EnhancementsData data = (EnhancementsData) loader.getLoader(ObjectType.EFFECT).getData().get(effectID);
 		Map<String, Long> xpGains = new HashMap<>();
 		if (data != null) {
@@ -263,7 +263,7 @@ public class Core {
 			ResourceLocation itemID = RegistryUtil.getId(stack);
 			modifiers = tooltips.bonusTooltipExists(itemID, ModifierDataType.HELD) 
 					? tooltips.getBonusTooltipData(itemID, ModifierDataType.HELD, stack) 
-					: getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack));
+					: getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack, player.level()));
 			for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
 				mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 			}		
@@ -278,10 +278,7 @@ public class Core {
 			ResourceLocation itemID = RegistryUtil.getId(stack);
 			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?
 					tooltips.getBonusTooltipData(itemID, ModifierDataType.WORN, stack):
-					getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN
-							, stack.getTag() == null
-								? new CompoundTag()
-								: stack.getTag());
+					getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN, TagUtils.stackTag(stack ,player.level()));
 			for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
 				mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 			}
@@ -307,7 +304,7 @@ public class Core {
 		
 		return (predicates.predicateExists(itemID, type)) 
 			? predicates.checkPredicateReq(player, stack, type)
-			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, stack, false));
+			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, stack, player.level(), false));
 	}
 	public boolean isActionPermitted(ReqType type, BlockPos pos, Player player) {
 		if (player instanceof FakePlayer
@@ -370,20 +367,20 @@ public class Core {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
 		return new HashMap<>(data != null ? data.getReqs(reqType, nbt) : new HashMap<>()); 
 	}
-	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack, boolean ignoreEnchants) {
+	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack, Level level, boolean ignoreEnchants) {
 		ResourceLocation itemID = RegistryUtil.getId(stack);
 		Map<String, Integer> reqMap = ignoreEnchants ? new HashMap<>() : getEnchantReqs(stack);
 		if (tooltips.requirementTooltipExists(itemID, reqType)) 
 			tooltips.getItemRequirementTooltipData(itemID, reqType, stack).forEach((skill, lvl) -> {
 				reqMap.merge(skill, lvl, Integer::max);
 			});;
-		return getCommonReqData(reqMap, ObjectType.ITEM, itemID, reqType, TagUtils.stackTag(stack));
+		return getCommonReqData(reqMap, ObjectType.ITEM, itemID, reqType, TagUtils.stackTag(stack, level));
 	}
 	public Map<String, Integer> getEnchantReqs(ItemStack stack) {
 		Map<String, Integer> outMap = new HashMap<>();
 		if (!stack.isEnchanted() || !Config.server().requirements().isEnabled(ReqType.USE_ENCHANTMENT)) return outMap;
-		for (Map.Entry<Enchantment, Integer> enchant : EnchantmentHelper.getEnchantments(stack).entrySet()) {			
-			getEnchantmentReqs(RegistryUtil.getId(enchant.getKey()), enchant.getValue()-1).forEach((skill, level) -> {
+		for (var enchant : stack.getEnchantments().entrySet()) {
+			getEnchantmentReqs(enchant.getKey().value().builtInRegistryHolder().unwrapKey().get().location(), enchant.getValue()-1).forEach((skill, level) -> {
 				outMap.merge(skill, level, Integer::max);
 			});
 		}

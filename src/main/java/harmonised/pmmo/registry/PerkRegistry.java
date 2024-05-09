@@ -13,7 +13,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -94,9 +94,9 @@ public class PerkRegistry {
 	private final List<TickSchedule> tickTracker = new ArrayList<>();
 	private final List<PerkCooldown> coolTracker = new ArrayList<>();
 	
-	public void executePerkTicks(TickEvent.LevelTickEvent event) {
+	public void executePerkTicks(LevelTickEvent event) {
 		MsLoggy.DEBUG.log(LOG_CODE.PERKS, "Perk Tick Tracker:" +MsLoggy.listToString(tickTracker));
-		coolTracker.removeIf(tracker -> tracker.cooledDown(event.level));
+		coolTracker.removeIf(tracker -> tracker.cooledDown(event.getLevel()));
 		new ArrayList<>(tickTracker).forEach(schedule -> {
 			if (schedule.perk().canActivate(schedule.player(), schedule.src())) {
 				if (schedule.shouldTick())

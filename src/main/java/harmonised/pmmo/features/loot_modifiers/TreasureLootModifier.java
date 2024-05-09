@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.loot_modifiers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
@@ -27,7 +28,7 @@ import java.util.Optional;
 public class TreasureLootModifier extends LootModifier{
 
 	
-	public static final Codec<TreasureLootModifier> CODEC = RecordCodecBuilder.create(instance -> codecStart(instance).and(instance.group(
+	public static final MapCodec<TreasureLootModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(instance.group(
 			ResourceLocation.CODEC.fieldOf("item").forGetter(tlm -> RegistryUtil.getId(tlm.drop)),
 			Codec.INT.fieldOf("count").forGetter(tlm -> tlm.count),
 			Codec.DOUBLE.fieldOf("chance").forGetter(tlm -> tlm.chance),
@@ -58,7 +59,7 @@ public class TreasureLootModifier extends LootModifier{
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC;
 	}
 

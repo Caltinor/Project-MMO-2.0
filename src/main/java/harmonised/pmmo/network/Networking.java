@@ -19,34 +19,35 @@ import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class Networking {
 	@SubscribeEvent
-	public static void registerMessages(RegisterPayloadHandlerEvent event) {
-		final IPayloadRegistrar registrar = event.registrar(Reference.MOD_ID);
+	public static void registerMessages(RegisterPayloadHandlersEvent event) {
+		final PayloadRegistrar registrar = event.registrar(Reference.MOD_ID);
 
 		registrar
 		//CLIENT BOUND PACKETS
-		.play(CP_UpdateExperience.ID, CP_UpdateExperience::new, h -> h.client(CP_UpdateExperience::handle))
-		.play(CP_SyncData.ID, CP_SyncData::decode, h -> h.client(CP_SyncData::handle))
-		.play(CP_SyncData_ClearXp.ID, CP_SyncData_ClearXp::new, h -> h.client(CP_SyncData_ClearXp::handle))
-		.play(CP_ClearData.ID, CP_ClearData::new, h -> h.client(CP_ClearData::handle))
-		.play(CP_SetOtherExperience.ID, CP_SetOtherExperience::new, h -> h.client(CP_SetOtherExperience::handle))
-		.play(CP_ResetXP.ID, CP_ResetXP::new, h -> h.client(CP_ResetXP::handle))
-		.play(CP_SyncVein.ID, CP_SyncVein::new, h -> h.client(CP_SyncVein::handle))
-		.play(CP_SyncConfig.ID, CP_SyncConfig::decode, h -> h.client(CP_SyncConfig::handle))
+		.playToClient(CP_UpdateExperience.TYPE, CP_UpdateExperience.CODEC, CP_UpdateExperience::handle)
+		.playToClient(CP_SyncData.TYPE, CP_SyncData.STREAM_CODEC, CP_SyncData::handle)
+		.playToClient(CP_SyncData_ClearXp.TYPE, StreamCodec.unit(new CP_SyncData_ClearXp()), CP_SyncData_ClearXp::handle)
+		.playToClient(CP_ClearData.TYPE, StreamCodec.unit(new CP_ClearData()), CP_ClearData::handle)
+		.playToClient(CP_SetOtherExperience.TYPE, CP_SetOtherExperience.STREAM_CODEC, CP_SetOtherExperience::handle)
+		.playToClient(CP_ResetXP.TYPE, StreamCodec.unit(new CP_ResetXP()), CP_ResetXP::handle)
+		.playToClient(CP_SyncVein.TYPE, CP_SyncVein.STREAM_CODEC, CP_SyncVein::handle)
+		.playToClient(CP_SyncConfig.TYPE, CP_SyncConfig.STREAM_CODEC, CP_SyncConfig::handle)
 		//SERVER BOUND PACKETS
-		.play(SP_UpdateVeinTarget.ID, SP_UpdateVeinTarget::new, h -> h.server(SP_UpdateVeinTarget::handle))
-		.play(SP_OtherExpRequest.ID, SP_OtherExpRequest::new, h -> h.server(SP_OtherExpRequest::handle))
-		.play(SP_SetVeinLimit.ID, SP_SetVeinLimit::new, h -> h.server(SP_SetVeinLimit::handle))
-		.play(SP_SetVeinShape.ID, SP_SetVeinShape::new, h -> h.server(SP_SetVeinShape::handle));
+		.playToServer(SP_UpdateVeinTarget.TYPE, SP_UpdateVeinTarget.STREAM_CODEC, SP_UpdateVeinTarget::handle)
+		.playToServer(SP_OtherExpRequest.TYPE, SP_OtherExpRequest.STREAM_CODEC, SP_OtherExpRequest::handle)
+		.playToServer(SP_SetVeinLimit.TYPE, SP_SetVeinLimit.STREAM_CODEC, SP_SetVeinLimit::handle)
+		.playToServer(SP_SetVeinShape.TYPE, SP_SetVeinShape.STREAM_CODEC, SP_SetVeinShape::handle);
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}
 	
@@ -64,10 +65,10 @@ public class Networking {
 	}
 
 	public static void sendToClient(CustomPacketPayload packet, ServerPlayer player) {
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	public static void sendToServer(CustomPacketPayload packet) {
-		PacketDistributor.SERVER.with(null).send(packet);
+		PacketDistributor.sendToServer(packet);
 	}
 
 }

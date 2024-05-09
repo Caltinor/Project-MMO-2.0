@@ -143,7 +143,7 @@ public class PlayerStatsComponent extends AbstractWidget {
         
         public PlayerStatsScroller(Minecraft client, int width, int height, int top, int left) {
             super(client, width, height, top, left, 1, 6,
-                0x00FFFFFF, 0x00FFFFFF, 0x88212121, 0xFF000000, 0xFF555555);
+                0x00FFFFFF, 0x00FFFFFF, 0x88212121);
         }
         
         public void populateAbilities(Core core, Minecraft minecraft) {

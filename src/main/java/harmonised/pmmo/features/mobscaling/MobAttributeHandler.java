@@ -7,6 +7,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -32,7 +34,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class MobAttributeHandler {
 	private static final UUID MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	/**Used for balancing purposes to ensure configurations do not exceed known limits.*/
@@ -91,10 +93,9 @@ public class MobAttributeHandler {
 
 		//Set each Modifier type
 		attributeKeys.forEach(attributeID -> {
-			Attribute attribute = BuiltInRegistries.ATTRIBUTE.get(attributeID);
-			if (attribute == null) return;
+			Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE.getHolder(attributeID).get();
 
-			Map<String, Double> config = multipliers.getOrDefault(attributeID.toString(), new HashMap<>());
+            Map<String, Double> config = multipliers.getOrDefault(attributeID.toString(), new HashMap<>());
 			AttributeInstance attributeInstance = entity.getAttribute(attribute);
 			if (attributeInstance != null) {
 				double base = baseValue(entity, attributeID, attributeInstance);
@@ -103,7 +104,7 @@ public class MobAttributeHandler {
 				bonus += dimMods.getOrDefault(attributeID.toString(), 0d).floatValue();
 				bonus += bioMods.getOrDefault(attributeID.toString(), 0d).floatValue();
 				bonus *= bossMultiplier;
-				AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
+				AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADD_VALUE);
 				attributeInstance.removeModifier(MODIFIER_ID);
 				attributeInstance.addPermanentModifier(modifier);
 				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Entity={} Attribute={} value={}", entity.getDisplayName().getString(), attributeID.toString(), bonus);

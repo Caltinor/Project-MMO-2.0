@@ -40,7 +40,7 @@ public class FurnaceHandler {
 		//core logic 
 		Core core = Core.get(event.getLevel());
 		CompoundTag eventHook = core.getEventTriggerRegistry().executeEventListeners(EventType.SMELT, event, new CompoundTag());
-		eventHook.putString(APIUtils.STACK, event.getInput().save(new CompoundTag()).getAsString());
+		eventHook.putString(APIUtils.STACK, TagUtils.stackTag(event.getInput(), event.getLevel()).getAsString());
 		eventHook = TagUtils.mergeTags(eventHook, core.getPerkRegistry().executePerk(EventType.SMELT, player, eventHook));
 		Map<String, Long> xpAwards = core.getExperienceAwards(EventType.SMELT, event.getInput(), player, eventHook);
 		List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);

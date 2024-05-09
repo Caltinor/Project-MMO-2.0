@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.codecs;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
@@ -64,10 +65,10 @@ public record ObjectData(
 					: xpValues().getOrDefault(type, new HashMap<>());
 			}
 			else return isDamage
-					? NBTUtils.getExperienceAward(nbtDamageValues
+					? NBTUtils.getExperienceAward(nbtDamageValues()
 						.getOrDefault(type, new HashMap<>())
 						.getOrDefault(nbt.getString(APIUtils.DAMAGE_TYPE), new ArrayList<>()), nbt)
-					: NBTUtils.getExperienceAward(nbtXpValues().get(type), nbt);
+					: NBTUtils.getExperienceAward(nbtXpValues().getOrDefault(type, new ArrayList<>()), nbt);
 
 		}
 		@Override
@@ -88,7 +89,7 @@ public record ObjectData(
 		public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
 			return nbtReqs().get(type) == null
 					? reqs().getOrDefault(type, new HashMap<>())
-					: NBTUtils.getRequirement(nbtReqs().get(type), nbt);
+					: NBTUtils.getRequirement(nbtReqs().getOrDefault(type, new ArrayList<>()), nbt);
 		}
 		@Override
 		public void setReqs(ReqType type, Map<String, Integer> reqs) {
@@ -105,35 +106,35 @@ public record ObjectData(
 		}
 		@Override
 		public Set<String> getTagValues() {return tagValues();}
-		public static final Codec<ObjectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		public static final MapCodec<ObjectData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),
 				Codec.STRING.listOf().optionalFieldOf("isTagFor").forGetter(od -> Optional.of(new ArrayList<>(od.tagValues))),
 				Codec.optionalField("requirements", 
-					Codec.simpleMap(ReqType.CODEC, CodecTypes.INTEGER_CODEC, StringRepresentable.keys(ReqType.values())).codec())
+					Codec.simpleMap(ReqType.CODEC, CodecTypes.INTEGER_CODEC, StringRepresentable.keys(ReqType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.reqs())),
 				Codec.optionalField("nbt_requirements",
-					Codec.simpleMap(ReqType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ReqType.values())).codec())
+					Codec.simpleMap(ReqType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ReqType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.nbtReqs())),
 				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
 					.optionalFieldOf("negative_effect")					
 					.forGetter(od -> Optional.of(od.negativeEffects())),
 				Codec.optionalField("xp_values",
-					Codec.simpleMap(EventType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(EventType.values())).codec())
+					Codec.simpleMap(EventType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(EventType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.xpValues())),
 				Codec.optionalField("nbt_xp_values",
-					Codec.simpleMap(EventType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(EventType.values())).codec())
+					Codec.simpleMap(EventType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(EventType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.nbtXpValues())),
 				Codec.optionalField("damage_type_xp",
-					Codec.simpleMap(EventType.CODEC, Codec.unboundedMap(Codec.STRING, CodecTypes.LONG_CODEC), StringRepresentable.keys(EventType.DAMAGE_TYPES)).codec())
+					Codec.simpleMap(EventType.CODEC, Codec.unboundedMap(Codec.STRING, CodecTypes.LONG_CODEC), StringRepresentable.keys(EventType.DAMAGE_TYPES)).codec(), false)
 					.forGetter(od -> Optional.of(od.damageXpValues())),
 				Codec.optionalField("nbt_damage_type_xp",
-					Codec.simpleMap(EventType.CODEC, Codec.unboundedMap(Codec.STRING, LogicEntry.CODEC.listOf()), StringRepresentable.keys(EventType.DAMAGE_TYPES)).codec())
+					Codec.simpleMap(EventType.CODEC, Codec.unboundedMap(Codec.STRING, LogicEntry.CODEC.listOf()), StringRepresentable.keys(EventType.DAMAGE_TYPES)).codec(), false)
 					.forGetter(od -> Optional.of(od.nbtDamageValues())),
 				Codec.optionalField("bonuses",
-					Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).codec())
+					Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.bonuses())),
 				Codec.optionalField("nbt_bonuses",
-					Codec.simpleMap(ModifierDataType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ModifierDataType.values())).codec())
+					Codec.simpleMap(ModifierDataType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ModifierDataType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.nbtBonuses())),
 				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).optionalFieldOf("salvage").forGetter(od -> Optional.of(od.salvage())),
 				VeinData.VEIN_DATA_CODEC.optionalFieldOf(VeinMiningLogic.VEIN_DATA).forGetter(od -> Optional.of(od.veinData()))

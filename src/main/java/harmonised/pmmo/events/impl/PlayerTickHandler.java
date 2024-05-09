@@ -18,7 +18,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,12 +31,12 @@ public class PlayerTickHandler {
 	private static final Map<UUID, Vec3> moveLast = new HashMap<>();
 	private static short ticksIgnoredSinceLastProcess = 0;
 
-	public static void handle(TickEvent.PlayerTickEvent event) {
+	public static void handle(PlayerTickEvent.Post event) {
 		ticksIgnoredSinceLastProcess++;
 		if (ticksIgnoredSinceLastProcess < 10) return;
 
-		Player player = event.player;
-		Core core = Core.get(event.side);
+		Player player = event.getEntity();
+		Core core = Core.get(event.getEntity().level());
 
 		//Recharge vein items
 		if (player instanceof ServerPlayer) {
@@ -89,13 +89,13 @@ public class PlayerTickHandler {
 		ticksIgnoredSinceLastProcess = 0;
 	}
 	
-	private static void processEvent(EventType type, Core core, TickEvent.PlayerTickEvent event) {
+	private static void processEvent(EventType type, Core core, PlayerTickEvent event) {
 		CompoundTag eventHookOutput = new CompoundTag();
 		boolean serverSide = core.getSide().equals(LogicalSide.SERVER);
 		if (serverSide){			
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
 		}
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.player, eventHookOutput));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.getEntity(), eventHookOutput));
 		if (serverSide) {
 			Map<String, Double> ratio = Config.server().xpGains().playerXp(type);
 			ResourceLocation source = new ResourceLocation("player");
@@ -104,34 +104,34 @@ public class PlayerTickHandler {
 					: new HashMap<>();
 			switch (type) {
 			case BREATH_CHANGE -> {
-				int diff = Math.abs(airLast.getOrDefault(event.player.getUUID(), 0) - event.player.getAirSupply());
+				int diff = Math.abs(airLast.getOrDefault(event.getEntity().getUUID(), 0) - event.getEntity().getAirSupply());
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
+					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.getEntity()).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 			}
 			case HEALTH_INCREASE, HEALTH_DECREASE -> {
-				processHealthChange(ratio, core, event.player, xpAward);
+				processHealthChange(ratio, core, event.getEntity(), xpAward);
 			}
 			case RIDING -> {
-				source = RegistryUtil.getId(event.player.getVehicle());
-				xpAward.putAll(core.getExperienceAwards(type, event.player.getVehicle(), event.player, perkOutput));
+				source = RegistryUtil.getId(event.getEntity().getVehicle());
+				xpAward.putAll(core.getExperienceAwards(type, event.getEntity().getVehicle(), event.getEntity(), perkOutput));
 			}
 			case EFFECT -> {
-				for (MobEffectInstance mei : event.player.getActiveEffects()) {	
-					source = RegistryUtil.getId(mei.getEffect());
-					xpAward.putAll(core.getExperienceAwards(mei, event.player, perkOutput));
+				for (MobEffectInstance mei : event.getEntity().getActiveEffects()) {	
+					source = mei.getEffect().unwrapKey().get().location();
+					xpAward.putAll(core.getExperienceAwards(mei, event.getEntity(), perkOutput));
 				}
 			}
 			case SPRINTING -> {
-				Vec3 vec = event.player.position();
-				Vec3 old = moveLast.getOrDefault(event.player.getUUID(), vec);
+				Vec3 vec = event.getEntity().position();
+				Vec3 old = moveLast.getOrDefault(event.getEntity().getUUID(), vec);
 				double magnitude = Math.sqrt(
 						Math.pow(Math.abs(vec.x()-old.x()), 2) +
 						Math.pow(Math.abs(vec.y()-old.y()), 2) +
 						Math.pow(Math.abs(vec.z()-old.z()), 2));
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
+					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.getEntity()).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 			}
@@ -141,19 +141,19 @@ public class PlayerTickHandler {
 				});
 			}
 			case SWIMMING, DIVING, SURFACING, SWIM_SPRINTING -> {
-				Vec3 vec = event.player.getDeltaMovement();
+				Vec3 vec = event.getEntity().getDeltaMovement();
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
+					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.getEntity()).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 			}
                 default -> {}
 			}
 			
-			CheeseTracker.applyAntiCheese(type, source, event.player, xpAward);
+			CheeseTracker.applyAntiCheese(type, source, event.getEntity(), xpAward);
 			
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.player);
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 	}

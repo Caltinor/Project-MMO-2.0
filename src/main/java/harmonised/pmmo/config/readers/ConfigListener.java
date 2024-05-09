@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.SkillsConfig;
@@ -17,6 +18,7 @@ import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -49,10 +51,10 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
         GLOBALS(GlobalsConfig.CODEC, "globals", GlobalsConfig::new),
         ANTICHEESE(AntiCheeseConfig.CODEC, "anticheese", AntiCheeseConfig::new);
 
-        public Codec<? extends ConfigData<?>> codec;
+        public MapCodec<? extends ConfigData<?>> codec;
         public String filename;
         public Supplier<ConfigData<?>> defaultSupplier;
-        ServerConfigs(Codec<? extends ConfigData<?>> codec, String filename, Supplier<ConfigData<?>> defaultSupplier) {
+        ServerConfigs(MapCodec<? extends ConfigData<?>> codec, String filename, Supplier<ConfigData<?>> defaultSupplier) {
             this.codec = codec;
             this.filename = filename;
             this.defaultSupplier = defaultSupplier;
@@ -60,18 +62,18 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
         public static final Codec<ServerConfigs> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(ServerConfigs::values, ServerConfigs::byName);
         private static final Map<String, ServerConfigs> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ServerConfigs::getSerializedName, s -> s));
 
-        public Codec<? extends ConfigData<?>> codec() {return codec;}
+        public MapCodec<? extends ConfigData<?>> codec() {return codec;}
         @Override
         public String getSerializedName() {return this.name();}
         public static ServerConfigs byName(String name) {return BY_NAME.get(name);}
-        public static ServerConfigs create(String name, Codec<? extends ConfigData<?>> codec, String filename, Supplier<ConfigData<?>> defaultSupplier) {throw new IllegalStateException("Enum not extended");}
+        public static ServerConfigs create(String name, MapCodec<? extends ConfigData<?>> codec, String filename, Supplier<ConfigData<?>> defaultSupplier) {throw new IllegalStateException("Enum not extended");}
 
         public static ServerConfigs fromFilename(String filename) {
             return Arrays.stream(values()).filter(sc -> sc.filename.equals(filename)).findFirst().orElse(null);
         }
 
-        public static final Codec<ConfigData<?>> MAPPER = ExtraCodecs.lazyInitializedCodec(() ->
-                ConfigListener.ServerConfigs.CODEC.dispatch("type", ConfigData::getType, x -> x.codec));
+        public static final Codec<ConfigData<?>> MAPPER = Codec.lazyInitialized(() ->
+                ServerConfigs.CODEC.dispatch(ConfigData::getType, ServerConfigs::codec));
     }
     private Map<ServerConfigs, ConfigData<?>> configs = new HashMap<>();
 
@@ -94,7 +96,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
                 ServerConfigs type = ServerConfigs.fromFilename(filename.substring(0, filename.indexOf(".")));
                 if (type == null) continue;
                 final JsonElement jsonElement = GsonHelper.fromJson(this.gson, reader, JsonElement.class);
-                type.codec.parse(JsonOps.INSTANCE, jsonElement)
+                type.codec.codec().parse(JsonOps.INSTANCE, jsonElement)
                         .resultOrPartial(JsonParseException::new)
                         .ifPresent(obj -> this.configs.put(type, obj));
             }
@@ -118,10 +120,10 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
             List<CustomPacketPayload> packets = new ArrayList<>();
             this.configs.forEach((key, value) -> packets.add(new CP_SyncConfig(key, value)));
 
-            PacketDistributor.PacketTarget target = player == null
-                    ? PacketDistributor.ALL.noArg()
-                    : PacketDistributor.PLAYER.with(player);
-            packets.forEach(target::send);
+            if (player == null)
+                packets.forEach(PacketDistributor::sendToAllPlayers);
+            else
+                packets.forEach(packet -> PacketDistributor.sendToPlayer(player, packet));
         });
     }
 }

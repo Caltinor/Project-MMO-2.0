@@ -14,11 +14,10 @@ import harmonised.pmmo.storage.Experience;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -27,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class XPOverlayGUI implements IGuiOverlay
+public class XPOverlayGUI implements LayeredDraw.Layer
 {
 	private final Core core = Core.get(LogicalSide.CLIENT);
 	private int skillGap = 0;
@@ -35,7 +34,7 @@ public class XPOverlayGUI implements IGuiOverlay
 	private Font fontRenderer;
 
 	@Override
-	public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+	public void render(GuiGraphics guiGraphics, float partialTick) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)

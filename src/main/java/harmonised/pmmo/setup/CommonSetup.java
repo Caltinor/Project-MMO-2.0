@@ -24,11 +24,13 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -37,9 +39,10 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class CommonSetup {
 	public static final DeferredRegister<CriterionTrigger<?>> TRIGGERS = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, Reference.MOD_ID);
 	private static final Supplier<SkillUpTrigger> SKILL_UP_TRIGGER = TRIGGERS.register("skill_up", SkillUpTrigger::new);
@@ -80,6 +83,7 @@ public class CommonSetup {
 	
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
+		CompletableFuture<HolderLookup.Provider> reg = event.getLookupProvider();
 		if (event.includeClient()) {
 			for (Locale locale : LangProvider.Locale.values()) {
 				generator.addProvider(true, new LangProvider(generator.getPackOutput(), locale.str));
@@ -87,20 +91,20 @@ public class CommonSetup {
 		}
 		if (event.includeServer()) {
 			//Easy Feature Pack Generators
-			generator.addProvider(true, new EasyGLMProvider(generator.getPackOutput()));
+			generator.addProvider(true, new EasyGLMProvider(generator.getPackOutput(), reg));
 			generator.addProvider(true, new EasyItemConfigProvider(generator.getPackOutput()));
 			generator.addProvider(true, new EasyConfigProvider(generator.getPackOutput()));
 			//Default Feature Pack Generators
-			generator.addProvider(true, new DefaultGLMProvider(generator.getPackOutput()));
+			generator.addProvider(true, new DefaultGLMProvider(generator.getPackOutput(), reg));
 			//Hardcore Feature Pack Generators
-			generator.addProvider(true, new HardcoreGLMProvider(generator.getPackOutput()));
+			generator.addProvider(true, new HardcoreGLMProvider(generator.getPackOutput(), reg));
 
 			//Common mod data
-			BlockTagProvider blockProvider = new BlockTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper());
+			BlockTagProvider blockProvider = new BlockTagProvider(generator.getPackOutput(), reg, event.getExistingFileHelper());
 			generator.addProvider(true, blockProvider);
-			generator.addProvider(true, new EntityTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
-			generator.addProvider(true, new ItemTagProvider(generator.getPackOutput(), event.getLookupProvider(), blockProvider.contentsGetter(), event.getExistingFileHelper()));
-			generator.addProvider(true, new DamageTagProvider(generator.getPackOutput(), event.getLookupProvider(), event.getExistingFileHelper()));
+			generator.addProvider(true, new EntityTagProvider(generator.getPackOutput(), reg, event.getExistingFileHelper()));
+			generator.addProvider(true, new ItemTagProvider(generator.getPackOutput(), reg, blockProvider.contentsGetter(), event.getExistingFileHelper()));
+			generator.addProvider(true, new DamageTagProvider(generator.getPackOutput(), reg, event.getExistingFileHelper()));
 		}
 	}
 }

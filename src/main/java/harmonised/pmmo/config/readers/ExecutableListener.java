@@ -45,10 +45,10 @@ public class ExecutableListener extends SimplePreparableReloadListener<Boolean> 
 	{
 		return event -> {
 			ServerPlayer player = event.getPlayer();
-			PacketDistributor.PacketTarget target = player == null
-				? PacketDistributor.ALL.noArg()
-				: PacketDistributor.PLAYER.with(player);
-			target.send(packetFactory.get());
+			if (player == null)
+				PacketDistributor.sendToAllPlayers(packetFactory.get());
+			else
+				PacketDistributor.sendToPlayer(player, packetFactory.get());
 		};
 	}
 }

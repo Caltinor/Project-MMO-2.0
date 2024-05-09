@@ -5,6 +5,7 @@ import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -158,7 +159,7 @@ public class CoreUtils {
 		if (applyDefaultNegatives && config.isEmpty())
 			config = Config.autovalue().reqs().penalties();
 		for (Map.Entry<ResourceLocation, Integer> effect : config.entrySet()) {
-			MobEffect effectRoot = BuiltInRegistries.MOB_EFFECT.get(effect.getKey());
+			Holder<MobEffect> effectRoot = BuiltInRegistries.MOB_EFFECT.getHolder(effect.getKey()).get();
 			if (effectRoot != null)
 				effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue(), true, true));
 		}

@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.anticheese;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.codecs.ConfigData;
@@ -24,14 +25,14 @@ public record AntiCheeseConfig(
 			Map.of(EventType.RIDING, Setting.build().source("minecraft:horse","minecraft:boat").retention(200).reduction(0.005).build()),
 			Map.of(EventType.SPRINTING, Setting.build().retention(400).tolerance(0.1).tolerance(10).build())
 	);}
-	public static final Codec<AntiCheeseConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<AntiCheeseConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.BOOL.fieldOf("afk_can_subtract").forGetter(AntiCheeseConfig::afkSubtract),
 			Codec.unboundedMap(EventType.CODEC, Setting.CODEC).fieldOf("afk").forGetter(AntiCheeseConfig::afk),
 			Codec.unboundedMap(EventType.CODEC, Setting.CODEC).fieldOf("diminishing_xp").forGetter(AntiCheeseConfig::diminish),
 			Codec.unboundedMap(EventType.CODEC, Setting.CODEC).fieldOf("normalization").forGetter(AntiCheeseConfig::normal)
 	).apply(instance, AntiCheeseConfig::new));
 	@Override
-	public Codec<AntiCheeseConfig> getCodec() {return CODEC;}
+	public MapCodec<AntiCheeseConfig> getCodec() {return CODEC;}
 
 	@Override
 	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.ANTICHEESE;}

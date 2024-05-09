@@ -5,13 +5,17 @@ import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.TagBuilder;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -35,25 +39,10 @@ public class FireworkHandler {
 	
 	public static void spawnRocket(Level world, Vec3 pos, String skill/*, @Nullable WorldText explosionText*/)
 	{
-		CompoundTag nbt = new CompoundTag();
-		CompoundTag fw = new CompoundTag();
-		ListTag explosion = new ListTag();
-		CompoundTag l = new CompoundTag();
-
-		int[] colors = new int[] {CoreUtils.getSkillColor(skill)};
-
-		l.putInt("Flicker", 1);
-		l.putInt("Trail", 0);
-		l.putInt("Type", 1);
-		l.put("Colors", new IntArrayTag(colors));
-		explosion.add(l);
-
-		fw.put("Explosions", explosion);
-		fw.putInt("Flight", 0);
-		nbt.put("Fireworks", fw);
-
+		var colors = IntList.of(CoreUtils.getSkillColor(skill));
 		ItemStack itemStack = new ItemStack(Items.FIREWORK_ROCKET);
-		itemStack.setTag(nbt);
+		var explosion = new FireworkExplosion(FireworkExplosion.DEFAULT.shape(), colors, colors, false, true);
+		itemStack.set(DataComponents.FIREWORKS, new Fireworks(0, List.of(explosion)));
 
 		PMMOFireworkEntity fireworkRocketEntity = new PMMOFireworkEntity(world, pos.x() + 0.5D, pos.y() + 0.5D, pos.z() + 0.5D, itemStack);
 		//if(explosionText != null)

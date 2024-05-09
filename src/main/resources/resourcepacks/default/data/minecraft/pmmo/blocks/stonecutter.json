@@ -1,5 +1,6 @@
 {
-	"requirements":{
-		"building": 10
+	"requirements": {
+		"PLACE": {
+			"building": 10}
 	}
 }

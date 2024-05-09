@@ -5,7 +5,7 @@
         }
     },
     "requirements":{
-        "BLOCK_PLACE": {
+        "PLACE": {
             "farming": 5,
             "woodcutting": 10
         }

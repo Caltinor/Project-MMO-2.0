@@ -8,6 +8,8 @@ import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.setup.GameplayPacks;
 import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.neoforged.bus.api.IEventBus;
@@ -19,11 +21,13 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
+import java.util.Optional;
+
 @Mod(Reference.MOD_ID)
 public class ProjectMMO {
     public ProjectMMO(IEventBus modbus) {
-    	ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
-    	ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
+    	ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
+    	ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
 		modbus.addListener(this::onConfigReload);
 		modbus.addListener(this::onPackFind);
 		modbus.addListener(Networking::registerMessages);
@@ -49,8 +53,10 @@ public class ProjectMMO {
 	public void onPackFind(AddPackFindersEvent event) {
 		GameplayPacks.getPacks().stream().filter(holder -> holder.type().equals(event.getPackType())).forEach(holder -> {
 			var resourcePath = ModList.get().getModFileById(Reference.MOD_ID).getFile().findResource("resourcepacks/%s".formatted(holder.id().getPath()));
-			var pack = Pack.readMetaAndCreate("builtin/%s".formatted(holder.id().getPath()), holder.titleKey().asComponent(), holder.required(),
-					new PathPackResources.PathResourcesSupplier(resourcePath,true), holder.type(), Pack.Position.BOTTOM, holder.source());
+			var pack = Pack.readMetaAndCreate(
+					new PackLocationInfo("builtin/%s".formatted(holder.id().getPath()), holder.titleKey().asComponent(), holder.source(), Optional.empty()),
+					new PathPackResources.PathResourcesSupplier(resourcePath), holder.type(),
+					new PackSelectionConfig(false, Pack.Position.BOTTOM, false));
 			event.addRepositorySource(consumer -> consumer.accept(pack));
 		});
 	}

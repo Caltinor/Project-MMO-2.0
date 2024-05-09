@@ -31,6 +31,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.ObjectData;
@@ -62,9 +63,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Generic data loader for Codec-parsable data.
@@ -86,7 +89,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	
 	private final String folderName;
 	private final Logger logger;
-	private final Codec<T> codec;
+	private final MapCodec<T> codec;
 	private final Function<List<T>, T> merger;
 	private final Consumer<Map<ResourceLocation, T>> finalizer;
 	private final Gson gson;
@@ -110,7 +113,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
 	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
 	 */
-	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
+	public MergeableCodecDataManager(final String folderName, final Logger logger, MapCodec<T> codec, final Function<List<T>, T> merger
 			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
 	{
 		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON, defaultImpl, registry);
@@ -133,7 +136,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * @param gson A GSON instance, allowing for user-defined deserializers. General not needed as the gson is only used to convert
 	 * raw json to a JsonElement, which the Codec then parses into a proper java object.
 	 */
-	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
+	public MergeableCodecDataManager(final String folderName, final Logger logger, MapCodec<T> codec, final Function<List<T>, T> merger
 			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
 	{
 		this.folderName = folderName;
@@ -218,7 +221,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 					// read the json file and save the parsed object for later
 					// this json element may return null
 					final JsonElement jsonElement = GsonHelper.fromJson(this.gson, reader, JsonElement.class);
-					this.codec.parse(JsonOps.INSTANCE, jsonElement)
+					this.codec.codec().parse(JsonOps.INSTANCE, jsonElement)
 						// resultOrPartial either returns a non-empty optional or calls the consumer given
 						.resultOrPartial(MergeableCodecDataManager::throwJsonParseException)
 						.ifPresent(unmergedRaws::add);
@@ -283,12 +286,11 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			for (String str : dataValue.getTagValues()) {
 				MsLoggy.INFO.log(LOG_CODE.DATA, "Applying Setting to Tag: {}", str);
 				if (str.startsWith("#")) {
-					HolderSet.Named<V> tag = activeRegistry
-							.getTag(TagKey.create(registry, new ResourceLocation(str.substring(1))))
-							.get();
-					if (tag != null)
-						tags.addAll(tag.stream().map(holder -> holder.unwrapKey().get().location())
-							.toList());
+					activeRegistry.getTag(TagKey.create(registry, new ResourceLocation(str.substring(1))))
+					.ifPresent(holder ->
+						tags.addAll(holder.stream()
+								.map(h -> h.unwrapKey().get().location())
+								.collect(Collectors.toSet())));
 				}
 				else if (str.endsWith(":*")) {
 					tags.addAll(activeRegistry.keySet()
@@ -354,10 +356,10 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 				packets.add(packetFactory.apply(Map.of(entry.getKey(), entry.getValue())));
 			}
 
-			PacketDistributor.PacketTarget target = player == null
-				? PacketDistributor.ALL.noArg()
-				: PacketDistributor.PLAYER.with(player);
-			packets.forEach(target::send);
+			if (player == null)
+				packets.forEach(PacketDistributor::sendToAllPlayers);
+			else
+				packets.forEach(p ->PacketDistributor.sendToPlayer(player, p));
 		};
 	}
 }

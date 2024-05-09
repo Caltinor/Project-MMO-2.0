@@ -8,32 +8,32 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record CP_SyncConfig(ConfigListener.ServerConfigs type, ConfigData<?> config) implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "s2c_sync_config");
+public record CP_SyncConfig(ConfigListener.ServerConfigs oType, ConfigData<?> config) implements CustomPacketPayload {
+    public static final Type<CP_SyncConfig> TYPE = new Type(new ResourceLocation(Reference.MOD_ID, "s2c_sync_config"));
+    @Override public Type<CP_SyncConfig> type() {return TYPE;}
 
+    public static final StreamCodec<FriendlyByteBuf, CP_SyncConfig> STREAM_CODEC = StreamCodec.of(
+            CP_SyncConfig::write, CP_SyncConfig::decode
+    );
     public static CP_SyncConfig decode(FriendlyByteBuf buf) {
         ConfigListener.ServerConfigs t = buf.readEnum(ConfigListener.ServerConfigs.class);
         ConfigData<?> c = ConfigListener.ServerConfigs.MAPPER.parse(NbtOps.INSTANCE, buf.readNbt()).result().orElseThrow();
         return new CP_SyncConfig(t, c);
     }
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeEnum(this.type());
-        buf.writeNbt(ConfigListener.ServerConfigs.MAPPER.encodeStart(NbtOps.INSTANCE, this.config()).result().orElse(new CompoundTag()));}
+    public static void write(FriendlyByteBuf buf, CP_SyncConfig packet) {
+        buf.writeEnum(packet.oType());
+        buf.writeNbt(ConfigListener.ServerConfigs.MAPPER.encodeStart(NbtOps.INSTANCE, packet.config()).result().orElse(new CompoundTag()));}
 
-    @Override
-    public ResourceLocation id() {
-        return ID;
-    }
 
-    public static void handle(CP_SyncConfig packet, PlayPayloadContext ctx) {
-        ctx.workHandler().execute(() -> {
-            Config.CONFIG.setData(packet.type(), packet.config());
-            MsLoggy.INFO.log(MsLoggy.LOG_CODE.DATA, "Config packet received on client for {}", packet.type().getSerializedName());
+    public static void handle(CP_SyncConfig packet, IPayloadContext ctx) {
+        ctx.enqueueWork(() -> {
+            Config.CONFIG.setData(packet.oType(), packet.config());
+            MsLoggy.INFO.log(MsLoggy.LOG_CODE.DATA, "Config packet received on client for {}", packet.oType().getSerializedName());
         });
     }
 }

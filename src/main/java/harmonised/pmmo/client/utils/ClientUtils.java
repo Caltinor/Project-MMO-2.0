@@ -44,7 +44,7 @@ public class ClientUtils {
 				BuiltInRegistries.ITEM.stream()
 						.map(ItemStack::new)
 						.filter(stack -> {
-							int objectLevel = core.getReqMap(reqType, stack, false).getOrDefault(skill, Integer.MAX_VALUE);
+							int objectLevel = core.getReqMap(reqType, stack, mc.level, false).getOrDefault(skill, Integer.MAX_VALUE);
 							return objectLevel > oldLevel && objectLevel <= level;
 						})
 						.map(ItemStack::getDisplayName)

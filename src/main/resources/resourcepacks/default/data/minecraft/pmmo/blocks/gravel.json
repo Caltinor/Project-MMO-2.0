@@ -8,10 +8,8 @@
         }
     },
     "requirements":{
-        "PLACE":{
-            "PLACE": {"building":0},
-            "BREAK": {"excavation":0}
-        }
+        "PLACE": {"building":0},
+        "BREAK": {"excavation":0}
     },
     "vein_data":{
         "consumeAmount": 1

@@ -3,6 +3,8 @@ package harmonised.pmmo.storage;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.List;
 
@@ -14,6 +16,12 @@ public class Experience {
             Codec.LONG.fieldOf("level").xmap(XpLevel::new, XpLevel::getLevel).forGetter(Experience::getLevel),
             Codec.LONG.fieldOf("xp").forGetter(Experience::getXp)
     ).apply(instance, Experience::new));
+    public static final StreamCodec<ByteBuf, Experience> STREAM_CODEC = new StreamCodec<ByteBuf, Experience>() {
+        @Override
+        public Experience decode(ByteBuf buf) {return new Experience(new XpLevel(buf.readLong()), buf.readLong());}
+        @Override
+        public void encode(ByteBuf buf, Experience xp) {buf.writeLong(xp.getLevel().getLevel()); buf.writeLong(xp.getXp());}
+    };
 
     public Experience() {
         this(new XpLevel(), 0L);

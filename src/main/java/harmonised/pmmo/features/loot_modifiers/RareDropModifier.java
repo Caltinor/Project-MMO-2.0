@@ -1,12 +1,14 @@
 package harmonised.pmmo.features.loot_modifiers;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +26,7 @@ import java.util.Optional;
 
 public class RareDropModifier extends LootModifier{
 	
-	public static final Codec<RareDropModifier> CODEC = RecordCodecBuilder.create(instance -> codecStart(instance).and(instance.group(
+	public static final MapCodec<RareDropModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(instance.group(
 			ResourceLocation.CODEC.fieldOf("item").forGetter(tlm -> RegistryUtil.getId(tlm.drop)),
 			Codec.INT.fieldOf("count").forGetter(tlm -> tlm.drop.getCount()),
 			Codec.DOUBLE.fieldOf("chance").forGetter(tlm -> tlm.chance),
@@ -51,7 +53,7 @@ public class RareDropModifier extends LootModifier{
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC;
 	}
 
@@ -61,7 +63,7 @@ public class RareDropModifier extends LootModifier{
 		if (perLevel && context.getParam(LootContextParams.THIS_ENTITY) instanceof Player player) {
 			chance *= Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 		}
-		double rand = MsLoggy.DEBUG.logAndReturn(context.getRandom().nextDouble(), LOG_CODE.FEATURE, "Rand: {} as test for "+drop.save(new CompoundTag()).toString());
+		double rand = MsLoggy.DEBUG.logAndReturn(context.getRandom().nextDouble(), LOG_CODE.FEATURE, "Rand: {} as test for "+ TagUtils.stackTag(drop, context.getLevel()));
 		if (rand <= chance) {
 			generatedLoot.add(drop.copy());
 		}
