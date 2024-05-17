@@ -112,7 +112,7 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* listY);
 		for (int i = 0; i < ClientTickHandler.xpGains.size(); i++) {
 			ClientTickHandler.GainEntry entry = ClientTickHandler.xpGains.get(i);
-			graphics.drawString(fontRenderer, entry.display(), renderX, 3+renderY+ (i*9), entry.display().getStyle().getColor().getValue());
+			graphics.drawString(fontRenderer, entry.display(), renderX, 3+renderY+ (i*9), entry.getColor());
 		}
 	}
 	

@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -136,17 +137,13 @@ public class CoreUtils {
 	 * @param skill the skill being 
 	 * @return
 	 */
-	public static Style getSkillStyle(String skill, double transparency) {
-		int skillColor = getSkillColor(skill);
-		skillColor = setTransparency(skillColor, transparency);
-		return Style.EMPTY.withColor(skillColor);
+	public static Style getSkillStyle(String skill) {
+		return Style.EMPTY.withColor(getSkillColor(skill));
 	}
-
-	public static Style getSkillStyle(String skill) {return getSkillStyle(skill, 1d);}
 
 	public static int setTransparency(int color, double transparency) {
 		int alpha = (int)(transparency * 255d);
-		return  (color & 0xffffff) | (alpha << 24) ;
+		return (color & 0x00FFFFFF) | ((alpha & 0xFF) << 24);
 	}
 	
 	/**Converts a configuration setting for effects into an effect instance list

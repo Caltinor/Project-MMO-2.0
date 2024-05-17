@@ -59,7 +59,7 @@ public class MobAttributeHandler {
 	}
 	@SuppressWarnings("resource")
 	@SubscribeEvent
-	public static void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
+	public static void onMobSpawn(MobSpawnEvent.PositionCheck event) {
 	    if (!Config.server().mobScaling().enabled())
 	        return;
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
@@ -95,7 +95,7 @@ public class MobAttributeHandler {
 		attributeKeys.forEach(attributeID -> {
 			Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE.getHolder(attributeID).get();
 
-            Map<String, Double> config = multipliers.getOrDefault(attributeID.toString(), new HashMap<>());
+            Map<String, Double> config = multipliers.getOrDefault(attributeID, new HashMap<>());
 			AttributeInstance attributeInstance = entity.getAttribute(attribute);
 			if (attributeInstance != null) {
 				double base = baseValue(entity, attributeID, attributeInstance);

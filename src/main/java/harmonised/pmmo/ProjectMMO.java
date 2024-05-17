@@ -36,6 +36,7 @@ public class ProjectMMO {
     	GLMRegistry.GLM.register(modbus);
 		DataAttachmentTypes.ATTACHMENT_TYPES.register(modbus);
 		CommonSetup.TRIGGERS.register(modbus);
+		CommonSetup.DATA_COMPONENTS.register(modbus);
 
     	modbus.addListener(CommonSetup::init);
     	modbus.addListener(CommonSetup::gatherData);

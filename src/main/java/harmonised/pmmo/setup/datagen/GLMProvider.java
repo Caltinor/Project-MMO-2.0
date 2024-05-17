@@ -126,7 +126,7 @@ public abstract class GLMProvider implements DataProvider {
 	public CompletableFuture<?> run(CachedOutput cache, HolderLookup.Provider registries) {
 		start();
 
-		Path forgePath = output.getOutputFolder().resolve(destination).resolve("loot_modifiers").resolve("global_loot_modifiers.json");
+		Path forgePath = output.getOutputFolder().resolve(destination).resolve("neoforge").resolve("loot_modifiers").resolve("global_loot_modifiers.json");
 		Path modifierFolderPath = output.getOutputFolder().resolve(destination).resolve(this.modid).resolve("loot_modifiers");
 		List<ResourceLocation> entries = new ArrayList<>();
 

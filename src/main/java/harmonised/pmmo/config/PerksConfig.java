@@ -7,9 +7,12 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.readers.ConfigListener;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +41,7 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 		//====================SKILL_UP DEFAULTS==========================
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "mining").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "building")
-					.withString(APIUtils.ATTRIBUTE, "forge:reach_distance")
+					.withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.BLOCK_INTERACTION_RANGE).toString())
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
 					.withDouble(APIUtils.MAX_BOOST, 10d).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "building").build());
@@ -46,17 +49,17 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "woodcutting").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "farming").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "agility")
-					.withString(APIUtils.ATTRIBUTE, "minecraft:generic.movement_speed")
+					.withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.MOVEMENT_SPEED).toString())
 					.withDouble(APIUtils.PER_LEVEL, 0.000015)
 					.withDouble(APIUtils.MAX_BOOST, 1d).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "agility").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "endurance")
-					.withString(APIUtils.ATTRIBUTE, "minecraft:generic.max_health")
+					.withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.MAX_HEALTH).toString())
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
 					.withDouble(APIUtils.MAX_BOOST, 10d).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "endurance").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "combat")
-				.withString(APIUtils.ATTRIBUTE, "minecraft:generic.attack_damage")
+				.withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.ATTACK_DAMAGE).toString())
 				.withDouble(APIUtils.PER_LEVEL, 0.005)
 				.withDouble(APIUtils.MAX_BOOST, 1d).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "combat").build());

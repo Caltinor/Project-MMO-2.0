@@ -4,6 +4,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +22,7 @@ public class PotionHandler {
 	@SuppressWarnings("resource")
 	public static void handle(PlayerBrewedPotionEvent event) {
 		ItemStack stack = event.getStack();
-		if (Config.server().general().brewingTracked() && stack.getOrDefault(Reference.BREWED, false))
+		if (Config.server().general().brewingTracked() && stack.getOrDefault(CommonSetup.BREWED, false))
 			return;
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
@@ -34,6 +35,6 @@ public class PotionHandler {
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 		if (Config.server().general().brewingTracked())
-			stack.set(Reference.BREWED, true);
+			stack.set(CommonSetup.BREWED, true);
 	}
 }

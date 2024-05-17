@@ -13,7 +13,7 @@ One major detail is the dropped support for Forge.  Project MMO will now only be
 ### Minor Changes
 - Default Data moved to optional Feature Packs (see below)
 - Field names in all configs have been standardized.  This will break old configs if you attempt to carry them over.
-- 
+- Item NBT structures have changed, so your NBT paths will need to be updated.
 
 ### Bugfixes / Tweaks
 - Added TOOL_BREAKING event which fires when an item with durability breaks.
@@ -38,3 +38,6 @@ The formula also changed.
 The built-in default data was somewhat annoying to work around.  The disabler pack was helpful, but added the additional problem of having to make sure your pack loaded before other packs with pmmo data.  
 
 To solve this problem, all default data was moved to "feature packs", which Mojang uses for things like Bundles, Villager update, Sniffers, etc.  By default the "default" pack is enabled.  When you create a new world, go to the datapacks menu.  You will see you now have the option to toggle this datapack off.  Additionally, you can enable either the Easy or Hardcore pack in its place.  If you would like pmmo to provide no default data, disable all 3.  Note that pmmo still populates its internal tags, but all data and treasure are now compartmentalized into these feature packs.
+
+
+- NOTE: admin set level does not trigger perks.  use add level if you want perks to trigger.

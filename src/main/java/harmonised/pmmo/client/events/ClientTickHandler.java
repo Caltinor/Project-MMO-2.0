@@ -27,7 +27,7 @@ public class ClientTickHandler {
 	public static final List<GainEntry> xpGains = new ArrayList<>();
 	
 	@SubscribeEvent
-	public static void onClientTick(ClientTickEvent.Pre event) {
+	public static void onClientTick(ClientTickEvent.Post event) {
 		ticksElapsed++;
 		tickDownGainList();
 	}
@@ -52,23 +52,29 @@ public class ClientTickHandler {
 	}
 	
 	public static class GainEntry {
-		public int duration;
+		public int duration, color;
 		private final String skill;
+		private final int skillColor;
 		private final long value;
 		public GainEntry(String skill, long value) {
 			this.skill = skill;
 			this.duration = MsLoggy.DEBUG.logAndReturn(Config.GAIN_LIST_LINGER_DURATION.get()
 								, LOG_CODE.GUI, "Gain Duration Set as: {}");
 			this.value = value;
+			this.skillColor = CoreUtils.getSkillColor(skill);
 		}
 		public void downTick() {duration--;}
 
 		public Component display() {
-			double fade = (double)duration/(double)Config.GAIN_LIST_LINGER_DURATION.get();
 			return Component.literal((value >= 0 ? "+" : "")+value+" ")
 					.append(Component.translatable("pmmo."+skill))
-					.setStyle(CoreUtils.getSkillStyle(skill, fade));
+					.setStyle(CoreUtils.getSkillStyle(skill));
 		}
+		public int getColor() {
+			this.color = CoreUtils.setTransparency(this.skillColor, (double)duration/(double)Config.GAIN_LIST_LINGER_DURATION.get());
+			return this.color;
+		}
+
 		@Override
 		public String toString() {
 			return "Duration:"+duration+"|"+display().toString();

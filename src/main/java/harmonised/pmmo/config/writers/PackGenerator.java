@@ -12,6 +12,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
@@ -285,7 +286,7 @@ public class PackGenerator {
 				.map(sc -> new ResourceLocation(Reference.MOD_ID, sc.filename)).collect(Collectors.toSet()),
 				id -> {
 					ConfigListener.ServerConfigs sc = ConfigListener.ServerConfigs.fromFilename(id.getPath());
-					return sc == null ? "" : gson.toJson(ConfigListener.ServerConfigs.MAPPER.encodeStart(JsonOps.INSTANCE, sc.defaultSupplier.get()).result().get());
+					return sc == null ? "" : gson.toJson(ConfigListener.ServerConfigs.MAPPER.encodeStart(JsonOps.INSTANCE, Config.CONFIG.get(sc)).result().get());
 				});
 
 		

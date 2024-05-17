@@ -198,9 +198,7 @@ public class PlayerStatsComponent extends AbstractWidget {
         private final SkillData skillData;
         
         private final Color skillColor;
-        private final long skillLevel;
-        private final long skillCurrentXP;
-        private final long skillXpToNext;
+        private final Experience xp;
         
         private static final int BASE_HEIGHT = 24;
         
@@ -211,9 +209,7 @@ public class PlayerStatsComponent extends AbstractWidget {
             this.skillData = skillData;
             
             this.skillColor = new Color(skillData.getColor());
-            this.skillCurrentXP = core.getData().getXp(null, skillKey);
-            this.skillLevel = core.getData().getLevel(skillKey, null);
-            this.skillXpToNext = core.getData().getXpMap(null).getOrDefault(skillKey, new Experience()).getLevel().getXpToNext();
+            this.xp = core.getData().getXpMap(null).getOrDefault(skillKey, new Experience());
         }
     
         @Override
@@ -223,26 +219,30 @@ public class PlayerStatsComponent extends AbstractWidget {
 
             renderProgressBar(graphics);
             graphics.drawString(minecraft.font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
-            graphics.drawString(minecraft.font, String.valueOf(skillLevel), (this.getX() + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.getY() + 5, skillColor.getRGB());
+            graphics.drawString(minecraft.font, String.valueOf(xp.getLevel().getLevel()), (this.getX() + this.width - 5) - minecraft.font.width(String.valueOf(xp.getLevel().getLevel())), this.getY() + 5, skillColor.getRGB());
         }
         
         public void renderProgressBar(GuiGraphics graphics) {
             int renderX = this.getX() + 24;
             int renderY = this.getY() + (minecraft.font.lineHeight + 6);
             if (this.isHovered()) {
-                MutableComponent text = Component.literal("%s => %s".formatted(this.skillXpToNext, this.skillLevel +1));
+                MutableComponent text = Component.literal("%s => %s".formatted(xpToNext(), this.xp.getLevel().getLevel() +1));
                 graphics.drawString(minecraft.font, text, renderX, renderY-1, this.skillColor.getRGB());
             }
             else {
                 graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
                 graphics.blit(TEXTURE_LOCATION, renderX, renderY, 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
 
-                float percent = 100.0f / skillXpToNext;
-                int xp = (int) Math.min(Math.floor(percent * skillCurrentXP), 94);
+                float percent = 100.0f / xpToNext();
+                int xp = (int) Math.min(Math.floor(percent * this.xp.getXp()), 94);
                 graphics.blit(TEXTURE_LOCATION, renderX, renderY, xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
 
                 graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
+        }
+
+        private long xpToNext() {
+            return this.xp.getLevel().getXpToNext() - this.xp.getXp();
         }
     }
 }

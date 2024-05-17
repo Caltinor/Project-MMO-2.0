@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -56,7 +57,9 @@ public class RegistryUtil {
 		return BuiltInRegistries.MOB_EFFECT.getKey(effect);
 	}
 
-	public static ResourceLocation getId(DamageSource source) {
-		return source.typeHolder().unwrapKey().get().location();
+	public static ResourceLocation getId(DamageSource source) {return source.typeHolder().unwrapKey().get().location();}
+
+	public static ResourceLocation getAttributeId(Holder<Attribute> attribute) {
+		return BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
 	}
 }

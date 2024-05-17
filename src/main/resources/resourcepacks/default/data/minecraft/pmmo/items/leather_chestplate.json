@@ -11,21 +11,21 @@
         "WORN": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases":[
-			 	{"paths":["Damage"],
+			 	{"paths":["components{}.minecraft:damage"],
 			 	 "criteria":[
 			 	 	{"operator":"EXISTS","value":{"woodcutting":1.025, "farming":1.025, "agility":1.025, "fishing":1.025}}
 			 	]}
 			]},
 			{"behavior_to_previous": "SUB_FROM", "should_cases_add": false,
 			 "cases":[
-			 	{"paths":["display{}.color"],
+			 	{"paths":["components{}.minecraft:dyed_color{}.rgb"],
 			 	 "criteria":[
 			 	 	{"operator":"EXISTS","value":{"woodcutting":1.025, "farming":1.025, "agility":1.025, "fishing":1.025}}
 			 	]}
 			]},
 			{"behavior_to_previous": "REPLACE", "should_cases_add": false,
 			 "cases":[
-			 	{"paths":["display{}.color"],
+			 	{"paths":["components{}.minecraft:dyed_color{}.rgb"],
 			 	 "criteria":[
 			 	 	{"operator":"EQUALS","comparators":["16701501"],"value":{"woodcutting":1.1}},
 			 	 	{"operator":"EQUALS","comparators":["8439583"],"value":{"agility":1.1}},

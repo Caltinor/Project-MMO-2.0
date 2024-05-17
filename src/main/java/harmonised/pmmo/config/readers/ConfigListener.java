@@ -76,6 +76,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
                 ServerConfigs.CODEC.dispatch(ConfigData::getType, ServerConfigs::codec));
     }
     private Map<ServerConfigs, ConfigData<?>> configs = new HashMap<>();
+    public ConfigData<?> get(ServerConfigs type) {return configs.getOrDefault(type, type.defaultSupplier.get());}
 
     public void setData(ServerConfigs type, ConfigData<?> data) {this.configs.put(type, data);}
     public ServerData server() {return (ServerData) configs.computeIfAbsent(ServerConfigs.SERVER, a -> a.defaultSupplier.get());}

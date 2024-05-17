@@ -56,7 +56,7 @@ public class FeaturePerks {
 	
 	private static Holder.Reference<Attribute> getAttribute(CompoundTag nbt) {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
-				name -> BuiltInRegistries.ATTRIBUTE.getHolder(new ResourceLocation(name)).get());
+				name -> BuiltInRegistries.ATTRIBUTE.getHolder(new ResourceLocation(name)).orElse(null));
 	}
 	
 	public static final Perk ATTRIBUTE = Perk.begin()
@@ -84,8 +84,11 @@ public class FeaturePerks {
 				double perLevel = settings.getDouble(APIUtils.PER_LEVEL);
 				String skillname = settings.getString(APIUtils.SKILLNAME);
 				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
+				String attrName = getAttribute(settings) == null
+						? settings.getString(APIUtils.ATTRIBUTE)
+						: getAttribute(settings).value().getDescriptionId();
 				return List.of(
-				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).value().getDescriptionId())),
+				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(attrName)),
 				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
 				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
 			}).build();

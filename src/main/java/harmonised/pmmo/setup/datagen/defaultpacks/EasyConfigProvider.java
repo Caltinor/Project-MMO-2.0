@@ -14,11 +14,13 @@ import harmonised.pmmo.features.autovalues.AutoItem;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.lwjgl.system.APIUtil;
 
 import java.util.ArrayList;
@@ -114,19 +116,19 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
                         .withInt(APIUtils.MODULUS, 10)
                         .withString(APIUtils.SKILLNAME, skill).build()));
         bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "building")
-                .withString(APIUtils.ATTRIBUTE, "forge:reach_distance")
+                .withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.BLOCK_INTERACTION_RANGE).toString())
                 .withDouble(APIUtils.PER_LEVEL, 0.005)
                 .withDouble(APIUtils.MAX_BOOST, 10d).build());
         bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "agility")
-                .withString(APIUtils.ATTRIBUTE, "minecraft:generic.movement_speed")
+                .withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.MOVEMENT_SPEED).toString())
                 .withDouble(APIUtils.PER_LEVEL, 0.0000015)
                 .withDouble(APIUtils.MAX_BOOST, 1d).build());
         bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "endurance")
-                .withString(APIUtils.ATTRIBUTE, "minecraft:generic.max_health")
+                .withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.MAX_HEALTH).toString())
                 .withDouble(APIUtils.PER_LEVEL, 0.005)
                 .withDouble(APIUtils.MAX_BOOST, 20d).build());
         bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "combat")
-                .withString(APIUtils.ATTRIBUTE, "minecraft:generic.attack_damage")
+                .withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.ATTACK_DAMAGE).toString())
                 .withDouble(APIUtils.PER_LEVEL, 0.0005)
                 .withDouble(APIUtils.MAX_BOOST, 3d).build());
         bodyList.add(TagBuilder.start().withString("perk", "pmmo:command").withString(APIUtils.SKILLNAME, "crafting")
@@ -182,7 +184,7 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
 
         //=====================FISHING==============================
         bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "fishing")
-                .withString(APIUtils.ATTRIBUTE, "minecraft:generic.luck")
+                .withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.LUCK).toString())
                 .withDouble(APIUtils.CHANCE, 0.05d)
                 .withDouble(APIUtils.PER_LEVEL, 0.005d)
                 .withDouble(APIUtils.MAX_BOOST, 100d).build());
