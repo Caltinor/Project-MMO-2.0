@@ -142,14 +142,15 @@ public class Core {
 	 * @param xpValues the map of pre-global-modifier xp awards
 	 */
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
-		CoreUtils.processSkillGroupXP(xpValues);
+		Map<String, Long> finalXP = new HashMap<>(xpValues);
+		CoreUtils.processSkillGroupXP(finalXP);
 
-		new HashMap<>(xpValues).forEach((skill, value) -> {
-			xpValues.put(skill, (long)((double)value * Config.SKILL_MODIFIERS.get().getOrDefault(skill, Config.GLOBAL_MODIFIER.get())));
+		new HashMap<>(finalXP).forEach((skill, value) -> {
+			finalXP.put(skill, (long)((double)value * Config.SKILL_MODIFIERS.get().getOrDefault(skill, Config.GLOBAL_MODIFIER.get())));
 		});
 		for (int i = 0; i < players.size(); i++) {
 			if (players.get(i) instanceof FakePlayer || players.get(i).isDeadOrDying()) continue;
-			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
+			for (Map.Entry<String, Long> award : finalXP.entrySet()) {
 				long xpAward = award.getValue();
 				if (players.size() > 1)
 					xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
