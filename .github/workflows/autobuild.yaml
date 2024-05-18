@@ -85,7 +85,7 @@ jobs:
           curseforge-id: 353935
           curseforge-token: ${{ secrets.curseforge_api }}
 
-          files-primary: ${{ needs.setup.outputs.file_path }}
+          files: ${{ needs.setup.outputs.file_path }}
 
           name: ${{ needs.setup.outputs.mod_name }}-${{ needs.setup.outputs.mod_version }}
           version: ${{ needs.setup.outputs.mod_version }}
@@ -105,7 +105,7 @@ jobs:
           modrinth-id: KFQYC1Uy
           modrinth-token: ${{ secrets.modrinth_api }}
 
-          files-primary: ${{ needs.setup.outputs.file_path }}
+          files: ${{ needs.setup.outputs.file_path }}
 
           name: ${{ needs.setup.outputs.mod_name }}-${{ needs.setup.outputs.mod_version }}
           version: ${{ needs.setup.outputs.mod_version }}
@@ -118,3 +118,21 @@ jobs:
             ${{ needs.setup.outputs.mc_patch_version }}
           java: |
             ${{ needs.setup.outputs.java_version }}
+  message:
+    name: send discord update messaage
+    runs-on: ubuntu-latest
+    needs: [ setup,build,upload ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Read changelog
+        id: changelog
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: CHANGELOG.md
+      - name: Discord Webhook Action
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          username: Project MMO Updates
+          content: ${{ steps.changelog.outputs.content }}
