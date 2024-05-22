@@ -7,6 +7,7 @@ import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.events.impl.*;
+import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
@@ -78,7 +79,7 @@ public class EventHandler {
 	public static void onRespawn(PlayerRespawnEvent event) {
 		Core core = Core.get(event.getEntity().level); 
 		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getPlayer(),
-				TagBuilder.start().withString(APIUtils.SKILLNAME, "respawn").build(), core.getSide());
+				TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, "respawn").build(), core.getSide());
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onSleep(SleepFinishedTimeEvent event) {
