@@ -263,6 +263,7 @@ public class FeaturePerks {
 	public static final String APPLICABLE_TO = "applies_to";
 	public static final Perk DAMAGE_BOOST = Perk.begin()
 			.addConditions((player, nbt) -> {
+				if (nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).isEmpty()) return true;
 				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
 				for (String key : type) {
 					if (key.startsWith("#") && ForgeRegistries.ITEMS.tags()
@@ -282,7 +283,7 @@ public class FeaturePerks {
 			})
 			.addDefaults(TagBuilder.start()
 				.withFloat(APIUtils.DAMAGE_IN, 0)
-				.withList(FeaturePerks.APPLICABLE_TO, StringTag.valueOf("weapon:id"))
+				.withList(FeaturePerks.APPLICABLE_TO)
 				.withDouble(APIUtils.PER_LEVEL, 0.05)
 				.withDouble(APIUtils.BASE, 1d)
 				.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
