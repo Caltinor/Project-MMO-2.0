@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -29,11 +30,13 @@ public class PlayerTickHandler {
 	private static final Map<UUID, Integer> airLast = new HashMap<>();
 	private static final Map<UUID, Float> healthLast = new HashMap<>();
 	private static final Map<UUID, Vec3> moveLast = new HashMap<>();
-	private static short ticksIgnoredSinceLastProcess = 0;
+	private static Map<Player, Short> ticksIgnoredSinceLastProcess = new HashMap<>();
 
 	public static void handle(PlayerTickEvent event) {
-		ticksIgnoredSinceLastProcess++;
-		if (ticksIgnoredSinceLastProcess < 10) return;
+		if (event.phase != TickEvent.Phase.END) return;
+		short current = ticksIgnoredSinceLastProcess.getOrDefault(event.player, (short)0);
+		ticksIgnoredSinceLastProcess.put(event.player, ++current);
+		if (current < 10) return;
 
 		Player player = event.player;
 		Core core = Core.get(event.side);
@@ -87,7 +90,7 @@ public class PlayerTickHandler {
 		airLast.put(player.getUUID(), player.getAirSupply());
 		healthLast.put(player.getUUID(), player.getHealth());
 		moveLast.put(player.getUUID(), player.position());
-		ticksIgnoredSinceLastProcess = 0;
+		ticksIgnoredSinceLastProcess.put(event.player, (short) 0);
 	}
 	
 	private static void processEvent(EventType type, Core core, PlayerTickEvent event) {
