@@ -791,6 +791,7 @@ public class APIUtils {
 	
 	public static final String MULTIPLICATIVE = "multiplicative";
 	public static final String BASE = "base";
+	public static final String CHANCE_SUCCESS_MSG = "chance_message";
 	
 	/**Called during common setup, this method is used to register custom perks
 	 * to PMMO so that players can use them in their configurations.  It is 

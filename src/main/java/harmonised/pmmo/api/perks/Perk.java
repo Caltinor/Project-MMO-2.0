@@ -3,6 +3,9 @@ package harmonised.pmmo.api.perks;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+
+import harmonised.pmmo.setup.datagen.LangProvider;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
@@ -107,8 +110,10 @@ public record Perk(
 	public static final BiPredicate<Player, CompoundTag> VALID_CONTEXT = (player, src) -> {
 		if (src.contains(APIUtils.COOLDOWN) && !Core.get(player.level()).getPerkRegistry().isPerkCooledDown(player, src))
 			return false;
+		boolean chanceSucceed = false;
 		if (src.contains(APIUtils.CHANCE) && src.getDouble(APIUtils.CHANCE) < player.level().random.nextDouble())
 			return false;
+		else if (src.contains(APIUtils.CHANCE)) chanceSucceed = true;
 		if (src.contains(APIUtils.SKILLNAME)) {
 			if (src.contains(FireworkHandler.FIREWORK_SKILL) && !src.getString(APIUtils.SKILLNAME).equals(src.getString(FireworkHandler.FIREWORK_SKILL)))
 				return false;
@@ -130,6 +135,10 @@ public record Perk(
 				if (!modulus_match && !milestone_match)
 					return false;
 			}
+		}
+		if (chanceSucceed && src.contains(APIUtils.CHANCE_SUCCESS_MSG)) {
+			String msg = src.getString(APIUtils.CHANCE_SUCCESS_MSG);
+			player.sendSystemMessage(Component.literal(msg));
 		}
 		return true;
 	};
