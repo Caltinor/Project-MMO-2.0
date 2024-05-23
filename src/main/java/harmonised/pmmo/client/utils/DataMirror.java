@@ -82,7 +82,7 @@ public class DataMirror implements IDataStorage{
 		int newLevel = getLevelFromXP(value);
 		int oldLevel = getLevelFromXP(oldValue);
 		if (oldLevel < newLevel)
-			ClientUtils.sendLevelUpUnlocks(skillName, oldLevel, newLevel);
+			ClientUtils.sendLevelUpUnlocks(skillName, newLevel);
 		MsLoggy.DEBUG.log(LOG_CODE.XP,"Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
 	}
 	@Override
