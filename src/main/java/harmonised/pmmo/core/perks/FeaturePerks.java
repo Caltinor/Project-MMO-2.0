@@ -301,8 +301,12 @@ public class FeaturePerks {
 				List<MutableComponent> lines = new ArrayList<>();
 				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
 				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
-					Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entry.getAsString()));
-					line1.append(item.equals(Items.AIR) ? Component.literal(entry.getAsString()) : item.getDescription());
+					Component description = Component.literal(entry.getAsString());
+					if (ResourceLocation.isValidResourceLocation(entry.getAsString())) {
+						Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entry.getAsString()));
+						if (item != null && !item.equals(Items.AIR)) description = item.getDescription();
+					}
+					line1.append(description);
 					line1.append(Component.literal(", "));
 				}
 				lines.add(line1);
