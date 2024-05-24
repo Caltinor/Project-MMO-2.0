@@ -29,11 +29,10 @@ public class PlayerTickHandler {
 	private static final Map<UUID, Integer> airLast = new HashMap<>();
 	private static final Map<UUID, Float> healthLast = new HashMap<>();
 	private static final Map<UUID, Vec3> moveLast = new HashMap<>();
-	private static short ticksIgnoredSinceLastProcess = 0;
 
 	public static void handle(PlayerTickEvent.Post event) {
-		ticksIgnoredSinceLastProcess++;
-		if (ticksIgnoredSinceLastProcess < 10) return;
+		//execute only on every 10th tick
+		if ((event.getEntity().tickCount % 10) != 0) return;
 
 		Player player = event.getEntity();
 		Core core = Core.get(event.getEntity().level());
@@ -86,7 +85,6 @@ public class PlayerTickHandler {
 		airLast.put(player.getUUID(), player.getAirSupply());
 		healthLast.put(player.getUUID(), player.getHealth());
 		moveLast.put(player.getUUID(), player.position());
-		ticksIgnoredSinceLastProcess = 0;
 	}
 	
 	private static void processEvent(EventType type, Core core, PlayerTickEvent event) {
