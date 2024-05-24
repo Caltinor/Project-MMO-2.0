@@ -100,7 +100,7 @@ public class DataMirror implements IDataStorage{
 			: getLevelFromXP(otherSkills.getOrDefault(skill, 0l));
 		rawLevel = Core.get(LogicalSide.CLIENT).getLevelProvider().process(skill, rawLevel);
 		int skillMax = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
-		return rawLevel > skillMax ? skillMax : rawLevel;
+		return Math.min(rawLevel, skillMax);
 	}
 	@Override
 	public IDataStorage get() {return this;}
