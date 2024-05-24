@@ -15,7 +15,6 @@ import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.TagUtils;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
@@ -23,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent.LevelTickEvent;
-import org.jline.utils.Log;
 
 public class PerkRegistry {
 	public PerkRegistry() {}
@@ -62,12 +60,16 @@ public class PerkRegistry {
 		PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
 			ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
 			Perk perk = perks.getOrDefault(perkID, Perk.empty());
-			CompoundTag fullSrc = perk.propertyDefaults().copy().merge(src.copy().merge(dataIn.copy().merge(output.copy())));
+			CompoundTag fullSrc = new CompoundTag()
+					.merge(perk.propertyDefaults().copy())
+					.merge(src.copy())
+					.merge(dataIn.copy())
+					.merge(output.copy());
 			fullSrc.putInt(APIUtils.SKILL_LEVEL, fullSrc.contains(APIUtils.SKILLNAME)
 					? Core.get(player.level()).getData().getPlayerSkillLevel(fullSrc.getString(APIUtils.SKILLNAME), player.getUUID())
 					: 0);
 			if (perk.canActivate(player, fullSrc)) {
-				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(perkID.toString()));
+				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(fullSrc.toString()));
 				CompoundTag executionOutput = perk.start(player, fullSrc);
 				tickTracker.add(new TickSchedule(perk, player, fullSrc.copy(), new AtomicInteger(0)));
 				if (fullSrc.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, fullSrc))

@@ -87,6 +87,7 @@ public class DamageDealtHandler {
 			//Process perks
 			CompoundTag dataIn = TagBuilder.start()
 					.withFloat(APIUtils.DAMAGE_IN, event.getAmount())
+					.withFloat(APIUtils.DAMAGE_OUT, event.getAmount())
 					.withString(APIUtils.DAMAGE_TYPE, RegistryUtil.getId(event.getSource()).toString()).build();
 			CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.DEAL_DAMAGE, player, dataIn);
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Pre-Perk Damage:"+event.getAmount());

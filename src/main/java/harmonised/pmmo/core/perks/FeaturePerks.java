@@ -17,6 +17,7 @@ import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -264,7 +265,7 @@ public class FeaturePerks {
 	public static final Perk DAMAGE_BOOST = Perk.begin()
 			.addConditions((player, nbt) -> {
 				if (nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).isEmpty()) return true;
-				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
+				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
 				for (String key : type) {
 					if (key.startsWith("#") && ForgeRegistries.ITEMS.tags()
 							.getTag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), new ResourceLocation(key.substring(1))))
@@ -283,6 +284,7 @@ public class FeaturePerks {
 			})
 			.addDefaults(TagBuilder.start()
 				.withFloat(APIUtils.DAMAGE_IN, 0)
+				.withFloat(APIUtils.DAMAGE_OUT, 0)
 				.withList(FeaturePerks.APPLICABLE_TO)
 				.withDouble(APIUtils.PER_LEVEL, 0.05)
 				.withDouble(APIUtils.BASE, 1d)
@@ -291,9 +293,9 @@ public class FeaturePerks {
 			.setStart((player, nbt) -> {
 				float damageModification = (float)(nbt.getDouble(APIUtils.BASE) + nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
 				damageModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), damageModification);
-				float damage = nbt.getBoolean(APIUtils.MULTIPLICATIVE) 
-						? nbt.getFloat(APIUtils.DAMAGE_IN) * damageModification
-						: nbt.getFloat(APIUtils.DAMAGE_IN) + damageModification;
+				float damage = nbt.getBoolean(APIUtils.MULTIPLICATIVE)
+						? nbt.getFloat(APIUtils.DAMAGE_OUT) * damageModification
+						: nbt.getFloat(APIUtils.DAMAGE_OUT) + damageModification;
 				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, damage).build();
 			})
 			.setDescription(LangProvider.PERK_DAMAGE_BOOST_DESC.asComponent())
