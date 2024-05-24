@@ -277,11 +277,12 @@ public class FeaturePerks {
 	public static final String APPLICABLE_TO = "applies_to";
 	public static final Perk DAMAGE_BOOST = Perk.begin()
 			.addConditions((player, nbt) -> {
-				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
+				if (nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).isEmpty()) return true;
+				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
 				for (String key : type) {
 					if (key.startsWith("#") && BuiltInRegistries.ITEM
 							.getTag(TagKey.create(Registries.ITEM, new ResourceLocation(key.substring(1))))
-							.stream().anyMatch(item -> player.getMainHandItem().getItem().equals(item))) {
+							.stream().anyMatch(item -> item.contains(Holder.direct(player.getMainHandItem().getItem())))) {
 						return true;
 					}
 					else if (key.endsWith(":*") && BuiltInRegistries.ITEM.stream()
@@ -296,7 +297,8 @@ public class FeaturePerks {
 			})
 			.addDefaults(TagBuilder.start()
 				.withFloat(APIUtils.DAMAGE_IN, 0)
-				.withList(FeaturePerks.APPLICABLE_TO, StringTag.valueOf("weapon:id"))
+				.withFloat(APIUtils.DAMAGE_OUT, 0)
+				.withList(FeaturePerks.APPLICABLE_TO)
 				.withDouble(APIUtils.PER_LEVEL, 0.05)
 				.withDouble(APIUtils.BASE, 1d)
 				.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
@@ -305,8 +307,8 @@ public class FeaturePerks {
 				float damageModification = (float)(nbt.getDouble(APIUtils.BASE) + nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
 				damageModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), damageModification);
 				float damage = nbt.getBoolean(APIUtils.MULTIPLICATIVE) 
-						? nbt.getFloat(APIUtils.DAMAGE_IN) * damageModification
-						: nbt.getFloat(APIUtils.DAMAGE_IN) + damageModification;
+						? nbt.getFloat(APIUtils.DAMAGE_OUT) * damageModification
+						: nbt.getFloat(APIUtils.DAMAGE_OUT) + damageModification;
 				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, damage).build();
 			})
 			.setDescription(LangProvider.PERK_DAMAGE_BOOST_DESC.asComponent())
@@ -314,8 +316,12 @@ public class FeaturePerks {
 				List<MutableComponent> lines = new ArrayList<>();
 				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
 				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
-					Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(entry.getAsString()));
-					line1.append(item.equals(Items.AIR) ? Component.literal(entry.getAsString()) : item.getDescription());
+					Component description = Component.literal(entry.getAsString());
+					if (ResourceLocation.isValidResourceLocation(entry.getAsString())) {
+						Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(entry.getAsString()));
+						if (!item.equals(Items.AIR)) description = item.getDescription();
+					}
+					line1.append(description);
 					line1.append(Component.literal(", "));
 				}
 				lines.add(line1);

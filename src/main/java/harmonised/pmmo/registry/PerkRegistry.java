@@ -59,12 +59,16 @@ public class PerkRegistry {
 		Config.perks().perks().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
 			ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
 			Perk perk = perks.getOrDefault(perkID, Perk.empty());
-			CompoundTag fullSrc = perk.propertyDefaults().copy().merge(src.copy().merge(dataIn.copy().merge(output.copy())));
+			CompoundTag fullSrc = new CompoundTag()
+					.merge(perk.propertyDefaults().copy())
+					.merge(src.copy())
+					.merge(dataIn.copy())
+					.merge(output.copy());
 			fullSrc.putLong(APIUtils.SKILL_LEVEL, fullSrc.contains(APIUtils.SKILLNAME)
 					? Core.get(player.level()).getData().getLevel(fullSrc.getString(APIUtils.SKILLNAME), player.getUUID())
 					: 0L);
 			if (perk.canActivate(player, fullSrc)) {
-				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(perkID.toString()));
+				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(fullSrc.toString()));
 				CompoundTag executionOutput = perk.start(player, fullSrc);
 				tickTracker.add(new TickSchedule(perk, player, fullSrc.copy(), new AtomicInteger(0)));
 				if (fullSrc.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, fullSrc))
