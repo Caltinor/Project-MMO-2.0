@@ -21,8 +21,8 @@ public class NBTUtils {
 		return translateToLong(evaluateEntries(nbt, new LinkedHashSet<>(logic)));
 	}
 	
-	public static Map<String, Integer> getRequirement(List<LogicEntry> logic, CompoundTag nbt) {
-		return translateToInt(evaluateEntries(nbt, new LinkedHashSet<>(logic)));
+	public static Map<String, Long> getRequirement(List<LogicEntry> logic, CompoundTag nbt) {
+		return translateToLong(evaluateEntries(nbt, new LinkedHashSet<>(logic)));
 	}
 	
 	public static Map<String, Double> getBonuses(List<LogicEntry> logic, CompoundTag nbt) {
@@ -112,11 +112,6 @@ public class NBTUtils {
 	private static Map<String, Long> translateToLong(Map<String, Double> src) {
 		Map<String, Long> output = new HashMap<>();
 		src.forEach((k, v) -> output.put(k, v.longValue()));
-		return output;
-	}
-	private static Map<String, Integer> translateToInt(Map<String, Double> src) {
-		Map<String, Integer> output = new HashMap<>();
-		src.forEach((k, v) -> output.put(k, v.intValue()));
 		return output;
 	}
 	

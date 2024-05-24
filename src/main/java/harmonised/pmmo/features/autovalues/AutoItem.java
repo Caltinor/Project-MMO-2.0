@@ -48,12 +48,12 @@ public class AutoItem {
 	public static final EventType[] EVENTTYPES = {EventType.ANVIL_REPAIR, EventType.BLOCK_PLACE, EventType.CRAFT,
 			EventType.CONSUME, EventType.ENCHANT, EventType.FISH, EventType.SMELT};	
 
-	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation stackID) {
+	public static Map<String, Long> processReqs(ReqType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
 		if (!type.itemApplicable) 
 			return new HashMap<>();
 		
-		final Map<String, Integer> outMap = new HashMap<>();
+		final Map<String, Long> outMap = new HashMap<>();
 		ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(stackID));
 		switch (type) {
 		case WEAR: {
@@ -81,7 +81,7 @@ public class AutoItem {
 				scale += (double) entry.getIntValue() / entry.getKey().value().getMaxLevel();
 			}
 			for (Map.Entry<String, Long> entry : Config.autovalue().reqs().req(type).entrySet()) {
-				outMap.put(entry.getKey(), (int)((double)entry.getValue() * scale));
+				outMap.put(entry.getKey(), (long)((double)entry.getValue() * scale));
 			}
 			break;
 		}
@@ -199,8 +199,8 @@ public class AutoItem {
 	}
 	
 	//=========================ITEM CLASS SPECIFIC METHODS==============================================
-	private static Map<String, Integer> getUtensilData(UtensilTypes utensil, ReqType type, ItemStack stack, boolean asWeapon) {
-		Map<String, Integer> outMap = new HashMap<>();
+	private static Map<String, Long> getUtensilData(UtensilTypes utensil, ReqType type, ItemStack stack, boolean asWeapon) {
+		Map<String, Long> outMap = new HashMap<>();
 		//if the item being evaluated is a basic item, return a blank map
 		if (stack.getItem() instanceof TieredItem && getTier((TieredItem) stack.getItem()) <= 0 ) 
 			return outMap;
@@ -212,7 +212,7 @@ public class AutoItem {
 					? Config.autovalue().reqs().req(ReqType.WEAPON)
 					: Config.autovalue().reqs().req(type);
 		configValue.forEach((skill, level) -> {
-			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
+			outMap.put(skill, (long)Math.max(0, (double)level * (scale)));
 		});
 		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Req Map: "+MsLoggy.mapToString(outMap));
 		return outMap;
@@ -226,15 +226,15 @@ public class AutoItem {
 		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem XpGain Map: "+MsLoggy.mapToString(outMap));
 		return outMap;
 	}
-	private static Map<String, Integer> getWearableData(ReqType type, ItemStack stack, boolean isArmor) {
-		Map<String, Integer> outMap = new HashMap<>();
+	private static Map<String, Long> getWearableData(ReqType type, ItemStack stack, boolean isArmor) {
+		Map<String, Long> outMap = new HashMap<>();
 		//if the item being evaluated is a basic item, return a blank map
 		if (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getMaterial().equals(ArmorMaterials.LEATHER)) 
 			return outMap;
 		
 		final double scale = getWearableAttributes(WearableTypes.fromSlot(LivingEntity.getEquipmentSlotForItem(stack), !isArmor), stack, isArmor);
 		Config.autovalue().reqs().req(type).forEach((skill, level) -> {
-			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
+			outMap.put(skill, (long)Math.max(0, (double)level * (scale)));
 		});
 		return outMap;
 	}

@@ -40,10 +40,10 @@ public interface DataSource<T> {
 		return new HashMap<>();
 	};
 	public default void setBonuses(ModifierDataType type, Map<String, Double> bonuses) {}
-	public default Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
+	public default Map<String, Long> getReqs(ReqType type, CompoundTag nbt) {
 		return new HashMap<>();
 	};
-	public default void setReqs(ReqType type, Map<String, Integer> reqs) {}
+	public default void setReqs(ReqType type, Map<String, Long> reqs) {}
 	public default Map<ResourceLocation, Integer> getNegativeEffect() {
 		return new HashMap<>();
 	};

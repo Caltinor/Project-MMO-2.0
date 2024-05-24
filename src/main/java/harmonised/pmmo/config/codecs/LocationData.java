@@ -26,7 +26,7 @@ public record LocationData(
 		Map<ResourceLocation, Integer> positive,
 		Map<ResourceLocation, Integer> negative,
 		List<ResourceLocation> veinBlacklist,
-		Map<String, Integer> travelReq,
+		Map<String, Long> travelReq,
 		Map<ResourceLocation, Map<String, Double>> mobModifiers) implements DataSource<LocationData>{
 	
 	public LocationData() {this(
@@ -42,11 +42,11 @@ public record LocationData(
 		bonusMap().put(type, bonuses);
 	}
 	@Override
-	public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
+	public Map<String, Long> getReqs(ReqType type, CompoundTag nbt) {
 		return travelReq();
 	}
 	@Override
-	public void setReqs(ReqType type, Map<String, Integer> reqs) {
+	public void setReqs(ReqType type, Map<String, Long> reqs) {
 		travelReq().clear();
 		travelReq().putAll(reqs);
 	}
@@ -80,7 +80,7 @@ public record LocationData(
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("positive_effect").forGetter(ld -> Optional.of(ld.positive())),
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("negative_effect").forGetter(ld -> Optional.of(ld.negative())),
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("vein_blacklist").forGetter(ld -> Optional.of(ld.veinBlacklist())),
-			Codec.unboundedMap(Codec.STRING, Codec.INT).optionalFieldOf("travel_req").forGetter(ld -> Optional.of(ld.travelReq())),
+			Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("travel_req").forGetter(ld -> Optional.of(ld.travelReq())),
 			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).optionalFieldOf("mob_modifier").forGetter(ld -> Optional.of(ld.mobModifiers()))
 			).apply(instance, (override, tags, bonus, pos, neg, vein, req, mobs) -> 
 				new LocationData(
@@ -101,7 +101,7 @@ public record LocationData(
 		Map<ResourceLocation, Integer> positive = new HashMap<>();
 		Map<ResourceLocation, Integer> negative = new HashMap<>();
 		List<ResourceLocation> veinBlacklist = new ArrayList<>();
-		Map<String, Integer> travelReq = new HashMap<>();
+		Map<String, Long> travelReq = new HashMap<>();
 		Map<ResourceLocation, Map<String, Double>> mobModifiers = new HashMap<>();
 		
 		BiConsumer<LocationData, LocationData> bothOrNeither = (o, t) -> {

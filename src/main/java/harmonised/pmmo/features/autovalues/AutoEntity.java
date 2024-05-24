@@ -22,7 +22,7 @@ public class AutoEntity {
 	public static final EventType[] EVENTTYPES = {EventType.BREED, EventType.DEATH, EventType.ENTITY, EventType.RIDING,
 			EventType.SHIELD_BLOCK,	EventType.TAMING};
 
-	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation entityID) {
+	public static Map<String, Long> processReqs(ReqType type, ResourceLocation entityID) {
 		return new HashMap<>();
 	}
 	

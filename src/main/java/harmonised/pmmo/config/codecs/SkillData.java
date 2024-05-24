@@ -61,18 +61,18 @@ public record SkillData (
 		return outMap;
 	}
 	
-	public Map<String, Integer> getGroupReq(int level) {
-		Map<String, Integer> outMap = new HashMap<>();
+	public Map<String, Long> getGroupReq(long level) {
+		Map<String, Long> outMap = new HashMap<>();
 		double denominator = getGroup().values().stream().mapToDouble(value -> value).sum();
 		getGroup().forEach((skill, ratio) -> {
-			outMap.put(skill, (int)((ratio / denominator) * (double)level));
+			outMap.put(skill, (long)((ratio / denominator) * (double)level));
 		});
 		new HashMap<>(outMap).forEach((skill, value) -> {
 			SkillData skillCheck = Config.skills().get(skill);
 			if (skillCheck.isSkillGroup()) {
 				outMap.remove(skill);
 				skillCheck.getGroupReq(value).forEach((s, x) -> {
-					outMap.merge(s, x, Integer::sum);
+					outMap.merge(s, x, Long::sum);
 				});
 			}
 		});

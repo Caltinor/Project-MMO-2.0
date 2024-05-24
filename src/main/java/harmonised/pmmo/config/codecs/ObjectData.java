@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public record ObjectData(
 		boolean override,
 		Set<String> tagValues,
-		Map<ReqType, Map<String, Integer>> reqs,
+		Map<ReqType, Map<String, Long>> reqs,
 		Map<ReqType, List<LogicEntry>> nbtReqs,
 		Map<ResourceLocation, Integer> negativeEffects,
 		Map<EventType, Map<String, Long>> xpValues,
@@ -86,13 +86,13 @@ public record ObjectData(
 			bonuses().put(type, bonuses);
 		}
 		@Override
-		public Map<String, Integer> getReqs(ReqType type, CompoundTag nbt) {
+		public Map<String, Long> getReqs(ReqType type, CompoundTag nbt) {
 			return nbtReqs().get(type) == null
 					? reqs().getOrDefault(type, new HashMap<>())
 					: NBTUtils.getRequirement(nbtReqs().getOrDefault(type, new ArrayList<>()), nbt);
 		}
 		@Override
-		public void setReqs(ReqType type, Map<String, Integer> reqs) {
+		public void setReqs(ReqType type, Map<String, Long> reqs) {
 			reqs().put(type, reqs);
 		}
 		@Override
@@ -110,7 +110,7 @@ public record ObjectData(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),
 				Codec.STRING.listOf().optionalFieldOf("isTagFor").forGetter(od -> Optional.of(new ArrayList<>(od.tagValues))),
 				Codec.optionalField("requirements", 
-					Codec.simpleMap(ReqType.CODEC, CodecTypes.INTEGER_CODEC, StringRepresentable.keys(ReqType.values())).codec(), false)
+					Codec.simpleMap(ReqType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(ReqType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.reqs())),
 				Codec.optionalField("nbt_requirements",
 					Codec.simpleMap(ReqType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ReqType.values())).codec(), false)
@@ -164,7 +164,7 @@ public record ObjectData(
 			Map<EventType, Map<String, List<LogicEntry>>> nbtDamageXP = new HashMap<>();
 			Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
 			Map<ModifierDataType, List<LogicEntry>> nbtBonus = new HashMap<>();
-			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
+			Map<ReqType, Map<String, Long>> reqs = new HashMap<>();
 			Map<ReqType, List<LogicEntry>> nbtReq = new HashMap<>();
 			Map<ResourceLocation, Integer> reqEffects = new HashMap<>();
 			Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
@@ -221,7 +221,7 @@ public record ObjectData(
 				reqs.putAll(o.reqs());	
 				t.reqs().forEach((event, map) -> {
 					reqs.merge(event, map, (oMap, nMap) -> {
-						Map<String, Integer> mergedMap = new HashMap<>(oMap);
+						Map<String, Long> mergedMap = new HashMap<>(oMap);
 						nMap.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
 						return mergedMap;
 					});
@@ -279,7 +279,7 @@ public record ObjectData(
 		public static class Builder {
 			boolean override = false;
 			Set<String> tagValues = new HashSet<>();
-			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
+			Map<ReqType, Map<String, Long>> reqs = new HashMap<>();
 			Map<ReqType, List<LogicEntry>> nbtReqs = new HashMap<>();
 			Map<ResourceLocation, Integer> negativeEffects = new HashMap<>();
 			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
@@ -301,7 +301,7 @@ public record ObjectData(
 				this.tagValues.add(id);
 				return this;
 			}
-			public Builder addReq(ReqType type, Map<String, Integer> req) {
+			public Builder addReq(ReqType type, Map<String, Long> req) {
 				this.reqs.put(type, req);
 				return this;
 			}

@@ -17,7 +17,7 @@ public class DimensionTravelHandler {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 		if (!Core.get(player.level()).isActionPermitted(ReqType.TRAVEL, event.getDimension(), player)) {
-			Map<String, Integer> req = Core.get(player.level()).getObjectSkillMap(ObjectType.DIMENSION, event.getDimension().location(), ReqType.TRAVEL, new CompoundTag());
+			Map<String, Long> req = Core.get(player.level()).getObjectSkillMap(ObjectType.DIMENSION, event.getDimension().location(), ReqType.TRAVEL, new CompoundTag());
 			Messenger.sendDenialMsg(ReqType.TRAVEL, player, event.getDimension().location().toString(), MsLoggy.mapToString(req));
 			event.setCanceled(true);
 		}

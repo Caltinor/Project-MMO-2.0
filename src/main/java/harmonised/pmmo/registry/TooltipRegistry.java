@@ -22,9 +22,9 @@ import java.util.function.Function;
 public class TooltipRegistry {
 	public TooltipRegistry() {}
 	
-	private Map<ReqType, HashMultimap<ResourceLocation, Function<ItemStack, Map<String, Integer>>>> itemReqTooltips = new HashMap<>();
-	private Map<ReqType, HashMultimap<ResourceLocation, Function<BlockEntity, Map<String, Integer>>>> blockReqTooltips = new HashMap<>();
-	private Map<ReqType, HashMultimap<ResourceLocation, Function<Entity, Map<String, Integer>>>> entityReqTooltips = new HashMap<>();
+	private Map<ReqType, HashMultimap<ResourceLocation, Function<ItemStack, Map<String, Long>>>> itemReqTooltips = new HashMap<>();
+	private Map<ReqType, HashMultimap<ResourceLocation, Function<BlockEntity, Map<String, Long>>>> blockReqTooltips = new HashMap<>();
+	private Map<ReqType, HashMultimap<ResourceLocation, Function<Entity, Map<String, Long>>>> entityReqTooltips = new HashMap<>();
 	
 	private Map<EventType, HashMultimap<ResourceLocation, Function<ItemStack, Map<String, Long>>>> itemXpGainTooltips = new HashMap<>();
 	private Map<EventType, HashMultimap<ResourceLocation, Function<BlockEntity, Map<String, Long>>>> blockXpGainTooltips = new HashMap<>();
@@ -53,7 +53,7 @@ public class TooltipRegistry {
 	 * @param reqType the PMMO behavior type
 	 * @param func returns a map of skills and required levels
 	 */
-	public void registerItemRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<ItemStack, Map<String, Integer>> func) 
+	public void registerItemRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<ItemStack, Map<String, Long>> func)
 	{
 		if (func == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied Function Null"); return;}
 		if (reqType == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ReqType Null"); return;}
@@ -78,7 +78,7 @@ public class TooltipRegistry {
 	 * @param reqType the PMMO behavior type
 	 * @param func returns a map of skills and required levels
 	 */
-	public void registerBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<BlockEntity, Map<String, Integer>> func) 
+	public void registerBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<BlockEntity, Map<String, Long>> func)
 	{
 		if (func == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied Function Null"); return;}
 		if (reqType == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ReqType Null"); return;}
@@ -103,7 +103,7 @@ public class TooltipRegistry {
 	 * @param reqType the PMMO behavior type
 	 * @param func returns a map of skills and required levels
 	 */
-	public void registerEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<Entity, Map<String, Integer>> func) 
+	public void registerEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<Entity, Map<String, Long>> func)
 	{
 		if (func == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied Function Null"); return;}
 		if (reqType == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ReqType Null"); return;}
@@ -140,17 +140,17 @@ public class TooltipRegistry {
 	 * @param stack the itemstack being evaluated for skill requirements
 	 * @return the skill map of the item.
 	 */	
-	public Map<String, Integer> getItemRequirementTooltipData(ResourceLocation res, ReqType reqType, ItemStack stack)
+	public Map<String, Long> getItemRequirementTooltipData(ResourceLocation res, ReqType reqType, ItemStack stack)
 	{
 		if (requirementTooltipExists(res, reqType)) {
-			Map<String, Integer> suppliedData = new HashMap<>();
-			List<Map<String, Integer>> rawData = new ArrayList<>();
-			for (Function<ItemStack, Map<String, Integer>> func : itemReqTooltips.get(reqType).get(res)) {
+			Map<String, Long> suppliedData = new HashMap<>();
+			List<Map<String, Long>> rawData = new ArrayList<>();
+			for (Function<ItemStack, Map<String, Long>> func : itemReqTooltips.get(reqType).get(res)) {
 				rawData.add(func.apply(stack));
 			}
 			for (int i = 0; i < rawData.size(); i++) {
-				for (Map.Entry<String, Integer> entry : rawData.get(i).entrySet()) {
-					suppliedData.merge(entry.getKey(), entry.getValue(), Integer::max);
+				for (Map.Entry<String, Long> entry : rawData.get(i).entrySet()) {
+					suppliedData.merge(entry.getKey(), entry.getValue(), Long::max);
 				}
 			}
 			return suppliedData;
@@ -166,17 +166,17 @@ public class TooltipRegistry {
 	 * @param stack the itemstack being evaluated for skill requirements
 	 * @return the skill map of the block.
 	 */	
-	public Map<String, Integer> getBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, BlockEntity tile)
+	public Map<String, Long> getBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, BlockEntity tile)
 	{
 		if (requirementTooltipExists(res, reqType)) {
-			Map<String,Integer> suppliedData = new HashMap<>();
-			List<Map<String, Integer>> rawData = new ArrayList<>();
-			for (Function<BlockEntity, Map<String, Integer>> func : blockReqTooltips.get(reqType).get(res)) {
+			Map<String,Long> suppliedData = new HashMap<>();
+			List<Map<String, Long>> rawData = new ArrayList<>();
+			for (Function<BlockEntity, Map<String, Long>> func : blockReqTooltips.get(reqType).get(res)) {
 				rawData.add(func.apply(tile));
 			}
 			for (int i = 0; i < rawData.size(); i++) {
-				for (Map.Entry<String, Integer> entry : rawData.get(i).entrySet()) {
-					suppliedData.merge(entry.getKey(), entry.getValue(), Integer::max);
+				for (Map.Entry<String, Long> entry : rawData.get(i).entrySet()) {
+					suppliedData.merge(entry.getKey(), entry.getValue(), Long::max);
 				}
 			}
 			return suppliedData;
@@ -190,17 +190,17 @@ public class TooltipRegistry {
 	 * @param stack the itemstack being evaluated for skill requirements
 	 * @return the skill map of the entity.
 	 */	
-	public Map<String, Integer> getEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Entity entity)
+	public Map<String, Long> getEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Entity entity)
 	{
 		if (requirementTooltipExists(res, reqType)) {
-			Map<String,Integer> suppliedData = new HashMap<>();
-			List<Map<String, Integer>> rawData = new ArrayList<>();
-			for (Function<Entity, Map<String, Integer>> func : entityReqTooltips.get(reqType).get(res)) {
+			Map<String, Long> suppliedData = new HashMap<>();
+			List<Map<String, Long>> rawData = new ArrayList<>();
+			for (Function<Entity, Map<String, Long>> func : entityReqTooltips.get(reqType).get(res)) {
 				rawData.add(func.apply(entity));
 			}
 			for (int i = 0; i < rawData.size(); i++) {
-				for (Map.Entry<String, Integer> entry : rawData.get(i).entrySet()) {
-					suppliedData.merge(entry.getKey(), entry.getValue(), Integer::max);
+				for (Map.Entry<String, Long> entry : rawData.get(i).entrySet()) {
+					suppliedData.merge(entry.getKey(), entry.getValue(), Long::max);
 				}
 			}
 			return suppliedData;

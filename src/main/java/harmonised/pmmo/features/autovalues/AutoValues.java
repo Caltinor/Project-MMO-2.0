@@ -13,11 +13,11 @@ import java.util.concurrent.ConcurrentMap;
 
 public class AutoValues {
 	//============================DATA CACHES==============================================================
-	private static ConcurrentMap<ReqType, Map<ResourceLocation, Map<String, Integer>>> reqValues = new ConcurrentHashMap<>();
+	private static ConcurrentMap<ReqType, Map<ResourceLocation, Map<String, Long>>> reqValues = new ConcurrentHashMap<>();
 	private static ConcurrentMap<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainValues = new ConcurrentHashMap<>();
 	
 	//============================CACHE GETTERS============================================================	
-	private static Map<String, Integer> cacheRequirement(ReqType reqType, ResourceLocation objectID, Map<String, Integer> requirementMap) {
+	private static Map<String, Long> cacheRequirement(ReqType reqType, ResourceLocation objectID, Map<String, Long> requirementMap) {
 		reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).put(objectID, requirementMap);
 		return requirementMap;
 	}
@@ -33,14 +33,14 @@ public class AutoValues {
 	}
 
 	//============================AUTO VALUE GETTERS=======================================================
-	public static Map<String, Integer> getRequirements(ReqType reqType, ResourceLocation objectID, ObjectType autoValueType) {
+	public static Map<String, Long> getRequirements(ReqType reqType, ResourceLocation objectID, ObjectType autoValueType) {
 		//ignore processing if individual req is disabled and clear the cache for this object
 		if (!Config.autovalue().reqEnabled().getOrDefault(reqType, true)) {
 			reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).remove(objectID);
 			return new HashMap<>();
 		}
 		
-		Map<String, Integer> requirements = new HashMap<>();
+		Map<String, Long> requirements = new HashMap<>();
 		//Check the cache for an existing calculation
 		if (reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).containsKey(objectID) && !(requirements = new HashMap<>(reqValues.get(reqType).get(objectID))).isEmpty())
 			return requirements;
@@ -51,7 +51,7 @@ public class AutoValues {
 		case ENTITY -> AutoEntity.processReqs(reqType, objectID);
 		default -> requirements;
 		};
-		Map<String, Integer> finalReqs = new HashMap<>();
+		Map<String, Long> finalReqs = new HashMap<>();
 		requirements.forEach((skill, level) -> {
 			if (level > 0)
 				finalReqs.put(skill, level);

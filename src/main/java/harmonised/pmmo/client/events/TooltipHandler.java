@@ -84,9 +84,9 @@ public class TooltipHandler {
          }
 	}
 	
-	private static void addRequirementTooltip(Translation header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
+	private static void addRequirementTooltip(Translation header, ItemTooltipEvent event, Map<String, Long> reqs, Core core) {
 		event.getToolTip().add(header.asComponent());
-		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
+		for (Map.Entry<String, Long> req : reqs.entrySet()) {
 			event.getToolTip().add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(" "+String.valueOf(req.getValue()))).setStyle(CoreUtils.getSkillStyle(req.getKey())));
 		}
 	}
@@ -128,13 +128,13 @@ public class TooltipHandler {
 		return map;
 	}
 	
-	private static Map<String, Integer> getReqData(Core core, ReqType type, ItemStack stack, Player player) {
+	private static Map<String, Long> getReqData(Core core, ReqType type, ItemStack stack, Player player) {
 		//if Reqs are not enabled, ignore the getters and return an empty map
 		//This will cause the map to be empty and result in no header being added.
 		if (!Config.server().requirements().isEnabled(type)) return new HashMap<>();
 		
 		//Gather req data and populate a map for return
-		Map<String, Integer> map = type == ReqType.USE_ENCHANTMENT 
+		Map<String, Long> map = type == ReqType.USE_ENCHANTMENT
 				? core.getEnchantReqs(stack)
 				: core.getReqMap(type, stack, player.level(), true);
 		

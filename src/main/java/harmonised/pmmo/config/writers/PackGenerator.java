@@ -79,7 +79,7 @@ public class PackGenerator {
 								: new HashMap<>()))
 						.entrySet().stream()
 						.filter(entry -> !applySimple || !entry.getValue().isEmpty())
-						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
+						.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
 					Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r -> 
 							applyDefaults
 								? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
@@ -134,7 +134,7 @@ public class PackGenerator {
 							: new HashMap<>()))
 						.entrySet().stream()
 							.filter(entry -> !applySimple || !entry.getValue().isEmpty())
-							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
 					Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r ->
 							applyDefaults
 									? existing.nbtReqs().getOrDefault(r, new ArrayList<>())
@@ -181,7 +181,7 @@ public class PackGenerator {
 									: new HashMap<>()))
 							.entrySet().stream()
 							.filter(entry -> !applySimple || !entry.getValue().isEmpty())
-							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Integer>)e.getValue())),
+							.collect(Collectors.toMap(Map.Entry::getKey, e -> (Map<String, Long>)e.getValue())),
 					Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS).collect(Collectors.toMap(r -> r, r ->
 							applyDefaults
 									? existing.nbtReqs().getOrDefault(r, new ArrayList<>())

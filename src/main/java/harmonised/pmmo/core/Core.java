@@ -342,10 +342,10 @@ public class Core {
 				getObjectSkillMap(ObjectType.DIMENSION, dimension.location(), type, new CompoundTag()));
 	}
 	
-	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Integer> requirements) {
+	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Long> requirements) {
 		//convert skill groups which do not use total levels into constituent skills
 		CoreUtils.processSkillGroupReqs(requirements);
-		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
+		for (Map.Entry<String, Long> req : requirements.entrySet()) {
 			long skillLevel = getData().getLevel(req.getKey(), playerID);
 			if (Config.skills().get(req.getKey()).isSkillGroup()) {
 				SkillData skillData = Config.skills().get(req.getKey());
@@ -363,40 +363,40 @@ public class Core {
 	}
 
 	//======DATA OBTAINING METHODS=======
-	public Map<String, Integer> getObjectSkillMap(ObjectType type, ResourceLocation objectID, ReqType reqType, CompoundTag nbt) {
+	public Map<String, Long> getObjectSkillMap(ObjectType type, ResourceLocation objectID, ReqType reqType, CompoundTag nbt) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
 		return new HashMap<>(data != null ? data.getReqs(reqType, nbt) : new HashMap<>()); 
 	}
-	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack, Level level, boolean ignoreEnchants) {
+	public Map<String, Long> getReqMap(ReqType reqType, ItemStack stack, Level level, boolean ignoreEnchants) {
 		ResourceLocation itemID = RegistryUtil.getId(stack);
-		Map<String, Integer> reqMap = ignoreEnchants ? new HashMap<>() : getEnchantReqs(stack);
+		Map<String, Long> reqMap = ignoreEnchants ? new HashMap<>() : getEnchantReqs(stack);
 		if (tooltips.requirementTooltipExists(itemID, reqType)) 
 			tooltips.getItemRequirementTooltipData(itemID, reqType, stack).forEach((skill, lvl) -> {
-				reqMap.merge(skill, lvl, Integer::max);
+				reqMap.merge(skill, lvl, Long::max);
 			});;
 		return getCommonReqData(reqMap, ObjectType.ITEM, itemID, reqType, TagUtils.stackTag(stack, level));
 	}
-	public Map<String, Integer> getEnchantReqs(ItemStack stack) {
-		Map<String, Integer> outMap = new HashMap<>();
+	public Map<String, Long> getEnchantReqs(ItemStack stack) {
+		Map<String, Long> outMap = new HashMap<>();
 		if (!stack.isEnchanted() || !Config.server().requirements().isEnabled(ReqType.USE_ENCHANTMENT)) return outMap;
 		for (var enchant : stack.getEnchantments().entrySet()) {
 			getEnchantmentReqs(enchant.getKey().value().builtInRegistryHolder().unwrapKey().get().location(), enchant.getValue()-1).forEach((skill, level) -> {
-				outMap.merge(skill, level, Integer::max);
+				outMap.merge(skill, level, Long::max);
 			});
 		}
 		return outMap;
 	}
-	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
+	public Map<String, Long> getReqMap(ReqType reqType, Entity entity) {
 		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? new ResourceLocation("minecraft:player") : RegistryUtil.getId(entity);
-		Map<String, Integer> reqMap = tooltips.requirementTooltipExists(entityID, reqType)
+		Map<String, Long> reqMap = tooltips.requirementTooltipExists(entityID, reqType)
 			? tooltips.getEntityRequirementTooltipData(entityID, reqType, entity)
 			: new HashMap<>();
 		return getCommonReqData(reqMap, ObjectType.ENTITY, entityID, reqType, TagUtils.entityTag(entity));
 	}	
-	public Map<String, Integer> getReqMap(ReqType reqType, BlockPos pos, Level level) {
+	public Map<String, Long> getReqMap(ReqType reqType, BlockPos pos, Level level) {
 		BlockEntity tile = level.getBlockEntity(pos);
 		ResourceLocation blockID = RegistryUtil.getId(level.getBlockState(pos));
-		Map<String, Integer> reqMap = (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
+		Map<String, Long> reqMap = (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
 			? tooltips.getBlockRequirementTooltipData(blockID, reqType, tile)
 			: new HashMap<>();
 		CompoundTag dataIn = TagUtils.tileTag(tile);
@@ -413,7 +413,7 @@ public class Core {
 	 * @param tag object's tag if present
 	 * @return a map of skills and levels required to perform the action
 	 */
-	public Map<String, Integer> getCommonReqData(Map<String, Integer> reqsIn, ObjectType oType, ResourceLocation objectID, ReqType type, CompoundTag tag) {
+	public Map<String, Long> getCommonReqData(Map<String, Long> reqsIn, ObjectType oType, ResourceLocation objectID, ReqType type, CompoundTag tag) {
 		if (reqsIn.isEmpty()) {
 			reqsIn = getObjectSkillMap(oType, objectID, type, tag);
 			if (Config.autovalue().enabled() && reqsIn.isEmpty())
@@ -424,7 +424,7 @@ public class Core {
 	//======DATA OBTAINING UTILITY METHODS======
 	private ResourceLocation playerID = new ResourceLocation("player");
 	
-	public Map<String, Integer> getEnchantmentReqs(ResourceLocation enchantID, int enchantLvl) {
+	public Map<String, Long> getEnchantmentReqs(ResourceLocation enchantID, int enchantLvl) {
 		return ((EnhancementsData) loader.getLoader(ObjectType.ENCHANTMENT).getData(enchantID)).skillArray().getOrDefault(enchantLvl, new HashMap<>());
 	}
 	

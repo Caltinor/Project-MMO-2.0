@@ -243,7 +243,7 @@ public class APIUtils {
 	 * @param side the side being queried.  this can be the actual setting on the server or the client mirror setting.
 	 * @return a map containing the skills and their required levels for this item and requirement type.
 	 */
-	public static Map<String, Integer> getRequirementMap(ItemStack item, Level level, ReqType type, LogicalSide side) {
+	public static Map<String, Long> getRequirementMap(ItemStack item, Level level, ReqType type, LogicalSide side) {
 		Preconditions.checkNotNull(item);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);
@@ -260,7 +260,7 @@ public class APIUtils {
 	 * @param type the requirement type
 	 * @return a map containing the skills and their required levels for this block and requirement type.
 	 */
-	public static Map<String, Integer> getRequirementMap(BlockPos pos, Level level, ReqType type) {
+	public static Map<String, Long> getRequirementMap(BlockPos pos, Level level, ReqType type) {
 		Preconditions.checkNotNull(pos);
 		Preconditions.checkNotNull(level);
 		Preconditions.checkNotNull(type);
@@ -277,7 +277,7 @@ public class APIUtils {
 	 * @param side the side being queried.  this can be the actual setting on the server or the client mirror setting.
 	 * @return a map containing the skills and their required levels for this entity and requirement type.
 	 */
-	public static Map<String, Integer> getRequirementMap(Entity entity, ReqType type, LogicalSide side) {
+	public static Map<String, Long> getRequirementMap(Entity entity, ReqType type, LogicalSide side) {
 		Preconditions.checkNotNull(entity);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);
@@ -296,7 +296,7 @@ public class APIUtils {
 	 * @param side the side to execute the data getter
 	 * @return a map of skill names an associated level requirements
 	 */
-	public static Map<String, Integer> getRequirementMap(ObjectType oType, ResourceLocation objectID, ReqType type, LogicalSide side) {
+	public static Map<String, Long> getRequirementMap(ObjectType oType, ResourceLocation objectID, ReqType type, LogicalSide side) {
 		Preconditions.checkNotNull(oType);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(objectID);
@@ -313,7 +313,7 @@ public class APIUtils {
 	 * @param requirements a map of skills and levels needed to perform the action
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerRequirement(ObjectType oType, ResourceLocation objectID, ReqType type, Map<String, Integer> requirements, boolean asOverride) {
+	public static void registerRequirement(ObjectType oType, ResourceLocation objectID, ReqType type, Map<String, Long> requirements, boolean asOverride) {
 		DataSource<?> raw = null;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData();}
@@ -610,7 +610,7 @@ public class APIUtils {
 	 * @param reqType the requirement type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerItemRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<ItemStack, Map<String, Integer>> func)  {
+	public static void registerItemRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<ItemStack, Map<String, Long>> func)  {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemRequirementTooltipData(res, reqType, func);
 	}
 	
@@ -624,7 +624,7 @@ public class APIUtils {
 	 * @param reqType the PMMO behavior type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<BlockEntity, Map<String, Integer>> func) {
+	public static void registerBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<BlockEntity, Map<String, Long>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerBlockRequirementTooltipData(res, reqType, func);
 	}
 	
@@ -638,7 +638,7 @@ public class APIUtils {
 	 * @param reqType the requirement type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<Entity, Map<String, Integer>> func) {
+	public static void registerEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<Entity, Map<String, Long>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerEntityRequirementTooltipData(res, reqType, func);
 	}
 	

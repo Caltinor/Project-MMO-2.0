@@ -92,13 +92,13 @@ public class CoreUtils {
 	 * @param map the base req map to be modified
 	 * @return the modified map (optional usage)
 	 */
-	public static Map<String, Integer> processSkillGroupReqs(Map<String, Integer> map) {
+	public static Map<String, Long> processSkillGroupReqs(Map<String, Long> map) {
 		new HashMap<>(map).forEach((skill, level) -> {
 			SkillData data = Config.skills().get(skill);
 			if (data.isSkillGroup() && !data.getUseTotalLevels()) {
 				map.remove(skill);
 				data.getGroupReq(level).forEach((member, xp) -> {
-					map.merge(member, xp, Integer::sum);
+					map.merge(member, xp, Long::sum);
 				});																						
 			}
 		});

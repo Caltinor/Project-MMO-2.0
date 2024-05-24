@@ -39,6 +39,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -61,6 +62,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -154,7 +156,7 @@ public class StatScrollWidget extends ScrollPanel {
 	}
 	public StatScrollWidget(int width, int height, int top, int left, BlockPos pos) {
 		this(width, height, top, left);
-		populateBlockFromWorld(pos, EventType.BLOCK_APPLICABLE_EVENTS, ReqType.BLOCK_APPLICABLE_EVENTS);
+		populateBlockFromWorld(pos, ReqType.BLOCK_APPLICABLE_EVENTS);
 	}
 	public StatScrollWidget(int width, int height, int top, int left, SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
 		this(width, height, top, left);
@@ -164,7 +166,7 @@ public class StatScrollWidget extends ScrollPanel {
 	//Utility method for uniform nesting indentation
 	private int step(int level) {return level * 10;}
 	
-	private Supplier<List<ItemStack>> itemSupplier = () -> CreativeModeTabs.searchTab().getDisplayItems().stream().toList();
+	private final Supplier<List<ItemStack>> itemSupplier = () -> CreativeModeTabs.searchTab().getDisplayItems().stream().toList();
 	
 	public void generateGlossary(SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
 		switch (selection) {
@@ -192,14 +194,14 @@ public class StatScrollWidget extends ScrollPanel {
 				break;}
 			case ENTITY: {
 				populateEntity(
-					BuiltInRegistries.ENTITY_TYPE.stream().map(entityType -> entityType.create(mc.level)).filter(entity -> entity != null).toList(),
+					BuiltInRegistries.ENTITY_TYPE.stream().map(entityType -> entityType.create(mc.level)).filter(Objects::nonNull).toList(),
 					events,
 					type == null ? ReqType.ENTITY_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
 					false,
 					skill);
 				break;}
 			case DIMENSIONS: {
-				populateLocation(mc.player.connection.levels().stream().map(key -> key.location()).toList(),
+				populateLocation(mc.player.connection.levels().stream().map(ResourceKey::location).toList(),
 					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, false, false, false);
 				break;}
 			case BIOMES: {
@@ -207,7 +209,7 @@ public class StatScrollWidget extends ScrollPanel {
 					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, true, false, false);
 				break;}
 			case ENCHANTS: {
-				populateEnchants(BuiltInRegistries.ENCHANTMENT.stream().map(ench -> RegistryUtil.getId(ench)).toList(), skill);
+				populateEnchants(BuiltInRegistries.ENCHANTMENT.stream().map(RegistryUtil::getId).toList(), skill);
 				break;}
 			default:{}
 			}
@@ -334,7 +336,7 @@ public class StatScrollWidget extends ScrollPanel {
 				return map;
 				}), events, skillFilter);
 			addReqSection((reqType -> {
-				Map<String, Integer> reqMap = core.getReqMap(reqType, stack, mc.level, true);
+				Map<String, Long> reqMap = core.getReqMap(reqType, stack, mc.level, true);
 				if (reqType == ReqType.USE_ENCHANTMENT)
 					core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
 				if (stack.getItem() instanceof BlockItem)
@@ -357,8 +359,8 @@ public class StatScrollWidget extends ScrollPanel {
 	}
 	
 	@SuppressWarnings("resource")
-	private void populateBlockFromWorld(BlockPos block, EventType[] events, ReqType[] reqs) {
-		addEventSection((event -> core.getExperienceAwards(event, block, Minecraft.getInstance().level, null, new CompoundTag())), events, "");
+	private void populateBlockFromWorld(BlockPos block, ReqType[] reqs) {
+		addEventSection((event -> core.getExperienceAwards(event, block, Minecraft.getInstance().level, null, new CompoundTag())), EventType.BLOCK_APPLICABLE_EVENTS, "");
 		addReqSection((reqType -> core.getReqMap(reqType, block, Minecraft.getInstance().level)), new ArrayList<>(), reqs, "");
 		addBlockVeinSection(core.getLoader().BLOCK_LOADER.getData(RegistryUtil.getId(Minecraft.getInstance().level.getBlockState(block))).veinData());
 	}
@@ -372,11 +374,11 @@ public class StatScrollWidget extends ScrollPanel {
 			ResourceLocation id = RegistryUtil.getId(block);
 			content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color().getColor(), Config.SECTION_HEADER_COLOR.get(), block));
 			addEventSection((event -> core.getTooltipRegistry().xpGainTooltipExists(id, event)
-					? Collections.singletonMap(PREDICATE_KEY, 0l)
+					? Collections.singletonMap(PREDICATE_KEY, 0L)
 					: core.getObjectExperienceMap(ObjectType.BLOCK, id, event, new CompoundTag()))
 				, events, skillFilter);
 			addReqSection((reqType -> core.getPredicateRegistry().predicateExists(id, reqType)
-					? Collections.singletonMap(PREDICATE_KEY, 0)
+					? Collections.singletonMap(PREDICATE_KEY, 0L)
 					: core.getObjectSkillMap(ObjectType.BLOCK, id, reqType, new CompoundTag()))
 				, new ArrayList<>()
 				, reqs, skillFilter);
@@ -463,10 +465,10 @@ public class StatScrollWidget extends ScrollPanel {
 				content.addAll(TextElement.build(Component.literal(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
 			for (int i = 0; i <= BuiltInRegistries.ENCHANTMENT.get(ench).getMaxLevel(); i++) {
-				Map<String, Integer> reqMap = core.getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
+				Map<String, Long> reqMap = core.getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 					holder.addAll(TextElement.build(Component.literal(String.valueOf(i)), this.width, 1, 0xFFFFFF, false, 0));
-					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
+					for (Map.Entry<String, Long> map : reqMap.entrySet()) {
 						if (map.getValue() == 0) continue;
 						holder.addAll(TextElement.build(map.getKey(), map.getValue(), this.width, step(1), CoreUtils.getSkillColor(map.getKey())));
 					}
@@ -520,27 +522,27 @@ public class StatScrollWidget extends ScrollPanel {
 					}
 				}
 			}
-			if (holder.size() > 0) {
+			if (!holder.isEmpty()) {
 				content.addAll(TextElement.build(LangProvider.EVENT_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 				content.addAll(holder);
 			}
 		}
 	}
 	
-	private void addReqSection(Function<ReqType, Map<String, Integer>> reqSrc, List<MobEffectInstance> reqEffects, ReqType[] reqs, String skillFilter) {
+	private void addReqSection(Function<ReqType, Map<String, Long>> reqSrc, List<MobEffectInstance> reqEffects, ReqType[] reqs, String skillFilter) {
 		if (reqs.length > 0) {
 			List<TextElement> holder = new ArrayList<>();
 			for (ReqType reqType: reqs) {
-				Map<String, Integer> reqMap = CoreUtils.processSkillGroupReqs(reqSrc.apply(reqType)).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+				Map<String, Long> reqMap = CoreUtils.processSkillGroupReqs(reqSrc.apply(reqType)).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 					holder.addAll(TextElement.build(reqType, this.width, 1, 0xFFFFFF, false, 0));
-					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
+					for (Map.Entry<String, Long> map : reqMap.entrySet()) {
 						if (map.getValue() == 0) continue;
 						holder.addAll(TextElement.build(map.getKey(), map.getValue(), this.width, step(1), CoreUtils.getSkillColor(map.getKey())));
 					}
 				}
 			}
-			if (holder.size() > 0) {
+			if (!holder.isEmpty()) {
 				content.addAll(TextElement.build(LangProvider.REQ_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 				content.addAll(holder);
 				addReqEffectSection(reqEffects, true);
@@ -549,7 +551,7 @@ public class StatScrollWidget extends ScrollPanel {
 	}
 	
 	private void addReqEffectSection(List<MobEffectInstance> reqEffects, boolean isNegative) {
-		if (reqEffects.size() > 0) {
+		if (!reqEffects.isEmpty()) {
 			content.addAll(TextElement.build(isNegative ? LangProvider.REQ_EFFECTS_HEADER.asComponent() : LangProvider.BIOME_EFFECT_POS.asComponent(), this.width, 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 			for (MobEffectInstance mei : reqEffects) {
 				content.addAll(TextElement.build(mei.getEffect().value().getDisplayName(), this.width, step(1), 0xFFFFFF, false, 0));
@@ -561,14 +563,14 @@ public class StatScrollWidget extends ScrollPanel {
 		if (mods.length > 0) {
 			List<TextElement> holder = new ArrayList<>();
 			for (ModifierDataType mod : mods) {
-				Map<String, Double> modifiers = bonusSrc.apply(mod).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+				Map<String, Double> modifiers = bonusSrc.apply(mod).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 				if (!modifiers.isEmpty()) {
-					content.addAll(TextElement.build(mod, this.width, 1, 0xFFFFFF, false, 0));
+					holder.addAll(TextElement.build(mod, this.width, 1, 0xFFFFFF, false, 0));
 					modifiers.forEach((key, value) 
-							-> content.addAll(TextElement.build(key, value, this.width, step(1), CoreUtils.getSkillColor(key))));
+							-> holder.addAll(TextElement.build(key, value, this.width, step(1), CoreUtils.getSkillColor(key))));
 				}
 			}
-			if (holder.size() > 0) {
+			if (!holder.isEmpty()) {
 				content.addAll(TextElement.build(LangProvider.MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 				content.addAll(holder);
 			}

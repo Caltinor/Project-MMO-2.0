@@ -24,14 +24,14 @@ public class AutoBlock {
 	public static final ReqType[] REQTYPES = {ReqType.BREAK};
 	public static final EventType[] EVENTTYPES = {EventType.BLOCK_BREAK, EventType.BLOCK_PLACE, EventType.GROW};
 	
-	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation blockID) {
+	public static Map<String, Long> processReqs(ReqType type, ResourceLocation blockID) {
 
 		//exit early if the type is not valid for a block
 		if (!type.blockApplicable || isWorldSensitive(blockID))
 			return new HashMap<>();
 		
 		Block block = BuiltInRegistries.BLOCK.get(blockID);
-		Map<String, Integer> outMap = new HashMap<>();
+		Map<String, Long> outMap = new HashMap<>();
 		switch (type) {
 		case BREAK -> {
 			//this water check exists solely to capture breaking waterlogged blocks
@@ -41,7 +41,7 @@ public class AutoBlock {
 
 			float breakSpeed = block.defaultBlockState().getDestroySpeed(null, null);
 			Config.autovalue().reqs().blockDefault().forEach((skill, level) -> {
-				outMap.put(skill, (int)Math.max(0, (breakSpeed - BASE_HARDNESS) * Config.autovalue().tweaks().hardnessModifier()));
+				outMap.put(skill, (long)Math.max(0, (breakSpeed - BASE_HARDNESS) * Config.autovalue().tweaks().hardnessModifier()));
 			});
 		}
 		default -> {}}
