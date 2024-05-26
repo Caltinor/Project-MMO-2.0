@@ -24,6 +24,9 @@ The below table contains every requirement type in the mod as well as what it do
 |**INTERACT**| can the player interact with this block                                                          |
 |**ENTITY_INTERACT**| can the player interact with this entity                                                         |
 
+## Crafting
+There is no way to fully restrict player crafting, therefore gating crafting events is currently not supported.
+
 ## Requirement Negative Effects
 There are two requirements that can trigger negative effects: `WEAR` and `BIOME`.  These are effects that are given to players who try to hold/wear an item they can't use or enter biome they aren't skilled enough for.  
 
