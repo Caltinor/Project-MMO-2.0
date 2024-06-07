@@ -609,7 +609,7 @@ public class StatScrollWidget extends ScrollPanel {
 	}
 	
 	private void addItemVeinSection(VeinData veinData, boolean isBlockItem) {
-		if (!veinData.equals(VeinData.EMPTY)) {
+		if (!veinData.isEmpty()) {
 			content.addAll(TextElement.build(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 			content.addAll(TextElement.build(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate.orElse(0d) * 2d), this.width, step(1), 0xFFFFFF, false, 0));
 			content.addAll(TextElement.build(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap.orElse(0)), this.width, step(1), 0xFFFFFF, false, 0));
@@ -619,7 +619,7 @@ public class StatScrollWidget extends ScrollPanel {
 	}
 	
 	private void addBlockVeinSection(VeinData veinData) {
-		if (veinData.consumeAmount != VeinData.EMPTY.consumeAmount) {
+		if (veinData.consumeAmount.orElse(0) != 0) {
 			content.addAll(TextElement.build(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 			content.addAll(TextElement.build(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount.orElse(0)), this.width, step(1), 0xFFFFFF, false, 0));
 		}

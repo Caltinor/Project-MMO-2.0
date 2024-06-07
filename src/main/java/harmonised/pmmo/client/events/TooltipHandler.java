@@ -78,7 +78,7 @@ public class TooltipHandler {
 					.forEach(pair -> addModifierTooltip(pair.getFirst().tooltip, event, pair.getSecond(), core));
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
             VeinData veinData = core.getLoader().ITEM_LOADER.getData(itemID).veinData();
-            if (!veinData.isUnconfigured() && !veinData.equals(VeinData.EMPTY) && Config.server().veinMiner().enabled()) {
+            if (!veinData.isUnconfigured() && !veinData.isEmpty() && Config.server().veinMiner().enabled()) {
 				addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, isBlockItem);
 			}
          }
