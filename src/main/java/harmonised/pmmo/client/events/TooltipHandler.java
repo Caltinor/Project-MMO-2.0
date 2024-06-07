@@ -101,7 +101,7 @@ public class TooltipHandler {
             if (heldItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.HELD).get()) {addModifierTooltip(LangProvider.BOOST_HELD, event, heldItemXpBoost, core);}
             if (wornItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.WORN).get()) {addModifierTooltip(LangProvider.BOOST_WORN, event, wornItemXpBoost, core);}
             //=====================VEIN DATA============================
-            if (!veinData.equals(VeinData.EMPTY) && Config.VEIN_ENABLED.get()) {addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, stack.getItem() instanceof BlockItem);}
+            if (!veinData.isEmpty() && Config.VEIN_ENABLED.get()) {addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, stack.getItem() instanceof BlockItem);}
          }
 	}
 	
