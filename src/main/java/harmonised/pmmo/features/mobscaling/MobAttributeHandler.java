@@ -15,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
@@ -39,10 +40,10 @@ public class MobAttributeHandler {
 	private static final UUID MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	/**Used for balancing purposes to ensure configurations do not exceed known limits.*/
 	private static final Map<ResourceLocation, Float> CAPS = Map.of(
-		new ResourceLocation("generic.max_health"), 1024f,
-		new ResourceLocation("generic.movement_speed"), 1.5f,
-		new ResourceLocation("generic.attack_damage"), 2048f,
-		new ResourceLocation("zombie.spawn_reinforcements"), 1f
+			Attributes.MAX_HEALTH.unwrapKey().get().location(), 1024f,
+			Attributes.MOVEMENT_SPEED.unwrapKey().get().location(), 1.5f,
+			Attributes.ATTACK_DAMAGE.unwrapKey().get().location(), 2048f,
+			Attributes.SPAWN_REINFORCEMENTS_CHANCE.unwrapKey().get().location(), 1f
 	);
 
 	@SubscribeEvent
