@@ -30,12 +30,9 @@ import net.minecraftforge.fml.LogicalSide;
 public class PlayerTickHandler {
 	private static final Map<UUID, Integer> airLast = new HashMap<>();
 	private static final Map<UUID, Float> healthLast = new HashMap<>();
-	private static Map<Player, Short> ticksIgnoredSinceLastProcess = new HashMap<>();
 
 	public static void handle(PlayerTickEvent event) {
-		short current = ticksIgnoredSinceLastProcess.computeIfAbsent(event.player, p ->(short)0);
-		ticksIgnoredSinceLastProcess.put(event.player, ++current);
-		if (current < 10) return;
+		if (event.player.tickCount %10 != 0) return;
 
 		Player player = event.player;
 		Core core = Core.get(event.side);
@@ -88,7 +85,6 @@ public class PlayerTickHandler {
 		//update tracker variables
 		airLast.put(player.getUUID(), player.getAirSupply());
 		healthLast.put(player.getUUID(), player.getHealth());
-		ticksIgnoredSinceLastProcess.put(event.player, (short)0);
 	}
 	
 	private static void processEvent(EventType type, Core core, PlayerTickEvent event) {
