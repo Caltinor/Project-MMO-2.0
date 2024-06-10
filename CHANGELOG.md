@@ -1,7 +1,6 @@
 # Changelog
 
-## [1.18.2-6.2.8] - 2024-05-22
+## [1.18.2-6.2.9] - 2024-06-10
 ### Bugfixes / Tweaks
-- Fixed 5+ players breaking features on servers
-- Fixed command perks not respecting skills
+- Fixed vein data not allowing removal as an override.  setting vein values to zero now properly removes the vein from the tooltip and overrides existing values when the override property is true.
 
