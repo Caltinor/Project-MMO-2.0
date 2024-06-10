@@ -57,7 +57,7 @@ public record ObjectData(
 		@Override
 		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
 			boolean isDamage = type == EventType.RECEIVE_DAMAGE || type == EventType.DEAL_DAMAGE;
-			if (nbtXpValues().get(type) == null && (isDamage && nbtDamageValues().get(type) == null)) {
+			if (nbtXpValues().get(type) == null && nbtDamageValues().get(type) == null) {
 				return isDamage
 					? damageXpValues()
 						.getOrDefault(type, new HashMap<>())
