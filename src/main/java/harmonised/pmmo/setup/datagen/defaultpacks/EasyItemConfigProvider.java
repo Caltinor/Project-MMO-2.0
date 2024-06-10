@@ -128,6 +128,20 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         miningBreak(Blocks.DEEPSLATE_LAPIS_ORE, 1000L);
         miningBreak(Blocks.NETHER_QUARTZ_ORE, 1000L);
         miningBreak(Blocks.ANCIENT_DEBRIS, 15000L);
+
+        get(Items.TORCH).addBonus(ModifierDataType.HELD, Map.of("mining", 2.0, "excavation", 2.0));
+        get(Items.SOUL_TORCH).addBonus(ModifierDataType.HELD, Map.of("mining", 5.0, "excavation", 5.0));
+        get(Items.SHIELD).addBonus(ModifierDataType.HELD, Map.of("combat", 2.0, "endurance", 2.0));
+        get(Items.SPECTRAL_ARROW).addBonus(ModifierDataType.HELD, Map.of("combat", 5.0, "endurance", 5.0));
+        get(Items.PUFFERFISH).addBonus(ModifierDataType.HELD, Map.of("swimming", 2.0));
+        get(Items.NAUTILUS_SHELL).addBonus(ModifierDataType.HELD, Map.of("swimming", 5.0));
+        get(Items.HEART_OF_THE_SEA).addBonus(ModifierDataType.HELD, Map.of("swimming", 10.0));
+        get(Items.TORCHFLOWER).addBonus(ModifierDataType.HELD, Map.of("farming", 10.0));
+        get(Items.PITCHER_POD).addBonus(ModifierDataType.HELD, Map.of("farming", 10.0));
+        get(Items.SCAFFOLDING).addBonus(ModifierDataType.HELD, Map.of("building", 5.0));
+        get(Items.CHAIN).addBonus(ModifierDataType.HELD, Map.of("woodcutting", 2.0));
+
+        get(Items.SCULK_VEIN).setVeinCap(2000).setVeinRate(100.0);
     }
 
     private void miningBreak(Block block, long amount) {
