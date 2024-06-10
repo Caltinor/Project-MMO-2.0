@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
     Map<ConfigListener.ServerConfigs, ConfigData<?>> data = new HashMap<>();
@@ -67,7 +68,7 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
         data.put(ConfigListener.ServerConfigs.PERKS, new PerksConfig(perkDefaults()));
         AutoValueConfig defaultAutoValues = new AutoValueConfig();
         data.put(ConfigListener.ServerConfigs.AUTOVALUES, new AutoValueConfig(true,
-                defaultAutoValues.reqEnabled(),
+                Arrays.stream(ReqType.values()).collect(Collectors.toMap(req -> req, r -> false)),
                 defaultAutoValues.xpEnabled(),
                 new AutoValueConfig.XpAwards(200d,
                         Arrays.stream(AutoItem.EVENTTYPES).collect(Collectors
@@ -76,7 +77,8 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
                         Map.of("woodcutting", 100L),
                         Map.of("farming", 100L),
                         Map.of("excavation", 100L),
-                        Arrays.stream(AutoEntity.EVENTTYPES).collect(Collectors.toMap(event -> event, event -> Map.of(event.autoValueSkill, 10L)))),
+                        Stream.of(EventType.DEATH, EventType.SHIELD_BLOCK, EventType.TAMING)
+                                .collect(Collectors.toMap(event -> event, event -> Map.of(event.autoValueSkill, 10L)))),
                 new AutoValueConfig.Requirements(Map.of(),Map.of(),Map.of(),Map.of(),Map.of(),Map.of(),Map.of()),
                 defaultAutoValues.tweaks()
         ));
