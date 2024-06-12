@@ -414,6 +414,174 @@
 		"mining": 12,
 		"magic": 6
 	},
+	"gemsnjewels:dusk_emerald_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:ruby_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:sapphire_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:sable_amethyst_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:opal_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:garnet_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:topaz_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:peridot_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:aquamarine_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:zircon_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:alexandrite_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:tanzanite_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:tourmaline_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:spinel_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:black_opal_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:citrine_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:morganite_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:ametrine_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:kunzite_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:iolite_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:dusk_emerald_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:ruby_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:sapphire_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:sable_amethyst_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:opal_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:garnet_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:topaz_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:peridot_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:aquamarine_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:zircon_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:alexandrite_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:tanzanite_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:tourmaline_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:spinel_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:black_opal_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:citrine_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:morganite_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:ametrine_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:kunzite_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:iolite_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:diamond_nether_ore_block":
+	{
+		"mining": 10
+	},
+	"gemsnjewels:v_emerald_nether_ore_block":
+	{
+		"mining": 10
+	},
 	"good_nights_sleep:necrum_ore":
 	{
 		"mining": 16,
