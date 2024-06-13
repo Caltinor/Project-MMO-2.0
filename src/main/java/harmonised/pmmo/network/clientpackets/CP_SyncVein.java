@@ -15,7 +15,7 @@ public record CP_SyncVein(double charge) implements CustomPacketPayload {
 	public static final StreamCodec<FriendlyByteBuf, CP_SyncVein> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.DOUBLE, CP_SyncVein::charge, CP_SyncVein::new
 	);
-	public static final Type<CP_SyncVein> TYPE = new Type(new ResourceLocation(Reference.MOD_ID, "s2c_sync_vein"));
+	public static final Type<CP_SyncVein> TYPE = new Type(Reference.rl("s2c_sync_vein"));
 	@Override public Type<CP_SyncVein> type() {return TYPE;}
 	public static void handle(CP_SyncVein packet, IPayloadContext ctx) {
 		ctx.enqueueWork(() -> {

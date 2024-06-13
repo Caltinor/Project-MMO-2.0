@@ -12,6 +12,7 @@ import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.core.nbt.NBTUtils;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.Functions;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -271,7 +272,7 @@ public record ObjectData(
 					&& nbtDamageValues().values().stream().allMatch(Map::isEmpty)
 					&& bonuses().values().stream().allMatch(Map::isEmpty)
 					&& nbtBonuses().values().stream().allMatch(List::isEmpty)
-					&& salvage().keySet().stream().allMatch(rl -> rl.equals(new ResourceLocation("item")))
+					&& salvage().keySet().stream().allMatch(rl -> rl.equals(Reference.mc("item")))
 					&& veinData().isUnconfigured();
 		}
 

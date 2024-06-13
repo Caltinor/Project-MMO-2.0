@@ -229,10 +229,10 @@ public class AutoItem {
 	private static Map<String, Long> getWearableData(ReqType type, ItemStack stack, boolean isArmor) {
 		Map<String, Long> outMap = new HashMap<>();
 		//if the item being evaluated is a basic item, return a blank map
-		if (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getMaterial().equals(ArmorMaterials.LEATHER)) 
+		if (stack.getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().equals(ArmorMaterials.LEATHER))
 			return outMap;
 		
-		final double scale = getWearableAttributes(WearableTypes.fromSlot(LivingEntity.getEquipmentSlotForItem(stack), !isArmor), stack, isArmor);
+		final double scale = getWearableAttributes(WearableTypes.fromSlot(stack.getEquipmentSlot(), !isArmor), stack, isArmor);
 		Config.autovalue().reqs().req(type).forEach((skill, level) -> {
 			outMap.put(skill, (long)Math.max(0, (double)level * (scale)));
 		});
@@ -240,7 +240,7 @@ public class AutoItem {
 	}
 	private static Map<String, Long> getWearableData(EventType type, ItemStack stack, boolean isArmor) {
 		Map<String, Long> outMap = new HashMap<>();
-		final double scale = getWearableAttributes(WearableTypes.fromSlot(LivingEntity.getEquipmentSlotForItem(stack), !isArmor), stack, isArmor);
+		final double scale = getWearableAttributes(WearableTypes.fromSlot(stack.getEquipmentSlot(), !isArmor), stack, isArmor);
 		Config.autovalue().xpAwards().item(type).forEach((skill, level) -> {
 			outMap.put(skill, Double.valueOf(Math.max(0, (double)level * scale)).longValue());
 		});
@@ -257,7 +257,7 @@ public class AutoItem {
 		return item.getTier().getAttackDamageBonus();
 	}
 	private static double getDamage(ItemStack stack) {
-		return (getAttributeAmount(stack, EquipmentSlot.MAINHAND, Attributes.ATTACK_DAMAGE) + EnchantmentHelper.getDamageBonus(stack, null) - BASE_DAMAGE);
+		return (getAttributeAmount(stack, EquipmentSlot.MAINHAND, Attributes.ATTACK_DAMAGE) /*There was a bonus check here*/ - BASE_DAMAGE);
 	}
 	private static double getAttackSpeed(ItemStack stack) {
 		return (Math.abs(getAttributeAmount(stack, EquipmentSlot.MAINHAND, Attributes.ATTACK_SPEED)) - BASE_ATK_SPD);

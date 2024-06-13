@@ -11,6 +11,7 @@ import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -34,7 +35,7 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 	private Font fontRenderer;
 
 	@Override
-	public void render(GuiGraphics guiGraphics, float partialTick) {
+	public void render(GuiGraphics guiGraphics, DeltaTracker partialTick) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)

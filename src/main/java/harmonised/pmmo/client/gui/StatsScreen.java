@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.function.BiFunction;
 
 public class StatsScreen extends Screen{
-	private static final ResourceLocation GUI_BG = new ResourceLocation(Reference.MOD_ID, "textures/gui/screenboxy.png");
+	private static final ResourceLocation GUI_BG = Reference.rl("textures/gui/screenboxy.png");
 	private static final MutableComponent MENU_NAME = Component.literal("Item Detail Screen");
 	
 	private StatScrollWidget scrollWidget;

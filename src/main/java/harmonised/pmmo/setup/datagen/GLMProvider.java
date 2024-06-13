@@ -135,7 +135,7 @@ public abstract class GLMProvider implements DataProvider {
 		for (var entry : toSerialize.entrySet()) {
 			var name = entry.getKey();
 			var lootModifier = entry.getValue();
-			entries.add(new ResourceLocation(modid, name));
+			entries.add(Reference.rl(modid, name));
 			Path modifierPath = modifierFolderPath.resolve(name + ".json");
 			futuresBuilder.add(DataProvider.saveStable(cache, registries, IGlobalLootModifier.CONDITIONAL_CODEC, Optional.of(lootModifier), modifierPath));
 		}

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
     Map<ResourceLocation, ObjectData.Builder> data = new HashMap<>();
@@ -65,6 +66,14 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
                                 entry.getKey().location())).toList())
         ));
         get(Items.POTION).addNBTXp(EventType.CONSUME, List.of(logic));
+        logic = new LogicEntry(BehaviorToPrevious.ADD_TO, false, List.of(
+                new LogicEntry.Case(List.of("components{}.minecraft:potion_contents{}.potion"),
+                        BuiltInRegistries.POTION.entrySet().stream().map(entry ->
+                                equalsCriteria("crafting",
+                                        entry.getValue().getEffects().stream().mapToInt(MobEffectInstance::getDuration).max().orElseGet(() -> 1),
+                                        entry.getKey().location())).toList())
+        ));
+        get(Items.POTION).addNBTXp(EventType.BREW, List.of(logic));
 
         var logicBase = new LogicEntry(BehaviorToPrevious.ADD_TO, false, List.of(new LogicEntry.Case(
                 List.of("components{}.minecraft:damage"),
@@ -142,6 +151,27 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         get(Items.CHAIN).addBonus(ModifierDataType.HELD, Map.of("woodcutting", 2.0));
 
         get(Items.SCULK_VEIN).setVeinCap(2000).setVeinRate(100.0);
+        doFor(List.of(Items.STONE_PICKAXE, Items.STONE_AXE, Items.STONE_SHOVEL, Items.STONE_HOE), builder ->
+                builder.setVeinRate(1.0).setVeinCap(10));
+        doFor(List.of(Items.GOLDEN_PICKAXE, Items.GOLDEN_AXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_HOE), builder ->
+                builder.setVeinRate(1.0).setVeinCap(50));
+        doFor(List.of(Items.IRON_PICKAXE, Items.IRON_AXE, Items.IRON_SHOVEL, Items.IRON_HOE), builder ->
+                builder.setVeinRate(2.0).setVeinCap(15));
+        doFor(List.of(Items.DIAMOND_PICKAXE, Items.DIAMOND_AXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_HOE), builder ->
+                builder.setVeinRate(3.0).setVeinCap(20));
+        doFor(List.of(Items.NETHERITE_PICKAXE, Items.NETHERITE_AXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_HOE), builder ->
+                builder.setVeinRate(4.0).setVeinCap(25));
+        
+        doFor(List.of(Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS), builder ->
+                builder.setVeinCap(10));
+        doFor(List.of(Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS), builder ->
+                builder.setVeinCap(20));
+        doFor(List.of(Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS), builder ->
+                builder.setVeinCap(30));
+        doFor(List.of(Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS), builder ->
+                builder.setVeinCap(15));
+        doFor(List.of(Items.NETHERITE_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS), builder ->
+                builder.setVeinCap(20));
     }
 
     private void miningBreak(Block block, long amount) {
@@ -153,7 +183,12 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
     }
 
     private ObjectData.Builder get(Item item) {
-        return data.computeIfAbsent(RegistryUtil.getId(item), i -> ObjectData.build());}
+        return data.computeIfAbsent(RegistryUtil.getId(item), i -> ObjectData.build());
+    }
+    
+    private void doFor(List<Item> items, Consumer<ObjectData.Builder> process) {
+        items.forEach(item -> process.accept(get(item)));
+    }
 
     @Override
     public String getName() {return "Project MMO Easy Item Generator";}

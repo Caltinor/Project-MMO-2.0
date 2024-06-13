@@ -13,7 +13,7 @@ import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record SP_SetVeinShape(ShapeType mode) implements CustomPacketPayload {
-	public static final Type<SP_SetVeinShape> TYPE = new Type(new ResourceLocation(Reference.MOD_ID, "c2s_set_vein_shape"));
+	public static final Type<SP_SetVeinShape> TYPE = new Type(Reference.rl("c2s_set_vein_shape"));
 	@Override public Type<SP_SetVeinShape> type() {return TYPE;}
 	public static final StreamCodec<FriendlyByteBuf, SP_SetVeinShape> STREAM_CODEC = StreamCodec.composite(
 			NeoForgeStreamCodecs.enumCodec(ShapeType.class), SP_SetVeinShape::mode, SP_SetVeinShape::new

@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 public class CropGrowHandler {
 
-	public static void handle(BlockEvent.CropGrowEvent.Post event) {
+	public static void handle(CropGrowEvent.Post event) {
 		Level level = (Level) event.getLevel();
 		if (!level.isClientSide) {
 			Core core = Core.get(level);

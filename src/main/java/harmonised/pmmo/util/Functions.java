@@ -98,6 +98,6 @@ public class Functions<X, Y> {
 	 * @return a new ResourceLocation with the prepended path.
 	 */
 	public static ResourceLocation pathPrepend(ResourceLocation original, String prepend) {
-		return new ResourceLocation(original.getNamespace(), prepend +"/"+ original.getPath());
+		return Reference.rl(original.getNamespace(), prepend +"/"+ original.getPath());
 	}
 }

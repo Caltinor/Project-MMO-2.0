@@ -38,8 +38,8 @@ public class ClientSetup {
     
     @SubscribeEvent
     public static void registerOverlay(RegisterGuiLayersEvent event) {
-    	event.registerAboveAll(new ResourceLocation(Reference.MOD_ID, "stats_overlay"), new XPOverlayGUI());
-    	event.registerAboveAll(new ResourceLocation(Reference.MOD_ID, "tutorial"), new TutorialOverlayGUI());
-    	event.registerAbove(new ResourceLocation("crosshair"), new ResourceLocation(Reference.MOD_ID, "overlay_icons"), new IndicatorsOverlayGUI());
+    	event.registerAboveAll(Reference.rl("stats_overlay"), new XPOverlayGUI());
+    	event.registerAboveAll(Reference.rl("tutorial"), new TutorialOverlayGUI());
+    	event.registerAbove(Reference.mc("crosshair"), Reference.rl("overlay_icons"), new IndicatorsOverlayGUI());
     }
 }

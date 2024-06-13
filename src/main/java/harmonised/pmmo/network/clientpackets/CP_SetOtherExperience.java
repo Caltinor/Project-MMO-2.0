@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public record CP_SetOtherExperience(Map<String, Experience> map) implements CustomPacketPayload {
-	public static final Type<CP_SetOtherExperience> TYPE = new Type<>(new ResourceLocation(Reference.MOD_ID, "s2c_set_other_xp"));
+	public static final Type<CP_SetOtherExperience> TYPE = new Type<>(Reference.rl("s2c_set_other_xp"));
 	public static final StreamCodec<FriendlyByteBuf, CP_SetOtherExperience> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.map(HashMap::new, ByteBufCodecs.STRING_UTF8, Experience.STREAM_CODEC), CP_SetOtherExperience::map,
 			CP_SetOtherExperience::new

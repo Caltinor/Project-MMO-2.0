@@ -3,6 +3,7 @@ package harmonised.pmmo.features.loot_modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -52,10 +53,10 @@ public class ValidBlockCondition implements LootItemCondition{
 
 	public static final MapCodec<ValidBlockCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.STRING.optionalFieldOf("tag")
-					.xmap(s -> s.map(v -> TagKey.create(Registries.BLOCK, new ResourceLocation(v))), t -> t.map(k -> k.location().toString()))
+					.xmap(s -> s.map(v -> TagKey.create(Registries.BLOCK, Reference.of(v))), t -> t.map(k -> k.location().toString()))
 					.forGetter(c -> c.tag),
 			Codec.STRING.optionalFieldOf("block")
-					.xmap(s -> s.map(v -> BuiltInRegistries.BLOCK.get(new ResourceLocation(v))), t -> t.map(k -> RegistryUtil.getId(k).toString()))
+					.xmap(s -> s.map(v -> BuiltInRegistries.BLOCK.get(Reference.of(v))), t -> t.map(k -> RegistryUtil.getId(k).toString()))
 					.forGetter(c -> c.block)
 	).apply(instance, ValidBlockCondition::new));
 }

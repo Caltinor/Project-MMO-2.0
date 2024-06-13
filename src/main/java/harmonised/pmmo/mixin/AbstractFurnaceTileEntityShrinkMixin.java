@@ -20,17 +20,14 @@ import javax.annotation.Nullable;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public class AbstractFurnaceTileEntityShrinkMixin
 {
-    @Shadow
-    protected NonNullList<ItemStack> items;
-
     @Inject(at = @At(
             	value = "INVOKE",
             	target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"),
-            method = "burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/RecipeHolder;Lnet/minecraft/core/NonNullList;I)Z")
-    public void projectmmo$$handleSmeltingShrink(RegistryAccess p_266740_, @Nullable RecipeHolder<?> p_266780_, NonNullList<ItemStack> p_267073_, int p_267157_, CallbackInfoReturnable<?> info)
+            method = "burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/RecipeHolder;Lnet/minecraft/core/NonNullList;ILnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)Z")
+    private static void projectmmo$$handleSmeltingShrink(RegistryAccess p_266740_, @Nullable RecipeHolder<?> p_266780_, NonNullList<ItemStack> p_267073_, int p_267157_, AbstractFurnaceBlockEntity be, CallbackInfoReturnable<Boolean> info)
     {
-        Level world = ((AbstractFurnaceBlockEntity)(Object)this).getLevel();
-        BlockPos pos = ((AbstractFurnaceBlockEntity)(Object)this).getBlockPos();
-        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(items.get(0), world, pos));
+        Level world = be.getLevel();
+        BlockPos pos = be.getBlockPos();
+        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(be.getItem(0), world, pos));
     }
 }

@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record SP_SetVeinLimit(int limit) implements CustomPacketPayload {
-	public static final Type<SP_SetVeinLimit> TYPE = new Type(new ResourceLocation(Reference.MOD_ID, "c2s_set_vein_limit"));
+	public static final Type<SP_SetVeinLimit> TYPE = new Type(Reference.rl("c2s_set_vein_limit"));
 	@Override public Type<SP_SetVeinLimit> type() {return TYPE;}
 	public static final StreamCodec<FriendlyByteBuf, SP_SetVeinLimit> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.INT, SP_SetVeinLimit::limit, SP_SetVeinLimit::new

@@ -18,7 +18,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import java.util.UUID;
 
 public record SP_OtherExpRequest(UUID pid) implements CustomPacketPayload {
-	public static final Type<SP_OtherExpRequest> TYPE = new Type(new ResourceLocation(Reference.MOD_ID, "c2s_other_xp_request"));
+	public static final Type<SP_OtherExpRequest> TYPE = new Type(Reference.rl("c2s_other_xp_request"));
 	@Override public Type<SP_OtherExpRequest> type() {return TYPE;}
 	public static final StreamCodec<FriendlyByteBuf, SP_OtherExpRequest> STREAM_CODEC = StreamCodec.composite(
 			UUIDUtil.STREAM_CODEC, SP_OtherExpRequest::pid, SP_OtherExpRequest::new

@@ -56,7 +56,7 @@ public class FeaturePerks {
 	
 	private static Holder.Reference<Attribute> getAttribute(CompoundTag nbt) {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
-				name -> BuiltInRegistries.ATTRIBUTE.getHolder(new ResourceLocation(name)).orElse(null));
+				name -> BuiltInRegistries.ATTRIBUTE.getHolder(Reference.of(name)).orElse(null));
 	}
 	
 	public static final Perk ATTRIBUTE = Perk.begin()
@@ -73,8 +73,8 @@ public class FeaturePerks {
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
 				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 				
-				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
-				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, operation);
+				ResourceLocation attributeID = Reference.rl("perk/"+nbt.getString(APIUtils.ATTRIBUTE).replace(':','_')+"/"+nbt.getString(APIUtils.SKILLNAME));
+				AttributeModifier modifier = new AttributeModifier(attributeID, boost, operation);
 				instance.removeModifier(attributeID);
 				instance.addPermanentModifier(modifier);
 				return NONE;
@@ -117,7 +117,7 @@ public class FeaturePerks {
 			respawnAttributes.get(event.getEntity()).stream()
 					.filter(mod -> {
 						AttributeInstance instance = event.getEntity().getAttribute(mod.attribute());
-						return instance != null && !instance.hasModifier(mod.modifier());
+						return instance != null && !instance.hasModifier(mod.modifier().id());
 					})
 					.forEach(mod ->	{
 						AttributeInstance instance = event.getEntity().getAttribute(mod.attribute());
@@ -136,15 +136,15 @@ public class FeaturePerks {
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
 				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 
-				UUID attributeID = Functions.getReliableUUID("temp/"+nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
-				AttributeModifier modifier = new AttributeModifier(attributeID, "temporary PMMO-modifier based on user skill", boost, operation);
-				if (instance.hasModifier(modifier))
+				ResourceLocation attributeID = Reference.rl("temp+perk/"+nbt.getString(APIUtils.ATTRIBUTE).replace(':','_')+"/"+nbt.getString(APIUtils.SKILLNAME));
+				AttributeModifier modifier = new AttributeModifier(attributeID, boost, operation);
+				if (instance.hasModifier(modifier.id()))
 					instance.removeModifier(attributeID);
 				instance.addTransientModifier(modifier);
 				return NONE;
 			})
 			.setStop((player, nbt) -> {
-				UUID attributeID = Functions.getReliableUUID("temp/"+nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
+				ResourceLocation attributeID = Reference.rl("temp+perk/"+nbt.getString(APIUtils.ATTRIBUTE).replace(':','_')+"/"+nbt.getString(APIUtils.SKILLNAME));
 				player.getAttribute(getAttribute(nbt)).removeModifier(attributeID);
 				return NONE;
 			})
@@ -153,7 +153,7 @@ public class FeaturePerks {
 	
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
 		Holder<MobEffect> effect;
-		if ((effect = BuiltInRegistries.MOB_EFFECT.getHolder(new ResourceLocation(nbt.getString("effect"))).get()) != null) {
+		if ((effect = BuiltInRegistries.MOB_EFFECT.getHolder(Reference.of(nbt.getString("effect"))).get()) != null) {
 			int skillLevel = nbt.getInt(APIUtils.SKILL_LEVEL);
 			int configDuration = nbt.getInt(APIUtils.DURATION);
 			double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
@@ -188,7 +188,7 @@ public class FeaturePerks {
 			.setTick((player, nbt, ticks) -> EFFECT_SETTER.apply(player, nbt))
 			.setDescription(LangProvider.PERK_EFFECT_DESC.asComponent())
 			.setStatus((player, nbt) -> List.of(
-					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(BuiltInRegistries.MOB_EFFECT.get(new ResourceLocation(nbt.getString("effect"))).getDescriptionId())),
+					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(BuiltInRegistries.MOB_EFFECT.get(Reference.of(nbt.getString("effect"))).getDescriptionId())),
 					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER),
 							(nbt.getInt(APIUtils.DURATION) * nbt.getDouble(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL))/20)))
 			.build();
@@ -244,9 +244,9 @@ public class FeaturePerks {
 			.addConditions((player, nbt) -> {
 				String perkApplicableDamageType = nbt.getString(APIUtils.DAMAGE_TYPE_IN);
 				Registry<DamageType> damageRegistry = player.level().registryAccess().registry(Registries.DAMAGE_TYPE).get();
-				ResourceKey<DamageType> resourceKey = ResourceKey.create(damageRegistry.key(), new ResourceLocation(nbt.getString(APIUtils.DAMAGE_TYPE)));
+				ResourceKey<DamageType> resourceKey = ResourceKey.create(damageRegistry.key(), Reference.of(nbt.getString(APIUtils.DAMAGE_TYPE)));
 				if (perkApplicableDamageType.startsWith("#") && damageRegistry
-						.getTag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(perkApplicableDamageType.substring(1)))
+						.getTag(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(perkApplicableDamageType.substring(1)))
 								).stream().anyMatch(typeTag -> typeTag.contains(damageRegistry.getHolder(resourceKey).get())))
 					return true;
 				else if (perkApplicableDamageType.endsWith(":*") && perkApplicableDamageType.substring(0, perkApplicableDamageType.indexOf(':'))
@@ -281,7 +281,7 @@ public class FeaturePerks {
 				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
 				for (String key : type) {
 					if (key.startsWith("#") && BuiltInRegistries.ITEM
-							.getTag(TagKey.create(Registries.ITEM, new ResourceLocation(key.substring(1))))
+							.getTag(TagKey.create(Registries.ITEM, Reference.of(key.substring(1))))
 							.stream().anyMatch(item -> item.contains(Holder.direct(player.getMainHandItem().getItem())))) {
 						return true;
 					}
@@ -317,8 +317,8 @@ public class FeaturePerks {
 				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
 				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
 					Component description = Component.literal(entry.getAsString());
-					if (ResourceLocation.isValidResourceLocation(entry.getAsString())) {
-						Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(entry.getAsString()));
+					if (ResourceLocation.tryParse(entry.getAsString()) != null) {
+						Item item = BuiltInRegistries.ITEM.get(Reference.of(entry.getAsString()));
 						if (!item.equals(Items.AIR)) description = item.getDescription();
 					}
 					line1.append(description);
@@ -340,7 +340,7 @@ public class FeaturePerks {
 			ServerPlayer player = (ServerPlayer) p;
 			if (nbt.contains(FUNCTION)) {
 				player.getServer().getFunctions().execute(
-						player.getServer().getFunctions().get(new ResourceLocation(nbt.getString(FUNCTION))).get(), 
+						player.getServer().getFunctions().get(Reference.of(nbt.getString(FUNCTION))).get(),
 						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2));			
 			}
 			else if (nbt.contains(COMMAND)) {

@@ -22,7 +22,8 @@ import java.util.List;
 @Mixin(EnchantmentMenu.class)
 public class EnchantApplyMixin {	
 
-	@Inject(method = "lambda$clickMenuButton$1(Lnet/minecraft/world/item/ItemStack;ILnet/minecraft/world/entity/player/Player;ILnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V",
+	//TODO restore this functionality
+	@Inject(method = "lambda$clickMenuButton$1(Lnet/minecraft/world/entity/player/Player;ILnet/minecraft/world/item/ItemStack;ILnet/minecraft/world/item/ItemStack;Ljava/util/List;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)Z",
 	        at = @At(
 	        	value = "INVOKE", 
 	        	target = "Lnet/minecraft/world/item/ItemStack;enchant(Lnet/minecraft/world/item/enchantment/Enchantment;I)V"), 

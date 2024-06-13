@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -49,7 +50,7 @@ public class TreasureLootModifier extends LootModifier{
 								double chance, Optional<Boolean> perLevel, Optional<String> skill) {
 		super(conditionsIn);
 		this.chance = chance;
-		this.drop = lootItemID.equals(new ResourceLocation("air"))
+		this.drop = lootItemID.equals(Reference.mc("air"))
 				? Items.AIR.getDefaultInstance() 
 				: new ItemStack(BuiltInRegistries.ITEM.get(lootItemID));
 		this.drop.setCount(count);

@@ -16,7 +16,7 @@ public record SP_UpdateVeinTarget(BlockPos pos) implements CustomPacketPayload {
 	public static final StreamCodec<FriendlyByteBuf, SP_UpdateVeinTarget> STREAM_CODEC = StreamCodec.composite(
 			BlockPos.STREAM_CODEC, SP_UpdateVeinTarget::pos, SP_UpdateVeinTarget::new
 	);
-	public static final Type<SP_UpdateVeinTarget> TYPE = new Type(new ResourceLocation(Reference.MOD_ID, "c2s_update_vein_target"));
+	public static final Type<SP_UpdateVeinTarget> TYPE = new Type(Reference.rl("c2s_update_vein_target"));
 	@Override public Type<SP_UpdateVeinTarget> type() {return TYPE;}
 	
 	public static void handle(SP_UpdateVeinTarget packet, IPayloadContext ctx) {

@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record CP_SyncConfig(ConfigListener.ServerConfigs oType, ConfigData<?> config) implements CustomPacketPayload {
-    public static final Type<CP_SyncConfig> TYPE = new Type(new ResourceLocation(Reference.MOD_ID, "s2c_sync_config"));
+    public static final Type<CP_SyncConfig> TYPE = new Type(Reference.rl("s2c_sync_config"));
     @Override public Type<CP_SyncConfig> type() {return TYPE;}
 
     public static final StreamCodec<FriendlyByteBuf, CP_SyncConfig> STREAM_CODEC = StreamCodec.of(

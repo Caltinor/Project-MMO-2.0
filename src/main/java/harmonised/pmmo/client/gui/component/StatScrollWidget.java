@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.component;
 
 import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -21,6 +22,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.ChatFormatting;
@@ -92,7 +94,7 @@ public class StatScrollWidget extends ScrollPanel {
 		public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess) {
 			if (isHeader()) 
 				graphics.fill(RenderType.gui(), x, y, x+width, y+12, headerColor());
-			MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(tess.getBuilder());
+			MultiBufferSource.BufferSource buffer = graphics.bufferSource();
 			text().renderText(Minecraft.getInstance().font, x + xOffset(), y, graphics.pose().last().pose(), buffer);
 			buffer.endBatch();
 		}
@@ -209,7 +211,8 @@ public class StatScrollWidget extends ScrollPanel {
 					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, true, false, false);
 				break;}
 			case ENCHANTS: {
-				populateEnchants(BuiltInRegistries.ENCHANTMENT.stream().map(RegistryUtil::getId).toList(), skill);
+				var reg = mc.player.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+				populateEnchants(new ArrayList<>(reg.keySet()), skill);
 				break;}
 			default:{}
 			}
@@ -464,7 +467,7 @@ public class StatScrollWidget extends ScrollPanel {
 			if (enchants.size() > 1)
 				content.addAll(TextElement.build(Component.literal(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			List<TextElement> holder = new ArrayList<>();
-			for (int i = 0; i <= BuiltInRegistries.ENCHANTMENT.get(ench).getMaxLevel(); i++) {
+			for (int i = 0; i <= mc.player.registryAccess().registryOrThrow(Registries.ENCHANTMENT).get(ench).getMaxLevel(); i++) {
 				Map<String, Long> reqMap = core.getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 					holder.addAll(TextElement.build(Component.literal(String.valueOf(i)), this.width, 1, 0xFFFFFF, false, 0));
@@ -489,7 +492,7 @@ public class StatScrollWidget extends ScrollPanel {
 			List<TextElement> holder = new ArrayList<>();
 			Player player = Minecraft.getInstance().player;
 			Config.perks().perks().getOrDefault(cause, new ArrayList<>()).forEach(nbt -> {
-				ResourceLocation perkID = new ResourceLocation(nbt.getString("perk"));
+				ResourceLocation perkID = Reference.of(nbt.getString("perk"));
 				nbt.putLong(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME)
 						? Core.get(player.level()).getData().getLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
 						: 0);
@@ -628,7 +631,7 @@ public class StatScrollWidget extends ScrollPanel {
 	private void addPlayerSection(Entity entity) {
 		//Section for player-specific data as it expands
 		content.addAll(TextElement.build(LangProvider.PLAYER_HEADER.asComponent(), this.width, step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-		PlayerData data = core.getLoader().PLAYER_LOADER.getData(new ResourceLocation(entity.getUUID().toString()));
+		PlayerData data = core.getLoader().PLAYER_LOADER.getData(Reference.mc(entity.getUUID().toString()));
 		content.addAll(TextElement.build(LangProvider.PLAYER_IGNORE_REQ.asComponent(data.ignoreReq()), this.width, step(2), 0xFFFFFF, false, 0));
 		if (!data.bonuses().isEmpty()) {
 			content.addAll(TextElement.build(LangProvider.PLAYER_BONUSES.asComponent(), this.width, step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
@@ -671,7 +674,7 @@ public class StatScrollWidget extends ScrollPanel {
 				Entity entity = BuiltInRegistries.ENTITY_TYPE.get(mobMap.getKey()).create(mc.level);
 				content.add(new RenderableElement(entity.getName(), step(1), 0xFFFFFF, Config.SALVAGE_ITEM_COLOR.get(), entity));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
-					Attribute attribute = BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(map.getKey()));
+					Attribute attribute = BuiltInRegistries.ATTRIBUTE.get(Reference.of(map.getKey()));
 					MutableComponent text = attribute == null ? Component.literal(map.getKey()) : Component.translatable(attribute.getDescriptionId());
 					text.append(Component.literal(": "+map.getValue()));
 					content.addAll(TextElement.build(text, this.width, step(2), 0xFFFFFF, false, 0xFFFFFF));

@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GlossarySelectScreen extends Screen{
-	private static final ResourceLocation GUI_BG = new ResourceLocation(Reference.MOD_ID, "textures/gui/screenboxy.png");
+	private static final ResourceLocation GUI_BG = Reference.rl("textures/gui/screenboxy.png");
 	
 	private SelectionWidget<SelectionEntry<SELECTION>> selectSection;
 	private SelectionWidget<SelectionEntry<OBJECT>> selectObject;

@@ -12,7 +12,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import java.util.HashMap;
 
 public record CP_SyncData_ClearXp() implements CustomPacketPayload {
-	public static final Type<CP_SyncData_ClearXp> TYPE = new Type<>(new ResourceLocation(Reference.MOD_ID, "s2c_syncdata_clear_xp"));
+	public static final Type<CP_SyncData_ClearXp> TYPE = new Type<>(Reference.rl("s2c_syncdata_clear_xp"));
 	public static void handle(CP_SyncData_ClearXp packet, IPayloadContext ctx) {
 		ctx.enqueueWork(() -> {
 			Core.get(LogicalSide.CLIENT).getData().setXpMap(null, new HashMap<>());

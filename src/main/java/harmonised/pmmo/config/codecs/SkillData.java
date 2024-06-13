@@ -36,7 +36,7 @@ public record SkillData (
 	public boolean getDisplayGroupName() { return displayGroupName.orElse(false); }
 	public boolean getUseTotalLevels() { return useTotalLevels.orElse(false); }
 	public long getMaxLevel() { return maxLevel.orElse(Config.server().levels().maxLevel()); }
-	public ResourceLocation getIcon() { return icon.orElse(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")); }
+	public ResourceLocation getIcon() { return icon.orElse(Reference.rl("textures/skills/missing_icon.png")); }
 	public int getIconSize() { return iconSize.orElse(18); }
 	
 	public boolean isSkillGroup() { return !getGroup().isEmpty(); }
@@ -111,7 +111,7 @@ public record SkillData (
 			afkExempt = false;
 			displayName = false;
 			useTotal = false;
-			icon = new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png");
+			icon = Reference.rl("textures/skills/missing_icon.png");
 			iconSize = 18;
 			groupOf = new HashMap<>();
 		}
@@ -123,7 +123,7 @@ public record SkillData (
 				Optional.of(false),
 				Optional.empty(), 
 				Optional.of(Config.server().levels().maxLevel()),
-				Optional.of(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")),
+				Optional.of(Reference.rl("textures/skills/missing_icon.png")),
 				Optional.of(18));
 		}
 		

@@ -37,6 +37,7 @@ import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -208,7 +209,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			final String dataPath = filePath.substring(this.folderName.length() + 1, filePath.length() - JSON_EXTENSION_LENGTH);
 			
 			// this is a json with identifier "somemodid:somedata"
-			final ResourceLocation jsonIdentifier = new ResourceLocation(namespace, dataPath);
+			final ResourceLocation jsonIdentifier = Reference.rl(namespace, dataPath);
 			// this is the list of all json objects with the given resource location (i.e. in multiple datapacks)
 			final List<T> unmergedRaws = new ArrayList<>();
 			// it's entirely possible that there are multiple jsons with this identifier,
@@ -286,7 +287,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			for (String str : dataValue.getTagValues()) {
 				MsLoggy.INFO.log(LOG_CODE.DATA, "Applying Setting to Tag: {}", str);
 				if (str.startsWith("#")) {
-					activeRegistry.getTag(TagKey.create(registry, new ResourceLocation(str.substring(1))))
+					activeRegistry.getTag(TagKey.create(registry, Reference.of(str.substring(1))))
 					.ifPresent(holder ->
 						tags.addAll(holder.stream()
 								.map(h -> h.unwrapKey().get().location())
@@ -299,7 +300,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 							.toList());
 				}
 				else
-					tags.add(new ResourceLocation(str));
+					tags.add(Reference.of(str));
 			}
 			dataValue.getTagValues().clear();
 
@@ -311,7 +312,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 						damageMembers.clear();
 						if (str.startsWith("#")) {
 							damageMembers.addAll(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE)
-									.getTag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(str.substring(1))))
+									.getTag(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(str.substring(1))))
 									.stream()
 									.map(type -> type.unwrapKey().get().location())
 									.toList());

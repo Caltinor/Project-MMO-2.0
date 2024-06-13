@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class PlayerStatsComponent extends AbstractWidget {
-    protected static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/player_stats.png");
+    protected static final ResourceLocation TEXTURE_LOCATION = Reference.rl("textures/gui/player_stats.png");
     protected static final Core core = Core.get(LogicalSide.CLIENT);
     protected Minecraft minecraft;
     private boolean visible;
@@ -162,7 +162,7 @@ public class PlayerStatsComponent extends AbstractWidget {
         protected void drawPanel(GuiGraphics guiGraphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
             for (StatComponent component : this.abilities) {
                 component.setPosition(component.getX(), relativeY);
-                component.render(guiGraphics, mouseX, mouseY, Minecraft.getInstance().getPartialTick());
+                component.render(guiGraphics, mouseX, mouseY, Minecraft.getInstance().getFrameTimeNs());
                 
                 relativeY += StatComponent.BASE_HEIGHT + this.border;
             }
@@ -188,8 +188,8 @@ public class PlayerStatsComponent extends AbstractWidget {
     
     static class StatComponent extends ImageButton {
         private static final WidgetSprites BACKGROUND_SPRITES = new WidgetSprites(
-            new ResourceLocation(Reference.MOD_ID, "stat_background"),
-            new ResourceLocation(Reference.MOD_ID, "stat_background_highlighted")
+            Reference.rl("stat_background"),
+            Reference.rl("stat_background_highlighted")
         );
         
         private final Minecraft minecraft;

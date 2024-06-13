@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.component;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -24,12 +25,12 @@ import java.util.stream.Stream;
 
 public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extends AbstractWidget {
     protected static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(
-        new ResourceLocation("widget/button"),
-        new ResourceLocation("widget/button_disabled"),
-        new ResourceLocation("widget/button_highlighted")
+        Reference.mc("widget/button"),
+        Reference.mc("widget/button_disabled"),
+        Reference.mc("widget/button_highlighted")
     );
-    private static final ResourceLocation SORT_UP_SPRITE = new ResourceLocation("statistics/sort_up");
-    private static final ResourceLocation SORT_DOWN_SPRITE = new ResourceLocation("statistics/sort_down");
+    private static final ResourceLocation SORT_UP_SPRITE = Reference.mc("statistics/sort_up");
+    private static final ResourceLocation SORT_DOWN_SPRITE = Reference.mc("statistics/sort_down");
     
     private static final int ENTRY_HEIGHT = 20;
     private final Component title;

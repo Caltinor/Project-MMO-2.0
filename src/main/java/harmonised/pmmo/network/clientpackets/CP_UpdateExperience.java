@@ -16,7 +16,7 @@ import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record CP_UpdateExperience(String skill, Experience xp, long change) implements CustomPacketPayload{
-	public static final Type<CP_UpdateExperience> TYPE = new Type<>(new ResourceLocation(Reference.MOD_ID, "s2c_update_xp"));
+	public static final Type<CP_UpdateExperience> TYPE = new Type<>(Reference.rl("s2c_update_xp"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, CP_UpdateExperience> CODEC = StreamCodec
 			.composite(ByteBufCodecs.STRING_UTF8, CP_UpdateExperience::skill,
 					Experience.STREAM_CODEC, CP_UpdateExperience::xp,

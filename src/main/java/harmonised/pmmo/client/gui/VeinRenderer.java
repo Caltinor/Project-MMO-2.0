@@ -48,18 +48,18 @@ public class VeinRenderer {
             switch(mode)
             {
                 case 0:
-                    builder.vertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ()).color(red, green, blue, alpha).normal(0, 0, 0).endVertex();
-                    builder.vertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() + 1).color(red, green, blue, alpha).normal(0, 0, 0).endVertex();
+                    builder.addVertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ()).setColor(red, green, blue, alpha).setNormal(0, 0, 0);
+                    builder.addVertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() + 1).setColor(red, green, blue, alpha).setNormal(0, 0, 0);
                     break;
 
                 case 1:
-                    builder.vertex(matrix4f, pos.getX(), pos.getY() + modulus, pos.getZ() + divide).color(red, green, blue, alpha).normal(0, 0, 0).endVertex();
-                    builder.vertex(matrix4f, pos.getX() + 1, pos.getY() + modulus, pos.getZ() + divide).color(red, green, blue, alpha).normal(0, 0, 0).endVertex();
+                    builder.addVertex(matrix4f, pos.getX(), pos.getY() + modulus, pos.getZ() + divide).setColor(red, green, blue, alpha).setNormal(0, 0, 0);
+                    builder.addVertex(matrix4f, pos.getX() + 1, pos.getY() + modulus, pos.getZ() + divide).setColor(red, green, blue, alpha).setNormal(0, 0, 0);
                     break;
 
                 case 2:
-                    builder.vertex(matrix4f, pos.getX() + divide, pos.getY(), pos.getZ() + modulus).color(red, green, blue, alpha).normal(0, 0, 0).endVertex();
-                    builder.vertex(matrix4f, pos.getX() + divide, pos.getY() + 1, pos.getZ() + modulus).color(red, green, blue, alpha).normal(0, 0, 0).endVertex();
+                    builder.addVertex(matrix4f, pos.getX() + divide, pos.getY(), pos.getZ() + modulus).setColor(red, green, blue, alpha).setNormal(0, 0, 0);
+                    builder.addVertex(matrix4f, pos.getX() + divide, pos.getY() + 1, pos.getZ() + modulus).setColor(red, green, blue, alpha).setNormal(0, 0, 0);
                     break;
             }
         }

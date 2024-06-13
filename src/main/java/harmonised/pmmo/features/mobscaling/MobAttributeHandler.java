@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 
 @EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class MobAttributeHandler {
-	private static final UUID MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
+	private static final ResourceLocation MODIFIER_ID = Reference.rl("mob_scaling_modifier");
 	/**Used for balancing purposes to ensure configurations do not exceed known limits.*/
 	private static final Map<ResourceLocation, Float> CAPS = Map.of(
 			Attributes.MAX_HEALTH.unwrapKey().get().location(), 1024f,
@@ -88,7 +88,7 @@ public class MobAttributeHandler {
 
 		Set<ResourceLocation> attributeKeys = Stream.of(dimMods.keySet(), bioMods.keySet())
 				.flatMap(Set::stream)
-				.map(ResourceLocation::new)
+				.map(Reference::of)
 				.collect(Collectors.toSet());
 		attributeKeys.addAll(multipliers.keySet());
 
@@ -105,7 +105,7 @@ public class MobAttributeHandler {
 				bonus += dimMods.getOrDefault(attributeID.toString(), 0d).floatValue();
 				bonus += bioMods.getOrDefault(attributeID.toString(), 0d).floatValue();
 				bonus *= bossMultiplier;
-				AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADD_VALUE);
+				AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, bonus, AttributeModifier.Operation.ADD_VALUE);
 				attributeInstance.removeModifier(MODIFIER_ID);
 				attributeInstance.addPermanentModifier(modifier);
 				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Entity={} Attribute={} value={}", entity.getDisplayName().getString(), attributeID.toString(), bonus);

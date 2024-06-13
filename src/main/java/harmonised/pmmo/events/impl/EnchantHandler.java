@@ -26,12 +26,12 @@ public class EnchantHandler {
 					.withString(APIUtils.STACK, TagUtils.stackTag(event.getItem(), event.getEntity().level()).getAsString())
 					.withString(APIUtils.PLAYER_ID, event.getEntity().getUUID().toString())
 					.withInt(APIUtils.ENCHANT_LEVEL, event.getEnchantment().level)
-					.withString(APIUtils.ENCHANT_NAME, event.getEnchantment().enchantment.getDescriptionId()).build();
+					.withString(APIUtils.ENCHANT_NAME, event.getEnchantment().enchantment.unwrapKey().get().location().toString()).build();
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ENCHANT, event, dataIn);
 		}
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ENCHANT, event.getEntity(), hookOutput));
 		if (serverSide) {
-			double proportion = (double)event.getEnchantment().level / (double)event.getEnchantment().enchantment.getMaxLevel();
+			double proportion = (double)event.getEnchantment().level / (double)event.getEnchantment().enchantment.value().getMaxLevel();
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENCHANT, event.getItem(), event.getEntity(), hookOutput);
 			Set<String> keys = xpAward.keySet();
 			keys.forEach((skill) -> {

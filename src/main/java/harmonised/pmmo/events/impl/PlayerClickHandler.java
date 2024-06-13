@@ -15,7 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.Event.Result;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.List;
@@ -30,15 +30,15 @@ public class PlayerClickHandler {
 		boolean serverSide = !player.level().isClientSide;
 		
 		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), player)) {
-			event.setUseBlock(Result.DENY);
+			event.setUseBlock(TriState.FALSE);
 			Messenger.sendDenialMsg(ReqType.BREAK, player, new ItemStack(player.level().getBlockState(event.getPos()).getBlock().asItem()).getDisplayName());
 
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
-			event.setUseItem(Result.DENY);
+			event.setUseItem(TriState.FALSE);
 			Messenger.sendDenialMsg(ReqType.INTERACT, player, player.getMainHandItem().getDisplayName());
 		}
-		if (event.getUseBlock().equals(Result.DENY)) return;
+		if (event.getUseBlock().equals(TriState.FALSE)) return;
 		
 		CompoundTag hookOutput = new CompoundTag();
 		if (serverSide) {
@@ -48,9 +48,9 @@ public class PlayerClickHandler {
 				return;
 			}
 			if (hookOutput.getBoolean(APIUtils.DENY_BLOCK_USE))
-				event.setUseBlock(Result.DENY);
+				event.setUseBlock(TriState.FALSE);
 			if (hookOutput.getBoolean(APIUtils.DENY_ITEM_USE))
-				event.setUseItem(Result.DENY);
+				event.setUseItem(TriState.FALSE);
 		}
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.HIT_BLOCK, player, new CompoundTag()));
@@ -68,12 +68,12 @@ public class PlayerClickHandler {
 		boolean serverSide = !player.level().isClientSide;
 		
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
-			event.setUseBlock(Result.DENY);
+			event.setUseBlock(TriState.FALSE);
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
-			event.setUseItem(Result.DENY);
+			event.setUseItem(TriState.FALSE);
 		}
-		if (event.getUseBlock().equals(Result.DENY) && !serverSide && event.getHand().equals(InteractionHand.MAIN_HAND)) {
+		if (event.getUseBlock().equals(TriState.FALSE) && !serverSide && event.getHand().equals(InteractionHand.MAIN_HAND)) {
 			Messenger.sendDenialMsg(ReqType.INTERACT, player, event.getLevel().getBlockState(event.getPos()).getBlock().getName());
 			return;
 		}

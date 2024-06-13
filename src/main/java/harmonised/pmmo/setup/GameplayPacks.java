@@ -19,7 +19,7 @@ public class GameplayPacks {
 
     public record PackHolder(ResourceLocation id, LangProvider.Translation titleKey, boolean required, PackType type, PackSource source) {
         public PackHolder(String id, LangProvider.Translation titleKey, boolean required, PackType type, PackSource source) {
-            this(new ResourceLocation(Reference.MOD_ID, id), titleKey, required, type, source);
+            this(Reference.rl(id), titleKey, required, type, source);
         }
     }
 }

@@ -11,8 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class PMMOButton extends ImageButton {
     private static final WidgetSprites SPRITES = new WidgetSprites(
-        new ResourceLocation(Reference.MOD_ID, "pmmo_button"),
-        new ResourceLocation(Reference.MOD_ID, "pmmo_button_highlighted")
+        Reference.rl("pmmo_button"),
+        Reference.rl("pmmo_button_highlighted")
     );
     
     public PMMOButton(Screen parent, int pX, int pY, int pWidth, int pHeight) {

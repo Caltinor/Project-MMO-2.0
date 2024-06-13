@@ -28,6 +28,6 @@ public class PerkRegistration {
 	}
 	
 	private static ResourceLocation rl(String str) {
-		return new ResourceLocation(Reference.MOD_ID, str);
+		return Reference.rl(str);
 	}
 }

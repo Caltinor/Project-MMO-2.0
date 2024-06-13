@@ -8,6 +8,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.readers.ConfigListener;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -118,9 +119,9 @@ public record AutoValueConfig(
 				Map.of("woodcutting", 1L),
 				Map.of("farming", 1L),
 				Map.of(
-						new ResourceLocation("mining_fatigue"), 1,
-						new ResourceLocation("weakness"), 1,
-						new ResourceLocation("slowness"), 1
+						Reference.mc("mining_fatigue"), 1,
+						Reference.mc("weakness"), 1,
+						Reference.mc("slowness"), 1
 				),
 				Map.of("mining", 1L));
 		}

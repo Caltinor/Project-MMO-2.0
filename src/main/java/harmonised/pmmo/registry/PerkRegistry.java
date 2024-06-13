@@ -8,6 +8,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -57,7 +58,7 @@ public class PerkRegistry {
 		if (player == null) return new CompoundTag();
 		CompoundTag output = new CompoundTag();
 		Config.perks().perks().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
-			ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
+			ResourceLocation perkID = Reference.of(src.getString("perk"));
 			Perk perk = perks.getOrDefault(perkID, Perk.empty());
 			CompoundTag fullSrc = new CompoundTag()
 					.merge(perk.propertyDefaults().copy())
@@ -116,7 +117,7 @@ public class PerkRegistry {
 	}
 
 	public boolean isPerkCooledDown(Player player, CompoundTag src) {
-		ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
+		ResourceLocation perkID = Reference.of(src.getString("perk"));
 		return coolTracker.stream().noneMatch(cd -> cd.player().equals(player) && cd.perkID().equals(perkID));
 	}
 }

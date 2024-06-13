@@ -20,6 +20,7 @@ import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -135,7 +136,7 @@ public class CmdNodeAdmin {
 	public static int exemptAdmin(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		Core core = Core.get(ctx.getSource().getLevel());
 		ServerPlayer player = EntityArgument.getPlayer(ctx, TARGET_ARG);
-		ResourceLocation playerID = new ResourceLocation(player.getUUID().toString());
+		ResourceLocation playerID = Reference.mc(player.getUUID().toString());
 		PlayerData existing = core.getLoader().PLAYER_LOADER.getData().get(playerID);
 		boolean exists = existing != null;
 		PlayerData updated = new PlayerData(true, exists ? !existing.ignoreReq() : true, exists ? existing.bonuses() : Map.of());
@@ -150,7 +151,7 @@ public class CmdNodeAdmin {
 
 		Core core = Core.get(ctx.getSource().getLevel());
 		ServerPlayer player = EntityArgument.getPlayer(ctx, TARGET_ARG);
-		ResourceLocation playerID = new ResourceLocation(player.getUUID().toString());
+		ResourceLocation playerID = Reference.mc(player.getUUID().toString());
 		PlayerData existing = core.getLoader().PLAYER_LOADER.getData().get(playerID);
 		boolean exists = existing != null;
 		Map<String, Double> bonuses = exists ? new HashMap<>(existing.bonuses()) : new HashMap<>();

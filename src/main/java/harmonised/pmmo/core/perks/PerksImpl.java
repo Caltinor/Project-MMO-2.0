@@ -4,11 +4,13 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -78,7 +80,7 @@ public class PerksImpl {
 		return builder.build();
 	}
 	
-	private static final UUID ATTRIBUTE_ID = UUID.fromString("b902b6aa-8393-4bdc-8f0d-b937268ef5af");
+	private static final ResourceLocation ATTRIBUTE_ID = Reference.rl("tame_boost");
 	private static final Map<Holder<Attribute>, Double> ANIMAL_ATTRIBUTES = Map.of(
 			Attributes.JUMP_STRENGTH, 0.005, 
 			Attributes.MAX_HEALTH, 1.0,
@@ -104,7 +106,7 @@ public class PerksImpl {
 						AttributeInstance instance = animal.getAttribute(atr.getKey());
 						if (instance == null) continue;
 						double boost = Mth.clamp(perLevel * atr.getValue() * nbt.getInt(APIUtils.SKILL_LEVEL), 0, nbt.getDouble(APIUtils.MAX_BOOST));
-						AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, "Taming boost", boost, Operation.ADD_VALUE);
+						AttributeModifier modifier = new AttributeModifier(ATTRIBUTE_ID, boost, Operation.ADD_VALUE);
 						instance.addPermanentModifier(modifier);
 					}
 				}

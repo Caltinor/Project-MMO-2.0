@@ -9,6 +9,7 @@ import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.registries.Registries;
@@ -78,7 +79,7 @@ public class DamageReceivedHandler {
 					if (!str.contains("#"))
 						return false;
 					var registry = player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
-					var tag = registry.getTag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(str.substring(1))));
+					var tag = registry.getTag(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(str.substring(1))));
 					return tag.map(type -> type.contains(source.typeHolder())).orElse(false);
 				}).toList();
 		Map<String, Long> tagXp = tags.stream().map(str -> config.get(str)).reduce((mapA, mapB) -> Functions.mergeMaps(mapA, mapB)).orElse(new HashMap<>());

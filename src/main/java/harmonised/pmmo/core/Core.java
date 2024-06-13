@@ -29,6 +29,7 @@ import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.BlockPos;
@@ -223,7 +224,7 @@ public class Core {
 		loggables[2] = MsLoggy.mapToString(xpGains);
 		List<ResourceLocation> source = new ArrayList<>();
 		source.add(objectID);
-		if (tag.contains(APIUtils.DAMAGE_TYPE)) source.add(new ResourceLocation(tag.getString(APIUtils.DAMAGE_TYPE)));
+		if (tag.contains(APIUtils.DAMAGE_TYPE)) source.add(Reference.of(tag.getString(APIUtils.DAMAGE_TYPE)));
 		CheeseTracker.applyAntiCheese(type, source, player, xpGains);
 
 		loggables[3] = MsLoggy.mapToString(xpGains);
@@ -285,7 +286,7 @@ public class Core {
 		});
 		
 		MsLoggy.DEBUG.log(LOG_CODE.XP, "Modifier Map: {}", MsLoggy.mapToString(mapOut));
-		return loader.PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString()))
+		return loader.PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString()))
 				.mergeWithPlayerBonuses(CoreUtils.processSkillGroupBonus(mapOut));
 	}
 	
@@ -299,7 +300,7 @@ public class Core {
 	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
 		if (player instanceof FakePlayer
 			|| !Config.server().requirements().isEnabled(type)
-			|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
+			|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
 		ResourceLocation itemID = RegistryUtil.getId(stack.getItem());
 		
 		return (predicates.predicateExists(itemID, type)) 
@@ -309,7 +310,7 @@ public class Core {
 	public boolean isActionPermitted(ReqType type, BlockPos pos, Player player) {
 		if (player instanceof FakePlayer
 				|| !Config.server().requirements().isEnabled(type)
-				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
+				|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
 		BlockEntity tile = player.level().getBlockEntity(pos);
 		ResourceLocation res = RegistryUtil.getId(player.level().getBlockState(pos));
 		return tile != null && predicates.predicateExists(res, type)
@@ -319,7 +320,7 @@ public class Core {
 	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
 		if (player instanceof FakePlayer
 				|| !Config.server().requirements().isEnabled(type)
-				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
+				|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
 		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
 		return (predicates.predicateExists(entityID, type))
 			? predicates.checkPredicateReq(player, entity, type)
@@ -329,7 +330,7 @@ public class Core {
 		if (type != ReqType.TRAVEL) return false;
 		if (player instanceof FakePlayer
 				|| !Config.server().requirements().isEnabled(type)
-				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
+				|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
 		return doesPlayerMeetReq(player.getUUID(), 
 				getObjectSkillMap(ObjectType.BIOME, RegistryUtil.getId(biome), type, new CompoundTag()));
 	}
@@ -337,7 +338,7 @@ public class Core {
 		if (type != ReqType.TRAVEL) return false;
 		if (player instanceof FakePlayer
 				|| !Config.server().requirements().isEnabled(type)
-				|| getLoader().PLAYER_LOADER.getData(new ResourceLocation(player.getUUID().toString())).ignoreReq()) return true;
+				|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
 		return doesPlayerMeetReq(player.getUUID(),
 				getObjectSkillMap(ObjectType.DIMENSION, dimension.location(), type, new CompoundTag()));
 	}
@@ -380,14 +381,14 @@ public class Core {
 		Map<String, Long> outMap = new HashMap<>();
 		if (!stack.isEnchanted() || !Config.server().requirements().isEnabled(ReqType.USE_ENCHANTMENT)) return outMap;
 		for (var enchant : stack.getEnchantments().entrySet()) {
-			getEnchantmentReqs(enchant.getKey().value().builtInRegistryHolder().unwrapKey().get().location(), enchant.getValue()-1).forEach((skill, level) -> {
+			getEnchantmentReqs(enchant.getKey().unwrapKey().get().location(), enchant.getValue()-1).forEach((skill, level) -> {
 				outMap.merge(skill, level, Long::max);
 			});
 		}
 		return outMap;
 	}
 	public Map<String, Long> getReqMap(ReqType reqType, Entity entity) {
-		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? new ResourceLocation("minecraft:player") : RegistryUtil.getId(entity);
+		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? Reference.mc("player") : RegistryUtil.getId(entity);
 		Map<String, Long> reqMap = tooltips.requirementTooltipExists(entityID, reqType)
 			? tooltips.getEntityRequirementTooltipData(entityID, reqType, entity)
 			: new HashMap<>();
@@ -422,7 +423,7 @@ public class Core {
 		return CoreUtils.processSkillGroupReqs(reqsIn);
 	}
 	//======DATA OBTAINING UTILITY METHODS======
-	private ResourceLocation playerID = new ResourceLocation("player");
+	private ResourceLocation playerID = Reference.mc("player");
 	
 	public Map<String, Long> getEnchantmentReqs(ResourceLocation enchantID, int enchantLvl) {
 		return ((EnhancementsData) loader.getLoader(ObjectType.ENCHANTMENT).getData(enchantID)).skillArray().getOrDefault(enchantLvl, new HashMap<>());

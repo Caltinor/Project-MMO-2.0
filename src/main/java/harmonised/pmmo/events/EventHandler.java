@@ -68,6 +68,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.PistonEvent;
 import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
+import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
@@ -95,7 +96,7 @@ public class EventHandler {
 			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).amount() != Config.server().general().creativeReach())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
-				reachAttribute.addPermanentModifier(new AttributeModifier(Reference.CREATIVE_REACH_ATTRIBUTE, "PMMO Creative Reach Bonus", Config.server().general().creativeReach(), AttributeModifier.Operation.ADD_VALUE));
+				reachAttribute.addPermanentModifier(new AttributeModifier(Reference.CREATIVE_REACH_ATTRIBUTE, Config.server().general().creativeReach(), AttributeModifier.Operation.ADD_VALUE));
 			}
 		}
 		else {
@@ -215,7 +216,7 @@ public class EventHandler {
 		FishHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST) 
-	public static void onCropGrow(BlockEvent.CropGrowEvent.Post event){
+	public static void onCropGrow(CropGrowEvent.Post event){
 		CropGrowHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)

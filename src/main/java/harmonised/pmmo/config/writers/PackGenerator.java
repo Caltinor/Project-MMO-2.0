@@ -119,7 +119,7 @@ public class PackGenerator {
 						.entrySet().stream()
 						.filter(entry -> !applySimple || !entry.getValue().isEmpty())
 						.collect(Collectors.toMap(Map.Entry::getKey, m -> (List<LogicEntry>)m.getValue())),
-					applyDefaults ? existing.salvage() : Map.of(new ResourceLocation("modid:item"), SalvageBuilder.start().build()),
+					applyDefaults ? existing.salvage() : Map.of(Reference.of("modid:item"), SalvageBuilder.start().build()),
 					applyDefaults ? existing.veinData() : VeinData.EMPTY);
 			JsonObject raw = ObjectData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
@@ -252,7 +252,7 @@ public class PackGenerator {
 					applyDefaults ? existing.mobModifiers() : new HashMap<>());
 			JsonObject raw = LocationData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
-		ENCHANTMENTS("pmmo/enchantments", server -> BuiltInRegistries.ENCHANTMENT.keySet(), (id) -> {
+		ENCHANTMENTS("pmmo/enchantments", server -> server.registryAccess().registryOrThrow(Registries.ENCHANTMENT).keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			EnhancementsData existing = core.getLoader().ENCHANTMENT_LOADER.getData(id);
 
@@ -283,7 +283,7 @@ public class PackGenerator {
 				Functions.pathPrepend(Reference.FROM_MAGIC.location(), "damage_type")),
 				(id) -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false, List.of())).result().get())),
 		CONFIGS("config", server -> Arrays.stream(ConfigListener.ServerConfigs.values())
-				.map(sc -> new ResourceLocation(Reference.MOD_ID, sc.filename)).collect(Collectors.toSet()),
+				.map(sc -> Reference.rl(sc.filename)).collect(Collectors.toSet()),
 				id -> {
 					ConfigListener.ServerConfigs sc = ConfigListener.ServerConfigs.fromFilename(id.getPath());
 					return sc == null ? "" : gson.toJson(ConfigListener.ServerConfigs.MAPPER.encodeStart(JsonOps.INSTANCE, Config.CONFIG.get(sc)).result().get());

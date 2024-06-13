@@ -13,6 +13,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -41,7 +42,7 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 	private BlockHitResult bhr;
 
 	@Override
-	public void render(GuiGraphics guiGraphics, float partialTick) {
+	public void render(GuiGraphics guiGraphics, DeltaTracker partialTick) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (!(mc.hitResult instanceof BlockHitResult))
@@ -91,17 +92,15 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 				int i1 = renderTop;
 				guiGraphics.pose().pushPose();
 				Tesselator tesselator = Tesselator.getInstance();
-				BufferBuilder bufferbuilder = tesselator.getBuilder();
+				BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 				RenderSystem.setShader(GameRenderer::getPositionColorShader);
-				bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 				Matrix4f matrix4f = guiGraphics.pose().last().pose();
 				TooltipRenderUtil.renderTooltipBackground(guiGraphics, l, i1, i, j, 400);
 				RenderSystem.enableDepthTest();
 				RenderSystem.enableBlend();
 				RenderSystem.defaultBlendFunc();
-				BufferUploader.drawWithShader(bufferbuilder.end());
-				MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource
-						.immediate(Tesselator.getInstance().getBuilder());
+				BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+				MultiBufferSource.BufferSource multibuffersource$buffersource = guiGraphics.bufferSource();
 				guiGraphics.pose().translate(0.0F, 0.0F, 400.0F);
 				int k1 = i1;
 
@@ -135,10 +134,10 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 		float f5 = (float) (pColorB >> 16 & 255) / 255.0F;
 		float f6 = (float) (pColorB >> 8 & 255) / 255.0F;
 		float f7 = (float) (pColorB & 255) / 255.0F;
-		pBuilder.vertex(pMatrix, (float) pX2, (float) pY1, (float) pBlitOffset).color(f1, f2, f3, f).endVertex();
-		pBuilder.vertex(pMatrix, (float) pX1, (float) pY1, (float) pBlitOffset).color(f1, f2, f3, f).endVertex();
-		pBuilder.vertex(pMatrix, (float) pX1, (float) pY2, (float) pBlitOffset).color(f5, f6, f7, f4).endVertex();
-		pBuilder.vertex(pMatrix, (float) pX2, (float) pY2, (float) pBlitOffset).color(f5, f6, f7, f4).endVertex();
+		pBuilder.addVertex(pMatrix, (float) pX2, (float) pY1, (float) pBlitOffset).setColor(f1, f2, f3, f);
+		pBuilder.addVertex(pMatrix, (float) pX1, (float) pY1, (float) pBlitOffset).setColor(f1, f2, f3, f);
+		pBuilder.addVertex(pMatrix, (float) pX1, (float) pY2, (float) pBlitOffset).setColor(f5, f6, f7, f4);
+		pBuilder.addVertex(pMatrix, (float) pX2, (float) pY2, (float) pBlitOffset).setColor(f5, f6, f7, f4);
 	}
 
 	private List<MutableComponent> gatherSalvageData(ItemStack stack) {

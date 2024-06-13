@@ -17,7 +17,7 @@ public record CP_ClearData() implements CustomPacketPayload {
 		});
 	}
 
-	public static final Type<CP_ClearData> TYPE = new Type<>(new ResourceLocation(Reference.MOD_ID, "s2c_clear_data"));
+	public static final Type<CP_ClearData> TYPE = new Type<>(Reference.rl("s2c_clear_data"));
 	@Override
 	public Type<? extends CustomPacketPayload> type() {return TYPE;}
 }

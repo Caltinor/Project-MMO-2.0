@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.readers.ConfigListener;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 
@@ -50,7 +51,7 @@ public record ServerData(
             boolean brewingTracked) {
         public General() {this(
                 50d,
-                new ResourceLocation("smithing_table"),
+                Reference.mc("smithing_table"),
                 true,
                 true);}
         public static final Codec<General> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -177,9 +178,9 @@ public record ServerData(
                 1.0,
                 1.104088404342588d,
                 Map.of(
-                        new ResourceLocation("generic.max_health"), Map.of("combat", 0.001),
-                        new ResourceLocation("generic.attack_damage"), Map.of("combat", 0.0001),
-                        new ResourceLocation("generic.movement_speed"), Map.of("combat", 0.000001)
+                        Reference.mc("generic.max_health"), Map.of("combat", 0.001),
+                        Reference.mc("generic.attack_damage"), Map.of("combat", 0.0001),
+                        Reference.mc("generic.movement_speed"), Map.of("combat", 0.000001)
                 ));}
 
         public static final Codec<MobScaling> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -208,7 +209,7 @@ public record ServerData(
                 false,
                 1,
                 1.0,
-                List.of(new ResourceLocation("silentgear:saw")),
+                List.of(Reference.of("silentgear:saw")),
                 0.01d,
                 0);}
 

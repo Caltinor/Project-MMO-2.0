@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public record CP_SyncData(ObjectType oType, Map<ResourceLocation, ? extends DataSource<?>> data) implements CustomPacketPayload {
-	public static final Type<CP_SyncData> TYPE = new Type<>(new ResourceLocation(Reference.MOD_ID, "s2c_sync_data"));
+	public static final Type<CP_SyncData> TYPE = new Type<>(Reference.rl("s2c_sync_data"));
 	public static final StreamCodec<FriendlyByteBuf, CP_SyncData> STREAM_CODEC = StreamCodec.of(CP_SyncData::write, CP_SyncData::decode);
 	private static final Codec<DataSource<?>> CODEC = Codec.lazyInitialized(() -> ObjectType.CODEC.dispatch("type",
 			s -> switch (s){

@@ -38,12 +38,12 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
     @Override
     protected void start() {
         populateData();
-        data.forEach((type, config) -> this.add(new ResourceLocation(Reference.MOD_ID, type.filename), config));
+        data.forEach((type, config) -> this.add(Reference.rl(type.filename), config));
     }
 
     private void populateData() {
         data.put(ConfigListener.ServerConfigs.SERVER, new ServerData(
-                new ServerData.General(50d, new ResourceLocation("smithing_table"), true, true),
+                new ServerData.General(50d, Reference.mc("smithing_table"), true, true),
                 new ServerData.Levels(1000000, List.of(-1L), 0.0, false,
                         true, 1.0, Map.of(), 3000, 0, 1.0),
                 new ServerData.Requirements(Arrays.stream(ReqType.values()).collect(Collectors.toMap(a -> a, a -> false))),
@@ -63,7 +63,7 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
                 new ServerData.Party(200, 1.3),
                 new ServerData.MobScaling(false, 0, 0, 1.0, true, 0.0, 1.0, Map.of()),
                 new ServerData.VeinMiner(true, false, 1, 1.5,
-                        List.of(new ResourceLocation("silentgear:saw")), 0.5, 15)
+                        List.of(Reference.of("silentgear:saw")), 0.5, 15)
         ));
         data.put(ConfigListener.ServerConfigs.PERKS, new PerksConfig(perkDefaults()));
         AutoValueConfig defaultAutoValues = new AutoValueConfig();

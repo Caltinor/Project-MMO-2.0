@@ -2,6 +2,7 @@ package harmonised.pmmo.client.gui;
 
 import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
@@ -9,12 +10,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class IndicatorsOverlayGUI implements LayeredDraw.Layer {
-	private static final ResourceLocation ICONS = new ResourceLocation(Reference.MOD_ID, "textures/gui/overlay_icons.png");
+	private static final ResourceLocation ICONS = Reference.rl("textures/gui/overlay_icons.png");
 	private Minecraft mc;
 	private BlockHitResult bhr;
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, float partialTick) {
+	public void render(GuiGraphics guiGraphics, DeltaTracker partialTick) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (!(mc.hitResult instanceof BlockHitResult))
