@@ -30,7 +30,7 @@ public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<
 		defaultSkills.put("combat", 	SkillData.Builder.start().withColor(0xff3300).withIcon(Reference.mc("textures/mob_effect/strength.png")).build());
 		defaultSkills.put("gunslinging",SkillData.Builder.start().withColor(0xd3c1a3).build());
 		defaultSkills.put("archery", 	SkillData.Builder.start().withColor(0xffff00).withIcon(Reference.mc("textures/item/bow.png")).withIconSize(16).build());
-		defaultSkills.put("smithing", 	SkillData.Builder.start().withColor(0xf0f0f0).withAfkExempt(true).withIcon(Reference.mc("pmmo:textures/skills/smithing.png")).withIconSize(32).build());
+		defaultSkills.put("smithing", 	SkillData.Builder.start().withColor(0xf0f0f0).withAfkExempt(true).withIcon(Reference.of("pmmo:textures/skills/smithing.png")).withIconSize(32).build());
 		defaultSkills.put("flying", 	SkillData.Builder.start().withColor(0xccccff).withIcon(Reference.mc("textures/item/elytra.png")).withIconSize(16).build());
 		defaultSkills.put("swimming", 	SkillData.Builder.start().withColor(0x3366ff).withIcon(Reference.mc("textures/mob_effect/dolphins_grace.png")).build());
 		defaultSkills.put("sailing", 	SkillData.Builder.start().withColor(0x99b3ff).withIcon(Reference.mc("textures/item/oak_boat.png")).withIconSize(16).build());

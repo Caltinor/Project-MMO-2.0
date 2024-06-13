@@ -139,7 +139,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     public boolean mouseScrolled(double mouseX, double mouseY, double delta, double other) {
         int maxY = getY() + ENTRY_HEIGHT * Math.min(entries.size() + 1, 5);
         if (extended && mouseX >= getX() && mouseX <= getX() + width && mouseY > getY() + ENTRY_HEIGHT && mouseY < maxY) {
-            if (delta < 0 && scrollOffset < entries.size() - 4)
+            if (delta <= 0 && scrollOffset < entries.size() - 4)
                 scrollOffset++;
             else if (delta > 0 && scrollOffset > 0)
                 scrollOffset--;

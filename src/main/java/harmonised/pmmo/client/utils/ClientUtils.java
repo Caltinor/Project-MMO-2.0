@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ClientUtils {
 	private static Minecraft mc = Minecraft.getInstance();
@@ -66,6 +67,7 @@ public class ClientUtils {
 			if (reqType.entityApplicable) {
 				BuiltInRegistries.ENTITY_TYPE.stream()
 						.map(entity -> entity.create(player.level()))
+						.filter(Objects::nonNull)
 						.forEach(entity -> core.getReqMap(reqType, entity).forEach((key, value) -> cache
 								.computeIfAbsent(key, s -> new HashMap<>())
 								.computeIfAbsent(value, v -> new HashMap<>())
