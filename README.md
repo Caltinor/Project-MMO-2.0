@@ -12,7 +12,7 @@ https://modrinth.com/mod/project-mmo
 
 |Version|Support Status|Notes|
 |:---:|:---|:---|
-|1.21.0|Actuve|recommended version|
+|1.21.0|Active|recommended version|
 |1.20.1|Active|actively supported|
 |1.19.4|Use Only|Player assistance, but no codebase updates|
 |1.19.2|Use Only|Player assistance, but no codebase updates|
