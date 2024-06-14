@@ -92,7 +92,7 @@ jobs:
           changelog-file: CHANGELOG.md
 
           loaders: |
-            forge
+            neoforge
           game-versions: |
             ${{ needs.setup.outputs.mc_minor_version }}
             ${{ needs.setup.outputs.mc_patch_version }}
@@ -112,7 +112,7 @@ jobs:
           changelog-file: CHANGELOG.md
 
           loaders: |
-            forge
+            neoforge
           game-versions: |
             ${{ needs.setup.outputs.mc_minor_version }}
             ${{ needs.setup.outputs.mc_patch_version }}
