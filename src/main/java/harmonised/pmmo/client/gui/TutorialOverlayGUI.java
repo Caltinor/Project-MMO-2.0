@@ -99,7 +99,7 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 				RenderSystem.enableDepthTest();
 				RenderSystem.enableBlend();
 				RenderSystem.defaultBlendFunc();
-				BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+				//BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
 				MultiBufferSource.BufferSource multibuffersource$buffersource = guiGraphics.bufferSource();
 				guiGraphics.pose().translate(0.0F, 0.0F, 400.0F);
 				int k1 = i1;
