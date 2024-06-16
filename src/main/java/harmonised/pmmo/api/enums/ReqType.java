@@ -4,13 +4,13 @@ import com.mojang.serialization.Codec;
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.neoforge.common.IExtensibleEnum;
+import net.neoforged.fml.common.asm.enumextension.IExtensibleEnum;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public enum ReqType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
+public enum ReqType implements StringRepresentable, GuiEnumGroup {
     WEAR(true, false, false, "endurance", LangProvider.REQ_WEAR),				//PLAYER TICK
     USE_ENCHANTMENT(true, false, false, "magic", LangProvider.REQ_ENCHANT),		//PLAYER TICK
     TOOL(true, false, false, "mining", LangProvider.REQ_TOOL),					//IMPLEMENTED IN ACTIONS
@@ -46,7 +46,7 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum, GuiEnumGrou
 	public static final ReqType[] ENTITY_APPLICABLE_EVENTS = Arrays.asList(ReqType.values()).stream().filter((type) -> type.entityApplicable).toArray(ReqType[]::new);
 	public static final ReqType[] BLOCKITEM_APPLICABLE_EVENTS = Arrays.asList(ReqType.values()).stream().filter((type) -> type.itemApplicable || type.blockApplicable).toArray(ReqType[]::new);
 
-	public static final Codec<ReqType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(ReqType::values, ReqType::byName);
+	public static final Codec<ReqType> CODEC = StringRepresentable.fromEnum(ReqType::values);
 	private static final Map<String, ReqType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ReqType::getSerializedName, s -> {return s;}));
 	public static ReqType byName(String name) {return BY_NAME.get(name);}
 	@Override

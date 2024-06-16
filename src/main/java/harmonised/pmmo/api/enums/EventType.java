@@ -4,13 +4,13 @@ import com.mojang.serialization.Codec;
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.neoforge.common.IExtensibleEnum;
+import net.neoforged.fml.common.asm.enumextension.IExtensibleEnum;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
+public enum EventType implements StringRepresentable, GuiEnumGroup {
 	ANVIL_REPAIR(true, false, false, "smithing", LangProvider.XP_VALUE_ANVIL),
 	BLOCK_BREAK(false, true, false, "mining", LangProvider.XP_VALUE_BREAK),
 		BREAK_SPEED(false, true, false, "mining", LangProvider.ENUM_BREAK_SPEED),
@@ -72,14 +72,12 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 	public static final EventType[] DAMAGE_TYPES = Arrays.stream(EventType.values()).filter(type -> type == RECEIVE_DAMAGE || type == DEAL_DAMAGE).toArray(EventType[]::new);
 	
 	
-	public static final Codec<EventType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(EventType::values, EventType::byName);
+	public static final Codec<EventType> CODEC = StringRepresentable.fromEnum(EventType::values);
 	private static final Map<String, EventType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(EventType::getSerializedName, s -> {return s;}));
 	public static EventType byName(String name) {return BY_NAME.get(name);} 
 	
 	@Override
 	public String getSerializedName() {return this.name();}
-	
-	public static EventType create(String name, boolean itemApplicable, boolean blockApplicable, boolean entityApplicable, String autoValueSkillDefault, LangProvider.Translation translation) {throw new IllegalStateException("Enum not extended");}
 
 	@Override
 	public String getName() {return name();}

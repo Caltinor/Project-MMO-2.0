@@ -18,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SwordItem;
-import net.neoforged.neoforge.common.IExtensibleEnum;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -185,26 +184,26 @@ public record AutoValueConfig(
 		public Double wearable(WearableTypes type, AttributeKey key) {
 			return wearableTweaks().getOrDefault(type, new HashMap<>()).getOrDefault(key.key, 0d);}
 	}
-	public enum UtensilTypes implements StringRepresentable, IExtensibleEnum {
+	public enum UtensilTypes implements StringRepresentable{
 		SWORD,
 		PICKAXE,
 		AXE,
 		SHOVEL,
 		HOE;
-		public static final Codec<UtensilTypes> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(UtensilTypes::values, UtensilTypes::byName);
+		public static final Codec<UtensilTypes> CODEC = StringRepresentable.fromEnum(UtensilTypes::values);
 		public static final Map<String, UtensilTypes> BY_NAME = Arrays.stream(UtensilTypes.values()).collect(Collectors.toMap(UtensilTypes::getSerializedName, s -> s));
 		public static UtensilTypes byName(String name) {return BY_NAME.get(name);}
 		@Override
 		public String getSerializedName() {return this.name();}
 		public static UtensilTypes create(String name) {throw new IllegalStateException("Enum not extended");}
 	}
-	public enum WearableTypes implements StringRepresentable, IExtensibleEnum {
+	public enum WearableTypes implements StringRepresentable{
 		HEAD,
 		CHEST,
 		LEGS,
 		BOOTS,
 		WINGS;
-		public static final Codec<WearableTypes> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(WearableTypes::values, WearableTypes::byName);
+		public static final Codec<WearableTypes> CODEC = StringRepresentable.fromEnum(WearableTypes::values);
 		public static final Map<String, WearableTypes> BY_NAME = Arrays.stream(WearableTypes.values()).collect(Collectors.toMap(WearableTypes::getSerializedName, s -> s));
 		public static WearableTypes byName(String name) {return BY_NAME.get(name);}
 		@Override

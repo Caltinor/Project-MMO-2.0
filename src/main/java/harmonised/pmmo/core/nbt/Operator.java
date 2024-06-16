@@ -2,13 +2,12 @@ package harmonised.pmmo.core.nbt;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.neoforge.common.IExtensibleEnum;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public enum Operator implements StringRepresentable, IExtensibleEnum {
+public enum Operator implements StringRepresentable{
 	EQUALS,
 	GREATER_THAN,
 	LESS_THAN,
@@ -16,7 +15,7 @@ public enum Operator implements StringRepresentable, IExtensibleEnum {
 	LESS_THAN_OR_EQUAL,
 	EXISTS;
 	
-	public static final Codec<Operator> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(Operator::values, Operator::byName);
+	public static final Codec<Operator> CODEC = StringRepresentable.fromEnum(Operator::values);
 	private static final Map<String, Operator> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(Operator::getSerializedName, s -> s));
 	public static Operator byName(String name) {return BY_NAME.get(name);}
 	

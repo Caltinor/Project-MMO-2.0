@@ -18,15 +18,12 @@ import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.neoforged.neoforge.common.IExtensibleEnum;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -43,7 +40,7 @@ import java.util.stream.Collectors;
 
 public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>> {
     private final Gson gson = new Gson();
-    public enum ServerConfigs implements StringRepresentable, IExtensibleEnum {
+    public enum ServerConfigs implements StringRepresentable {
         SERVER(ServerData.CODEC, "server", ServerData::new),
         AUTOVALUES(AutoValueConfig.CODEC, "autovalues", AutoValueConfig::new),
         SKILLS(SkillsConfig.CODEC, "skills", SkillsConfig::new),
@@ -59,7 +56,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
             this.filename = filename;
             this.defaultSupplier = defaultSupplier;
         }
-        public static final Codec<ServerConfigs> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(ServerConfigs::values, ServerConfigs::byName);
+        public static final Codec<ServerConfigs> CODEC = StringRepresentable.fromEnum(ServerConfigs::values);
         private static final Map<String, ServerConfigs> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ServerConfigs::getSerializedName, s -> s));
 
         public MapCodec<? extends ConfigData<?>> codec() {return codec;}
