@@ -212,13 +212,14 @@ public record AutoValueConfig(
 		public static WearableTypes create(String name) {throw new IllegalStateException("Enum not extended");}
 		
 		public static WearableTypes fromSlot(EquipmentSlot slot, boolean isElytra) {
-			switch (slot) {
-			case HEAD: return HEAD;
-			case CHEST: return isElytra ? WINGS : CHEST;
-			case LEGS: return LEGS;
-			case FEET: return BOOTS;
-			default: return null;
-			}
+			if (slot == null) return null;
+            return switch (slot) {
+                case HEAD -> HEAD;
+                case CHEST -> isElytra ? WINGS : CHEST;
+                case LEGS -> LEGS;
+                case FEET -> BOOTS;
+                default -> null;
+            };
 		}
 	}
 	public enum AttributeKey{

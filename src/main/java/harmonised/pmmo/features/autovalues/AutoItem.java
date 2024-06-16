@@ -280,6 +280,7 @@ public class AutoItem {
 	}
 	
 	private static double getWearableAttributes(WearableTypes type, ItemStack stack, boolean isArmor) {
+		if (type == null) return 1d;
 		//Universally Used Attributes
 		double durabilityScale = (double)stack.getMaxDamage() * Config.autovalue().tweaks().wearable(type, AttributeKey.DUR);
 		//Armor Specific
