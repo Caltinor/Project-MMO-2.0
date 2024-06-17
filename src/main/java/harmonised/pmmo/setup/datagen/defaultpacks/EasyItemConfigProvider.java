@@ -1,5 +1,6 @@
 package harmonised.pmmo.setup.datagen.defaultpacks;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.config.codecs.ObjectData;
@@ -138,6 +139,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         miningBreak(Blocks.NETHER_QUARTZ_ORE, 1000L);
         miningBreak(Blocks.ANCIENT_DEBRIS, 15000L);
 
+        //============BONUSES==================
         get(Items.TORCH).addBonus(ModifierDataType.HELD, Map.of("mining", 2.0, "excavation", 2.0));
         get(Items.SOUL_TORCH).addBonus(ModifierDataType.HELD, Map.of("mining", 5.0, "excavation", 5.0));
         get(Items.SHIELD).addBonus(ModifierDataType.HELD, Map.of("combat", 2.0, "endurance", 2.0));
@@ -150,6 +152,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         get(Items.SCAFFOLDING).addBonus(ModifierDataType.HELD, Map.of("building", 5.0));
         get(Items.CHAIN).addBonus(ModifierDataType.HELD, Map.of("woodcutting", 2.0));
 
+        //=============VEIN DATA=============================
         get(Items.SCULK_VEIN).setVeinCap(2000).setVeinRate(100.0);
         doFor(List.of(Items.STONE_PICKAXE, Items.STONE_AXE, Items.STONE_SHOVEL, Items.STONE_HOE), builder ->
                 builder.setVeinRate(1.0).setVeinCap(10));
@@ -172,22 +175,77 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 builder.setVeinCap(15));
         doFor(List.of(Items.NETHERITE_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS), builder ->
                 builder.setVeinCap(20));
+
+        //================SALVAGE================
+        doFor(List.of(Items.WOODEN_PICKAXE, Items.WOODEN_SHOVEL, Items.WOODEN_AXE, Items.WOODEN_HOE,
+                Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_AXE, Items.STONE_HOE,
+                Items.GOLDEN_PICKAXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_AXE, Items.GOLDEN_HOE,
+                Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE,
+                Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE,
+                Items.NETHERITE_PICKAXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_AXE, Items.NETHERITE_HOE),
+                builder -> builder.addSalvage(RegistryUtil.getId(Items.STICK), APIUtils.SalvageBuilder.start()
+                        .setBaseChance(0.8)
+                        .setChancePerLevel(Map.of("crafting", 0.005, "smithing", 0.005))
+                        .setSalvageMax(2)
+                        .setXpAward(Map.of("crafting", 100L, "smithing", 100L)).build())
+        );
+        List.of(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.GOLDEN_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD,
+                Items.NETHERITE_SWORD).forEach(tool -> recoverTool(tool, Items.STICK, 1, 100L, 0.005));
+
+        recoverTool(Items.WOODEN_PICKAXE, Items.OAK_PLANKS, 3, 100L, 0.005 );
+        recoverTool(Items.WOODEN_AXE, Items.OAK_PLANKS, 3, 100L, 0.005);
+        recoverTool(Items.WOODEN_HOE, Items.OAK_PLANKS, 2, 100L, 0.005);
+        recoverTool(Items.WOODEN_SHOVEL, Items.OAK_PLANKS, 1, 100L, 0.005);
+
+        recoverTool(Items.STONE_PICKAXE, Items.COBBLESTONE, 3, 150L, 0.005);
+        recoverTool(Items.STONE_AXE, Items.COBBLESTONE, 3, 150L, 0.005);
+        recoverTool(Items.STONE_HOE, Items.COBBLESTONE, 2, 150L, 0.005);
+        recoverTool(Items.STONE_SHOVEL, Items.COBBLESTONE, 1, 150L, 0.005);
+
+        recoverTool(Items.GOLDEN_PICKAXE, Items.GOLD_INGOT, 3, 500L, 0.005);
+        recoverTool(Items.GOLDEN_AXE, Items.GOLD_INGOT, 3, 500L, 0.005);
+        recoverTool(Items.GOLDEN_HOE, Items.GOLD_INGOT, 2, 500L, 0.005);
+        recoverTool(Items.GOLDEN_SHOVEL, Items.GOLD_INGOT, 1, 500L, 0.005);
+
+        recoverTool(Items.IRON_PICKAXE, Items.IRON_INGOT, 3, 1500L, 0.0025);
+        recoverTool(Items.IRON_AXE, Items.IRON_INGOT, 3, 1500L, 0.0025);
+        recoverTool(Items.IRON_HOE, Items.IRON_INGOT, 2, 1500L, 0.0025);
+        recoverTool(Items.IRON_SHOVEL, Items.IRON_INGOT, 1, 1500L, 0.0025);
+
+        recoverTool(Items.DIAMOND_PICKAXE, Items.DIAMOND, 3, 5000L, 0.00125);
+        recoverTool(Items.DIAMOND_AXE, Items.DIAMOND, 3, 5000L, 0.00125);
+        recoverTool(Items.DIAMOND_HOE, Items.DIAMOND, 2, 5000L, 0.00125);
+        recoverTool(Items.DIAMOND_SHOVEL, Items.DIAMOND, 1, 5000L, 0.00125);
+
+        recoverTool(Items.NETHERITE_PICKAXE, Items.NETHERITE_INGOT, 3, 10000L, 0.00125);
+        recoverTool(Items.NETHERITE_AXE, Items.NETHERITE_INGOT, 3, 10000L, 0.00125);
+        recoverTool(Items.NETHERITE_HOE, Items.NETHERITE_INGOT, 2, 10000L, 0.00125);
+        recoverTool(Items.NETHERITE_SHOVEL, Items.NETHERITE_INGOT, 1, 10000L, 0.00125);
+
     }
 
-    private void miningBreak(Block block, long amount) {
+    protected void miningBreak(Block block, long amount) {
         get(block.asItem()).addXpValues(EventType.BLOCK_BREAK, Map.of("mining", amount));
     }
 
-    private LogicEntry.Criteria equalsCriteria(String skill, double value, ResourceLocation key) {
+    protected LogicEntry.Criteria equalsCriteria(String skill, double value, ResourceLocation key) {
         return new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of(key.toString())), Map.of(skill, value));
     }
 
-    private ObjectData.Builder get(Item item) {
+    protected ObjectData.Builder get(Item item) {
         return data.computeIfAbsent(RegistryUtil.getId(item), i -> ObjectData.build());
     }
     
-    private void doFor(List<Item> items, Consumer<ObjectData.Builder> process) {
+    protected void doFor(List<Item> items, Consumer<ObjectData.Builder> process) {
         items.forEach(item -> process.accept(get(item)));
+    }
+
+    protected void recoverTool(Item tool, Item material, int count, long xp, double skillChance) {
+        get(tool).addSalvage(RegistryUtil.getId(material), APIUtils.SalvageBuilder.start()
+                .setBaseChance(0.8)
+                .setChancePerLevel(Map.of("crafting", skillChance, "smithing", skillChance))
+                .setSalvageMax(count)
+                .setXpAward(Map.of("crafting", xp, "smithing", xp)).build());
     }
 
     @Override
