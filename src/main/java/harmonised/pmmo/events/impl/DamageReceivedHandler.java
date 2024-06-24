@@ -14,13 +14,13 @@ import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,38 +29,39 @@ import java.util.Map;
 public class DamageReceivedHandler {
 
 	@SuppressWarnings("resource")
-	public static void handle(LivingHurtEvent event) {
-		if (event.getEntity() instanceof Player) {			
-			Player player = (Player) event.getEntity();
-			if (player.equals(event.getSource().getEntity()))
-				return;
+	public static void handle(LivingDamageEvent.Pre event) {
+		if (event.getEntity() instanceof Player player) {
+			DamageContainer container = event.getContainer();
+			DamageSource source = container.getSource();
+			if (player.equals(source.getEntity())) return;
+
 			Core core = Core.get(player.level());
-			String damageType = RegistryUtil.getId(event.getSource()).toString();
-			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+event.getSource().getMsgId());
+			String damageType = RegistryUtil.getId(source).toString();
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+source.getMsgId());
 			
 			boolean serverSide = !player.level().isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide){
 				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.RECEIVE_DAMAGE, event, new CompoundTag());
 				if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) { 
-					event.setCanceled(true);
+					container.setNewDamage(0);
 					return;
 				}
 			}
 			//Process perks
 			CompoundTag perkDataIn = eventHookOutput.copy();
 			perkDataIn.putString(APIUtils.DAMAGE_TYPE, damageType);
-			perkDataIn.putFloat(APIUtils.DAMAGE_IN, event.getAmount());
-			perkDataIn.putFloat(APIUtils.DAMAGE_OUT, event.getAmount());
+			perkDataIn.putFloat(APIUtils.DAMAGE_IN, container.getNewDamage());
+			perkDataIn.putFloat(APIUtils.DAMAGE_OUT, container.getNewDamage());
 			CompoundTag perkOutput = TagUtils.mergeTags(perkDataIn, core.getPerkRegistry().executePerk(EventType.RECEIVE_DAMAGE,  player, perkDataIn));
 			if (perkOutput.contains(APIUtils.DAMAGE_OUT)) {
 				float damageOut = perkOutput.getFloat(APIUtils.DAMAGE_OUT);
-				MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Damage Modified from %s to %s".formatted(event.getAmount(), damageOut));
-				event.setAmount(damageOut);
+				MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Damage Modified from %s to %s".formatted(container.getNewDamage(), damageOut));
+				container.setNewDamage(damageOut);
 			}
 			if (serverSide) {
 				perkOutput.putString(APIUtils.DAMAGE_TYPE, damageType);
-				Map<String, Long> xpAward = getExperienceAwards(core, event.getSource(), event.getAmount(), player, perkOutput);
+				Map<String, Long> xpAward = getExperienceAwards(core, source, container.getNewDamage(), player, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 				core.awardXP(partyMembersInRange, xpAward);
 			}

@@ -45,20 +45,18 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.StatAwardEvent;
 import net.neoforged.neoforge.event.brewing.PlayerBrewedPotionEvent;
+import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.living.AnimalTameEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
-import net.neoforged.neoforge.event.entity.living.ShieldBlockEvent;
+import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
 import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -158,20 +156,20 @@ public class EventHandler {
 		CraftHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onDamage(LivingHurtEvent event) {
-		if (event.isCanceled())
+	public static void onDamage(LivingDamageEvent.Pre event) {
+		if (event.getContainer().getNewDamage() <= 0)
 			return;
 		DamageReceivedHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onDealDamage(LivingAttackEvent event) {
-		if (event.isCanceled())
+	public static void onDealDamage(EntityInvulnerabilityCheckEvent event) {
+		if (event.isInvulnerable())
 			return;
 		DamageDealtHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onDealDamage(LivingDamageEvent event) {
-		if (event.isCanceled())
+	public static void onDealDamage(LivingDamageEvent.Pre event) {
+		if (event.getContainer().getNewDamage() <= 0)
 			return;
 		DamageDealtHandler.handle(event);
 	}
@@ -226,7 +224,7 @@ public class EventHandler {
 		MountHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onShieldBlock(ShieldBlockEvent event) {
+	public static void onShieldBlock(LivingShieldBlockEvent event) {
 		if (event.isCanceled())
 			return;
 		ShieldBlockHandler.handle(event);

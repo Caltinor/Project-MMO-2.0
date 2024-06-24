@@ -249,7 +249,7 @@ public class AutoItem {
 
 	//=========================UTILITY METHODS==============================================
  	private static double getAttributeAmount(ItemStack stack, EquipmentSlot slot, Holder<Attribute> attribute) {
-		return stack.getItem().getAttributeModifiers(stack).modifiers().stream()
+		return stack.getAttributeModifiers().modifiers().stream()
 				.filter(entry -> entry.attribute().is(attribute))
 				.mapToDouble(a -> a.modifier().amount()).sum();
 	}

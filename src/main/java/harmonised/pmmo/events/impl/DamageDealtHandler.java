@@ -16,7 +16,6 @@ import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,8 +23,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,17 +35,14 @@ import java.util.Map;
 public class DamageDealtHandler {
 
 	@SuppressWarnings("resource")
-	public static void handle(LivingAttackEvent event) {
+	public static void handle(EntityInvulnerabilityCheckEvent event) {
 		//Check the source entity isn't null.  This should also reduce
 		//the number of events processed.
 		if (event.getSource().getEntity() == null) return;
 
 		//Execute actual logic only if the source is a player
-		if (event.getSource().getEntity() instanceof Player player) {
-			LivingEntity target = event.getEntity();
-			//Confirm our target is a living entity
-			if (target == null) return;
-
+		if (event.getSource().getEntity() instanceof Player player
+				&& event.getEntity() instanceof LivingEntity target) {
 			if (target.equals(player))
 				return;
 			Core core = Core.get(player.level());
@@ -53,57 +51,56 @@ public class DamageDealtHandler {
 			
 			//===========================DEFAULT LOGIC===================================
 			if (!core.isActionPermitted(ReqType.WEAPON, player.getMainHandItem(), player)) {
-				event.setCanceled(true);
+				event.setInvulnerable(true);
 				Messenger.sendDenialMsg(ReqType.WEAPON, player, player.getMainHandItem().getDisplayName());
 				return;
 			}
 			if (!core.isActionPermitted(ReqType.KILL, target, player)) {
-				event.setCanceled(true);
+				event.setInvulnerable(true);
 				Messenger.sendDenialMsg(ReqType.KILL, player, target.getDisplayName());
 				return;
 			}
-			boolean serverSide = !player.level().isClientSide;
-			CompoundTag eventHookOutput = new CompoundTag();
-			if (serverSide) {
-				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.DEAL_DAMAGE, event, new CompoundTag());
+
+			if (!player.level().isClientSide) {
+				CompoundTag eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.DEAL_DAMAGE, event, new CompoundTag());
 				if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) { 
-					event.setCanceled(true);
-					return;
+					event.setInvulnerable(true);
 				}
 			}
 			
 		}
 	}
 	
-	@SuppressWarnings("resource")
-	public static void handle(LivingDamageEvent event) {
-		if (event.getSource().getEntity() == null) return;
+	@SuppressWarnings({"resource", "unstable"})
+	public static void handle(LivingDamageEvent.Pre event) {
+		DamageContainer container = event.getContainer();
+		DamageSource source = container.getSource();
+
 		//Execute actual logic only if the source is a player
-		if (event.getSource().getEntity() instanceof Player player) {
+		if (source.getEntity() instanceof Player player) {
 			LivingEntity target = event.getEntity();
-			if (target == null) return;
 
 			if (target.equals(player)) return;
 			
 			Core core = Core.get(player.level());
-			String damageType = RegistryUtil.getId(event.getSource()).toString();
-			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+event.getSource().getMsgId());
+			String damageType = RegistryUtil.getId(source).toString();
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+source.getMsgId());
 			//Process perks
 			CompoundTag dataIn = TagBuilder.start()
-					.withFloat(APIUtils.DAMAGE_IN, event.getAmount())
-					.withFloat(APIUtils.DAMAGE_OUT, event.getAmount())
-					.withString(APIUtils.DAMAGE_TYPE, RegistryUtil.getId(event.getSource()).toString()).build();
+					.withFloat(APIUtils.DAMAGE_IN, container.getNewDamage())
+					.withFloat(APIUtils.DAMAGE_OUT, container.getNewDamage())
+					.withString(APIUtils.DAMAGE_TYPE, RegistryUtil.getId(source).toString()).build();
 			CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.DEAL_DAMAGE, player, dataIn);
-			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Pre-Perk Damage:"+event.getAmount());
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Pre-Perk Damage:"+container.getNewDamage());
 			if (perkOutput.contains(APIUtils.DAMAGE_OUT)) {
 				float damageOut = perkOutput.getFloat(APIUtils.DAMAGE_OUT);
-				MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Damage Modified from %s to %s".formatted(event.getAmount(), damageOut));
-				event.setAmount(damageOut);
+				MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Damage Modified from %s to %s".formatted(container.getNewDamage(), damageOut));
+				event.getContainer().setNewDamage(damageOut);
 			}
-			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+damageType+" | Damage Out: "+event.getAmount());
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+damageType+" | Damage Out: "+container.getNewDamage());
 			if (!player.level().isClientSide) {
 				perkOutput.putString(APIUtils.DAMAGE_TYPE, damageType);
-				Map<String, Long> xpAward = getExperienceAwards(core, target, event.getAmount(), event.getSource(), player, perkOutput);
+				Map<String, Long> xpAward = getExperienceAwards(core, target, container.getNewDamage(), source, player, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 				core.awardXP(partyMembersInRange, xpAward);
 			}
