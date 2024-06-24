@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
 }
 
 version = "${minecraft_version}-${mod_version}"
@@ -17,6 +17,11 @@ repositories {
         content { includeGroup 'curse.maven' }
     }
 }
+
+configurations {
+    junitImplementation.extendsFrom(implementation)
+}
+
 base {
     archivesName = mod_id
 }
@@ -57,13 +62,17 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
     implementation "net.neoforged:testframework:21.0.6-beta"
+    junitImplementation "org.junit.jupiter:junit-jupiter-params"
+    //junitRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+
+    junitImplementation("org.assertj:assertj-core:3.25.1")
+    junitImplementation "net.neoforged.fancymodloader:junit-fml:${loader_version}"
     //annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
     //annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     //annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
 
-    //compileOnly "top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api"
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")
     //compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
     //compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
@@ -72,7 +81,6 @@ dependencies {
     //compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
     //compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
 
-    //runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}")
     //runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
     //runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
     //runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
