@@ -98,7 +98,7 @@ public class Config {
 				.define("Gain List Size", 3);
 		GAIN_LIST_LINGER_DURATION = builder.comment("How long, in ticks, items on the gain list should stay on screen before disappearing")
 				.define("Gain List Linger Duration", 100);
-		GAIN_BLACKLIST = builder.comment("skills that should now show their gains in the gain list.  this can be used to limit spammy skills")
+		GAIN_BLACKLIST = builder.comment("skills that should not show their gains in the gain list.  this can be used to limit spammy skills")
 				.defineList("Gain Blacklist", new ArrayList<>(), s -> s instanceof String);
 		HIDE_SKILL_BUTTON = builder.comment("if true, removes the skills button from the inventory screen")
 				.define("hide skill button", false);
