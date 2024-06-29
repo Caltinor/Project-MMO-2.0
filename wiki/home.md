@@ -2,6 +2,7 @@ Welcome to the Project-MMO-2.0 wiki!
 
 # PMMO Features
 ## Core
+- [Commands](commands.md)
 - [Experience](core/experience.md)
     - [Award Events](core/events.md)
     - [Skills](core/skills.md)
