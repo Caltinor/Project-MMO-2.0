@@ -67,7 +67,9 @@ public class CmdNodeAdmin {
 												.then(Commands.argument(VALUE_ARG, LongArgumentType.longArg())
 														.executes(ctx -> adminSetOrAdd(ctx, false))))))
 						.then(Commands.literal("clear")
-								.executes(CmdNodeAdmin::adminClear))
+								.executes(CmdNodeAdmin::adminClear)
+								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
+										.executes(CmdNodeAdmin::adminClear)))
 						.then(Commands.literal("ignoreReqs")
 								.executes(CmdNodeAdmin::exemptAdmin))
 						.then(Commands.literal("adminBonus")
@@ -113,9 +115,17 @@ public class CmdNodeAdmin {
 	
 	public static int adminClear(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {	
 		IDataStorage data = Core.get(LogicalSide.SERVER).getData();
+		String specifiedSkill = StringArgumentType.getString(ctx, SKILL_ARG);
+		boolean hasSkill = specifiedSkill != null;
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
-			data.setXpMap(player.getUUID(), new HashMap<>());
-			Networking.sendToClient(new CP_SyncData_ClearXp(), player);
+			if (hasSkill) {
+				data.getXpMap(player.getUUID()).remove(specifiedSkill);
+				Networking.sendToClient(new CP_SyncData_ClearXp(specifiedSkill), player);
+			}
+			else {
+				data.setXpMap(player.getUUID(), new HashMap<>());
+				Networking.sendToClient(new CP_SyncData_ClearXp(null), player);
+			}
 		}
 		return 0;
 	}

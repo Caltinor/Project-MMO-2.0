@@ -37,7 +37,7 @@ public class Networking {
 		//CLIENT BOUND PACKETS
 		.playToClient(CP_UpdateExperience.TYPE, CP_UpdateExperience.CODEC, CP_UpdateExperience::handle)
 		.playToClient(CP_SyncData.TYPE, CP_SyncData.STREAM_CODEC, CP_SyncData::handle)
-		.playToClient(CP_SyncData_ClearXp.TYPE, StreamCodec.unit(new CP_SyncData_ClearXp()), CP_SyncData_ClearXp::handle)
+		.playToClient(CP_SyncData_ClearXp.TYPE, CP_SyncData_ClearXp.CODEC, CP_SyncData_ClearXp::handle)
 		.playToClient(CP_ClearData.TYPE, StreamCodec.unit(new CP_ClearData()), CP_ClearData::handle)
 		.playToClient(CP_SetOtherExperience.TYPE, CP_SetOtherExperience.STREAM_CODEC, CP_SetOtherExperience::handle)
 		.playToClient(CP_ResetXP.TYPE, StreamCodec.unit(new CP_ResetXP()), CP_ResetXP::handle)
