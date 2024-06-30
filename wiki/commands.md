@@ -1,14 +1,14 @@
 ## Commands
 Project MMO has many commands that may be of use to players, server ops, and modpack developers. They are listed below.
 
-|Command|Permission|Use|
-|:---|:---:|:---|
-|`/pmmo help`| None | Shows places where help can be obtained.|
-|`/pmmo party`| None | Features for creating and managing a party. [See below](commands.md#pmmo-party)|
-|`/pmmo debug`| ---- | Not currently implemented.|
-|`/pmmo admin`|  OP  | Ability to add/remove XP/levels/bonuses or allow a player to ignore requirements. [See below](commands.md#pmmo-admin)|
-|`/pmmo store`|  OP  | Takes a player and skill name arguments and stores those values onto the Scoreboard.|
-|`/pmmo genData`|  OP  | For building datapacks used to configure Project MMO. Please see [Configuration](configuration/configuration.md#command-options)|
+|Command|Permission| Use                                                                                                                      |
+|:---|:---:|:-------------------------------------------------------------------------------------------------------------------------|
+|`/pmmo help`| None | Shows places where help can be obtained.                                                                                 |
+|`/pmmo party`| None | Features for creating and managing a party. [See below](commands.md#pmmo-party)                                          |
+|`/pmmo debug`| ---- | Not currently implemented.                                                                                               |
+|`/pmmo admin`|  OP  | Ability to add/remove XP/levels/bonuses or allow a player to ignore requirements. [See below](commands.md#pmmo-admin)    |
+|`/pmmo store`|  OP  | Takes a player and skill name arguments and stores those values onto the Scoreboard.                                     |
+|`/pmmo genData`|  OP  | For building datapacks used to configure Project MMO. Please see [Configuration](configuration/config.md#command-options)|
 
 -----
 

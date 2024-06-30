@@ -24,6 +24,8 @@ This command generates a lot of data.  For certain computers and network connect
 |:---------------------------------------------|:---------------------------------------------------------------------------------------------------------------|
 | `/pmmo genData begin`                        | resets all settings for a new command sequence                                                                 |
 | `/pmmo genData withOverrides`                | makes all generated files override other datapacks, including the default data                                 |
+| `/pmmo genData withConfigs`                  | includes server configs in generated data                                                                      |
+| `/pmmo genData withoutObjects`               | excludes object config files (items, blocks, entities, etc)                                                    |
 | `/pmmo genData withDefaults`                 | generates all files with their current settings, including any AuotValues                                      |
 | `/pmmo genData simplified`                   | removes all unused properties (for those familiar with pmmo data)                                              |
 | `/pmmo genData modFilter <modid>`            | generates files for only this mod.  may be called multiple times to include additional mods                    |
@@ -51,17 +53,15 @@ There is one client config located in your minecraft directory at `/config/pmmo-
 The common config is used by both the server and the player but not at the same time and is located in your minecraft directory at `/config/pmmo-common.toml`.  Your settings in the common config will still only apply to your instance of the game and the server's its own.  Currently, the only feature in the common config is the [logging system](../features/logging.md) "Ms. Loggy".  Changes made here affect how your side of the game logs pmmo in your log files.
 
 ### SERVER Configs
-There are five server configs which are located in your minecraft directory at `/saves/<worldname>/serverconfig/<configname>.toml`.  If you are on a dedicated server they are located at `/<worldname>/serverconfig/<configname>.toml`.  The six configs are:
+There are six server configs which can be generated using the datapack generator commands above.  The game has default configurations included, which can be overriden via datapack.  These are located under `data/pmmo/config/` in the datapack.  The six configs are:
 
-| config name          | purpose                                                                                                   |
-|:---------------------|:----------------------------------------------------------------------------------------------------------|
-| pmmo-server.toml     | contains general settings such as defaults for xp and reqs as well as certain enabling/disabling settings |
-| pmmo-Skills.toml     | where custom skill colors and settings are defined                                                        |
-| pmmo-Perks.toml      | where perks are configured                                                                                |
-| pmmo-Globals.toml    | where NBT globals are defined                                                                             |
-| pmmo-AutoValues.toml | contains all the settings for autovalues                                                                  |
-| pmmo-AntiCheese.toml | where anti-cheese rules are defined                                                                       |
-
-*Note that server configs are unique to the world they are nested under.  If you want your configs to carry over between worlds, be sure to make a copy of your config and place it in the `/defaultconfigs/` folder.  This is a Forge folder that copies server configs over to new worlds when they are created.*
+| config name     | purpose                                                                                                   |
+|:----------------|:----------------------------------------------------------------------------------------------------------|
+| server.json     | contains general settings such as defaults for xp and reqs as well as certain enabling/disabling settings |
+| skills.json     | where custom skill colors and settings are defined                                                        |
+| perks.json      | where perks are configured                                                                                |
+| globals.json    | where NBT globals are defined                                                                             |
+| autovalues.json | contains all the settings for autovalues                                                                  |
+| anticheese.json | where anti-cheese rules are defined                                                                       |
 
 [Home](../home.md)
