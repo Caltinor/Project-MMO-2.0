@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.21.0-2.3.9] - 2024-07-04
+### HOTFIX
+- Fixed crash from gametest
+
 ## [1.21.0-2.3.8] - 2024-07-04
 ### Bugfixes/Tweaks
 - Updated minimum NeoForge version to 21.0.40-beta
