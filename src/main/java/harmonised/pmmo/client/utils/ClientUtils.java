@@ -102,8 +102,9 @@ public class ClientUtils {
 			return;
 		if (cache.isEmpty()) cacheUnlocks();
 		LocalPlayer player = mc.player;
+		player.sendSystemMessage(LangProvider.LEVEL_UP_HEADER.asComponent(level, Component.translatable("pmmo."+skill)));
 		cache.getOrDefault(skill, new HashMap<>()).getOrDefault(level, new HashMap<>()).entrySet().stream()
-				.filter(entry -> !entry.getValue().isEmpty())
+				.filter(entry -> Config.server().requirements().isEnabled(entry.getKey()) && !entry.getValue().isEmpty())
 				.forEach(entry -> {
 					MutableComponent header = Component.translatable("pmmo.enum." + entry.getKey().name());
 					header.setStyle(Style.EMPTY.applyFormats(ChatFormatting.GOLD, ChatFormatting.BOLD));
