@@ -7,11 +7,15 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.config.writers.PackGenerator;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraftforge.fml.ModList;
 
 public class CmdPmmoRoot {
@@ -59,8 +63,15 @@ public class CmdPmmoRoot {
 	}
 	
 	public static int help(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-		//QOL if Patchouli is installed, open the book
-		context.getSource().sendSuccess(() -> Component.literal("Help can be found on the wiki or in the discord"), false);
+		MutableComponent wiki = Component.literal("the wiki").withStyle(Style.EMPTY
+				.withUnderlined(true)
+				.withColor(ChatFormatting.BLUE)
+				.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Caltinor/Project-MMO-2.0/blob/1-20-1/wiki/home.md")));
+		MutableComponent discord = Component.literal("the discord").withStyle(Style.EMPTY
+				.withUnderlined(true)
+				.withColor(ChatFormatting.BLUE)
+				.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/5NVNkNB")));
+		context.getSource().sendSuccess(() -> Component.literal("Help can be found on ").append(wiki).append(" or in ").append(discord), false);
 		return 0;
 	}
 	
