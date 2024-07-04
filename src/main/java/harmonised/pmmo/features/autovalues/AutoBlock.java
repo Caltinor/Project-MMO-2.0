@@ -8,6 +8,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
@@ -35,7 +36,7 @@ public class AutoBlock {
 			//is unable to break water blocks.
 			if (block.equals(Blocks.WATER)) break;
 
-			float breakSpeed = block.defaultBlockState().getDestroySpeed(null, null);
+			float breakSpeed = block.defaultBlockState().getDestroySpeed(EmptyBlockGetter.INSTANCE, null);
 			AutoValueConfig.getBlockReq(type).forEach((skill, level) -> {
 				outMap.put(skill, (int)Math.max(0, (breakSpeed - BASE_HARDNESS) * AutoValueConfig.HARDNESS_MODIFIER.get()));
 			});
