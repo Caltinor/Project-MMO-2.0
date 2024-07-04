@@ -23,9 +23,9 @@ public class FishHandler {
 	public static void handle(ItemFishedEvent event) {
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
-		if (!core.isActionPermitted(ReqType.TOOL, event.getDrops().get(0), player)) {
+		if (!core.isActionPermitted(ReqType.TOOL, player.getMainHandItem(), player)) {
 			event.setCanceled(true);
-			Messenger.sendDenialMsg(ReqType.TOOL, player, event.getDrops().get(0).getDisplayName());
+			Messenger.sendDenialMsg(ReqType.TOOL, player, player.getMainHandItem().getDisplayName());
 			return;
 		}
 		boolean serverSide = !player.level().isClientSide;
@@ -41,7 +41,6 @@ public class FishHandler {
 		if (serverSide) {
 			Map<String, Long> xpAward = new HashMap<>(); 
 			for (ItemStack stack : event.getDrops()) {
-				System.out.println(stack.toString());//TODO REMOVE
 				core.getExperienceAwards(EventType.FISH, stack, (Player) event.getEntity(), perkOutput).forEach((skill, value) -> {
 					xpAward.merge(skill, value, Long::sum);
 				});;
