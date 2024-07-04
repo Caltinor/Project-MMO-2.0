@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
@@ -39,7 +40,7 @@ public class AutoBlock {
 			//is unable to break water blocks.
 			if (block.equals(Blocks.WATER)) break;
 
-			float breakSpeed = block.defaultBlockState().getDestroySpeed(null, null);
+			float breakSpeed = block.defaultBlockState().getDestroySpeed(EmptyBlockGetter.INSTANCE, null);
 			Config.autovalue().reqs().blockDefault().forEach((skill, level) -> {
 				outMap.put(skill, (long)Math.max(0, (breakSpeed - BASE_HARDNESS) * Config.autovalue().tweaks().hardnessModifier()));
 			});
