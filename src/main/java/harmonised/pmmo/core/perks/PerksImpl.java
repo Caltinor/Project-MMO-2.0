@@ -20,8 +20,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.ToolAction;
-import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +30,13 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PerksImpl {
-	private static Set<ToolAction> DIG_ACTIONS = Set.of(
-			ToolActions.PICKAXE_DIG,
-			ToolActions.AXE_DIG, 
-			ToolActions.SHOVEL_DIG, 
-			ToolActions.HOE_DIG, 
-			ToolActions.SHEARS_DIG, 
-			ToolActions.SWORD_DIG);
+	private static Set<ItemAbility> DIG_ACTIONS = Set.of(
+			ItemAbilities.PICKAXE_DIG,
+			ItemAbilities.AXE_DIG, 
+			ItemAbilities.SHOVEL_DIG, 
+			ItemAbilities.HOE_DIG, 
+			ItemAbilities.SHEARS_DIG, 
+			ItemAbilities.SWORD_DIG);
 	private static final CompoundTag NONE = new CompoundTag();
 	
 	public static Perk BREAK_SPEED = Perk.begin()
@@ -64,7 +64,7 @@ public class PerksImpl {
 	
 	private static float getRatioForTool(ItemStack tool, CompoundTag nbt) {
 		float ratio = 0f;
-		for (ToolAction action : DIG_ACTIONS) {
+		for (ItemAbility action : DIG_ACTIONS) {
 			if (tool.canPerformAction(action))
 				ratio += nbt.getFloat(action.name());
 		}
@@ -74,7 +74,7 @@ public class PerksImpl {
 	public static CompoundTag getDefaults() {
 		TagBuilder builder = TagBuilder.start();
 		builder.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE);
-		for (ToolAction action : DIG_ACTIONS) {
+		for (ItemAbility action : DIG_ACTIONS) {
 			builder.withFloat(action.name(), 0f);
 		}
 		return builder.build();

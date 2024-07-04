@@ -1,7 +1,18 @@
 # Changelog
 
-## [1.21.0-2.3.7] - 2024-06-16
+## [1.21.0-2.3.8] - 2024-07-04
 ### Bugfixes/Tweaks
-- fixes crash from NF 21.0.10 with IExtensibleEnum no class found error
-- fixes crash from glossary for tool type checks
+- Updated minimum NeoForge version to 21.0.40-beta
+- Fixed typo in Gain Blacklist config comment
+- Added commands to wiki
+- Added optional parameter to admin clear to remove only one skill from the user(s)
+- Updated wiki to reflect server config toml => json changes
+- Fixed world-sensitive blocks crashing from AutoValues
+- Fixed crash from fishing where there is no loot
+- Fixed skill filter in glossary not working on perks
+- Added hyperlinks to the help command for the wiki and discord
+- Fixed level-up unlocks not displaying the new level and showing reqs that were disabled.
+
+### Default Pack Changes
+- Easy: Added tool salvage
 
