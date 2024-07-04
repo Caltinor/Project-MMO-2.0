@@ -52,8 +52,8 @@ public class Networking {
 			.consumerNetworkThread(CP_SyncData::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
-			.encoder((packet, buf) -> {})
-			.decoder(buf -> new CP_SyncData_ClearXp())
+			.encoder(CP_SyncData_ClearXp::encode)
+			.decoder(CP_SyncData_ClearXp::new)
 			.consumerNetworkThread(CP_SyncData_ClearXp::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_ClearData.class, ID++)
