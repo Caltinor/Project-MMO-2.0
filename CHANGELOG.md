@@ -1,6 +1,7 @@
 # Changelog
 
-## [1.18.2-6.2.9] - 2024-06-10
+## [1.18.2-6.2.10] - 2024-07-04
 ### Bugfixes / Tweaks
-- Fixed vein data not allowing removal as an override.  setting vein values to zero now properly removes the vein from the tooltip and overrides existing values when the override property is true.
+- Fixed typo in Gain blacklist config comment
+- Added hyperlinks in help command to the wiki and discord
 
