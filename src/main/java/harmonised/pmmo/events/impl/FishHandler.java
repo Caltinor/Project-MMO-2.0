@@ -23,9 +23,9 @@ public class FishHandler {
 	public static void handle(ItemFishedEvent event) {
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
-		if (!core.isActionPermitted(ReqType.TOOL, event.getDrops().get(0), player)) {
+		if (!core.isActionPermitted(ReqType.TOOL, player.getMainHandItem(), player)) {
 			event.setCanceled(true);
-			Messenger.sendDenialMsg(ReqType.TOOL, player, event.getDrops().get(0).getDisplayName());
+			Messenger.sendDenialMsg(ReqType.TOOL, player, player.getMainHandItem().getDisplayName());
 			return;
 		}
 		boolean serverSide = !player.level().isClientSide;
