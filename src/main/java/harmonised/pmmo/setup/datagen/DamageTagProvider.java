@@ -47,6 +47,15 @@ public class DamageTagProvider extends TagsProvider<DamageType>{
 
         tag(Reference.FROM_MAGIC)
                 .add(DamageTypes.MAGIC)
-                .add(DamageTypes.INDIRECT_MAGIC);
+                .add(DamageTypes.INDIRECT_MAGIC)
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:fire_magic"))
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:ice_magic"))
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:lightning_magic"))
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:holy_magic"))
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:ender_magic"))
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:blood_magic"))
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:evocation_magic"))
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:eldritch_magic"))
+                .addOptional(new ResourceLocaltion(pLocation: "irons_spellbooks:nature_magic"));
     }
 }
