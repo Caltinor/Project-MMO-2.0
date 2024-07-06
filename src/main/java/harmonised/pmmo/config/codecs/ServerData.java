@@ -136,7 +136,7 @@ public record ServerData(
             map.put(EventType.JUMP, Map.of("agility", 2.5));
             map.put(EventType.SPRINT_JUMP, Map.of("agility", 2.5));
             map.put(EventType.CROUCH_JUMP, Map.of("agility", 2.5));
-            map.put(EventType.BREATH_CHANGE, Map.of("swimming", 1d));
+            map.put(EventType.BREATH_CHANGE, Map.of("endurance", 1d));
             map.put(EventType.HEALTH_INCREASE, Map.of("endurance", 1d));
             map.put(EventType.HEALTH_DECREASE, Map.of("endurance", 1d));
             map.put(EventType.SPRINTING, Map.of("agility", 100d));

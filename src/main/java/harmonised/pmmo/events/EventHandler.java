@@ -9,6 +9,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.events.impl.AnvilRepairHandler;
 import harmonised.pmmo.events.impl.BreakHandler;
 import harmonised.pmmo.events.impl.BreakSpeedHandler;
+import harmonised.pmmo.events.impl.BreathHandler;
 import harmonised.pmmo.events.impl.BreedHandler;
 import harmonised.pmmo.events.impl.CraftHandler;
 import harmonised.pmmo.events.impl.CropGrowHandler;
@@ -52,6 +53,7 @@ import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.living.AnimalTameEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
+import net.neoforged.neoforge.event.entity.living.LivingBreatheEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
@@ -248,6 +250,10 @@ public class EventHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onPlayerTick(PlayerTickEvent.Post event) {
 		PlayerTickHandler.handle(event);
+	}
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onBreathChange(LivingBreatheEvent event) {
+		BreathHandler.handle(event);
 	}
 	@SubscribeEvent
 	public static void onPlayerDimTravel(EntityTravelToDimensionEvent event) {

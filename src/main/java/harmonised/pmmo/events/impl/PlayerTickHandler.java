@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerTickHandler {
-	private static final Map<UUID, Integer> airLast = new HashMap<>();
 	private static final Map<UUID, Float> healthLast = new HashMap<>();
 	private static final Map<UUID, Vec3> moveLast = new HashMap<>();
 
@@ -44,14 +43,10 @@ public class PlayerTickHandler {
 			//Apply positive and negative effects based on biome and items worn
 			EffectManager.applyEffects(core, player);
 		}
-		
-		if (!airLast.containsKey(player.getUUID()))
-			airLast.put(player.getUUID(), player.getAirSupply());
+
 		if (!healthLast.containsKey(player.getUUID()))
 			healthLast.put(player.getUUID(), player.getHealth());
-		
-		if (player.getAirSupply() != airLast.getOrDefault(player.getUUID(), 0))
-			processEvent(EventType.BREATH_CHANGE, core, event);
+
 		float healthDiff = player.getHealth() - healthLast.getOrDefault(player.getUUID(), 0f);
 		if (Math.abs(healthDiff) >= 0.01) {
 			processEvent(healthDiff > 0 ? EventType.HEALTH_INCREASE : EventType.HEALTH_DECREASE, core, event);
@@ -83,7 +78,6 @@ public class PlayerTickHandler {
 			processEvent(EventType.CROUCH, core, event);
 		
 		//update tracker variables
-		airLast.put(player.getUUID(), player.getAirSupply());
 		healthLast.put(player.getUUID(), player.getHealth());
 		moveLast.put(player.getUUID(), player.position());
 	}
@@ -102,13 +96,6 @@ public class PlayerTickHandler {
 					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
 					: new HashMap<>();
 			switch (type) {
-			case BREATH_CHANGE -> {
-				int diff = Math.abs(airLast.getOrDefault(event.getEntity().getUUID(), 0) - event.getEntity().getAirSupply());
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.getEntity()).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
-			}
 			case HEALTH_INCREASE, HEALTH_DECREASE -> {
 				processHealthChange(ratio, core, event.getEntity(), xpAward);
 			}
