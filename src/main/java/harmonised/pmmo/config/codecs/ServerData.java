@@ -116,7 +116,7 @@ public record ServerData(
                                 "minecraft:generic_kill", Map.of("combat", 1L),
                                 "minecraft:player_attack", Map.of("combat", 1L),
                                 "#minecraft:is_projectile", Map.of("archery", 1L),
-                                "#pmmo:magic", Map.of("magic", 15l)
+                                "#pmmo:magic", Map.of("magic", 15L)
                         ),
                         EventType.RECEIVE_DAMAGE, Map.of(
                                 "minecraft:generic_kill", Map.of("endurance", 1L),
