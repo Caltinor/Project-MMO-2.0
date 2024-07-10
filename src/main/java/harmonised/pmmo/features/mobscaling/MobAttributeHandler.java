@@ -32,6 +32,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MobAttributeHandler {
 	private static final UUID MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
+	private static final UUID MODIFIER_ID2 = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcc");
+	private static final UUID CUSTOM_MOD_ID_ADDITION = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcd");
+	private static final UUID CUSTOM_MOD_ID_MULTIPLY_BASE = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fce");
+	private static final UUID CUSTOM_MOD_ID_MULTIPLY_TOTAL = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcf");
 	/**Used for balancing purposes to ensure configurations do not exceed known limits.*/
 	private static final Map<ResourceLocation, Float> CAPS = Map.of(
 		new ResourceLocation("generic.max_health"), 1024f,
@@ -57,11 +61,9 @@ public class MobAttributeHandler {
 	public static void onMobSpawn(FinalizeSpawn event) {
 	    if (!Config.MOB_SCALING_ENABLED.get())
 	        return;
-		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
-			handle(event.getEntity(), event.getLevel().getLevel()
-					, new Vec3(event.getX(), event.getY(), event.getZ())
-					, event.getLevel().getDifficulty().getId());
-		}
+		handle(event.getEntity(), event.getLevel().getLevel()
+				, new Vec3(event.getX(), event.getY(), event.getZ())
+				, event.getLevel().getDifficulty().getId());
 	}
 
 	private static void handle(LivingEntity entity, ServerLevel level, Vec3 spawnPos, int diffScale) {
@@ -77,6 +79,7 @@ public class MobAttributeHandler {
 
 		var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
 		var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
+		var dimModsCustom = dimData.dimensionalMobModifiers();
 		var multipliers = Config.MOB_SCALING.get();
 		final float bossMultiplier = entity.getType().is(Tags.EntityTypes.BOSSES) ? Config.BOSS_SCALING_RATIO.get().floatValue() : 1f;
 
@@ -84,6 +87,31 @@ public class MobAttributeHandler {
 				.flatMap(Set::stream)
 				.map(ResourceLocation::new)
 				.collect(Collectors.toSet());
+
+		for (harmonised.pmmo.config.codecs.AttributeModifier att : dimModsCustom) {
+			var attributeLocation = new ResourceLocation(att.attribute());
+			var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeLocation);
+			if (attribute == null) continue;
+
+			AttributeInstance attributeInstance = entity.getAttribute(attribute);
+			if (attributeInstance == null) continue;
+
+			double bonus = att.amount();
+			AttributeModifier.Operation operation = switch (att.operation()) {
+				case "addition" -> AttributeModifier.Operation.ADDITION;
+				case "multiply_base" -> AttributeModifier.Operation.MULTIPLY_BASE;
+				case "multiply_total" -> AttributeModifier.Operation.MULTIPLY_TOTAL;
+				default -> AttributeModifier.Operation.ADDITION;
+			};
+			UUID modifierID = switch (att.operation()) {
+				case "addition" -> CUSTOM_MOD_ID_ADDITION;
+				case "multiply_base" -> CUSTOM_MOD_ID_MULTIPLY_BASE;
+				case "multiply_total" -> CUSTOM_MOD_ID_MULTIPLY_TOTAL;
+				default -> CUSTOM_MOD_ID_ADDITION;
+			};
+			attributeInstance.removeModifier(modifierID);
+			attributeInstance.addPermanentModifier(new AttributeModifier(modifierID, "Boost to By Dimension Scaling", bonus, operation));
+		}
 
 		//Set each Modifier type
 		attributeKeys.forEach(attributeID -> {
@@ -96,7 +124,16 @@ public class MobAttributeHandler {
 				double base = baseValue(entity, attributeID, attributeInstance);
 				float cap = CAPS.getOrDefault(attributeID, Float.MAX_VALUE);
 				float bonus = getBonus(nearbyPlayers, config, diffScale, base, cap);
-				bonus += dimMods.getOrDefault(attributeID.toString(), 0d).floatValue();
+				float dimBonus = dimMods.getOrDefault(attributeID.toString(), 0d).floatValue();
+				float bioBonus = bioMods.getOrDefault(attributeID.toString(), 0d).floatValue();
+				boolean hasDimBonus = dimBonus >= 10000;
+				if (hasDimBonus) {
+					dimBonus /= 10000;
+					AttributeModifier modifier = new AttributeModifier(MODIFIER_ID2, "Boost to Mob Scaling", dimBonus, AttributeModifier.Operation.MULTIPLY_BASE);
+					attributeInstance.removeModifier(MODIFIER_ID2);
+					attributeInstance.addPermanentModifier(modifier);
+				}
+				bonus += !hasDimBonus ? dimMods.getOrDefault(attributeID.toString(), 0d).floatValue() : 0f;
 				bonus += bioMods.getOrDefault(attributeID.toString(), 0d).floatValue();
 				bonus *= bossMultiplier;
 				AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
@@ -152,12 +189,15 @@ public class MobAttributeHandler {
 		//get the average level for each skill and calculate its modifier from the configuration formula
 		float outValue = 0f;
 		for (Map.Entry<String, Double> configEntry : config.entrySet()) {
+			float currValue = 0f;
 			int averageLevel = totalLevel.getOrDefault(configEntry.getKey(), 0)/nearbyPlayers.size();
 			if (averageLevel < Config.MOB_SCALING_BASE_LEVEL.get()) continue;
-			outValue += Config.MOB_USE_EXPONENTIAL_FORMULA.get()
+			currValue += Config.MOB_USE_EXPONENTIAL_FORMULA.get()
 					? Math.pow(Config.MOB_EXPONENTIAL_POWER_BASE.get(), (Config.MOB_EXPONENTIAL_LEVEL_MOD.get() * (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get())))
 					: (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get()) * Config.MOB_LINEAR_PER_LEVEL.get();
-			outValue *= configEntry.getValue();
+			currValue *= configEntry.getValue();
+			currValue -= configEntry.getValue();
+			outValue += currValue;
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Modifier Value: "+outValue * scale);
 		outValue *= scale;

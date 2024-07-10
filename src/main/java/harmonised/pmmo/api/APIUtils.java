@@ -55,7 +55,7 @@ public class APIUtils {
 	//===============CORE HOOKS======================================
 	/**get the player's current level in the skill provided
 	 * 
-	 * @param skill skill name.  Skills are case-sensitive and usually all lowercase
+	 * @param skill skill attribute.  Skills are case-sensitive and usually all lowercase
 	 * @param player the player whose skills are being obtained.
 	 * @return the current skill level of the player
 	 */
@@ -67,7 +67,7 @@ public class APIUtils {
 	
 	/**Sets the player's current level in the skill provided
 	 * 
-	 * @param skill skill's name.  skills are case-sensitive and usually all lowercase
+	 * @param skill skill's attribute.  skills are case-sensitive and usually all lowercase
 	 * @param player the player whose skills are being set
 	 * @param level the new level being applied to the skill
 	 */
@@ -81,7 +81,7 @@ public class APIUtils {
 	 * providing a negative value in @{link levelChange} will reduce the player's
 	 * level.
 	 * 
-	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
+	 * @param skill skill attribute.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose level is being changed
 	 * @param levelChange the number of levels being changed by.  negative values will reduce the player level.
 	 * @return true if the level was in fact changed.
@@ -94,7 +94,7 @@ public class APIUtils {
 	
 	/**Gets the raw xp value associated with the specified skill and player.
 	 * 
-	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
+	 * @param skill skill attribute.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose experience is being sought.
 	 * @return the raw experience earned in the specified skill.
 	 */
@@ -106,7 +106,7 @@ public class APIUtils {
 	
 	/**Sets the raw XP value for the player in the skill specified.
 	 * 
-	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
+	 * @param skill skill attribute.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose skill is being set.
 	 * @param xpRaw the new experience amount to be set for this skill
 	 */
@@ -119,7 +119,7 @@ public class APIUtils {
 	/**Changes the player's current experience in the specified skill by the amount.
 	 * Negative values will reduce current experience.
 	 * 
-	 * @param skill skill name. Skills are case-sensitive and usually lowercase. if a
+	 * @param skill skill attribute. Skills are case-sensitive and usually lowercase. if a
 	 *              skill group is passed into this method, it will be parsed according
 	 *              to its component skills and the xp distributed accordingly.
 	 * @param player the player whose experience is being changed.
@@ -613,7 +613,7 @@ public class APIUtils {
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
-	 * skill requirements. The map consists of skill name and skill value pairs.  
+	 * skill requirements. The map consists of skill attribute and skill value pairs.
 	 * The ResourceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.
@@ -627,7 +627,7 @@ public class APIUtils {
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific block
-	 * skill requirements. The map consists of skill name and skill value pairs.  
+	 * skill requirements. The map consists of skill attribute and skill value pairs.
 	 * The ResourceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.
@@ -641,7 +641,7 @@ public class APIUtils {
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific entity
-	 * skill requirements. The map consists of skill name and skill value pairs.  
+	 * skill requirements. The map consists of skill attribute and skill value pairs.
 	 * The ResourceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.
@@ -655,7 +655,7 @@ public class APIUtils {
 	}
 	
 	/**registers a Function to be used in providing the experience gains for specific item
-	 * and event. The map consists of skill name and experience value pairs.  
+	 * and event. The map consists of skill attribute and experience value pairs.
 	 * The ResourceLocation and EventType parameters are conditions for when the function
 	 * should be applied.
 	 *  
@@ -668,7 +668,7 @@ public class APIUtils {
 	}
 	
 	/**registers a Function to be used in providing the experience gains for specific block
-	 * and event. The map consists of skill name and experience value pairs.  
+	 * and event. The map consists of skill attribute and experience value pairs.
 	 * The ResourceLocation and EventType parameters are conditions for when the function
 	 * should be applied.
 	 *  
@@ -681,7 +681,7 @@ public class APIUtils {
 	}
 	
 	/**registers a Function to be used in providing the experience gains for specific entity
-	 * and event. The map consists of skill name and experience value pairs.  
+	 * and event. The map consists of skill attribute and experience value pairs.
 	 * The ResourceLocation and EventType parameters are conditions for when the function
 	 * should be applied.
 	 *  

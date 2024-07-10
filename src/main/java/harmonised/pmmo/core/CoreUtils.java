@@ -127,7 +127,7 @@ public class CoreUtils {
 	
 	/**Obtain the integer value for the skill color supplied.
 	 * 
-	 * @param skill the skill name whose color is being obtained
+	 * @param skill the skill attribute whose color is being obtained
 	 * @return the integer skill value
 	 */
 	public static int getSkillColor(String skill) {

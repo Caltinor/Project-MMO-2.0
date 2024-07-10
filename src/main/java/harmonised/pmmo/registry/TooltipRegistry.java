@@ -43,7 +43,7 @@ public class TooltipRegistry {
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
-	 * skill requirements. The map consists of skill name and skill value pairs.  
+	 * skill requirements. The map consists of skill attribute and skill value pairs.
 	 * The ResouceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.  The function itself links to the compat mod's logic which handles 
@@ -68,7 +68,7 @@ public class TooltipRegistry {
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
-	 * skill requirements. The map consists of skill name and skill value pairs.  
+	 * skill requirements. The map consists of skill attribute and skill value pairs.
 	 * The ResouceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.  The function itself links to the compat mod's logic which handles 
@@ -93,7 +93,7 @@ public class TooltipRegistry {
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
-	 * skill requirements. The map consists of skill name and skill value pairs.  
+	 * skill requirements. The map consists of skill attribute and skill value pairs.
 	 * The ResouceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.  The function itself links to the compat mod's logic which handles 
