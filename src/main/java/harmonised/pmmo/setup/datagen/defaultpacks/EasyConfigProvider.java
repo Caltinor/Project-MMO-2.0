@@ -51,7 +51,8 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
                         EventType.DEAL_DAMAGE, Map.of(
                                 "minecraft:generic_kill", Map.of("combat", 100L),
                                 "minecraft:player_attack", Map.of("combat", 100L),
-                                "#minecraft:is_projectile", Map.of("combat", 100L)
+                                "#minecraft:is_projectile", Map.of("combat", 100L),
+                                "#pmmo:magic", Map.of("magic", 100L)
                         ),
                         EventType.RECEIVE_DAMAGE, Map.of(
                                 "minecraft:generic_kill", Map.of("endurance", 100L),

@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -47,6 +48,15 @@ public class DamageTagProvider extends TagsProvider<DamageType>{
 
         tag(Reference.FROM_MAGIC)
                 .add(DamageTypes.MAGIC)
-                .add(DamageTypes.INDIRECT_MAGIC);
+                .add(DamageTypes.INDIRECT_MAGIC)
+                .addOptional(ResourceLocation.parse("irons_spellbooks:fire_magic"))
+                .addOptional(ResourceLocation.parse("irons_spellbooks:ice_magic"))
+                .addOptional(ResourceLocation.parse("irons_spellbooks:lightning_magic"))
+                .addOptional(ResourceLocation.parse("irons_spellbooks:holy_magic"))
+                .addOptional(ResourceLocation.parse("irons_spellbooks:ender_magic"))
+                .addOptional(ResourceLocation.parse("irons_spellbooks:blood_magic"))
+                .addOptional(ResourceLocation.parse("irons_spellbooks:evocation_magic"))
+                .addOptional(ResourceLocation.parse("irons_spellbooks:eldritch_magic"))
+                .addOptional(ResourceLocation.parse("irons_spellbooks:nature_magic"));
     }
 }
