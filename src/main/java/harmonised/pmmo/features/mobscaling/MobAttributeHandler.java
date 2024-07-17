@@ -79,7 +79,7 @@ public class MobAttributeHandler {
 
 		var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
 		var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
-		var dimModsCustom = dimData.dimensionalMobModifiers();
+		var dimModsCustom = dimData.globalMobModifiers();
 		var multipliers = Config.MOB_SCALING.get();
 		final float bossMultiplier = entity.getType().is(Tags.EntityTypes.BOSSES) ? Config.BOSS_SCALING_RATIO.get().floatValue() : 1f;
 
