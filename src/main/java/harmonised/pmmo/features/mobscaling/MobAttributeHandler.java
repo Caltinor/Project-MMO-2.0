@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -19,7 +20,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
@@ -88,7 +88,7 @@ public class MobAttributeHandler {
 				.map(ResourceLocation::new)
 				.collect(Collectors.toSet());
 
-		for (harmonised.pmmo.config.codecs.AttributeModifier att : dimModsCustom) {
+		for (MobModifier att : dimModsCustom) {
 			var attributeLocation = new ResourceLocation(att.attribute());
 			var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeLocation);
 			if (attribute == null) continue;

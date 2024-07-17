@@ -27,7 +27,7 @@ public record LocationData(
 		Map<ResourceLocation, Integer> negative,
 		List<ResourceLocation> veinBlacklist,
 		Map<String, Integer> travelReq,
-		List<AttributeModifier> dimensionalMobModifiers,
+		List<MobModifier> dimensionalMobModifiers,
 		Map<ResourceLocation, Map<String, Double>> mobModifiers) implements DataSource<LocationData>{
 	
 	public LocationData() {this(
@@ -82,7 +82,7 @@ public record LocationData(
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("negative_effect").forGetter(ld -> Optional.of(ld.negative())),
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("vein_blacklist").forGetter(ld -> Optional.of(ld.veinBlacklist())),
 			Codec.unboundedMap(Codec.STRING, Codec.INT).optionalFieldOf("travel_req").forGetter(ld -> Optional.of(ld.travelReq())),
-			Codec.list(AttributeModifier.CODEC).optionalFieldOf("dimensional_mob_modifiers").forGetter(ld -> Optional.of(ld.dimensionalMobModifiers())),
+			Codec.list(MobModifier.CODEC).optionalFieldOf("dimensional_mob_modifiers").forGetter(ld -> Optional.of(ld.dimensionalMobModifiers())),
 			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).optionalFieldOf("mob_modifier").forGetter(ld -> Optional.of(ld.mobModifiers()))
 			).apply(instance, (override, tags, bonus, pos, neg, vein, req, dimMobScaling, mobs) ->
 				new LocationData(
@@ -105,7 +105,7 @@ public record LocationData(
 		Map<ResourceLocation, Integer> negative = new HashMap<>();
 		List<ResourceLocation> veinBlacklist = new ArrayList<>();
 		Map<String, Integer> travelReq = new HashMap<>();
-		List<AttributeModifier> dimensionalMobModifiers = new ArrayList<>();
+		List<MobModifier> dimensionalMobModifiers = new ArrayList<>();
 		Map<ResourceLocation, Map<String, Double>> mobModifiers = new HashMap<>();
 		
 		BiConsumer<LocationData, LocationData> bothOrNeither = (o, t) -> {
