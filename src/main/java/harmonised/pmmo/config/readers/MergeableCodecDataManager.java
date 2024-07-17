@@ -101,8 +101,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	private Map<ResourceLocation, T> overrideSettings = new HashMap<>();
 	
 	/**
-	 * Initialize a data manager with the given folder attribute, codec, and merger
-	 * @param folderName The attribute of the folder to load data from,
+	 * Initialize a data manager with the given folder name, codec, and merger
+	 * @param folderName The name of the folder to load data from,
 	 * e.g. "cheeses" would load data from "data/modid/cheeses" for all modids.
 	 * Can include subfolders, e.g. "cheeses/sharp"
 	 * @param logger A logger that will log parsing errors if they occur
@@ -110,8 +110,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * https://gist.github.com/Drullkus/1bca3f2d7f048b1fe03be97c28f87910
 	 * @param merger A merging function that uses a list of java-objects-that-were-parsed-from-json to create a final object.
 	 * The list contains all successfully-parsed objects with the same ID from all mods and datapacks.
-	 * (for a json located at "data/modid/folderName/attribute.json", the object's ID is "modid:attribute")
-	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:attribute id,
+	 * (for a json located at "data/modid/folderName/name.json", the object's ID is "modid:name")
+	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
 	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
 	 */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, Codec<T> codec, final Function<List<T>, T> merger
@@ -122,8 +122,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 
 	
 	/**
-	 * Initialize a data manager with the given folder attribute, codec, and merger, as well as a user-defined GSON instance.
-	 * @param folderName The attribute of the folder to load data from,
+	 * Initialize a data manager with the given folder name, codec, and merger, as well as a user-defined GSON instance.
+	 * @param folderName The name of the folder to load data from,
 	 * e.g. "cheeses" would load data from "data/modid/cheeses" for all modids.
 	 * Can include subfolders, e.g. "cheeses/sharp"
 	 * @param logger A logger that will log parsing errors if they occur
@@ -131,8 +131,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * https://gist.github.com/Drullkus/1bca3f2d7f048b1fe03be97c28f87910
 	 * @param merger A merging function that uses a list of java-objects-that-were-parsed-from-json to create a final object.
 	 * The list contains all successfully-parsed objects with the same ID from all mods and datapacks.
-	 * (for a json located at "data/modid/folderName/attribute.json", the object's ID is "modid:attribute")
-	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:attribute id,
+	 * (for a json located at "data/modid/folderName/name.json", the object's ID is "modid:name")
+	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
 	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
 	 * @param gson A GSON instance, allowing for user-defined deserializers. General not needed as the gson is only used to convert
 	 * raw json to a JsonElement, which the Codec then parses into a proper java object.
