@@ -30,9 +30,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MobAttributeHandler {
-	private static final UUID GLOBAL_DIMENSION_ADDITION_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcd");
-	private static final UUID GLOBAL_DIMENSION_MULTIPLY_BASE_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fce");
-	private static final UUID GLOBAL_DIMENSION_MULTIPLY_TOTAL_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcf");
+	private static final UUID ADDITION_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcd");
+	private static final UUID MULTIPLY_BASE_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fce");
+	private static final UUID MULTIPLY_TOTAL_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcf");
 	/**Used for balancing purposes to ensure configurations do not exceed known limits.*/
 	private static final Map<ResourceLocation, Float> CAPS = Map.of(
 		new ResourceLocation("generic.max_health"), 1024f,
@@ -120,9 +120,9 @@ public class MobAttributeHandler {
 		applyMobScaling(collapsedAdditionModifiers, entity, mobScalingMultipliers, nearbyPlayers, diffScale);
 		applyBossMultiplier(collapsedAdditionModifiers, bossMultiplier);
 
-		applyModifiers(entity, GLOBAL_DIMENSION_ADDITION_MODIFIER_ID, AttributeModifier.Operation.ADDITION, collapsedAdditionModifiers);
-		applyModifiers(entity, GLOBAL_DIMENSION_MULTIPLY_BASE_MODIFIER_ID, AttributeModifier.Operation.MULTIPLY_BASE, collapsedMultiplyBaseModifiers);
-		applyModifiers(entity, GLOBAL_DIMENSION_MULTIPLY_TOTAL_MODIFIER_ID, AttributeModifier.Operation.MULTIPLY_TOTAL, collapsedMultiplyTotalModifiers);
+		applyModifiers(entity, ADDITION_MODIFIER_ID, AttributeModifier.Operation.ADDITION, collapsedAdditionModifiers);
+		applyModifiers(entity, MULTIPLY_BASE_MODIFIER_ID, AttributeModifier.Operation.MULTIPLY_BASE, collapsedMultiplyBaseModifiers);
+		applyModifiers(entity, MULTIPLY_TOTAL_MODIFIER_ID, AttributeModifier.Operation.MULTIPLY_TOTAL, collapsedMultiplyTotalModifiers);
 	}
 
 	/**Applies the modifiers to the entity.
@@ -130,10 +130,10 @@ public class MobAttributeHandler {
 	 * @param entity the entity to apply the modifiers to
 	 * @param modifierId the id of the modifier to apply
 	 * @param operation the operation to apply
-	 * @param modifiers the map of modifiers to apply
+	 * @param collapsedModifiers the map of modifiers to apply
 	 */
-	private static void applyModifiers(LivingEntity entity, UUID modifierId, AttributeModifier.Operation operation, Map<String, Double> modifiers) {
-		modifiers.forEach((attributeStr, amount) -> {
+	private static void applyModifiers(LivingEntity entity, UUID modifierId, AttributeModifier.Operation operation, Map<String, Double> collapsedModifiers) {
+		collapsedModifiers.forEach((attributeStr, amount) -> {
 			if (Math.abs(amount) < 0.0001f) return;
 			var attributeLocation = new ResourceLocation(attributeStr);
 			var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeLocation);
@@ -166,7 +166,7 @@ public class MobAttributeHandler {
 		return modifierMap;
 	}
 
-	private static void applyMobScaling(HashMap<String, Double> modifiers, LivingEntity entity, Map<String, Map<String, Double>> config, List<Player> nearbyPlayers, int difficultyScale) {
+	private static void applyMobScaling(HashMap<String, Double> collapsedModifiers, LivingEntity entity, Map<String, Map<String, Double>> config, List<Player> nearbyPlayers, int difficultyScale) {
 		config.forEach((attributeName, configMap) -> {
 			var attributeScalingConfig = config.getOrDefault(attributeName, new HashMap<>());
 			if (attributeScalingConfig.isEmpty()) return;
@@ -181,17 +181,17 @@ public class MobAttributeHandler {
 			var bonus = getBonus(nearbyPlayers, attributeScalingConfig, difficultyScale, baseValue, cap);
 			if (Math.abs(bonus) < 0.0001f) return;
 
-			if (modifiers.containsKey(attributeName)) {
-				modifiers.put(attributeName, modifiers.get(attributeName) + bonus);
+			if (collapsedModifiers.containsKey(attributeName)) {
+				collapsedModifiers.put(attributeName, collapsedModifiers.get(attributeName) + bonus);
 			} else {
-				modifiers.put(attributeName, (double) bonus);
+				collapsedModifiers.put(attributeName, (double) bonus);
 			}
 		});
 	}
 
-	private static void applyBossMultiplier(HashMap<String, Double> modifiers, float multiplier) {
+	private static void applyBossMultiplier(HashMap<String, Double> collapsedModifiers, float multiplier) {
 		if (Math.abs(multiplier - 1f) < 0.0001f) return;
-		modifiers.replaceAll((attribute, value) -> value * multiplier);
+		collapsedModifiers.replaceAll((attribute, value) -> value * multiplier);
 	}
 
 	
