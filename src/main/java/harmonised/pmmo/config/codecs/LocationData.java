@@ -28,7 +28,7 @@ public record LocationData(
 		List<ResourceLocation> veinBlacklist,
 		Map<String, Integer> travelReq,
 		List<MobModifier> globalMobModifiers,
-		Map<ResourceLocation, Map<String, Double>> mobModifiers) implements DataSource<LocationData>{
+		Map<ResourceLocation, List<MobModifier>> mobModifiers) implements DataSource<LocationData>{
 	
 	public LocationData() {this(
 			false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
@@ -83,7 +83,7 @@ public record LocationData(
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("vein_blacklist").forGetter(ld -> Optional.of(ld.veinBlacklist())),
 			Codec.unboundedMap(Codec.STRING, Codec.INT).optionalFieldOf("travel_req").forGetter(ld -> Optional.of(ld.travelReq())),
 			Codec.list(MobModifier.CODEC).optionalFieldOf("global_mob_modifiers").forGetter(ld -> Optional.of(ld.globalMobModifiers())),
-			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).optionalFieldOf("mob_modifier").forGetter(ld -> Optional.of(ld.mobModifiers()))
+			Codec.unboundedMap(ResourceLocation.CODEC, Codec.list(MobModifier.CODEC)).optionalFieldOf("mob_modifier").forGetter(ld -> Optional.of(ld.mobModifiers()))
 			).apply(instance, (override, tags, bonus, pos, neg, vein, req, dimMobScaling, mobs) ->
 				new LocationData(
 						override.orElse(false),
@@ -106,7 +106,7 @@ public record LocationData(
 		List<ResourceLocation> veinBlacklist = new ArrayList<>();
 		Map<String, Integer> travelReq = new HashMap<>();
 		List<MobModifier> globalMobModifiers = new ArrayList<>();
-		Map<ResourceLocation, Map<String, Double>> mobModifiers = new HashMap<>();
+		Map<ResourceLocation, List<MobModifier>> mobModifiers = new HashMap<>();
 		
 		BiConsumer<LocationData, LocationData> bothOrNeither = (o, t) -> {
 			tagValues.addAll(o.tagValues());
@@ -141,9 +141,9 @@ public record LocationData(
 			mobModifiers.putAll(o.mobModifiers());
 			t.mobModifiers().forEach((key, value) -> {
 				mobModifiers.merge(key, value, (oldV, newV) -> {
-					Map<String, Double> mergedMap = new HashMap<>(oldV);
-					newV.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
-					return mergedMap;
+					List<MobModifier> mergedList = new ArrayList<>(oldV);
+                    mergedList.addAll(newV);
+					return mergedList;
 				});
 			});	
 		};

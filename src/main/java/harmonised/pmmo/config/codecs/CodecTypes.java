@@ -14,6 +14,8 @@ import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.ChunkPos;
 
 public class CodecTypes {
@@ -21,6 +23,12 @@ public class CodecTypes {
 	public static final Codec<Map<String, Long>> LONG_CODEC = Codec.unboundedMap(Codec.STRING, Codec.LONG);
 	public static final Codec<Map<String, Integer>> INTEGER_CODEC = Codec.unboundedMap(Codec.STRING, Codec.INT);
 	public static final Codec<Map<String, Map<String, Long>>> DAMAGE_XP_CODEC = Codec.unboundedMap(Codec.STRING, LONG_CODEC);
+	public static final Codec<AttributeModifier.Operation> OPERATION_CODEC = ExtraCodecs.stringResolverCodec(AttributeModifier.Operation::name,
+			str -> switch (str) {
+				case "MULTIPLY_BASE" -> AttributeModifier.Operation.MULTIPLY_BASE;
+				case "MULTIPLY_TOTAL" -> AttributeModifier.Operation.MULTIPLY_TOTAL;
+				default -> AttributeModifier.Operation.ADDITION;
+			});
 	
 	public record SalvageData (
 			Map<String, Double> chancePerLevel,

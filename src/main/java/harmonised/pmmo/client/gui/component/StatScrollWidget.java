@@ -25,12 +25,8 @@ import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.PerksConfig;
+import harmonised.pmmo.config.codecs.*;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
-import harmonised.pmmo.config.codecs.DataSource;
-import harmonised.pmmo.config.codecs.EnhancementsData;
-import harmonised.pmmo.config.codecs.LocationData;
-import harmonised.pmmo.config.codecs.PlayerData;
-import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -665,13 +661,13 @@ public class StatScrollWidget extends ScrollPanel{
 		LocationData loader = (LocationData) core.getLoader().getLoader(type).getData(location);
 		if (!loader.mobModifiers().isEmpty()) {
 			content.addAll(TextElement.build(LangProvider.MOB_MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), this.width, step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : loader.mobModifiers().entrySet()) {
+			for (Map.Entry<ResourceLocation, List<MobModifier>> mobMap : loader.mobModifiers().entrySet()) {
 				Entity entity = ForgeRegistries.ENTITY_TYPES.getValue(mobMap.getKey()).create(mc.level);
 				content.add(new RenderableElement(entity.getName(), step(1), 0xFFFFFF, Config.SALVAGE_ITEM_COLOR.get(), entity));
-				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
-					Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(map.getKey()));
-					MutableComponent text = attribute == null ? Component.literal(map.getKey()) : Component.translatable(attribute.getDescriptionId());
-					text.append(Component.literal(": "+map.getValue()));
+				for (MobModifier mobModifier : mobMap.getValue()) {
+					Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(mobModifier.attribute()));
+					MutableComponent text = attribute == null ? Component.literal(mobModifier.attribute()) : Component.translatable(attribute.getDescriptionId());
+					text.append(Component.literal(": "+mobModifier.attribute()));
 					content.addAll(TextElement.build(text, this.width, step(2), 0xFFFFFF, false, 0xFFFFFF));
 				}
 			}
