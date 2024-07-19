@@ -16,6 +16,7 @@ import harmonised.pmmo.config.readers.ConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
@@ -479,7 +480,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_LEVEL_MOD;
 	public static ForgeConfigSpec.ConfigValue<Double> BOSS_SCALING_RATIO;
 
-	public static ConfigObject<Map<String, Map<String, Double>>> MOB_SCALING;
+	public static ConfigObject<Map<ResourceLocation, Map<String, Double>>> MOB_SCALING;
 	
 	private static void buildMobScalingSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("settings related to how strong mobs get based on player level.").push("Mob_Scaling");
@@ -518,11 +519,11 @@ public class Config {
 					, "negative values are possible and you can use this to create counterbalance skills",""
 					, "NOTE: TOML WILL MOVE THE QUOTATIONS OF YOUR ATTRIBUTE ID AND BREAK YOUR CONFIG."
 					, "ENSURE YOU HAVE FORCIBLY PUT YOUR QUOTES AROUND YOUR ATTRIBUTE ID BEFORE SAVING.").push("Scaling_Settings");
-				MOB_SCALING = TomlConfigHelper.<Map<String, Map<String, Double>>>defineObject(builder,
-						"Mob Scaling IDs and Ratios", Codec.unboundedMap(Codec.STRING, CodecTypes.DOUBLE_CODEC), Map.of(
-								"minecraft:generic.max_health", Map.of("combat", 0.001),
-								"minecraft:generic.movement_speed", Map.of("combat", 0.000001),
-								"minecraft:generic.attack_damage", Map.of("combat", 0.0001)
+				MOB_SCALING = TomlConfigHelper.defineObject(builder,
+						"Mob Scaling IDs and Ratios", Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC), Map.of(
+								new ResourceLocation("minecraft:generic.max_health"), Map.of("combat", 0.001),
+								new ResourceLocation("minecraft:generic.movement_speed"), Map.of("combat", 0.000001),
+								new ResourceLocation("minecraft:generic.attack_damage"), Map.of("combat", 0.0001)
 						));
 			builder.pop(); //Scaling Settings
 		builder.pop(); //Mob_Scaling

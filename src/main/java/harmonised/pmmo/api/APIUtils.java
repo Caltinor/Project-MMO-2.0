@@ -1,6 +1,7 @@
 package harmonised.pmmo.api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import harmonised.pmmo.config.codecs.*;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.core.IDataStorage;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -22,13 +24,7 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.api.perks.Perk;
-import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
-import harmonised.pmmo.config.codecs.DataSource;
-import harmonised.pmmo.config.codecs.LocationData;
-import harmonised.pmmo.config.codecs.ObjectData;
-import harmonised.pmmo.config.codecs.PlayerData;
-import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -467,7 +463,7 @@ public class APIUtils {
 	 * @param mob_modifiers a map of mob keys with a value map of attribute types and values
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
+	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, List<MobModifier>> mob_modifiers, boolean asOverride) {
 		if (oType != ObjectType.BIOME && oType != ObjectType.DIMENSION) 
 			return;
 		LocationData raw = new LocationData();

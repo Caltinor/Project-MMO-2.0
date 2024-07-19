@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -14,12 +15,10 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
@@ -31,7 +30,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MobAttributeHandler {
-	private static final UUID MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
+	private static final UUID ADDITION_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcd");
+	private static final UUID MULTIPLY_BASE_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fce");
+	private static final UUID MULTIPLY_TOTAL_MODIFIER_ID = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcf");
 	/**Used for balancing purposes to ensure configurations do not exceed known limits.*/
 	private static final Map<ResourceLocation, Float> CAPS = Map.of(
 		new ResourceLocation("generic.max_health"), 1024f,
@@ -75,39 +76,122 @@ public class MobAttributeHandler {
 		LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(level.getLevel().dimension().location());
 		LocationData bioData = core.getLoader().BIOME_LOADER.getData(RegistryUtil.getId(level.getBiome(entity.getOnPos())));
 
-		var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
-		var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new HashMap<>());
-		var multipliers = Config.MOB_SCALING.get();
+		var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new ArrayList<>(0));
+		var bioMods = bioData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new ArrayList<>(0));
+		var globalDimMods = dimData.globalMobModifiers();
+		var globalBioMods = bioData.globalMobModifiers();
+		var mergedModifiers = mergeModifiers(Stream.of(dimMods, bioMods, globalDimMods, globalBioMods).collect(Collectors.toList()));
+
 		final float bossMultiplier = entity.getType().is(Tags.EntityTypes.BOSSES) ? Config.BOSS_SCALING_RATIO.get().floatValue() : 1f;
 
-		Set<ResourceLocation> attributeKeys = Stream.of(dimMods.keySet(), bioMods.keySet(), multipliers.keySet())
-				.flatMap(Set::stream)
-				.map(ResourceLocation::new)
-				.collect(Collectors.toSet());
+		computeAndApplyModifiers(entity, mergedModifiers, nearbyPlayers, diffScale, bossMultiplier);
 
-		//Set each Modifier type
-		attributeKeys.forEach(attributeID -> {
-			Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeID);
-			if (attribute == null) return;
-
-			Map<String, Double> config = multipliers.getOrDefault(attributeID.toString(), new HashMap<>());
-			AttributeInstance attributeInstance = entity.getAttribute(attribute);
-			if (attributeInstance != null) {
-				double base = baseValue(entity, attributeID, attributeInstance);
-				float cap = CAPS.getOrDefault(attributeID, Float.MAX_VALUE);
-				float bonus = getBonus(nearbyPlayers, config, diffScale, base, cap);
-				bonus += dimMods.getOrDefault(attributeID.toString(), 0d).floatValue();
-				bonus += bioMods.getOrDefault(attributeID.toString(), 0d).floatValue();
-				bonus *= bossMultiplier;
-				AttributeModifier modifier = new AttributeModifier(MODIFIER_ID, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
-				attributeInstance.removeModifier(MODIFIER_ID);
-				attributeInstance.addPermanentModifier(modifier);
-				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Entity={} Attribute={} value={}", entity.getDisplayName().getString(), attributeID.toString(), bonus);
-			}
-		});
-		//sets health to max if max HP was modified.  This is a case catch.
+		//reset health to max after applying modifiers
 		entity.setHealth(entity.getMaxHealth());
 	}
+
+	private static List<MobModifier> mergeModifiers(List<List<MobModifier>> modifiers) {
+		return modifiers.stream().flatMap(List::stream).collect(Collectors.toList());
+	}
+
+	/**Computes & applies all the modifiers to the entity.
+	 *
+	 * @param entity the entity to apply the modifiers to
+	 * @param modifiers the list of modifiers to apply
+	 */
+	private static void computeAndApplyModifiers(LivingEntity entity, List<MobModifier> modifiers, List<Player> nearbyPlayers, int diffScale , float bossMultiplier) {
+		var additionModifiers = new ArrayList<MobModifier>();
+		var multiplyBaseModifiers = new ArrayList<MobModifier>();
+		var multiplyTotalModifiers = new ArrayList<MobModifier>();
+		modifiers.forEach(mod -> {
+			switch (mod.operation()) {
+			case ADDITION -> additionModifiers.add(mod);
+			case MULTIPLY_BASE -> multiplyBaseModifiers.add(mod);
+			case MULTIPLY_TOTAL -> multiplyTotalModifiers.add(mod);
+			}
+		});
+		modifiers.clear();
+
+		var collapsedAdditionModifiers = collapseModifiers(additionModifiers);
+		var collapsedMultiplyBaseModifiers = collapseModifiers(multiplyBaseModifiers);
+		var collapsedMultiplyTotalModifiers = collapseModifiers(multiplyTotalModifiers);
+
+		var mobScalingMultipliers = Config.MOB_SCALING.get();
+		applyMobScaling(collapsedAdditionModifiers, entity, mobScalingMultipliers, nearbyPlayers, diffScale);
+		applyBossMultiplier(collapsedAdditionModifiers, bossMultiplier);
+
+		applyModifiers(entity, ADDITION_MODIFIER_ID, AttributeModifier.Operation.ADDITION, collapsedAdditionModifiers);
+		applyModifiers(entity, MULTIPLY_BASE_MODIFIER_ID, AttributeModifier.Operation.MULTIPLY_BASE, collapsedMultiplyBaseModifiers);
+		applyModifiers(entity, MULTIPLY_TOTAL_MODIFIER_ID, AttributeModifier.Operation.MULTIPLY_TOTAL, collapsedMultiplyTotalModifiers);
+	}
+
+	/**Applies the modifiers to the entity.
+	 *
+	 * @param entity the entity to apply the modifiers to
+	 * @param modifierId the id of the modifier to apply
+	 * @param operation the operation to apply
+	 * @param collapsedModifiers the map of modifiers to apply
+	 */
+	private static void applyModifiers(LivingEntity entity, UUID modifierId, AttributeModifier.Operation operation, Map<ResourceLocation, Double> collapsedModifiers) {
+		collapsedModifiers.forEach((attributeID, amount) -> {
+			if (Math.abs(amount) < 0.0001f) return;
+			var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeID);
+			if (attribute == null) return;
+			var attributeInstance = entity.getAttribute(attribute);
+			if (attributeInstance == null) return;
+			var modifier = new AttributeModifier(modifierId, "Boost to Mob Scaling", amount, operation);
+			attributeInstance.removeModifier(modifierId);
+			attributeInstance.addPermanentModifier(modifier);
+			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Entity={} Attribute={} value={} operation={}", entity.getDisplayName().getString(), attributeID, amount, operation);
+		});
+	}
+
+	/**Collapses the list of modifiers into a single map
+	 * with the attribute as the key and the sum of the
+	 * modifiers as the value.
+	 *
+	 * @param modifiers the list of modifiers to collapse
+	 * @return the collapsed map of modifiers
+	 */
+	private static HashMap<ResourceLocation, Double> collapseModifiers(List<MobModifier> modifiers) {
+		var modifierMap = new HashMap<ResourceLocation, Double>();
+		for (MobModifier mod : modifiers) {
+			if (modifierMap.containsKey(mod.attribute())) {
+				modifierMap.put(mod.attribute(), modifierMap.get(mod.attribute()) + mod.amount());
+			} else {
+				modifierMap.put(mod.attribute(), mod.amount());
+			}
+		}
+		return modifierMap;
+	}
+
+	private static void applyMobScaling(HashMap<ResourceLocation, Double> collapsedModifiers, LivingEntity entity, Map<ResourceLocation, Map<String, Double>> config, List<Player> nearbyPlayers, int difficultyScale) {
+		config.forEach((attributeID, configMap) -> {
+			var attributeScalingConfig = config.getOrDefault(attributeID, new HashMap<>());
+			if (attributeScalingConfig.isEmpty()) return;
+			var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeID);
+			if (attribute == null) return;
+			var attributeInstance = entity.getAttribute(attribute);
+			if (attributeInstance == null) return;
+
+			var baseValue = baseValue(entity, attributeID, attributeInstance);
+			var cap = CAPS.getOrDefault(attributeID, Float.MAX_VALUE);
+			var bonus = getBonus(nearbyPlayers, attributeScalingConfig, difficultyScale, baseValue, cap);
+			if (Math.abs(bonus) < 0.0001f) return;
+
+			if (collapsedModifiers.containsKey(attributeID)) {
+				collapsedModifiers.put(attributeID, collapsedModifiers.get(attributeID) + bonus);
+			} else {
+				collapsedModifiers.put(attributeID, (double) bonus);
+			}
+		});
+	}
+
+	private static void applyBossMultiplier(HashMap<ResourceLocation, Double> collapsedModifiers, float multiplier) {
+		if (Math.abs(multiplier - 1f) < 0.0001f) return;
+		collapsedModifiers.replaceAll((attribute, value) -> value * multiplier);
+	}
+
 	
 	/**This function serves as an intermediary for balance
 	 * purposes.  It seeks to intercept certain values which
