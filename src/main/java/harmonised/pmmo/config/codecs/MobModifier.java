@@ -18,4 +18,12 @@ public record MobModifier(
 			CodecTypes.OPERATION_CODEC.fieldOf( "operation" ).forGetter( MobModifier::operation )
 		).apply( instance, MobModifier::new )
 	);
+
+	public String display() {
+		return switch (operation) {
+			case ADDITION -> "+";
+			case MULTIPLY_BASE -> "*";
+			case MULTIPLY_TOTAL -> "**";
+		};
+	}
 }

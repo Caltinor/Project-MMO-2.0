@@ -12,7 +12,7 @@
         "combat": 30
     },
     "vein_blacklist":["minecraft:bedrock"],
-    "global_ mob_modifier": [
+    "global_mob_modifiers": [
       {"attribute": "minecraft:generic.max_health",
         "amount": 7, "operation": "ADDITION"},
       {"attribute": "minecraft:generic.attack_damage",

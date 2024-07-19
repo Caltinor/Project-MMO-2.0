@@ -8,9 +8,12 @@
         }
     },
     "vein_blacklist":["minecraft:bedrock"],
-    "global_ mob_modifier": [
-      {"attribute": "minecraft:generic.movement_speed",
-      "amount": 0.00025, "operation": "ADDITION"},
+    "global_mob_modifiers": [
+      {
+        "attribute": "minecraft:generic.movement_speed",
+        "amount": 0.00025,
+        "operation": "ADDITION"
+      },
       {"attribute": "minecraft:generic.max_health",
         "amount": 10, "operation": "ADDITION"},
       {"attribute": "minecraft:generic.attack_damage",

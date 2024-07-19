@@ -18,6 +18,7 @@ import harmonised.pmmo.util.Functions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public record LocationData(
 		boolean override,
@@ -169,6 +170,6 @@ public record LocationData(
 		return bonusMap.values().stream().allMatch(map -> map.isEmpty())
 				&& positive.isEmpty() && negative.isEmpty()
 				&& veinBlacklist.isEmpty() && travelReq.isEmpty()
-				&& mobModifiers.isEmpty();
+				&& globalMobModifiers.isEmpty()	&& mobModifiers.isEmpty();
 	}
 }
