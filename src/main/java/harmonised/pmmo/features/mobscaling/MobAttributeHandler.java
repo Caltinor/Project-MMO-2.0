@@ -132,18 +132,17 @@ public class MobAttributeHandler {
 	 * @param operation the operation to apply
 	 * @param collapsedModifiers the map of modifiers to apply
 	 */
-	private static void applyModifiers(LivingEntity entity, UUID modifierId, AttributeModifier.Operation operation, Map<String, Double> collapsedModifiers) {
-		collapsedModifiers.forEach((attributeStr, amount) -> {
+	private static void applyModifiers(LivingEntity entity, UUID modifierId, AttributeModifier.Operation operation, Map<ResourceLocation, Double> collapsedModifiers) {
+		collapsedModifiers.forEach((attributeID, amount) -> {
 			if (Math.abs(amount) < 0.0001f) return;
-			var attributeLocation = new ResourceLocation(attributeStr);
-			var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeLocation);
+			var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeID);
 			if (attribute == null) return;
 			var attributeInstance = entity.getAttribute(attribute);
 			if (attributeInstance == null) return;
 			var modifier = new AttributeModifier(modifierId, "Boost to Mob Scaling", amount, operation);
 			attributeInstance.removeModifier(modifierId);
 			attributeInstance.addPermanentModifier(modifier);
-			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Entity={} Attribute={} value={} operation={}", entity.getDisplayName().getString(), attributeStr, amount, operation);
+			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Entity={} Attribute={} value={} operation={}", entity.getDisplayName().getString(), attributeID, amount, operation);
 		});
 	}
 
@@ -154,8 +153,8 @@ public class MobAttributeHandler {
 	 * @param modifiers the list of modifiers to collapse
 	 * @return the collapsed map of modifiers
 	 */
-	private static HashMap<String, Double> collapseModifiers(List<MobModifier> modifiers) {
-		var modifierMap = new HashMap<String, Double>();
+	private static HashMap<ResourceLocation, Double> collapseModifiers(List<MobModifier> modifiers) {
+		var modifierMap = new HashMap<ResourceLocation, Double>();
 		for (MobModifier mod : modifiers) {
 			if (modifierMap.containsKey(mod.attribute())) {
 				modifierMap.put(mod.attribute(), modifierMap.get(mod.attribute()) + mod.amount());
@@ -166,30 +165,29 @@ public class MobAttributeHandler {
 		return modifierMap;
 	}
 
-	private static void applyMobScaling(HashMap<String, Double> collapsedModifiers, LivingEntity entity, Map<String, Map<String, Double>> config, List<Player> nearbyPlayers, int difficultyScale) {
-		config.forEach((attributeName, configMap) -> {
-			var attributeScalingConfig = config.getOrDefault(attributeName, new HashMap<>());
+	private static void applyMobScaling(HashMap<ResourceLocation, Double> collapsedModifiers, LivingEntity entity, Map<ResourceLocation, Map<String, Double>> config, List<Player> nearbyPlayers, int difficultyScale) {
+		config.forEach((attributeID, configMap) -> {
+			var attributeScalingConfig = config.getOrDefault(attributeID, new HashMap<>());
 			if (attributeScalingConfig.isEmpty()) return;
-			var resourceLocation = new ResourceLocation(attributeName);
-			var attribute = ForgeRegistries.ATTRIBUTES.getValue(resourceLocation);
+			var attribute = ForgeRegistries.ATTRIBUTES.getValue(attributeID);
 			if (attribute == null) return;
 			var attributeInstance = entity.getAttribute(attribute);
 			if (attributeInstance == null) return;
 
-			var baseValue = baseValue(entity, resourceLocation, attributeInstance);
-			var cap = CAPS.getOrDefault(resourceLocation, Float.MAX_VALUE);
+			var baseValue = baseValue(entity, attributeID, attributeInstance);
+			var cap = CAPS.getOrDefault(attributeID, Float.MAX_VALUE);
 			var bonus = getBonus(nearbyPlayers, attributeScalingConfig, difficultyScale, baseValue, cap);
 			if (Math.abs(bonus) < 0.0001f) return;
 
-			if (collapsedModifiers.containsKey(attributeName)) {
-				collapsedModifiers.put(attributeName, collapsedModifiers.get(attributeName) + bonus);
+			if (collapsedModifiers.containsKey(attributeID)) {
+				collapsedModifiers.put(attributeID, collapsedModifiers.get(attributeID) + bonus);
 			} else {
-				collapsedModifiers.put(attributeName, (double) bonus);
+				collapsedModifiers.put(attributeID, (double) bonus);
 			}
 		});
 	}
 
-	private static void applyBossMultiplier(HashMap<String, Double> collapsedModifiers, float multiplier) {
+	private static void applyBossMultiplier(HashMap<ResourceLocation, Double> collapsedModifiers, float multiplier) {
 		if (Math.abs(multiplier - 1f) < 0.0001f) return;
 		collapsedModifiers.replaceAll((attribute, value) -> value * multiplier);
 	}
