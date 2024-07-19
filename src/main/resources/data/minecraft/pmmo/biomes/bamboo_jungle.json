@@ -18,25 +18,25 @@
         "endurance": 20
     },
     "mob_modifier":{
-        "minecraft:zombie" :{
-            "minecraft:generic.movement_speed": 0.005,
-		    "minecraft:generic.max_health": 5.0
-        },
-        "minecraft:skeleton" :{
-            "minecraft:generic.movement_speed": 0.005,
-		    "minecraft:generic.max_health": 5.0
-        },
-        "minecraft:creeper" :{
-            "minecraft:generic.movement_speed": 0.005,
-		    "minecraft:generic.max_health": 5.0
-        },
-        "minecraft:spider" :{
-            "minecraft:generic.movement_speed": 0.005,
-		    "minecraft:generic.max_health": 5.0
-        },
-        "minecraft:enderman" :{
-            "minecraft:generic.movement_speed": 0.005,
-		    "minecraft:generic.max_health": 5.0
-        }
+        "minecraft:zombie" :[
+            {"attribute": "minecraft:generic.max_health", "amount": 5, "operation": "ADDITION"},
+            {"attribute": "minecraft:generic.attack_damage", "amount": 0.005, "operation": "ADDITION"}
+        ],
+        "minecraft:skeleton" :[
+            {"attribute": "minecraft:generic.max_health", "amount": 5, "operation": "ADDITION"},
+            {"attribute": "minecraft:generic.attack_damage", "amount": 0.005, "operation": "ADDITION"}
+        ],
+        "minecraft:creeper" :[
+            {"attribute": "minecraft:generic.max_health", "amount": 5, "operation": "ADDITION"},
+            {"attribute": "minecraft:generic.attack_damage", "amount": 0.005, "operation": "ADDITION"}
+        ],
+        "minecraft:spider" :[
+            {"attribute": "minecraft:generic.max_health", "amount": 5, "operation": "ADDITION"},
+            {"attribute": "minecraft:generic.attack_damage", "amount": 0.005, "operation": "ADDITION"}
+        ],
+        "minecraft:enderman" :[
+            {"attribute": "minecraft:generic.max_health", "amount": 5, "operation": "ADDITION"},
+            {"attribute": "minecraft:generic.attack_damage", "amount": 0.005, "operation": "ADDITION"}
+        ]
     }
 }

@@ -8,31 +8,12 @@
         }
     },
     "vein_blacklist":["minecraft:bedrock"],
-    "mob_modifier": {
-	    "minecraft:ender_dragon": {
-            "minecraft:generic.movement_speed": 0.00025,
-		    "minecraft:generic.max_health": 10,
-		    "minecraft:generic.attack_damage": 0.00025
-        },
-	    "minecraft:enderman": {
-            "minecraft:generic.movement_speed": 0.00025,
-		    "minecraft:generic.max_health": 10,
-		    "minecraft:generic.attack_damage": 0.00025
-        },
-	    "minecraft:endermite": {
-            "minecraft:generic.movement_speed": 0.00025,
-		    "minecraft:generic.max_health": 10,
-		    "minecraft:generic.attack_damage": 0.00025
-        },
-	    "minecraft:phantom": {
-            "minecraft:generic.movement_speed": 0.00025,
-		    "minecraft:generic.max_health": 10,
-		    "minecraft:generic.attack_damage": 0.00025
-        },
-	    "minecraft:shulker": {
-            "minecraft:generic.movement_speed": 0.00025,
-		    "minecraft:generic.max_health": 10,
-		    "minecraft:generic.attack_damage": 0.00025
-        }
-    }
+    "global_ mob_modifier": [
+      {"attribute": "minecraft:generic.movement_speed",
+      "amount": 0.00025, "operation": "ADDITION"},
+      {"attribute": "minecraft:generic.max_health",
+        "amount": 10, "operation": "ADDITION"},
+      {"attribute": "minecraft:generic.attack_damage",
+        "amount": 0.00025, "operation": "ADDITION"}
+    ]
 }
