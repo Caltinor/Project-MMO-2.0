@@ -69,12 +69,14 @@ public class FeaturePerks {
 				double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
 				double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
 				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
+				if (instance == null) return NONE;
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
 				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.MULTIPLY_BASE :  Operation.ADDITION;
 				
 				UUID attributeID = Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME));
 				AttributeModifier modifier = new AttributeModifier(attributeID, "PMMO-modifier based on user skill", boost, operation);
-				instance.removeModifier(attributeID);
+				if (instance.hasModifier(modifier))
+					instance.removeModifier(attributeID);
 				instance.addPermanentModifier(modifier);
 				return NONE;
 			})
@@ -97,6 +99,7 @@ public class FeaturePerks {
 			for (CompoundTag nbt : PerksConfig.PERK_SETTINGS.get().get(EventType.SKILL_UP).stream()
 					.filter(tag -> tag.getString("perk").equals("pmmo:attribute")).toList()) {
 				Attribute attribute = getAttribute(nbt);
+				if (attribute == null) continue;
 				player.getAttributes().getInstance(attribute).getModifiers().stream()
 						.filter(mod -> mod.getId().equals(Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME))))
 						.forEach(mod -> respawnAttributes.put(player, new AttributeRecord(attribute, mod)));
