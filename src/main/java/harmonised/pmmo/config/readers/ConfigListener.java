@@ -72,7 +72,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
         public static final Codec<ConfigData<?>> MAPPER = Codec.lazyInitialized(() ->
                 ServerConfigs.CODEC.dispatch(ConfigData::getType, ServerConfigs::codec));
     }
-    private Map<ServerConfigs, ConfigData<?>> configs = new HashMap<>();
+    private final Map<ServerConfigs, ConfigData<?>> configs = new HashMap<>();
     public ConfigData<?> get(ServerConfigs type) {return configs.getOrDefault(type, type.defaultSupplier.get());}
 
     public void setData(ServerConfigs type, ConfigData<?> data) {this.configs.put(type, data);}
@@ -86,6 +86,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
 
     @Override
     protected ConfigData<?> prepare(ResourceManager manager, ProfilerFiller profilerFiller) {
+        this.configs.clear();
         for (Map.Entry<ResourceLocation, Resource> entry : manager.listResources("config",
                 file -> file.getNamespace().equals("pmmo") && file.getPath().endsWith(".json")).entrySet()
         ){
