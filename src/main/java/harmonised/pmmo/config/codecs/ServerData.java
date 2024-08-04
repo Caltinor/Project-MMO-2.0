@@ -140,7 +140,7 @@ public record ServerData(
             map.put(EventType.BREATH_CHANGE, Map.of("endurance", 1d));
             map.put(EventType.HEALTH_INCREASE, Map.of("endurance", 1d));
             map.put(EventType.HEALTH_DECREASE, Map.of("endurance", 1d));
-            map.put(EventType.SPRINTING, Map.of("agility", 100d));
+            map.put(EventType.SPRINTING, Map.of("agility", 2d));
             map.put(EventType.SUBMERGED, Map.of("swimming", 1d));
             map.put(EventType.SWIMMING, Map.of("swimming", 1d));
             map.put(EventType.DIVING, Map.of("swimming", 1d));
