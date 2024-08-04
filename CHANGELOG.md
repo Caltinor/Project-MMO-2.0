@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.21.0-2.3.10] - 2024-07-04
+## [1.21.0-2.3.10] - 2024-08-04
 ### Bugfixes/Tweaks
 - Fixed switching worlds retaining the server configs of the first world
 - Fixed xp admin commands not syncing to clients
