@@ -18,6 +18,7 @@ import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
+import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.Reference;
@@ -109,6 +110,7 @@ public class CmdNodeAdmin {
 					ctx.getSource().sendSuccess(() -> LangProvider.ADD_XP.asComponent(skillName, value, player.getName()), true);
 				}
 			}
+			Networking.sendToClient(new CP_UpdateExperience(skillName, exp, 0), player);
 		}
 		return 0;
 	}
