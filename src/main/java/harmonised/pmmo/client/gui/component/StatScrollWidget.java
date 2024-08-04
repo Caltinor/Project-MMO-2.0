@@ -1,7 +1,6 @@
 package harmonised.pmmo.client.gui.component;
 
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -70,9 +69,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class StatScrollWidget extends ScrollPanel {
-	private static interface Element {public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess);}
+	private interface Element {void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess);}
 	
-	private static record TextElement(ClientTooltipComponent text, int xOffset, int color, boolean isHeader, int headerColor) implements Element{
+	private record TextElement(ClientTooltipComponent text, int xOffset, int color, boolean isHeader, int headerColor) implements Element{
 		public static List<TextElement> build(Component component, int width, int xOffset, int color, boolean isHeader, int headerColor) {
 			return format(component.copy(), width, xOffset, color, isHeader, headerColor);
 		}
@@ -89,7 +88,6 @@ public class StatScrollWidget extends ScrollPanel {
 		public static List<TextElement> build(Enum<?> type, int width, int xOffset, int color, boolean isHeader, int headerColor) {
 			return format(Component.translatable("pmmo.enum."+type.name()), width - xOffset, xOffset, color, isHeader, headerColor);	
 		}
-		@SuppressWarnings("resource")
 		@Override
 		public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess) {
 			if (isHeader()) 
@@ -105,7 +103,7 @@ public class StatScrollWidget extends ScrollPanel {
 		}
 	}
 	
-	private static record RenderableElement(Component text, int xOffset, int color, int headerColor, ItemStack stack, Block block, Entity entity) implements Element{
+	private record RenderableElement(Component text, int xOffset, int color, int headerColor, ItemStack stack, Block block, Entity entity) implements Element{
 		RenderableElement(Component text, int xOffset, int color, int headerColor, ItemStack stack) {
 			this(text, xOffset, color, headerColor, stack, null, null);
 		}
@@ -118,17 +116,17 @@ public class StatScrollWidget extends ScrollPanel {
 		@Override
 		public void render(GuiGraphics graphics, int x, int y, int width, Tesselator tess) {
 			graphics.fill(RenderType.gui(), x, y, x+width, y+12, headerColor());
-			@SuppressWarnings("resource")
 			Font font = Minecraft.getInstance().font;
 			if (stack() != null || block() != null) {
 				ItemStack renderStack = stack() == null ? new ItemStack(block().asItem()) : stack();
 				graphics.renderItem(renderStack, x+width - 25, y);
 				graphics.drawString(font, renderStack.getDisplayName(), x + 10, y, 0xFFFFFF);
 			}
-			else if (entity != null && entity instanceof LivingEntity) {
-				int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
-				InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, x+width - 20, y+12, scale, 0, 0,  0f, 0f, 0f, (LivingEntity) entity);
-				graphics.drawString(font, this.entity.getDisplayName(), x, y, 0xFFFFFF);
+			else if (entity instanceof LivingEntity renderEntity) {
+				int scale = Math.max(1, 10 / Math.max(1, (int) renderEntity.getBoundingBox().getSize()));
+				int px = x+width - 30;
+				InventoryScreen.renderEntityInInventoryFollowsAngle(graphics, px, y, px+30, y+30, scale, 0, 0f, 0f, renderEntity);
+				graphics.drawString(font, renderEntity.getDisplayName(), x, y, 0xFFFFFF);
 			}
 		}
 	}
