@@ -51,7 +51,7 @@ This criteria attached to an advancement would trigger when the player reaches l
     }
 ```
 
-This criteria requires the player to be level 3 in agility and swimming in order to trigger. For more information on creating advancements refer to the [minecraft wiki](https://minecraft.fandom.com/wiki/Advancement/JSON_format). There is also [this](https://misode.github.io/advancement/) tool that will do a lot of the setup for you for all your datapack needs, advancements included.
+This criteria requires the player to be level 3 in agility and swimming in order to trigger. For more information on creating advancements refer to [The Minecraft Wiki](https://minecraft.wiki/w/Advancement_definition). There is also [this](https://misode.github.io/advancement/) tool that will do a lot of the setup for you for all your datapack needs, advancements included.
 
 # What this can do.
 
