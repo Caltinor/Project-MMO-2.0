@@ -107,7 +107,7 @@ Shoots a firework into the air above the player.  Only works with the `SKILL_UP`
 | `skill`  | `"none"` | The skill this firework should activate for. |
 
 ### <u>pmmo:attribute</u>
-Gives the player an attribute modifier.  This works with modded attributes.  For the full list of vanilla attribute IDs, go [HERE](https://minecraft.fandom.com/wiki/Attribute#Attributes_available_on_all_living_entities)
+Gives the player an attribute modifier.  This works with modded attributes.  For the full list of vanilla attribute IDs, go [HERE](https://minecraft.wiki/w/Attribute#Attributes)
 
 | property         | default | description                                                                          |
 |:-----------------|:-------:|:-------------------------------------------------------------------------------------|
