@@ -2,7 +2,7 @@
 
 PMMO 2.0 adds a very simple solution to the previous systems of Treasure, Extra Drops, Rare Mob Drops, and Rare Fish Pool. Using Forge's "Global Loot Modifier" functionality, pmmo adds an on-chance means of adding an extra drop to any loot drop.
 
-In your datapack, under any namespace, add a folder called loot_modifiers. Within this folder add json files with any name you like (must still conform to [datapack naming rules](https://minecraft.fandom.com/wiki/Resource_location#Legal_characters))
+In your datapack, under any namespace, add a folder called loot_modifiers. Within this folder add json files with any name you like (must still conform to [datapack naming rules](https://minecraft.wiki/w/Resource_location#Legal_characters))
 
 Your file will then have these required components
 
@@ -19,7 +19,7 @@ Your file will then have these required components
 In this example, we have a 25% chance of getting a single apple when loot is dropped. Since we do not have any conditions, this will apply to all loot tables including chests.
 Conditions
 
-Adding conditions specifies when this treasure is to be attempted. Minecraft provides many conditions (called "Predicates") that are used for existing loot tables, and you can use those in this section as well. You can read about thos on [The Minecraft Wiki](https://minecraft.fandom.com/wiki/Predicate). PMMO also adds 4 conditions as well such as player level requirements, and specific block targets. You can read about those [HERE](https://github.com/Caltinor/Project-MMO-2.0/wiki/Loot-Predicates)
+Adding conditions specifies when this treasure is to be attempted. Minecraft provides many conditions (called "Predicates") that are used for existing loot tables, and you can use those in this section as well. You can read about those on [The Minecraft Wiki](https://minecraft.wiki/w/Predicate). PMMO also adds 4 conditions as well such as player level requirements, and specific block targets. You can read about those [HERE](https://github.com/Caltinor/Project-MMO-2.0/wiki/Loot-Predicates)
 
 Conditions work on an "AND" basis unless you use the "alternate" type. Which means that if you put a player skill and a specific block condition, the player must have the requisite skill AND be breaking the specified block to trigger the treasure chance.
 
