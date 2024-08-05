@@ -24,7 +24,7 @@ There are nine settings you can configure for each skill:
 9. [iconSize](#icon-and-iconsize)
 
 ### Formatted Name
-If you don't want your skill to display as "pmmo.skillname", you need to add a language entry to a resource pack and use that resource pack on your server or personal game.  Your language entry just needs to look like `"pmmo.myskillname":"My Skill Name Beautified"`.  If you are unfamiliar with creating resource packs, you can read more about them [HERE](https://minecraft.fandom.com/wiki/Resource_Pack)
+If you don't want your skill to display as "pmmo.skillname", you need to add a language entry to a resource pack and use that resource pack on your server or personal game.  Your language entry just needs to look like `"pmmo.myskillname":"My Skill Name Beautified"`.  If you are unfamiliar with creating resource packs, you can read more about them [HERE](https://minecraft.wiki/w/Resource_pack)
 
 ### Color and AFK Penalty
 By default, skills display in white.  If that is okay with you, then you don't need to do anything here.  If you do want a custom color though, You will need to add your custom skill to the `pmmo-Skills.toml` file.  This is a server config.  You will find it in your Minecraft folder under `/saves/<save name>/serverconfig/`.  You will then add an entry for your new skill that should look like:
