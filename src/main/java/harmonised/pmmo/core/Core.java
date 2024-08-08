@@ -6,7 +6,6 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DataMirror;
-import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.codecs.DataSource;
@@ -45,8 +44,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -273,8 +270,6 @@ public class Core {
 		//WORN Modification
 		List<ItemStack> wornItems = new ArrayList<>();
 		player.getArmorSlots().forEach(wornItems::add);
-		if (CurioCompat.hasCurio)
-			CurioCompat.getItems(player).forEach(wornItems::add);
 		wornItems.forEach((stack) -> {
 			ResourceLocation itemID = RegistryUtil.getId(stack);
 			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?

@@ -1,7 +1,6 @@
 package harmonised.pmmo.features.veinmining;
 
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
@@ -64,11 +63,6 @@ public class VeinMiningLogic {
 		items.addAll(inv.armor);
 		items.add(inv.getSelected());
 		items.addAll(inv.offhand);
-		//========== CURIOS ==============
-		if (CurioCompat.hasCurio) {
-			items = new ArrayList<>(items);
-			items.addAll(CurioCompat.getItems(player));
-		}
 		//================================
 		Core core = Core.get(player.level());
 		double currentCharge = player.getData(DataAttachmentTypes.VEIN_CHARGE.get());
@@ -99,8 +93,6 @@ public class VeinMiningLogic {
 	}
 	
 	//=========================UTILITY METHODS=============================
-	
-	@SuppressWarnings("resource")
 	public static int getMaxChargeFromAllItems(Player player) {
 		Inventory inv = player.getInventory();		
 		List<ItemStack> items = List.of(
@@ -110,11 +102,6 @@ public class VeinMiningLogic {
 				inv.getItem(39),
 				player.getMainHandItem(),
 				player.getOffhandItem());
-		//========== CURIOS ==============
-		if (CurioCompat.hasCurio) {
-			items = new ArrayList<>(items);
-			items.addAll(CurioCompat.getItems(player));
-		}
 		//================================
 		int totalCapacity = Config.server().veinMiner().baseVeinCapacity();
 		for (ItemStack stack : items) {
