@@ -2,7 +2,6 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.api.events.EnchantEvent;
 import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
@@ -61,6 +60,7 @@ import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
 import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEnchantItemEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent;
@@ -268,7 +268,7 @@ public class EventHandler {
 		FurnaceHandler.handle(event);
 	}
 	@SubscribeEvent
-	public static void onEnchant(EnchantEvent event) {
+	public static void onEnchant(PlayerEnchantItemEvent event) {
 		EnchantHandler.handle(event);
 	}
 	@SubscribeEvent

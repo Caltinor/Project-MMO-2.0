@@ -33,8 +33,8 @@ public class RegistryUtil {
 		return BuiltInRegistries.BLOCK.getKey(block);
 	}
 
-	public static ResourceLocation getId(Holder<Biome> biome) {
-		return biome.unwrapKey().get().location();
+	public static ResourceLocation getId(Holder<?> holder) {
+		return holder.unwrapKey().get().location();
 	}
 
 	public static ResourceLocation getId(SoundEvent sound) {
@@ -48,10 +48,6 @@ public class RegistryUtil {
 	public static ResourceLocation getId(EntityType<?> entity) {
 		return BuiltInRegistries.ENTITY_TYPE.getKey(entity);
 	}
-	
-//	public static ResourceLocation getId(Enchantment enchant) {
-//		return Holder.direct(enchant).unwrapKey().get().location();// BuiltInRegistries.ENCHANTMENT.getKey(enchant);
-//	}
 
 	public static ResourceLocation getId(MobEffect effect) {
 		return BuiltInRegistries.MOB_EFFECT.getKey(effect);
