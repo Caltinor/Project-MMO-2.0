@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,9 +68,13 @@ public class TagUtils {
 	 * @return an associated tag or new instance
 	 */
 	public static CompoundTag stackTag(ItemStack stack, Level level) {
-		return stack.isEmpty()
-				? new CompoundTag()
-				: (CompoundTag) stack.save(level.registryAccess());
+		if (stack.isEmpty()) return new CompoundTag();
+		if (stack.getCount() > 99) {
+			var clone = stack.copy();
+			clone.setCount(99);
+			return (CompoundTag) clone.save(level.registryAccess());
+		}
+		return (CompoundTag) stack.save(level.registryAccess());
 	}
 	 /**safely obtain the NBT tag or get a new instance
 	  * 
