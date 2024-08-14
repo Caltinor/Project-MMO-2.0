@@ -1,13 +1,9 @@
 # Changelog
 
-## [1.21.0-2.4.11] - 2024-08-04
-### Minor Version changes
-- Removed `EnchantEvent` since NF has a built-in version now.
-
+## [1.21.1-2.4.12] - 2024-08-14
 ### Bugfixes/Tweaks
-- Readded ENCHANT xp from enchanting table.  Now using NF events, so it doesn't use fragile mixins
-- 
-
-### Default Pack Changes
-- Default: Reduced agility gains from sprinting
+- Readded CraftTweaker Compat
+- Readded FTB Quests Compat
+- Readded ENCHANT event using new NF event
+- Fixed crash from hovering items when using mods with stacks greater than 99
 

@@ -88,7 +88,9 @@ jobs:
           files: ${{ needs.setup.outputs.file_path }}
 
           name: ${{ needs.setup.outputs.mod_name }}-${{ steps.patchversion.outputs.mc_patch_version}}-${{ needs.setup.outputs.mod_version }}
-          version: ${{ needs.setup.outputs.mod_version }}
+          version: |
+            ${{ needs.setup.outputs.mod_version }}
+            1.20.1
           changelog-file: CHANGELOG.md
 
           loaders: |
@@ -108,7 +110,9 @@ jobs:
           files: ${{ needs.setup.outputs.file_path }}
 
           name: ${{ needs.setup.outputs.mod_name }}-${{ steps.patchversion.outputs.mc_patch_version}}-${{ needs.setup.outputs.mod_version }}
-          version: ${{ needs.setup.outputs.mod_version }}
+          version: |
+            ${{ needs.setup.outputs.mod_version }}
+            1.20.1
           changelog-file: CHANGELOG.md
 
           loaders: |
