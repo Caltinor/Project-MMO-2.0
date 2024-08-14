@@ -39,8 +39,6 @@ public class BreakSpeedHandler {
 		//calculate the event results anew.
 		if (!core.isActionPermitted(ReqType.TOOL, event.getEntity().getMainHandItem(), event.getEntity())) {
 			event.setCanceled(true);
-			event.getEntity().displayClientMessage(Component.literal("Unable to use this tool"), false);
-			Messenger.sendDenialMsg(ReqType.TOOL, event.getEntity(), event.getEntity().getMainHandItem().getDisplayName());
 			//Cache the result for future event occurrences
 			resultCache.put(event.getEntity().getUUID(), 
 					new DetailsCache(event.getEntity().getMainHandItem(), event.getPosition().orElse(new BlockPos(0,0,0)), event.getState(), true, event.getNewSpeed()));
@@ -48,9 +46,7 @@ public class BreakSpeedHandler {
 		}
 		if (!core.isActionPermitted(ReqType.BREAK, event.getPosition().orElse(new BlockPos(0,0,0)), event.getEntity())) {
 			event.setCanceled(true);
-			event.getEntity().displayClientMessage(Component.literal("Unable to break this block"), false);
-			Messenger.sendDenialMsg(ReqType.BREAK, event.getEntity(), event.getState().getBlock().getName());
-			resultCache.put(event.getEntity().getUUID(), 
+			resultCache.put(event.getEntity().getUUID(),
 					new DetailsCache(event.getEntity().getMainHandItem(), event.getPosition().orElse(new BlockPos(0,0,0)), event.getState(), true, event.getNewSpeed()));
 			return;
 		}

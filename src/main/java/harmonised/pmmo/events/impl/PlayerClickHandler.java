@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
@@ -30,11 +31,13 @@ public class PlayerClickHandler {
 		Core core = Core.get(player.level);
 		boolean serverSide = !player.level.isClientSide;
 		
-		if (!core.isActionPermitted(ReqType.INTERACT, event.getPos(), player)) {
+		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), player)) {
 			event.setUseBlock(Result.DENY);
+			Messenger.sendDenialMsg(ReqType.BREAK, player, new ItemStack(player.getLevel().getBlockState(event.getPos()).getBlock().asItem()).getDisplayName());
 		}
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
 			event.setUseItem(Result.DENY);
+			Messenger.sendDenialMsg(ReqType.INTERACT, player, player.getMainHandItem().getDisplayName());
 		}
 		if (event.getUseBlock().equals(Result.DENY)) return;
 		
