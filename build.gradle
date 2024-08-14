@@ -69,25 +69,25 @@ dependencies {
     junitImplementation "net.neoforged.fancymodloader:junit-fml:${loader_version}"
     //annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
-    //annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
-    //annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    //annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
+//    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.16'
+//    annotationProcessor "net.neoforged:neoforge:${minecraft_version}-${neo_version}"
+//    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${ct_version}"
 
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")
-    //compileOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
-    //compileOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
-    //compileOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+    compileOnly "curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}"
+    compileOnly "curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}"
+    compileOnly "curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}"
     //compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
-    //compileOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-    //compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
+    compileOnly "curse.maven:arch-${projectid_arch}:${version_arch}"
+    compileOnly "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${ct_version}"
 
     //runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
-    //runtimeOnly fg.deobf("curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}")
-    //runtimeOnly fg.deobf("curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}")
-    //runtimeOnly fg.deobf("curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}")
+    runtimeOnly "curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}"
+    runtimeOnly "curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}"
+    runtimeOnly "curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}"
     //runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
-    //runtimeOnly fg.deobf("curse.maven:arch-${projectid_arch}:${version_arch}")
-    //runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}")
+    runtimeOnly "curse.maven:arch-${projectid_arch}:${version_arch}"
+    runtimeOnly "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${ct_version}"
     //runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
     //runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
     //runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')
@@ -96,6 +96,8 @@ dependencies {
     //runtimeOnly fg.deobf('curse.maven:pst-850298:4745035')
     //runtimeOnly fg.deobf('curse.maven:attributefix-280510:4844658')
     //runtimeOnly fg.deobf('curse.maven:maxhealthfix-492246:4714765')
+    runtimeOnly 'curse.maven:sophback-422301:5621986'
+    runtimeOnly 'curse.maven:sophcore-618298:5621984'
 }
 
 tasks.withType(ProcessResources).configureEach {
