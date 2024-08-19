@@ -34,9 +34,6 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class PmmoSavedData extends SavedData implements IDataStorage{
-	
-	private static String NAME = Reference.MOD_ID;
-	
 	private Map<UUID, Map<String, Long>> xp = new HashMap<>();
 	private Map<UUID, Map<String, Long>> scheduledXP = new HashMap<>();
 	
@@ -155,7 +152,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	@Override
 	public IDataStorage get() { 
 		if (ServerLifecycleHooks.getCurrentServer() != null)
-			return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
+			return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, Reference.MOD_ID);
 		else
 			return new PmmoSavedData();
     }

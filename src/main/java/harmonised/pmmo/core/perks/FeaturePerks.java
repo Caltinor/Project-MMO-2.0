@@ -325,6 +325,7 @@ public class FeaturePerks {
 	private static final String COMMAND = "command";
 	private static final String FUNCTION = "function";	
 	public static final Perk RUN_COMMAND = Perk.begin()
+		.addConditions((player, nbt) -> !nbt.getString(APIUtils.SKILLNAME).equals("respawn"))
 		.setStart((p, nbt) -> {
 			if (!(p instanceof ServerPlayer)) return NONE;
 			ServerPlayer player = (ServerPlayer) p;
