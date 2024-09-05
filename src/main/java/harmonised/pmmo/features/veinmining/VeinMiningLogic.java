@@ -58,23 +58,24 @@ public class VeinMiningLogic {
 	
 	public static void regenerateVein(ServerPlayer player) {
 		if (!Config.server().veinMiner().enabled()) return;
-		Inventory inv = player.getInventory();	
-		List<ItemStack> items = new ArrayList<>();
-		items.addAll(inv.armor);
-		items.add(inv.getSelected());
-		items.addAll(inv.offhand);
+		Inventory inv = player.getInventory();
+		List<ItemStack> items = List.of(
+				inv.getItem(36),
+				inv.getItem(37),
+				inv.getItem(38),
+				inv.getItem(39),
+				player.getMainHandItem(),
+				player.getOffhandItem());
 		//================================
 		Core core = Core.get(player.level());
 		double currentCharge = player.getData(DataAttachmentTypes.VEIN_CHARGE.get());
 		int chargeCap = Config.server().veinMiner().baseVeinCapacity();
 		double chargeRate = Config.server().veinMiner().baseChargeRate();
 		for (ItemStack stack : items) {
-			VeinData data;
 			if (!core.isActionPermitted(ReqType.WEAR, stack, player)) continue;
-			if ((data = core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData()).chargeRate.isPresent()) {
-				chargeCap += data.chargeCap.orElse(0);
-				chargeRate += data.chargeRate.orElse(0d);
-			}
+			VeinData data = core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData();
+			chargeCap += data.chargeCap.orElse(0);
+			chargeRate += data.chargeRate.orElse(0d);
 		}
 		if (chargeRate == 0 || chargeCap == 0 || currentCharge >= chargeCap) 
 			return;
@@ -103,11 +104,10 @@ public class VeinMiningLogic {
 				player.getMainHandItem(),
 				player.getOffhandItem());
 		//================================
-		int totalCapacity = Config.server().veinMiner().baseVeinCapacity();
-		for (ItemStack stack : items) {
-			if (!Core.get(player.level()).isActionPermitted(ReqType.WEAR, stack, player)) continue;
-			totalCapacity += Core.get(player.level()).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0);
-		}
+		int totalCapacity = Config.server().veinMiner().baseVeinCapacity() + items.stream()
+				.filter(stack -> Core.get(player.level()).isActionPermitted(ReqType.WEAR, stack, player))
+				.mapToInt(stack -> Core.get(player.level()).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0))
+				.sum();
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
 		return totalCapacity; 
 	}
