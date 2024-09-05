@@ -87,17 +87,15 @@ jobs:
 
           files: ${{ needs.setup.outputs.file_path }}
 
-          name: ${{ needs.setup.outputs.mod_name }}-${{ steps.patchversion.outputs.mc_patch_version}}-${{ needs.setup.outputs.mod_version }}
-          version: |
-            ${{ needs.setup.outputs.mod_version }}
-            1.20.1
+          name: ${{ needs.setup.outputs.mod_name }}-1.21-${{ needs.setup.outputs.mod_version }}
+          version: ${{ needs.setup.outputs.mod_version }}
           changelog-file: CHANGELOG.md
 
           loaders: |
             neoforge
           game-versions: |
-            ${{ needs.setup.outputs.mc_minor_version }}
-            ${{ needs.setup.outputs.mc_patch_version }}
+            1.21
+            1.21.1
           java: |
             ${{ needs.setup.outputs.java_version }}
       - name: Upload to Modrinth
@@ -109,17 +107,15 @@ jobs:
 
           files: ${{ needs.setup.outputs.file_path }}
 
-          name: ${{ needs.setup.outputs.mod_name }}-${{ steps.patchversion.outputs.mc_patch_version}}-${{ needs.setup.outputs.mod_version }}
-          version: |
-            ${{ needs.setup.outputs.mod_version }}
-            1.20.1
+          name: ${{ needs.setup.outputs.mod_name }}-1.21-${{ steps.patchversion.outputs.mc_patch_version}}-${{ needs.setup.outputs.mod_version }}
+          version: ${{ needs.setup.outputs.mod_version }}
           changelog-file: CHANGELOG.md
 
           loaders: |
             neoforge
           game-versions: |
-            ${{ needs.setup.outputs.mc_minor_version }}
-            ${{ needs.setup.outputs.mc_patch_version }}
+            1.21
+            1.21.1
           java: |
             ${{ needs.setup.outputs.java_version }}
   message:
