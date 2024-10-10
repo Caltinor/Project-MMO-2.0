@@ -23,6 +23,7 @@ public class NBTUtils {
 	}
 	
 	public static Map<String, Integer> getRequirement(List<LogicEntry> logic, CompoundTag nbt) {
+		//TODO add src null check to fix #576.  
 		return translateToInt(evaluateEntries(nbt, new LinkedHashSet<>(logic)));
 	}
 	
