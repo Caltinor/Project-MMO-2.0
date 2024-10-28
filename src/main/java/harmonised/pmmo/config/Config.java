@@ -412,7 +412,8 @@ public class Config {
 							"minecraft:generic_kill", Map.of("combat", 1l),
 							"minecraft:player_attack", Map.of("combat", 1l),
 							"#minecraft:is_projectile", Map.of("archery", 1l),
-							"#pmmo:magic", Map.of("magic", 15l)));
+							"#pmmo:magic", Map.of("magic", 15l),
+							"cgm:bullet", Map.of("gunslinger", 1l)));
 			RECEIVE_DAMAGE_XP = TomlConfigHelper.defineObject(builder,
 					"RECEIVE_DAMAGE", CodecTypes.DAMAGE_XP_CODEC, Map.of(
 							"minecraft:generic_kill", Map.of("endurance", 1l),
