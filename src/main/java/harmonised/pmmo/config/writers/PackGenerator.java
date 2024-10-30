@@ -280,7 +280,8 @@ public class PackGenerator {
 				Functions.pathPrepend(Reference.SMELTABLES.location(), "items"),
 				Functions.pathPrepend(Reference.FROM_ENVIRONMENT.location(), "damage_type"),
 				Functions.pathPrepend(Reference.FROM_IMPACT.location(), "damage_type"),
-				Functions.pathPrepend(Reference.FROM_MAGIC.location(), "damage_type")),
+				Functions.pathPrepend(Reference.FROM_MAGIC.location(), "damage_type"),
+				Functions.pathPrepend(Reference.FROM_GUN.location(), "damage_type")),
 				(id) -> gson.toJson(TagFile.CODEC.encodeStart(JsonOps.INSTANCE, new TagFile(List.of(), false, List.of())).result().get())),
 		CONFIGS("config", server -> Arrays.stream(ConfigListener.ServerConfigs.values())
 				.map(sc -> Reference.rl(sc.filename)).collect(Collectors.toSet()),
