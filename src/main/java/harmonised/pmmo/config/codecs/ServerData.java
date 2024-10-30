@@ -117,7 +117,7 @@ public record ServerData(
                                 "minecraft:player_attack", Map.of("combat", 1L),
                                 "#minecraft:is_projectile", Map.of("archery", 1L),
                                 "#pmmo:magic", Map.of("magic", 15L),
-                                "cgm:bullet", Map.of("gunslinging", 1L)
+                                "#pmmo:gun", Map.of("gunslinging", 1L)
                         ),
                         EventType.RECEIVE_DAMAGE, Map.of(
                                 "minecraft:generic_kill", Map.of("endurance", 1L),

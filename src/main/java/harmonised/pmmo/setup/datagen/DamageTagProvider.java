@@ -58,5 +58,8 @@ public class DamageTagProvider extends TagsProvider<DamageType>{
                 .addOptional(ResourceLocation.parse("irons_spellbooks:evocation_magic"))
                 .addOptional(ResourceLocation.parse("irons_spellbooks:eldritch_magic"))
                 .addOptional(ResourceLocation.parse("irons_spellbooks:nature_magic"));
+        tag(Reference.FROM_GUN)
+                .addOptional(ResourceLocation.parse("cgm:bullet"))
+                .addOptional(ResourceLocation.parse("scguns:bullet"));
     }
 }
