@@ -36,4 +36,5 @@ public class Reference {
 	public static final TagKey<DamageType> FROM_ENVIRONMENT = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "environment"));
 	public static final TagKey<DamageType> FROM_IMPACT = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "impact"));
 	public static final TagKey<DamageType> FROM_MAGIC = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "magic"));
+	public static final TagKey<DamageType> FROM_GUN = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(MOD_ID, "gun"));
 }
