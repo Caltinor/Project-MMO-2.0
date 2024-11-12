@@ -28,24 +28,24 @@ public class Functions {
         KEYWORDS.put("xp", (param, id, type, value) -> {
             EventType event = EventType.byName(param.toUpperCase());
             if (event == null) return;
-            Map<String, Long> award = mapValue(value.getOrDefault("value", ""));
+            Map<String, Long> award = mapValue(value.getOrDefault("award", ""));
             if (award.isEmpty()) return;
             APIUtils.registerXpAward(type, id, event, award, true);
         });
         KEYWORDS.put("deal_damage", (param, id, type, value) -> {
-            Map<String, Long> award = mapValue(value.getOrDefault("value", ""));
+            Map<String, Long> award = mapValue(value.getOrDefault("award", ""));
             if (award.isEmpty()) return;
             APIUtils.registerXpAward(type, id, EventType.DEAL_DAMAGE, award, true);
         });
         KEYWORDS.put("receive_damage", (param, id, type, value) -> {
-            Map<String, Long> award = mapValue(value.getOrDefault("value", ""));
+            Map<String, Long> award = mapValue(value.getOrDefault("award", ""));
             if (award.isEmpty()) return;
             APIUtils.registerXpAward(type, id, EventType.RECEIVE_DAMAGE, award, true);
         });
         KEYWORDS.put("req", (param, id, type, value) -> {
             ReqType reqType = ReqType.byName(param.toUpperCase());
             if (reqType == null) return;
-            Map<String, Long> reqs = mapValue(value.getOrDefault("value", ""));
+            Map<String, Long> reqs = mapValue(value.getOrDefault("require", ""));
             if (reqs.isEmpty()) return;
             APIUtils.registerRequirement(type, id, reqType, reqs, true);
         });
