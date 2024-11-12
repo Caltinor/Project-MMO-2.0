@@ -68,15 +68,15 @@ These nodes take the target and perform a configuration action for that object. 
 Long repetitive lines over the length of a file are both tedious and an eyesore.  To help with that, there are some special formatting tools you can use to make your life easier.
 
 ## Comments
-any line that starts with `//` will be ignored by the script.  You can use this to document your scripts.
+any text on the same line and after `//` will be ignored by the script.  You can use this to document your scripts.
 
 ## WITH statement
 By starting a line with `WITH ` the nodes that follow will be used with every line after until you define another WITH.  For example, if we wanted to write out how much xp breaking blocks should be, we can do the following 
 ```
-WITH xp(BREAK)
-    block(stone, andesite, granite, diorite).value(mining,10);
-    block(obsidian).value(mining,500);
-    block(extra_ores:ultra_diamond).value(mining,5000);
+WITH xp(BLOCK_BREAK)
+    block(stone, andesite, granite, diorite).award(mining,10);
+    block(obsidian).award(mining,500);
+    block(extra_ores:ultra_diamond).award(mining,5000);
 ```
 Without the WITH statement before, each line would need to repeat the `.xp(BREAK)`.
 
@@ -86,16 +86,16 @@ To remove the prefix create a line that just has `END`
 Earlier the semicolon was mentioned.  Here it is explained.  Semicolons end chains.  Which means if you omit the semicolon you can continue on the next line.  this is helpful for really long lines to make them more readable
 ```
 //very long line
-item(iron_sword).vein_charge(1.5).vein_capacity(30).deal_damage(minecraft:player_attack).value(combat,10);
+item(iron_sword).vein_charge(1.5).vein_capacity(30).deal_damage(minecraft:player_attack).award(combat,10);
 
 //same line but broken up for readability
 item(iron_sword)
     .vein_charge(1.5)
     .vein_capacity(30)
-    .deal_damage(minecraft:player_attack).value(combat,10);
+    .deal_damage(minecraft:player_attack).award(combat,10);
     
 //a simple example of breaking up the value to make the skills easier to read
 item(diamond_helmet).xp(CRAFT)
-    .value(crafting,100
+    .award(crafting,100,
            smithing,1000);
 ```
