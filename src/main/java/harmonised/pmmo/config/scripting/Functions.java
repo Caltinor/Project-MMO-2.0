@@ -78,9 +78,9 @@ public class Functions {
             }
         });
         KEYWORDS.put("mob_scale", (param, id, type, value) -> {
-            //TODO map this out
-            System.out.println(id +" of "+ type +" scales mob "+ param
-                    +" by "+value.getOrDefault("value", "")+" per level");
+            ResourceLocation entityID = ResourceLocation.parse(param);
+            Map<String, Double> modifiers = doubleMap(value.getOrDefault("attribute", ""));
+            APIUtils.registerMobModifier(type, id, Map.of(entityID, modifiers), true);
         });
         KEYWORDS.put("positive_effect", (param, id, type, value) -> {
             DataSource<?> data = Core.get(LogicalSide.SERVER).getLoader().getLoader(type).getData(id);
