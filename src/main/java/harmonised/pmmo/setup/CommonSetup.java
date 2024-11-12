@@ -5,6 +5,7 @@ import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.CoreLoader;
+import harmonised.pmmo.config.scripting.Scripting;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;

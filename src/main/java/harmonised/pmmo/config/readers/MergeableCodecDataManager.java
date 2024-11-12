@@ -146,7 +146,11 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	
 	public Map<ResourceLocation, T> getData() {return data;}
 	
-	public void clearData() {this.data = new HashMap<>();}
+	public void clearData() {
+		this.data.clear();
+		this.overrideSettings.clear();
+		this.defaultSettings.clear();
+	}
 	
 	public T getData(ResourceLocation id) {
 		return data.computeIfAbsent(id, res -> getGenericTypeInstance());
@@ -186,7 +190,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 */
 	@SuppressWarnings("unchecked")
 	public void registerOverride(ResourceLocation id, DataSource<?> data) {
-		overrideSettings.merge(id, (T) data, (currID, currData) -> currData.combine((T) data));
+		overrideSettings.merge(id, (T) data, DataSource::combine);
 	}
 
 	/** Off-thread processing (can include reading files from hard drive) **/

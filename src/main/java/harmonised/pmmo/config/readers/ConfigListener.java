@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -72,7 +73,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
         public static final Codec<ConfigData<?>> MAPPER = Codec.lazyInitialized(() ->
                 ServerConfigs.CODEC.dispatch(ConfigData::getType, ServerConfigs::codec));
     }
-    private final Map<ServerConfigs, ConfigData<?>> configs = new HashMap<>();
+    private final Map<ServerConfigs, ConfigData<?>> configs = new ConcurrentHashMap<>();
     public ConfigData<?> get(ServerConfigs type) {return configs.getOrDefault(type, type.defaultSupplier.get());}
 
     public void setData(ServerConfigs type, ConfigData<?> data) {this.configs.put(type, data);}

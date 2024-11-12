@@ -7,6 +7,7 @@ import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
+import harmonised.pmmo.config.scripting.Scripting;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -85,6 +86,7 @@ public class CoreLoader {
 	
 	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {
 		Core.get(LogicalSide.SERVER).getLoader().resetData();
+		Scripting.readFiles();
 	});
 	
 	public void resetData() {

@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -314,11 +315,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerRequirement(ObjectType oType, ResourceLocation objectID, ReqType type, Map<String, Long> requirements, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
-		default -> {}}
+		case BIOME, DIMENSION -> {raw = new LocationData(asOverride); }
+		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData(asOverride);}
+		default -> {return;}}
 		raw.setReqs(type, requirements);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
@@ -333,8 +334,8 @@ public class APIUtils {
 	public static void registerXpAward(ObjectType oType, ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
+		case BIOME, DIMENSION -> {raw = new LocationData(asOverride);}
+		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData(asOverride);}
 		default -> {return;}}
 		raw.setXpValues(type, award);
 		registerConfiguration(asOverride, oType, objectID, raw);
@@ -353,7 +354,7 @@ public class APIUtils {
 	 */
 	public static void registerDamageXpAward(ObjectType oType, ResourceLocation objectID, boolean isDealt, String damageType, Map<String, Long> award, boolean asOverride) {
 		if (oType == ObjectType.ENTITY || oType == ObjectType.ITEM) {
-			ObjectData raw = new ObjectData();
+			ObjectData raw = new ObjectData(asOverride);
 			raw.damageXpValues().put(isDealt ? EventType.DEAL_DAMAGE : EventType.RECEIVE_DAMAGE, Map.of(damageType, award));
 			registerConfiguration(asOverride, oType, objectID, raw);
 		}
@@ -368,8 +369,8 @@ public class APIUtils {
 	public static void registerBonus(ObjectType oType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM -> {raw = new ObjectData();}
+		case BIOME, DIMENSION -> {raw = new LocationData(asOverride);}
+		case ITEM -> {raw = new ObjectData(asOverride);}
 		case PLAYER -> {raw = new PlayerData();}
 		default -> {return;}}
 		raw.setBonuses(type, bonus);
@@ -386,8 +387,8 @@ public class APIUtils {
 	public static void registerNegativeEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM -> {raw = new ObjectData();}
+		case BIOME, DIMENSION -> {raw = new LocationData(asOverride);}
+		case ITEM -> {raw = new ObjectData(asOverride);}
 		default -> {return;}}
 		raw.setNegativeEffects(effects);
 		registerConfiguration(asOverride, oType, objectID, raw);
@@ -404,8 +405,8 @@ public class APIUtils {
 	public static void registerPositiveEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM -> {raw = new ObjectData();}
+		case BIOME, DIMENSION -> {raw = new LocationData(asOverride);}
+		case ITEM -> {raw = new ObjectData(asOverride);}
 		default -> {return;}}
 		raw.setPositiveEffects(effects);
 		registerConfiguration(asOverride, oType, objectID, raw);
@@ -420,7 +421,7 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage, boolean asOverride) {
-		ObjectData raw = new ObjectData();
+		ObjectData raw = new ObjectData(asOverride);
 		raw.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().build())));
 		registerConfiguration(asOverride, ObjectType.ITEM, item, raw);
 	}
@@ -438,14 +439,12 @@ public class APIUtils {
 		if (oType != ObjectType.ITEM && oType != ObjectType.BLOCK)
 			return;
 		VeinData data = new VeinData(chargeCap, chargeRate, consumeAmount);
-		ObjectData raw = new ObjectData();
-		raw.veinData().combine(data);
+		ObjectData raw = new ObjectData(asOverride, Set.of(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+			new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+			new HashMap<>(), data);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
-	
-	public static final String MOB_HEALTH = "health";
-	public static final String MOB_SPEED = "speed";
-	public static final String MOB_DAMAGE = "damage";
+
 	/**registers a configuration setting for mob modifiers to a biome or dimension.
 	 * 
 	 * <p>Attribute types for the inner map of mob_modifiers can be referenced
@@ -458,7 +457,7 @@ public class APIUtils {
 	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
 		if (oType != ObjectType.BIOME && oType != ObjectType.DIMENSION) 
 			return;
-		LocationData raw = new LocationData();
+		LocationData raw = new LocationData(asOverride);
 		raw.mobModifiers().putAll(mob_modifiers);
 		registerConfiguration(asOverride, oType, locationID, raw);	
 	}
