@@ -24,7 +24,7 @@ public class CodecTypes {
 	
 	public record SalvageData (
 			Map<String, Double> chancePerLevel,
-			Map<String, Integer> levelReq,
+			Map<String, Long> levelReq,
 			Map<String, Long> xpAward,
 			int salvageMax,
 			double baseChance, 
@@ -32,7 +32,7 @@ public class CodecTypes {
 		
 		public static SalvageData combine(SalvageData one, SalvageData two, boolean oneOverride, boolean twoOverride) {
 			Map<String, Double> chancePerLevel = new HashMap<>();
-			Map<String, Integer> levelReq = new HashMap<>();
+			Map<String, Long> levelReq = new HashMap<>();
 			Map<String, Long> xpAward = new HashMap<>();
 			AtomicInteger salvageMax = new AtomicInteger(0);
 			AtomicDouble baseChance = new AtomicDouble(0); 
@@ -71,7 +71,7 @@ public class CodecTypes {
 	}
 	public static final Codec<SalvageData> SALVAGE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.unboundedMap(Codec.STRING, Codec.DOUBLE).fieldOf("chancePerLevel").forGetter(SalvageData::chancePerLevel),
-			Codec.unboundedMap(Codec.STRING, Codec.INT).fieldOf("levelReq").forGetter(SalvageData::levelReq),
+			Codec.unboundedMap(Codec.STRING, Codec.LONG).fieldOf("levelReq").forGetter(SalvageData::levelReq),
 			Codec.unboundedMap(Codec.STRING, Codec.LONG).fieldOf("xpPerItem").forGetter(SalvageData::xpAward),
 			Codec.INT.fieldOf("salvageMax").forGetter(SalvageData::salvageMax),			
 			Codec.DOUBLE.fieldOf("baseChance").forGetter(SalvageData::baseChance),			

@@ -588,7 +588,7 @@ public class StatScrollWidget extends ScrollPanel {
 				content.addAll(TextElement.build(resultStack.getDisplayName(), this.width, step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
 				if (!data.levelReq().isEmpty()) {
 					content.addAll(TextElement.build(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE), this.width, step(1), 0xFFFFFF, false, 0));
-					for (Map.Entry<String, Integer> req : data.levelReq().entrySet()) {
+					for (Map.Entry<String, Long> req : data.levelReq().entrySet()) {
 						content.addAll(TextElement.build(req.getKey(), req.getValue(), this.width, step(2), CoreUtils.getSkillColor(req.getKey())));
 					}
 				}

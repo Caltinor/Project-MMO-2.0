@@ -331,11 +331,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerXpAward(ObjectType oType, ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData();}
 		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
-		default -> {}}
+		default -> {return;}}
 		raw.setXpValues(type, award);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
@@ -366,17 +366,17 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerBonus(ObjectType oType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData();}
 		case ITEM -> {raw = new ObjectData();}
 		case PLAYER -> {raw = new PlayerData();}
-		default -> {}}
+		default -> {return;}}
 		raw.setBonuses(type, bonus);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
-	 * if they attempt to wear/hold/travel and they are not skilled enough to do so.
+	 * if they attempt to wear/hold/travel, and they are not skilled enough to do so.
 	 * 
 	 * @param oType the object type this effect is being stored on
 	 * @param objectID the key for the item being configured
@@ -384,11 +384,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerNegativeEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData();}
 		case ITEM -> {raw = new ObjectData();}
-		default -> {}}
+		default -> {return;}}
 		raw.setNegativeEffects(effects);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
@@ -402,11 +402,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerPositiveEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData();}
 		case ITEM -> {raw = new ObjectData();}
-		default -> {}}
+		default -> {return;}}
 		raw.setPositiveEffects(effects);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
@@ -421,7 +421,7 @@ public class APIUtils {
 	 */
 	public static void registerSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage, boolean asOverride) {
 		ObjectData raw = new ObjectData();
-		raw.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().build())));
+		raw.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().build())));
 		registerConfiguration(asOverride, ObjectType.ITEM, item, raw);
 	}
 	/**registers vein information for the specified block or item.  Items 
@@ -485,7 +485,7 @@ public class APIUtils {
 	 */
 	public static class SalvageBuilder {
 		private Map<String, Double> chancePerLevel = new HashMap<>();
-		private Map<String, Integer> levelReq = new HashMap<>();
+		private Map<String, Long> levelReq = new HashMap<>();
 		private Map<String, Long> xpAward = new HashMap<>();
 		private int salvageMax = 1;
 		private double baseChance = 0.0; 
@@ -510,7 +510,7 @@ public class APIUtils {
 		 * <p>default = no requirements</p>
 		 * @param levelReq the requirements to attempt this result
 		 */
-		public SalvageBuilder setLevelReq(Map<String, Integer> levelReq) {
+		public SalvageBuilder setLevelReq(Map<String, Long> levelReq) {
 			this.levelReq = levelReq;
 			return this;
 		}
@@ -531,7 +531,7 @@ public class APIUtils {
 			this.salvageMax = max;
 			return this;
 		}
-		/**The default chance irregardless of skills that this
+		/**The default chance regardless of skills that this
 		 * salvage will be obtained.
 		 * <p>default = 0.0</p>
 		 * @param chance chance before skill based chances are added

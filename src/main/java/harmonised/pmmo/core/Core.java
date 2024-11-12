@@ -449,7 +449,7 @@ public class Core {
 		for (Map.Entry<ResourceLocation, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(salvageItem)).salvage().entrySet()) {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met. 
-			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {
+			for (Map.Entry<String, Long> skill : result.getValue().levelReq().entrySet()) {
 				if (skill.getValue() > playerXp.getOrDefault(skill.getKey(), new Experience()).getLevel().getLevel()) continue entry;
 			}
 			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption
