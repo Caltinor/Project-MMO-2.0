@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.scripting;
 
 import harmonised.pmmo.util.MsLoggy;
+import net.minecraft.core.RegistryAccess;
 import net.neoforged.fml.loading.FMLPaths;
 
 import java.io.IOException;
@@ -11,22 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Scripting {
-    public static void readFiles() {
+    public static void readFiles(RegistryAccess access) {
         Path filePath = FMLPaths.CONFIGDIR.get();
 
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(filePath, "*.pmmo")) {
             for (Path path : stream) {
                 MsLoggy.INFO.log(MsLoggy.LOG_CODE.API, "Loading script from {}", path);
-                read(new String(Files.readAllBytes(path)));
+                read(access, new String(Files.readAllBytes(path)));
             }
         } catch (IOException e) {e.printStackTrace();}
     }
 
-    public static void read(String rawString) {
-        read(rawString.lines().filter(str -> !str.startsWith("//")).toList());
+    public static void read(RegistryAccess access, String rawString) {
+        read(access, rawString.lines().filter(str -> !str.startsWith("//")).toList());
     }
 
-    public static void read(List<String> lines) {
+    public static void read(RegistryAccess access, List<String> lines) {
         String currentNode = "";
         StringBuilder multiLine = new StringBuilder();
         List<Expression> builders = new ArrayList<>();
@@ -47,7 +48,7 @@ public class Scripting {
             else if (!trimmed.endsWith(";"))
                 multiLine.append(trimmed);
             else {
-                List<Expression> exprs = Expression.create(currentNode + multiLine + trimmed)
+                List<Expression> exprs = Expression.create(access, currentNode + multiLine + trimmed)
                         .stream().filter(Expression::isValid).toList();
                 multiLine = new StringBuilder();
                 builders.addAll(exprs);

@@ -32,6 +32,7 @@ block(minecraft:obsidian)
 entity(minecraft:zombie, iceandfire:wyvern, alexmobs:elephant)
 ```
 *Note: when using multiple IDs, each id is separated by a commma*
+PMMO also provides advanced target nodes, which you can read about [here](#advanced-target-selectors)
 
 ### Value Nodes
 Value nodes are blank space for feature nodes to grab additional information from.  They follow the same format of `keyword(data)` as other nodes.  See the table in the next section for what value nodes each feature node uses.
@@ -99,3 +100,18 @@ item(diamond_helmet).xp(CRAFT)
     .award(crafting,100,
            smithing,1000);
 ```
+
+## Advanced Target Selectors
+These selectors allow you to configure objects based on common properties without knowing the item ID in advance.  You can use this to create configurations that apply to new mods as they are added without needing to explicitly add the object IDs to your script.
+
+*Note: if a line contains both a basic target node and an advanced selector, the latter in the chain will be used*
+
+Here are the advanced nodes and their parameters.  Advanced selectors do not use value nodes
+
+| selector keyword | parameters                                                                                                                                                                                                                                                                                                                                                                                           |
+|:----------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|      `food`      | takes two optional expressions separated by a comma `(expr1,expr2)`. the expressions start with a keyword of either `nutrition` or `saturation` followed by an operator >, <, =, >=, or <= and the value to filter by.  eg `(nutrition>=5,saturation>0)` applies your settings to all food of 5 or more nutrition and any saturation.  (omitting saturation in this case would have the same effect) |
+|      `tool`      | configures any item with the `TOOL` data component.  accepts an optional item tag as a parameter. eg `tool()` will configure all items with the data component, but `tool(minecraft:pickaxes)` will configure all items with the data component AND are in the pickaxes tag.                                                                                                                         |
+|     `armor`      | configures any item extending `ArmorItem`.  accepts an optional item tag as a parameter. eg `armor()` will configure all items of the class, but `armor(minecraft:chest_armor)` will configure all items of the class AND are in the chest_armor tag.                                                                                                                                                |
+|     `weapon`     | configures any item with the `DAMAGE` data component.  accepts an optional item tag as a parameter. eg `weapon()` will configure all items with the data component, but `weapon(minecraft:swords)` will configure all items with the data component AND are in the swords tag.                                                                                                                       |
+

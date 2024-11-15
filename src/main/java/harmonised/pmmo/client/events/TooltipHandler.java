@@ -9,6 +9,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
@@ -150,7 +151,7 @@ public class TooltipHandler {
 		
 		//remove values that meet the requirement
 		new HashMap<>(map).forEach((skill, level) -> {
-			if (Config.skills().skills().get(skill).isSkillGroup()) {
+			if (Config.skills().skills().getOrDefault(skill, SkillData.Builder.getDefault()).isSkillGroup()) {
 				long total = Config.skills().get(skill)
 						.getGroup()
 						.keySet()

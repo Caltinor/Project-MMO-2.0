@@ -1,5 +1,6 @@
 package harmonised.pmmo.config.readers;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -13,9 +14,11 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ExecutableListener extends SimplePreparableReloadListener<Boolean> {
-	private Runnable executor;
+	private final Consumer<RegistryAccess> executor;
+	private final RegistryAccess access;
 	
-	public ExecutableListener(Runnable executor) {
+	public ExecutableListener(RegistryAccess access, Consumer<RegistryAccess> executor) {
+		this.access = access;
 		this.executor = executor;
 	}
 
@@ -24,7 +27,7 @@ public class ExecutableListener extends SimplePreparableReloadListener<Boolean> 
 
 	@Override
 	protected void apply(Boolean pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
-		executor.run();		
+		executor.accept(access);
 	}
 
 	/**
@@ -33,11 +36,8 @@ public class ExecutableListener extends SimplePreparableReloadListener<Boolean> 
 	 * @param packetFactory  A packet constructor or factory method that converts the given map to a packet object to send on the given channel
 	 * @return this manager object
 	 */
-	public ExecutableListener subscribeAsSyncable(
-		final Supplier<CustomPacketPayload> packetFactory)
-	{
+	public void subscribeAsSyncable(final Supplier<CustomPacketPayload> packetFactory) {
 		NeoForge.EVENT_BUS.addListener(this.getDatapackSyncListener(packetFactory));
-		return this;
 	}
 	
 	/** Generate an event listener function for the on-datapack-sync event **/

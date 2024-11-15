@@ -2,7 +2,13 @@ package harmonised.pmmo.config.scripting;
 
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,13 +22,13 @@ public record Expression(
         List<Node> features) {
     public record Node(String param, NodeConsumer consumer) {@Override public String toString() {return param;}}
 
-    public static List<Expression> create(String str) {
+    public static List<Expression> create(RegistryAccess access, String str) {
         MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.DATA, "Raw Script Line: {}", str);
         List<Expression> expressions = new ArrayList<>();
         String[] nodes = str.replace(";", "").split("\\)\\.");
         List<Node> features = new ArrayList<>();
         Map<String, String> values = new HashMap<>();
-        String[] targetIDs = new String[]{};
+        List<ResourceLocation> targetIDs = new ArrayList<>();
         ObjectType targetType = null;
         for (String node : nodes) {
             MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.DATA, "NODE: {}", node);
@@ -31,21 +37,19 @@ public record Expression(
 
             if (ObjectType.byName(keyword.toUpperCase()) != null) {
                 targetType = ObjectType.byName(keyword.toUpperCase());
-                targetIDs = param.split(",");
+                targetIDs = parseIDs(param, targetType, access);
             }
-            /*TODO find a way to hook script reads into a loading stage with registry access so that we
-             *can use dynamic keywords such as food, weapons, etc to make scripts better.
             else if (Functions.TARGETORS.containsKey(keyword)) {
-                TargetSelector.Selection selection = Functions.TARGETORS.get(keyword).read(param);
+                TargetSelector.Selection selection = Functions.TARGETORS.get(keyword).read(param, access);
                 targetType = selection.type();
-                targetIDs = (String[]) selection.IDs().stream().map(ResourceLocation::toString).toArray();
-            }*/
+                targetIDs = selection.IDs();
+            }
             else if (Functions.KEYWORDS.containsKey(keyword))
                 features.add(new Node(param, Functions.KEYWORDS.get(keyword)));
             else values.put(keyword, param);
         }
 
-        for (String id : targetIDs) {expressions.add(new Expression(targetType, ResourceLocation.parse(id), values, features));}
+        for (ResourceLocation id : targetIDs) {expressions.add(new Expression(targetType, id, values, features));}
         expressions.forEach(expr -> MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.DATA, "Expressions: {}", expr));
         return expressions;
     }
@@ -55,4 +59,42 @@ public record Expression(
     public void commit() {
         features.forEach(c -> c.consumer().consume(c.param(), targetID, targetType, value));
     }
+
+    public static List<ResourceLocation> parseIDs(String raw, ObjectType type, RegistryAccess access) {
+        List<ResourceLocation> ids = new ArrayList<>();
+        String[] rawSplit = raw.split(",");
+        for (String str : rawSplit) {
+            if (str.startsWith("#")) {
+                ResourceLocation tagID = Reference.of(str.substring(1));
+                ids.addAll(getMembers(true, tagID, access, type));
+            }
+            else if (str.endsWith(":*")) {
+                ResourceLocation namespace = Reference.of(str.replace("*", "wildcard"));
+                ids.addAll(getMembers(false, namespace, access, type));
+            }
+            else ids.add(Reference.of(str));
+        }
+        return ids;
+    }
+
+    private static List<ResourceLocation> getMembers(boolean isTag, ResourceLocation tagID, RegistryAccess access, ObjectType type) {
+        return switch (type) {
+            case ITEM -> readRegistry(isTag, access, Registries.ITEM, tagID);
+            case BLOCK -> readRegistry(isTag, access, Registries.BLOCK, tagID);
+            case ENTITY -> readRegistry(isTag, access, Registries.ENTITY_TYPE, tagID);
+            case BIOME -> readRegistry(isTag, access, Registries.BIOME, tagID);
+            case ENCHANTMENT -> readRegistry(isTag, access, Registries.ENCHANTMENT, tagID);
+            default -> List.of();
+        };
+    }
+
+    private static <T> List<ResourceLocation> readRegistry(boolean forTags, RegistryAccess access, ResourceKey<Registry<T>> registry, ResourceLocation tagID) {
+        var reg = access.registryOrThrow(registry);
+        return forTags
+                ? reg.getTag(TagKey.create(registry, tagID))
+                .map(named -> named.stream().map(holder -> holder.unwrapKey().get().location()).toList())
+                .orElse(List.of())
+                : reg.keySet().stream().filter(id -> id.getNamespace().equals(tagID.getNamespace())).toList();
+    }
+
 }
