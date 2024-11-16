@@ -30,8 +30,11 @@ import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModList;
@@ -53,12 +56,21 @@ public class CommonSetup {
 	public static final DeferredRegister<CriterionTrigger<?>> TRIGGERS = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, Reference.MOD_ID);
 	private static final Supplier<SkillUpTrigger> SKILL_UP_TRIGGER = TRIGGERS.register("skill_up", SkillUpTrigger::new);
 
-	public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS = DeferredRegister.createDataComponents(Reference.MOD_ID);
+	public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, Reference.MOD_ID);
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> BREWED =
 			DATA_COMPONENTS.register("brewed", () -> DataComponentType.<Boolean>builder()
 					.persistent(Codec.BOOL)
 					.networkSynchronized(ByteBufCodecs.BOOL)
 					.build());
+
+	public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(Registries.ATTRIBUTE, Reference.MOD_ID);
+
+	public static final DeferredHolder<Attribute, Attribute> VEIN_CAPACITY = ATTRIBUTES.register("vein_capacity", () ->
+			new RangedAttribute(LangProvider.VEIN_CAP_DESC.key(), 0, 0, Integer.MAX_VALUE));
+	public static final DeferredHolder<Attribute, Attribute> VEIN_RECHARGE = ATTRIBUTES.register("vein_charge_rate", () ->
+			new RangedAttribute(LangProvider.VEIN_RATE_DESC.key(), 0d, 0d, Double.MAX_VALUE));
+	public static final DeferredHolder<Attribute, Attribute> VEIN_AMOUNT = ATTRIBUTES.register("vein_amount", () ->
+			new RangedAttribute(LangProvider.VEIN_AMOUNT.key(), 0, 0, Double.MAX_VALUE));
 
 	public static void init(final FMLCommonSetupEvent event) {
 		PerkRegistration.init();

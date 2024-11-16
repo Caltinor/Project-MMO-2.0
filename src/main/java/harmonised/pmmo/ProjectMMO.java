@@ -38,6 +38,7 @@ public class ProjectMMO {
 		DataAttachmentTypes.ATTACHMENT_TYPES.register(modbus);
 		CommonSetup.TRIGGERS.register(modbus);
 		CommonSetup.DATA_COMPONENTS.register(modbus);
+		CommonSetup.ATTRIBUTES.register(modbus);
 
     	modbus.addListener(CommonSetup::init);
     	modbus.addListener(CommonSetup::gatherData);

@@ -7,6 +7,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinShapeData.ShapeType;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
+import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ public class VeinMiningLogic {
 		Block block = level.getBlockState(pos).getBlock();
 		int cost = Core.get(level).getBlockConsume(block);
 		if (cost <= 0) return; 
-		double charge = player.getData(DataAttachmentTypes.VEIN_CHARGE.get());
+		double charge = player.getAttribute(CommonSetup.VEIN_AMOUNT).getValue();
 		int consumed = 0;			
 		int maxBlocks = Math.min((int)charge/cost, maxBlocksPerPlayer.computeIfAbsent(player.getUUID(), id -> 64));
 		ShapeType mode = shapePerPlayer.computeIfAbsent(player.getUUID(), id -> ShapeType.AOE);
