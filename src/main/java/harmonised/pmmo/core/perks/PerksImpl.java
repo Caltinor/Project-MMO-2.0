@@ -3,6 +3,7 @@ package harmonised.pmmo.core.perks;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.client.utils.DP;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
@@ -42,13 +43,16 @@ public class PerksImpl {
 	public static Perk BREAK_SPEED = Perk.begin()
 			.addDefaults(getDefaults())
 			.setStart((player, nbt) -> {
-				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
-				if (speedBonus == 0) return NONE;
+				if (Config.BREAK_SPEED_PERKS.get()) {
+					float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
+					if (speedBonus == 0) return NONE;
 
-				float existingSpeedModification = nbt.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE);
-				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus) + existingSpeedModification;
-				speedModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), speedModification);
-				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
+					float existingSpeedModification = nbt.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE);
+					float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus) + existingSpeedModification;
+					speedModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), speedModification);
+					return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
+				}
+				return nbt;
 			})
 			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())
 			.setStatus((player, settings) -> {

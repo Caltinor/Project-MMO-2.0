@@ -1652,6 +1652,12 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "Vein Mine Marker").build();
 	public static final Translation KEYBIND_OPENMENU = Translation.Builder.start("key.pmmo.openMenu")
 		.addLocale(Locale.EN_US, "Open Glossary").build();
+	public static final Translation KEYBIND_TOGGLE_BRKSPD = Translation.Builder.start("key.pmmo.toggle_brkspd")
+		.addLocale(Locale.EN_US, "Toggle Break Speed Perks").build();
+	public static final Translation TOGGLE_BRKSPD_ENABLED = Translation.Builder.start("pmmo.toggle_brkspd_enabled")
+		.addLocale(Locale.EN_US, "Break Speed Perk Enabled").build();
+	public static final Translation TOGGLE_BRKSPD_DISABLED = Translation.Builder.start("pmmo.toggle_brkspd_disabled")
+			.addLocale(Locale.EN_US, "Break Speed Perk Disabled").build();
 	
 	//=========LOGIN HANDLER===================
 	public static final Translation WELCOME_TEXT = Translation.Builder.start("pmmo.welcomeText")

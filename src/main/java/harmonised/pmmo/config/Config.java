@@ -177,6 +177,7 @@ public class Config {
     public static BooleanValue BREAK_NERF_HIGHLIGHTS;
     public static BooleanValue BLOCK_OWNER_HIGHLIGHTS;
     public static BooleanValue SALVAGE_HIGHLIGHTS;
+    public static BooleanValue BREAK_SPEED_PERKS;
 
     private static void buildTutorial(ModConfigSpec.Builder builder) {
         builder.comment("Toggles for helpful features related to mechanics").push("Tutorial");
@@ -187,6 +188,8 @@ public class Config {
                 .define("Enable Owner Highlights", true);
         SALVAGE_HIGHLIGHTS = builder.comment("Should hovering over a salvage block show helpful tips?")
                 .define("Enable Salvage Tips", true);
+        BREAK_SPEED_PERKS = builder.comment("Are break speed perks enabled. can be toggled in-game with a keybind")
+                .define("break_speed_enabled", true);
 
         builder.pop();
     }

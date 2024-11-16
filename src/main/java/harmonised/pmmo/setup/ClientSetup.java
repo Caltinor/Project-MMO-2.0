@@ -24,6 +24,7 @@ public class ClientSetup {
     public static final KeyMapping SHOW_LIST = new KeyMapping(LangProvider.KEYBIND_SHOWLIST.key(), GLFW.GLFW_KEY_LEFT_ALT, LangProvider.KEYBIND_CATEGORY.key());
     public static final KeyMapping VEIN_KEY = new KeyMapping(LangProvider.KEYBIND_VEIN.key(), GLFW.GLFW_KEY_GRAVE_ACCENT, LangProvider.KEYBIND_CATEGORY.key());
     public static final KeyMapping OPEN_MENU = new KeyMapping(LangProvider.KEYBIND_OPENMENU.key(), GLFW.GLFW_KEY_P, LangProvider.KEYBIND_CATEGORY.key());
+	public static final KeyMapping TOGGLE_BRKSPD = new KeyMapping(LangProvider.KEYBIND_TOGGLE_BRKSPD.key(), GLFW.GLFW_KEY_MINUS, LangProvider.KEYBIND_CATEGORY.key());
 
     @SubscribeEvent
     public static void init(RegisterKeyMappingsEvent event) {
@@ -34,6 +35,7 @@ public class ClientSetup {
     	event.register(SHOW_LIST);
     	event.register(VEIN_KEY);
     	event.register(OPEN_MENU);
+		event.register(TOGGLE_BRKSPD);
     }
     
     @SubscribeEvent

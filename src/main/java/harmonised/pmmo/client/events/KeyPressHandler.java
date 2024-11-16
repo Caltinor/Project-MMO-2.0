@@ -49,6 +49,13 @@ public class KeyPressHandler {
             	else
             		mc.player.sendSystemMessage(LangProvider.VEIN_BLACKLIST.asComponent());
             }
+			if (ClientSetup.TOGGLE_BRKSPD.isDown()) {
+				Config.BREAK_SPEED_PERKS.set(!Config.BREAK_SPEED_PERKS.get());
+				mc.player.displayClientMessage(Config.BREAK_SPEED_PERKS.get()
+						? LangProvider.TOGGLE_BRKSPD_ENABLED.asComponent()
+						: LangProvider.TOGGLE_BRKSPD_DISABLED.asComponent()
+				, false);
+			}
             if (ClientSetup.SHOW_LIST.isDown()) {
             	Config.SKILL_LIST_DISPLAY.set(!Config.SKILL_LIST_DISPLAY.get());
             }
