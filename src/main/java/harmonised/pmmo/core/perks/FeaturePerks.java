@@ -58,6 +58,10 @@ public class FeaturePerks {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
 				name -> BuiltInRegistries.ATTRIBUTE.getHolder(Reference.of(name)).orElse(null));
 	}
+
+	private static ResourceLocation attributeID(String attribute, String skill) {
+		return Reference.rl("perk/"+attribute.replace(':','_')+"/"+skill);
+	}
 	
 	public static final Perk ATTRIBUTE = Perk.begin()
 			.addDefaults(TagBuilder.start()
@@ -73,7 +77,7 @@ public class FeaturePerks {
 				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
 				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 				
-				ResourceLocation attributeID = Reference.rl("perk/"+nbt.getString(APIUtils.ATTRIBUTE).replace(':','_')+"/"+nbt.getString(APIUtils.SKILLNAME));
+				ResourceLocation attributeID = attributeID(nbt.getString(APIUtils.ATTRIBUTE), nbt.getString(APIUtils.SKILLNAME));
 				AttributeModifier modifier = new AttributeModifier(attributeID, boost, operation);
 				instance.removeModifier(attributeID);
 				instance.addPermanentModifier(modifier);
@@ -104,7 +108,7 @@ public class FeaturePerks {
 				AttributeInstance instance = player.getAttributes().getInstance(attribute);
 				if (instance != null)
 						instance.getModifiers().stream()
-						.filter(mod -> mod.id().equals(Functions.getReliableUUID(nbt.getString(APIUtils.ATTRIBUTE)+"/"+nbt.getString(APIUtils.SKILLNAME))))
+						.filter(mod -> mod.id().equals(attributeID(nbt.getString(APIUtils.ATTRIBUTE), nbt.getString(APIUtils.SKILLNAME))))
 						.forEach(mod -> respawnAttributes.put(player, new AttributeRecord(attribute, mod)));
 			}
 
