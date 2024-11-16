@@ -5,6 +5,8 @@ import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.CoreLoader;
+import harmonised.pmmo.config.readers.ExecutableListener;
+import harmonised.pmmo.config.scripting.Scripting;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
@@ -59,7 +61,6 @@ public class CommonSetup {
 					.build());
 
 	public static void init(final FMLCommonSetupEvent event) {
-		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
 		//=========COMPAT=============
 		if (ModList.get().isLoaded("ftbquests")) FTBQHandler.init();
@@ -79,7 +80,8 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(CoreLoader.RELOADER);
+		Core.get(LogicalSide.SERVER).getLoader().RELOADER = new ExecutableListener(event.getRegistryAccess(), CoreLoader.RELOADER_FUNCTION);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().RELOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
@@ -89,6 +91,7 @@ public class CommonSetup {
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
 		event.addListener(Config.CONFIG);
+		Networking.registerDataSyncPackets();
 	}
 	
 	public static void gatherData(GatherDataEvent event) {

@@ -273,7 +273,7 @@ public class CTUtils implements IRuntimeAction{
 	@ZenCodeType.Name("mods.pmmo.SalvageBuilder")
 	public static class SalvageBuilder {
 		private Map<String, Double> chancePerLevel = new HashMap<>();
-		private Map<String, Integer> levelReq = new HashMap<>();
+		private Map<String, Long> levelReq = new HashMap<>();
 		private Map<String, Long> xpAward = new HashMap<>();
 		private int salvageMax = 1;
 		private double baseChance = 0.0;
@@ -305,7 +305,7 @@ public class CTUtils implements IRuntimeAction{
 		 * @docParam levelReq {skillname: 0.0 as int?, otherskillname: 0.0 as int?}
 		 */
 		@ZenCodeType.Method
-		public SalvageBuilder setLevelReq(Map<String, Integer> levelReq) {
+		public SalvageBuilder setLevelReq(Map<String, Long> levelReq) {
 			this.levelReq = levelReq;
 			return this;
 		}

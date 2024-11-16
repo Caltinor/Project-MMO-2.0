@@ -52,7 +52,7 @@ public class Networking {
 	}
 	
 	public static void registerDataSyncPackets() {
-		CoreLoader.RELOADER.subscribeAsSyncable(CP_ClearData::new);
+		Core.get(LogicalSide.SERVER).getLoader().RELOADER.subscribeAsSyncable(CP_ClearData::new);
 		Config.CONFIG.subscribeAsSyncable();
 		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.ITEM, o));
 		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable((o) -> new CP_SyncData(ObjectType.BLOCK, o));

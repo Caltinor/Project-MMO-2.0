@@ -149,7 +149,7 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 			SalvageData data = entry.getValue();
 			if (!data.levelReq().isEmpty()) {
 				outList.add(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE));
-				for (Map.Entry<String, Integer> req : data.levelReq().entrySet()) {
+				for (Map.Entry<String, Long> req : data.levelReq().entrySet()) {
 					outList.add(Component.translatable("pmmo." + req.getKey())
 							.append(Component.literal(": " + req.getValue())));
 				}

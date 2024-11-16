@@ -28,7 +28,8 @@ public record LocationData(
 		List<ResourceLocation> veinBlacklist,
 		Map<String, Long> travelReq,
 		Map<ResourceLocation, Map<String, Double>> mobModifiers) implements DataSource<LocationData>{
-	
+	public LocationData(boolean override) {this(override, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+			new ArrayList<>(), new HashMap<>(), new HashMap<>());}
 	public LocationData() {this(
 			false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
 			new ArrayList<>(), new HashMap<>(), new HashMap<>());}

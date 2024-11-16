@@ -7,10 +7,12 @@ import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
+import harmonised.pmmo.config.scripting.Scripting;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -26,11 +28,13 @@ import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class CoreLoader {
@@ -82,10 +86,12 @@ public class CoreLoader {
 		case BIOME -> BIOME_LOADER;
         };
 	}
-	
-	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {
+
+	public ExecutableListener RELOADER;
+	public static final Consumer<RegistryAccess> RELOADER_FUNCTION = access -> {
 		Core.get(LogicalSide.SERVER).getLoader().resetData();
-	});
+		Scripting.readFiles(access);
+	};
 	
 	public void resetData() {
 		ITEM_LOADER.clearData();

@@ -233,7 +233,7 @@ public class Core {
 	//======DATA OBTAINING UTILITY METHODS=======
 	public Map<String, Long> getObjectExperienceMap(ObjectType type, ResourceLocation objectID, EventType eventType, CompoundTag tag) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
-		return new HashMap<>(data != null ? MsLoggy.DEBUG.logAndReturn(data.getXpValues(eventType, tag), LOG_CODE.DATA, "getObjectExperienceMap= {}") : new HashMap<>());
+		return new HashMap<>(data != null ? MsLoggy.DEBUG.logAndReturn(data.getXpValues(eventType, tag), LOG_CODE.XP, "getObjectExperienceMap= {}") : new HashMap<>());
 	}
 	public Map<String, Double> getObjectModifierMap(ObjectType type, ResourceLocation objectID, ModifierDataType modifierType, CompoundTag tag) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
@@ -449,7 +449,7 @@ public class Core {
 		for (Map.Entry<ResourceLocation, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(salvageItem)).salvage().entrySet()) {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met. 
-			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {
+			for (Map.Entry<String, Long> skill : result.getValue().levelReq().entrySet()) {
 				if (skill.getValue() > playerXp.getOrDefault(skill.getKey(), new Experience()).getLevel().getLevel()) continue entry;
 			}
 			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption

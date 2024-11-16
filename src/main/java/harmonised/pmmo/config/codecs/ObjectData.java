@@ -44,10 +44,12 @@ public record ObjectData(
 		Map<ModifierDataType, List<LogicEntry>> nbtBonuses,
 		Map<ResourceLocation, SalvageData> salvage,
 		VeinData veinData) implements DataSource<ObjectData>{
-	
-		public ObjectData() {
-			this(false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-					new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY);
+		public ObjectData(boolean override) {this(override, new HashSet<>(), new HashMap<>(), new HashMap<>(),
+			new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+			new HashMap<>(), new HashMap<>(), VeinData.EMPTY);}
+		public ObjectData() {this(false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+			new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+			new HashMap<>(), VeinData.EMPTY);
 		}
 
 		public Map<ResourceLocation, SalvageData> salvage() {
@@ -189,10 +191,7 @@ public record ObjectData(
 
 				//merge all other settings
 				tagValues.addAll(o.tagValues());
-				t.tagValues.forEach((rl) -> {
-					if (!tagValues.contains(rl))
-						tagValues.add(rl);
-				});			
+                tagValues.addAll(t.tagValues());
 				xpValues.putAll(o.xpValues());
 				t.xpValues().forEach((event, map) -> {
 					xpValues.merge(event, map, (oMap, nMap) -> {
@@ -223,13 +222,13 @@ public record ObjectData(
 				t.reqs().forEach((event, map) -> {
 					reqs.merge(event, map, (oMap, nMap) -> {
 						Map<String, Long> mergedMap = new HashMap<>(oMap);
-						nMap.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
+						nMap.forEach((k, v) -> mergedMap.merge(k, v, Long::max));
 						return mergedMap;
 					});
 				});
 				reqEffects.putAll(o.negativeEffects());	
 				t.negativeEffects().forEach((skill, level) -> {
-					reqEffects.merge(skill, level, (o1, n1) -> o1 > n1 ? o1 : n1);
+					reqEffects.merge(skill, level, Integer::max);
 				});
 				salvage.putAll(o.salvage());
 				t.salvage().forEach((rl, data) -> {

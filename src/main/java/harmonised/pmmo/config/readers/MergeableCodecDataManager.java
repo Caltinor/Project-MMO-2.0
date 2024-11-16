@@ -29,7 +29,6 @@ package harmonised.pmmo.config.readers;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import harmonised.pmmo.api.enums.EventType;
@@ -38,7 +37,6 @@ import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -56,15 +54,14 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -76,16 +73,13 @@ import java.util.stream.Collectors;
  * After creating the manager, subscribeAsSyncable can optionally be called on it to subscribe the manager
  * to the forge events necessary for syncing datapack data to clients.
  * @param <T> The type of the objects that the codec is parsing jsons as
- * @param <T> The type of the object we get after merging the parsed objects. Can be the same as RAW
- * @param <V>
+ * @param <V> The type of the object associated with a registry
  */
 public class MergeableCodecDataManager<T extends DataSource<T>, V> extends SimplePreparableReloadListener<Map<ResourceLocation, T>>
 {
 	protected static final String JSON_EXTENSION = ".json";
 	protected static final int JSON_EXTENSION_LENGTH = JSON_EXTENSION.length();
 	protected static final Gson STANDARD_GSON = new Gson();
-	@Nonnull
-	/** Mutable, non-null map containing whatever data was loaded last time server datapacks were loaded **/ 
 	protected Map<ResourceLocation, T> data = new HashMap<>();
 	
 	private final String folderName;
@@ -97,23 +91,23 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	private final Supplier<T> defaultImpl;
 	private final ResourceKey<Registry<V>> registry;
 
-	private Map<ResourceLocation, T> defaultSettings = new HashMap<>();
-	private Map<ResourceLocation, T> overrideSettings = new HashMap<>();
+	private final Map<ResourceLocation, T> defaultSettings = new HashMap<>();
+	private final Map<ResourceLocation, T> overrideSettings = new HashMap<>();
 	
 	/**
-	 * Initialize a data manager with the given folder name, codec, and merger
-	 * @param folderName The name of the folder to load data from,
-	 * e.g. "cheeses" would load data from "data/modid/cheeses" for all modids.
-	 * Can include subfolders, e.g. "cheeses/sharp"
-	 * @param logger A logger that will log parsing errors if they occur
-	 * @param codec A codec that will be used to parse jsons. See drullkus's codec primer for help on creating these:
-	 * https://gist.github.com/Drullkus/1bca3f2d7f048b1fe03be97c28f87910
-	 * @param merger A merging function that uses a list of java-objects-that-were-parsed-from-json to create a final object.
-	 * The list contains all successfully-parsed objects with the same ID from all mods and datapacks.
-	 * (for a json located at "data/modid/folderName/name.json", the object's ID is "modid:name")
-	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
-	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
-	 */
+     * Initialize a data manager with the given folder name, codec, and merger
+     * @param folderName The name of the folder to load data from,
+     * e.g. "cheeses" would load data from "data/modid/cheeses" for all modids.
+     * Can include subfolders, e.g. "cheeses/sharp"
+     * @param logger A logger that will log parsing errors if they occur
+     * @param codec A codec that will be used to parse jsons. See drullkus's codec primer for help on creating these:
+     * <a href="https://gist.github.com/Drullkus/1bca3f2d7f048b1fe03be97c28f87910">go to primer</a>
+     * @param merger A merging function that uses a list of java-objects-that-were-parsed-from-json to create a final object.
+     * The list contains all successfully-parsed objects with the same ID from all mods and datapacks.
+     * (for a json located at "data/modid/folderName/name.json", the object's ID is "modid:name")
+     * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
+     * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
+     */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, MapCodec<T> codec, final Function<List<T>, T> merger
 			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
 	{
@@ -122,21 +116,21 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 
 	
 	/**
-	 * Initialize a data manager with the given folder name, codec, and merger, as well as a user-defined GSON instance.
-	 * @param folderName The name of the folder to load data from,
-	 * e.g. "cheeses" would load data from "data/modid/cheeses" for all modids.
-	 * Can include subfolders, e.g. "cheeses/sharp"
-	 * @param logger A logger that will log parsing errors if they occur
-	 * @param codec A codec that will be used to parse jsons. See drullkus's codec primer for help on creating these:
-	 * https://gist.github.com/Drullkus/1bca3f2d7f048b1fe03be97c28f87910
-	 * @param merger A merging function that uses a list of java-objects-that-were-parsed-from-json to create a final object.
-	 * The list contains all successfully-parsed objects with the same ID from all mods and datapacks.
-	 * (for a json located at "data/modid/folderName/name.json", the object's ID is "modid:name")
-	 * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
-	 * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
-	 * @param gson A GSON instance, allowing for user-defined deserializers. General not needed as the gson is only used to convert
-	 * raw json to a JsonElement, which the Codec then parses into a proper java object.
-	 */
+     * Initialize a data manager with the given folder name, codec, and merger, as well as a user-defined GSON instance.
+     * @param folderName The name of the folder to load data from,
+     * e.g. "cheeses" would load data from "data/modid/cheeses" for all modids.
+     * Can include subfolders, e.g. "cheeses/sharp"
+     * @param logger A logger that will log parsing errors if they occur
+     * @param codec A codec that will be used to parse jsons. See drullkus's codec primer for help on creating these:
+     * <a href="https://gist.github.com/Drullkus/1bca3f2d7f048b1fe03be97c28f87910">go to primer</a>
+     * @param merger A merging function that uses a list of java-objects-that-were-parsed-from-json to create a final object.
+     * The list contains all successfully-parsed objects with the same ID from all mods and datapacks.
+     * (for a json located at "data/modid/folderName/name.json", the object's ID is "modid:name")
+     * As an example, consider vanilla's Tags: mods or datapacks can define tags with the same modid:name id,
+     * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
+     * @param gson A GSON instance, allowing for user-defined deserializers. General not needed as the gson is only used to convert
+     * raw json to a JsonElement, which the Codec then parses into a proper java object.
+     */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, MapCodec<T> codec, final Function<List<T>, T> merger
 			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
 	{
@@ -152,7 +146,11 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	
 	public Map<ResourceLocation, T> getData() {return data;}
 	
-	public void clearData() {this.data = new HashMap<>();}
+	public void clearData() {
+		this.data.clear();
+		this.overrideSettings.clear();
+		this.defaultSettings.clear();
+	}
 	
 	public T getData(ResourceLocation id) {
 		return data.computeIfAbsent(id, res -> getGenericTypeInstance());
@@ -192,12 +190,13 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 */
 	@SuppressWarnings("unchecked")
 	public void registerOverride(ResourceLocation id, DataSource<?> data) {
-		overrideSettings.merge(id, (T) data, (currID, currData) -> currData.combine((T) data));
+		overrideSettings.merge(id, (T) data, DataSource::combine);
 	}
 
 	/** Off-thread processing (can include reading files from hard drive) **/
+	@NotNull
 	@Override
-	protected Map<ResourceLocation, T> prepare(final ResourceManager resourceManager, final ProfilerFiller profiler)
+	protected  Map<ResourceLocation, T> prepare(final ResourceManager resourceManager, final @NotNull ProfilerFiller profiler)
 	{
 		final Map<ResourceLocation, List<T>> map = new HashMap<>();
 		defaultSettings.forEach((id, data) -> {map.put(id, new ArrayList<>(List.of(data)));});
@@ -236,7 +235,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			map.put(jsonIdentifier, unmergedRaws);
 		}
 
-		return MergeableCodecDataManager.mapValues(map, this.merger::apply);
+		return MergeableCodecDataManager.mapValues(map, this.merger);
 	}
 	
 	static boolean isStringJsonFile(final ResourceLocation file)
@@ -264,7 +263,10 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	
 	/** Main-thread processing, runs after prepare concludes **/
 	@Override
-	protected void apply(final Map<ResourceLocation, T> processedData, final ResourceManager resourceManager, final ProfilerFiller profiler)
+	protected void apply(
+			final @NotNull Map<ResourceLocation, T> processedData,
+			final @NotNull ResourceManager resourceManager,
+			final @NotNull ProfilerFiller profiler)
 	{
 		MsLoggy.INFO.log(LOG_CODE.DATA, "Beginning loading of data for data loader: {}", this.folderName);
 		// now that we're on the main thread, we can finalize the data
@@ -326,7 +328,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 				}
 			}
 
-			tags.forEach(rl -> this.data.merge(rl, (T)dataValue, (o, n) -> o.combine(n)));
+			tags.forEach(rl -> this.data.merge(rl, (T)dataValue, DataSource::combine));
 		}
 		//Execute post-processing behavior (mostly logging at this point).
 		finalizer.accept(this.data);
@@ -336,14 +338,11 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * This should be called at most once, during construction of your mod (static init of your main mod class is fine)
 	 * (FMLCommonSetupEvent *may* work as well)
 	 * Calling this method automatically subscribes a packet-sender to {@link OnDatapackSyncEvent}.
-	 * @param packetFactory  A packet constructor or factory method that converts the given map to a packet object to send on the given channel
-	 * @return this manager object
+	 *
+	 * @param packetFactory A packet constructor or factory method that converts the given map to a packet object to send on the given channel
 	 */
-	public MergeableCodecDataManager<T, V> subscribeAsSyncable(
-		final Function<Map<ResourceLocation, T>, CustomPacketPayload> packetFactory)
-	{
+	public void subscribeAsSyncable(final Function<Map<ResourceLocation, T>, CustomPacketPayload> packetFactory) {
 		NeoForge.EVENT_BUS.addListener(this.getDatapackSyncListener(packetFactory));
-		return this;
 	}
 	
 	/** Generate an event listener function for the on-datapack-sync event **/
