@@ -55,7 +55,7 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 		int renderTop = (guiGraphics.guiHeight() / 4);
 		int tooltipWidth = 3 * (guiGraphics.guiWidth() / 8);
 
-		if (!mc.getDebugOverlay().showDebugScreen()) {
+		if (!mc.getDebugOverlay().showDebugScreen() && Config.SALVAGE_HIGHLIGHTS.get()) {
 			// IDENTIFY LINES
 			if (mc.level.getBlockState(bhr.getBlockPos()).getBlock()
 					.equals(BuiltInRegistries.BLOCK.get(Config.server().general().salvageBlock()))) {
