@@ -1,3 +1,5 @@
+[Home](../home.md)
+
 # Scripting
 This feature allows you to define `.pmmo` files in your config folder that are read when your world loads and provide configurations that supersede datapacks.  This powerful feature simplifies the configuration process.
 
@@ -115,3 +117,4 @@ Here are the advanced nodes and their parameters.  Advanced selectors do not use
 |     `armor`      | configures any item extending `ArmorItem`.  accepts an optional item tag as a parameter. eg `armor()` will configure all items of the class, but `armor(minecraft:chest_armor)` will configure all items of the class AND are in the chest_armor tag.                                                                                                                                                |
 |     `weapon`     | configures any item with the `DAMAGE` data component.  accepts an optional item tag as a parameter. eg `weapon()` will configure all items with the data component, but `weapon(minecraft:swords)` will configure all items with the data component AND are in the swords tag.                                                                                                                       |
 
+[Home](../home.md)

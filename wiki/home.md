@@ -9,6 +9,7 @@ Welcome to the Project-MMO-2.0 wiki!
     - [Gameplay Gating](core/gating.md)
     - [Perks](core/perks.md)
 - [Configuration](configuration/config.md)
+    - [Scripting](configuration/scripting.md)
     - [Items](configuration/items.md)
     - [Blocks](configuration/blocks.md)
     - [Entities](configuration/entities.md)
