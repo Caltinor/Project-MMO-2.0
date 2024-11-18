@@ -12,7 +12,7 @@ Nodes are connected with a period (`.`).  By connecting nodes with a period, you
 ```
 color(yellow).type(ball).sport(tennis);
 ```
-*Note: the semicolon at the end is important and will be explained later*
+*Note: the semicolon (`;`) at the end is important and will be explained later*
 
 ## PMMO Basic Nodes
 PMMO has 3 basic types of nodes, [__target__](scripting.md#target-nodes) nodes, [__value__](scripting.md#value-nodes) nodes, and [__feature__](scripting.md#feature-nodes) nodes.  All configurations must have a target node.  feature nodes are what actually do the work, so you will always have one, or else you line doesn't do anything.  The value node is a holder for special information that certain feature nodes will use.
