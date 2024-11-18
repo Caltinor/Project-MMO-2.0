@@ -1,8 +1,8 @@
 [Home](../home.md)
 
 Project MMO has three types of configuration files:
-- [data (datapack `.json`s)](config.md#Datapacks%20and%20JSONS)
-- [configs (`.toml`)](config.md#Config%20.Toml%20files)
+- [data (datapack `.json`s)](config.md#Datapacks)
+- [configs (`.toml`)](config.md#Config)
 - [scripts (`.pmmo`)](config.md#Scripting)
 
 ## Datapacks and JSONS
