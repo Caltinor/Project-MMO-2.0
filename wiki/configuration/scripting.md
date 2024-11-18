@@ -34,6 +34,9 @@ block(minecraft:obsidian)
 entity(minecraft:zombie, iceandfire:wyvern, alexmobs:elephant)
 ```
 *Note: when using multiple IDs, each id is separated by a commma*
+
+target nodes can also take tags and wildcards.  prefixing a `#` to an ID will tell pmmo this id is a tag. eg `blocks(#c:ores/copper)`.  wildcards let you provide a modid and have all objects for that mod configured by the line.  to use wildcards, use an ID like `modid:*`.  eg `entity(alexmobs:*)`
+
 PMMO also provides advanced target nodes, which you can read about [here](#advanced-target-selectors)
 
 ### Value Nodes
