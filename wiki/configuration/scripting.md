@@ -6,16 +6,16 @@ This feature allows you to define `.pmmo` files in your config folder that are r
 ## Basic Syntax
 `.pmmo` files use a "chaining" style where each line is a configuration that "chains" together nodes of information
 
-a node is simply `keyword(data)`.  The keyword defines what happens behind the scenes, and the data is the specific information it needs to know what you want to do.
+A node is simply `keyword(data)`.  The keyword defines what happens behind the scenes, and the data is the specific information it needs to know what you want to do.
 
-nodes are connected with a period `.`.  By connecting nodes with a period, you "chain" them together.  Let's look at an example:
+Nodes are connected with a period `.`.  By connecting nodes with a period, you "chain" them together.  Let's look at an example:
 ```
 color(yellow).type(ball).sport(tennis);
 ```
 *Note: the semicolon at the end is important and will be explained later*
 
 ## PMMO Basic Nodes
-pmmo has 3 basic types of nodes, __target__ nodes, __feature__ nodes, and __value__ nodes.  All configurations must have a target node.  feature nodes are what actually do the work, so you will always have one, or else you line doesn't do anything.  The value node is a holder for special information that certain feature nodes will use.
+PMMO has 3 basic types of nodes, __target__ nodes, __feature__ nodes, and __value__ nodes.  All configurations must have a target node.  feature nodes are what actually do the work, so you will always have one, or else you line doesn't do anything.  The value node is a holder for special information that certain feature nodes will use.
 
 ### Target Nodes
 PMMO has specific target nodes that correspond to object types in the game.  they are:
@@ -35,7 +35,7 @@ entity(minecraft:zombie, iceandfire:wyvern, alexmobs:elephant)
 ```
 *Note: when using multiple IDs, each id is separated by a commma*
 
-target nodes can also take tags and wildcards.  prefixing a `#` to an ID will tell pmmo this id is a tag. eg `blocks(#c:ores/copper)`.  wildcards let you provide a modid and have all objects for that mod configured by the line.  to use wildcards, use an ID like `modid:*`.  eg `entity(alexmobs:*)`
+Target nodes can also take tags and wildcards.  prefixing a `#` to an ID will tell PMMO this id is a tag. eg `blocks(#c:ores/copper)`.  wildcards let you provide a modid and have all objects for that mod configured by the line.  to use wildcards, use an ID like `modid:*`.  eg `entity(alexmobs:*)`
 
 PMMO also provides advanced target nodes, which you can read about [here](#advanced-target-selectors)
 
@@ -74,7 +74,7 @@ These nodes take the target and perform a configuration action for that object. 
 Long repetitive lines over the length of a file are both tedious and an eyesore.  To help with that, there are some special formatting tools you can use to make your life easier.
 
 ## Comments
-any text on the same line and after `//` will be ignored by the script.  You can use this to document your scripts.
+Any text on the same line and after `//` will be ignored by the script.  You can use this to document your scripts.
 
 ## WITH statement
 By starting a line with `WITH ` the nodes that follow will be used with every line after until you define another WITH.  For example, if we wanted to write out how much xp breaking blocks should be, we can do the following 
