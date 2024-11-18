@@ -37,7 +37,7 @@ entity(minecraft:zombie, iceandfire:wyvern, alexmobs:elephant)
 
 Target nodes can also take tags and wildcards.  prefixing a `#` to an ID will tell PMMO this id is a tag. eg `blocks(#c:ores/copper)`.  wildcards let you provide a modid and have all objects for that mod configured by the line.  to use wildcards, use an ID like `modid:*`.  eg `entity(alexmobs:*)`
 
-PMMO also provides advanced target nodes, which you can read about [here](#advanced-target-selectors)
+PMMO also provides advanced target nodes, which you can read about [here](#advanced-target-nodes)
 
 ### Value Nodes
 Value nodes are blank space for feature nodes to grab additional information from.  They follow the same format of `keyword(data)` as other nodes.  See the table in the next section for what value nodes each feature node uses.
@@ -106,7 +106,7 @@ item(diamond_helmet).xp(CRAFT)
            smithing,1000);
 ```
 
-## Advanced Target Selectors
+## Advanced Target Nodes
 These selectors allow you to configure objects based on common properties without knowing the item ID in advance.  You can use this to create configurations that apply to new mods as they are added without needing to explicitly add the object IDs to your script.
 
 *Note: if a line contains both a basic target node and an advanced selector, the latter in the chain will be used*
