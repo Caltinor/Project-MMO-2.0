@@ -1,6 +1,9 @@
 [Home](../home.md)
 
-Project MMO has three types of configuration files: configs (`.toml`), data (datapack jsons), and scripts (`.pmmo`)
+Project MMO has three types of configuration files:
+- [data (datapack `.json`s)](config.md#Datapacks%20and%20JSONS)
+- [configs (`.toml`)](config.md#Config%20.Toml%20files)
+- [scripts (`.pmmo`)](config.md#Scripting)
 
 ## Datapacks and JSONS
 Project MMO used to have a folder `config/pmmo/` that contained many json files that could be used to configure PMMO.  Many of the changes in the rework made that impractical and a move was made to shift everything into datapacks.  Below are links to the specific configuration page for each datapack-able element
@@ -33,9 +36,6 @@ This command generates a lot of data.  For certain computers and network connect
 | `/pmmo genData disabler`                     | adds a pack filter which disables all default data and that of packs loaded before this pack                   |
 | `/pmmo genData create`                       | builds the datapack using the settings you have enabled                                                        |
 
-### Scripting
-if you are comfortable with a more programmatic approach to configuration, pmmo also offers a configuration method that allows you to contain all of your settings in one (or multiple) script files.  [read about scripting here](./scripting.md)
-
 ### Specific Configuration Details
 - [Items](items.md)
 - [Blocks](blocks.md)
@@ -66,5 +66,8 @@ There are six server configs which can be generated using the datapack generator
 | globals.json    | where NBT globals are defined                                                                             |
 | autovalues.json | contains all the settings for autovalues                                                                  |
 | anticheese.json | where anti-cheese rules are defined                                                                       |
+
+## Scripting
+If you are comfortable with a more programmatic approach to configuration, pmmo also offers a configuration method that allows you to contain all of your settings in one (or multiple) script files.  [read about scripting here](./scripting.md)
 
 [Home](../home.md)
