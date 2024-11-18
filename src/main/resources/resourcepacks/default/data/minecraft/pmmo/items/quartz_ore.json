@@ -1,8 +1,0 @@
-{
-    "isTagFor":["#forge:ores/quartz"],
-    "xp_values":{
-        "SMELT": {
-            "smithing": 100
-        }
-    }
-}

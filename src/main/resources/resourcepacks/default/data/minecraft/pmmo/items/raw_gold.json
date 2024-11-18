@@ -1,8 +1,0 @@
-{
-    "isTagFor": ["#forge:raw_materials/gold"],
-    "xp_values":{
-        "SMELT": {
-            "smithing": 200
-        }
-    }
-}

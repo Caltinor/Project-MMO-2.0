@@ -20,6 +20,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -297,8 +298,8 @@ public record ObjectData(
 				this.override = override;
 				return this;
 			}
-			public Builder addTag(String id) {
-				this.tagValues.add(id);
+			public Builder addTag(String... id) {
+				this.tagValues.addAll(Arrays.asList(id));
 				return this;
 			}
 			public Builder addReq(ReqType type, Map<String, Long> req) {

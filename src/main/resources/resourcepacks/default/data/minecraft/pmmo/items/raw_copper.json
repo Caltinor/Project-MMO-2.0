@@ -1,8 +1,0 @@
-{
-    "isTagFor": ["#forge:raw_materials/copper"],
-    "xp_values":{
-        "SMELT": {
-            "smithing": 33
-        }
-    }
-}

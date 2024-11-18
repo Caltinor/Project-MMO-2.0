@@ -1,8 +1,0 @@
-{
-    "isTagFor":["#forge:ores/lapis"],
-    "xp_values":{
-        "SMELT": {
-            "smithing": 100
-        }
-    }
-}
