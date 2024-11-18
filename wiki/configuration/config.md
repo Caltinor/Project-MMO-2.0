@@ -1,6 +1,9 @@
 [Home](../home.md)
 
-Project MMO has three types of configuration files: configs (`.toml`), data (datapack jsons), and scripts (`.pmmo`)
+Project MMO has three types of configuration files:
+- [data (datapack `.json`s)](config.md#datapacks-and-jsons)
+- [configs (`.toml`)](config.md#config-toml-files)
+- [scripts (`.pmmo`)](config.md#scripting)
 
 ## Datapacks and JSONS
 Project MMO used to have a folder `config/pmmo/` that contained many json files that could be used to configure PMMO.  Many of the changes in the rework made that impractical and a move was made to shift everything into datapacks.  Below are links to the specific configuration page for each datapack-able element
@@ -30,9 +33,6 @@ This command generates a lot of data.  For certain computers and network connect
 | `/pmmo genData forPlayers <player selector>` | creates player-specific files for the selected players. maybe called multiple times to add multiple selections |
 | `/pmmo genData disabler`                     | adds a pack filter which disables all default data and that of packs loaded before this pack                   |
 | `/pmmo genData create`                       | builds the datapack using the settings you have enabled                                                        |
-
-### Scripting
-if you are comfortable with a more programmatic approach to configuration, pmmo also offers a configuration method that allows you to contain all of your settings in one (or multiple) script files.  [read about scripting here](./scripting.md)
 
 ### Specific Configuration Details
 - [Items](items.md)
@@ -66,5 +66,8 @@ There are five server configs which are located in your minecraft directory at `
 | pmmo-AntiCheese.toml | where anti-cheese rules are defined                                                                       |
 
 *Note that server configs are unique to the world they are nested under.  If you want your configs to carry over between worlds, be sure to make a copy of your config and place it in the `/defaultconfigs/` folder.  This is a Forge folder that copies server configs over to new worlds when they are created.*
+
+## Scripting
+If you are comfortable with a more programmatic approach to configuration, pmmo also offers a configuration method that allows you to contain all of your settings in one (or multiple) script files.  [read about scripting here](./scripting.md)
 
 [Home](../home.md)
