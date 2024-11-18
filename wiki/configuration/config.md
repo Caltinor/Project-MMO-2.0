@@ -1,9 +1,9 @@
 [Home](../home.md)
 
 Project MMO has three types of configuration files:
-- [data (datapack `.json`s)](config.md#Datapacks)
-- [configs (`.toml`)](config.md#Config)
-- [scripts (`.pmmo`)](config.md#Scripting)
+- [data (datapack `.json`s)](config.md#datapacks-and-jsons)
+- [configs (`.toml`)](config.md#config-toml-files)
+- [scripts (`.pmmo`)](config.md#scripting)
 
 ## Datapacks and JSONS
 Project MMO used to have a folder `config/pmmo/` that contained many json files that could be used to configure PMMO.  Many of the changes in the rework made that impractical and a move was made to shift everything into datapacks.  Below are links to the specific configuration page for each datapack-able element
