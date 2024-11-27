@@ -30,7 +30,11 @@ public record LocationData(
 		Map<String, Integer> travelReq,
 		List<MobModifier> globalMobModifiers,
 		Map<ResourceLocation, List<MobModifier>> mobModifiers) implements DataSource<LocationData>{
-	
+
+	public LocationData(boolean override) {
+		this(override, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+			new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new HashMap<>());
+	}
 	public LocationData() {this(
 			false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
 			new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new HashMap<>());}
