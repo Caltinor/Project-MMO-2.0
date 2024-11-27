@@ -2,7 +2,10 @@ package harmonised.pmmo.config.readers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
+import harmonised.pmmo.config.scripting.Scripting;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import org.apache.logging.log4j.LogManager;
@@ -84,10 +87,12 @@ public class CoreLoader {
 		case BIOME -> BIOME_LOADER;
 		default -> null;};
 	}
-	
-	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {
+
+	public ExecutableListener RELOADER;
+	public static final Consumer<RegistryAccess> RELOADER_FUNCTION = access -> {
 		Core.get(LogicalSide.SERVER).getLoader().resetData();
-	});
+		Scripting.readFiles(access);
+	};
 	
 	public void resetData() {
 		ITEM_LOADER.clearData();
