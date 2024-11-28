@@ -15,6 +15,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
 import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.Arrays;
@@ -38,7 +40,7 @@ import java.util.stream.Collectors;
 public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
     Map<ResourceLocation, ObjectData.Builder> data = new HashMap<>();
     public DefaultItemConfigProvider(PackOutput gen) {
-        super(gen, "easy", "pmmo/items", ObjectData.CODEC.codec());
+        super(gen, "default", "pmmo/items", ObjectData.CODEC.codec());
     }
 
     @Override
@@ -58,6 +60,27 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         get(Items.LAPIS_ORE).addTag("#c:ores/lapis").addXpValues(EventType.SMELT, Map.of("smithing", 100L));
         get(Items.NETHER_QUARTZ_ORE).addTag("#c:ores/quartz").addXpValues(EventType.SMELT, Map.of("smithing", 100L));
         get(Items.REDSTONE_ORE).addTag("#c:ores/redstone").addXpValues(EventType.SMELT, Map.of("smithing", 200L));
+
+        //BLOCK TOOLTIP PARITY SETTINGS
+        miningBreak(Blocks.COAL_ORE, 25L, Tags.Blocks.ORES_COAL);
+        miningBreak(Blocks.DEEPSLATE_COAL_ORE, 50L);
+        miningBreak(Blocks.COPPER_ORE, 30L, Tags.Blocks.ORES_COPPER);
+        miningBreak(Blocks.DEEPSLATE_COPPER_ORE, 60L);
+        miningBreak(Blocks.IRON_ORE, 150L, Tags.Blocks.ORES_IRON);
+        miningBreak(Blocks.DEEPSLATE_IRON_ORE, 300L);
+        miningBreak(Blocks.GOLD_ORE, 200L, Tags.Blocks.ORES_GOLD);
+        miningBreak(Blocks.DEEPSLATE_GOLD_ORE, 400L);
+        miningBreak(Blocks.NETHER_GOLD_ORE, 400L);
+        miningBreak(Blocks.REDSTONE_ORE, 150L, Tags.Blocks.ORES_REDSTONE);
+        miningBreak(Blocks.DEEPSLATE_REDSTONE_ORE, 300L);
+        miningBreak(Blocks.DIAMOND_ORE, 750L, Tags.Blocks.ORES_DIAMOND);
+        miningBreak(Blocks.DEEPSLATE_DIAMOND_ORE, 750L);
+        miningBreak(Blocks.EMERALD_ORE, 400L, Tags.Blocks.ORES_EMERALD);
+        miningBreak(Blocks.DEEPSLATE_EMERALD_ORE, 10000L);
+        miningBreak(Blocks.LAPIS_ORE, 50L, Tags.Blocks.ORES_LAPIS);
+        miningBreak(Blocks.DEEPSLATE_LAPIS_ORE, 100L);
+        miningBreak(Blocks.NETHER_QUARTZ_ORE, 100L, Tags.Blocks.ORES_QUARTZ);
+        miningBreak(Blocks.ANCIENT_DEBRIS, 1500L);
 
         //====FOOD============
         BuiltInRegistries.ITEM.stream()
@@ -659,9 +682,9 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addNBTReq(ReqType.TOOL, swordList.apply("farming"));
      }
 
-    protected void miningBreak(Block block, long amount, String...tags) {
-        var builder = get(block.asItem()).addXpValues(EventType.BLOCK_BREAK, Map.of("mining", amount));
-        for (String tag : tags) {builder.addTag(tag);}
+    protected void miningBreak(Block block, long amount, TagKey<Block>...tags) {
+        var tagStrings = Arrays.stream(tags).map(key -> "#"+key.location().toString()).toArray(String[]::new);
+        get(block.asItem()).addXpValues(EventType.BLOCK_BREAK, Map.of("mining", amount)).addTag(tagStrings);
     }
 
     protected LogicEntry.Criteria equalsCriteria(String skill, double value, ResourceLocation key) {
@@ -695,5 +718,5 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
     }
 
     @Override
-    public String getName() {return "Project MMO Easy Item Generator";}
+    public String getName() {return "Project MMO Default Item Generator";}
 }

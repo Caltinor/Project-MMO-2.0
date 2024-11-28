@@ -16,6 +16,7 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Items;
 
@@ -300,6 +301,11 @@ public record ObjectData(
 			}
 			public Builder addTag(String... id) {
 				this.tagValues.addAll(Arrays.asList(id));
+				return this;
+			}
+			public Builder addTag(TagKey<?>...id) {
+				var ids = Arrays.stream(id).map(key -> "#"+key.location()).toList();
+				this.tagValues.addAll(ids);
 				return this;
 			}
 			public Builder addReq(ReqType type, Map<String, Long> req) {
