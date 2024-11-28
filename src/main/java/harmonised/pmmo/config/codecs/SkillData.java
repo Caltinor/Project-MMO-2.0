@@ -14,6 +14,7 @@ public record SkillData (
 	Optional<Integer> color,
 	Optional<Boolean> afkExempt,
 	Optional<Boolean> displayGroupName,
+	Optional<Boolean> showInList,
 	Optional<Boolean> useTotalLevels,
 	Optional<Map<String, Double>> groupedSkills,
 	Optional<Long> maxLevel,
@@ -24,6 +25,7 @@ public record SkillData (
 			Codec.INT.optionalFieldOf("color").forGetter(SkillData::color),
 			Codec.BOOL.optionalFieldOf("noAfkPenalty").forGetter(SkillData::afkExempt),
 			Codec.BOOL.optionalFieldOf("displayGroupName").forGetter(SkillData::displayGroupName),
+			Codec.BOOL.optionalFieldOf("showInList").forGetter(SkillData::showInList),
 			Codec.BOOL.optionalFieldOf("useTotalLevels").forGetter(SkillData::useTotalLevels),
 			CodecTypes.DOUBLE_CODEC.optionalFieldOf("groupFor").forGetter(SkillData::groupedSkills),
 			Codec.LONG.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel),
@@ -34,6 +36,7 @@ public record SkillData (
 	public int getColor() { return color.orElse(16777215); }
 	public boolean getAfkExempt() { return afkExempt.orElse(false); }
 	public boolean getDisplayGroupName() { return displayGroupName.orElse(false); }
+	public boolean getShowInList() {return showInList.orElse(true);}
 	public boolean getUseTotalLevels() { return useTotalLevels.orElse(false); }
 	public long getMaxLevel() { return maxLevel.orElse(Config.server().levels().maxLevel()); }
 	public ResourceLocation getIcon() { return icon.orElse(Reference.rl("textures/skills/missing_icon.png")); }
@@ -101,7 +104,7 @@ public record SkillData (
 	public static class Builder {
 		int color, iconSize;
 		long maxLevel;
-		boolean afkExempt, displayName, useTotal;
+		boolean afkExempt, displayName, useTotal, showInList;
 		ResourceLocation icon;
 		Map<String, Double> groupOf;
 		
@@ -110,6 +113,7 @@ public record SkillData (
 			maxLevel = Integer.MAX_VALUE;
 			afkExempt = false;
 			displayName = false;
+			showInList = true;
 			useTotal = false;
 			icon = Reference.rl("textures/skills/missing_icon.png");
 			iconSize = 18;
@@ -120,6 +124,7 @@ public record SkillData (
 				Optional.of(16777215), 
 				Optional.of(false), 
 				Optional.of(false),
+				Optional.of(true),
 				Optional.of(false),
 				Optional.empty(), 
 				Optional.of(Config.server().levels().maxLevel()),
@@ -168,6 +173,7 @@ public record SkillData (
 				Optional.of(color),
 				Optional.of(afkExempt),
 				Optional.of(displayName),
+				Optional.of(showInList),
 				Optional.of(useTotal),
 				groupOf.isEmpty() ? Optional.empty() : Optional.of(groupOf),
 				Optional.of(maxLevel),

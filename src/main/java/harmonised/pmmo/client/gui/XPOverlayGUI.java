@@ -6,6 +6,7 @@ import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
@@ -68,6 +69,7 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 		if (ClientTickHandler.isRefreshTick()) {
 			modifiers = core.getConsolidatedModifierMap(mc.player);
 			List<String> skillsKeys = core.getData().getXpMap(null).keySet().stream()
+					.filter(a -> Config.skills().skills().getOrDefault(a, SkillData.Builder.getDefault()).getShowInList())
 					.sorted(Comparator.<String>comparingLong(a -> core.getData().getLevel(a, null)).reversed())
 					.toList();
 			var holderMap = lineRenderers;
