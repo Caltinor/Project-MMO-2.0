@@ -51,6 +51,10 @@ public record ObjectData(
 					new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY);
 		}
 
+		public void salvagePutAll(Map<ResourceLocation, SalvageData> map) {
+			salvage.putAll(map);
+		}
+
 		public Map<ResourceLocation, SalvageData> salvage() {
 			return salvage.entrySet().stream()
 					.filter(entry -> !ForgeRegistries.ITEMS.getValue(entry.getKey()).equals(Items.AIR))

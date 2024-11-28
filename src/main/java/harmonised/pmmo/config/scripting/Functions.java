@@ -115,7 +115,7 @@ public class Functions {
             int amplifier = Integer.parseInt(splitParam[1]);
             Map<ResourceLocation, Integer> current = new HashMap<>(data.getNegativeEffect());
             current.put(effectID, amplifier);
-            APIUtils.registerPositiveEffect(type, id, current, true);
+            APIUtils.registerNegativeEffect(type, id, current, true);
         });
         KEYWORDS.put("salvage", (param, id, type, value) -> {
             APIUtils.SalvageBuilder builder = APIUtils.SalvageBuilder.start();

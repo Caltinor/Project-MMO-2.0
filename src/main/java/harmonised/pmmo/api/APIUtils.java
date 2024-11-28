@@ -1,9 +1,11 @@
 package harmonised.pmmo.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -429,7 +431,7 @@ public class APIUtils {
 	 */
 	public static void registerSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage, boolean asOverride) {
 		ObjectData raw = new ObjectData(asOverride);
-		raw.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().build())));
+		raw.salvagePutAll(salvage.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().build())));
 		registerConfiguration(asOverride, ObjectType.ITEM, item, raw);
 	}
 	/**registers vein information for the specified block or item.  Items 
@@ -446,8 +448,9 @@ public class APIUtils {
 		if (oType != ObjectType.ITEM && oType != ObjectType.BLOCK)
 			return;
 		VeinData data = new VeinData(chargeCap, chargeRate, consumeAmount);
-		ObjectData raw = new ObjectData(asOverride);
-		raw.veinData().combine(data);
+		ObjectData raw = new ObjectData(asOverride, Set.of(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+				new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+				new HashMap<>(), data);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 
