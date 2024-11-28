@@ -48,7 +48,7 @@ public class AutoItem {
 
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
-		if (!type.itemApplicable) 
+		if (!type.itemApplicable || !AutoValueConfig.isReqEnabled(type))
 			return new HashMap<>();
 		
 		final Map<String, Integer> outMap = new HashMap<>();
@@ -126,7 +126,7 @@ public class AutoItem {
 	
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
-		if (!type.itemApplicable)
+		if (!type.itemApplicable || !AutoValueConfig.isXpGainEnabled(type))
 			return new HashMap<>();
 		
 		Map<String, Long> outMap = new HashMap<>();

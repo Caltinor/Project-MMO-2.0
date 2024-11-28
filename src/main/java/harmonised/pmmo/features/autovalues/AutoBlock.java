@@ -24,7 +24,7 @@ public class AutoBlock {
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation blockID) {
 
 		//exit early if the type is not valid for a block
-		if (!type.blockApplicable || isWorldSensitive(blockID))
+		if (!type.blockApplicable || isWorldSensitive(blockID) || !AutoValueConfig.isReqEnabled(type))
 			return new HashMap<>();
 		
 		Block block = ForgeRegistries.BLOCKS.getValue(blockID);
@@ -47,13 +47,13 @@ public class AutoBlock {
 	
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation blockID) {
 		//exit early if the type is not valid for a block
-		if (!type.blockApplicable || isWorldSensitive(blockID))
+		if (!type.blockApplicable || isWorldSensitive(blockID) || !AutoValueConfig.isXpGainEnabled(type))
 			return new HashMap<>();
 		
 		Block block = ForgeRegistries.BLOCKS.getValue(blockID);
 		Map<String, Long> outMap = new HashMap<>();
 		switch (type) {
-		case BLOCK_BREAK: case BLOCK_PLACE: {			
+		case BLOCK_BREAK: case BLOCK_PLACE: {
 			if (ForgeRegistries.BLOCKS.tags().getTag(Reference.CROPS).contains(block))
 				outMap.putAll(AutoValueConfig.getBlockXpAward(EventType.GROW));
 			else if (ForgeRegistries.BLOCKS.tags().getTag(Reference.MINABLE_AXE).contains(block))
