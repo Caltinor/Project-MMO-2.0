@@ -4,6 +4,7 @@ import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.readers.CoreLoader;
+import harmonised.pmmo.config.readers.ExecutableListener;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.autovalues.AutoValues;
@@ -43,7 +44,6 @@ public class CommonSetup {
 	
 	public static void init(final FMLCommonSetupEvent event) {
 		Networking.registerMessages();
-		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
 		
 		event.enqueueWork(() -> CriteriaTriggers.register(SkillUpTrigger.SKILL_UP));
@@ -78,7 +78,8 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(CoreLoader.RELOADER);
+		Core.get(LogicalSide.SERVER).getLoader().RELOADER = new ExecutableListener(event.getRegistryAccess(), CoreLoader.RELOADER_FUNCTION);
+		event.addListener(Core.get(LogicalSide.SERVER).getLoader().RELOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
@@ -87,6 +88,7 @@ public class CommonSetup {
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
+		Networking.registerDataSyncPackets();
 	}
 	
 	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {

@@ -1,8 +1,11 @@
 package harmonised.pmmo.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -10,7 +13,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.function.TriFunction;
+import harmonised.pmmo.config.codecs.*;
+import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.core.IDataStorage;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -21,13 +25,8 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.codecs.CodecTypes;
+import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
-import harmonised.pmmo.config.codecs.DataSource;
-import harmonised.pmmo.config.codecs.LocationData;
-import harmonised.pmmo.config.codecs.ObjectData;
-import harmonised.pmmo.config.codecs.PlayerData;
-import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -40,11 +39,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
+@SuppressWarnings("unused")
 public class APIUtils {
 	/* NOTES
 	 * 
@@ -54,33 +53,33 @@ public class APIUtils {
 	//===============CORE HOOKS======================================
 	/**get the player's current level in the skill provided
 	 * 
-	 * @param skill skill name.  Skills are case sensitive and usually all lowercase
+	 * @param skill skill name.  Skills are case-sensitive and usually all lowercase
 	 * @param player the player whose skills are being obtained.
 	 * @return the current skill level of the player
 	 */
 	public static int getLevel(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level).getData().getPlayerSkillLevel(skill, player.getUUID());
+		return Core.get(player.level()).getData().getPlayerSkillLevel(skill, player.getUUID());
 	}
 	
 	/**Sets the player's current level in the skill provided
 	 * 
-	 * @param skill skill's name.  skills are case sensitive and usually all lowercase
+	 * @param skill skill's name.  skills are case-sensitive and usually all lowercase
 	 * @param player the player whose skills are being set
 	 * @param level the new level being applied to the skill
 	 */
 	public static void setLevel(String skill, Player player, int level) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		Core.get(player.level).getData().setPlayerSkillLevel(skill, player.getUUID(), level);
+		Core.get(player.level()).getData().setPlayerSkillLevel(skill, player.getUUID(), level);
 	}
 	
 	/**changes the player's level in the specified skill by a specific amount.
 	 * providing a negative value in @{link levelChange} will reduce the player's
 	 * level.
 	 * 
-	 * @param skill skill name.  Skills are case sensitive and usually lowercase.
+	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose level is being changed
 	 * @param levelChange the number of levels being changed by.  negative values will reduce the player level.
 	 * @return true if the level was in fact changed.
@@ -88,37 +87,39 @@ public class APIUtils {
 	public static boolean addLevel(String skill, Player player, int levelChange) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level).getData().changePlayerSkillLevel(skill, player.getUUID(), levelChange);
+		return Core.get(player.level()).getData().changePlayerSkillLevel(skill, player.getUUID(), levelChange);
 	}
 	
 	/**Gets the raw xp value associated with the specified skill and player.
 	 * 
-	 * @param skill skill name.  Skills are case sensitive and usually lowercase.
+	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose experience is being sought.
 	 * @return the raw experience earned in the specified skill.
 	 */
 	public static long getXp(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level).getData().getXpRaw(player.getUUID(), skill);
+		return Core.get(player.level()).getData().getXpRaw(player.getUUID(), skill);
 	}
 	
 	/**Sets the raw XP value for the player in the skill specified.
 	 * 
-	 * @param skill skill name.  Skills are case sensitive and usually lowercase.
+	 * @param skill skill name.  Skills are case-sensitive and usually lowercase.
 	 * @param player the player whose skill is being set.
 	 * @param xpRaw the new experience amount to be set for this skill
 	 */
 	public static void setXp(String skill, Player player, long xpRaw) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		Core.get(player.level).getData().setXpRaw(player.getUUID(), skill, xpRaw);
+		Core.get(player.level()).getData().setXpRaw(player.getUUID(), skill, xpRaw);
 	}
 	
 	/**Changes the player's current experience in the specified skill by the amount.
 	 * Negative values will reduce current experience.
 	 * 
-	 * @param skill skill name. Skills are case sensitive and usually lowercase.
+	 * @param skill skill name. Skills are case-sensitive and usually lowercase. if a
+	 *              skill group is passed into this method, it will be parsed according
+	 *              to its component skills and the xp distributed accordingly.
 	 * @param player the player whose experience is being changed.
 	 * @param change the amount being changed by.  Negative values reduce experience.
 	 * @return true if the modification was successful.
@@ -126,7 +127,9 @@ public class APIUtils {
 	public static boolean addXp(String skill, Player player, long change) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level).getData().setXpDiff(player.getUUID(), skill, change);
+		IDataStorage data = Core.get(player.level()).getData();
+		return CoreUtils.processSkillGroupXP(Map.of(skill, change)).entrySet().stream()
+				.allMatch(entry -> data.setXpDiff(player.getUUID(), entry.getKey(), entry.getValue()));
 	}
 
 	/**Supplies the player's entire skill map with raw xp
@@ -136,7 +139,7 @@ public class APIUtils {
 	 * @return a map of skills and raw xp
 	 */
 	public static Map<String, Long> getRawXpMap(Player player) {
-		return Core.get(player.getLevel()).getData().getXpMap(player.getUUID());
+		return Core.get(player.level()).getData().getXpMap(player.getUUID());
 	}
 
 	/**Returns the player's entire skill map.
@@ -145,7 +148,7 @@ public class APIUtils {
 	 * @return a map of skills and levels
 	 */
 	public static Map<String, Integer> getAllLevels(Player player) {
-		IDataStorage data = Core.get(player.getLevel()).getData();
+		IDataStorage data = Core.get(player.level()).getData();
 		return getRawXpMap(player).entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> data.getLevelFromXP(e.getValue())));
 	}
@@ -212,7 +215,7 @@ public class APIUtils {
 	public static Map<String, Long> getXpAwardMap(Entity entity, EventType type, LogicalSide side, @Nullable Player player) {
 		Preconditions.checkNotNull(entity);
 		Preconditions.checkNotNull(type);
-		Preconditions.checkNotNull(side);;
+		Preconditions.checkNotNull(side);
 		return Core.get(side).getExperienceAwards(type, entity, player, new CompoundTag());
 	}
 	
@@ -254,12 +257,12 @@ public class APIUtils {
 		Preconditions.checkNotNull(item);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);
-		return Core.get(side).getReqMap(type, item);
+		return Core.get(side).getReqMap(type, item, true);
 	}
 	
 	/**Returns a skill-level map for the requirements of the block and the requirement type passed.
 	 * Note that registered block predicates do not have to conform to the level system in determining
-	 * whether an block action is permitted or not.  Because of this, a missing or inaccurate tooltip 
+	 * whether a block action is permitted or not.  Because of this, a missing or inaccurate tooltip
 	 * registration may not reflect the outcome of a predicate check during gameplay.
 	 * 
 	 * @param pos the location of the block or block entity being queried
@@ -276,7 +279,7 @@ public class APIUtils {
 	
 	/**Returns a skill-level map for the requirements of the entity and the requirement type passed.
 	 * Note that registered entity predicates do not have to conform to the level system in determining
-	 * whether an block action is permitted or not.  Because of this, a missing or inaccurate tooltip 
+	 * whether a block action is permitted or not.  Because of this, a missing or inaccurate tooltip
 	 * registration may not reflect the outcome of a predicate check during gameplay.
 	 * 
 	 * @param entity the entity being queried
@@ -321,11 +324,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerRequirement(ObjectType oType, ResourceLocation objectID, ReqType type, Map<String, Integer> requirements, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
-		default -> {}}
+		case BIOME, DIMENSION -> raw = new LocationData(asOverride);
+		case ITEM, BLOCK, ENTITY -> raw = new ObjectData(asOverride);
+		default -> {return;}}
 		raw.setReqs(type, requirements);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
@@ -338,13 +341,32 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerXpAward(ObjectType oType, ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM, BLOCK, ENTITY -> {raw = new ObjectData();}
-		default -> {}}
+		case BIOME, DIMENSION -> raw = new LocationData(asOverride);
+		case ITEM, BLOCK, ENTITY -> raw = new ObjectData(asOverride);
+		default -> {return;}}
 		raw.setXpValues(type, award);
 		registerConfiguration(asOverride, oType, objectID, raw);
+	}
+
+	/**Registers a configuration for an entity or item for damage dealt
+	 * and received xp events.  <i>Note: passing other object types into
+	 * this method will be ignored, and have no effect.</i>
+	 *
+	 * @param oType use only ITEM or ENTITY
+	 * @param objectID the key for the object being configured
+	 * @param isDealt is Dealt Damage config else if false will be received damage
+	 * @param damageType the id or tag string for damage type
+	 * @param award a map of skills and experience values to be awarded
+	 * @param asOverride should this apply after datapacks as an override
+	 */
+	public static void registerDamageXpAward(ObjectType oType, ResourceLocation objectID, boolean isDealt, String damageType, Map<String, Long> award, boolean asOverride) {
+		if (oType == ObjectType.ENTITY || oType == ObjectType.ITEM) {
+			ObjectData raw = new ObjectData(asOverride);
+			raw.damageXpValues().put(isDealt ? EventType.DEAL_DAMAGE : EventType.RECEIVE_DAMAGE, Map.of(damageType, award));
+			registerConfiguration(asOverride, oType, objectID, raw);
+		}
 	}
 	/**registers a configuration setting for bonuses to xp gains.
 	 * 
@@ -354,17 +376,17 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerBonus(ObjectType oType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM -> {raw = new ObjectData();}
-		case PLAYER -> {raw = new PlayerData();}
-		default -> {}}
+		case BIOME, DIMENSION -> raw = new LocationData(asOverride);
+		case ITEM -> raw = new ObjectData(asOverride);
+		case PLAYER -> raw = new PlayerData();
+		default -> {return;}}
 		raw.setBonuses(type, bonus);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 	/**registers a configuration setting for what status effects should be applied to the player
-	 * if they attempt to wear/hold/travel and they are not skilled enough to do so.
+	 * if they attempt to wear/hold/travel, and they are not skilled enough to do so.
 	 * 
 	 * @param oType the object type this effect is being stored on
 	 * @param objectID the key for the item being configured
@@ -372,11 +394,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerNegativeEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM -> {raw = new ObjectData();}
-		default -> {}}
+		case BIOME, DIMENSION -> raw = new LocationData(asOverride);
+		case ITEM -> raw = new ObjectData(asOverride);
+		default -> {return;}}
 		raw.setNegativeEffects(effects);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
@@ -390,11 +412,11 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerPositiveEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
-		DataSource<?> raw = null;
+		DataSource<?> raw;
 		switch (oType) {
-		case BIOME, DIMENSION -> {raw = new LocationData();}
-		case ITEM -> {raw = new ObjectData();}
-		default -> {}}
+		case BIOME, DIMENSION -> raw = new LocationData(asOverride);
+		case ITEM -> raw = new ObjectData(asOverride);
+		default -> {return;}}
 		raw.setPositiveEffects(effects);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
@@ -408,8 +430,8 @@ public class APIUtils {
 	 * @param asOverride should this apply after datapacks as an override
 	 */
 	public static void registerSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage, boolean asOverride) {
-		ObjectData raw = new ObjectData();
-		raw.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().build())));
+		ObjectData raw = new ObjectData(asOverride);
+		raw.salvagePutAll(salvage.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().build())));
 		registerConfiguration(asOverride, ObjectType.ITEM, item, raw);
 	}
 	/**registers vein information for the specified block or item.  Items 
@@ -426,14 +448,12 @@ public class APIUtils {
 		if (oType != ObjectType.ITEM && oType != ObjectType.BLOCK)
 			return;
 		VeinData data = new VeinData(chargeCap, chargeRate, consumeAmount);
-		ObjectData raw = new ObjectData();
-		raw.veinData().combine(data);
+		ObjectData raw = new ObjectData(asOverride, Set.of(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+				new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+				new HashMap<>(), data);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
-	
-	public static final String MOB_HEALTH = "health";
-	public static final String MOB_SPEED = "speed";
-	public static final String MOB_DAMAGE = "damage";
+
 	/**registers a configuration setting for mob modifiers to a biome or dimension.
 	 * 
 	 * <p>Attribute types for the inner map of mob_modifiers can be referenced
@@ -443,10 +463,10 @@ public class APIUtils {
 	 * @param mob_modifiers a map of mob keys with a value map of attribute types and values
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
+	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, List<MobModifier>> mob_modifiers, boolean asOverride) {
 		if (oType != ObjectType.BIOME && oType != ObjectType.DIMENSION) 
 			return;
-		LocationData raw = new LocationData();
+		LocationData raw = new LocationData(asOverride);
 		raw.mobModifiers().putAll(mob_modifiers);
 		registerConfiguration(asOverride, oType, locationID, raw);	
 	}
@@ -454,7 +474,9 @@ public class APIUtils {
 	/**<b>INTERNAL USE ONLY.</b> Utility method for registering custom configurations
 	 * 
 	 * @param asOverride should this apply after datapacks as an override
-	 * @param consumer execution for applying the configuration
+	 * @param objectID the unique id of data being registered
+	 * @param oType the type of data being registered
+	 * @param data a configuration object to be stored for the type provided
 	 */
 	private static void registerConfiguration(boolean asOverride, ObjectType oType, ResourceLocation objectID, DataSource<?> data) {
 		if (asOverride)
@@ -517,7 +539,7 @@ public class APIUtils {
 			this.salvageMax = max;
 			return this;
 		}
-		/**The default chance irregardless of skills that this
+		/**The default chance regardless of skills that this
 		 * salvage will be obtained.
 		 * <p>default = 0.0</p>
 		 * @param chance chance before skill based chances are added
@@ -547,7 +569,7 @@ public class APIUtils {
 	//===============REQ AND TOOLTIP REFERENCES======================
 	/** registers a predicate to be used in determining if a given player is permitted
 	 * to perform a particular action. [Except for break action.  see {@link APIUtils#registerBreakPredicate registerBreakPredicate}.
-	 * The ResouceLocation and ReqType parameters are 
+	 * The ResourceLocation and ReqType parameters are
 	 * conditions for when this check should be applied and are used by PMMO to know
 	 * which predicates apply in which contexts.
 	 * 
@@ -560,7 +582,7 @@ public class APIUtils {
 	}
 	
 	/** registers a predicate to be used in determining if a given player is permitted
-	 * to break a block.  The ResouceLocation and ReqType parameters are 
+	 * to break a block.  The ResourceLocation and ReqType parameters are
 	 * conditions for when this check should be applied and are used by PMMO to know
 	 * which predicates apply in which contexts.
 	 * 
@@ -574,7 +596,7 @@ public class APIUtils {
 	
 	/** registers a predicate to be used in determining if a given player is permitted
 	 * to perform a particular action related to an entity.
-	 * The ResouceLocation and ReqType parameters are 
+	 * The ResourceLocation and ReqType parameters are
 	 * conditions for when this check should be applied and are used by PMMO to know
 	 * which predicates apply in which contexts.
 	 * 
@@ -588,7 +610,7 @@ public class APIUtils {
 	
 	/**registers a Function to be used in providing the requirements for specific item
 	 * skill requirements. The map consists of skill name and skill value pairs.  
-	 * The ResouceLocation and ReqType parameters are conditions for when this check
+	 * The ResourceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.
 	 *  
@@ -602,7 +624,7 @@ public class APIUtils {
 	
 	/**registers a Function to be used in providing the requirements for specific block
 	 * skill requirements. The map consists of skill name and skill value pairs.  
-	 * The ResouceLocation and ReqType parameters are conditions for when this check
+	 * The ResourceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.
 	 *  
@@ -616,7 +638,7 @@ public class APIUtils {
 	
 	/**registers a Function to be used in providing the requirements for specific entity
 	 * skill requirements. The map consists of skill name and skill value pairs.  
-	 * The ResouceLocation and ReqType parameters are conditions for when this check
+	 * The ResourceLocation and ReqType parameters are conditions for when this check
 	 * should be applied and are used by PMMO to know which functions apply in which
 	 * contexts.
 	 *  
@@ -630,11 +652,11 @@ public class APIUtils {
 	
 	/**registers a Function to be used in providing the experience gains for specific item
 	 * and event. The map consists of skill name and experience value pairs.  
-	 * The ResouceLocation and EventType parameters are conditions for when the function 
+	 * The ResourceLocation and EventType parameters are conditions for when the function
 	 * should be applied.
 	 *  
 	 * @param res the item registrykey
-	 * @param reqType the event type
+	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
 	public static void registerItemXpGainTooltipData(ResourceLocation res, EventType eventType, Function<ItemStack, Map<String, Long>> func) {
@@ -643,11 +665,11 @@ public class APIUtils {
 	
 	/**registers a Function to be used in providing the experience gains for specific block
 	 * and event. The map consists of skill name and experience value pairs.  
-	 * The ResouceLocation and EventType parameters are conditions for when the function 
+	 * The ResourceLocation and EventType parameters are conditions for when the function
 	 * should be applied.
 	 *  
 	 * @param res the block registrykey
-	 * @param reqType the event type
+	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
 	public static void registerBlockXpGainTooltipData(ResourceLocation res, EventType eventType, Function<BlockEntity, Map<String, Long>> func) {
@@ -656,11 +678,11 @@ public class APIUtils {
 	
 	/**registers a Function to be used in providing the experience gains for specific entity
 	 * and event. The map consists of skill name and experience value pairs.  
-	 * The ResouceLocation and EventType parameters are conditions for when the function 
+	 * The ResourceLocation and EventType parameters are conditions for when the function
 	 * should be applied.
 	 *  
 	 * @param res the entity registrykey
-	 * @param reqType the event type
+	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
 	public static void registerEntityXpGainTooltipData(ResourceLocation res, EventType eventType, Function<Entity, Map<String, Long>> func) {
@@ -733,13 +755,18 @@ public class APIUtils {
 	public static final String CHANCE = "chance";
 	public static final String COOLDOWN = "cooldown";
 	public static final String DURATION = "duration";
-	
+
+	public static final String TARGET = "target";
+	public static final String ENTITY_ID = "entity_id";
 	public static final String BLOCK_POS = "block_pos";
 	public static final String SKILLNAME = "skill";
+	public static final String SKILL_LEVEL = "level";
 	
 	public static final String BREAK_SPEED_INPUT_VALUE = "speedIn";
 	public static final String BREAK_SPEED_OUTPUT_VALUE = "speed";
-	
+
+	public static final String DAMAGE_TYPE_IN = "for_damage";
+	public static final String DAMAGE_TYPE = "damage_type";
 	public static final String DAMAGE_IN = "damageIn";
 	public static final String DAMAGE_OUT ="damage";
 	
@@ -754,8 +781,13 @@ public class APIUtils {
 	
 	public static final String AMBIENT = "ambient";
 	public static final String VISIBLE = "visible";
+	public static final String SHOW_ICON = "show_icon";
 	
 	public static final String EFFECTS = "effects";
+	
+	public static final String MULTIPLICATIVE = "multiplicative";
+	public static final String BASE = "base";
+	public static final String CHANCE_SUCCESS_MSG = "chance_message";
 	
 	/**Called during common setup, this method is used to register custom perks
 	 * to PMMO so that players can use them in their configurations.  It is 
@@ -764,25 +796,21 @@ public class APIUtils {
 	 * reasonable triggers, and sidedness.
 	 * 
 	 * @param perkID a custom id for your perk that can be used in perks.json to reference this perk
-	 * @param propertyDefaults keys used by your perks and default values to supply if omitted
-	 * @param customConditions a predicate for checks outside the standard built in checks
-	 * @param onExecute the function executing the behavior of this perk when triggered
-	 * @param onConclude the function executing the behavior of this perk when expected to end
 	 * @param side the logical sides this perk should execute on.  Your implementation should factor in sidedness to avoid crashes.
 	 */
 	public static void registerPerk(
 			@NonNull ResourceLocation perkID,
-			@NonNull CompoundTag propertyDefaults,
-			@NonNull TriPredicate<Player, CompoundTag, Integer> customConditions,
-			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onExecute, 
-			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude,
+			@NonNull Perk perk,
 			@NonNull PerkSide side) {
-		if (side.equals(PerkSide.SERVER) || side.equals(PerkSide.BOTH)) {
-			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
-			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerProperties(perkID, propertyDefaults);
+		switch (side) {
+		case SERVER -> {
+			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, perk);
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerClientClone(perkID, perk);}
+		case CLIENT -> Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, perk);
+		case BOTH -> {
+			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, perk);
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, perk);}
 		}
-		if (side.equals(PerkSide.CLIENT) || side.equals(PerkSide.BOTH))
-			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
 	}	
 	
 	//===============UTILITY METHODS=================================
@@ -791,8 +819,8 @@ public class APIUtils {
 	public static final String SERIALIZED_AWARD_MAP = "serialized_award_map";
 	
 	/** Both Perks and Event Triggers can be used to provide custom XP award maps
-	 *  to events. When returning the {@link net.minecraft.nbt.CompoundTag CompoundTag} in  {@link onExecute} 
-	 *  and {@link onConclude}, use the key {@link APIUtils.SERIALIZED_AWARD_MAP SERIALIZED_AWARD_MAP} and use 
+	 *  to events. When returning the {@link net.minecraft.nbt.CompoundTag CompoundTag} in <code>onExecute</code>
+	 *  and <code>onConclude</code>, use the key {@link #SERIALIZED_AWARD_MAP} and use
 	 *  this method to convert your award map into a universally serializable
 	 *  object that PMMO can understand and utilize when processing rewards.
 	 * 
