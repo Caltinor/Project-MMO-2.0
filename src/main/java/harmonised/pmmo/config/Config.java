@@ -463,8 +463,8 @@ public class Config {
 	
 	private static void buildPartySettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("All settings governing party behavior").push("Party");
-			PARTY_RANGE = builder.comment("How close do party members have to be to share experience.")
-					.defineInRange("Party Range", 50, 0, Integer.MAX_VALUE);
+			PARTY_RANGE = builder.comment("How close do party members have to be to share experience. -1 = infinite same dimension, -2 = infinite all dimensions")
+					.defineInRange("Party Range", 50, -2, Integer.MAX_VALUE);
 			PARTY_BONUS = builder.comment("How much bonus xp should parties earn.",
 					"This value is multiplied by the party size.")
 					.defineInRange("Party Bonus", 1.05, 1.0, Double.MAX_VALUE);

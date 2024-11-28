@@ -26,7 +26,9 @@ public class PartyUtils {
 	public static List<ServerPlayer> getPartyMembersInRange(ServerPlayer player) {
 		List<ServerPlayer> inRange = new ArrayList<>();
 		for (ServerPlayer member : getPartyMembers(player)) {
-			if (player.position().distanceTo(member.position()) <= Config.PARTY_RANGE.get())
+			if (Config.PARTY_RANGE.get() == -2
+					|| (Config.PARTY_RANGE.get() == -1 && player.level().equals(member.level()))
+					|| player.position().distanceTo(member.position()) <= Config.PARTY_RANGE.get())
 				inRange.add(member);
 		}
 		return inRange;
