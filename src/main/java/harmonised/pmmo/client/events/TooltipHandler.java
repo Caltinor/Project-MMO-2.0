@@ -128,7 +128,7 @@ public class TooltipHandler {
 		if (stack.getItem() instanceof BlockItem) 
 			map = core.getCommonXpAwardData(new HashMap<>(), type, RegistryUtil.getId(stack), player, ObjectType.BLOCK, TagUtils.stackTag(stack));
 		CoreUtils.processSkillGroupXP(map);
-		return map;
+		return map.entrySet().stream().filter(entry -> entry.getValue() != 0).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 	
 	private static Map<String, Integer> getReqData(Core core, ReqType type, ItemStack stack) {		
