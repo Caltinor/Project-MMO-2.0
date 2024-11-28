@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.20.1-1.5.27] - 2024-11-28
+### Minor Version changes
+- Updated party xp ratio config property to have per-skill ratios
+
 ## [1.20.1-1.5.26] - 2024-11-28
 ### Minor version changes
 - Added Scripting Feature.  [See wiki for more details](https://github.com/Caltinor/Project-MMO-2.0/blob/1-20-1/wiki/configuration/scripting.md)
