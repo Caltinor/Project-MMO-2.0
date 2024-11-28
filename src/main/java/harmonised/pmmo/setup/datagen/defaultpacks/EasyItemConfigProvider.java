@@ -183,7 +183,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE,
                 Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE,
                 Items.NETHERITE_PICKAXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_AXE, Items.NETHERITE_HOE),
-                builder -> builder.addSalvage(RegistryUtil.getId(Items.STICK), APIUtils.SalvageBuilder.start()
+                builder -> builder.addSalvage(getId(Items.STICK), APIUtils.SalvageBuilder.start()
                         .setBaseChance(0.8)
                         .setChancePerLevel(Map.of("crafting", 0.005, "smithing", 0.005))
                         .setSalvageMax(2)
@@ -233,7 +233,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
     }
 
     protected ObjectData.Builder get(Item item) {
-        return data.computeIfAbsent(RegistryUtil.getId(item), i -> ObjectData.build());
+        return data.computeIfAbsent(getId(item), i -> ObjectData.build());
     }
     
     protected void doFor(List<Item> items, Consumer<ObjectData.Builder> process) {
@@ -241,7 +241,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
     }
 
     protected void recoverTool(Item tool, Item material, int count, long xp, double skillChance) {
-        get(tool).addSalvage(RegistryUtil.getId(material), APIUtils.SalvageBuilder.start()
+        get(tool).addSalvage(getId(material), APIUtils.SalvageBuilder.start()
                 .setBaseChance(0.8)
                 .setChancePerLevel(Map.of("crafting", skillChance, "smithing", skillChance))
                 .setSalvageMax(count)

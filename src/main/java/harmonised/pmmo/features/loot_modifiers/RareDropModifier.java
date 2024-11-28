@@ -27,7 +27,7 @@ import java.util.Optional;
 public class RareDropModifier extends LootModifier{
 	
 	public static final MapCodec<RareDropModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(instance.group(
-			ResourceLocation.CODEC.fieldOf("item").forGetter(tlm -> RegistryUtil.getId(tlm.drop)),
+			ItemStack.CODEC.fieldOf("item").forGetter(tlm -> tlm.drop),
 			Codec.INT.fieldOf("count").forGetter(tlm -> tlm.drop.getCount()),
 			Codec.DOUBLE.fieldOf("chance").forGetter(tlm -> tlm.chance),
 			Codec.BOOL.optionalFieldOf("per_level").forGetter(tlm -> Optional.of(tlm.perLevel)),
@@ -39,14 +39,14 @@ public class RareDropModifier extends LootModifier{
 	public boolean perLevel;
 	public String skill;
 
-	public RareDropModifier(LootItemCondition[] conditionsIn, ResourceLocation lootItemID, int count, double chance) {
-		this(conditionsIn, lootItemID, count, chance, Optional.of(false), Optional.empty());
+	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStack lootItem, int count, double chance) {
+		this(conditionsIn, lootItem, count, chance, Optional.of(false), Optional.empty());
 	}
-	public RareDropModifier(LootItemCondition[] conditionsIn, ResourceLocation lootItemID, int count, double chance,
+	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStack lootItem, int count, double chance,
 							Optional<Boolean> perLevel, Optional<String> skill) {
 		super(conditionsIn);
 		this.chance = chance;
-		this.drop = new ItemStack(BuiltInRegistries.ITEM.get(lootItemID));
+		this.drop = lootItem;
 		this.drop.setCount(count);
 		this.perLevel = perLevel.orElse(false);
 		this.skill = skill.orElse("");

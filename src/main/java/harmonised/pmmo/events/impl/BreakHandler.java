@@ -63,7 +63,7 @@ public class BreakHandler {
 		if (core.getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			Item tool = event.getPlayer().getMainHandItem().getItem();
-			if (!Config.server().veinMiner().blacklist().contains(RegistryUtil.getId(tool))) {
+			if (!Config.server().veinMiner().blacklist().contains(RegistryUtil.getId(event.getLevel().registryAccess(), tool))) {
 				VeinMiningLogic.applyVein((ServerPlayer) event.getPlayer(), event.getPos());
 			}
 		}

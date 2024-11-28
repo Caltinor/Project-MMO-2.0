@@ -12,8 +12,12 @@ import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.QuadFunction;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -171,7 +176,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                     .addReq(ReqType.WEAR, Map.of("endurance", 30L))
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 1)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 1)
-                    .addSalvage(RegistryUtil.getId(Items.IRON_INGOT), APIUtils.SalvageBuilder.start()
+                    .addSalvage(getId(Items.IRON_INGOT), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
                             .setMaxChance(0.9)
                             .setChancePerLevel(Map.of("smithing", 0.005))
@@ -186,7 +191,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                     .addReq(ReqType.WEAR, Map.of("endurance", 60L))
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 2)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 2)
-                    .addSalvage(RegistryUtil.getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
+                    .addSalvage(getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
                             .setMaxChance(0.9)
                             .setChancePerLevel(Map.of("smithing", 0.005))
@@ -202,7 +207,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                     .addBonus(ModifierDataType.WORN, Map.of("mining", 1.25))
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 1)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 1)
-                    .addSalvage(RegistryUtil.getId(Items.GOLD_INGOT), APIUtils.SalvageBuilder.start()
+                    .addSalvage(getId(Items.GOLD_INGOT), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
                             .setMaxChance(0.9)
                             .setChancePerLevel(Map.of("smithing", 0.005))
@@ -217,7 +222,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                     .addReq(ReqType.WEAR, Map.of("endurance", 30L))
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 1)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 1)
-                    .addSalvage(RegistryUtil.getId(Items.IRON_INGOT), APIUtils.SalvageBuilder.start()
+                    .addSalvage(getId(Items.IRON_INGOT), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
                             .setMaxChance(0.9)
                             .setChancePerLevel(Map.of("smithing", 0.005))
@@ -232,13 +237,13 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                     .addReq(ReqType.WEAR, Map.of("endurance", 90L))
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 3)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 3)
-                    .addSalvage(RegistryUtil.getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
+                    .addSalvage(getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
                             .setMaxChance(0.9)
                             .setChancePerLevel(Map.of("smithing", 0.005))
                             .setLevelReq(Map.of("smithing", 5L))
                             .setXpAward(Map.of("smithing", 30L)).build())
-                    .addSalvage(RegistryUtil.getId(Items.NETHERITE_INGOT), APIUtils.SalvageBuilder.start()
+                    .addSalvage(getId(Items.NETHERITE_INGOT), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(1)
                             .setMaxChance(0.3)
                             .setChancePerLevel(Map.of("smithing", 0.0005))
@@ -338,7 +343,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                         Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE,
                         Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE,
                         Items.NETHERITE_PICKAXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_AXE, Items.NETHERITE_HOE),
-                builder -> builder.addSalvage(RegistryUtil.getId(Items.STICK), APIUtils.SalvageBuilder.start()
+                builder -> builder.addSalvage(getId(Items.STICK), APIUtils.SalvageBuilder.start()
                         .setBaseChance(0.8)
                         .setChancePerLevel(Map.of("crafting", 0.005, "smithing", 0.005))
                         .setSalvageMax(2)
@@ -380,7 +385,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         //CONSTRUCTION WAND DEFAULTS
         get("constructionwand:core_angel").setOverride(true)
                 .addXpValues(EventType.CRAFT, Map.of("crafting",2000L,"smithing",300L))
-                .addSalvage(RegistryUtil.getId(Items.GOLD_INGOT), APIUtils.SalvageBuilder.start()
+                .addSalvage(getId(Items.GOLD_INGOT), APIUtils.SalvageBuilder.start()
                         .setSalvageMax(2)
                         .setMaxChance(0.9)
                         .setChancePerLevel(Map.of("smithing",0.005))
@@ -388,13 +393,13 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                         .setXpAward(Map.of("smithing",30L)).build());
         get("constructionwand:core_destruction").setOverride(true)
                 .addXpValues(EventType.CRAFT, Map.of("crafting",10000L,"smithing",7000L))
-                .addSalvage(RegistryUtil.getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
+                .addSalvage(getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
                         .setSalvageMax(6)
                         .setMaxChance(0.9)
                         .setChancePerLevel(Map.of("smithing",0.005))
                         .setLevelReq(Map.of("smithing",5L))
                         .setXpAward(Map.of("smithing",30L)).build())
-                .addSalvage(RegistryUtil.getId(Items.DIAMOND_BLOCK), APIUtils.SalvageBuilder.start()
+                .addSalvage(getId(Items.DIAMOND_BLOCK), APIUtils.SalvageBuilder.start()
                         .setMaxChance(0.9)
                         .setChancePerLevel(Map.of("smithing",0.005))
                         .setLevelReq(Map.of("smithing",5L))
@@ -412,12 +417,12 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addReq(ReqType.INTERACT, Map.of("building", 30L))
                 .addReq(ReqType.USE, Map.of("building", 30L))
                 .addBonus(ModifierDataType.HELD, Map.of("bulding", 1.1))
-                .addSalvage(RegistryUtil.getId(Items.IRON_INGOT), APIUtils.SalvageBuilder.start()
+                .addSalvage(getId(Items.IRON_INGOT), APIUtils.SalvageBuilder.start()
                         .setMaxChance(0.9)
                         .setLevelReq(Map.of("smithing", 5L))
                         .setChancePerLevel(Map.of("smithing",0.005))
                         .setXpAward(Map.of("smithing",30L)).build())
-                .addSalvage(RegistryUtil.getId(Items.STICK), stick);
+                .addSalvage(getId(Items.STICK), stick);
         get("constructionwand:diamond_wand").setOverride(true)
                 .addXpValues(EventType.ANVIL_REPAIR, Map.of("smithing", 4000L))
                 .addXpValues(EventType.CRAFT, Map.of("crafting", 4000L, "smithing", 700L))
@@ -426,12 +431,12 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addReq(ReqType.INTERACT, Map.of("building", 60L))
                 .addReq(ReqType.USE, Map.of("building", 60L))
                 .addBonus(ModifierDataType.HELD, Map.of("bulding", 1.5))
-                .addSalvage(RegistryUtil.getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
+                .addSalvage(getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
                         .setMaxChance(0.9)
                         .setLevelReq(Map.of("smithing", 5L))
                         .setChancePerLevel(Map.of("smithing",0.005))
                         .setXpAward(Map.of("smithing",30L)).build())
-                .addSalvage(RegistryUtil.getId(Items.STICK), stick);
+                .addSalvage(getId(Items.STICK), stick);
         get("constructionwand:infinity_wand").setOverride(true)
                 .addXpValues(EventType.ANVIL_REPAIR, Map.of("smithing", 7000L))
                 .addXpValues(EventType.CRAFT, Map.of("crafting", 7000L, "smithing", 1000L))
@@ -440,12 +445,12 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addReq(ReqType.INTERACT, Map.of("building", 90L))
                 .addReq(ReqType.USE, Map.of("building", 90L))
                 .addBonus(ModifierDataType.HELD, Map.of("bulding", 2.0))
-                .addSalvage(RegistryUtil.getId(Items.NETHER_STAR), APIUtils.SalvageBuilder.start()
+                .addSalvage(getId(Items.NETHER_STAR), APIUtils.SalvageBuilder.start()
                         .setMaxChance(0.9)
                         .setLevelReq(Map.of("smithing", 10L))
                         .setChancePerLevel(Map.of("smithing",0.002))
                         .setXpAward(Map.of("smithing",30L)).build())
-                .addSalvage(RegistryUtil.getId(Items.STICK), stick);
+                .addSalvage(getId(Items.STICK), stick);
 
         //GOBLINS AND DUNGEONS DEFAULTS
         doForRaw(List.of(
@@ -692,7 +697,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
     }
 
     protected ObjectData.Builder get(Item item) {
-        return data.computeIfAbsent(RegistryUtil.getId(item), i -> ObjectData.build());
+        return data.computeIfAbsent(getId(item), i -> ObjectData.build());
     }
     protected ObjectData.Builder get(String id) {
         return data.computeIfAbsent(Reference.of(id), i -> ObjectData.build());
@@ -706,7 +711,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
     }
 
     protected void recoverTool(Item tool, Item material, int count, long xp, double skillChance) {
-        get(tool).addSalvage(RegistryUtil.getId(material), APIUtils.SalvageBuilder.start()
+        get(tool).addSalvage(getId(material), APIUtils.SalvageBuilder.start()
                 .setBaseChance(0.8)
                 .setChancePerLevel(Map.of("crafting", skillChance, "smithing", skillChance))
                 .setSalvageMax(count)

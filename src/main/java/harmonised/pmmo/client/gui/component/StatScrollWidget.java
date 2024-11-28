@@ -333,7 +333,7 @@ public class StatScrollWidget extends ScrollPanel {
 			addEventSection((event -> {
 				Map<String, Long> map = core.getExperienceAwards(event, stack, mc.player, new CompoundTag());
 				if (stack.getItem() instanceof BlockItem)
-					map = core.getCommonXpAwardData(new HashMap<>(), event, RegistryUtil.getId(stack), mc.player, ObjectType.BLOCK, TagUtils.stackTag(stack, mc.level));
+					map = core.getCommonXpAwardData(new HashMap<>(), event, RegistryUtil.getId(mc.level.registryAccess(), stack), mc.player, ObjectType.BLOCK, TagUtils.stackTag(stack, mc.level));
 				return map;
 				}), events, skillFilter);
 			addReqSection((reqType -> {
@@ -341,19 +341,19 @@ public class StatScrollWidget extends ScrollPanel {
 				if (reqType == ReqType.USE_ENCHANTMENT)
 					core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
 				if (stack.getItem() instanceof BlockItem)
-					reqMap.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), reqType, TagUtils.stackTag(stack, mc.level)));
+					reqMap.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(mc.level.registryAccess(), stack), reqType, TagUtils.stackTag(stack, mc.level)));
 				return reqMap;
 				}),	
-				CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect(), true), 
+				CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(mc.level.registryAccess(), stack)).getNegativeEffect(), true),
 				reqs, skillFilter);
-			addModifierSection((mod -> core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(stack), mod) ?
-						core.getTooltipRegistry().getBonusTooltipData(RegistryUtil.getId(stack), mod, stack) :
-						core.getObjectModifierMap(ObjectType.ITEM, RegistryUtil.getId(stack), mod, TagUtils.stackTag(stack, mc.level))
+			addModifierSection((mod -> core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(mc.level.registryAccess(), stack), mod) ?
+						core.getTooltipRegistry().getBonusTooltipData(RegistryUtil.getId(mc.level.registryAccess(), stack), mod, stack) :
+						core.getObjectModifierMap(ObjectType.ITEM, RegistryUtil.getId(mc.level.registryAccess(), stack), mod, TagUtils.stackTag(stack, mc.level))
 				), modifiers, skillFilter);
 			if (includeSalvage)
-				addSalvageSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).salvage());
+				addSalvageSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(mc.level.registryAccess(), stack)).salvage());
 			if (includeVein)
-				addItemVeinSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData(), stack.getItem() instanceof BlockItem);
+				addItemVeinSection(core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(mc.level.registryAccess(), stack)).veinData(), stack.getItem() instanceof BlockItem);
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		}

@@ -138,7 +138,7 @@ public class Core {
 	 */
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
 		if (players.size() > 1)
-			xpValues.replaceAll((skill, value) -> Double.valueOf((double)value * Config.server().party().bonus()).longValue());
+			xpValues.replaceAll((skill, value) -> Double.valueOf((double)value * Config.server().party().bonus().getOrDefault(skill, 1.0)).longValue());
 		CoreUtils.processSkillGroupXP(xpValues);
 
 		new HashMap<>(xpValues).forEach((skill, value) -> {
@@ -149,7 +149,7 @@ public class Core {
 			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
 				long xpAward = award.getValue();
 				if (players.size() > 1)
-					xpAward = Double.valueOf((double)xpAward * (Config.server().party().bonus() * (double)players.size())).longValue();
+					xpAward = Double.valueOf((double)xpAward * (Config.server().party().bonus().getOrDefault(award.getKey(), 1.0) * (double)players.size())).longValue();
 				getData().addXp(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
 			}
 		}
@@ -157,7 +157,7 @@ public class Core {
 
 	//======DATA OBTAINING METHODS======
 	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
-		ResourceLocation itemID = RegistryUtil.getId(stack);
+		ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 		dataIn.merge(TagUtils.stackTag(stack, player.level()));
   
 		Map<String, Long> xpGains = tooltips.xpGainTooltipExists(itemID, type)
@@ -258,7 +258,7 @@ public class Core {
 		Map<String, Double> modifiers = new HashMap<>();
 		//HELD Modification
 		for (ItemStack stack : List.of(player.getOffhandItem(), player.getMainHandItem())) {
-			ResourceLocation itemID = RegistryUtil.getId(stack);
+			ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 			modifiers = tooltips.bonusTooltipExists(itemID, ModifierDataType.HELD) 
 					? tooltips.getBonusTooltipData(itemID, ModifierDataType.HELD, stack) 
 					: getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack, player.level()));
@@ -271,7 +271,7 @@ public class Core {
 		List<ItemStack> wornItems = new ArrayList<>();
 		player.getArmorSlots().forEach(wornItems::add);
 		wornItems.forEach((stack) -> {
-			ResourceLocation itemID = RegistryUtil.getId(stack);
+			ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?
 					tooltips.getBonusTooltipData(itemID, ModifierDataType.WORN, stack):
 					getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN, TagUtils.stackTag(stack ,player.level()));
@@ -296,7 +296,7 @@ public class Core {
 		if (player instanceof FakePlayer
 			|| !Config.server().requirements().isEnabled(type)
 			|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
-		ResourceLocation itemID = RegistryUtil.getId(stack.getItem());
+		ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 		
 		return (predicates.predicateExists(itemID, type)) 
 			? predicates.checkPredicateReq(player, stack, type)
@@ -364,7 +364,7 @@ public class Core {
 		return new HashMap<>(data != null ? data.getReqs(reqType, nbt) : new HashMap<>()); 
 	}
 	public Map<String, Long> getReqMap(ReqType reqType, ItemStack stack, Level level, boolean ignoreEnchants) {
-		ResourceLocation itemID = RegistryUtil.getId(stack);
+		ResourceLocation itemID = RegistryUtil.getId(level.registryAccess(), stack);
 		Map<String, Long> reqMap = ignoreEnchants ? new HashMap<>() : getEnchantReqs(stack);
 		if (tooltips.requirementTooltipExists(itemID, reqType)) 
 			tooltips.getItemRequirementTooltipData(itemID, reqType, stack).forEach((skill, lvl) -> {
@@ -440,13 +440,13 @@ public class Core {
 					: ItemStack.EMPTY ;
 		if (salvageItem == ItemStack.EMPTY || salvageItem.is(Items.AIR))
 			return;
-		if (!loader.ITEM_LOADER.getData().containsKey(RegistryUtil.getId(salvageItem))) return;
+		if (!loader.ITEM_LOADER.getData().containsKey(RegistryUtil.getId(player.level().registryAccess(), salvageItem))) return;
 		Map<String, Experience> playerXp = getData().getXpMap(player.getUUID());
 		
 		Map<String, Long> xpAwards = new HashMap<>();
 		boolean validAttempt = false;
 		entry:
-		for (Map.Entry<ResourceLocation, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(salvageItem)).salvage().entrySet()) {
+		for (Map.Entry<ResourceLocation, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(player.level().registryAccess(), salvageItem)).salvage().entrySet()) {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met. 
 			for (Map.Entry<String, Long> skill : result.getValue().levelReq().entrySet()) {

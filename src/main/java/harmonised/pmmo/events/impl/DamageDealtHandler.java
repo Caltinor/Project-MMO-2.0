@@ -83,13 +83,13 @@ public class DamageDealtHandler {
 			if (target.equals(player)) return;
 			
 			Core core = Core.get(player.level());
-			String damageType = RegistryUtil.getId(source).toString();
+			String damageType = RegistryUtil.getId(player.level().registryAccess(), Registries.DAMAGE_TYPE, source.type()).toString();
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+source.getMsgId());
 			//Process perks
 			CompoundTag dataIn = TagBuilder.start()
 					.withFloat(APIUtils.DAMAGE_IN, container.getNewDamage())
 					.withFloat(APIUtils.DAMAGE_OUT, container.getNewDamage())
-					.withString(APIUtils.DAMAGE_TYPE, RegistryUtil.getId(source).toString()).build();
+					.withString(APIUtils.DAMAGE_TYPE, damageType).build();
 			CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.DEAL_DAMAGE, player, dataIn);
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Pre-Perk Damage:"+container.getNewDamage());
 			if (perkOutput.contains(APIUtils.DAMAGE_OUT)) {
@@ -135,7 +135,7 @@ public class DamageDealtHandler {
 					return tag.map(type -> type.contains(source.typeHolder())).orElse(false);
 				}).toList();
 		Map<String, Long> tagXp = tags.stream().map(str -> config.get(str)).reduce((mapA, mapB) -> Functions.mergeMaps(mapA, mapB)).orElse(new HashMap<>());
-		Functions.mergeMaps(config.getOrDefault(RegistryUtil.getId(source).toString(), new HashMap<>()), tagXp)
+		Functions.mergeMaps(config.getOrDefault(RegistryUtil.getId(player.level().registryAccess(), Registries.DAMAGE_TYPE, source.type()).toString(), new HashMap<>()), tagXp)
 				.forEach((skill, xp) -> mapOut.putIfAbsent(skill, (long)(xp.floatValue() * ultimateDamage)));
 		CoreUtils.applyXpModifiers(mapOut, core.getConsolidatedModifierMap(player));
 		return mapOut;

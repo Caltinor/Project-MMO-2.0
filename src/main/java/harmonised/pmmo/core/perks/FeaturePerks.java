@@ -292,11 +292,11 @@ public class FeaturePerks {
 				});
 				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
 				boolean weaponMatch = type.isEmpty() || type.stream().anyMatch(key -> {
-					if (key.startsWith("#") && RegistryUtil.isInTag(player.level().registryAccess(), Registries.ITEM, RegistryUtil.getId(player.getMainHandItem()), key.substring(1)))
+					if (key.startsWith("#") && RegistryUtil.isInTag(player.level().registryAccess(), Registries.ITEM, RegistryUtil.getId(player.level().registryAccess(), player.getMainHandItem()), key.substring(1)))
 						return true;
 					else if (key.endsWith(":*") && BuiltInRegistries.ITEM.stream().anyMatch(item -> player.getMainHandItem().getItem().equals(item)))
 						return true;
-					else return key.equals(RegistryUtil.getId(player.getMainHandItem()).toString());
+					else return key.equals(RegistryUtil.getId(player.level().registryAccess(), player.getMainHandItem()).toString());
 				});
 				return weaponMatch && damageMatch;
 			})

@@ -21,6 +21,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -64,7 +66,7 @@ public abstract class GLMProvider implements DataProvider {
 				new LootItemCondition[] {
 					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
 					new ValidBlockCondition(validBlocks)
-				}, RegistryUtil.getId(drop), count, chance);
+				}, Optional.of(drop.getDefaultInstance()), count, chance);
 	}
 
 	public TreasureLootModifier of(Block validBlocks, Item drop, int count, double chance, String skill, int minLevel) {
@@ -72,7 +74,7 @@ public abstract class GLMProvider implements DataProvider {
 				new LootItemCondition[] {
 					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
 					new ValidBlockCondition(validBlocks)
-				}, RegistryUtil.getId(drop), count, chance);
+				}, Optional.of(drop.getDefaultInstance()), count, chance);
 	}
 
 	/**Used to specify that a tag member should drop extra of itself.
@@ -91,7 +93,7 @@ public abstract class GLMProvider implements DataProvider {
 				new LootItemCondition[] {
 					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
 					new ValidBlockCondition(validBlocks)
-				}, RegistryUtil.getId(Blocks.AIR), count, chance);
+				}, Optional.empty(), count, chance);
 	}
 
 	public RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel, int maxLevel) {
@@ -99,7 +101,7 @@ public abstract class GLMProvider implements DataProvider {
 				new LootItemCondition[] {
 						LootTableIdCondition.builder(BuiltInLootTables.FISHING.location()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
-				}, RegistryUtil.getId(drop), count, chance);
+				}, drop.getDefaultInstance(), count, chance);
 	}
 
 	public RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel) {
@@ -112,7 +114,7 @@ public abstract class GLMProvider implements DataProvider {
 						LootItemKilledByPlayerCondition.killedByPlayer().build(),
 						LootTableIdCondition.builder(mob.getDefaultLootTable().location()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
-				}, RegistryUtil.getId(drop), count, chance);
+				}, drop.getDefaultInstance(), count, chance);
 	}
 	
 	public RareDropModifier mob(EntityType<?> mob, Item drop, int count, double chance, String skill, int minLevel) {

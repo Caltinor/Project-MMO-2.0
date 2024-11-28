@@ -36,7 +36,7 @@ public class DamageReceivedHandler {
 			if (player.equals(source.getEntity())) return;
 
 			Core core = Core.get(player.level());
-			String damageType = RegistryUtil.getId(source).toString();
+			String damageType = RegistryUtil.getId(player.level().registryAccess(), Registries.DAMAGE_TYPE, source.type()).toString();
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+source.getMsgId());
 			
 			boolean serverSide = !player.level().isClientSide;
@@ -84,7 +84,7 @@ public class DamageReceivedHandler {
 					return tag.map(type -> type.contains(source.typeHolder())).orElse(false);
 				}).toList();
 		Map<String, Long> tagXp = tags.stream().map(str -> config.get(str)).reduce((mapA, mapB) -> Functions.mergeMaps(mapA, mapB)).orElse(new HashMap<>());
-		Functions.mergeMaps(config.getOrDefault(RegistryUtil.getId(source).toString(), new HashMap<>()), tagXp)
+		Functions.mergeMaps(config.getOrDefault(RegistryUtil.getId(player.level().registryAccess(), Registries.DAMAGE_TYPE ,source.type()).toString(), new HashMap<>()), tagXp)
 				.forEach((skill, xp) -> mapOut.putIfAbsent(skill, (long)(xp.floatValue() * ultimateDamage)));
 		CoreUtils.applyXpModifiers(mapOut, core.getConsolidatedModifierMap(player));
 		return mapOut;

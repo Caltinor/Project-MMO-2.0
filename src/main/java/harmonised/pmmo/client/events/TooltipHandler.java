@@ -53,7 +53,7 @@ public class TooltipHandler {
         	Core core = Core.get(LogicalSide.CLIENT);
             ItemStack stack = event.getItemStack();
 			boolean isBlockItem = stack.getItem() instanceof BlockItem;
-			ResourceLocation itemID = RegistryUtil.getId(stack);
+			ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 
             if(itemID == null)
                 return;
@@ -124,7 +124,7 @@ public class TooltipHandler {
 	private static Map<String, Long> getXpData(Core core, EventType type, Player player, ItemStack stack) {
 		Map<String, Long> map = core.getExperienceAwards(type, stack, player, new CompoundTag());
 		if (stack.getItem() instanceof BlockItem) 
-			map = core.getCommonXpAwardData(new HashMap<>(), type, RegistryUtil.getId(stack), player, ObjectType.BLOCK, TagUtils.stackTag(stack, player.level()));
+			map = core.getCommonXpAwardData(new HashMap<>(), type, RegistryUtil.getId(player.level().registryAccess(), stack), player, ObjectType.BLOCK, TagUtils.stackTag(stack, player.level()));
 		CoreUtils.processSkillGroupXP(map);
 		return map;
 	}
@@ -140,7 +140,7 @@ public class TooltipHandler {
 				: core.getReqMap(type, stack, player.level(), true);
 		
 		if (stack.getItem() instanceof BlockItem)
-			map.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(stack), type, TagUtils.stackTag(stack, player.level())));
+			map.putAll(core.getCommonReqData(new HashMap<>(), ObjectType.BLOCK, RegistryUtil.getId(player.level().registryAccess(), stack), type, TagUtils.stackTag(stack, player.level())));
 		
 		//splits skill groups that aren't using total levels
 		CoreUtils.processSkillGroupReqs(map);

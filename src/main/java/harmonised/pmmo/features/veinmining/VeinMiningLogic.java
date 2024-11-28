@@ -73,7 +73,7 @@ public class VeinMiningLogic {
 		double chargeRate = Config.server().veinMiner().baseChargeRate();
 		for (ItemStack stack : items) {
 			if (!core.isActionPermitted(ReqType.WEAR, stack, player)) continue;
-			VeinData data = core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData();
+			VeinData data = core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(player.level().registryAccess(), stack)).veinData();
 			chargeCap += data.chargeCap.orElse(0);
 			chargeRate += data.chargeRate.orElse(0d);
 		}
@@ -106,7 +106,7 @@ public class VeinMiningLogic {
 		//================================
 		int totalCapacity = Config.server().veinMiner().baseVeinCapacity() + items.stream()
 				.filter(stack -> Core.get(player.level()).isActionPermitted(ReqType.WEAR, stack, player))
-				.mapToInt(stack -> Core.get(player.level()).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0))
+				.mapToInt(stack -> Core.get(player.level()).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(player.level().registryAccess(), stack)).veinData().chargeCap.orElse(0))
 				.sum();
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
 		return totalCapacity; 

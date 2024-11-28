@@ -4,6 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -21,13 +22,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class RegistryUtil {
-	public static ResourceLocation getId(ItemStack stack) {
-		return getId(stack.getItem());
+	public static ResourceLocation getId(RegistryAccess access, ItemStack stack) {
+		return getId(access, stack.getItem());
 	}
 
-	public static ResourceLocation getId(Item item) {
-		return BuiltInRegistries.ITEM.getKey(item);
-	}
+	public static ResourceLocation getId(RegistryAccess access, Item item) {return getId(access, Registries.ITEM, item);}
 
 	public static ResourceLocation getId(BlockState blockState) {
 		return getId(blockState.getBlock());
@@ -57,7 +56,9 @@ public class RegistryUtil {
 		return BuiltInRegistries.MOB_EFFECT.getKey(effect);
 	}
 
-	public static ResourceLocation getId(DamageSource source) {return source.typeHolder().unwrapKey().get().location();}
+	public static <T> ResourceLocation getId(RegistryAccess access, ResourceKey<Registry<T>> registry, T source) {
+		return access.registryOrThrow(registry).getKey(source);
+	}
 
 	public static ResourceLocation getAttributeId(Holder<Attribute> attribute) {
 		return BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());

@@ -18,9 +18,9 @@ import java.util.function.BiPredicate;
 public class PredicateRegistry {
 	public PredicateRegistry() {}
 	
-	private LinkedListMultimap<String, BiPredicate<Player, ItemStack>> reqPredicates = LinkedListMultimap.create();
-	private LinkedListMultimap<String, BiPredicate<Player, BlockEntity>> reqBreakPredicates = LinkedListMultimap.create();
-	private LinkedListMultimap<String, BiPredicate<Player, Entity>> reqEntityPredicates = LinkedListMultimap.create();
+	private final LinkedListMultimap<String, BiPredicate<Player, ItemStack>> reqPredicates = LinkedListMultimap.create();
+	private final LinkedListMultimap<String, BiPredicate<Player, BlockEntity>> reqBreakPredicates = LinkedListMultimap.create();
+	private final LinkedListMultimap<String, BiPredicate<Player, Entity>> reqEntityPredicates = LinkedListMultimap.create();
 	
 	/** registers a predicate to be used in determining if a given player is permitted
 	 * to perform a particular action. [Except for break action.  see {@link APIUtils#registerBreakPredicate registerBreakPredicate}.
@@ -65,8 +65,8 @@ public class PredicateRegistry {
 	/**this is an internal method to check if a predicate exists for the given conditions
 	 * 
 	 * @param res res the block, item, or entity registrykey
-	 * @param jType the PMMO behavior type
-	 * @return whether or not a predicate is registered for the parameters
+	 * @param type the requirement type
+	 * @return whether a predicate is registered for the parameters
 	 */
 	public boolean predicateExists(ResourceLocation res, ReqType type) 
 	{
@@ -80,15 +80,15 @@ public class PredicateRegistry {
 	 * the action according to the object and type contexts.  
 	 * 
 	 * @param player the player performing the action
-	 * @param res res res the block, item, or entity registrykey
+	 * @param stack the item being checked
 	 * @param jType the PMMO behavior type
 	 * @return whether the player is permitted to do the action (true if yes)
 	 */
 	public boolean checkPredicateReq(Player player, ItemStack stack, ReqType jType) 
 	{
-		if (!predicateExists(RegistryUtil.getId(stack), jType)) 
+		if (!predicateExists(RegistryUtil.getId(player.level().registryAccess(), stack), jType))
 			return false;
-		for (BiPredicate<Player, ItemStack> pred : reqPredicates.get(jType.toString()+";"+RegistryUtil.getId(stack).toString())) {
+		for (BiPredicate<Player, ItemStack> pred : reqPredicates.get(jType.toString()+";"+RegistryUtil.getId(player.level().registryAccess(), stack).toString())) {
 			if (!pred.test(player, stack)) return false;
 		}
 		return true;
@@ -98,7 +98,7 @@ public class PredicateRegistry {
 	 * the block according to the object and type contexts.  
 	 * 
 	 * @param player the player performing the action
-	 * @param res res res the block, item, or entity registrykey
+	 * @param tile the block entity being checked
 	 * @param jType the PMMO behavior type
 	 * @return whether the player is permitted to do the action (true if yes)
 	 */

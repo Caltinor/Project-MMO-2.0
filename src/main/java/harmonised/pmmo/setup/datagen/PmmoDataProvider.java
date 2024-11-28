@@ -10,6 +10,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -34,6 +35,8 @@ public abstract class PmmoDataProvider<T extends DataSource<?>> implements DataP
         this.toSerialize.put(id, json);
     }
     protected abstract void start();
+
+    protected ResourceLocation getId(Item item) {return item.builtInRegistryHolder().unwrapKey().get().location();}
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         start();

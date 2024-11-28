@@ -39,7 +39,7 @@ public class EffectManager {
 		//================================
 		for (ItemStack stack : items) {
 			if (!stack.isEmpty() && !core.isActionPermitted(ReqType.WEAR, stack, player)) {
-				for (MobEffectInstance mei : CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(stack)).getNegativeEffect(), true)) {
+				for (MobEffectInstance mei : CoreUtils.getEffects(core.getLoader().getLoader(ObjectType.ITEM).getData(RegistryUtil.getId(player.level().registryAccess(), stack)).getNegativeEffect(), true)) {
 					if (!player.hasEffect(mei.getEffect()) || player.getEffect(mei.getEffect()).getDuration() < 10)
 						player.addEffect(mei);
 				}

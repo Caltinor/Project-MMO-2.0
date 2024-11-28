@@ -143,7 +143,7 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 	private List<MutableComponent> gatherSalvageData(ItemStack stack) {
 		List<MutableComponent> outList = new ArrayList<>();
 		for (Map.Entry<ResourceLocation, SalvageData> entry : Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER
-				.getData(RegistryUtil.getId(stack)).salvage().entrySet()) {
+				.getData(RegistryUtil.getId(mc.level.registryAccess(), stack)).salvage().entrySet()) {
 			outList.add(MutableComponent.create(
 					new ItemStack(BuiltInRegistries.ITEM.get(entry.getKey())).getDisplayName().getContents()));
 			SalvageData data = entry.getValue();
