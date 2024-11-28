@@ -281,23 +281,24 @@ public class FeaturePerks {
 	public static final String APPLICABLE_TO = "applies_to";
 	public static final Perk DAMAGE_BOOST = Perk.begin()
 			.addConditions((player, nbt) -> {
-				if (nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).isEmpty()) return true;
+				String perkApplicableDamageType = nbt.getString(APIUtils.DAMAGE_TYPE);
+				List<String> dmgType = nbt.getList(APIUtils.DAMAGE_TYPE_IN, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
+				boolean damageMatch = dmgType.isEmpty() || dmgType.stream().anyMatch(key -> {
+					if (key.startsWith("#") && RegistryUtil.isInTag(player.level().registryAccess(), Registries.DAMAGE_TYPE, perkApplicableDamageType, key.substring(1)))
+						return true;
+					else if (key.endsWith(":*") && Reference.of(perkApplicableDamageType).getNamespace().equals(key.replace(":*", "")))
+						return true;
+					else return key.equals(perkApplicableDamageType);
+				});
 				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
-				for (String key : type) {
-					if (key.startsWith("#") && BuiltInRegistries.ITEM
-							.getTag(TagKey.create(Registries.ITEM, Reference.of(key.substring(1))))
-							.stream().anyMatch(item -> item.contains(Holder.direct(player.getMainHandItem().getItem())))) {
+				boolean weaponMatch = type.isEmpty() || type.stream().anyMatch(key -> {
+					if (key.startsWith("#") && RegistryUtil.isInTag(player.level().registryAccess(), Registries.ITEM, RegistryUtil.getId(player.getMainHandItem()), key.substring(1)))
 						return true;
-					}
-					else if (key.endsWith(":*") && BuiltInRegistries.ITEM.stream()
-							.anyMatch(item -> player.getMainHandItem().getItem().equals(item))) {
+					else if (key.endsWith(":*") && BuiltInRegistries.ITEM.stream().anyMatch(item -> player.getMainHandItem().getItem().equals(item)))
 						return true;
-					}
-					else if (key.equals(RegistryUtil.getId(player.getMainHandItem()).toString()))
-						return true;
-						
-				}
-				return false;
+					else return key.equals(RegistryUtil.getId(player.getMainHandItem()).toString());
+				});
+				return weaponMatch && damageMatch;
 			})
 			.addDefaults(TagBuilder.start()
 				.withFloat(APIUtils.DAMAGE_IN, 0)

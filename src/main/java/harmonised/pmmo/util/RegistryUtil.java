@@ -1,9 +1,13 @@
 package harmonised.pmmo.util;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
@@ -57,5 +61,15 @@ public class RegistryUtil {
 
 	public static ResourceLocation getAttributeId(Holder<Attribute> attribute) {
 		return BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
+	}
+
+	public static <T> boolean isInTag(RegistryAccess access, ResourceKey<Registry<T>> registry, String objectID, String tagId) {
+		return isInTag(access, registry, Reference.of(objectID), tagId);
+	}
+	public static <T> boolean isInTag(RegistryAccess access, ResourceKey<Registry<T>> registry, ResourceLocation objectID, String tagId) {
+		var reg = access.registryOrThrow(registry);
+		var tag = TagKey.create(registry, Reference.of(tagId));
+		var holder = reg.getHolder(ResourceKey.create(registry, objectID));
+		return holder.map(h -> h.is(tag)).orElse(false);
 	}
 }
