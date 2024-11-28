@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.19.2-3.3.16] - 2024-08-14
-### Bugfixes / Tweaks
-- Fixed chat spam for unmet reqs when using Jade~~~~
+## [1.19.2-3.4.16] - 2024-11-28
+### Minor Version update
+- Updated party xp ratio config property to have per-skill ratios
