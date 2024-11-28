@@ -4,8 +4,10 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.PerksConfig;
+import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.ServerData;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.readers.ConfigListener;
 import harmonised.pmmo.features.anticheese.AntiCheeseConfig;
 import harmonised.pmmo.features.autovalues.AutoBlock;
@@ -61,7 +63,7 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
                                 "#pmmo:magic", Map.of("endurance", 150L),
                                 "#minecraft:is_projectile", Map.of("endurance", 150L))
                 )),
-                new ServerData.Party(200, 1.3),
+                new ServerData.Party(200, new SkillsConfig().skills().keySet().stream().collect(Collectors.toMap(str -> str, str -> 1.5))),
                 new ServerData.MobScaling(false, 0, 0, 1.0, true, 0.0, 1.0, Map.of()),
                 new ServerData.VeinMiner(true, false, 1, 1.5,
                         List.of(Reference.of("silentgear:saw")), 0.5, 15)

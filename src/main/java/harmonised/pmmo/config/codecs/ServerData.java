@@ -154,11 +154,11 @@ public record ServerData(
         public Map<String, Map<String, Long>> dealtDamage() {return this.damageXp().getOrDefault(EventType.DEAL_DAMAGE, new HashMap<>());}
         public Map<String, Double> playerXp(EventType type) {return this.playerEvents().getOrDefault(type, new HashMap<>());}
     }
-    public record Party(int range, double bonus) {
-        public Party() {this(50, 1.05);}
+    public record Party(int range, Map<String, Double> bonus) {
+        public Party() {this(50, Map.of("combat", 1.05, "endurance", 1.1));}
         public static final Codec<Party> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.INT.fieldOf("party_range").forGetter(Party::range),
-                Codec.DOUBLE.fieldOf("party_bonus").forGetter(Party::bonus)
+                CodecTypes.DOUBLE_CODEC.fieldOf("party_bonus").forGetter(Party::bonus)
         ).apply(instance, Party::new));
     }
     public record MobScaling(
