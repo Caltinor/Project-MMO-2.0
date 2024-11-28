@@ -28,7 +28,7 @@ public class AutoEntity {
 	
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation entityID) {
 		//exit early if not an applicable type
-		if (!type.entityApplicable)
+		if (!type.entityApplicable || !Config.autovalue().xpEnabled(type))
 			return new HashMap<>();
 				
 		Map<String, Long> outMap = new HashMap<>();

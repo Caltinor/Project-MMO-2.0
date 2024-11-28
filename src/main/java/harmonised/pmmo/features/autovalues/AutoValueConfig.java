@@ -62,6 +62,9 @@ public record AutoValueConfig(
 	@Override
 	public boolean isUnconfigured() {return false;}
 
+	public boolean reqEnabled(ReqType type) {return reqEnabled().getOrDefault(type, false);}
+	public boolean xpEnabled(EventType type) {return xpEnabled().getOrDefault(type, false);}
+
 	public record XpAwards(
 			Double raritiesMultiplier,
 			Map<EventType, Map<String, Long>> itemXp,

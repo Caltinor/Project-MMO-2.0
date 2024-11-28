@@ -50,7 +50,7 @@ public class AutoItem {
 
 	public static Map<String, Long> processReqs(ReqType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
-		if (!type.itemApplicable) 
+		if (!type.itemApplicable || !Config.autovalue().reqEnabled(type))
 			return new HashMap<>();
 		
 		final Map<String, Long> outMap = new HashMap<>();
@@ -58,20 +58,20 @@ public class AutoItem {
 		switch (type) {
 		case WEAR: {
 			if (stack.getItem() instanceof TieredItem) {
-				if (stack.getItem() instanceof SwordItem) 
+				if (stack.getItem() instanceof SwordItem)
 					outMap.putAll(getUtensilData(UtensilTypes.SWORD, type, stack, true));
-				else if (stack.getItem() instanceof AxeItem) 
+				else if (stack.getItem() instanceof AxeItem)
 					outMap.putAll(getUtensilData(UtensilTypes.AXE, type, stack, false));
-				else if (stack.getItem() instanceof PickaxeItem) 
+				else if (stack.getItem() instanceof PickaxeItem)
 					outMap.putAll(getUtensilData(UtensilTypes.PICKAXE, type, stack, false));
-				else if (stack.getItem() instanceof ShovelItem) 
+				else if (stack.getItem() instanceof ShovelItem)
 					outMap.putAll(getUtensilData(UtensilTypes.SHOVEL, type, stack, false));
-				else if (stack.getItem() instanceof HoeItem) 
+				else if (stack.getItem() instanceof HoeItem)
 					outMap.putAll(getUtensilData(UtensilTypes.HOE, type, stack, false));
 			}
 			else if (stack.getItem() instanceof ArmorItem)
 				outMap.putAll(getWearableData(type, stack, true));
-			else if (stack.getItem() instanceof ElytraItem) 
+			else if (stack.getItem() instanceof ElytraItem)
 				outMap.putAll(getWearableData(type, stack, false));
 			break;
 		}
@@ -128,7 +128,7 @@ public class AutoItem {
 	
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
-		if (!type.itemApplicable)
+		if (!type.itemApplicable || !Config.autovalue().xpEnabled(type))
 			return new HashMap<>();
 		
 		Map<String, Long> outMap = new HashMap<>();

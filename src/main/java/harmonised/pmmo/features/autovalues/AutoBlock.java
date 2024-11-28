@@ -28,7 +28,7 @@ public class AutoBlock {
 	public static Map<String, Long> processReqs(ReqType type, ResourceLocation blockID) {
 
 		//exit early if the type is not valid for a block
-		if (!type.blockApplicable || isWorldSensitive(blockID))
+		if (!type.blockApplicable || isWorldSensitive(blockID) || !Config.autovalue().reqEnabled(type))
 			return new HashMap<>();
 		
 		Block block = BuiltInRegistries.BLOCK.get(blockID);
@@ -51,7 +51,7 @@ public class AutoBlock {
 	
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation blockID) {
 		//exit early if the type is not valid for a block
-		if (!type.blockApplicable || isWorldSensitive(blockID))
+		if (!type.blockApplicable || isWorldSensitive(blockID) || !Config.autovalue().xpEnabled(type))
 			return new HashMap<>();
 		
 		Holder.Reference<Block> block = BuiltInRegistries.BLOCK.getHolder(ResourceKey.create(Registries.BLOCK, blockID)).orElse(null);
