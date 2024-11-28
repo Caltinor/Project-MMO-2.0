@@ -16,6 +16,7 @@ public record SkillData (
 	Optional<Integer> color,
 	Optional<Boolean> afkExempt,
 	Optional<Boolean> displayGroupName,
+	Optional<Boolean> showInList,
 	Optional<Boolean> useTotalLevels,
 	Optional<Map<String, Double>> groupedSkills,
 	Optional<Integer> maxLevel,
@@ -26,6 +27,7 @@ public record SkillData (
 			Codec.INT.optionalFieldOf("color").forGetter(SkillData::color),
 			Codec.BOOL.optionalFieldOf("noAfkPenalty").forGetter(SkillData::afkExempt),
 			Codec.BOOL.optionalFieldOf("displayGroupName").forGetter(SkillData::displayGroupName),
+			Codec.BOOL.optionalFieldOf("showInList").forGetter(SkillData::showInList),
 			Codec.BOOL.optionalFieldOf("useTotalLevels").forGetter(SkillData::useTotalLevels),
 			CodecTypes.DOUBLE_CODEC.optionalFieldOf("groupFor").forGetter(SkillData::groupedSkills),
 			Codec.INT.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel),
@@ -36,6 +38,7 @@ public record SkillData (
 	public int getColor() { return color.orElse(16777215); }
 	public boolean getAfkExempt() { return afkExempt.orElse(false); }
 	public boolean getDisplayGroupName() { return displayGroupName.orElse(false); }
+	public boolean getShowInList() {return showInList.orElse(true);}
 	public boolean getUseTotalLevels() { return useTotalLevels.orElse(false); }
 	public int getMaxLevel() { return maxLevel.orElse(Config.MAX_LEVEL.get()); }
 	public ResourceLocation getIcon() { return icon.orElse(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")); }
@@ -102,7 +105,7 @@ public record SkillData (
 	
 	public static class Builder {
 		int color, maxLevel, iconSize;
-		boolean afkExempt, displayName, useTotal;
+		boolean afkExempt, displayName, useTotal, showInList;
 		ResourceLocation icon;
 		Map<String, Double> groupOf;
 		
@@ -112,6 +115,7 @@ public record SkillData (
 			afkExempt = false;
 			displayName = false;
 			useTotal = false;
+			showInList = true;
 			icon = new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png");
 			iconSize = 18;
 			groupOf = new HashMap<>();
@@ -121,6 +125,7 @@ public record SkillData (
 				Optional.of(16777215), 
 				Optional.of(false), 
 				Optional.of(false),
+				Optional.of(true),
 				Optional.of(false),
 				Optional.empty(), 
 				Optional.of(Config.MAX_LEVEL.get()),
@@ -159,6 +164,10 @@ public record SkillData (
 			this.useTotal = useTotalLevels;
 			return this;
 		}
+		public Builder omitFromList() {
+			this.showInList = false;
+			return this;
+		}
 		public Builder setGroupOf(Map<String, Double> group) {
 			this.groupOf = group;
 			return this;
@@ -169,6 +178,7 @@ public record SkillData (
 				Optional.of(color),
 				Optional.of(afkExempt),
 				Optional.of(displayName),
+				Optional.of(showInList),
 				Optional.of(useTotal),
 				groupOf.isEmpty() ? Optional.empty() : Optional.of(groupOf),
 				Optional.of(maxLevel),

@@ -69,6 +69,7 @@ public class XPOverlayGUI implements IGuiOverlay
 		if (ClientTickHandler.isRefreshTick()) {
 			modifiers = core.getConsolidatedModifierMap(mc.player);	
 			skillsKeys = core.getData().getXpMap(null).keySet().stream()
+					.filter(a -> SkillsConfig.SKILLS.get().getOrDefault(a, SkillData.Builder.getDefault()).getShowInList())
 					.sorted(Comparator.<String>comparingLong(a -> core.getData().getXpRaw(null, a)).reversed())
 					.toList();
 			var holderMap = lineRenderers;
