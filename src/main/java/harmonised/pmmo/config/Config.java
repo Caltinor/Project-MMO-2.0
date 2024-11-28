@@ -461,15 +461,18 @@ public class Config {
 	}
 	
 	public static ForgeConfigSpec.IntValue PARTY_RANGE;
-	public static ForgeConfigSpec.DoubleValue PARTY_BONUS;
+	public static ConfigObject<Map<String, Double>> PARTY_BONUS;
+	public static double partyBonus(String skill) {
+		return PARTY_BONUS.get().getOrDefault(skill, 0d);
+	}
 	
 	private static void buildPartySettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("All settings governing party behavior").push("Party");
 			PARTY_RANGE = builder.comment("How close do party members have to be to share experience.")
 					.defineInRange("Party Range", 50, 0, Integer.MAX_VALUE);
-			PARTY_BONUS = builder.comment("How much bonus xp should parties earn.",
-					"This value is multiplied by the party size.")
-					.defineInRange("Party Bonus", 1.05, 1.0, Double.MAX_VALUE);
+			PARTY_BONUS = TomlConfigHelper.defineObject(builder.comment("How much bonus xp should parties earn by skill.",
+							"This value is multiplied by the party size."),
+					"Party Bonus", CodecTypes.DOUBLE_CODEC, Map.of("combat", 1.05, "endurance", 1.1));
 		builder.pop();
 	}
 	
