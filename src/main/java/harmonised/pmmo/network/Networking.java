@@ -2,7 +2,6 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
@@ -10,7 +9,6 @@ import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
 import harmonised.pmmo.network.clientpackets.CP_SyncConfig;
 import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
-import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
@@ -42,7 +40,6 @@ public class Networking {
 		.playToClient(CP_ClearData.TYPE, StreamCodec.unit(new CP_ClearData()), CP_ClearData::handle)
 		.playToClient(CP_SetOtherExperience.TYPE, CP_SetOtherExperience.STREAM_CODEC, CP_SetOtherExperience::handle)
 		.playToClient(CP_ResetXP.TYPE, StreamCodec.unit(new CP_ResetXP()), CP_ResetXP::handle)
-		.playToClient(CP_SyncVein.TYPE, CP_SyncVein.STREAM_CODEC, CP_SyncVein::handle)
 		.playToClient(CP_SyncConfig.TYPE, CP_SyncConfig.STREAM_CODEC, CP_SyncConfig::handle)
 		//SERVER BOUND PACKETS
 		.playToServer(SP_UpdateVeinTarget.TYPE, SP_UpdateVeinTarget.STREAM_CODEC, SP_UpdateVeinTarget::handle)
