@@ -20,7 +20,7 @@ public record CP_SyncVein(double charge) implements CustomPacketPayload {
 	public static void handle(CP_SyncVein packet, IPayloadContext ctx) {
 		ctx.enqueueWork(() -> {
 			MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Vein Update on Client: "+packet.charge());
-			VeinTracker.currentCharge = packet.charge();
+//			VeinTracker.currentCharge = packet.charge();
 		});
 	}
 }

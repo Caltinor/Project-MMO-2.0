@@ -201,9 +201,7 @@ public record ServerData(
             boolean requireSettings,
             int defaultConsume,
             double chargeModifier,
-            List<ResourceLocation> blacklist,
-            double baseChargeRate,
-            int baseVeinCapacity
+            List<ResourceLocation> blacklist
 
     ) {
         public VeinMiner() {this(
@@ -211,18 +209,14 @@ public record ServerData(
                 false,
                 1,
                 1.0,
-                List.of(Reference.of("silentgear:saw")),
-                0.01d,
-                0);}
+                List.of(Reference.of("silentgear:saw")));}
 
         public static final Codec<VeinMiner> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.BOOL.fieldOf("vein_enabled").forGetter(VeinMiner::enabled),
                 Codec.BOOL.fieldOf("require_settings").forGetter(VeinMiner::requireSettings),
                 Codec.INT.fieldOf("default_consume").forGetter(VeinMiner::defaultConsume),
                 Codec.DOUBLE.fieldOf("charge_modifier").forGetter(VeinMiner::chargeModifier),
-                ResourceLocation.CODEC.listOf().fieldOf("blacklist").forGetter(VeinMiner::blacklist),
-                Codec.DOUBLE.fieldOf("base_charge_rate").forGetter(VeinMiner::baseChargeRate),
-                Codec.INT.fieldOf("base_capacity").forGetter(VeinMiner::baseVeinCapacity)
+                ResourceLocation.CODEC.listOf().fieldOf("blacklist").forGetter(VeinMiner::blacklist)
         ).apply(instance, VeinMiner::new));
     }
 

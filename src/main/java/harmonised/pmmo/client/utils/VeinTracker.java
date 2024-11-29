@@ -3,6 +3,7 @@ package harmonised.pmmo.client.utils;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinShapeData;
 import harmonised.pmmo.features.veinmining.VeinShapeData.ShapeType;
+import harmonised.pmmo.setup.CommonSetup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -16,7 +17,7 @@ import java.util.Set;
 public class VeinTracker {
 	private static Set<BlockPos> vein;
 	public static BlockPos currentTarget;
-	public static double currentCharge;
+//	public static double currentCharge;
 	public static ShapeType mode = ShapeType.AOE;
 	
 	public static void setTarget(BlockPos pos) {		
@@ -40,12 +41,10 @@ public class VeinTracker {
 		return vein;
 	}
 	
-	public static int getCurrentCharge() {return (int)currentCharge;}
-	
 	public static void updateVein(Player player) {
 		Block block = player.level().getBlockState(currentTarget).getBlock();
 		int perBlock = Core.get(LogicalSide.CLIENT).getBlockConsume(block);
-		int maxBlocks = perBlock <= 0 ? 0 : getCurrentCharge()/perBlock;
+		int maxBlocks = perBlock <= 0 ? 0 : (int)(player.getAttribute(CommonSetup.VEIN_AMOUNT).getValue()/(double)perBlock);
 		vein = new VeinShapeData(player.level(), currentTarget, maxBlocks, mode, player.getDirection()).getVein();
 	}
 }
