@@ -7,6 +7,7 @@ import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
+import harmonised.pmmo.network.serverpackets.SP_ToggleBreakSpeed;
 import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.storage.PmmoSavedData;
@@ -36,6 +37,7 @@ public class LoginHandler {
 		}
 		else {
 			Networking.sendToServer(new SP_SetVeinLimit(Config.VEIN_LIMIT.get()));
+			Networking.sendToServer(new SP_ToggleBreakSpeed(Config.BREAK_SPEED_PERKS.get()));
 		}
 	}
 }

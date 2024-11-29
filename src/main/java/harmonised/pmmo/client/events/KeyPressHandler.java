@@ -8,6 +8,7 @@ import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
+import harmonised.pmmo.network.serverpackets.SP_ToggleBreakSpeed;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -51,6 +52,7 @@ public class KeyPressHandler {
             }
 			if (ClientSetup.TOGGLE_BRKSPD.isDown()) {
 				Config.BREAK_SPEED_PERKS.set(!Config.BREAK_SPEED_PERKS.get());
+				Networking.sendToServer(new SP_ToggleBreakSpeed(Config.BREAK_SPEED_PERKS.get()));
 				mc.player.displayClientMessage(Config.BREAK_SPEED_PERKS.get()
 						? LangProvider.TOGGLE_BRKSPD_ENABLED.asComponent()
 						: LangProvider.TOGGLE_BRKSPD_DISABLED.asComponent()

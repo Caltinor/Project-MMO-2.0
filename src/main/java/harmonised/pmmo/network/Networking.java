@@ -15,6 +15,7 @@ import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
+import harmonised.pmmo.network.serverpackets.SP_ToggleBreakSpeed;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -47,7 +48,8 @@ public class Networking {
 		.playToServer(SP_UpdateVeinTarget.TYPE, SP_UpdateVeinTarget.STREAM_CODEC, SP_UpdateVeinTarget::handle)
 		.playToServer(SP_OtherExpRequest.TYPE, SP_OtherExpRequest.STREAM_CODEC, SP_OtherExpRequest::handle)
 		.playToServer(SP_SetVeinLimit.TYPE, SP_SetVeinLimit.STREAM_CODEC, SP_SetVeinLimit::handle)
-		.playToServer(SP_SetVeinShape.TYPE, SP_SetVeinShape.STREAM_CODEC, SP_SetVeinShape::handle);
+		.playToServer(SP_SetVeinShape.TYPE, SP_SetVeinShape.STREAM_CODEC, SP_SetVeinShape::handle)
+		.playToServer(SP_ToggleBreakSpeed.TYPE, SP_ToggleBreakSpeed.STREAM_CODEC, SP_ToggleBreakSpeed::handle);
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}
 	

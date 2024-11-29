@@ -20,11 +20,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,20 +41,18 @@ public class PerksImpl {
 			ItemAbilities.SHEARS_DIG, 
 			ItemAbilities.SWORD_DIG);
 	private static final CompoundTag NONE = new CompoundTag();
-	
+	public static final Map<Player, Boolean> breakSpeedEnabled = new HashMap<>();
 	public static Perk BREAK_SPEED = Perk.begin()
+			.addConditions((p,t) -> breakSpeedEnabled.getOrDefault(p, true))
 			.addDefaults(getDefaults())
 			.setStart((player, nbt) -> {
-				if (Config.BREAK_SPEED_PERKS.get()) {
-					float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
-					if (speedBonus == 0) return NONE;
+				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
+				if (speedBonus == 0) return NONE;
 
-					float existingSpeedModification = nbt.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE);
-					float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus) + existingSpeedModification;
-					speedModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), speedModification);
-					return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
-				}
-				return nbt;
+				float existingSpeedModification = nbt.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE);
+				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL) * speedBonus) + existingSpeedModification;
+				speedModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), speedModification);
+				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			})
 			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())
 			.setStatus((player, settings) -> {
