@@ -104,6 +104,7 @@ dependencies {
     //compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
     compileOnly "curse.maven:arch-${projectid_arch}:${version_arch}"
     compileOnly "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${ct_version}"
+    compileOnly "curse.maven:curios-${projectid_curios}:${version_curios}"
 
     //runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
     //runtimeOnly "curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}"
@@ -112,6 +113,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
     //runtimeOnly "curse.maven:arch-${projectid_arch}:${version_arch}"
     //runtimeOnly "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${ct_version}"
+    //runtimeOnly "curse.maven:curios-${projectid_curios}:${version_curios}"
     //runtimeOnly fg.deobf('curse.maven:aquaculture-60028:4074684')
     //runtimeOnly fg.deobf('curse.maven:twilight-227639:4337394')
     //runtimeOnly fg.deobf('curse.maven:travelersbackpack-321117:4595935')

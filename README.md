@@ -10,14 +10,15 @@ https://modrinth.com/mod/project-mmo
 
 ## Project Version Support Status
 
-|Version|Support Status|Notes|
-|:---:|:---|:---|
-|1.21.0|Active|recommended version|
-|1.20.1|Active|actively supported|
-|1.19.4|Use Only|Player assistance, but no codebase updates|
-|1.19.2|Use Only|Player assistance, but no codebase updates|
-|1.18.2|Use Only|Player assistance, but no codebase updates|
-|1.18.2-Legacy|Unsupported||
-|1.16.5|Unsupported||
-|1.12.2|Unsupported||
+|    Version    | Support Status | Notes                                      |
+|:-------------:|:---------------|:-------------------------------------------|
+|    1.22.0     | In-Dev         | alpha only                                 |      
+|    1.21.1     | Active         | recommended version                        |
+|    1.20.1     | Active         | actively supported                         |
+|    1.19.4     | Use Only       | Player assistance, but no codebase updates |
+|    1.19.2     | Use Only       | Player assistance, but no codebase updates |
+|    1.18.2     | Use Only       | Player assistance, but no codebase updates |
+| 1.18.2-Legacy | Unsupported    |                                            |
+|    1.16.5     | Unsupported    |                                            |
+|    1.12.2     | Unsupported    |                                            |
 
