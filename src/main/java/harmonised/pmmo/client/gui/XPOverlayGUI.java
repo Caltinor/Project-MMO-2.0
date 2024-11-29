@@ -9,6 +9,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
 import net.minecraft.client.DeltaTracker;
@@ -100,7 +101,7 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 		if (ClientTickHandler.isRefreshTick()) {
 			maxCharge = VeinMiningLogic.getMaxChargeFromAllItems(mc.player);
 			if (maxCharge > 0)
-				currentCharge = VeinTracker.getCurrentCharge();
+				currentCharge = (int)mc.player.getAttribute(CommonSetup.VEIN_AMOUNT).getValue();
 		}
 		if (currentCharge > 0) {
 			graphics.drawString(fontRenderer, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()), renderX, renderY-11, 0xFFFFFF);

@@ -29,7 +29,6 @@ import java.util.UUID;
 
 public class VeinMiningLogic {
 	public static final String VEIN_DATA = "vein_data";
-	public static final String CURRENT_CHARGE = "vein_charge";
 	public static final Map<UUID, Integer> maxBlocksPerPlayer = new HashMap<>();
 	public static final Map<UUID, ShapeType> shapePerPlayer = new HashMap<>();
 
@@ -55,7 +54,7 @@ public class VeinMiningLogic {
 			player.gameMode.destroyAndAck(veinable, 1, "Vein Break");
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Consumed: "+consumed+" charge");
-		applyChargeCost(player, consumed, charge);
+		setAmount(player, charge-consumed);
 	}
 	
 	public static void regenerateVein(ServerPlayer player) {
@@ -70,9 +69,9 @@ public class VeinMiningLogic {
 				player.getOffhandItem());
 		//================================
 		Core core = Core.get(player.level());
-		double currentCharge = player.getData(DataAttachmentTypes.VEIN_CHARGE.get());
-		int chargeCap = Config.server().veinMiner().baseVeinCapacity();
-		double chargeRate = Config.server().veinMiner().baseChargeRate();
+		double currentCharge = veinAmount(player);
+		int chargeCap = getCap(player) ;
+		double chargeRate = getCharge(player);
 		for (ItemStack stack : items) {
 			if (!core.isActionPermitted(ReqType.WEAR, stack, player)) continue;
 			VeinData data = core.getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData();
@@ -85,14 +84,13 @@ public class VeinMiningLogic {
 		final int fCap = chargeCap;
 		final double fRate = chargeRate * Config.server().veinMiner().chargeModifier();
 		if ((currentCharge + fRate) >= fCap) {
-			player.setData(DataAttachmentTypes.VEIN_CHARGE.get(), (double)fCap);
+			setAmount(player, fCap);
 			MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen at Cap: "+fCap);
 		}
 		else {
-			player.setData(DataAttachmentTypes.VEIN_CHARGE.get(), currentCharge + fRate);
+			setAmount(player, currentCharge + fRate);
 			MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen: "+(currentCharge+fRate));
 		}
-		Networking.sendToClient(new CP_SyncVein(player.getData(DataAttachmentTypes.VEIN_CHARGE.get())), player);
 	}
 	
 	//=========================UTILITY METHODS=============================
@@ -106,16 +104,29 @@ public class VeinMiningLogic {
 				player.getMainHandItem(),
 				player.getOffhandItem());
 		//================================
-		int totalCapacity = Config.server().veinMiner().baseVeinCapacity() + items.stream()
+		int totalCapacity = getCap(player) + items.stream()
 				.filter(stack -> Core.get(player.level()).isActionPermitted(ReqType.WEAR, stack, player))
 				.mapToInt(stack -> Core.get(player.level()).getLoader().ITEM_LOADER.getData(RegistryUtil.getId(stack)).veinData().chargeCap.orElse(0))
 				.sum();
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
 		return totalCapacity; 
 	}
-	
-	private static void applyChargeCost(ServerPlayer player, int cost, double currentCharge) {
-		player.setData(DataAttachmentTypes.VEIN_CHARGE.get(), currentCharge-cost);
-		Networking.sendToClient(new CP_SyncVein(currentCharge-cost), player);
+
+	public static double veinAmount(Player player) {
+		var attribute = player.getAttribute(CommonSetup.VEIN_AMOUNT);
+		return attribute == null ? 0 : attribute.getValue();
+	}
+	public static void setAmount(Player player, double amount) {
+		var attribute = player.getAttribute(CommonSetup.VEIN_AMOUNT);
+		if (attribute != null)
+			attribute.setBaseValue(amount);
+	}
+	public static int getCap(Player player) {
+		var attribute = player.getAttribute(CommonSetup.VEIN_CAPACITY);
+		return  attribute == null ? 0 : (int)attribute.getValue();
+	}
+	public static int getCharge(Player player) {
+		var attribute = player.getAttribute(CommonSetup.VEIN_RECHARGE);
+		return  attribute == null ? 0 : (int)attribute.getValue();
 	}
 }

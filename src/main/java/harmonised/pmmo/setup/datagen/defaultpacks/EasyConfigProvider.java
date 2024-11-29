@@ -12,6 +12,7 @@ import harmonised.pmmo.features.autovalues.AutoBlock;
 import harmonised.pmmo.features.autovalues.AutoEntity;
 import harmonised.pmmo.features.autovalues.AutoItem;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
+import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
@@ -64,7 +65,7 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
                 new ServerData.Party(200, 1.3),
                 new ServerData.MobScaling(false, 0, 0, 1.0, true, 0.0, 1.0, Map.of()),
                 new ServerData.VeinMiner(true, false, 1, 1.5,
-                        List.of(Reference.of("silentgear:saw")), 0.5, 15)
+                        List.of(Reference.of("silentgear:saw")))
         ));
         data.put(ConfigListener.ServerConfigs.PERKS, new PerksConfig(perkDefaults()));
         AutoValueConfig defaultAutoValues = new AutoValueConfig();
@@ -118,6 +119,12 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
                         .withString("perk", "pmmo:fireworks")
                         .withInt(APIUtils.MODULUS, 10)
                         .withString(APIUtils.SKILLNAME, skill).build()));
+        bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "mining")
+                .withString(APIUtils.ATTRIBUTE, CommonSetup.VEIN_RECHARGE.getRegisteredName())
+                .withDouble(APIUtils.BASE, 0.5).build());
+        bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "mining")
+                .withString(APIUtils.ATTRIBUTE, CommonSetup.VEIN_CAPACITY.getRegisteredName())
+                .withDouble(APIUtils.BASE, 15).build());
         bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "building")
                 .withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.BLOCK_INTERACTION_RANGE).toString())
                 .withDouble(APIUtils.PER_LEVEL, 0.005)

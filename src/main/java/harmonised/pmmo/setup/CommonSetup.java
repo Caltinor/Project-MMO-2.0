@@ -33,6 +33,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -44,6 +45,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -66,16 +68,22 @@ public class CommonSetup {
 	public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(Registries.ATTRIBUTE, Reference.MOD_ID);
 
 	public static final DeferredHolder<Attribute, Attribute> VEIN_CAPACITY = ATTRIBUTES.register("vein_capacity", () ->
-			new RangedAttribute(LangProvider.VEIN_CAP_DESC.key(), 0, 0, Integer.MAX_VALUE));
+			new RangedAttribute(LangProvider.VEIN_CAP_DESC.key(), 0, 0, Integer.MAX_VALUE).setSyncable(true));
 	public static final DeferredHolder<Attribute, Attribute> VEIN_RECHARGE = ATTRIBUTES.register("vein_charge_rate", () ->
-			new RangedAttribute(LangProvider.VEIN_RATE_DESC.key(), 0d, 0d, Double.MAX_VALUE));
+			new RangedAttribute(LangProvider.VEIN_RATE_DESC.key(), 0d, 0d, Double.MAX_VALUE).setSyncable(true));
 	public static final DeferredHolder<Attribute, Attribute> VEIN_AMOUNT = ATTRIBUTES.register("vein_amount", () ->
-			new RangedAttribute(LangProvider.VEIN_AMOUNT.key(), 0, 0, Double.MAX_VALUE));
+			new RangedAttribute(LangProvider.VEIN_AMOUNT.key(), 0, 0, Double.MAX_VALUE).setSyncable(true));
 
 	public static void init(final FMLCommonSetupEvent event) {
 		PerkRegistration.init();
 		//=========COMPAT=============
 		if (ModList.get().isLoaded("ftbquests")) FTBQHandler.init();
+	}
+
+	public static void addAttributes(final EntityAttributeModificationEvent event) {
+		event.add(EntityType.PLAYER, VEIN_AMOUNT);
+		event.add(EntityType.PLAYER, VEIN_CAPACITY);
+		event.add(EntityType.PLAYER, VEIN_RECHARGE);
 	}
 	
 	@SubscribeEvent

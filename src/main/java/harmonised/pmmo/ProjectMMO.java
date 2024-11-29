@@ -42,6 +42,7 @@ public class ProjectMMO {
 
     	modbus.addListener(CommonSetup::init);
     	modbus.addListener(CommonSetup::gatherData);
+		modbus.addListener(CommonSetup::addAttributes);
 
 //		final MutableTestFramework framework = FrameworkConfiguration.builder(Reference.rl("tests")) // The ID of the framework. Used by logging, primarily
 //				.clientConfiguration(() -> ClientConfiguration.builder() // Client-side compatibility configuration. This is COMPLETLY optional, but it is recommended for ease of use.
