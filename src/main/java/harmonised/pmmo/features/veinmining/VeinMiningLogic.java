@@ -1,6 +1,7 @@
 package harmonised.pmmo.features.veinmining;
 
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.compat.curios.CuriosCompat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,11 @@ public class VeinMiningLogic {
 				inv.getItem(39),
 				player.getMainHandItem(),
 				player.getOffhandItem());
+		//========== CURIOS ==============
+		if (CuriosCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CuriosCompat.getItems(player));
+		}
 		//================================
 		Core core = Core.get(player.level());
 		double currentCharge = veinAmount(player);
@@ -98,6 +105,11 @@ public class VeinMiningLogic {
 				inv.getItem(39),
 				player.getMainHandItem(),
 				player.getOffhandItem());
+		//========== CURIOS ==============
+		if (CuriosCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CuriosCompat.getItems(player));
+		}
 		//================================
 		int totalCapacity = getCap(player) + items.stream()
 				.filter(stack -> Core.get(player.level()).isActionPermitted(ReqType.WEAR, stack, player))

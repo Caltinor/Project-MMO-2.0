@@ -2,6 +2,7 @@ package harmonised.pmmo.setup;
 
 import com.mojang.serialization.Codec;
 import harmonised.pmmo.commands.CmdPmmoRoot;
+import harmonised.pmmo.compat.curios.CuriosCompat;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.CoreLoader;
@@ -78,6 +79,7 @@ public class CommonSetup {
 	public static void init(final FMLCommonSetupEvent event) {
 		PerkRegistration.init();
 		//=========COMPAT=============
+		CuriosCompat.hasCurio = ModList.get().isLoaded("curios");
 		if (ModList.get().isLoaded("ftbquests")) FTBQHandler.init();
 	}
 
