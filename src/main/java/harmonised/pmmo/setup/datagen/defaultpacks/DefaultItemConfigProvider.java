@@ -154,7 +154,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                         new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("8439583")), Map.of("agility", 1.25)),
                         new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("6192150")), Map.of("farming", 1.25)),
                         new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("3949738")), Map.of("fishing", 1.25)),
-                        new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("1908001")), Map.of("combat", 1.25)),
+                        new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("1908001")), Map.of("combat", 1.25, "archery", 1.25)),
                         new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("11546150")), Map.of("endurance", 1.25)),
                         new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("16383998")), Map.of("smithing", 1.25)),
                         new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("16351261")), Map.of("crafting", 1.25)),
