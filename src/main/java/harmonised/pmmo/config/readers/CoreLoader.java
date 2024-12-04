@@ -2,12 +2,6 @@ package harmonised.pmmo.config.readers;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
-
-import harmonised.pmmo.config.scripting.Scripting;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -44,12 +38,11 @@ public class CoreLoader {
 	@SubscribeEvent
 	public static void onTagLoad(TagsUpdatedEvent event) {
 		Core core = Core.get(event.getUpdateCause() == UpdateCause.CLIENT_PACKET_RECEIVED ? LogicalSide.CLIENT : LogicalSide.SERVER);
-		core.getLoader().ITEM_LOADER.postProcess(event.getRegistryAccess());
-		core.getLoader().BLOCK_LOADER.postProcess(event.getRegistryAccess());
-		core.getLoader().ENTITY_LOADER.postProcess(event.getRegistryAccess());
-		//Until dimensions are stored as a client registry, this must remain commented.
-		//core.getLoader().DIMENSION_LOADER.postProcess(event.getRegistryAccess());
-		core.getLoader().BIOME_LOADER.postProcess(event.getRegistryAccess());
+		core.getLoader().ITEM_LOADER.postProcess();
+		core.getLoader().BLOCK_LOADER.postProcess();
+		core.getLoader().ENTITY_LOADER.postProcess();
+		//core.getLoader().DIMENSION_LOADER.postProcess();
+		core.getLoader().BIOME_LOADER.postProcess();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -87,12 +80,10 @@ public class CoreLoader {
 		case BIOME -> BIOME_LOADER;
 		default -> null;};
 	}
-
-	public ExecutableListener RELOADER;
-	public static final Consumer<RegistryAccess> RELOADER_FUNCTION = access -> {
+	
+	public static final ExecutableListener RELOADER = new ExecutableListener(() -> {
 		Core.get(LogicalSide.SERVER).getLoader().resetData();
-		Scripting.readFiles(access);
-	};
+	});
 	
 	public void resetData() {
 		ITEM_LOADER.clearData();
@@ -106,21 +97,21 @@ public class CoreLoader {
 	}
 	
 	public final MergeableCodecDataManager<ObjectData, Item> ITEM_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/items", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, Registries.ITEM);
+			"pmmo/items", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, ForgeRegistries.ITEMS);
 	public final MergeableCodecDataManager<ObjectData, Block> BLOCK_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/blocks", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, Registries.BLOCK);
+			"pmmo/blocks", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, ForgeRegistries.BLOCKS);
 	public final MergeableCodecDataManager<ObjectData, EntityType<?>> ENTITY_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/entities", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, Registries.ENTITY_TYPE);
+			"pmmo/entities", DATA_LOGGER, ObjectData.CODEC, this::mergeLoaderData, this::printData, ObjectData::new, ForgeRegistries.ENTITY_TYPES);
 	public final MergeableCodecDataManager<LocationData, Biome> BIOME_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/biomes", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new, Registries.BIOME);
+			"pmmo/biomes", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new, ForgeRegistries.BIOMES);
 	public final MergeableCodecDataManager<LocationData, Level> DIMENSION_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/dimensions", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new, Registries.DIMENSION);
+			"pmmo/dimensions", DATA_LOGGER, LocationData.CODEC, this::mergeLoaderData, this::printData, LocationData::new, null);
 	public final MergeableCodecDataManager<PlayerData, Player> PLAYER_LOADER = new MergeableCodecDataManager<>(
 			"pmmo/players", DATA_LOGGER, PlayerData.CODEC, this::mergeLoaderData, this::printData, PlayerData::new, null);
 	public final MergeableCodecDataManager<EnhancementsData, Enchantment> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/enchantments", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, Registries.ENCHANTMENT);
+			"pmmo/enchantments", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, ForgeRegistries.ENCHANTMENTS);
 	public final MergeableCodecDataManager<EnhancementsData, MobEffect> EFFECT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/effects", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, Registries.MOB_EFFECT);
+			"pmmo/effects", DATA_LOGGER, EnhancementsData.CODEC, this::mergeLoaderData, this::printData, EnhancementsData::new, ForgeRegistries.MOB_EFFECTS);
 	
 	
 	private <T extends DataSource<T>> T mergeLoaderData(final List<T> raws) {

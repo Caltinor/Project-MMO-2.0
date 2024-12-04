@@ -3,7 +3,6 @@ package harmonised.pmmo.config.readers;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -15,11 +14,9 @@ import net.minecraftforge.network.PacketDistributor.PacketTarget;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ExecutableListener extends SimplePreparableReloadListener<Boolean> {
-	private final Consumer<RegistryAccess> executor;
-	private final RegistryAccess access;
-
-	public ExecutableListener(RegistryAccess access, Consumer<RegistryAccess> executor) {
-		this.access = access;
+	private Runnable executor;
+	
+	public ExecutableListener(Runnable executor) {
 		this.executor = executor;
 	}
 
@@ -28,7 +25,7 @@ public class ExecutableListener extends SimplePreparableReloadListener<Boolean> 
 
 	@Override
 	protected void apply(Boolean pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
-		executor.accept(access);
+		executor.run();		
 	}
 
 	/**

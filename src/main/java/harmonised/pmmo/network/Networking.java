@@ -101,7 +101,7 @@ public class Networking {
 	}
 	
 	public static void registerDataSyncPackets() {
-		Core.get(LogicalSide.SERVER).getLoader().RELOADER.subscribeAsSyncable(INSTANCE, CP_ClearData::new);
+		CoreLoader.RELOADER.subscribeAsSyncable(INSTANCE, () -> new CP_ClearData());
 		Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.ITEM, o));
 		Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.BLOCK, o));
 		Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData(ObjectType.ENTITY, o));
