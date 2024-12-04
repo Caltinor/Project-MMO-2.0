@@ -38,7 +38,6 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.core.RegistryAccess;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -274,7 +273,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void postProcess(RegistryAccess access) {
+	public void postProcess() {
 		MsLoggy.DEBUG.log(LOG_CODE.DATA, "Begin PostProcessing for {}", folderName);
 		for (Map.Entry<ResourceLocation, T> dataRaw : new HashMap<>(this.data).entrySet()) {
 			DataSource<T> dataValue = dataRaw.getValue();

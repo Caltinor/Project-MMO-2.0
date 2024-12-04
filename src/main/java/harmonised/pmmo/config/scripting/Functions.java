@@ -7,9 +7,12 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.DataSource;
+import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,7 +24,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TieredItem;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +46,16 @@ public class Functions {
             Map<String, Long> award = mapValue(value.getOrDefault("award", ""));
             if (award.isEmpty()) return;
             APIUtils.registerXpAward(type, id, event, award, true);
+        });
+        KEYWORDS.put("deal_damage", (param, id, type, value) -> {
+            Map<String, Long> award = mapValue(value.getOrDefault("award", ""));
+            if (award.isEmpty()) return;
+            APIUtils.registerXpAward(type, id, EventType.DEAL_DAMAGE, award, true);
+        });
+        KEYWORDS.put("receive_damage", (param, id, type, value) -> {
+            Map<String, Long> award = mapValue(value.getOrDefault("award", ""));
+            if (award.isEmpty()) return;
+            APIUtils.registerXpAward(type, id, EventType.RECEIVE_DAMAGE, award, true);
         });
         KEYWORDS.put("req", (param, id, type, value) -> {
             ReqType reqType = ReqType.byName(param.toUpperCase());
@@ -82,7 +94,7 @@ public class Functions {
         });
         KEYWORDS.put("mob_scale", (param, id, type, value) -> {
             ResourceLocation entityID = new ResourceLocation(param);
-            Map<String, Double> modifiers = doubleMap(value.getOrDefault("attribute", ""));
+            List<MobModifier> modifiers = modifiers(value.getOrDefault("attribute", ""));
             APIUtils.registerMobModifier(type, id, Map.of(entityID, modifiers), true);
         });
         KEYWORDS.put("positive_effect", (param, id, type, value) -> {
@@ -144,7 +156,7 @@ public class Functions {
             }
             final Pair<Float, Float> values = Pair.of(nutVal, satVal);
             final Pair<Operator, Operator> ops = Pair.of(nutOp, satOp);
-            List<ResourceLocation> food = access.registryOrThrow(ForgeRegistries.ITEMS.getRegistryKey()).entrySet().stream()
+            List<ResourceLocation> food = access.registryOrThrow(Registries.ITEM).entrySet().stream()
                 .filter(entry -> {
                         FoodProperties props = entry.getValue().getFoodProperties(entry.getValue().getDefaultInstance(), null);
                         return props != null
@@ -157,13 +169,13 @@ public class Functions {
         TARGETORS.put("tool", (param, access) -> {
             List<ResourceLocation>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.registryOrThrow(ForgeRegistries.ITEMS.getRegistryKey()).entrySet().stream()
+                tools.addAll(access.registryOrThrow(Registries.ITEM).entrySet().stream()
                     .filter(entry -> entry.getValue() instanceof TieredItem)
                     .map(entry -> entry.getKey().location())
                     .toList());
             else {
                 ResourceLocation tag = new ResourceLocation(param);
-                tools.addAll(access.registryOrThrow(ForgeRegistries.ITEMS.getRegistryKey()).getTag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), tag))
+                tools.addAll(access.registryOrThrow(Registries.ITEM).getTag(TagKey.create(Registries.ITEM, tag))
                         .map(named -> named.stream()
                                 .filter(holder -> holder.value() instanceof TieredItem)
                                 .map(holder -> holder.unwrapKey().get().location()).toList())
@@ -174,13 +186,13 @@ public class Functions {
         TARGETORS.put("armor", (param, access) -> {
             List<ResourceLocation>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.registryOrThrow(ForgeRegistries.ITEMS.getRegistryKey()).entrySet().stream()
+                tools.addAll(access.registryOrThrow(Registries.ITEM).entrySet().stream()
                         .filter(entry -> entry.getValue() instanceof ArmorItem)
                         .map(entry -> entry.getKey().location())
                         .toList());
             else {
                 ResourceLocation tag = new ResourceLocation(param);
-                tools.addAll(access.registryOrThrow(ForgeRegistries.ITEMS.getRegistryKey()).getTag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), tag))
+                tools.addAll(access.registryOrThrow(Registries.ITEM).getTag(TagKey.create(Registries.ITEM, tag))
                         .map(named -> named.stream()
                                 .filter(holder -> holder.value() instanceof ArmorItem)
                                 .map(holder -> holder.unwrapKey().get().location()).toList())
@@ -191,13 +203,13 @@ public class Functions {
         TARGETORS.put("weapon", (param, access) -> {
             List<ResourceLocation>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.registryOrThrow(ForgeRegistries.ITEMS.getRegistryKey()).entrySet().stream()
+                tools.addAll(access.registryOrThrow(Registries.ITEM).entrySet().stream()
                         .filter(entry -> entry.getValue().getAttributeModifiers(EquipmentSlot.MAINHAND, entry.getValue().getDefaultInstance()).containsKey(Attributes.ATTACK_DAMAGE))
                         .map(entry -> entry.getKey().location())
                         .toList());
             else {
                 ResourceLocation tag = new ResourceLocation(param);
-                tools.addAll(access.registryOrThrow(ForgeRegistries.ITEMS.getRegistryKey()).getTag(TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), tag))
+                tools.addAll(access.registryOrThrow(Registries.ITEM).getTag(TagKey.create(Registries.ITEM, tag))
                         .map(named -> named.stream()
                                 .filter(holder -> holder.value().getAttributeModifiers(EquipmentSlot.MAINHAND, holder.value().getDefaultInstance()).containsKey(Attributes.ATTACK_DAMAGE))
                                 .map(holder -> holder.unwrapKey().get().location()).toList())
@@ -255,5 +267,18 @@ public class Functions {
             outMap.put(elements[i], Double.valueOf(elements[i+1]));
         }
         return outMap;
+    }
+
+    private static List<MobModifier> modifiers(String value) {
+        List<MobModifier> output = new ArrayList<>();
+        String[] elements = value.replaceAll("\\)", "").split(",");
+        if (elements.length % 3 != 0) return output;
+        for (int i = 0; i <= elements.length-3; i += 3) {
+            output.add(new MobModifier(
+                    new ResourceLocation(elements[i]),
+                    Double.valueOf(elements[i+1]),
+                    AttributeModifier.Operation.valueOf(elements[i+2])));
+        }
+        return output;
     }
 }

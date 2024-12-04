@@ -2,12 +2,13 @@ package harmonised.pmmo.config.scripting;
 
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,11 +79,11 @@ public record Expression(
 
     private static List<ResourceLocation> getMembers(boolean isTag, ResourceLocation tagID, RegistryAccess access, ObjectType type) {
         return switch (type) {
-            case ITEM -> readRegistry(isTag, access, ForgeRegistries.ITEMS.getRegistryKey(), tagID);
-            case BLOCK -> readRegistry(isTag, access, ForgeRegistries.BLOCKS.getRegistryKey(), tagID);
-            case ENTITY -> readRegistry(isTag, access, ForgeRegistries.ENTITY_TYPES.getRegistryKey(), tagID);
-            case BIOME -> readRegistry(isTag, access, ForgeRegistries.BIOMES.getRegistryKey(), tagID);
-            case ENCHANTMENT -> readRegistry(isTag, access, ForgeRegistries.ENCHANTMENTS.getRegistryKey(), tagID);
+            case ITEM -> readRegistry(isTag, access, Registries.ITEM, tagID);
+            case BLOCK -> readRegistry(isTag, access, Registries.BLOCK, tagID);
+            case ENTITY -> readRegistry(isTag, access, Registries.ENTITY_TYPE, tagID);
+            case BIOME -> readRegistry(isTag, access, Registries.BIOME, tagID);
+            case ENCHANTMENT -> readRegistry(isTag, access, Registries.ENCHANTMENT, tagID);
             default -> List.of();
         };
     }

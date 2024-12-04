@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -17,9 +16,9 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ExecutableListener extends SimplePreparableReloadListener<Boolean> {
 	private final Consumer<RegistryAccess> executor;
-	private final Supplier<RegistryAccess> access;
+	private final RegistryAccess access;
 
-	public ExecutableListener(Supplier<RegistryAccess> access, Consumer<RegistryAccess> executor) {
+	public ExecutableListener(RegistryAccess access, Consumer<RegistryAccess> executor) {
 		this.access = access;
 		this.executor = executor;
 	}
@@ -29,9 +28,7 @@ public class ExecutableListener extends SimplePreparableReloadListener<Boolean> 
 
 	@Override
 	protected void apply(Boolean pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
-		var regAccess = access.get();
-		if (regAccess != null)
-			executor.accept(regAccess);
+		executor.accept(access);
 	}
 
 	/**
