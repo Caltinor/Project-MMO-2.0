@@ -38,6 +38,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonSetup {
@@ -78,7 +79,11 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
-		Core.get(LogicalSide.SERVER).getLoader().RELOADER = new ExecutableListener(event.getRegistryAccess(), CoreLoader.RELOADER_FUNCTION);
+		Core.get(LogicalSide.SERVER).getLoader().RELOADER = new ExecutableListener(() ->
+			ServerLifecycleHooks.getCurrentServer() != null
+				? ServerLifecycleHooks.getCurrentServer().registryAccess()
+				: null
+			, CoreLoader.RELOADER_FUNCTION);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().RELOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
 		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);

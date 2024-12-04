@@ -39,7 +39,11 @@ public record ObjectData(
 		Map<ModifierDataType, List<LogicEntry>> nbtBonuses,
 		Map<ResourceLocation, SalvageData> salvage,
 		VeinData veinData) implements DataSource<ObjectData>{
-	
+
+		public ObjectData(boolean override) {this(
+				override, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+				new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY
+		);}
 		public ObjectData() {
 			this(false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), 
 					new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), VeinData.EMPTY);
@@ -91,6 +95,11 @@ public record ObjectData(
 		}
 		@Override
 		public Set<String> getTagValues() {return tagValues();}
+
+		public void salvagePutAll(Map<ResourceLocation, SalvageData> collect) {
+			salvage().putAll(collect);
+		}
+
 		public static final Codec<ObjectData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),
 				Codec.STRING.listOf().optionalFieldOf("isTagFor").forGetter(od -> Optional.of(new ArrayList<>(od.tagValues))),

@@ -16,6 +16,8 @@ import javax.annotation.Nullable;
 import harmonised.pmmo.config.codecs.*;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.core.IDataStorage;
+import net.minecraftforge.common.util.TriPredicate;
+import org.apache.commons.lang3.function.TriFunction;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.google.common.base.Preconditions;
@@ -25,7 +27,6 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
@@ -60,7 +61,7 @@ public class APIUtils {
 	public static int getLevel(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level()).getData().getPlayerSkillLevel(skill, player.getUUID());
+		return Core.get(player.getLevel()).getData().getPlayerSkillLevel(skill, player.getUUID());
 	}
 	
 	/**Sets the player's current level in the skill provided
@@ -72,7 +73,7 @@ public class APIUtils {
 	public static void setLevel(String skill, Player player, int level) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		Core.get(player.level()).getData().setPlayerSkillLevel(skill, player.getUUID(), level);
+		Core.get(player.getLevel()).getData().setPlayerSkillLevel(skill, player.getUUID(), level);
 	}
 	
 	/**changes the player's level in the specified skill by a specific amount.
@@ -87,7 +88,7 @@ public class APIUtils {
 	public static boolean addLevel(String skill, Player player, int levelChange) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level()).getData().changePlayerSkillLevel(skill, player.getUUID(), levelChange);
+		return Core.get(player.getLevel()).getData().changePlayerSkillLevel(skill, player.getUUID(), levelChange);
 	}
 	
 	/**Gets the raw xp value associated with the specified skill and player.
@@ -99,7 +100,7 @@ public class APIUtils {
 	public static long getXp(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		return Core.get(player.level()).getData().getXpRaw(player.getUUID(), skill);
+		return Core.get(player.getLevel()).getData().getXpRaw(player.getUUID(), skill);
 	}
 	
 	/**Sets the raw XP value for the player in the skill specified.
@@ -111,7 +112,7 @@ public class APIUtils {
 	public static void setXp(String skill, Player player, long xpRaw) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		Core.get(player.level()).getData().setXpRaw(player.getUUID(), skill, xpRaw);
+		Core.get(player.getLevel()).getData().setXpRaw(player.getUUID(), skill, xpRaw);
 	}
 	
 	/**Changes the player's current experience in the specified skill by the amount.
@@ -127,7 +128,7 @@ public class APIUtils {
 	public static boolean addXp(String skill, Player player, long change) {
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
-		IDataStorage data = Core.get(player.level()).getData();
+		IDataStorage data = Core.get(player.getLevel()).getData();
 		return CoreUtils.processSkillGroupXP(Map.of(skill, change)).entrySet().stream()
 				.allMatch(entry -> data.setXpDiff(player.getUUID(), entry.getKey(), entry.getValue()));
 	}
@@ -139,7 +140,7 @@ public class APIUtils {
 	 * @return a map of skills and raw xp
 	 */
 	public static Map<String, Long> getRawXpMap(Player player) {
-		return Core.get(player.level()).getData().getXpMap(player.getUUID());
+		return Core.get(player.getLevel()).getData().getXpMap(player.getUUID());
 	}
 
 	/**Returns the player's entire skill map.
@@ -148,7 +149,7 @@ public class APIUtils {
 	 * @return a map of skills and levels
 	 */
 	public static Map<String, Integer> getAllLevels(Player player) {
-		IDataStorage data = Core.get(player.level()).getData();
+		IDataStorage data = Core.get(player.getLevel()).getData();
 		return getRawXpMap(player).entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> data.getLevelFromXP(e.getValue())));
 	}
@@ -257,7 +258,7 @@ public class APIUtils {
 		Preconditions.checkNotNull(item);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(side);
-		return Core.get(side).getReqMap(type, item, true);
+		return Core.get(side).getReqMap(type, item);
 	}
 	
 	/**Returns a skill-level map for the requirements of the block and the requirement type passed.
@@ -349,25 +350,6 @@ public class APIUtils {
 		raw.setXpValues(type, award);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
-
-	/**Registers a configuration for an entity or item for damage dealt
-	 * and received xp events.  <i>Note: passing other object types into
-	 * this method will be ignored, and have no effect.</i>
-	 *
-	 * @param oType use only ITEM or ENTITY
-	 * @param objectID the key for the object being configured
-	 * @param isDealt is Dealt Damage config else if false will be received damage
-	 * @param damageType the id or tag string for damage type
-	 * @param award a map of skills and experience values to be awarded
-	 * @param asOverride should this apply after datapacks as an override
-	 */
-	public static void registerDamageXpAward(ObjectType oType, ResourceLocation objectID, boolean isDealt, String damageType, Map<String, Long> award, boolean asOverride) {
-		if (oType == ObjectType.ENTITY || oType == ObjectType.ITEM) {
-			ObjectData raw = new ObjectData(asOverride);
-			raw.damageXpValues().put(isDealt ? EventType.DEAL_DAMAGE : EventType.RECEIVE_DAMAGE, Map.of(damageType, award));
-			registerConfiguration(asOverride, oType, objectID, raw);
-		}
-	}
 	/**registers a configuration setting for bonuses to xp gains.
 	 * 
 	 * @param objectID the object linked to the bonus
@@ -449,8 +431,7 @@ public class APIUtils {
 			return;
 		VeinData data = new VeinData(chargeCap, chargeRate, consumeAmount);
 		ObjectData raw = new ObjectData(asOverride, Set.of(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-				new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-				new HashMap<>(), data);
+				new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), data);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
 
@@ -463,7 +444,7 @@ public class APIUtils {
 	 * @param mob_modifiers a map of mob keys with a value map of attribute types and values
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, List<MobModifier>> mob_modifiers, boolean asOverride) {
+	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
 		if (oType != ObjectType.BIOME && oType != ObjectType.DIMENSION) 
 			return;
 		LocationData raw = new LocationData(asOverride);
@@ -800,17 +781,17 @@ public class APIUtils {
 	 */
 	public static void registerPerk(
 			@NonNull ResourceLocation perkID,
-			@NonNull Perk perk,
+			@NonNull CompoundTag propertyDefaults,
+			@NonNull TriPredicate<Player, CompoundTag, Integer> customConditions,
+			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onExecute,
+			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude,
 			@NonNull PerkSide side) {
-		switch (side) {
-		case SERVER -> {
-			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, perk);
-			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerClientClone(perkID, perk);}
-		case CLIENT -> Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, perk);
-		case BOTH -> {
-			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, perk);
-			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, perk);}
+		if (side.equals(PerkSide.SERVER) || side.equals(PerkSide.BOTH)) {
+			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerProperties(perkID, propertyDefaults);
 		}
+		if (side.equals(PerkSide.CLIENT) || side.equals(PerkSide.BOTH))
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
 	}	
 	
 	//===============UTILITY METHODS=================================
