@@ -461,7 +461,7 @@ public class Config {
 	public static ForgeConfigSpec.IntValue PARTY_RANGE;
 	public static ConfigObject<Map<String, Double>> PARTY_BONUS;
 	public static double partyBonus(String skill) {
-		return PARTY_BONUS.get().getOrDefault(skill, 0d);
+		return PARTY_BONUS.get().getOrDefault(skill, 1d);
 	}
 	
 	private static void buildPartySettings(ForgeConfigSpec.Builder builder) {
