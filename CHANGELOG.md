@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.19.2-3.4.16] - 2024-11-28
+## [1.19.2-3.4.17] - 2024-12-08
 ### Minor Version update
-- Updated party xp ratio config property to have per-skill ratios
+- Fixed party xp giving zero in certain cases
