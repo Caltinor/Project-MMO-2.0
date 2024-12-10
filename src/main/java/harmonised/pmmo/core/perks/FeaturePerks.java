@@ -266,12 +266,13 @@ public class FeaturePerks {
 					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 					.withString(APIUtils.DAMAGE_TYPE_IN, "omitted").build())
 			.setStart((player, nbt) -> {
-				float saved = (int)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL)) + nbt.getInt(APIUtils.BASE);
-				saved = Math.min(nbt.getInt(APIUtils.MAX_BOOST), saved);
+				float saved = (nbt.getFloat(APIUtils.PER_LEVEL) * (float)nbt.getInt(APIUtils.SKILL_LEVEL)) + nbt.getFloat(APIUtils.BASE);
+				saved = Math.min(nbt.getFloat(APIUtils.MAX_BOOST), saved);
 				float baseDamage = nbt.contains(APIUtils.DAMAGE_OUT)
 						? nbt.getFloat(APIUtils.DAMAGE_OUT)
 						: nbt.getFloat(APIUtils.DAMAGE_IN);
-				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, Math.max(baseDamage - saved, 0)).build();
+				nbt.putFloat(APIUtils.DAMAGE_OUT, Math.max(baseDamage - saved, 0));
+				return nbt;
 			})
 			.setDescription(LangProvider.PERK_FALL_SAVE_DESC.asComponent())
 			.setStatus((player, nbt) -> List.of(
