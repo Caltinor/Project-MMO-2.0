@@ -6,18 +6,18 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class EnchantEvent extends PlayerEvent{
+	EnchantmentInstance enchant;
 	ItemStack stack;
-	int levelsSpent;
 	
-	public EnchantEvent(Player player, ItemStack stack, int levelsSpent) {
+	public EnchantEvent(Player player, ItemStack stack, EnchantmentInstance enchantment) {
 		super(player);
 		this.stack = stack;
-		this.levelsSpent = levelsSpent;
+		this.enchant = enchantment;
 	}
 	
 	@Override
 	public boolean isCancelable() {return false;}
 
+	public EnchantmentInstance getEnchantment() {return enchant;}
 	public ItemStack getItem() {return stack;}
-	public int getLevelsSpent() {return levelsSpent;}
 }

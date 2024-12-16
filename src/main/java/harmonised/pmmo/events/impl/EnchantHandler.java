@@ -25,15 +25,17 @@ public class EnchantHandler {
 			CompoundTag dataIn = TagBuilder.start()
 					.withString(APIUtils.STACK, event.getItem().serializeNBT().getAsString())
 					.withString(APIUtils.PLAYER_ID, event.getEntity().getUUID().toString())
-					.withInt(APIUtils.ENCHANT_LEVELS_SPENT, event.getLevelsSpent()).build();
+					.withInt(APIUtils.ENCHANT_LEVEL, event.getEnchantment().level)
+					.withString(APIUtils.ENCHANT_NAME, event.getEnchantment().enchantment.getDescriptionId()).build();
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ENCHANT, event, dataIn);
 		}
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ENCHANT, event.getEntity(), hookOutput));
 		if (serverSide) {
+			double proportion = (double)event.getEnchantment().level / (double)event.getEnchantment().enchantment.getMaxLevel();
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENCHANT, event.getItem(), event.getEntity(), hookOutput);
 			Set<String> keys = xpAward.keySet();
 			keys.forEach((skill) -> {
-				xpAward.computeIfPresent(skill, (key, value) -> Double.valueOf((double)value * event.getLevelsSpent()).longValue());
+				xpAward.computeIfPresent(skill, (key, value) -> Double.valueOf((double)value * proportion).longValue());
 			});
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	

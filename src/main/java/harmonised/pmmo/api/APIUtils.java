@@ -776,7 +776,8 @@ public class APIUtils {
 	public static final String STACK = "stack";
 	public static final String PLAYER_ID = "player_id";
 	
-	public static final String ENCHANT_LEVELS_SPENT = "enchant_levels_spent";
+	public static final String ENCHANT_LEVEL = "enchant_level";
+	public static final String ENCHANT_NAME = "enchant_name";
 	
 	public static final String AMBIENT = "ambient";
 	public static final String VISIBLE = "visible";
