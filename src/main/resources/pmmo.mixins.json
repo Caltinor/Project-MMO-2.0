@@ -8,6 +8,7 @@
   "mixins": [
     "AbstractFurnaceTileEntityShrinkMixin",
     "CampfireMixin",
+    "CampfireMixin_Dev",
     "ServerLevelMixin"
   ],
   "server": [
