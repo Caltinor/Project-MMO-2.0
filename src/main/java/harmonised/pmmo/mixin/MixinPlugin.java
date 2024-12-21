@@ -13,9 +13,9 @@ import java.util.Set;
 public final class MixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (isDevelopmentEnv() && mixinClassName.endsWith("_Dev")) return true;
-        if (!isDevelopmentEnv() && !mixinClassName.endsWith("_Dev")) return true;
-        return false;
+        if (mixinClassName.endsWith("_Dev") && !isDevelopmentEnv()) return false;
+        if (mixinClassName.endsWith("_Prod") && isDevelopmentEnv()) return false;
+        return true;
     }
 
     @Override

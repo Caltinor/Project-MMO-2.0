@@ -7,14 +7,14 @@
   "plugin": "harmonised.pmmo.mixin.MixinPlugin",
   "mixins": [
     "AbstractFurnaceTileEntityShrinkMixin",
-    "CampfireMixin",
+    "CampfireMixin_Prod",
     "CampfireMixin_Dev",
-    "ServerLevelMixin"
+    "ServerLevelMixin",
+    "EnchantApplyMixin"
   ],
   "server": [
   ],
   "client": [
-    "EnchantApplyMixin"
   ],
   "injectors": {
     "defaultRequire": 1
