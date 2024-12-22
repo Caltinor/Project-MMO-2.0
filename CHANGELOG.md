@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.20.1-1.5.29] - 2024-12-10
+## [1.20.1-1.5.30] - 2024-12-22
 
 ### Bugfixes / Tweaks~~~~
-- Fixed damage reduction perk stacking reduction onto initial damage resulting in more damage taken.
+- Update enchant mixin internals to give more stable event behavior.  PR by Cubiferous
