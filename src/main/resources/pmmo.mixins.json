@@ -9,12 +9,12 @@
     "AbstractFurnaceTileEntityShrinkMixin",
     "CampfireMixin_Prod",
     "CampfireMixin_Dev",
-    "ServerLevelMixin",
-    "EnchantApplyMixin"
+    "ServerLevelMixin"
   ],
   "server": [
   ],
   "client": [
+    "EnchantApplyMixin"
   ],
   "injectors": {
     "defaultRequire": 1
