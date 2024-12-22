@@ -4,9 +4,11 @@
   "package": "harmonised.pmmo.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "pmmo.refmap.json",
+  "plugin": "harmonised.pmmo.mixin.MixinPlugin",
   "mixins": [
     "AbstractFurnaceTileEntityShrinkMixin",
-    "CampfireMixin",
+    "CampfireMixin_Prod",
+    "CampfireMixin_Dev",
     "ServerLevelMixin"
   ],
   "server": [
