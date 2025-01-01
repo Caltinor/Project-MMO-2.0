@@ -18,6 +18,10 @@ import harmonised.pmmo.setup.datagen.EntityTagProvider;
 import harmonised.pmmo.setup.datagen.ItemTagProvider;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.setup.datagen.LangProvider.Locale;
+import harmonised.pmmo.setup.datagen.defaultpacks.DefaultBiomeConfigProvider;
+import harmonised.pmmo.setup.datagen.defaultpacks.DefaultBlockConfigProvider;
+import harmonised.pmmo.setup.datagen.defaultpacks.DefaultDimConfigProvider;
+import harmonised.pmmo.setup.datagen.defaultpacks.DefaultEntityConfigProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.DefaultGLMProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.DefaultItemConfigProvider;
 import harmonised.pmmo.setup.datagen.defaultpacks.EasyBlockConfigProvider;
@@ -134,6 +138,10 @@ public class CommonSetup {
 			//Default Feature Pack Generators
 			generator.addProvider(true, new DefaultGLMProvider(generator.getPackOutput(), reg));
 			generator.addProvider(true, new DefaultItemConfigProvider(generator.getPackOutput()));
+			generator.addProvider(true, new DefaultBlockConfigProvider(generator.getPackOutput()));
+			generator.addProvider(true, new DefaultDimConfigProvider(generator.getPackOutput()));
+			generator.addProvider(true, new DefaultBiomeConfigProvider(generator.getPackOutput()));
+			generator.addProvider(true, new DefaultEntityConfigProvider(generator.getPackOutput()));
 			//Hardcore Feature Pack Generators
 			generator.addProvider(true, new HardcoreGLMProvider(generator.getPackOutput(), reg));
 

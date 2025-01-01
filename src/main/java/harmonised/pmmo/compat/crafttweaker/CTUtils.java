@@ -14,6 +14,7 @@ import com.blamejared.crafttweaker.api.data.converter.tag.TagToDataConverter;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 
 import harmonised.pmmo.api.perks.Perk;
+import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.PlainTextContents;
@@ -248,7 +249,7 @@ public class CTUtils implements IRuntimeAction{
 	 * @docParam effects {skillname: 0.0 as double?, otherskillname: 0.0 as double?}
 	 */
 	@ZenCodeType.Method
-	public static void setMobModifier(ObjectType objectType, ResourceLocation locationID, ResourceLocation mobID, Map<String, Double> modifiers) {
+	public static void setMobModifier(ObjectType objectType, ResourceLocation locationID, ResourceLocation mobID, List<MobModifier> modifiers) {
 		switch (objectType) {
 		case DIMENSION -> {
 			var data = Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(locationID, rl -> new LocationData()).mobModifiers();

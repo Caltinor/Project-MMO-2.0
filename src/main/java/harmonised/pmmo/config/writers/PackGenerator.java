@@ -233,6 +233,7 @@ public class PackGenerator {
 						new HashMap<>(),
 						applyDefaults ? existing.veinBlacklist() : new ArrayList<>(),
 						applyDefaults ? existing.travelReq() : new HashMap<>(),
+						applyDefaults ? existing.globalModifiers() : new ArrayList<>(),
 						applyDefaults ? existing.mobModifiers() : new HashMap<>());
 				JsonObject raw = LocationData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 				raw.remove("positive_effect");
@@ -249,6 +250,7 @@ public class PackGenerator {
 					applyDefaults ? existing.negative() : new HashMap<>(),
 					applyDefaults ? existing.veinBlacklist() : new ArrayList<>(),
 					applyDefaults ? existing.travelReq() : new HashMap<>(),
+					applyDefaults ? existing.globalModifiers() : new ArrayList<>(),
 					applyDefaults ? existing.mobModifiers() : new HashMap<>());
 			JsonObject raw = LocationData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),

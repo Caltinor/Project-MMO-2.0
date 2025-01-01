@@ -11,6 +11,7 @@ import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.config.codecs.VeinData;
@@ -34,6 +35,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -454,7 +456,7 @@ public class APIUtils {
 	 * @param mob_modifiers a map of mob keys with a value map of attribute types and values
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, Map<String, Double>> mob_modifiers, boolean asOverride) {
+	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, List<MobModifier>> mob_modifiers, boolean asOverride) {
 		if (oType != ObjectType.BIOME && oType != ObjectType.DIMENSION) 
 			return;
 		LocationData raw = new LocationData(asOverride);
