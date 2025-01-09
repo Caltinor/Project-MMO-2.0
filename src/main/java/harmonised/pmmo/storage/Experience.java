@@ -156,7 +156,7 @@ public class Experience {
         public static long getXpForNextLevel(long level) {
             List<Long> staticLvls = Config.server().levels().staticLevels();
             if (staticLvls.get(0) != -1)
-                return staticLvls.size() < level ? staticLvls.get((int)level) : Long.MAX_VALUE;
+                return staticLvls.size() > level ? staticLvls.get((int)level) : Long.MAX_VALUE;
             long min = Config.server().levels().xpMin();
             double base = Config.server().levels().xpBase();
             double lvl = Config.server().levels().perLevel();
