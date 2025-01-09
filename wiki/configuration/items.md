@@ -67,19 +67,21 @@ In this example if we craft the item we will get 100 crafting XP and 55 smithing
 |SMELT| when this is the item being smelted/cooked, NOT the output     |
 |ACTIVATE_ITEM|  if this item has a right-click action, when that is activated |
 
-## "dealt_damage_xp":{}
+## "damage_type_xp":{}
 In 1.19.4, Mojang made damage a datapack object, which allowed users to add their own damage types via datapack.  Included in this new feature was the ability to make damage type tags.  To take advantage of this feature, PMMO uses those damage types and tags when determining what XP to give a player.  Using this system, you can give players a different type of XP based on the type of damage they dealt.  For a list of all the vanilla damage types, see [HERE](damagetypes.md).  If using damage tags, pmmo will treat an entry like a tag if it is preceded with a `#`.  An example default implementation for "dealt_damage_xp" looks as follows:
 ```json5
-"dealt_damage_xp":{
-  "minecraft:player_attack": { //gives the below XP for every point of damage dealt with melee attacks
-    "combat": 10  
-  },
-  "#minecraft:is_projectile": { //using a tag, we can give archery XP for every point of damage dealt by projectiles
-    "archery": 10
-  },
-  "magic_mod:spell_damage": { //if a mod adds their own damage type, you can use those here too.
-    "magic": 100,
-    "spellcasting": 50
+"damage_type_xp":{
+  "DEAL_DAMAGE":
+    "minecraft:player_attack": { //gives the below XP for every point of damage dealt with melee attacks
+      "combat": 10  
+    },
+    "#minecraft:is_projectile": { //using a tag, we can give archery XP for every point of damage dealt by projectiles
+      "archery": 10
+    },
+    "magic_mod:spell_damage": { //if a mod adds their own damage type, you can use those here too.
+      "magic": 100,
+      "spellcasting": 50
+    }
   } 
 }
 ```
