@@ -82,7 +82,8 @@ In 1.19.4, Mojang made damage a datapack object, which allowed users to add thei
       "magic": 100,
       "spellcasting": 50
     }
-  } 
+  },
+  "RECEIVE_DAMAGE": {} 
 }
 ```
 
