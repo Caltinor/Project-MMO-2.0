@@ -1,10 +1,8 @@
 # Changelog
 
-## [1.21.1-2.6.17] - 2025-01-01
-### Minor Version Changes
-- Updated dimension/biome mob modifiers to use the 1.20 modifier system. (forward feature port)
-- Updated default mob modifiers to be global modifiers instead of mob-specific.
+## [1.21.1-2.6.18] - 2025-01-09
 ### Bugfixes/Tweaks
-- Fixed black leather armor not having archery bonus
-- Fixed damage reduction perk not stacking with incoming damage resulting in extra damage instead of reduced
+- Fixed static levels ignoring setting values
+- Fixed shield event firing for all damage not just blocks
+- Updated wiki with correct damage xp format.
 
