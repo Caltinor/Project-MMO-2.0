@@ -20,14 +20,11 @@ public class PlayerDeathHandler {
 		Core core = Core.get(player.level());
 
 		new HashMap<>(core.getData().getXpMap(player.getUUID())).forEach((skill, xp) -> {
-			long lossExp = 0;
-			long lossLvl = 0;
 			long lossScaled = Double.valueOf(Config.server().levels().lossOnDeath() * 10000d).longValue();
 			if (Config.server().levels().loseOnlyExcess()) {
-				lossExp = (xp.getXp() * lossScaled)/10000L;
-				xp.addXp(-lossExp);
+				xp.addXp(-((xp.getXp() * lossScaled)/10000L));
 			}
-			else if (Config.server().levels().loseOnDeath()) {
+			else {
 				BigInteger totalXp = BigInteger.valueOf(0L);
 				for (long i = 0; i < xp.getLevel().getLevel(); i++) {
 					totalXp = totalXp.add(BigInteger.valueOf(Experience.XpLevel.getXpForNextLevel(i)));
