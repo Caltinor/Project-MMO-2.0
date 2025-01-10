@@ -39,6 +39,7 @@ public class Scripting {
             //is a block node
             if (trimmed.startsWith("WITH")) {
                 currentNode = trimmed.replaceAll("^WITH ?", "");
+                if (!currentNode.endsWith(".")) currentNode += ".";
                 multiLine = new StringBuilder();
             }
             else if (trimmed.startsWith("END")) {
