@@ -58,6 +58,13 @@ public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<
 	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.SKILLS;}
 
 	@Override
+	public ConfigData<SkillsConfig> getFromScripting(String param, Map<String, String> value) {
+		Map<String, SkillData> skills = new HashMap<>(this.skills());
+		skills.put(param, SkillData.Builder.start().fromScripting(value));
+		return new SkillsConfig(skills);
+	}
+
+	@Override
 	public SkillsConfig combine(SkillsConfig two) {return two;}
 	@Override
 	public boolean isUnconfigured() {return false;}
