@@ -1,5 +1,7 @@
 package harmonised.pmmo.config;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -7,11 +9,13 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.readers.ConfigListener;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.ArrayList;
@@ -225,6 +229,47 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 
 	@Override
 	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.PERKS;}
+
+	private static final String EVENT = "event";
+	private static final String CLEAR = "clear_all";
+	@Override
+	public ConfigData<PerksConfig> getFromScripting(String param, Map<String, String> value) {
+		if (param.equals(CLEAR))
+			return new PerksConfig(new HashMap<>());
+		else if (value.containsKey(EVENT)) {
+			EventType type = EventType.byName(value.get(EVENT));
+			if (type == null) {
+				MsLoggy.ERROR.log(MsLoggy.LOG_CODE.DATA, "perk script for event {%s} is not valid", value.get(EVENT));
+				return this;
+			}
+
+			PerksConfig config = new PerksConfig(makeMutable(this.perks()));
+
+				config.perks().computeIfAbsent(type, t -> new ArrayList<>()).add(tagFromValueMap(value));
+			return config;
+		}
+		else return this;
+	}
+
+	private CompoundTag tagFromValueMap(Map<String, String> values) {
+		CompoundTag outTag = new CompoundTag();
+		values.entrySet().stream().filter(entry -> !entry.getKey().equals(EVENT)).forEach(entry -> {
+			try {
+				Tag tag = new TagParser(new StringReader(entry.getValue())).readValue();
+				outTag.put(entry.getKey(), tag);
+			}
+			catch (CommandSyntaxException e) {
+				MsLoggy.ERROR.log(MsLoggy.LOG_CODE.DATA, "unable to parse perk value %s", entry.getValue());
+			}
+		});
+		return outTag;
+	}
+
+	private Map<EventType, List<CompoundTag>> makeMutable(Map<EventType, List<CompoundTag>> inMap) {
+		Map<EventType, List<CompoundTag>> outMap = new HashMap<>();
+		inMap.forEach((type, list) -> outMap.put(type, new ArrayList<>(list)));
+		return outMap;
+	}
 
 	@Override
 	public PerksConfig combine(PerksConfig two) {return two;}

@@ -75,6 +75,7 @@ These nodes take the target and perform a configuration action for that object. 
 ### Server config syntax and examples
 [Server Config](./serverconfig.md)
 [Globals Config](./globalsconfig.md)
+[Perks Config](./perksconfig.md)
 
 ## Advanced Syntax 
 Long repetitive lines over the length of a file are both tedious and an eyesore.  To help with that, there are some special formatting tools you can use to make your life easier.
