@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
@@ -208,6 +209,17 @@ public class CheeseTracker {
 			}
 			public Setting build() {
 				return new Setting(source, minTime, retention, toleranceFlat, reduction, cooloff, tolerancePercent, strictTolerance);
+			}
+			public Setting fromScripting(Map<String, String> values) {
+				if (values.containsKey(SOURCE)) this.source(values.get(SOURCE).split(","));
+				if (values.containsKey(MIN_TIME_TO_APPLY)) this.minTime(Integer.parseInt(values.get(MIN_TIME_TO_APPLY)));
+				if (values.containsKey(REDUCTION)) this.reduction(Double.parseDouble(values.get(REDUCTION)));
+				if (values.containsKey(COOLOFF)) this.cooloff(Integer.parseInt(values.get(COOLOFF)));
+				if (values.containsKey(TOLERANCE_PERCENT)) this.tolerance(Double.parseDouble(values.get(TOLERANCE_PERCENT)));
+				if (values.containsKey(TOLERANCE_FLAT)) this.tolerance(Integer.parseInt(values.get(TOLERANCE_FLAT)));
+				if (values.containsKey(RETENTION)) this.retention(Integer.parseInt(values.get(RETENTION)));
+				if (values.containsKey(STRICT)) this.setStrictness(Boolean.parseBoolean(values.get(STRICT)));
+				return this.build();
 			}
 		}
 		
