@@ -15,6 +15,7 @@ import harmonised.pmmo.config.codecs.ServerData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.config.readers.ConfigListener;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -136,7 +137,10 @@ public class Functions {
         });
         KEYWORDS.put("set", (param, configId, type, value) -> {
             ConfigListener.ServerConfigs configType = ConfigListener.ServerConfigs.fromFilename(configId.getPath());
-            Config.CONFIG.set(configType, Config.CONFIG.get(configType).getFromScripting(param, value));
+            if (configType == null)
+                MsLoggy.ERROR.log(MsLoggy.LOG_CODE.DATA, "config type value invalid: %s", configId.getPath());
+            else
+                Config.CONFIG.set(configType, Config.CONFIG.get(configType).getFromScripting(param, value));
         });
 
         //ObjectType.PLAYER is arbitrary here since none of the features use it.

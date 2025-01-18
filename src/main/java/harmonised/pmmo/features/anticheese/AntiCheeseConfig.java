@@ -49,22 +49,24 @@ public record AntiCheeseConfig(
 
 	@Override
 	public ConfigData<AntiCheeseConfig> getFromScripting(String param, Map<String, String> value) {
-		if (!value.containsKey(EVENT)) return this;
-		EventType type = EventType.byName(value.get(EVENT));
-		if (type == null) return this;
-
 		boolean afk_sub = param.equals(AFK_SUB) ? Functions.getBool(value) : this.afkSubtract();
 		AntiCheeseConfig config = new AntiCheeseConfig(afk_sub,
 				new HashMap<>(this.afk()),
 				new HashMap<>(this.diminish()),
 				new HashMap<>(this.normal()));
+
+		if (!value.containsKey(EVENT)) return config;
+		EventType type = EventType.byName(value.get(EVENT));
+		if (type == null) return config;
+
+
 		switch (param) {
 			case AFK -> config.afk().put(type, Setting.build().fromScripting(value));
 			case DIM -> config.diminish().put(type, Setting.build().fromScripting(value));
 			case NORM -> config.normal().put(type, Setting.build().fromScripting(value));
 			default -> {}
 		}
-		return this;
+		return config;
 	}
 
 	@Override

@@ -44,8 +44,8 @@ public record AutoValueConfig(
 			Tweaks.DEFAULT
 	);}
 	private static final String ENABLED = "enabled";
-	private static final String REQ_ENABLE = "enable_requirements";
-	private static final String XP_ENABLE = "enable_xp_awards";
+	private static final String REQ_ENABLE = "enabled_requirements";
+	private static final String XP_ENABLE = "enabled_xp_awards";
 	private static final String REQ = "requirement";
 	private static final String EVENT = "event";
 

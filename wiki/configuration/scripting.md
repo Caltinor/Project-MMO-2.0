@@ -73,12 +73,12 @@ These nodes take the target and perform a configuration action for that object. 
 |  `max_drops`  | whole number `max_drops(3)`                                                                                                                  |
 
 ### Server config syntax and examples
-[Server Config](./serverconfig.md)
-[Globals Config](./globalsconfig.md)
-[Perks Config](./perksconfig.md)
-[Skills Config](./skillsconfig.md)
-[Anti-Cheese Config](./anticheeseconfig.md)
-[AutoValues Config](./autovaluesconfig.md)
+[Server Config](./serverconfig.md)<br>
+[Globals Config](./globalsconfig.md)<br>
+[Perks Config](./perksconfig.md)<br>
+[Skills Config](./skillsconfig.md)<br>
+[Anti-Cheese Config](./anticheeseconfig.md)<br>
+[AutoValues Config](./autovaluesconfig.md)<br>
 
 ## Advanced Syntax 
 Long repetitive lines over the length of a file are both tedious and an eyesore.  To help with that, there are some special formatting tools you can use to make your life easier.

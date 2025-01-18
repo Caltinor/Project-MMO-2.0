@@ -47,7 +47,7 @@ public class EasyConfigProvider extends PmmoDataProvider<ConfigData<?>> {
     private void populateData() {
         data.put(ConfigListener.ServerConfigs.SERVER, new ServerData(
                 new ServerData.General(50d, Reference.mc("smithing_table"), true, true),
-                new ServerData.Levels(1000000, List.of(-1L), 0.0, false,
+                new ServerData.Levels(1000000, List.of(-1L), 0.0,
                         true, 1.0, Map.of(), 3000, 0, 1.0),
                 new ServerData.Requirements(Arrays.stream(ReqType.values()).collect(Collectors.toMap(a -> a, a -> false))),
                 new ServerData.XpGains(0.0, false, serverDefaults(), Map.of(

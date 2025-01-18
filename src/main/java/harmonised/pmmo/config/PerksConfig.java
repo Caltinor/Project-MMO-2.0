@@ -245,7 +245,7 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 
 			PerksConfig config = new PerksConfig(makeMutable(this.perks()));
 
-				config.perks().computeIfAbsent(type, t -> new ArrayList<>()).add(tagFromValueMap(value));
+			config.perks().computeIfAbsent(type, t -> new ArrayList<>()).add(tagFromValueMap(value));
 			return config;
 		}
 		else return this;

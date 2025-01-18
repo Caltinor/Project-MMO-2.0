@@ -1,3 +1,5 @@
+[Back](./scripting.md#server-config-syntax-and-examples)
+
 # Anti-Cheese Config Syntax and Examples
 
 ## Example File
@@ -40,3 +42,5 @@ Each configuration uses a combination of `set(config_keyword).value(some_value);
 |   `tolerance_flat`   | a whole number                 |    0    | same as above but a flat difference, but for afk tracking applies to distance moved to still be considered AFK. |
 | `retention_duration` | a whole number                 |    0    | how long after no longer meeting criteria before reductions start to fall off                                   |
 |  `strict_tolerance`  | true/false                     |  true   | used in AFK tracking. if true, the player's facing angle must also be within tolerance to be "afk"              |                                             
+
+[Back](./scripting.md#server-config-syntax-and-examples)

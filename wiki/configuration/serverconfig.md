@@ -1,3 +1,5 @@
+[Back](./scripting.md#server-config-syntax-and-examples)
+
 # Server Config Syntax and Examples
 
 ## Example File
@@ -94,3 +96,5 @@ Most configurations use a combination of `set(config_keyword).value(some_value);
 |     `default_consume`     | the default amount of vein charge consumed on unconfigured blocks                                                                                        |                                                                                                                                                                                                                   | whole number. default `value(1)`                                                                                                                                                                                               |
 |     `charge_modifier`     | scales charge rates globally from all sources                                                                                                            |                                                                                                                                                                                                                   | decimal value. default `value(1.0)`                                                                                                                                                                                            |
 |        `blacklist`        | items that should cannot be used to vein mine blocks                                                                                                     |                                                                                                                                                                                                                   | a list of item ids separated by a comma. default `value(silentgear:saw)`                                                                                                                                                       |
+
+[Back](./scripting.md#server-config-syntax-and-examples)

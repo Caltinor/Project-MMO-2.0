@@ -1,3 +1,5 @@
+[Back](./scripting.md#server-config-syntax-and-examples)
+
 # Perks Config Syntax and Examples
 
 ## Example File
@@ -30,4 +32,10 @@ Each configuration uses a combination of `set(config_keyword).value(some_value);
 | `clear_all`|clears the perks config of all perks|||
 | blank|start each perk with `set()`|`event(EVENT_TYPE)` specifies which event this perk is for.|`property(value)` perks take multiple values chained together where the attribute you are setting is the value node and the value inside the `()` is the value|
 
-**Note that each perk must have the `perk(perkID)` node to be valid, but omitting it will simply cause that configuration to be skipped.**
+[Built-in Perk Properties](../core/perks.md)
+
+### IMPORTANT NOTES
+- each perk must have the `perk(perkID)` node to be valid, but omitting it will simply cause that configuration to be skipped.
+- values with `:` included such as perk IDs must be enclosed in quotes eg `perk("pmmo:effect")` or else the parser will omit everything after the `:`.  This only applies to perk settings in scripting since perks use a dynamic properties system that has to be parsed differently.
+
+[Back](./scripting.md#server-config-syntax-and-examples)

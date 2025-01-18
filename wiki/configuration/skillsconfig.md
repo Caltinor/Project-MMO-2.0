@@ -1,3 +1,5 @@
+[Back](./scripting.md#server-config-syntax-and-examples)
+
 # Skills Config Syntax and Examples
 
 ## Example File
@@ -28,3 +30,5 @@ Each skill setting starts with `set(skillname)`' followed by an optional number 
 |    `showInList`    | true/false                                                                                | `true`                                       | Should this skill appear in the skill list on the user's screeen                     |
 |       `icon`       | namespace:textures/texurename.png                                                         | `minecraft:textures/skills/missing_icon.png` | the location of your desired texture from vanilla or a resource pack                 |
 |     `groupFor`     | skills and ratios separated by commas. eg `groupFor(combat,0.3,archery,0.3,endurance0.4)` | none.                                        | If populated, defines this skill as a "skill group"                                  | 
+
+[Back](./scripting.md#server-config-syntax-and-examples)
