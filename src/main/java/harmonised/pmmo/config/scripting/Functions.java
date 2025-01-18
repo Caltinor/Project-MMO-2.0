@@ -6,12 +6,17 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.config.codecs.ObjectData;
+import harmonised.pmmo.config.codecs.ServerData;
 import harmonised.pmmo.config.codecs.VeinData;
+import harmonised.pmmo.config.readers.ConfigListener;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -137,7 +142,16 @@ public class Functions {
             ResourceLocation drop = ResourceLocation.parse(param);
             APIUtils.registerSalvage(id, Map.of(drop, builder), true);
         });
+        KEYWORDS.put("set", (param, configId, type, value) -> {
+            ConfigListener.ServerConfigs configType = ConfigListener.ServerConfigs.fromFilename(configId.getPath());
+            if (configType == null)
+                MsLoggy.ERROR.log(MsLoggy.LOG_CODE.DATA, "config type value invalid: %s", configId.getPath());
+            else
+                Config.CONFIG.set(configType, Config.CONFIG.get(configType).getFromScripting(param, value));
+        });
 
+        //ObjectType.PLAYER is arbitrary here since none of the features use it.
+        TARGETORS.put("config", (param, access) -> new TargetSelector.Selection(ObjectType.PLAYER, List.of(Reference.rl(param))));
         TARGETORS.put("food", (param, access) -> {
             String[] exprStr = param.split(",");
             //left equals nutrition, right equals saturation
@@ -243,7 +257,7 @@ public class Functions {
         }
     }
 
-    private static Map<String, Long> mapValue(String value) {
+    public static Map<String, Long> mapValue(String value) {
         Map<String, Long> outMap = new HashMap<>();
         String[] elements = value.replaceAll("\\)", "").split(",");
         for (int i = 0; i <= elements.length-2; i += 2) {
@@ -252,7 +266,7 @@ public class Functions {
         return outMap;
     }
 
-    private static Map<String, Double> doubleMap(String value) {
+    public static Map<String, Double> doubleMap(String value) {
         Map<String, Double> outMap = new HashMap<>();
         String[] elements = value.replaceAll("\\)", "").split(",");
         for (int i = 0; i <= elements.length-2; i += 2) {
@@ -261,6 +275,24 @@ public class Functions {
         return outMap;
     }
 
+    public static double getDouble(Map<String, String> values) {
+        return Double.parseDouble(values.getOrDefault("value", "0"));
+    }
+    public static ResourceLocation getId(Map<String, String> values) {
+        return Reference.of(values.getOrDefault("value", "pmmo_scripting:missing_value"));
+    }
+    public static boolean getBool(Map<String, String> values) {
+        return Boolean.parseBoolean(values.getOrDefault("value", "false"));
+    }
+    public static float getFloat(Map<String, String> values) {
+        return Float.parseFloat(values.getOrDefault("value", "0"));
+    }
+    public static long getLong(Map<String, String> values) {
+        return Long.parseLong(values.getOrDefault("value", "0"));
+    }
+    public static int getInt(Map<String, String> values) {
+        return Integer.parseInt(values.getOrDefault("value", "0"));
+    }
     private static MobModifier getModifier(String raw) {
         var match = attributeRegex.matcher(raw);
         if (!match.find()) return null;

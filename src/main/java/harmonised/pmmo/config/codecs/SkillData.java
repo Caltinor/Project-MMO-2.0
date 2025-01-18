@@ -3,6 +3,7 @@ package harmonised.pmmo.config.codecs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.scripting.Functions;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 
@@ -20,17 +21,27 @@ public record SkillData (
 	Optional<Long> maxLevel,
 	Optional<ResourceLocation> icon,
 	Optional<Integer> iconSize) {
-	
+
+	private static final String COLOR = "color";
+	private static final String ICON_SIZE = "iconSize";
+	private static final String ICON = "icon";
+	private static final String MAX_LEVEL = "maxLevel";
+	private static final String AFK_EXEMPT = "noAfkPenalty";
+	private static final String DISPLAY = "displayGroupName";
+	private static final String SHOW_LIST = "showInList";
+	private static final String USE_TOTAL_LVL = "useTotalLevels";
+	private static final String GROUP_FOR = "groupFor";
+
 	public static Codec<SkillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.INT.optionalFieldOf("color").forGetter(SkillData::color),
-			Codec.BOOL.optionalFieldOf("noAfkPenalty").forGetter(SkillData::afkExempt),
-			Codec.BOOL.optionalFieldOf("displayGroupName").forGetter(SkillData::displayGroupName),
-			Codec.BOOL.optionalFieldOf("showInList").forGetter(SkillData::showInList),
-			Codec.BOOL.optionalFieldOf("useTotalLevels").forGetter(SkillData::useTotalLevels),
-			CodecTypes.DOUBLE_CODEC.optionalFieldOf("groupFor").forGetter(SkillData::groupedSkills),
-			Codec.LONG.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel),
-			ResourceLocation.CODEC.optionalFieldOf("icon").forGetter(SkillData::icon),
-			Codec.INT.optionalFieldOf("iconSize").forGetter(SkillData::iconSize)
+			Codec.INT.optionalFieldOf(COLOR).forGetter(SkillData::color),
+			Codec.BOOL.optionalFieldOf(AFK_EXEMPT).forGetter(SkillData::afkExempt),
+			Codec.BOOL.optionalFieldOf(DISPLAY).forGetter(SkillData::displayGroupName),
+			Codec.BOOL.optionalFieldOf(SHOW_LIST).forGetter(SkillData::showInList),
+			Codec.BOOL.optionalFieldOf(USE_TOTAL_LVL).forGetter(SkillData::useTotalLevels),
+			CodecTypes.DOUBLE_CODEC.optionalFieldOf(GROUP_FOR).forGetter(SkillData::groupedSkills),
+			Codec.LONG.optionalFieldOf(MAX_LEVEL).forGetter(SkillData::maxLevel),
+			ResourceLocation.CODEC.optionalFieldOf(ICON).forGetter(SkillData::icon),
+			Codec.INT.optionalFieldOf(ICON_SIZE).forGetter(SkillData::iconSize)
 			).apply(instance, SkillData::new));
 	
 	public int getColor() { return color.orElse(16777215); }
@@ -147,7 +158,7 @@ public record SkillData (
 			this.iconSize = size;
 			return this;
 		}
-		public Builder withMaxLevel(int maxLevel) {
+		public Builder withMaxLevel(long maxLevel) {
 			this.maxLevel = maxLevel;
 			return this;
 		}
@@ -161,6 +172,10 @@ public record SkillData (
 		}
 		public Builder withUseTotal(boolean useTotalLevels) {
 			this.useTotal = useTotalLevels;
+			return this;
+		}
+		public Builder withShowInList(boolean show) {
+			this.showInList = show;
 			return this;
 		}
 		public Builder setGroupOf(Map<String, Double> group) {
@@ -180,6 +195,20 @@ public record SkillData (
 				Optional.of(icon),
 				Optional.of(iconSize)
 			);
+		}
+
+
+		public SkillData fromScripting(Map<String, String> values) {
+			if (values.containsKey(COLOR)) this.withColor(Integer.parseInt(values.get(COLOR)));
+			if (values.containsKey(ICON_SIZE)) this.withIconSize(Integer.parseInt(values.get(ICON_SIZE)));
+			if (values.containsKey(MAX_LEVEL)) this.withMaxLevel(Long.parseLong(values.get(MAX_LEVEL)));
+			if (values.containsKey(AFK_EXEMPT)) this.withAfkExempt(Boolean.parseBoolean(values.get(AFK_EXEMPT)));
+			if (values.containsKey(DISPLAY)) this.withDisplayName(Boolean.parseBoolean(values.get(DISPLAY)));
+			if (values.containsKey(USE_TOTAL_LVL)) this.withUseTotal(Boolean.parseBoolean(values.get(USE_TOTAL_LVL)));
+			if (values.containsKey(SHOW_LIST)) this.withShowInList(Boolean.parseBoolean(values.get(SHOW_LIST)));
+			if (values.containsKey(ICON)) this.withIcon(Reference.of(values.get(ICON)));
+			if (values.containsKey(GROUP_FOR)) this.setGroupOf(Functions.doubleMap(values.get(GROUP_FOR)));
+			return this.build();
 		}
 	}
 }

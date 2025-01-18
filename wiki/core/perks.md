@@ -173,6 +173,7 @@ Gives the player an effect for a specific time
 
 | property    | default | description                                                                 |
 |:------------|:-------:|:----------------------------------------------------------------------------|
+| `effect`    |  none   | The ID of the effect being applied. eg minecraft:slowness                   |
 | `duration`  |   100   | The number of ticks the effect should last per level                        |
 | `per_level` |    1    | multiplies the level by this value before multiplying by duration           |
 | `modifier`  |    0    | sets the level of the effect.  all effect levels are +1 than their modifier |

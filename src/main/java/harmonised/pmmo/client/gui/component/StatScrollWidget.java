@@ -485,13 +485,12 @@ public class StatScrollWidget extends ScrollPanel {
 		});
 	}
 
-	@SuppressWarnings("resource")
 	private void populatePerks(String skillFilter) {
 		for (EventType cause : EventType.values()) {
 			List<TextElement> holder = new ArrayList<>();
 			Player player = Minecraft.getInstance().player;
 			Config.perks().perks().getOrDefault(cause, new ArrayList<>()).forEach(nbt -> {
-				if (nbt.contains(APIUtils.SKILLNAME) && !nbt.getString(APIUtils.SKILLNAME).equals(skillFilter)) return;
+				if (!skillFilter.isEmpty() && nbt.contains(APIUtils.SKILLNAME) && !nbt.getString(APIUtils.SKILLNAME).equals(skillFilter)) return;
 				ResourceLocation perkID = Reference.of(nbt.getString("perk"));
 				nbt.putLong(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME)
 						? Core.get(player.level()).getData().getLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())

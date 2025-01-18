@@ -56,7 +56,7 @@ There is one client config located in your minecraft directory at `/config/pmmo-
 The common config is used by both the server and the player but not at the same time and is located in your minecraft directory at `/config/pmmo-common.toml`.  Your settings in the common config will still only apply to your instance of the game and the server's its own.  Currently, the only feature in the common config is the [logging system](../features/logging.md) "Ms. Loggy".  Changes made here affect how your side of the game logs pmmo in your log files.
 
 ### SERVER Configs
-There are six server configs which can be generated using the datapack generator commands above.  The game has default configurations included, which can be overriden via datapack.  These are located under `data/pmmo/config/` in the datapack.  The six configs are:
+There are six server configs which can be generated using the datapack generator commands above.  The game has default configurations included, which can be overridden via datapack.  These are located under `data/pmmo/config/` in the datapack.  The six configs are:
 
 | config name     | purpose                                                                                                   |
 |:----------------|:----------------------------------------------------------------------------------------------------------|

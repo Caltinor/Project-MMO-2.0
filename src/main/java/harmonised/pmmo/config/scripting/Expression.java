@@ -35,11 +35,11 @@ public record Expression(
             String keyword = node.substring(0, node.indexOf('('));
             String param = node.substring(node.indexOf('(')+1).replaceAll("[ )]", "");
 
-            if (ObjectType.byName(keyword.toUpperCase()) != null) {
+            if (targetType == null && ObjectType.byName(keyword.toUpperCase()) != null) {
                 targetType = ObjectType.byName(keyword.toUpperCase());
                 targetIDs = parseIDs(param, targetType, access);
             }
-            else if (Functions.TARGETORS.containsKey(keyword)) {
+            else if (targetType == null && Functions.TARGETORS.containsKey(keyword)) {
                 TargetSelector.Selection selection = Functions.TARGETORS.get(keyword).read(param, access);
                 targetType = selection.type();
                 targetIDs = selection.IDs();

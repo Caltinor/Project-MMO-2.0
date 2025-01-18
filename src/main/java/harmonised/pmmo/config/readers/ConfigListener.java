@@ -75,6 +75,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
     }
     private final Map<ServerConfigs, ConfigData<?>> configs = new ConcurrentHashMap<>();
     public ConfigData<?> get(ServerConfigs type) {return configs.getOrDefault(type, type.defaultSupplier.get());}
+    public void set(ServerConfigs type, ConfigData<?> config) {configs.put(type, config);}
 
     public void setData(ServerConfigs type, ConfigData<?> data) {this.configs.put(type, data);}
     public ServerData server() {return (ServerData) configs.computeIfAbsent(ServerConfigs.SERVER, a -> a.defaultSupplier.get());}
