@@ -10,6 +10,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.DataSource;
 import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.ServerData;
 import harmonised.pmmo.config.codecs.VeinData;
@@ -21,6 +22,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.neoforged.fml.LogicalSide;
@@ -39,6 +41,7 @@ public class Functions {
     public static final Map<String, NodeConsumer> KEYWORDS = new HashMap<>();
     public static final Map<String, TargetSelector> TARGETORS = new HashMap<>();
     public static final Pattern operationRegex = Pattern.compile("(>=|<=|>|<|=)\\s*([-+]?\\d*\\.?\\d+(?:[eE][-+]?\\d+)?)");
+    public static final Pattern attributeRegex = Pattern.compile("(.*?)(\\*\\*|\\+|\\*)(.*)");
 
     static {
         KEYWORDS.put("xp", (param, id, type, value) -> {
@@ -95,7 +98,11 @@ public class Functions {
         });
         KEYWORDS.put("mob_scale", (param, id, type, value) -> {
             ResourceLocation entityID = ResourceLocation.parse(param);
-            Map<String, Double> modifiers = doubleMap(value.getOrDefault("attribute", ""));
+            List<MobModifier> modifiers = new ArrayList<>();
+            for (String raw : value.getOrDefault("attribute", "").split(",")) {
+                var modifier = getModifier(raw);
+                if (modifier != null) modifiers.add(modifier);
+            }
             APIUtils.registerMobModifier(type, id, Map.of(entityID, modifiers), true);
         });
         KEYWORDS.put("positive_effect", (param, id, type, value) -> {
@@ -285,5 +292,19 @@ public class Functions {
     }
     public static int getInt(Map<String, String> values) {
         return Integer.parseInt(values.getOrDefault("value", "0"));
+    }
+    private static MobModifier getModifier(String raw) {
+        var match = attributeRegex.matcher(raw);
+        if (!match.find()) return null;
+        ResourceLocation attrId = Reference.of(match.group(1));
+        AttributeModifier.Operation operation = switch (match.group(2)) {
+            case "+" -> AttributeModifier.Operation.ADD_VALUE;
+            case "*" -> AttributeModifier.Operation.ADD_MULTIPLIED_BASE;
+            case "**" -> AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL;
+            default -> null;
+        };
+        if (operation == null) return null;
+        double modificationValue = Double.parseDouble(match.group(3));
+        return new MobModifier(attrId, modificationValue, operation);
     }
 }

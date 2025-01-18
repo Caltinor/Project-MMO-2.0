@@ -61,7 +61,6 @@ These nodes take the target and perform a configuration action for that object. 
 |     `salvage`     | the Item ID for the item returned when salvaged.                              | see table below                                                                                                                                                                                                                                              |
 |       `set`       | *used only with the `config` target selector*, accepts a config key           | see links below for server config keys and examples                                                                                                                                                                                                          |
 
-
 ### Salvage value keywords
 |    keyword    | data format                                                                                                                                  |
 |:-------------:|:---------------------------------------------------------------------------------------------------------------------------------------------|

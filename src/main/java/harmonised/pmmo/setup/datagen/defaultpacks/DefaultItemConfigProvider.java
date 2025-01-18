@@ -275,7 +275,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.STONE_PICKAXE, 10, 5, "mining").addBonus(ModifierDataType.HELD, Map.of("mining", 1.05));
         toolReq(Items.STONE_HOE, 10, 5, "farming").addBonus(ModifierDataType.HELD, Map.of("farming", 1.05));
         toolReq(Items.STONE_SHOVEL, 10, 5, "excavation").addBonus(ModifierDataType.HELD, Map.of("excavation", 1.05));
-        toolReq(Items.STONE_SWORD, 10, 10, "farming").addBonus(ModifierDataType.HELD, Map.of("combat", 1.05));
+        toolReq(Items.STONE_SWORD, 10, 10, "combat").addBonus(ModifierDataType.HELD, Map.of("combat", 1.05));
         
         doFor(List.of(Items.DIAMOND_AXE, Items.DIAMOND_PICKAXE, Items.DIAMOND_HOE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",4000L, "smithing",700L))
@@ -289,7 +289,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.DIAMOND_PICKAXE, 60, 30, "mining");
         toolReq(Items.DIAMOND_HOE, 60, 30, "farming");
         toolReq(Items.DIAMOND_SHOVEL, 60, 30, "excavation");
-        toolReq(Items.DIAMOND_SWORD, 60, 60, "farming");
+        toolReq(Items.DIAMOND_SWORD, 60, 60, "combat");
 
         doFor(List.of(Items.IRON_AXE, Items.IRON_PICKAXE, Items.IRON_HOE, Items.IRON_SHOVEL, Items.IRON_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",2000L, "smithing",300L))
@@ -303,7 +303,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.IRON_PICKAXE, 30, 15, "mining");
         toolReq(Items.IRON_HOE, 30, 15, "farming");
         toolReq(Items.IRON_SHOVEL, 30, 15, "excavation");
-        toolReq(Items.IRON_SWORD, 30, 30, "farming");
+        toolReq(Items.IRON_SWORD, 30, 30, "combat");
 
         doFor(List.of(Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL,Items.GOLDEN_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",1500L, "smithing",200L))
@@ -317,7 +317,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.GOLDEN_PICKAXE, 10, 5, "mining").addBonus(ModifierDataType.HELD, Map.of("mining", 1.5));
         toolReq(Items.GOLDEN_HOE, 10, 5, "farming").addBonus(ModifierDataType.HELD, Map.of("farming", 1.5));
         toolReq(Items.GOLDEN_SHOVEL, 10, 5, "excavation").addBonus(ModifierDataType.HELD, Map.of("excavation", 1.5));
-        toolReq(Items.GOLDEN_SWORD, 10, 10, "farming").addBonus(ModifierDataType.HELD, Map.of("combat", 1.5));
+        toolReq(Items.GOLDEN_SWORD, 10, 10, "combat").addBonus(ModifierDataType.HELD, Map.of("combat", 1.5));
 
         doFor(List.of(Items.NETHERITE_AXE, Items.NETHERITE_PICKAXE, Items.NETHERITE_HOE, Items.NETHERITE_SHOVEL, Items.NETHERITE_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",6000L, "smithing",1000L))
@@ -331,7 +331,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.NETHERITE_PICKAXE, 90, 45, "mining");
         toolReq(Items.NETHERITE_HOE, 90, 45, "farming");
         toolReq(Items.NETHERITE_SHOVEL, 90, 45, "excavation");
-        toolReq(Items.NETHERITE_SWORD, 90, 90, "farming");
+        toolReq(Items.NETHERITE_SWORD, 90, 90, "combat");
 
         //MISC
         get(Items.HEART_OF_THE_SEA).addBonus(ModifierDataType.HELD, Map.of("swimming",1.25, "fishing",1.1));
@@ -483,7 +483,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("woodcutting")))
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
         doForRaw(List.of("tconstruct:broad_sword", "tconstruct:cleaver", "tconstruct:dagger", "tconstruct:kama", "tconstruct:scythe", "tconstruct:sword"), builder -> builder
-                .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("farming")))
+                .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("combat")))
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
         doForRaw(List.of("tconstruct:excavator"), builder -> builder
                 .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("excavation")))

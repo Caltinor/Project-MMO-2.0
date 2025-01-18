@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.ChunkPos;
 
 import java.util.HashMap;

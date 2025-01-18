@@ -6,11 +6,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.Functions;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.effect.MobEffect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,12 +31,13 @@ public record LocationData(
 		Map<ResourceLocation, Integer> negative,
 		List<ResourceLocation> veinBlacklist,
 		Map<String, Long> travelReq,
-		Map<ResourceLocation, Map<String, Double>> mobModifiers) implements DataSource<LocationData>{
+		List<MobModifier> globalModifiers,
+		Map<ResourceLocation, List<MobModifier>> mobModifiers) implements DataSource<LocationData>{
 	public LocationData(boolean override) {this(override, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-			new ArrayList<>(), new HashMap<>(), new HashMap<>());}
+			new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new HashMap<>());}
 	public LocationData() {this(
 			false, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-			new ArrayList<>(), new HashMap<>(), new HashMap<>());}
+			new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new HashMap<>());}
 
 	@Override
 	public Map<String, Double> getBonuses(ModifierDataType type, CompoundTag nbt) {
@@ -82,8 +87,9 @@ public record LocationData(
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("negative_effect").forGetter(ld -> Optional.of(ld.negative())),
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("vein_blacklist").forGetter(ld -> Optional.of(ld.veinBlacklist())),
 			Codec.unboundedMap(Codec.STRING, Codec.LONG).optionalFieldOf("travel_req").forGetter(ld -> Optional.of(ld.travelReq())),
-			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).optionalFieldOf("mob_modifier").forGetter(ld -> Optional.of(ld.mobModifiers()))
-			).apply(instance, (override, tags, bonus, pos, neg, vein, req, mobs) -> 
+			MobModifier.CODEC.listOf().optionalFieldOf("global_mob_modifier").forGetter(ld -> Optional.of(ld.globalModifiers)),
+			Codec.unboundedMap(ResourceLocation.CODEC, MobModifier.CODEC.listOf()).optionalFieldOf("mob_modifier").forGetter(ld -> Optional.of(ld.mobModifiers()))
+			).apply(instance, (override, tags, bonus, pos, neg, vein, req, global, mobs) ->
 				new LocationData(
 						override.orElse(false),
 						new HashSet<>(tags.orElse(List.of())),
@@ -92,6 +98,7 @@ public record LocationData(
 						DataSource.clearEmptyValues(neg.orElse(new HashMap<>())),
 						new ArrayList<>(vein.orElse(new ArrayList<>())),
 						DataSource.clearEmptyValues(req.orElse(new HashMap<>())),
+						new ArrayList<>(global.orElse(new ArrayList<>())),
 						DataSource.clearEmptyValues(mobs.orElse(new HashMap<>())))
 			));	
 	
@@ -103,7 +110,8 @@ public record LocationData(
 		Map<ResourceLocation, Integer> negative = new HashMap<>();
 		List<ResourceLocation> veinBlacklist = new ArrayList<>();
 		Map<String, Long> travelReq = new HashMap<>();
-		Map<ResourceLocation, Map<String, Double>> mobModifiers = new HashMap<>();
+		List<MobModifier> globalModifiers = new ArrayList<>();
+		Map<ResourceLocation, List<MobModifier>> mobModifiers = new HashMap<>();
 		
 		BiConsumer<LocationData, LocationData> bothOrNeither = (o, t) -> {
 			tagValues.addAll(o.tagValues());
@@ -129,15 +137,11 @@ public record LocationData(
 					veinBlacklist.add(rl);
 			});		
 			travelReq.putAll(o.travelReq());
-			t.travelReq().forEach((key, value) -> travelReq.merge(key, value, (o1, n1) -> o1 > n1 ? o1 : n1));			
+			t.travelReq().forEach((key, value) -> travelReq.merge(key, value, (o1, n1) -> o1 > n1 ? o1 : n1));
+			globalModifiers.addAll(o.globalModifiers());
+			t.globalModifiers().forEach(modifier -> {if (!globalModifiers.contains(modifier)) globalModifiers.add(modifier);});
 			mobModifiers.putAll(o.mobModifiers());
-			t.mobModifiers().forEach((key, value) -> {
-				mobModifiers.merge(key, value, (oldV, newV) -> {
-					Map<String, Double> mergedMap = new HashMap<>(oldV);
-					newV.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
-					return mergedMap;
-				});
-			});	
+			t.mobModifiers().forEach((key, value) -> mobModifiers.computeIfAbsent(key, id -> new ArrayList<>()).addAll(value));
 		};
 		Functions.biPermutation(this, two, this.override(), two.override(), 
 		(o, t) -> {
@@ -147,12 +151,13 @@ public record LocationData(
 			negative.putAll(o.negative().isEmpty() ? t.negative() : o.negative());
 			veinBlacklist.addAll(o.veinBlacklist().isEmpty() ? t.veinBlacklist(): o.veinBlacklist());
 			travelReq.putAll(o.travelReq().isEmpty() ? t.travelReq() : o.travelReq());
+			globalModifiers.addAll(o.globalModifiers().isEmpty() ? t.globalModifiers() : o.globalModifiers());
 			mobModifiers.putAll(o.mobModifiers().isEmpty() ? t.mobModifiers() : o.mobModifiers());
 		}, 
 		bothOrNeither,
 		bothOrNeither);
 		
-		return new LocationData(this.override() || two.override(), tagValues, bonusMap, positive, negative, veinBlacklist, travelReq, mobModifiers);
+		return new LocationData(this.override() || two.override(), tagValues, bonusMap, positive, negative, veinBlacklist, travelReq, globalModifiers, mobModifiers);
 	}
 
 	@Override
@@ -161,5 +166,64 @@ public record LocationData(
 				&& positive.isEmpty() && negative.isEmpty()
 				&& veinBlacklist.isEmpty() && travelReq.isEmpty()
 				&& mobModifiers.isEmpty();
+	}
+
+	public static Builder build() {return new Builder();}
+	public static class Builder {
+		boolean override = false;
+		Set<String> tagValues = new HashSet<>();
+		Map<ModifierDataType, Map<String, Double>> bonusMap = new HashMap<>();
+		Map<ResourceLocation, Integer> positive = new HashMap<>();
+		Map<ResourceLocation, Integer> negative = new HashMap<>();
+		List<ResourceLocation> veinBlacklist = new ArrayList<>();
+		Map<String, Long> travelReq = new HashMap<>();
+		List<MobModifier> globalModifiers = new ArrayList<>();
+		Map<ResourceLocation, List<MobModifier>> mobModifiers = new HashMap<>();
+
+		protected Builder() {}
+		public Builder setOverride(boolean override) {
+			this.override = override;
+			return this;
+		}
+		public Builder addTag(String... id) {
+			this.tagValues.addAll(Arrays.asList(id));
+			return this;
+		}
+		public Builder addTag(TagKey<?>...id) {
+			var ids = Arrays.stream(id).map(key -> "#"+key.location()).toList();
+			this.tagValues.addAll(ids);
+			return this;
+		}
+		public Builder addReq(Map<String, Long> req) {
+			this.travelReq.putAll(req);
+			return this;
+		}
+		public Builder addNegativeEffect(Holder<MobEffect> id, int level) {
+			this.negative.put(id.unwrapKey().get().location(), level);
+			return this;
+		}
+		public Builder addPositiveEffect(Holder<MobEffect> id, int level) {
+			this.positive.put(id.unwrapKey().get().location(), level);
+			return this;
+		}
+		public Builder addBonus(ModifierDataType type, Map<String, Double> bonus) {
+			this.bonusMap.put(type, bonus);
+			return this;
+		}
+		public Builder addVeinBlacklist(ResourceLocation... id) {
+			this.veinBlacklist.addAll(Arrays.stream(id).toList());
+			return this;
+		}
+		public Builder addGlobalModifier(MobModifier...modifiers) {
+			this.globalModifiers.addAll(Arrays.stream(modifiers).toList());
+			return this;
+		}
+		public Builder addMobModifier(ResourceLocation mobId, MobModifier modifier) {
+			this.mobModifiers.computeIfAbsent(mobId, id -> new ArrayList<>()).add(modifier);
+			return this;
+		}
+		public LocationData end() {return
+			new LocationData(override, tagValues, bonusMap, positive, negative, veinBlacklist, travelReq, globalModifiers, mobModifiers);
+		}
 	}
 }

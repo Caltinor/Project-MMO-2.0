@@ -22,7 +22,7 @@ public class ShieldBlockHandler {
 
 	@SuppressWarnings("resource")
 	public static void handle(LivingShieldBlockEvent event) {
-		if (event.getEntity() instanceof Player player
+		if (event.getBlocked() && event.getEntity() instanceof Player player
 			&& event.getDamageSource().getEntity() instanceof Entity attacker) {
 
 			Core core = Core.get(player.level());
