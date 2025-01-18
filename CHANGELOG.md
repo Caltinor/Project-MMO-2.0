@@ -1,8 +1,6 @@
 # Changelog
 
-## [1.21.1-2.6.18] - 2025-01-09
+## [1.21.1-2.6.19] - 2025-01-18
 ### Bugfixes/Tweaks
-- Fixed static levels ignoring setting values
-- Fixed shield event firing for all damage not just blocks
-- Updated wiki with correct damage xp format.
+- Added scripting options for configs [More in Wiki](https://github.com/Caltinor/Project-MMO-2.0/blob/main/wiki/configuration/config.md#specific-configuration-details)
 

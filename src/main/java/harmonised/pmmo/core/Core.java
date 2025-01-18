@@ -247,13 +247,13 @@ public class Core {
 		//BIOME Modification
 		ResourceLocation biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()));
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {
-			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> o + (n-1));
 		}
 		
 		//DIMENSION Modification
 		ResourceLocation dimensionID = player.level().dimension().location();
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.DIMENSION, dimensionID, ModifierDataType.DIMENSION, new CompoundTag()).entrySet()) {
-			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> o + (n-1));
 		}
 				
 		Map<String, Double> modifiers = new HashMap<>();
@@ -264,7 +264,7 @@ public class Core {
 					? tooltips.getBonusTooltipData(itemID, ModifierDataType.HELD, stack) 
 					: getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack, player.level()));
 			for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-				mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+				mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> o + (n-1));
 			}		
 		}
 		
@@ -279,7 +279,7 @@ public class Core {
 					tooltips.getBonusTooltipData(itemID, ModifierDataType.WORN, stack):
 					getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN, TagUtils.stackTag(stack ,player.level()));
 			for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
-				mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
+				mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> o + (n-1));
 			}
 		});
 		
