@@ -37,7 +37,6 @@ public class BreathHandler {
                 final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP)
                         ? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
                         : new HashMap<>();
-                System.out.println("airdown: "+event.getConsumeAirAmount()+" airup: "+event.getRefillAirAmount());//TODO REMOVE
                 ratio.keySet().forEach((skill) -> {
                     Double value = ratio.getOrDefault(skill, 0d) * diff;
                     xpAward.put(skill, value.longValue());
