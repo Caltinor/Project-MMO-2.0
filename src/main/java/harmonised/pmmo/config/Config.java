@@ -71,6 +71,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_X;
 	public static ForgeConfigSpec.ConfigValue<Integer> SKILL_BUTTON_Y;
 	public static ForgeConfigSpec.BooleanValue SKILLUP_UNLOCKS;
+	public static ForgeConfigSpec.BooleanValue SKILLUP_UNLOCKS_STRICT;
 	
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
@@ -109,6 +110,8 @@ public class Config {
 				.define("skill_button_y", -22);
 		SKILLUP_UNLOCKS = builder.comment("If enabled, lists in chat all features unlocked when a skill levels up.")
 				.define("skillup_unlocks", true);
+		SKILLUP_UNLOCKS_STRICT = builder.comment("should skillups only show in chat if content is actually unlocked.")
+				.define("strict_skillup_unlocks", true);
 
 		builder.pop();
 	}

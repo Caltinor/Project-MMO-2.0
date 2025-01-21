@@ -32,6 +32,7 @@ public class ClientUtils {
 	public static List<ClientTooltipComponent> ctc(MutableComponent component, int width) {
 		return mc.font.split(component, width).stream().map(fcs -> ClientTooltipComponent.create(fcs)).toList();
 	}
+	//Skillname, Required Level, Req Type, list of object display components
 	private static Map<String, Map<Integer, Map<ReqType, List<Component>>>> cache = new HashMap<>();
 	public static void invalidateUnlocksCache() {cache.clear();}
 
@@ -101,8 +102,13 @@ public class ClientUtils {
 			cacheUnlocks();
 		//send unlocks to chat
 		LocalPlayer player = mc.player;
-		player.sendSystemMessage(LangProvider.LEVEL_UP_HEADER.asComponent(level, Component.translatable("pmmo."+skill)));
-		cache.getOrDefault(skill, new HashMap<>()).getOrDefault(level, new HashMap<>()).entrySet().stream()
+		Map<ReqType, List<Component>> reqMap = cache.getOrDefault(skill, new HashMap<>()).getOrDefault(level, new HashMap<>());
+		boolean isEmpty = reqMap.entrySet().stream().allMatch(entry -> entry.getValue().isEmpty());
+		if (isEmpty && Config.SKILLUP_UNLOCKS_STRICT.get()) return;
+		player.sendSystemMessage(isEmpty
+				? LangProvider.LEVEL_UP_HEADER.asComponent(level, Component.translatable("pmmo."+skill))
+				: LangProvider.LEVEL_UP_HEADER_WITH_UNLOCKS.asComponent(level, Component.translatable("pmmo."+skill)));
+		reqMap.entrySet().stream()
 				.filter(entry -> Config.reqEnabled(entry.getKey()).get() && !entry.getValue().isEmpty())
 				.forEach(entry -> {
 					MutableComponent header = Component.translatable("pmmo.enum." + entry.getKey().name());
