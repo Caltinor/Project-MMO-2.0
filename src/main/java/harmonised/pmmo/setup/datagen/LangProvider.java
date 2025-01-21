@@ -1673,6 +1673,8 @@ public class LangProvider extends LanguageProvider {
 	
 	//=========TOOLTIP HEADERS=================
 	public static final Translation LEVEL_UP_HEADER = Translation.Builder.start("pmmo.levelup")
+			.addLocale(Locale.EN_US, "You have reached level %s in %s").build();
+	public static final Translation LEVEL_UP_HEADER_WITH_UNLOCKS = Translation.Builder.start("pmmo.levelupandunlock")
 			.addLocale(Locale.EN_US, "You have reached level %s in %s and unlocked:").build();
 	public static final Translation REQ_WEAR = Translation.Builder.start("pmmo.toWear")
 		.addLocale(Locale.EN_US, "To Wear").build();
