@@ -16,6 +16,7 @@ import jdk.jfr.Event;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeMod;
 
 public class PerksConfig {
 	public static ForgeConfigSpec SERVER_CONFIG;
@@ -57,7 +58,7 @@ public class PerksConfig {
 		//====================SKILL_UP DEFAULTS==========================
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "mining").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "building")
-					.withString(APIUtils.ATTRIBUTE, "forge:reach_distance")
+					.withString(APIUtils.ATTRIBUTE, ForgeMod.BLOCK_REACH.getId().toString())
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
 					.withDouble(APIUtils.MAX_BOOST, 10d).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "building").build());

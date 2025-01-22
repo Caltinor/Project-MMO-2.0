@@ -59,6 +59,11 @@ public class FeaturePerks {
 		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
 				name -> ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(name)));
 	}
+
+	private static String getAttributeDescription(CompoundTag nbt) {
+		var attribute = getAttribute(nbt);
+		return attribute != null ? attribute.getDescriptionId() : nbt.getString(APIUtils.ATTRIBUTE);
+	}
 	
 	public static final Perk ATTRIBUTE = Perk.begin()
 			.addDefaults(TagBuilder.start()
@@ -87,7 +92,7 @@ public class FeaturePerks {
 				String skillname = settings.getString(APIUtils.SKILLNAME);
 				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
 				return List.of(
-				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttribute(settings).getDescriptionId())),
+				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(getAttributeDescription(settings))),
 				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
 				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
 			}).build();
