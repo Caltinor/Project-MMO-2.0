@@ -1,0 +1,58 @@
+# Configuring Project MMO
+
+Project MMO has two built-in methods for configuring the mod features.
+1. Datapacks
+2. Scripting
+
+Additionally, there are two `.toml` config files
+- `pmmo-client.toml` contains settings for the client.  Settings related to visual aspects of pmmo are configured here and can be different for every client.Datapacks
+- `pmmo-common.toml` contains Project MMO's logging system settings.  Clients and Servers have their own copy of this and their reflective log files will contain logging information according to what is enabled in this config.  [The Logging Page](logging) has more information on this config.
+
+Both methods provide the same capabilities.  So it is purely your preference as to which you would like to use.  Both options are server-enforced, so whether you ship your settings to clients in a modpack or simply set them up on your server, the client does not need a copy for Project MMO to work and the server version is always the one used.
+
+## Datapacks
+### Getting Started
+To save yourself time, pmmo provides a command to create a datapack for you.  `/pmmo genData` will create a datapack called "generated_data" in the datapacks folder for that world.  This pack will include files for every mod installed and all of their items, blocks, entities, dimensions, biomes, and enchantments.  You can rerun this command at any point to have additional mods' data included or to restore files you may have deleted.  This will not override current files.
+
+<Callout variant="info">the genData command requires Op permissions or cheats enabled.</Callout>
+
+### Command options
+`/pmmo genData` is a "builder" style command.  This means you call the command multiple times to set it up and use the "create" parameter to finalize everything.  Below are the sub-commands and their function
+
+| command                                      | purpose                                                                                                        |
+|:---------------------------------------------|:---------------------------------------------------------------------------------------------------------------|
+| `/pmmo genData begin`                        | resets all settings for a new command sequence                                                                 |
+| `/pmmo genData withOverrides`                | makes all generated files override other datapacks, including the default data                                 |
+| `/pmmo genData withConfigs`                  | includes server configs in generated data                                                                      |
+| `/pmmo genData withoutObjects`               | excludes object config files (items, blocks, entities, etc)                                                    |
+| `/pmmo genData withDefaults`                 | generates all files with their current settings, including any AuotValues                                      |
+| `/pmmo genData simplified`                   | removes all unused properties (for those familiar with pmmo data)                                              |
+| `/pmmo genData modFilter <modid>`            | generates files for only this mod.  may be called multiple times for each mod you want included                |
+| `/pmmo genData forPlayers <player selector>` | creates player-specific files for the selected players. maybe called multiple times to add multiple selections |
+| `/pmmo genData disabler`                     | adds a pack filter which disables all default data and that of packs loaded before this pack                   |
+| `/pmmo genData create`                       | builds the datapack using the settings you have enabled                                                        |
+
+### Specific Configuration Details
+- [Items](items.md)
+- [Blocks](blocks.md)
+- [Entities](entities.md)
+- [Dimensions](dimensions.md)
+- [Enchantments](enchantments.md)
+- [Effects](effects.md)
+- [Biomes](biomes.md)
+- [Players](players.md)
+
+### SERVER Configs
+There are six server configs which can be generated using the datapack generator commands above.  The game has default configurations included, which can be overridden via datapack.  These are located under `data/pmmo/config/` in the datapack.  The six configs are:
+
+| config name     | purpose                                                                                                   |
+|:----------------|:----------------------------------------------------------------------------------------------------------|
+| server.json     | contains general settings such as defaults for xp and reqs as well as certain enabling/disabling settings |
+| skills.json     | where custom skill colors and settings are defined                                                        |
+| perks.json      | where perks are configured                                                                                |
+| globals.json    | where NBT globals are defined                                                                             |
+| autovalues.json | contains all the settings for autovalues                                                                  |
+| anticheese.json | where anti-cheese rules are defined                                                                       |
+
+## Scripting
+If you are comfortable with a more programmatic approach to configuration, pmmo also offers a configuration method that allows you to contain all of your settings in one (or multiple) script files.  [read about scripting here](./scripting.md)

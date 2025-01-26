@@ -1,0 +1,10 @@
+{
+  "id": "pmmo",
+  "platforms": {
+    "curseforge": "project-mmo",
+    "modrinth": "project-mmo"
+  },
+  "versions": {
+    "1.21.1": "main"
+  }
+}
