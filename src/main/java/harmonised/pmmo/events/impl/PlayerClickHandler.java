@@ -113,7 +113,7 @@ public class PlayerClickHandler {
 		if (!core.isActionPermitted(ReqType.USE, event.getItemStack(), player)) {
 			event.setCancellationResult(InteractionResult.FAIL);
 			event.setCanceled(true);
-			Messenger.sendDenialMsg(ReqType.USE, player, event.getItemStack());
+			Messenger.sendDenialMsg(ReqType.USE, player, event.getItemStack().getDisplayName());
 			return;
 		}
 		CompoundTag hookOutput = new CompoundTag();
