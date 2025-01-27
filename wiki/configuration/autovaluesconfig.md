@@ -43,9 +43,9 @@ WITH config(autovalues)
     set(shovel_override).value(excavation,1);
     set(sword_override).value(combat,1);
     set(penalties).value(
-        minecraft:weakness,1,
-        minecraft:slowness,1,
-        minecraft:mining_fatigue,1);
+        "minecraft:weakness",1,
+        "minecraft:slowness",1,
+        "minecraft:mining_fatigue",1);
     set(block_default).value(mining,1);
     
     set(items).requirement(WEAR).value(endurance,1);
@@ -138,7 +138,7 @@ Each configuration uses a combination of `set(config_keyword).value(some_value);
 |      `sword_override`       | for all requirements related to swords.                                         |                                                               | a skill and level ratio separated by commas. `value(skill,3)`                     |
 |       `axe_override`        | for all requirements related to axes.                                           |                                                               | a skill and level ratio separated by commas. `value(skill,3)`                     |
 |       `hoe_override`        | for all requirements related to hoes.                                           |                                                               | a skill and level ratio separated by commas. `value(skill,3)`                     |
-|         `penalties`         | the potion effects applied for not meeting requirements                         |                                                               | effect ids and effect levels separated by commas. `value(minecraft:slowness,0)`   |
+|         `penalties`         | the potion effects applied for not meeting requirements                         |                                                               | effect ids and effect levels separated by commas. `value("minecraft:slowness",0)`   |
 |           `items`           | the skills and ratio values for each requirement type.                          | `requirement(TYPE)` specifies the req type                    | a skill and ratio separated by commas. `value(skill,1)`                           |
 |     `hardness_modifier`     | How block hardness scales block ratios                                          |                                                               | decimal value. default `value(0.65)`                                              |
 |        `tool_tweaks`        | How tool properties scale autovalues                                            | `type(...)` one of `SWORD`, `PICKAXE`, `AXE`, `SHOVEL`, `HOE` | an attribute type (see below) and ratio value as decimal. `value(Durablity,10.0)` |
