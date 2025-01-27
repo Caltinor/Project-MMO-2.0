@@ -101,7 +101,7 @@ To remove the prefix create a line that just has `END`
 Earlier the semicolon (`;`) was mentioned.  Here it is explained.  Semicolons end chains.  Which means if you omit the semicolon you can continue on the next line.  this is helpful for really long lines to make them more readable
 ```
 //very long line
-item(iron_sword).vein_charge(1.5).vein_capacity(30).deal_damage(minecraft:player_attack).award(combat,10);
+item(iron_sword).vein_charge(1.5).vein_capacity(30).deal_damage("minecraft:player_attack").award(combat,10);
 
 //same line but broken up for readability
 item(iron_sword)
