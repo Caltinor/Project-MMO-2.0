@@ -12,7 +12,7 @@ WITH config(anticheese)
         .min_time_to_apply(200);
     set(diminishing_xp).event(RIDING)
         .reduction(0.005)
-        .source(minecraft:horse,minecraft:boat)
+        .source(["minecraft:horse","minecraft:boat"])
         .retention_duration(200);
     set(normalization).event(SPRINTING)
         .tolerance_percent(0.1)
