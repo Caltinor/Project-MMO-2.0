@@ -29,13 +29,13 @@ PMMO has specific target nodes that correspond to object types in the game.  the
 
 Target nodes take one or multiple IDs.  for example:
 ```
-item(minecraft:stick)
-block(minecraft:obsidian)
-entity(minecraft:zombie, iceandfire:wyvern, alexmobs:elephant)
+item("minecraft:stick")
+block("minecraft:obsidian")
+entity("minecraft:zombie", "iceandfire:wyvern", "alexmobs:elephant")
 ```
 *Note: when using multiple IDs, each id is separated by a commma*
 
-Target nodes can also take tags and wildcards.  prefixing a `#` to an ID will tell PMMO this id is a tag. eg `blocks(#c:ores/copper)`.  wildcards let you provide a modid and have all objects for that mod configured by the line.  to use wildcards, use an ID like `modid:*`.  eg `entity(alexmobs:*)`
+Target nodes can also take tags and wildcards.  prefixing a `#` to an ID will tell PMMO this id is a tag. eg `blocks("#c:ores/copper")`.  wildcards let you provide a modid and have all objects for that mod configured by the line.  to use wildcards, use an ID like `modid:*`.  eg `entity("alexmobs:*")`
 
 PMMO also provides advanced target nodes, which you can read about [here](#advanced-target-nodes)
 
@@ -55,7 +55,7 @@ These nodes take the target and perform a configuration action for that object. 
 |   `vein_charge`   | the amount of charge this item gives                                          | N/A                                                                                                                                                                                                                                                          |
 |  `vein_capacity`  | the capacity this item adds                                                   | N/A                                                                                                                                                                                                                                                          |
 |  `vein_consume`   | the amount of vein consumed by this block                                     | N/A                                                                                                                                                                                                                                                          |
-|    `mob_scale`    | the id of the mob being scaled                                                | keyword = `attribute`. the attributed id and scaling value separated by a comma. `minecraft:generic.max_health,1.001` for multiple attributes, continue the pattern `attribute(minecraft:generic.max_health,1.001,minecraft:generic.movement_speed,1.00001)` |
+|    `mob_scale`    | the id of the mob being scaled                                                | keyword = `attribute`. the attributed id and scaling value separated by a comma. `minecraft:generic.max_health,1.001` for multiple attributes, continue the pattern `attribute("minecraft:generic.max_health",1.001,"minecraft:generic.movement_speed",1.00001)` |
 | `positive_effect` | the effect id and magnitude separated by a comma.  Eg `minecraft:swiftness,2` | N/A                                                                                                                                                                                                                                                          |
 | `negative_effect` | the effect id and magnitude separated by a comma.  Eg `minecraft:weakness,2`  | N/A                                                                                                                                                                                                                                                          |
 |     `salvage`     | the Item ID for the item returned when salvaged.                              | see table below                                                                                                                                                                                                                                              |
@@ -91,7 +91,7 @@ By starting a line with `WITH ` the nodes that follow will be used with every li
 WITH xp(BLOCK_BREAK)
     block(stone, andesite, granite, diorite).award(mining,10);
     block(obsidian).award(mining,500);
-    block(extra_ores:ultra_diamond).award(mining,5000);
+    block("extra_ores:ultra_diamond").award(mining,5000);
 ```
 Without the `WITH` statement before, each line would need to repeat the `.xp(BREAK)`.
 
@@ -107,7 +107,7 @@ item(iron_sword).vein_charge(1.5).vein_capacity(30).deal_damage(minecraft:player
 item(iron_sword)
     .vein_charge(1.5)
     .vein_capacity(30)
-    .deal_damage(minecraft:player_attack).award(combat,10);
+    .deal_damage("minecraft:player_attack").award(combat,10);
     
 //a simple example of breaking up the value to make the skills easier to read
 item(diamond_helmet).xp(CRAFT)
