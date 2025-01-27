@@ -7,7 +7,7 @@
 WITH config(server)
     //general settings
     set(creative_reach).value(50);
-    set(salvage_block).value(minecraft:smithing_table);
+    set(salvage_block).value("minecraft:smithing_table");
     set(treasure_enabled).value(true);
     set(brewing_tracked).value(true);
     
@@ -31,8 +31,8 @@ WITH config(server)
     set(reuse_penalty).value(0.0);
     set(perks_plus_config).set(false);
     set(player_actions).event(JUMP).value(agility,2.5);
-    set(damage_dealt).type(minecraft:player_attack).value(combat,1);
-    set(damage_received).type(minecraft:mob_attack).value(endurance,1);
+    set(damage_dealt).type("minecraft:player_attack").value(combat,1);
+    set(damage_received).type("minecraft:mob_attack").value(endurance,1);
     
     //Party Settings
     set(party_range).value(50);
@@ -46,14 +46,14 @@ WITH config(server)
     set(use_exponential_formula).value(true);
     set(per_level).value(1.0);
     set(power_base).value(1.104088404342588);
-    set(ratios).mob(minecraft:generic.max_health).value(combat,0.001);
+    set(ratios).mob("minecraft:generic.max_health").value(combat,0.001);
     
     //Vein Miner Settings
     set(vein_enabled).value(true);
     set(require_settings).value(false);
     set(default_consume).value(1);
     set(charge_modifier).value(1.0);
-    set(blacklist).value(silentgear:saw);
+    set(blacklist).value("silentgear:saw");
 END
 ```
 
@@ -79,7 +79,7 @@ Most configurations use a combination of `set(config_keyword).value(some_value);
 |      `reuse_penalty`      | how much xp percentage should breaking blocks placed by the player award.                                                                                |                                                                                                                                                                                                                   | decimal value. default `value(0.0)`                                                                                                                                                                                            |
 |    `perks_plus_config`    | for perks that award XP, if this is true, the perk XP will combine with the configured XP                                                                |                                                                                                                                                                                                                   | true/false.  default `value(false)`                                                                                                                                                                                            |
 |     `player_actions`      | sets the XP ratio for player actions not tied to other objects in the game.                                                                              | `event()` accepts any of the following `JUMP`, `SPRINT_JUMP`, `CROUCH_JUMP`, `BREATH_CHANGE`, `HEALTH_INCREASE`, `HEALTH_DECREASE`, `SPRINTING`, `SUBMERGED`, `SWIMMING`, `DIVING`, `SURFACING`, `SWIM_SPRINTING` | decimal value. example `value(2.5)`                                                                                                                                                                                            |
-|      `damage_dealt`       | what skill and XP ratio to award when the player deals specific damage types                                                                             | `type()` takes a damage type ID. eg `type(minecraft:player_attack)`                                                                                                                                               | skills and decimal values separated by commas.  example `value(combat,2.5,archery,1.3)`                                                                                                                                        |
+|      `damage_dealt`       | what skill and XP ratio to award when the player deals specific damage types                                                                             | `type()` takes a damage type ID. eg `type("minecraft:player_attack")`                                                                                                                                               | skills and decimal values separated by commas.  example `value(combat,2.5,archery,1.3)`                                                                                                                                        |
 |     `damage_received`     | same as damage dealt but for damage inflicted to the player                                                                                              | same as above                                                                                                                                                                                                     | same as above                                                                                                                                                                                                                  |
 |       `party_range`       | How close players need to be for their XP to be shared                                                                                                   |                                                                                                                                                                                                                   | a whole number, default `value(50)`                                                                                                                                                                                            |
 |       `party_bonus`       | how much extra xp is awarded to players in parties based on the skill                                                                                    |                                                                                                                                                                                                                   | a list of skills and decimal values.  default `value(combat,1.05,endurance,1.1)`                                                                                                                                               |
@@ -95,6 +95,6 @@ Most configurations use a combination of `set(config_keyword).value(some_value);
 |    `require_settings`     | if true, requires that automatic break values be ignored                                                                                                 |                                                                                                                                                                                                                   | true/false. default `value(false)`                                                                                                                                                                                             |
 |     `default_consume`     | the default amount of vein charge consumed on unconfigured blocks                                                                                        |                                                                                                                                                                                                                   | whole number. default `value(1)`                                                                                                                                                                                               |
 |     `charge_modifier`     | scales charge rates globally from all sources                                                                                                            |                                                                                                                                                                                                                   | decimal value. default `value(1.0)`                                                                                                                                                                                            |
-|        `blacklist`        | items that should cannot be used to vein mine blocks                                                                                                     |                                                                                                                                                                                                                   | a list of item ids separated by a comma. default `value(silentgear:saw)`                                                                                                                                                       |
+|        `blacklist`        | items that should cannot be used to vein mine blocks                                                                                                     |                                                                                                                                                                                                                   | a list of item ids separated by a comma. default `value("silentgear:saw")`                                                                                                                                                       |
 
 [Back](./scripting.md#server-config-syntax-and-examples)
