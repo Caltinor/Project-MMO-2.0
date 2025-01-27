@@ -31,7 +31,7 @@ Target nodes take one or multiple IDs.  for example:
 ```
 item("minecraft:stick")
 block("minecraft:obsidian")
-entity("minecraft:zombie", "iceandfire:wyvern", "alexmobs:elephant")
+entity(["minecraft:zombie", "iceandfire:wyvern", "alexmobs:elephant"])
 ```
 *Note: when using multiple IDs, each id is separated by a commma*
 
