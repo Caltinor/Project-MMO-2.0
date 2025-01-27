@@ -7,17 +7,17 @@
 WITH config(perks)
     set(clear_all);  //removes all perks from defaults before we start adding our own.  not required.
     set().event(SKILL_UP)
-        .perk(pmmo:fireworks)
+        .perk("pmmo:fireworks")
         .skill(mining);
     set().event(DEAL_DAMAGE)
-        .perk(pmmo:damage_boost)
+        .perk("pmmo:damage_boost")
         .skill(archery)
         .applies_to(["minecraft:bow","minecraft:crossbow","minecraft:trident"]);
         //notice for lists, you must write is as a standard JSON array
 END
 
 //Another approach for less typing
-WITH config(perks).event(SKILL_UP).perk(pmmo:fireworks);
+WITH config(perks).event(SKILL_UP).perk("pmmo:fireworks");
     set().skill(archery);
     set().skill(mining);
     set().skill(dragon_slaying);

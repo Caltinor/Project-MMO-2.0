@@ -10,7 +10,7 @@ WITH config(skills)
         .maxLevel(100)
         .noAfkPenalty(true);
     set(fightgroup)
-        .groupFor(combat,0.5,archery0.5)
+        .groupFor(combat,0.5,archery,0.5)
         .useTotalLevels(true)
         .showInList(false);
 END
@@ -29,6 +29,6 @@ Each skill setting starts with `set(skillname)`' followed by an optional number 
 |  `useTotalLevels`  | true/false                                                                                | `false`                                      | Should this skill be a sum of its group members when checking skill levels           |
 |    `showInList`    | true/false                                                                                | `true`                                       | Should this skill appear in the skill list on the user's screeen                     |
 |       `icon`       | namespace:textures/texurename.png                                                         | `minecraft:textures/skills/missing_icon.png` | the location of your desired texture from vanilla or a resource pack                 |
-|     `groupFor`     | skills and ratios separated by commas. eg `groupFor(combat,0.3,archery,0.3,endurance0.4)` | none.                                        | If populated, defines this skill as a "skill group"                                  | 
+|     `groupFor`     | skills and ratios separated by commas. eg `groupFor(combat,0.3,archery,0.3,endurance,0.4)`| none.                                        | If populated, defines this skill as a "skill group"                                  | 
 
 [Back](./scripting.md#server-config-syntax-and-examples)
