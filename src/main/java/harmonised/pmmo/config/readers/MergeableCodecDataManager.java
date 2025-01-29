@@ -293,13 +293,12 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			for (String str : dataValue.getTagValues()) {
 				MsLoggy.INFO.log(LOG_CODE.DATA, "Applying Setting to Tag: {}", str);
 				if (str.startsWith("#")) {
-					HolderSet.Named<V> tag = activeRegistry
-							.getTag(TagKey.create(registry, new ResourceLocation(str.substring(1))))
-							.get();
-					if (tag != null)
-						tags.addAll(tag.stream().map(holder -> holder.unwrapKey().get().location())
-							.toList());
-				}
+                    activeRegistry
+                            .getTag(TagKey.create(registry, new ResourceLocation(str.substring(1))))
+							.ifPresent(tag -> tags.addAll(tag.stream()
+									.map(holder -> holder.unwrapKey().get().location())
+                                    .toList()));
+                }
 				else if (str.endsWith(":*")) {
 					tags.addAll(activeRegistry.keySet()
 							.stream()
