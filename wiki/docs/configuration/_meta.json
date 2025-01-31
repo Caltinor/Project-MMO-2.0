@@ -1,4 +1,7 @@
 {
   "config_home.mdx": "Configuration Overview",
-  "logging.mdx": "Logging Info"
+  "logging.mdx": "Logging Info",
+  "scripting.mcx": "Scripting",
+  "serverconfigs": "Server Config Scripting",
+  "datapackconfig": "Datapack Object Configs"
 }

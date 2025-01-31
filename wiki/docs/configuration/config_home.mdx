@@ -33,14 +33,14 @@ To save yourself time, pmmo provides a command to create a datapack for you.  `/
 | `/pmmo genData create`                       | builds the datapack using the settings you have enabled                                                        |
 
 ### Specific Configuration Details
-- [Items](items.md)
-- [Blocks](blocks.md)
-- [Entities](entities.md)
-- [Dimensions](dimensions.md)
-- [Enchantments](enchantments.md)
-- [Effects](effects.md)
-- [Biomes](biomes.md)
-- [Players](players.md)
+- [Items](./datapackconfig/items)
+- [Blocks](./datapackconfig/blocks)
+- [Entities](./datapackconfig/entities)
+- [Dimensions](./datapackconfig/dimensions)
+- [Enchantments](./datapackconfig/enchantments)
+- [Effects](./datapackconfig/effects)
+- [Biomes](./datapackconfig/biomes)
+- [Players](./datapackconfig/players)
 
 ### SERVER Configs
 There are six server configs which can be generated using the datapack generator commands above.  The game has default configurations included, which can be overridden via datapack.  These are located under `data/pmmo/config/` in the datapack.  The six configs are:
@@ -55,4 +55,9 @@ There are six server configs which can be generated using the datapack generator
 | anticheese.json | where anti-cheese rules are defined                                                                       |
 
 ## Scripting
-If you are comfortable with a more programmatic approach to configuration, pmmo also offers a configuration method that allows you to contain all of your settings in one (or multiple) script files.  [read about scripting here](./scripting.md)
+If you are comfortable with a more programmatic approach to configuration, pmmo also offers a configuration method that allows you to contain all of your settings in one (or multiple) script files.  [read about scripting here](scripting)
+
+## Troubleshooting Configurations
+There are multiple layers to the configuration options provided.  If you are having issues with your configurations, the following details may help explain the issue.Datapacks
+
+### Load Order and Overrides
