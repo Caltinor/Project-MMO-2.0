@@ -102,7 +102,7 @@ public class FeaturePerks {
 	@SubscribeEvent
 	public static void saveAttributesOnDeath(LivingDeathEvent event) {
 		if (event.getEntity() instanceof Player player) {
-			for (CompoundTag nbt : Config.perks().perks().get(EventType.SKILL_UP).stream()
+			for (CompoundTag nbt : Config.perks().perks().getOrDefault(EventType.SKILL_UP, new ArrayList<>()).stream()
 					.filter(tag -> tag.getString("perk").equals("pmmo:attribute")).toList()) {
 				Holder<Attribute> attribute = getAttribute(nbt);
 				AttributeInstance instance = player.getAttributes().getInstance(attribute);
