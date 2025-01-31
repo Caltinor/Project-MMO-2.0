@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.20.1-1.6.32] - 2025-01-29
+## [1.20.1-1.6.33] - 2025-01-31
 ### Bugfixes / Tweaks
-- Added failsafe to data load for non-existent tags in `isTagFor` blocks.
+- Fixed crash when dying after removing all skillup perks.
