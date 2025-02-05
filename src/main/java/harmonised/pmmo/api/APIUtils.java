@@ -45,11 +45,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class APIUtils {
-	/* NOTES
-	 * 
-	 * - Add methods to modify the configuration while live
-	 * - Add subjective methods for creating individualized req and xp behaviors
-	 */
 	//===============CORE HOOKS======================================
 	/**get the player's current level in the skill provided
 	 * 
@@ -721,8 +716,8 @@ public class APIUtils {
 	
 	/**Registers a custom event listener inside PMMO's listeners.  All registered
 	 * listeners execute after requirement checks have succeeded but before perks
-	 * and xp awards.  The outputs of these functions are used provided to perks and
-	 * used in modify xp awards, and also to cancel event behavior before perks and
+	 * and xp awards.  The outputs of these functions are provided to perks,
+	 * used to modify xp awards, and also to cancel event behavior before perks and
 	 * xp awards execute.
 	 * 
 	 * @param listenerID a unique ID for this behavior for use in debugging.
@@ -812,8 +807,8 @@ public class APIUtils {
 	public static final String SERIALIZED_AWARD_MAP = "serialized_award_map";
 	
 	/** Both Perks and Event Triggers can be used to provide custom XP award maps
-	 *  to events. When returning the {@link net.minecraft.nbt.CompoundTag CompoundTag} in  {@link onExecute} 
-	 *  and {@link onConclude}, use the key {@link SERIALIZED_AWARD_MAP} and use
+	 *  to events. When returning the {@link net.minecraft.nbt.CompoundTag CompoundTag} in  {@link Perk#start}
+	 *  and {@link Perk#stop}, use the key {@link SERIALIZED_AWARD_MAP} and use
 	 *  this method to convert your award map into a universally serializable
 	 *  object that PMMO can understand and utilize when processing rewards.
 	 * 
@@ -827,3 +822,8 @@ public class APIUtils {
 				.orElse(new CompoundTag());
 	}
 }
+/* Developer TODOs
+ *
+ * - Add methods to modify the configuration while live
+ * - Add subjective methods for creating individualized req and xp behaviors
+ */

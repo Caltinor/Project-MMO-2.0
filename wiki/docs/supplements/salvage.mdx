@@ -2,12 +2,18 @@
 Salvaging is a feature that lets you recover items from other items based on skill and chance.
 
 ## How to Salvage
-While holding an item in either hand, crouch and right-click a smithing table (configurable).  This will consume the item and drop the results on the ground.
+While holding an item in either hand, crouch while looking at a smithing table (configurable).
+<Asset location="pmmo:salvage_block" width="50%"/>
+Items that are salvageable will display a list of items that they can "drop" when salvaged.
+<Asset location="pmmo:salvage_detail" width="50%"/>
+Right-clicking at this point will salvage the item.  When you salvage an item each item in this list is checked individually.  So there is a chance that none or all of the items may drop.
+<Asset location="pmmo:salvage_result" width="50%"/>
+In the examples above, a stone pickaxe had a chance to drop cobblestone 3 times with an 80% chance for each cobble and sticks 2 times also with an 80% chance for each stick.
 
 ## Salvage Settings
 If you view and item using the "P" (default) menu, you can see all of its salvage data (if any).  An item can have any number of salvage results, each with its own properties.  For example, a stone tool may salvage to always return one cobblestone, but may only give extra cobblestone or sticks on chance.  When looking at the salvage properties, here are what each mean:
-- "Max Obtainable" the number of times this specific entry item will attempt to drop.
-- "Required level to obtain" the skill(s) level needed for this entry to attempt to drop.
-- "Chance x% x%" The chance you will obtain a drop from this entry. The first number is the chance based on skill. the second number is the chance cap for this entry.  If the first number is higher than the second, the second will be used.  This means if the second number is 80%, the item at max chance will still have a 20% chance of failure.
-- "Chance boost based on level" What skills give extra salvage chance, and how much.  This is cumulative
-- "Xp award on success" what skills and XP are awarded if this entry drops.
+- __"Max Obtainable"__ the number of times this specific entry item will attempt to drop.
+- __"Required level to obtain"__ the skill(s) level needed for this entry to attempt to drop.
+- __"Chance x% / x%"__ The chance you will obtain a drop from this entry. The first number is the chance based on skill. the second number is the chance cap for this entry.  If the first number is higher than the second, the second will be used.  This means if the second number is 80%, the item at max chance will still have a 20% chance of failure.
+- __"Chance boost based on level"__ What skills give extra salvage chance, and how much.  This is cumulative
+- __"Xp award on success"__ what skills and XP are awarded if this entry drops.

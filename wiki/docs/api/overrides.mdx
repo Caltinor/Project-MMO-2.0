@@ -1,0 +1,6 @@
+Project MMO's API allows you to inject custom logic into the requirements, Xp gain, and Bonus logic of the mod.  This allows you to use your mod/addon's custom feature as a prerequisite for an action, as a factor in xp calculations, or in establishing xp bonuses.
+
+## Registering your Logic
+During the Forge `ServerStartingEvent` register your custom logic using the respective register call in `APIUtils`
+
+For specific details about the hooks provided by Project MMO, [View the APIUtils class JavaDocs](https://github.com/Caltinor/Project-MMO-2.0/blob/main/src/main/java/harmonised/pmmo/api/APIUtils.java)
