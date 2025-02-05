@@ -13,6 +13,40 @@ At its core, a Perk is just special behavior that players can configure to invok
 |MutableComponent description|Used in the glossary to describe your perk|
 |BiFunction\<Player, CompoundTag, List\<MutableComponent\>\> status|Takes the player and perk configuration and returns text lines to be printed in the glossary.  The difference with this property is that you are given the real-time player and configuration which you can use to calculate the perk's attributes and give detailed information.  whereas the description is static|
 
+### Example Perk Implementation
+```java
+CompoundTag defaults = new CompoundTag();
+defaults.putInt(APIUtils.PER_LEVEL, 1);
+
+Perk myCustomPerk = Perk.begin() //Builder class provided with APIUtils
+                    .addConditions((player, nbtSettings) -> player.isUnderWater())
+                    .addDefaults(defaults)
+                    //for every level (default) in the configured skill, send the message "glub" to the player
+                    .setStart((player, nbtSettings) -> {
+                        int loops = nbtSettings.getInt(APIUtils.PER_LEVEL) * nbtSettings.getLong(APIUtils.SKILL_LEVEL);
+                        for (int i = 0; i <= loops; i++) {
+                            player.sendMessage("glub");
+                        }
+                        return new CompoundTag();
+                    })
+                    //if duration is configured, repeat the louder glub per tick
+                    .setTick((player, nbtSettings, ticksElapsed) -> {
+                        player.sendMessage("GLUB!");
+                        return new CompoundTag();
+                    })
+                    .setStop((player, nbtSettings) -> {
+                        player.sendMessage("glubn't");
+                        return new CompoundTag();
+                    })
+                    .setDescription(Component.literal("You make your natural noises when wet during this event.")
+                    .setStatus((player, nbtSettings) -> {
+                        int times = nbtSettings.getInt(APIUtils.PER_LEVEL);
+                        String skill = nbtSettings.getString(APIUtils.SKILLNAME);
+                        return List.of(
+                            Component.literal("You will make the noise " + times + " per level in " + skill)
+                        )
+                    });
+```
 
 ## Registering a Perk
 in order for players to be able to use your perk in their configurations, you need to register your perk during `FMLCommonSetupEvent` using `harmonised.pmmo.api.APIUtils.registerPerk`.  There are three parameters to this registration:
