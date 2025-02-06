@@ -1,6 +1,9 @@
 {
+  "salvage.mdx": "Item Salvaging",
+  "vein.mdx": "Vein Mining",
   "mobscaling.mdx": "Mob Scaling",
   "parties.mdx": "Parties",
   "predicates.mdx": "Custom Loot Conditions",
-  "salvage.mdx": "Item Salvaging"
+  "treasure.mdx": "Treasure, Extra Drops, and Rare Mob Drops",
+  "triggers.mdx": "Advancements and FTB Quest Compat"
 }

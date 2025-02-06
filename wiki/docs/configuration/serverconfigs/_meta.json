@@ -1,8 +1,8 @@
 {
-  "anticheeseconfig.mdx": "Anti-Cheese Config",
-  "autovaluesconfig.mdx": "AutoValues Config",
-  "globalsconfig.mdx": "NBT Globals Config",
-  "perksconfig.mdx": "Perks Config",
   "serverconfig.mdx": "Server Config",
-  "skillsconfig.mdx": "Skills Config"
+  "autovaluesconfig.mdx": "AutoValues Config",
+  "perksconfig.mdx": "Perks Config",
+  "skillsconfig.mdx": "Skills Config",
+  "anticheeseconfig.mdx": "Anti-Cheese Config",
+  "globalsconfig.mdx": "NBT Globals Config"
 }
