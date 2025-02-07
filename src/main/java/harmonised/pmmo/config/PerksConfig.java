@@ -154,9 +154,9 @@ public class PerksConfig {
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic")
 				.withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic")
-				.withList("damage_type", StringTag.valueOf("#pmmo:magic")).build());
+				.withList(APIUtils.DAMAGE_TYPE_IN, StringTag.valueOf("#pmmo:magic")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging")
-				.withList("damage_type", StringTag.valueOf("#pmmo:gun")).build());
+				.withList(APIUtils.DAMAGE_TYPE_IN, StringTag.valueOf("#pmmo:gun")).build());
 		defaultSettings.put(EventType.DEAL_DAMAGE, new ArrayList<>(bodyList));
 	}
 	
