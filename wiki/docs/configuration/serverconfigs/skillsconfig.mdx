@@ -1,6 +1,42 @@
 # Skills Config Syntax and Examples
 
-## Example File
+## Datapack Example File
+```json
+{
+    "type": "SKILLS",
+    "skills": {
+        //a regular skill with basic properties
+        "my_custom_skill": {
+          "maxLevel": 2000,
+          "icon": "minecraft:textures/particle/enchanted_hit.png",
+          "iconSize": 8,
+          "useTotalLevels": false,
+          "color": 255,
+          "noAfkPenalty": false,
+          "displayGroupName": false,
+          "showInList": true
+        },
+        //a skill group which acts as an alias for groups of skills
+        "my_custom_skill_group": {
+          "maxLevel": 3000,
+          "icon": "pmmo:textures/skills/missing_icon.png",
+          "iconSize": 18,
+          "useTotalLevels": false,
+          "groupFor": {
+            "archery": 0.2,
+            "endurance": 0.3,
+            "combat": 0.5
+          },
+          "color": 16777215,
+          "noAfkPenalty": false,
+          "displayGroupName": false,
+          "showInList": true
+        }
+    }
+}
+```
+
+## Scripting Example File
 ```
 WITH config(skills)
     set(mining)
@@ -14,7 +50,7 @@ WITH config(skills)
 END
 ```
 
-## Syntax
+## Scripting Syntax
 Each skill setting starts with `set(skillname)`' followed by an optional number of value nodes.  the table below lists the value nodes, the format for their values and the default value if you omit that keyword.
 
 |    node keyword    | value format                                                                              | default value                                | What it does                                                                         |

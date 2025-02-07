@@ -1,6 +1,7 @@
 {
   "overview.mdx": "Mod Overview",
+  "core": "Core Features",
   "configuration": "Configuring PMMO",
   "supplements": "Special Features",
-  "api": "API Resources"
+  "api": "Dev Resources"
 }

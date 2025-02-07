@@ -1,6 +1,43 @@
 # Perks Config Syntax and Examples
+Perks can be configured via scripting and datapack.  Whether you are using scripting or datapacks, you will need to know what the properties are for the perk you are configuring.  This will inform you on what to include in the `{}` of the datapack or the special nodes in your scripting.
 
-## Example File
+For perks from addons, you will need to refer to their documentation, but you can check [here for the Built-in Perk Properties](../core/perks)
+
+## Datapack Example File
+```json
+{
+    "type": "PERKS",
+    "perks": {
+        //perks are nested under the event they apply to.
+        //Each event is an array []  with each perk as an item in that list
+        //eg "EVENT": [ {perk A}, {perk B}, {perk C} ]
+        "JUMP": [
+            {
+                "per_level": 0.0005,
+                "perk": "pmmo:jump_boost",
+                "skill": "agility"
+            }
+        ],
+        "SKILL_UP": [
+            {
+                "perk": "pmmo:fireworks",
+                "skill": "mining"
+            },
+            {
+                "per_level": 0.05,
+                "perk": "pmmo:attribute",
+                "attribute": "minecraft:generic.max_health",
+                "max_boost": 10.0,
+                "skill": "endurance"
+            }
+        ]
+        //events don't have to have perks.  You can add or omit whatever events
+        //you do or do not have perks for.
+    }
+}
+```
+
+## Scripting Example File
 ```
 WITH config(perks)
     set(clear_all);  //removes all perks from defaults before we start adding our own.  not required.
@@ -22,7 +59,7 @@ WITH config(perks).event(SKILL_UP).perk(pmmo:fireworks);
 END
 ```
 
-## Syntax
+## Scripting Syntax
 Each configuration uses a combination of `set(config_keyword).value(some_value);`.  The table below lists each configuration node's keyword, purpose and the value node format.
 
 | set node key | setting function                         | special nodes                                                      | value node                             |
@@ -30,7 +67,6 @@ Each configuration uses a combination of `set(config_keyword).value(some_value);
 | `clear_all`|clears the perks config of all perks|||
 | blank|start each perk with `set()`|`event(EVENT_TYPE)` specifies which event this perk is for.|`property(value)` perks take multiple values chained together where the attribute you are setting is the value node and the value inside the `()` is the value|
 
-[Built-in Perk Properties](../core/perks.md)
 <Callout variant="info">
     each perk must have the `perk(perkID)` node to be valid, but omitting it will simply cause that configuration to be skipped.
 </Callout>
