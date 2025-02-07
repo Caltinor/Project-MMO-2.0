@@ -148,89 +148,15 @@ public class PerksConfig {
 		bodyList.clear();
 		
 		//=====================DEAL_RANGED_DAMAGE=======================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "archery")
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost")
+				.withString(APIUtils.SKILLNAME, "archery")
 				.withList("applies_to", StringTag.valueOf("minecraft:bow"), StringTag.valueOf("minecraft:crossbow"), StringTag.valueOf("minecraft:trident")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic")
 				.withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic")
+				.withList("damage_type", StringTag.valueOf("#pmmo:magic")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging")
-				.withList("applies_to", 
-					StringTag.valueOf("cgm:*"),
-					StringTag.valueOf("scguns:arc_worker"),
-					StringTag.valueOf("scguns:astella"),
-					StringTag.valueOf("scguns:auvtomag"),
-					StringTag.valueOf("scguns:blasphemy"),
-					StringTag.valueOf("scguns:blunderbuss"),
-					StringTag.valueOf("scguns:bomb_lance"),
-					StringTag.valueOf("scguns:boomstick"),
-					StringTag.valueOf("scguns:brawler"),
-					StringTag.valueOf("scguns:bruiser"),
-					StringTag.valueOf("scguns:callwell"),
-					StringTag.valueOf("scguns:carapice"),
-					StringTag.valueOf("scguns:cogloader"),
-					StringTag.valueOf("scguns:combat_shotgun"),
-					StringTag.valueOf("scguns:cyclone"),
-					StringTag.valueOf("scguns:dark_matter"),
-					StringTag.valueOf("scguns:defender_pistol"),
-					StringTag.valueOf("scguns:dozier_rl"),
-					StringTag.valueOf("scguns:earths_corpse"),
-					StringTag.valueOf("scguns:echoes_2"),
-					StringTag.valueOf("scguns:flintlock_pistol"),
-					StringTag.valueOf("scguns:floundergat"),
-					StringTag.valueOf("scguns:freyr"),
-					StringTag.valueOf("scguns:gale"),
-					StringTag.valueOf("scguns:gattaler"),
-					StringTag.valueOf("scguns:gauss_rifle"),
-					StringTag.valueOf("scguns:greaser_smg"),
-					StringTag.valueOf("scguns:gyrojet_pistol"),
-					StringTag.valueOf("scguns:handcannon"),
-					StringTag.valueOf("scguns:howler"),
-					StringTag.valueOf("scguns:howler_conversion"),
-					StringTag.valueOf("scguns:inertial"),
-					StringTag.valueOf("scguns:iron_javelin"),
-					StringTag.valueOf("scguns:iron_spear"),
-					StringTag.valueOf("scguns:jackhammer"),
-					StringTag.valueOf("scguns:krauser"),
-					StringTag.valueOf("scguns:laser_musket"),
-					StringTag.valueOf("scguns:llr_director"),
-					StringTag.valueOf("scguns:lockewood"),
-					StringTag.valueOf("scguns:locust"),
-					StringTag.valueOf("scguns:lone_wonder"),
-					StringTag.valueOf("scguns:m22_waltz"),
-					StringTag.valueOf("scguns:m3_carabine"),
-					StringTag.valueOf("scguns:makeshift_rifle"),
-					StringTag.valueOf("scguns:marlin"),
-					StringTag.valueOf("scguns:mas_55"),
-					StringTag.valueOf("scguns:mk43_rifle"),
-					StringTag.valueOf("scguns:musket"),
-					StringTag.valueOf("scguns:newborn_cyst"),
-					StringTag.valueOf("scguns:osgood_50"),
-					StringTag.valueOf("scguns:pax"),
-					StringTag.valueOf("scguns:plasgun"),
-					StringTag.valueOf("scguns:prush_gun"),
-					StringTag.valueOf("scguns:pulsar"),
-					StringTag.valueOf("scguns:rat_king_and_queen"),
-					StringTag.valueOf("scguns:raygun"),
-					StringTag.valueOf("scguns:repeating_musket"),
-					StringTag.valueOf("scguns:rocket_rifle"),
-					StringTag.valueOf("scguns:rusty_gnat"),
-					StringTag.valueOf("scguns:saketini"),
-					StringTag.valueOf("scguns:sawed_off_callwell"),
-					StringTag.valueOf("scguns:scrapper"),
-					StringTag.valueOf("scguns:sculk_resonator"),
-					StringTag.valueOf("scguns:sequoia"),
-					StringTag.valueOf("scguns:shellurker"),
-					StringTag.valueOf("scguns:soul_drummer"),
-					StringTag.valueOf("scguns:spitfire"),
-					StringTag.valueOf("scguns:super_shotgun"),
-					StringTag.valueOf("scguns:thunderhead"),
-					StringTag.valueOf("scguns:umax_pistol"),
-					StringTag.valueOf("scguns:uppercut"),
-					StringTag.valueOf("scguns:venturi"),
-					StringTag.valueOf("scguns:vulcanic_repeater"),
-					StringTag.valueOf("scguns:waltz_conversion"),
-					StringTag.valueOf("scguns:whispers"),
-					StringTag.valueOf("scguns:winnie")
-				).build());
+				.withList("damage_type", StringTag.valueOf("#pmmo:gun")).build());
 		defaultSettings.put(EventType.DEAL_DAMAGE, new ArrayList<>(bodyList));
 	}
 	

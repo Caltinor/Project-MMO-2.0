@@ -57,7 +57,12 @@ public class DamageTagProvider extends TagsProvider<DamageType>{
                 .addOptional(new ResourceLocation("irons_spellbooks:blood_magic"))
                 .addOptional(new ResourceLocation("irons_spellbooks:evocation_magic"))
                 .addOptional(new ResourceLocation("irons_spellbooks:eldritch_magic"))
-                .addOptional(new ResourceLocation("irons_spellbooks:nature_magic"));
+                .addOptional(new ResourceLocation("irons_spellbooks:nature_magic"))
+                .addOptional(new ResourceLocation("ars_nouveau:spell"))
+                .addOptional(new ResourceLocation("ars_nouveau:frost"))
+                .addOptional(new ResourceLocation("ars_nouveau:flare"))
+                .addOptional(new ResourceLocation("ars_nouveau:crush"))
+                .addOptional(new ResourceLocation("ars_nouveau:windshear"));
         tag(Reference.FROM_GUN)
                 .addOptional(new ResourceLocation("cgm:bullet"))
                 .addOptional(new ResourceLocation("scguns:bullet"));
