@@ -141,9 +141,9 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic")
 				.withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "magic")
-				.withList("for_damage",StringTag.valueOf("#pmmo:magic")).build());
+				.withList(APIUtils.DAMAGE_TYPE_IN,StringTag.valueOf("#pmmo:magic")).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString(APIUtils.SKILLNAME, "gunslinging")
-				.withList("for_damage",StringTag.valueOf("#pmmo:gun")).build());
+				.withList(APIUtils.DAMAGE_TYPE_IN,StringTag.valueOf("#pmmo:gun")).build());
 		defaultSettings.put(EventType.DEAL_DAMAGE, new ArrayList<>(bodyList));
 		return defaultSettings;
 	}
