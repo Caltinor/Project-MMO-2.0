@@ -56,20 +56,24 @@ In this example if we craft the item we will get 100 crafting XP and 55 smithing
 |Event| Context                                                          |
 |:---|:-----------------------------------------------------------------|
 |ANVIL_REPAIR| when this is the output item                                   |
+|BLOCK_BREAK| if this is a block item, the xp for breaking the block version of this.  good to include for tooltips. not used for xp|
 |BLOCK_PLACE| if this is a block item, the xp for placing the block          |
 |BREW| as brew ingredient, output does not matter                     |
 |CONSUME| if eaten/drank                                                 |
 |CRAFT| when this is the output itemm                                  |
+|TOOL_BREAKING|if the item has durability and breaks|
 |ENCHANT| when enchants are added to this item                           |
 |FISH| when this is the item obtained from fishing                    |
 |SMELT| when this is the item being smelted/cooked, NOT the output     |
+|GIVEN_AS_TRADE| when this item is consumed by a village during a trade|
 |ACTIVATE_ITEM|  if this item has a right-click action, when that is activated |
+|RECEIVED_AS_TRADE| when this item is received from a villager during a trade|
 
 ## "damage_type_xp":{}
 In 1.19.4, Mojang made damage a datapack object, which allowed users to add their own damage types via datapack.  Included in this new feature was the ability to make damage type tags.  To take advantage of this feature, PMMO uses those damage types and tags when determining what XP to give a player.  Using this system, you can give players a different type of XP based on the type of damage they dealt.  For a list of all the vanilla damage types, see [HERE](damagetypes.mdx).  If using damage tags, pmmo will treat an entry like a tag if it is preceded with a `#`.  An example default implementation for "dealt_damage_xp" looks as follows:
 ```json5
 "damage_type_xp":{
-  "DEAL_DAMAGE":
+  "DEAL_DAMAGE": {
     "minecraft:player_attack": { //gives the below XP for every point of damage dealt with melee attacks
       "combat": 10  
     },

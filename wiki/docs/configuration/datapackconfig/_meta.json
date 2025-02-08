@@ -6,5 +6,6 @@
   "biomes.mdx": "Biomes",
   "effects.mdx": "Mob/Potion Effects",
   "enchantments.mdx": "Enchantments",
-  "players.mdx": "Players"
+  "players.mdx": "Players",
+  "nbtconfigs": "NBT Configuration Format"
 }

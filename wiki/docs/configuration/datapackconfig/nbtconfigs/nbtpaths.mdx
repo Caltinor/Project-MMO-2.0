@@ -1,0 +1,74 @@
+# Paths (Advanced)
+
+this section assumes you understand the concepts from [Config Structure Overview](nbtstructure).  This section will really only expand upon the minor intricacies of the path parsing.
+
+## Values
+
+Any key that is not followed by `{}` or `[]` is treated as a value, and the corresponding NBT element that it contains will be returned.  This means that if you have the following NBT structure
+```
+{
+    Damage:0b,
+    display:{
+        color:16701501
+    }
+}
+```
+and you enter the path `"display"`, your resulting value will be `"{color:16701501}"`.  This is useful for special cases where the values inside a compound might not be normal, such as `ITextComponent` data.
+
+<Callout variant="warning">
+    A path will not return a value unless the last element in the path string is a value or list type.  for example since `"path{}"` is a compound type, it will return nothing even if the NBT has a compound named "path".
+</Callout>
+
+## Lists
+
+Lists are unique in that there is additional information that can be put inside the `[]` to better define what is being sought.  There are 3 possibilities for how a list can be defined:
+- `[]` get All entries
+- `[#]` get a Specific entry
+- `[{"key":"value"}]` get a specific entry with the following key and value
+
+If nothing is provided (eg `[]`) in the brackets, then the pather will iterate through every entry in that list when evaluating the paths.  therefore if we assume that each list in this path has 2 entries, then `"list[].other[].last[].value"` will result in 8 unique paths from just one string.
+
+If we provide the index `[#]` in the path, then the path reader will look at that specific location.  Warning though, if that index does not exist, it will crash the reader.  Keep this in mind when using items with lists that are not static in shape, such as the enchantment list in weapons and tools.
+
+Speaking of enchantments, the last options is how you can get the level as the value from a specific enchantment.  for example `"Enchantments[{id:\"minecraft:smite\"}].level"` tells the reader to look through the list of enchantments for one with a key of "id" whose value is "minecraft:smite" then return the value of "level".  If the reader cannot find an enchantment named smite, then it will return nothing and there will be no path for the criteria to compare to.
+<Callout>
+    the backslashes in the path are for the JSON to escape them.  The JSON syntax will be broken if this isn't done.
+</Callout>
+
+## Compounds
+Compounds are simple in that they are usually just containers for other properties.  However, there is one special use case with compounds called Qualified Compounds.  A Qualified Compound is on that only returns the value of one of its properties if a different property matches a specific value.  For example, let's assume we have an item that has the following properties
+ ```json
+ {
+    "abilities": {
+        "doesBurn":0b,
+        "burnPower": 100,
+        "enemyExecute": 10
+    }
+ }
+ ```
+ We want to set a requirement based on "burnPower", but only if "doesBurn" is true.  In this case, the item might have a value we are interested in but because it doesn't use it, we don't want to penalize our players.  To specify this in our path, we add a qualifier to our compound.
+ `"abilities{\"doesBurn":true}.burnPower"`
+ If doesBurn equals false (0b in NBT) we don't return the value of burnPower and the logic for this criteria is skipped.
+
+## Reading Your NBT to Build Paths
+
+The trickiest part might be understanding how to read an NBT value and make sense of it for the sake of creating a path.  The first thing to know is that NBT is just JSON in Mojang style.  Except that JSON requires keys to be wrapped in `""` and NBT does not.  Therefore, if you use the command `/data get` (plus relevant parameters) and copy the text to your favorite editor, you can proceed to format it like a JSON and this will be accurate.
+
+Once you have your NBT in a readable form, the same rules about JSON apply here.  Every element has a list of keys and each key has a value.  That value may be a compound, or if the item is a list, a list of values or compounds (or lists again).  The trick is to see that all the paths are is a sequence of nested keys.  suppose we had the following NBT
+```json
+{
+  "Damage":1,
+  "tag":{
+    "somekey":"someValue",
+    "somecompound": {
+      "aList":[
+        "one",
+        "two",
+        "three"
+      ],
+      "value":"done"
+    }
+  }
+}
+```
+Under our root tag are two keys "Damage" and "tag".  No matter what we want, our path must start with one of those two.  if we want the value of damage then our path is just `"Damage"`, but if we want something nested under tag, we have to start with `"tag{}"`.  As you may recall, this is an invalid path since it doesn't end with a value.  We could remove the `{}` and get the entire string of everything underneath it, but we want something nested, so we move on.  Within "tag" we have "somekey" and "somecompound".  if we want the value of "somekey" then we finish our path with `"tag{}.somekey"`.  However, if we want to go deeper, we could get a value nested in somecompound `"tag{}.somecompound{}."`.  once again we are not finished since this doesn't end with a value.  "somecompound" contains only two keys, a list labeled "aList", and a key of "value". if we put `"tag{}.somecompound{}.aList"` we will get `["one", "two", "three"]"` which probably isn't useful to us.  so we can put `"tag{}.somecompound{}.aList[]"` to get all 3 as path values, or we can pick an index. or, if we want the value of "value", we put `"tag{}.somecompound{}.value"` and get "done" as a path value.

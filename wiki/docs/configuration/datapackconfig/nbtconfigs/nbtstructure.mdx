@@ -1,0 +1,145 @@
+# NBT Config Structure Overview
+NBT configurations allow for using properties of items, blocks, and entities to define requirements and/or experience.  Some mods such as Tinkers Construct, Tetra, and Silent Gear have a select few items that differ based on their NBT but have the same item ID.  eg "tetra:modular_double".  For mods with variant items like this you likely want different requirements based on the materials used.  NBT configurations are how this is configured.  The following section covers the basic syntax of NBT configurations.
+
+## Logic, Paths, and Constants
+Logic is what defines how properties relate to pmmo settings.  Paths are the specific NBT location your values reside at.  for example if the NBT for your item looked like:
+```json
+{
+    "materials": {
+        "top_material": "iron",
+        "bottom_material": "wood",
+        "upgrade_level": 12
+    }
+}
+```
+if you wanted requirements to be based on the `top_material` value.  you would need to create a path string that started at `materials` then pointed to `top_material`.  eg `"materials{}.top_material"`.  You can read more about paths [HERE](nbtpaths)
+
+Globals are like paths except they work as aliases for the values themselves.  In our example above "iron" was the value.  If for example the mod you are using has long or complicated values, you might want to use an alias in your config to save space and typing.  Globals are defined in the [Globals Config](../../serverconfigs/globalsconfig)
+
+### Logic Blocks
+
+The logic block is the bulk of the config and contains all the desired behavior of your items.  The most important aspect of the Logic block is that is is an ordered list.  The first entry is evaluated, then the second, then the third, and so on.  Each logic entry will also have a specific relation to the entry before it, which is why order matters.  Let's look at the basic structure of a logic entry.
+
+```json
+{
+    "behavior_to_previous": "",
+    "should_cases_add": false,
+    "cases": []
+}
+```
+
+`"behavior_to_previous"` tells the logic evaluator how this specific entry should interact with all of the data before it.  There are 4 valid options that this block can have.  they are:
+- `"ADD_TO"`: Adds the results of this entry's cases to the values preceding it
+- `"SUB_FROM"`: Subtracts the results of this entry's cases from the values preceding it
+- `"HIGHEST"`: Compares the values preceding it to this case and uses the highest as the new value
+- `"REPLACE"`: Overrides a previous entry with this entry's
+
+`"should_cases_add"` determines if cases should aggregate or if only the highest value within a case block should be used.
+
+Before we get to cases, let's take a look at a basic layout for an item NBT WEAR requirement
+```json
+"nbt_requirements": {
+    //as noted above, NBT settings are a list of logic entries, so our json must use square braces to indicate a list
+    "WEAR": [
+        //we start with a base entry to establish our initial values
+        {"behavior_to_previous": "ADD_TO", "should_cases_add": false, "cases": []},
+        //we then evaluate new cases and the result of this entry is subtracted from the first one's output
+        {"behavior_to_previous": "SUB_FROM", "should_cases_add": false, "cases": []},
+        //lastly, we may not want the discounts from the previous step to be less than a certain amount so we have
+        //one final entry to ensure we are least as high as this final case.
+        {"behavior_to_previous": "HIGHEST", "should_cases_add": false, "cases": []}
+    ]
+}
+```
+
+`"cases"` is another major block within an entry and contains all of the actual values being evaluated and applied.  Case entries are not ordered in any specific way, but have a specific format as well.  case entries are structured as follows:
+```json
+{
+    "paths": [],
+    "criteria": []
+}
+```
+`"paths"` is an array of all the nbt paths that should be evaluated against the succeeding criteria.
+
+`"criteria"` is an array containing the skill values and evaluation parameters. an example of a criteria entry looks like this:
+```json
+{
+    "operator":"",
+    "comparators":[],
+    "value":{}
+}
+```
+`"operator"` tells the pmmo how to compare the value found at the path to the value in the comparator.  There are only six valid entries here:
+- `"EQUALS"`: nbt value and comparator value must be the same
+- `"GREATER_THAN"`: nbt value must be greater than the comparator
+- `"LESS_THAN"`: nbt value must be less than the comparator
+- `"GREATER_THAN_OR_EQUAL"`: nbt value must be greater than or equal to the comparator
+- `"LESS_THAN_OR_EQUAL"`: nbt value must be less than or equal to the comparator
+- `"EXISTS"`: is true if the nbt value exists *(if used the comparators key can be omitted)*
+
+`"comparators": []` is an array of values.  each one is evaluated independently so that you can group similar conditions together.  e.g. `["mymod:iron", "mymod:wood", "mymod:diamond"]` or `["5", "10", "15"]`.
+
+`"value": {}` is the exact same as regular pmmo configs' section for defining skills.  This section is where you say what skills and level should be applied if the expression is true.  e.g `"value": { "mining": 10 }"`
+
+**Putting it all together**
+
+Here is an example of an item with two logical tiers.  In the first tier we say that the value of the item is based on what material is used, then we subtract a value from the requirement if the item is damaged beyond 50.  which in this case would mean an item with a head material of diamond and damage of 51 would only require 5 mining.
+```json
+{
+    "logic": [
+        {"behavior_to_previous": "ADD_TO", "should_cases_add": false,
+         "cases": [
+            {"paths":["materials{}.head"],
+             "criteria":[
+                {"operator":"EQUALS", "comparators":["iron","gold"], "value":{"mining":5}},
+                {"operator":"EQUALS", "comparators":["diamond"], "value":{"mining":10}},
+                {"operator":"EQUALS", "comparators":["netherite"], "value":{"mining":15}}
+             ]
+            }
+         ]
+        },
+        {"behavior_to_previous": "SUB_FROM", "should_cases_add": false,
+         "cases": [
+            {"paths":["Damage"],
+             "criteria":[
+                {"operator":"GREATER_THAN", "comparators":[50], "value":{"mining":5}}
+             ]
+            }
+         ]
+        }
+    ]
+}
+```
+### Paths
+
+Paths are how you define where in an item's NBT a specific value is located.  A path in your config is a string representation of that location.  Paths are constructed using key names followed by a type indicator and delimited by a period `.`.  The 3 path type indicators are:
+- Compounds: `{}`   eg `"compoundExample{}"`
+- Lists: `[]`  eg `"listExample[]"`
+- Values: nothing  eg `"valueExample"`
+
+An example path from vanilla would be dyed leather armor.  The actual NBT of a dyed armor piece looks like this
+```
+{
+    Damage:0b,
+    display:{
+        color:16701501
+    }
+}
+```
+If we want the color of this armor piece, we need to get the first containing element.  in this example the only two keys under the root tag are "Damage" and "display".  We know two things: "display" contains our color key, and because of the `{` after the colon, it's a compound type.  So we have the first part of our path `"display{}"`.  Now that we have told the reader to look in the "display" compound, we need to tell it to get us the value of color.  We know color is our value, so there's our type.  so we add a delimiter period after our compound and add the value to our path `"display{}.color"` which gives us our final path.  You can read more about paths [HERE](nbtpaths).
+
+This path can be used directly in the "paths" array in your cases, or you can use the global and local paths sections to create aliases.  Globals are set in the [globals config](../../serverconfigs/globalsconfig) and let you define path aliases.
+
+Aliases give you a way to make a shorthand version of a path for use in your configs.  for example if I create the following alias:
+```json
+{
+  "global": {
+    "paths": {
+      "myalias":"someData{}.withALongPath{}.thatWouldBe[].veryBulky{}.toWriteOrPaste{}.repeatedly"
+    },
+    "constants":{}
+  }
+}
+```
+I could then use that alias in my cases section by putting a `#` in front of the alias in my case's paths section `"paths":["#myalias"]"`
+
