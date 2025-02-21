@@ -479,10 +479,20 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                       new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("tconstruct:queens_slime","tconstruct:blazing_bone","tconstruct:bloodbone","tconstruct:hepatizon","tconstruct:manyullyn")), getMap.apply(30.0))
               ))
         )));};
-        doForRaw(List.of("tconstruct:axe", "tconstruct:broad_axe", "tconstruct:hand_axe"), builder -> builder
+        Function<List<String>, List<LogicEntry>> tinkerArmorReqs = str -> {
+                Function<Double, Map<String, Double>> getMap = d -> str.stream().collect(Collectors.toMap(s -> s, s -> d));
+                return List.of(new LogicEntry(BehaviorToPrevious.ADD_TO, false, List.of(
+                  new LogicEntry.Case(List.of("tic_materials[]"), List.of(
+                          new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood","tconstruct:rock")), getMap.apply(5.0)),
+                          new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("tconstruct:iron","tconstruct:plated_slimewood","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum","tconstruct:chorus","tconstruct:bloodbone")), getMap.apply(20.0)),
+                          new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("twilightforest:steeleaf","twilightforest:knightmetal","twilightforest:fiery","tconstruct:slimesteel","tconstruct:whitestone","tconstruct:amethyst_bronze","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt", "tconstruct:necronium")), getMap.apply(40.0)),
+                          new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("tconstruct:queens_slime","tconstruct:blazing_bone","tconstruct:bloodbone","tconstruct:hepatizon","tconstruct:manyullyn")), getMap.apply(60.0))
+                  ))
+            )));};
+        doForRaw(List.of("tconstruct:broad_axe", "tconstruct:hand_axe"), builder -> builder
                 .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("woodcutting")))
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
-        doForRaw(List.of("tconstruct:broad_sword", "tconstruct:cleaver", "tconstruct:dagger", "tconstruct:kama", "tconstruct:scythe", "tconstruct:sword"), builder -> builder
+        doForRaw(List.of("tconstruct:cleaver", "tconstruct:dagger", "tconstruct:kama", "tconstruct:scythe", "tconstruct:sword"), builder -> builder
                 .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("combat")))
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
         doForRaw(List.of("tconstruct:excavator"), builder -> builder
@@ -494,6 +504,10 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         doForRaw(List.of("tconstruct:pickadze", "tconstruct:pickaxe", "tconstruct:sledge_hammer", "tconstruct:vein_hammer"), builder -> builder
                 .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("mining")))
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
+        doForRaw(List.of("tconstruct:battlesign"), builder -> builder
+                .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
+        doForRaw(List.of("tconstruct:plate_boots", "tconstruct:plate_chestplate", "tconstruct:plate_helmet", "tconstruct:plate_leggings"), builder -> builder
+                .addNBTReq(ReqType.WEAR, tinkerArmorReqs.apply(List.of("endurance"))));
 
         //TETRA DEFAULTS
         doForRaw(List.of("tetra:modular_bow", "tetra:modular_crossbow", "tetra:modular_double", "tetra:modular_shield", "tetra:modular_single", "tetra:modular_sword"),
