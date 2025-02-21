@@ -1,28 +1,172 @@
 {
-    "nbt_requirements": {
-        "TOOL": [
-            {"behavior_to_previous": "ADD_TO", "should_cases_add": false,
-            "cases": [
-                {"paths": ["tic_materials[]"],
-                 "criteria": [
-                    {"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood","tconstruct:rock"],"value": { "farming": 5}},
-					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:plated_slimewood","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum","tconstruct:chorus","tconstruct:bloodbone"], "value": { "farming": 10}},
-					{"operator": "EQUALS","comparators": ["twilightforest:steeleaf","twilightforest:knightmetal","twilightforest:fiery","tconstruct:slimesteel","tconstruct:whitestone","tconstruct:amethyst_bronze","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt", "tconstruct:necronium"],"value": { "farming": 20}},
-					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:blazing_bone","tconstruct:bloodbone","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "farming": 30}}
-			 	]}
-            ],
-            "WEAPON": [
-                {"behavior_to_previous": "ADD_TO", "should_cases_add": false,
-                "cases": [
-                     {"paths": ["tic_materials[]"],
+  "nbt_requirements": {
+      "TOOL": [
+          {
+              "behavior_to_previous": "ADD_TO",
+              "should_cases_add": false,
+              "cases": [
+                  {
+                      "paths": [
+                          "tic_materials[]"
+                      ],
                       "criteria": [
-                        {"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood","tconstruct:rock"],"value": { "combat": 5}},
-                        {"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:plated_slimewood","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum","tconstruct:chorus","tconstruct:bloodbone"], "value": { "combat": 10}},
-                        {"operator": "EQUALS","comparators": ["twilightforest:steeleaf","twilightforest:knightmetal","twilightforest:fiery","tconstruct:slimesteel","tconstruct:whitestone","tconstruct:amethyst_bronze","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt", "tconstruct:necronium"],"value": { "combat": 20}},
-                        {"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:blazing_bone","tconstruct:bloodbone","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "combat": 30}}
-                     ]}
-                ]}
-            ]}
-        ]
-    }
+                          {
+                              "operator": "EQUALS",
+                              "comparators": [
+                                  "tconstruct:necrotic_bone",
+                                  "tconstruct:bone",
+                                  "tconstruct:flint",
+                                  "tconstruct:stone",
+                                  "tconstruct:wood",
+                                  "tconstruct:rock"
+                              ],
+                              "value": {
+                                  "farming": 5
+                              }
+                          },
+                          {
+                              "operator": "EQUALS",
+                              "comparators": [
+                                  "tconstruct:iron",
+                                  "tconstruct:plated_slimewood",
+                                  "tconstruct:seared_stone",
+                                  "tconstruct:scorched_stone",
+                                  "tconstruct:copper",
+                                  "tconstruct:slimewood",
+                                  "tconstruct:lead",
+                                  "tconstruct:silver",
+                                  "tconstruct:electrum",
+                                  "tconstruct:chorus",
+                                  "tconstruct:bloodbone"
+                              ],
+                              "value": {
+                                  "farming": 10
+                              }
+                          },
+                          {
+                              "operator": "EQUALS",
+                              "comparators": [
+                                  "twilightforest:steeleaf",
+                                  "twilightforest:knightmetal",
+                                  "twilightforest:fiery",
+                                  "tconstruct:slimesteel",
+                                  "tconstruct:whitestone",
+                                  "tconstruct:amethyst_bronze",
+                                  "tconstruct:steel",
+                                  "tconstruct:bronze",
+                                  "tconstruct:tinkers_bronze",
+                                  "tconstruct:nahuatl",
+                                  "tconstruct:pig_iron",
+                                  "tconstruct:rose_gold",
+                                  "tconstruct:constantan",
+                                  "tconstruct:cobalt",
+                                  "tconstruct:necronium"
+                              ],
+                              "value": {
+                                  "farming": 20
+                              }
+                          },
+                          {
+                              "operator": "EQUALS",
+                              "comparators": [
+                                  "tconstruct:queens_slime",
+                                  "tconstruct:blazing_bone",
+                                  "tconstruct:bloodbone",
+                                  "tconstruct:hepatizon",
+                                  "tconstruct:manyullyn"
+                              ],
+                              "value": {
+                                  "farming": 30
+                              }
+                          }
+                      ]
+                  }
+              ]
+          }
+      ],
+      "WEAPON": [
+          {
+              "behavior_to_previous": "ADD_TO",
+              "should_cases_add": false,
+              "cases": [
+                  {
+                      "paths": [
+                          "tic_materials[]"
+                      ],
+                      "criteria": [
+                          {
+                              "operator": "EQUALS",
+                              "comparators": [
+                                  "tconstruct:necrotic_bone",
+                                  "tconstruct:bone",
+                                  "tconstruct:flint",
+                                  "tconstruct:stone",
+                                  "tconstruct:wood",
+                                  "tconstruct:rock"
+                              ],
+                              "value": {
+                                  "combat": 5
+                              }
+                          },
+                          {
+                              "operator": "EQUALS",
+                              "comparators": [
+                                  "tconstruct:iron",
+                                  "tconstruct:plated_slimewood",
+                                  "tconstruct:seared_stone",
+                                  "tconstruct:scorched_stone",
+                                  "tconstruct:copper",
+                                  "tconstruct:slimewood",
+                                  "tconstruct:lead",
+                                  "tconstruct:silver",
+                                  "tconstruct:electrum",
+                                  "tconstruct:chorus",
+                                  "tconstruct:bloodbone"
+                              ],
+                              "value": {
+                                  "combat": 10
+                              }
+                          },
+                          {
+                              "operator": "EQUALS",
+                              "comparators": [
+                                  "twilightforest:steeleaf",
+                                  "twilightforest:knightmetal",
+                                  "twilightforest:fiery",
+                                  "tconstruct:slimesteel",
+                                  "tconstruct:whitestone",
+                                  "tconstruct:amethyst_bronze",
+                                  "tconstruct:steel",
+                                  "tconstruct:bronze",
+                                  "tconstruct:tinkers_bronze",
+                                  "tconstruct:nahuatl",
+                                  "tconstruct:pig_iron",
+                                  "tconstruct:rose_gold",
+                                  "tconstruct:constantan",
+                                  "tconstruct:cobalt",
+                                  "tconstruct:necronium"
+                              ],
+                              "value": {
+                                  "combat": 20
+                              }
+                          },
+                          {
+                              "operator": "EQUALS",
+                              "comparators": [
+                                  "tconstruct:queens_slime",
+                                  "tconstruct:blazing_bone",
+                                  "tconstruct:bloodbone",
+                                  "tconstruct:hepatizon",
+                                  "tconstruct:manyullyn"
+                              ],
+                              "value": {
+                                  "combat": 30
+                              }
+                          }
+                      ]
+                  }
+              ]
+          }
+      ]
+  }
 }
