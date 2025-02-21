@@ -479,10 +479,10 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                       new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of("tconstruct:queens_slime","tconstruct:blazing_bone","tconstruct:bloodbone","tconstruct:hepatizon","tconstruct:manyullyn")), getMap.apply(30.0))
               ))
         )));};
-        doForRaw(List.of("tconstruct:axe", "tconstruct:broad_axe", "tconstruct:hand_axe"), builder -> builder
+        doForRaw(List.of("tconstruct:broad_axe", "tconstruct:hand_axe"), builder -> builder
                 .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("woodcutting")))
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
-        doForRaw(List.of("tconstruct:broad_sword", "tconstruct:cleaver", "tconstruct:dagger", "tconstruct:kama", "tconstruct:scythe", "tconstruct:sword"), builder -> builder
+        doForRaw(List.of("tconstruct:cleaver", "tconstruct:dagger", "tconstruct:kama", "tconstruct:scythe", "tconstruct:sword"), builder -> builder
                 .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("combat")))
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
         doForRaw(List.of("tconstruct:excavator"), builder -> builder
@@ -493,6 +493,8 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
         doForRaw(List.of("tconstruct:pickadze", "tconstruct:pickaxe", "tconstruct:sledge_hammer", "tconstruct:vein_hammer"), builder -> builder
                 .addNBTReq(ReqType.TOOL, tinkerReqs.apply(List.of("mining")))
+                .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
+        doForRaw(List.of("tconstruct:battlesign"), builder -> builder
                 .addNBTReq(ReqType.WEAPON, tinkerReqs.apply(List.of("combat"))));
 
         //TETRA DEFAULTS
