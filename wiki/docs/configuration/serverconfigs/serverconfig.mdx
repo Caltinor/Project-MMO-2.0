@@ -1,0 +1,292 @@
+# Server Config Syntax and Examples
+
+## Example File
+<Callout>
+    Project MMO will generate a valid file for you with each new world.  Do not copy/paste this example.
+</Callout>
+<Callout variant="warning">
+    As outlined below, mob scaling values have a bug where Forge's TOML parser will change `"minecraft:generic.attribute"` into `"minecraft:generic".attribute`.  If you don't want the defaults for mob scaling, make sure this format change is manually set back to the first example.  The example below shows what the config should look like if you need a reference.
+</Callout>
+```toml
+
+#General settings on the server
+[General]
+	#how much extra reach should a player get in creative mode
+	#Range: 4.0 ~ 1.7976931348623157E308
+	"Creative Reach" = 50.0
+	#Which block should be used for salvaging
+	"Salvage Block" = "minecraft:smithing_table"
+	#if false, all pmmo loot conditions will be turned off
+	"Treasure Enabled" = true
+	#If false, pmmo will not track if a potion was previously brewed.
+	#this helps with stacking potions from other mods, but
+	#does not prevent users from pick-placing potions in the
+	#brewing stand for free XP. Toggle at your discretion.
+	brewing_tracked = true
+
+#Settings related level gain
+[Levels]
+	#The highest level a player can achieve in any skill.
+	#NOTE: if this is changing on you to a lower value, that's intentional
+	#If your formula makes the required xp to get max level greater than
+	#pmmo can store, pmmo will replace your value with the actual max.
+	#Range: > 1
+	"Max Level" = 329
+	#should levels be determined using an exponential formula?
+	"Use Exponential Formula" = true
+	#=====LEAVE -1 VALUE UNLESS YOU WANT STATIC LEVELS=====
+	#Replacing the -1 and adding values to this list will set the xp required to advance for each
+	#level manually.  Note that the number of level settings you enter into this list
+	#will set your max level.  If you only add 10 entries, your max level will be 10.
+	#This setting is intended for players/ops who want fine-tune control over their
+	#level growth.  use with caution.
+	#
+	#As a technical note, if you enter values that are not greater than their previous
+	#value, the entire list will be ignored and revert back to the selected exponential
+	#or linear formulaic calculation
+	Static_Levels = [-1]
+	#How much experience should players lose when they die?
+	#zero is no loss, one is lose everything
+	#Range: 0.0 ~ 1.0
+	"Loss on death" = 0.0
+	#should loss of experience cross levels?
+	#for example, if true, a player with 1 xp above their current level would lose the
+	#[Loss on death] percentage of xp and fall below their current level.  However,
+	#if false, the player would lose only 1 xp as that would put them at the base xp of their current level
+	"Lose Levels On Death" = false
+	#This setting only matters if [Lose Level On Death] is set to false.
+	#If this is true the [Loss On Death] applies only to the experience above the current level
+	#for example if level 3 is 1000k xp and the player has 1020 and dies.  the player will only lose
+	#the [Loss On Death] of the 20 xp above the level's base.
+	"Lose Only Excess" = true
+	#Modifies how much xp is earned.  This is multiplicative to the XP.
+	#(Mutually Exclusive to [Skill Modifiers])
+	"Global Modifier" = 1.0
+
+	#Modifies xp gains for specific skills.  This is multiplicative to the XP.
+	#(Mutually Exclusive to [Global Modifier])
+	[Levels."Skill Modifiers"]
+		example_skill = 2.0
+		other_example = 0.5
+    # In the above example "example_skill" earns double xp and "other_example" earns half xp.
+
+	#Settings for Linear XP configuration
+	[Levels."LINEAR LEVELS"]
+		#what is the base xp to reach level 2 (this + level * xpPerLevel)
+		#Range: 0 ~ 9223372036854775807
+		"Base XP" = 250
+		#What is the xp increase per level (baseXp + level * this)
+		#Range: 0.0 ~ 1.7976931348623157E308
+		"Per Level" = 500.0
+
+	#Settings for Exponential XP configuration
+	[Levels."EXPONENTIAL LEVELS"]
+		#What is the x in: x * ([Power Base]^([Per Level] * level))
+		#Range: > 1
+		"Base XP" = 250
+		#What is the x in: [Base XP] * (x^([Per Level] * level))
+		#Range: 0.0 ~ 1.7976931348623157E308
+		"Power Base" = 1.104088404342588
+		#What is the x in: [Base XP] * ([Power Base]^(x * level))
+		#Range: 0.0 ~ 1.7976931348623157E308
+		"Per Level" = 1.1
+
+#Should requirements apply for the applicable action type
+[Requirements]
+	"WEAR Req Enabled" = true
+	"USE_ENCHANTMENT Req Enabled" = true
+	"TOOL Req Enabled" = true
+	"WEAPON Req Enabled" = true
+	"USE Req Enabled" = true
+	"PLACE Req Enabled" = true
+	"BREAK Req Enabled" = true
+	"KILL Req Enabled" = true
+	"TRAVEL Req Enabled" = true
+	"RIDE Req Enabled" = true
+	"TAME Req Enabled" = true
+	"BREED Req Enabled" = true
+	"INTERACT Req Enabled" = true
+	"ENTITY_INTERACT Req Enabled" = true
+
+#All settings related to the gain of experience
+[XP_Gains]
+	#what percent of the original XP should be awarded when a player breaks a block they placed
+	#Range: 0.0 ~ 1.0
+	"Reuse Penalty" = 0.0
+	#Should xp Gains from perks be added onto by configured xp values
+	"Perks Plus Configs" = false
+
+	#Settings related to certain default event XP awards.
+	[XP_Gains.Event_XP_Specifics]
+
+		[XP_Gains.Event_XP_Specifics.Damage]
+
+			#damage dealt and received is defined by the damage type
+			#or damage type tag preceding it.  xp is awarded based on
+			#the value below multiplied by the damage applied.
+			[XP_Gains.Event_XP_Specifics.Damage.DEAL_DAMAGE]
+
+				[XP_Gains.Event_XP_Specifics.Damage.DEAL_DAMAGE."minecraft:generic_kill"]
+					combat = 1
+
+				[XP_Gains.Event_XP_Specifics.Damage.DEAL_DAMAGE."#pmmo:magic"]
+					magic = 15
+
+				[XP_Gains.Event_XP_Specifics.Damage.DEAL_DAMAGE."minecraft:player_attack"]
+					combat = 1
+
+				[XP_Gains.Event_XP_Specifics.Damage.DEAL_DAMAGE."#minecraft:is_projectile"]
+					archery = 1
+
+			[XP_Gains.Event_XP_Specifics.Damage.RECEIVE_DAMAGE]
+
+				[XP_Gains.Event_XP_Specifics.Damage.RECEIVE_DAMAGE."minecraft:generic_kill"]
+					endurance = 1
+
+				[XP_Gains.Event_XP_Specifics.Damage.RECEIVE_DAMAGE."#pmmo:impact"]
+					endurance = 15
+
+				[XP_Gains.Event_XP_Specifics.Damage.RECEIVE_DAMAGE."#pmmo:magic"]
+					magic = 15
+
+				[XP_Gains.Event_XP_Specifics.Damage.RECEIVE_DAMAGE."#pmmo:environment"]
+					endurance = 10
+
+				[XP_Gains.Event_XP_Specifics.Damage.RECEIVE_DAMAGE."#minecraft:is_projectile"]
+					endurance = 15
+
+		[XP_Gains.Event_XP_Specifics.Jumps]
+
+			[XP_Gains.Event_XP_Specifics.Jumps."JUMP Skills and Ratios"]
+				agility = 2.5
+
+			[XP_Gains.Event_XP_Specifics.Jumps."SPRINT_JUMP Skills and Ratios"]
+				agility = 2.5
+
+			[XP_Gains.Event_XP_Specifics.Jumps."CROUCH_JUMP Skills and Ratios"]
+				agility = 2.5
+
+		[XP_Gains.Event_XP_Specifics.Player_Actions]
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."BREATH_CHANGE Skills and Ratios"]
+				swimming = 1.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."HEALTH_CHANGE Skills and Ratios"]
+				endurance = 0.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."HEALTH_INCREASE Skills and Ratios"]
+				endurance = 1.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."HEALTH_DECREASE Skills and Ratios"]
+				endurance = 1.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."SPRINTING Skills and Ratios"]
+				agility = 100.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."SUBMERGED Skills and Ratios"]
+				swimming = 1.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."SWIMMING Skills and Ratios"]
+				swimming = 100.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."DIVING Skills and Ratios"]
+				swimming = 150.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."SURFACING Skills and Ratios"]
+				swimming = 50.0
+
+			[XP_Gains.Event_XP_Specifics.Player_Actions."SWIM_SPRINTING Skills and Ratios"]
+				swimming = 200.0
+
+#All settings governing party behavior
+[Party]
+	#How close do party members have to be to share experience.
+	#Range: > 0
+	"Party Range" = 50
+
+	#How much bonus xp should parties earn by skill.
+	#This value is multiplied by the party size.
+	[Party."Party Bonus"]
+		combat = 1.05
+		endurance = 1.1
+
+#settings related to how strong mobs get based on player level.
+[Mob_Scaling]
+	#Should mob scaling be turned on.
+	"Enable Mob Scaling" = true
+	#How far should players be from spawning mobs to affect scaling?
+	#Range: > 0
+	"Scaling AOE" = 150
+	#what is the minimum level for scaling to kick in
+	#Range: > 0
+	"Base Level" = 0
+	#a multiplier on top of final scaling values that
+	#applies only to entities in the forge:bosses tag.
+	boss_scaling = 1.1
+
+	#How should mob attributes be calculated with respect to the player's level.
+	[Mob_Scaling.Formula]
+		#should levels be determined using an exponential formula?
+		"Use Exponential Formula" = true
+
+		#Settings for Linear scaling configuration
+		[Mob_Scaling.Formula.LINEAR_LEVELS]
+			#What is the xp increase per level ((level - base_level) * this)
+			#Range: 0.0 ~ 1.7976931348623157E308
+			"Per Level" = 1.0
+
+		#Settings for Exponential scaling configuration
+		[Mob_Scaling.Formula.EXPONENTIAL_LEVELS]
+			#What is the x in: (x^([Per Level] * level))
+			#Range: 0.0 ~ 1.7976931348623157E308
+			"Power Base" = 1.104088404342588
+			#What is the x in: ([Power Base]^(x * level))
+			#Range: 0.0 ~ 1.7976931348623157E308
+			"Per Level" = 1.0
+
+	#These settings control which skills affect scaling and the ratio for each skill
+	#minecraft:generic.max_health: 1 = half a heart, or 1 hitpoint
+	#minecraft:generic.movement_speed: 0.7 is base for most mobs.  this is added to that. so 0.7 from scaling is double speed
+	#minecraft:generic.attack_damage: is a multiplier of their base damage.  1 = no change, 2 = double damage
+	#negative values are possible and you can use this to create counterbalance skills
+	#
+	#NOTE: TOML WILL MOVE THE QUOTATIONS OF YOUR ATTRIBUTE ID AND BREAK YOUR CONFIG.
+	#ENSURE YOU HAVE FORCIBLY PUT YOUR QUOTES AROUND YOUR ATTRIBUTE ID BEFORE SAVING.
+	[Mob_Scaling.Scaling_Settings]
+
+		[Mob_Scaling.Scaling_Settings."Mob Scaling IDs and Ratios"]
+
+			[Mob_Scaling.Scaling_Settings."Mob Scaling IDs and Ratios"]
+
+				[Mob_Scaling.Scaling_Settings."Mob Scaling IDs and Ratios"."minecraft:generic.max_health"]
+					combat = 0.001
+
+				[Mob_Scaling.Scaling_Settings."Mob Scaling IDs and Ratios"."minecraft:generic.attack_damage"]
+					combat = 1.0E-4
+
+				[Mob_Scaling.Scaling_Settings."Mob Scaling IDs and Ratios"."minecraft:generic.movement_speed"]
+					combat = 1.0E-6
+
+#Settings related to the Vein Miner
+[Vein_Miner]
+	#setting to false disables all vein features
+	"vein enabled" = true
+	#If true, default consume will be ignored in favor of only allowing
+	#veining blocks with declared values.
+	"Require Settings" = false
+	#how much a block should consume if no setting is defined.
+	"Vein Mine Default Consume" = 1
+	#a multiplier to all vein charge rates.
+	#Range: 0.0 ~ 1.7976931348623157E308
+	"Vein Charge Modifier" = 1.0
+	#Tools in this list do not cause the vein miner to trigger
+	Vein_Blacklist = ["silentgear:saw"]
+	#A constant charge rate given to all players regardless of equipment.
+	#Items worn will add to this amount, not replace it.
+	#Range: 0.0 ~ 1.7976931348623157E308
+	"base charge rate" = 0.01
+	#A minimum capacity given to all players regardless of equipment.
+	#Items worn will add to this amount, not replace it.
+	#Range: > 0
+	"base vein capacity" = 0
+```

@@ -1,0 +1,45 @@
+# Skills Config Syntax and Examples
+
+## Example File
+<Callout>
+    Project MMO will generate a valid file for you with each new world.  Do not copy/paste this example.
+</Callout>
+```toml
+[Skills]
+    [Skills.Entry]
+        #a regular skill with basic properties
+        [Skills.Entry.my_custom_skill]
+          #Sets the max level for this specific skill independent of the global max level
+          maxLevel = 2000
+          #Sets the texture location for the skill's icon in the inventory menu
+          icon = "minecraft:textures/particle/enchanted_hit.png"
+          #Tells pmmo how many pixels the above image is so it can be scaled properly
+          iconSize = 16
+          #the hex color converted to integer
+          color = 255
+          #if true afk penalties from Anti-Cheese are ignored for this skill
+          noAfkPenalty = false
+          #if false, this skill will not show in either skill list.
+          showInList = true
+          #the following properties only apply to skill groups.  see below
+          useTotalLevels = false          
+          displayGroupName = false
+        #a skill group which acts as an alias for groups of skills
+        [Skills.Entry.my_custom_skill_group]
+          maxLevel = 3000
+          icon = "pmmo:textures/skills/missing_icon.png",
+          iconSize = 18
+          color = 16777215
+          noAfkPenalty = false
+          displayGroupName = false
+          showInList = true
+          #if true, will ignore the proportions for requirements and instead total the 
+          #skill levels of the skill group to determine if a player meets the req
+          useTotalLevels = false
+          #the skills that make up this skill group.  the numbers represent weights that
+          #each skill has and tell pmmo how to divide the xp or requirements.
+          [Skills.Entry.my_custom_skill_group.groupFor]
+            archery = 0.2
+            endurance = 0.3
+            combat = 0.5
+```

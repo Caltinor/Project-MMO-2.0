@@ -1,0 +1,144 @@
+# Logic (Advanced)
+
+This section is going to assume you have read the logic section from the [Config Structure Overview](nbtstructure).  In that section we built a logic section from the top down.  On this page, we will be working our way from the bottom up to get a better idea how individual values translate into skill levels for your item.
+
+## Cases
+
+the first component is the case entry.
+
+`{"operator":"", "comparators":[], "value":{}}`
+
+When your item is used, or the tooltip hovered, the mod looks through every case and figures out which ones are true.  the values provided in `"value"` are then added together to make the final map of skills for your item.  for example if we are using the damage value of an item, which in this case will be 10, and we have the following cases:
+```json
+{"operator":"LESS_THAN", "comparators":["20"], "value":{ "mining": 5 }},
+{"operator":"GREATER_THAN", "comparators":["0"], "value":{ "excavation": 5 }}
+```
+<Callout>
+    numeric values in comparators need to be treated like strings.  They are still used like numbers internally, but we need to format them like strings for PMMO to parse them correctly.
+</Callout>
+Then our item with have the skill requirements of level 5 mining and level 5 excavation.  If the damage increases past 20, the mining skill will no longer be true and won't be applied to the item.  In cases like with Tinker's Construct, you will have cases for each item material.  Only one of your cases will be true, since the handle can only be one material.  Let's use Tinker's construct for our next example.  Our path is set to look for the pickaxe head material of our pickaxe item.  to save space, we created the following case
+
+`{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "mining": 30}}`
+
+Notice that there are 3 entries in this `comparators` array.  This allows you to only have to write the operator and value once for values that would produce the same output and use the same operator.  This is exactly the same as doing this:
+```json
+{"operator": "EQUALS","comparators": ["tconstruct:queens_slime"],"value": { "mining": 30}},
+{"operator": "EQUALS","comparators": ["tconstruct:hepatizon"],"value": { "mining": 30}},
+{"operator": "EQUALS","comparators": ["tconstruct:manyullyn"],"value": { "mining": 30}}
+```
+In fact, when the evaluator processes your config, this is how it internally splits cases up.  In helping you understand cases, this is important.
+<Callout>
+    Even if you have only have one case entry, but it has multiple comparators, each comparator value is treated as it's own case.
+</Callout>
+This is particularly important when we us `should_cases_add": true`.  More on that in a bit.  but first, case entries also have a `"paths"` key.
+
+Paths are just like comparators in that you can put multiple entries in the same array and it creates a case for each path and each comparator.  for example, let's say our tinker's case entry looked like this
+```json
+{"paths":["tic_materials[0]", "tic_materials[1]"],
+ "criteria": [
+    {"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "mining": 30}}
+ ]
+}
+```
+This is the same as writing:
+```json
+{"paths":["tic_materials[0]"],
+ "criteria": [{"operator": "EQUALS","comparators": ["tconstruct:queens_slime"],"value": { "mining": 30}}]
+},
+{"paths":["tic_materials[0]"],
+ "criteria": [{"operator": "EQUALS","comparators": ["tconstruct:hepatizon"],"value": { "mining": 30}}]
+}
+{"paths":["tic_materials[0]"],
+ "criteria": [{"operator": "EQUALS","comparators": ["tconstruct:manyullyn"],"value": { "mining": 30}}]
+},
+{"paths":["tic_materials[1]"],
+ "criteria": [{"operator": "EQUALS","comparators": ["tconstruct:queens_slime"],"value": { "mining": 30}}]
+},
+{"paths":["tic_materials[1]"],
+ "criteria": [{"operator": "EQUALS","comparators": ["tconstruct:hepatizon"],"value": { "mining": 30}}]
+},
+{"paths":["tic_materials[1]"],
+ "criteria": [{"operator": "EQUALS","comparators": ["tconstruct:manyullyn"],"value": { "mining": 30}}]
+}
+```
+
+As you can see, there are benefits to consolidating your configs as much as possible, and the functionality to do so.
+
+Now that we have understood how cases are handled, now we have to understand how they are used.  Each case has a `"value"` section with skills that are applied if the case is true.  Each skill can only have one value in the final output, so if two cases both give a mining stat, the higher one will be used.  The only exception to this is if `"should_cases_add"` is equal to `true`.  When this is true, cases with the same skills will be added together instead of using the highest.  This is particularly useful when you want something to scale or when you materials to add up.  For example, if I use the path `"tic_materials[]"`, I will get a case for every entry in that nbt list.  Which means I could make it so a pickaxe binding, handle, and head materials all use the same logic.  If my cases are not added together, then the highest material sets the requirement.  If my cases are added together, then all materials contribute.  So a full manyullyn pickaxe requires 90, but a manyullyn head with wood binding and handle only requires 32.  Another example might be if you have an item with a speed stat that is a number.  You could use adding cases to make the value increase as the speed does eg:
+```json
+{"paths":["itemData{}.speed"],
+ "criteria":[{"operator":"GREATER_THAN","comparators":[1,2,3,4,5],"value":{"mining":5}}]
+}
+```
+which would make each level of speed contribute 5 levels of mining.  so a lvl 4 speed item would have mining 15, since 4 \> 3 and \>2 and \>1.
+
+## Logic Entries
+
+The next level is the logic entry.
+
+`{"behavior_to_previous":"", "should_cases_add": false, "criteria":[]}`
+
+We already discussed the cases contained in the `"criteria"` section and the effect `"should_cases_add"` has on those cases.  The last item is the `"behavior_to_previous"`.  As stated in the overview, there are only 4 valid entries to this key:
+- `"ADD_TO"`: Adds the results of this entry's cases to the values preceding it
+- `"SUB_FROM"`: Subtracts the results of this entry's cases from the values preceding it
+- `"HIGHEST"`: Compares the values preceding it to this case and uses the highest as the new value
+- `"REPLACE"`: Overrides a previous entry with this entry's
+
+As you recall cases are consolidated (highest or added) together, but this only happens to cases within the same logic entry.  If we have more logic entries, we need a way to define how the multiple consolidated skill maps interact with each other.  The list above describes what each does.  I will give examples below using the skills that each logic entry would produce based on its cases.  For our fist example, we will be using `"ADD_TO"`.  Our logic entries produced the following maps:
+1. `{"mining": 5, "smithing": 3}`
+2. `{"mining": 3}`
+Since we are adding to the previous.  #2 gets added to #1 resulting in `{"mining":8, "smithing": 3}` being the final output.  Now assume the same resulting skills except now let's assume "SUB_FROM".  The resulting skills in this case would be `{"mining":2, "smithing";3}`.  *One note on "SUB_FROM" if the resulting value is zero or negative, the skill is removed from the final output.*
+
+Next we have "HIGHEST".  If we use the same entry outputs as above, the second entry actually doesn't change anything since 5 is higher than 3 so the original value persists.  "HIGHER" is particularly useful when you want some sort of minimum.  This will ensure that no matter how crafty your players are, there will always be at least this req.
+
+Lastly is "REPLACE".  This does exactly what it says, sets the value to this one, no matter what the existing value is.  In this case our output becomes `{"mining":3,"smithing":3}`.
+
+## Full Example
+Assuming the following NBT Data on an item that we want to put a WEAR requirement on,
+```json
+"tag": {
+    "mod_properties": {
+        "material": "stone",
+        "grade": "epic"
+    }
+}
+```
+we might use the following logic entry:
+```json
+"nbt_requirements": {
+    "WEAR": [
+        //our first base case starts us off.  this sets a mining requirement based on the material, which in our
+        //example above is stone
+        {"behavior_to_previous": "ADD_TO", "should_cases_add": false,
+         "cases": [
+            {"paths":["mod_properties{}.material"],
+             "criteria":[
+                {"operator":"EQUALS", "comparators":["wood","stone"], "value":{"mining":5}},
+                {"operator":"EQUALS", "comparators":["iron"], "value":{"mining":10}},
+                {"operator":"EQUALS", "comparators":["diamond"], "value":{"mining":15}}
+                //based on these criteria, the only one that is true is the first one, which results in "mining 5"
+             ]
+            }
+         ]
+        },
+        //we now have a second logic entry.  we start this entry knowing we have "mining 5" as our current output
+        //This entry, however is checking for the "grade" property AND will return the HIGHEST between our current
+        //output and the result of this entry's criteria
+        {"behavior_to_previous": "HIGHEST", "should_cases_add": false,
+         "cases": [
+            {"paths":["mod_properties{}.grade"],
+             "criteria":[
+                {"operator":"GREATER_THAN", "comparators":["common"], "value":{"mining":1}},
+                {"operator":"GREATER_THAN", "comparators":["rare"], "value":{"mining":5}},
+                {"operator":"GREATER_THAN", "comparators":["epic"], "value":{"mining":10}}
+                //since our item is "epic" we have an output of "mining 10".  This is higher than the output from
+                //our previous entry so this becomes the new output.  if this item were instead "common", the
+                //original output of "mining 5" would have remained.
+             ]
+            }
+         ]
+        }
+        //at the end of all of our logic entries, we have an output of "mining 10" for this item as it currently is.
+    ]
+}
+```

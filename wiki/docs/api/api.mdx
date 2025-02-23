@@ -1,0 +1,22 @@
+# Project MMO API and Extensions
+Project MMO offers multiple ways to extend its features through addon mods or KubeJS.  Most features are contained within the [APIUtils class](https://github.com/Caltinor/Project-MMO-2.0/blob/main/src/main/java/harmonised/pmmo/api/APIUtils.java).
+
+## Summary of API Features
+### [Event Triggers](events)
+These are Forge event listeners nested within pmmo's own event listeners.  These allow you to apply your own behavior at a specific point in the pmmo event cycle instead of generically during regular event postings.MMO
+
+### [Perks](perks)
+Perks are Project MMO's "Abilities".  You can create custom abilities for players, which they can then configure to their liking.
+
+### Custom Configurations Logic
+An addon can force the configuration settings for users.  It can also provide its own logic for defining requirments, xp values, and bonuses.  the `APIUtils` class contains these hooks and the documentation to explain them.
+
+### Custom Forge Events
+Project MMO provides 4 custom events that it listens to by default.  These can be used to provide compatibility with pmmo.
+
+| event            | purpose                                                                                 |
+|:-----------------|:----------------------------------------------------------------------------------------|
+| EnchantEvent     | When an item is enchanted                                                               |
+| FurnaceBurnEvent | Pmmo's location-sensitive smelt event                                                   |
+| SalvageEvent     | currently unused.                                                                       |
+| XpEvent          | Not to be invoked, but listened to.  This is Pmmo's internal event for when XP changes. |

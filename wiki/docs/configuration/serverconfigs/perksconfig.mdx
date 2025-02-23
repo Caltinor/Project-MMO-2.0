@@ -1,0 +1,37 @@
+# Perks Config Syntax and Examples
+Perks can be configured via pmmo-Perks.toml.  You will need to know what the properties are for the perk you are configuring.  This will inform you on what to include below the perk `[[]]` header.
+
+For perks from addons, you will need to refer to their documentation, but you can check [here for the Built-in Perk Properties](../core/perks)
+
+## Example File
+<Callout variant="info">
+    Perks cannot have comments.  The example below contains comments for informational purposes only.
+</Callout>
+```toml
+[Perks]
+    [Perks.For_Event]
+        #Each perk consists of the "Perks.For_Event." followed by the event that triggers them.
+        #As seen below, you can have multiple of these headers with different perks configured
+        #beneath them.  Each section/block will be its own perk.
+        [[Perks.For_Event.SKILL_UP]]
+            perk = "pmmo:fireworks"
+            skill = "agility"
+        [[Perks.For_Event.SKILL_UP]]
+            perk = "pmmo:attribute"
+            attribute = "minecraft:generic.max_health"
+            skill = "endurance"
+            per_level = 0.05
+            max_boost = 10.0
+
+        #example perk with a different event
+        [[Perks.For_Event.JUMP]]
+            perk = "pmmo:jump_boost"
+            skill = "agility"
+            per_level = 0.0005
+
+        [[Perks.For_Event.RECEIVE_DAMAGE]]
+            perk = "pmmo:damage_reduce"
+            for_damage = "minecraft:fall"
+            skill = "agility"
+            per_level = 0.025
+```

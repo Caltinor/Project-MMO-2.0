@@ -15,6 +15,13 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id 'org.moddedmc.wiki.toolkit' version '0.2.5'
+}
+
+wiki {
+    docs {
+        pmmo { root = file('wiki/docs')}
+    }
 }
 
 mixin {
@@ -87,7 +94,7 @@ dependencies {
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
     annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
-    annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor 'net.minecraftforge:forge:${minecraft_version}-${forge_version}'
     annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api")
