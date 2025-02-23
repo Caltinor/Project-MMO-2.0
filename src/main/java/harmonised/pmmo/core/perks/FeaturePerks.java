@@ -51,7 +51,7 @@ import java.util.function.BiFunction;
 @EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
-	
+	//<editor-fold defaultstate="collapsed" desc="Attribute Perk">
 	private static final Map<String, Holder.Reference<Attribute>> attributeCache = new HashMap<>();
 	
 	private static Holder.Reference<Attribute> getAttribute(CompoundTag nbt) {
@@ -131,6 +131,7 @@ public class FeaturePerks {
 			respawnAttributes.get(event.getEntity()).clear();
 		}
 	}
+
 	public static final Perk TEMP_ATTRIBUTE = Perk.begin()
 			.addDefaults(ATTRIBUTE.propertyDefaults())
 			.setStart((player, nbt) -> {
@@ -154,7 +155,8 @@ public class FeaturePerks {
 			})
 			.setDescription(ATTRIBUTE.description())
 			.setStatus(ATTRIBUTE.status()).build();
-	
+	//</editor-fold>
+	//<editor-fold defaultstate="collapsed" desc="Effect Perk">
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
 		Holder<MobEffect> effect;
 		if ((effect = BuiltInRegistries.MOB_EFFECT.getHolder(Reference.of(nbt.getString("effect"))).get()) != null) {
@@ -196,7 +198,8 @@ public class FeaturePerks {
 					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER),
 							(nbt.getInt(APIUtils.DURATION) * nbt.getDouble(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL))/20)))
 			.build();
-	
+	//</editor-fold>
+	//<editor-fold defaultstate="collapsed" desc="Jump Perks">
 	private static BiFunction<Player, CompoundTag, List<MutableComponent>> JUMP_LINES = (player, nbt) -> 
 			List.of(LangProvider.PERK_JUMP_BOOST_STATUS_1.asComponent(
 			nbt.getInt(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL)));
@@ -224,7 +227,8 @@ public class FeaturePerks {
 		})
 		.setDescription(LangProvider.PERK_JUMP_BOOST_DESC.asComponent())
 		.setStatus(JUMP_LINES).build();
-	
+	//</editor-fold>
+	//<editor-fold defaultstate="collapsed" desc="Breath Perk">
 	public static final Perk BREATH = Perk.begin()
 			.addConditions((player, nbt) -> player.getAirSupply() < 2)
 			.addDefaults(TagBuilder.start()
@@ -243,7 +247,8 @@ public class FeaturePerks {
 			.setStatus((player, nbt) -> List.of(
 					LangProvider.PERK_BREATH_STATUS_1.asComponent((int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL))),
 					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
-
+	//</editor-fold>
+	//<editor-fold defaultstate="collapsed" desc="Damage Boost/Reduce Perks">
 	public static final Perk DAMAGE_REDUCE = Perk.begin()
 			.addConditions((player, nbt) -> {
 				String perkApplicableDamageType = nbt.getString(APIUtils.DAMAGE_TYPE_IN);
@@ -337,7 +342,8 @@ public class FeaturePerks {
 				));
 				return lines;
 			}).build();
-	
+	//</editor-fold>
+	//<editor-fold defaultstate="collapsed" desc="Command Perk">
 	private static final String COMMAND = "command";
 	private static final String FUNCTION = "function";	
 	public static final Perk RUN_COMMAND = Perk.begin()
@@ -361,7 +367,8 @@ public class FeaturePerks {
 				LangProvider.PERK_COMMAND_STATUS_1.asComponent(
 				nbt.contains(FUNCTION) ? "Function" : "Command",
 				nbt.contains(FUNCTION) ? nbt.getString(FUNCTION) : nbt.getString(COMMAND)))).build();
-
+	//</editor-fold>
+	//<editor-fold defaultstate="collapsed" desc="Villager Trading Perk">
 	public static final Perk VILLAGER_TRADING = Perk.begin()
 			.addConditions((player, tag) -> tag.getString(APIUtils.TARGET).equals("minecraft:villager"))
 			.addDefaults(TagBuilder.start()
@@ -383,4 +390,5 @@ public class FeaturePerks {
 						nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)
 				)
 			)).build();
+	//</editor-fold>
 }

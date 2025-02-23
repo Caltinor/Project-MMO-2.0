@@ -22,7 +22,7 @@ public record CP_SyncData_ClearXp(String skill) implements CustomPacketPayload {
 	public static void handle(CP_SyncData_ClearXp packet, IPayloadContext ctx) {
 		ctx.enqueueWork(() -> {
 			var data = Core.get(LogicalSide.CLIENT).getData();
-			if (packet.skill == null)
+			if (packet.skill.isEmpty())
 				data.setXpMap(null, new HashMap<>());
 			else
 				data.getXpMap(null).remove(packet.skill);
