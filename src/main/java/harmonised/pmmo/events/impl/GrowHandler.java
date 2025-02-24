@@ -12,33 +12,39 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class CropGrowHandler {
-
+public class GrowHandler {
 	public static void handle(CropGrowEvent.Post event) {
-		Level level = (Level) event.getLevel();
+		handle((Level)event.getLevel(), event.getState(), event.getPos(), event);
+	}
+	public static void handle(BlockGrowFeatureEvent event) {
+		handle((Level) event.getLevel(), event.getLevel().getBlockState(event.getPos()), event.getPos(), event);
+	}
+
+	public static void handle(Level level, BlockState state, BlockPos pos, Event event) {
 		if (!level.isClientSide) {
 			Core core = Core.get(level);
 			
 			//if this block grew to exist because of a cascading block, return the block which spawned it
-			BlockPos sourcePos = getParentPos(level, event.getState(), event.getPos());
+			BlockPos sourcePos = getParentPos(level, state, pos);
 			//get the owner of the source block to know who to give the grow XP to.
 			LevelChunk chunk = level.getChunkAt(sourcePos);
 			var placeMap = chunk.getData(DataAttachmentTypes.PLACED_MAP.get());
 			UUID placerID = placeMap.getOrDefault(sourcePos, Reference.NIL);
-			ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(placerID);
+			ServerPlayer player = level.getServer().getPlayerList().getPlayer(placerID);
 			
 			//if there is no owning player, return as there is no XP to give
 			if (player == null) return;
 			
 			//this is a redundant call to make sure cascading blocks have their owner set.  for non-cascading it just reassigns the same value
-			placeMap.put(event.getPos(), placerID);
+			placeMap.put(pos, placerID);
 			chunk.setUnsaved(true);
 			
 			//Execute event triggers from addons
@@ -48,7 +54,7 @@ public class CropGrowHandler {
 			hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.GROW, player, new CompoundTag()));
 
 			//Apply experience gains
-			Map<String, Long> xpAward = core.getExperienceAwards(EventType.GROW, event.getPos(), level, player, hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.GROW, pos, level, player, hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);
 			core.awardXP(partyMembersInRange, xpAward);
 		}

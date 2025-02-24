@@ -11,7 +11,7 @@ import harmonised.pmmo.events.impl.BreakSpeedHandler;
 import harmonised.pmmo.events.impl.BreathHandler;
 import harmonised.pmmo.events.impl.BreedHandler;
 import harmonised.pmmo.events.impl.CraftHandler;
-import harmonised.pmmo.events.impl.CropGrowHandler;
+import harmonised.pmmo.events.impl.GrowHandler;
 import harmonised.pmmo.events.impl.DamageDealtHandler;
 import harmonised.pmmo.events.impl.DamageReceivedHandler;
 import harmonised.pmmo.events.impl.DeathHandler;
@@ -65,6 +65,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.PistonEvent;
 import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
@@ -217,7 +218,11 @@ public class EventHandler {
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST) 
 	public static void onCropGrow(CropGrowEvent.Post event){
-		CropGrowHandler.handle(event);
+		GrowHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onBlockGrow(BlockGrowFeatureEvent event) {
+		GrowHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onMount(EntityMountEvent event) {
