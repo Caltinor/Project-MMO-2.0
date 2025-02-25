@@ -59,6 +59,7 @@ import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
+import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEnchantItemEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -220,8 +221,12 @@ public class EventHandler {
 	public static void onCropGrow(CropGrowEvent.Post event){
 		GrowHandler.handle(event);
 	}
-	@SubscribeEvent
+	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onBlockGrow(BlockGrowFeatureEvent event) {
+		GrowHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onCropBonemeal(BonemealEvent event) {
 		GrowHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
@@ -237,7 +242,7 @@ public class EventHandler {
 		ShieldBlockHandler.handle(event);
 	}
 	@SubscribeEvent
-	public static void onAnvilRepar(AnvilRepairEvent event) {
+	public static void onAnvilRepair(AnvilRepairEvent event) {
 		AnvilRepairHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)

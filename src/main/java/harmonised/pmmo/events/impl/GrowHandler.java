@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 
@@ -26,6 +27,10 @@ public class GrowHandler {
 	}
 	public static void handle(BlockGrowFeatureEvent event) {
 		handle((Level) event.getLevel(), event.getLevel().getBlockState(event.getPos()), event.getPos(), event);
+	}
+	public static void handle(BonemealEvent event) {
+		if (!event.isCanceled() && event.isValidBonemealTarget())
+			handle(event.getLevel(), event.getState(), event.getPos(), event);
 	}
 
 	public static void handle(Level level, BlockState state, BlockPos pos, Event event) {
