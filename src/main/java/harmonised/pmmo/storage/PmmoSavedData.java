@@ -107,6 +107,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		xp.computeIfAbsent(playerID, p -> new HashMap<>())
 				.computeIfAbsent(skill, s -> new Experience())
 				.setLevel(level > 0 ? level : 0);
+		this.setDirty();
 		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
 		if (player != null)
 			Networking.sendToClient(new CP_UpdateExperience(skill, xp.get(playerID).get(skill), 0), player);
@@ -116,6 +117,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		xp.computeIfAbsent(playerID, p -> new HashMap<>())
 				.computeIfAbsent(skill, s -> new Experience())
 				.addLevel(change);
+		this.setDirty();
 		ServerPlayer player  = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
 		if (player != null) {
 			if (change > 0)
