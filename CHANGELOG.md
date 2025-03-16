@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.21.1-2.6.24] - 2025-02-25
+## [1.21.1-2.6.25] - 2025-03-16
 ### Bugfixes/Tweaks
-- Updated GROW event to include bonemealing crops/saplings
+- Fixed skill changes not saving when using commands and then closing the server.
 
