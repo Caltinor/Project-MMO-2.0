@@ -16,6 +16,9 @@ import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -23,6 +26,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -139,6 +143,23 @@ public class APIUtils {
 	public static Map<String, Long> getAllLevels(Player player) {
 		return getRawXpMap(player).entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getLevel().getLevel()));
+	}
+
+	/**<p>Used to remove a skill from the player's skill list.  Unlike the independent calls to set
+	 * xp and level to zero, this call will additionally clear the skill out of the player's list
+	 * preventing the skill from persisting with a zero value.</p>
+	 * <p>This is a server-side operation only.</p>
+	 *
+	 * @param player a server-side player.
+	 * @param skill the skill being cleared.
+	 */
+	public static void clearSkill(ServerPlayer player, String skill) {
+		Preconditions.checkNotNull(player);
+		Preconditions.checkNotNull(skill);
+		IDataStorage data = Core.get(player.level()).getData();
+		data.setXp(player.getUUID(), skill, 0);
+		data.setLevel(skill, player.getUUID(), 0);
+		Networking.sendToClient(new CP_SyncData_ClearXp(skill), player);
 	}
 	
 	/**<p>Obtains a map of the skills and experience amount that would be awarded for the provided
