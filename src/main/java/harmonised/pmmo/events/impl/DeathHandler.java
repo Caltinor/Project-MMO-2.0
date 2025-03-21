@@ -25,12 +25,11 @@ public class DeathHandler {
 		if (event.getSource().getEntity() == null) return;
 		
 		//Execute actual logic only if the source is a player
-		if (event.getSource().getEntity() instanceof Player) {
+		if (event.getSource().getEntity() instanceof Player player) {
 			LivingEntity target = event.getEntity();
 			//Confirm our target is a living entity
 			if (target == null) return;
-			
-			Player player = (Player) event.getSource().getEntity();
+
 			if (target.equals(player))
 				return;
 			Core core = Core.get(player.level());			

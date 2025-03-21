@@ -39,7 +39,7 @@ public class DamageReceivedHandler {
 			String damageType = RegistryUtil.getId(player.level().registryAccess(), Registries.DAMAGE_TYPE, source.type()).toString();
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+damageType+" | Source Raw: "+source.getMsgId());
 			
-			boolean serverSide = !player.level().isClientSide;
+			boolean serverSide = player instanceof ServerPlayer;
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide){
 				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.RECEIVE_DAMAGE, event, new CompoundTag());

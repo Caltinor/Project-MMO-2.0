@@ -98,10 +98,10 @@ public class DamageDealtHandler {
 				event.getContainer().setNewDamage(damageOut);
 			}
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+damageType+" | Damage Out: "+container.getNewDamage());
-			if (!player.level().isClientSide) {
+			if (player instanceof ServerPlayer splayer) {
 				perkOutput.putString(APIUtils.DAMAGE_TYPE, damageType);
-				Map<String, Long> xpAward = getExperienceAwards(core, target, container.getNewDamage(), source, player, perkOutput);
-				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
+				Map<String, Long> xpAward = getExperienceAwards(core, target, container.getNewDamage(), source, splayer, perkOutput);
+				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(splayer);
 				core.awardXP(partyMembersInRange, xpAward);
 			}
 		}
