@@ -45,7 +45,7 @@ public class DeathHandler {
 				Messenger.sendDenialMsg(ReqType.KILL, player, target.getName());
 				return;
 			}
-			boolean serverSide = !player.level().isClientSide;
+			boolean serverSide = player instanceof ServerPlayer;
 			CompoundTag hookOutput = new CompoundTag();
 			if (serverSide) {
 				hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.DEATH, event, new CompoundTag());
