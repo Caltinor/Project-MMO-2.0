@@ -1,0 +1,12 @@
+{
+  "bonuses": {
+    "WORN": {
+      "magic": 1.1
+    }
+  },
+  "requirements": {
+    "WEAR": {
+      "magic": 10
+    }
+  }
+}
