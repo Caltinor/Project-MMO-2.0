@@ -1,0 +1,14 @@
+{
+  "bonuses": {
+    "WORN": {
+      "magic": 1.5
+    }
+  },
+  "isTagFor": ["irons_spellbooks:electromancer_boots", "irons_spellbooks:electromancer_leggings", "irons_spellbooks:electromancer_helmet", "irons_spellbooks:electromancer_chestplate"],
+  "requirements": {
+    "WEAR": {
+      "endurance": 60,
+      "magic": 60
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "bonuses": {
+    "WORN": {
+      "magic": 1.25
+    }
+  },
+  "isTagFor": ["irons_spellbooks:pumpkin_boots", "irons_spellbooks:pumpkin_leggings", "irons_spellbooks:pumpkin_helmet", "irons_spellbooks:pumpkin_chestplate"],
+  "requirements": {
+    "WEAR": {
+      "endurance": 60,
+      "magic": 10
+    }
+  }
+}

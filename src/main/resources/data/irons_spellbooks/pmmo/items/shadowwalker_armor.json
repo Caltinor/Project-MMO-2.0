@@ -1,0 +1,14 @@
+{
+  "bonuses": {
+    "WORN": {
+      "magic": 1.5
+    }
+  },
+  "isTagFor": ["irons_spellbooks:shadowwalker_boots", "irons_spellbooks:shadowwalker_leggings", "irons_spellbooks:shadowwalker_helmet", "irons_spellbooks:shadowwalker_chestplate"],
+  "requirements": {
+    "WEAR": {
+      "endurance": 60,
+      "magic": 60
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "bonuses": {
+    "WORN": {
+      "magic": 1.1
+    }
+  },
+  "isTagFor": ["irons_spellbooks:wandering_magician_boots", "irons_spellbooks:wandering_magician_leggings", "irons_spellbooks:wandering_magician_helmet", "irons_spellbooks:wandering_magician_chestplate"],
+  "requirements": {
+    "WEAR": {
+      "endurance": 30,
+      "magic": 5
+    }
+  }
+}
