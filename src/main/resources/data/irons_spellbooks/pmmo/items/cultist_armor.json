@@ -1,0 +1,14 @@
+{
+  "bonuses": {
+    "WORN": {
+      "magic": 1.5
+    }
+  },
+  "isTagFor": ["irons_spellbooks:cultist_boots", "irons_spellbooks:cultist_leggings", "irons_spellbooks:cultist_helmet", "irons_spellbooks:cultist_chestplate"],
+  "requirements": {
+    "WEAR": {
+      "endurance": 60,
+      "magic": 60
+    }
+  }
+}

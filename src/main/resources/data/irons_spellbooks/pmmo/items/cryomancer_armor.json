@@ -1,0 +1,14 @@
+{
+  "bonuses": {
+    "WORN": {
+      "magic": 1.5
+    }
+  },
+  "isTagFor": ["irons_spellbooks:cryomancer_boots", "irons_spellbooks:cryomancer_leggings", "irons_spellbooks:cryomancer_helmet", "irons_spellbooks:cryomancer_chestplate"],
+  "requirements": {
+    "WEAR": {
+      "endurance": 60,
+      "magic": 60
+    }
+  }
+}

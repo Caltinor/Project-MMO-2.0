@@ -1,0 +1,14 @@
+{
+  "bonuses": {
+    "WORN": {
+      "magic": 1.5
+    }
+  },
+  "isTagFor": ["irons_spellbooks:plagued_boots", "irons_spellbooks:plagued_leggings", "irons_spellbooks:plagued_helmet", "irons_spellbooks:plagued_chestplate"],
+  "requirements": {
+    "WEAR": {
+      "endurance": 60,
+      "magic": 60
+    }
+  }
+}
