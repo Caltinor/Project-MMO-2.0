@@ -509,6 +509,99 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         doForRaw(List.of("tconstruct:plate_boots", "tconstruct:plate_chestplate", "tconstruct:plate_helmet", "tconstruct:plate_leggings"), builder -> builder
                 .addNBTReq(ReqType.WEAR, tinkerArmorReqs.apply(List.of("endurance"))));
 
+        //Iron's Spells and Spellbooks DEFAULTS
+        get("irons_spellbooks:tarnished_helmet")
+                .addReq(ReqType.WEAR, Map.of("magic", 10L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.1));       
+        doForRaw(List.of(
+                "irons_spellbooks:wandering_magician_boots",
+                "irons_spellbooks:wandering_magician_leggings",
+                "irons_spellbooks:wandering_magician_helmet",
+                "irons_spellbooks:wandering_magician_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 5L, "endurance", 30L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.1)));
+        doForRaw(List.of(
+                "irons_spellbooks:shadowwalker_boots",
+                "irons_spellbooks:shadowwalker_leggings",
+                "irons_spellbooks:shadowwalker_helmet",
+                "irons_spellbooks:shadowwalker_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:pyromancer_boots",
+                "irons_spellbooks:pyromancer_leggings",
+                "irons_spellbooks:pyromancer_helmet",
+                "irons_spellbooks:pyromancer_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:priest_boots",
+                "irons_spellbooks:priest_leggings",
+                "irons_spellbooks:priest_helmet",
+                "irons_spellbooks:priest_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:plagued_boots",
+                "irons_spellbooks:plagued_leggings",
+                "irons_spellbooks:plagued_helmet",
+                "irons_spellbooks:plagued_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:electromancer_boots",
+                "irons_spellbooks:electromancer_leggings",
+                "irons_spellbooks:electromancer_helmet",
+                "irons_spellbooks:electromancer_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:cultist_boots",
+                "irons_spellbooks:cultist_leggings",
+                "irons_spellbooks:cultist_helmet",
+                "irons_spellbooks:cultist_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:cryomancer_boots",
+                "irons_spellbooks:cryomancer_leggings",
+                "irons_spellbooks:cryomancer_helmet",
+                "irons_spellbooks:cryomancer_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:archevoker_boots",
+                "irons_spellbooks:archevoker_leggings",
+                "irons_spellbooks:archevoker_helmet",
+                "irons_spellbooks:archevoker_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:netherite_mage_boots",
+                "irons_spellbooks:netherite_mage_leggings",
+                "irons_spellbooks:netherite_mage_helmet",
+                "irons_spellbooks:netherite_mage_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 60L, "endurance", 80L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.5)));
+        doForRaw(List.of(
+                "irons_spellbooks:pumpkin_boots",
+                "irons_spellbooks:pumpkin_leggings",
+                "irons_spellbooks:pumpkin_helmet",
+                "irons_spellbooks:pumpkin_chestplate"),
+                builder -> builder
+                .addReq(ReqType.WEAR, Map.of("magic", 10L, "endurance", 60L))
+                .addBonus(ModifierDataType.WORN, Map.of("magic", 1.25)));
+                
         //TETRA DEFAULTS
         doForRaw(List.of("tetra:modular_bow", "tetra:modular_crossbow", "tetra:modular_double", "tetra:modular_shield", "tetra:modular_single", "tetra:modular_sword"),
                 builder -> builder
