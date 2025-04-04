@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.21.1-2.6.28] - 2025-03-27
+## [1.21.1-2.6.29] - 2025-04-04
 ### Bugfixes/Tweaks
-- Fixed crash from Oritech laser death
+- Added default data for iron spellbooks armor
 
