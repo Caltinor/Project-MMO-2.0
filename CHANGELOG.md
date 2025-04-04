@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.20.1-1.6.33] - 2025-01-31
+## [1.20.1-1.6.34] - 2025-04-04
 ### Bugfixes / Tweaks
-- Fixed crash when dying after removing all skillup perks.
+- Added default reqs for iron spellbooks armor
