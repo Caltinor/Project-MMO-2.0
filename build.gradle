@@ -93,8 +93,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     //CT Processors
-    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15'
-    annotationProcessor 'net.minecraftforge:forge:${minecraft_version}-${forge_version}'
+    annotationProcessor "com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.15"
+    annotationProcessor "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${ct_version}"
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_ver}+${minecraft_version}:api")
