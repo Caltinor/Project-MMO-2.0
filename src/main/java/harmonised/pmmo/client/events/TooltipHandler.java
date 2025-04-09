@@ -163,7 +163,7 @@ public class TooltipHandler {
 				if (level <= total) {
 					map.remove(skill);
 				}
-				if (level == 0) {
+				else if (level == 0) {
 					map.remove(skill);
 				}
 			}
