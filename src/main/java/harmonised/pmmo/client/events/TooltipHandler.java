@@ -163,6 +163,9 @@ public class TooltipHandler {
 				if (level <= total) {
 					map.remove(skill);
 				}
+				if (level == 0) {
+					map.remove(skill);
+				}
 			}
 			else if (core.getData().getPlayerSkillLevel(skill, null) >= level)
 				map.remove(skill);
