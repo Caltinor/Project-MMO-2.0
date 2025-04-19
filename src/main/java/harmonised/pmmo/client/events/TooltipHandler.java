@@ -160,10 +160,7 @@ public class TooltipHandler {
 						.stream()
 						.map(groupskill-> core.getData().getPlayerSkillLevel(groupskill, null))
 						.collect(Collectors.summingInt(Integer::intValue));
-				if (level <= total) {
-					map.remove(skill);
-				}
-				else if (level == 0) {
+				if (level <= total || level == 0) {
 					map.remove(skill);
 				}
 			}
