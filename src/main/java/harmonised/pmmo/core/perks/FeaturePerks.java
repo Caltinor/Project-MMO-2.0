@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -18,12 +17,9 @@ import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagBuilder;
-import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -287,7 +283,7 @@ public class FeaturePerks {
 				boolean weaponMatch = type.isEmpty() || type.stream().anyMatch(key -> {
 					if (key.startsWith("#") && RegistryUtil.isInTag(player.level().registryAccess(), Registries.ITEM, RegistryUtil.getId(player.getMainHandItem()), key.substring(1)))
 						return true;
-					else if (key.endsWith(":*") && ForgeRegistries.ITEMS.getValues().stream().anyMatch(item -> player.getMainHandItem().getItem().equals(item)))
+					else if (key.endsWith(":*") && RegistryUtil.getId(player.getMainHandItem()).getNamespace().equals(key.replace(":*","")))
 						return true;
 					else return key.equals(RegistryUtil.getId(player.getMainHandItem()).toString());
                 });
