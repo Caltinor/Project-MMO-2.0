@@ -54,12 +54,12 @@ public class Functions {
         KEYWORDS.put("deal_damage", (param, id, type, value) -> {
             Map<String, Long> award = mapValue(value.getOrDefault("award", ""));
             if (award.isEmpty()) return;
-            APIUtils.registerXpAward(type, id, EventType.DEAL_DAMAGE, award, true);
+            APIUtils.registerDamageXpAward(type, id, true, param, award, true);
         });
         KEYWORDS.put("receive_damage", (param, id, type, value) -> {
             Map<String, Long> award = mapValue(value.getOrDefault("award", ""));
             if (award.isEmpty()) return;
-            APIUtils.registerXpAward(type, id, EventType.RECEIVE_DAMAGE, award, true);
+            APIUtils.registerDamageXpAward(type, id, false, param, award, true);
         });
         KEYWORDS.put("req", (param, id, type, value) -> {
             ReqType reqType = ReqType.byName(param.toUpperCase());
