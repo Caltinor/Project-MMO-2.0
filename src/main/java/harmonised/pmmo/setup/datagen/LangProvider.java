@@ -1927,6 +1927,26 @@ public class LangProvider extends LanguageProvider{
 		.addLocale(Locale.EN_US, "Bonus Effects").build();
 	public static final Translation ADDON_AFFECTED_ATTRIBUTE = Translation.Builder.start("pmmo.gui.statscroll.addon_affected")
 		.addLocale(Locale.EN_US, "This Property is Dynamically Defined").build();
+	public static final Translation GLM_HEADER_RARE = Translation.Builder.start("pmmo.gui.statscroll.glm.rare_header")
+		.addLocale(Locale.EN_US, "Rare Drop Ability").build();
+	public static final Translation GLM_HEADER_TREASURE = Translation.Builder.start("pmmo.gui.statscroll.glm.treasure_header")
+		.addLocale(Locale.EN_US, "Rare Treasure Drop").build();
+	public static final Translation GLM_DROP_ITEM = Translation.Builder.start("pmmo.gui.statscroll.glm.drop_item")
+		.addLocale(Locale.EN_US, "%s of %s").build();
+	public static final Translation GLM_DROP_CHANCE = Translation.Builder.start("pmmo.gui.statscroll.glm.drop_chance")
+			.addLocale(Locale.EN_US, "with %s%% flat chance").build();
+	public static final Translation GLM_DROP_CHANCE_SKILL = Translation.Builder.start("pmmo.gui.statscroll.glm.drop_chance_skill")
+		.addLocale(Locale.EN_US, "with %s%% chance based on %s").build();
+	public static final Translation GLM_OTHER_CONDITIONS = Translation.Builder.start("pmmo.gui.statscroll.glm.other_conditions")
+		.addLocale(Locale.EN_US, "+%s custom conditions").build();
+	public static final Translation GLM_SKILL_RANGE = Translation.Builder.start("pmmo.gui.statscroll.glm.skill_range")
+		.addLocale(Locale.EN_US, "and skill %s between %s and %s").build();
+	public static final Translation GLM_VALID_BLOCK = Translation.Builder.start("pmmo.gui.statscroll.glm.valid_block")
+		.addLocale(Locale.EN_US, "When breaking block(s) %s").build();
+	public static final Translation GLM_HIGHEST_SKILL = Translation.Builder.start("pmmo.gui.statscroll.glm.highest_skill")
+		.addLocale(Locale.EN_US, "When %s is the highest skill of %s").build();
+	public static final Translation GLM_LOOT_TABLE = Translation.Builder.start("pmmo.gui.statscroll.glm.loot_table")
+		.addLocale(Locale.EN_US, "When loot drops from: '%s'").build();
 	
 	//=========GLOSSARY SELECT SCREEN=============
 	public static final Translation GLOSSARY_DEFAULT_SECTION = Translation.Builder.start("pmmo.gui.glossary.default_section")

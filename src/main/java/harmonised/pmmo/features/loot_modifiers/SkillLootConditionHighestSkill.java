@@ -21,8 +21,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class SkillLootConditionHighestSkill implements LootItemCondition{
 
-	private String targetSkill;
-	private List<String> comparables;
+	public String targetSkill;
+	public List<String> comparables;
 	
 	public SkillLootConditionHighestSkill(String skill, List<String> comparables) {
 		this.targetSkill = skill;

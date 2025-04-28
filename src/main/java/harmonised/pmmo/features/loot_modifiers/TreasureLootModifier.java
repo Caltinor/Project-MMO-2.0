@@ -37,7 +37,7 @@ public class TreasureLootModifier extends LootModifier{
 			)).apply(instance, TreasureLootModifier::new));
 
 	public ItemStack drop;
-	private final int count;
+	public final int count;
 	public double chance;
 	public boolean perLevel;
 	public String skill;
@@ -57,6 +57,8 @@ public class TreasureLootModifier extends LootModifier{
 		this.perLevel = perLevel.orElse(false);
 		this.skill = skill.orElse("");
 	}
+
+	public LootItemCondition[] getConditions() {return this.conditions;}
 
 	@Override
 	public Codec<? extends IGlobalLootModifier> codec() {

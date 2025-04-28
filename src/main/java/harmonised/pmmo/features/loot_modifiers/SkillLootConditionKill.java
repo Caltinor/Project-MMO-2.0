@@ -17,8 +17,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class SkillLootConditionKill implements LootItemCondition{
 
-	private String skill;
-	private Integer levelMin, levelMax;
+	public String skill;
+	public Integer levelMin, levelMax;
 	
 	public SkillLootConditionKill(Integer levelMin, Integer levelMax, String skill) {
 		this.levelMin = levelMin;

@@ -4,6 +4,8 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
+import harmonised.pmmo.network.clientpackets.CP_GLMRareSync;
+import harmonised.pmmo.network.clientpackets.CP_GLMTreasureSync;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
 import harmonised.pmmo.network.clientpackets.CP_SyncData;
@@ -11,6 +13,7 @@ import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
+import harmonised.pmmo.network.serverpackets.SP_GLMRequest;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
@@ -76,6 +79,16 @@ public class Networking {
 			.decoder(CP_SyncVein::new)
 			.consumerNetworkThread(CP_SyncVein::handle)
 			.add();
+		INSTANCE.messageBuilder(CP_GLMRareSync.class, ID++)
+			.encoder(CP_GLMRareSync::encode)
+			.decoder(CP_GLMRareSync::new)
+			.consumerNetworkThread(CP_GLMRareSync::handle)
+			.add();
+		INSTANCE.messageBuilder(CP_GLMTreasureSync.class, ID++)
+			.encoder(CP_GLMTreasureSync::encode)
+			.decoder(CP_GLMTreasureSync::new)
+			.consumerNetworkThread(CP_GLMTreasureSync::handle)
+			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
 			.encoder(SP_UpdateVeinTarget::toBytes)
@@ -96,6 +109,11 @@ public class Networking {
 			.encoder(SP_SetVeinShape::encode)
 			.decoder(SP_SetVeinShape::new)
 			.consumerNetworkThread(SP_SetVeinShape::handle)
+			.add();
+		INSTANCE.messageBuilder(SP_GLMRequest.class, ID++)
+			.encoder((pkt, buf) -> {})
+			.decoder(buf -> new SP_GLMRequest())
+			.consumerNetworkThread(SP_GLMRequest::handle)
 			.add();
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}

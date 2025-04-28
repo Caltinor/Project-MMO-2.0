@@ -51,6 +51,8 @@ public class RareDropModifier extends LootModifier{
 		this.skill = skill.orElse("");
 	}
 
+	public LootItemCondition[] getConditions() {return this.conditions;}
+
 	@Override
 	public Codec<? extends IGlobalLootModifier> codec() {
 		return CODEC;

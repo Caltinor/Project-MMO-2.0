@@ -18,7 +18,7 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
         this.explosionText = explosionText;
     }*/
 
-    @Override
+    //@Override
     public void explode()
     {
         this.level().broadcastEntityEvent(this, (byte)17);

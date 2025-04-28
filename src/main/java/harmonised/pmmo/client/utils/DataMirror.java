@@ -5,15 +5,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.features.loot_modifiers.RareDropModifier;
+import harmonised.pmmo.features.loot_modifiers.SkillLootConditionHighestSkill;
+import harmonised.pmmo.features.loot_modifiers.SkillLootConditionKill;
+import harmonised.pmmo.features.loot_modifiers.SkillLootConditionPlayer;
+import harmonised.pmmo.features.loot_modifiers.TreasureLootModifier;
+import harmonised.pmmo.features.loot_modifiers.ValidBlockCondition;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.common.loot.LootModifier;
+import net.minecraftforge.common.loot.LootTableIdCondition;
 import net.minecraftforge.fml.LogicalSide;
 
 /**This class serves as a run-time cache of data that
@@ -106,4 +122,62 @@ public class DataMirror implements IDataStorage{
 	public IDataStorage get() {return this;}
 	@Override
 	public long getBaseXpForLevel(int level) {return level > 0 && (level -1) < levelCache.size() ? levelCache.get(level - 1) : 0l;}
+
+	//GLM clones
+	public record GLM(Component header, ItemStack drop, int count, double chance, boolean perLevel, String skill, LootItemCondition[] conditions) {
+		public static void add(RareDropModifier modifier) {
+			DataMirror data = (DataMirror) Core.get(LogicalSide.CLIENT).getData();
+			data.lootModifiers.add(new GLM(LangProvider.GLM_HEADER_RARE.asComponent().withStyle(ChatFormatting.BOLD), modifier.drop, modifier.drop.getCount(),
+					modifier.chance, modifier.perLevel, modifier.skill, modifier.getConditions()));
+		}
+
+		public static void add(TreasureLootModifier modifier) {
+			DataMirror data = (DataMirror) Core.get(LogicalSide.CLIENT).getData();
+			data.lootModifiers.add(new GLM(LangProvider.GLM_HEADER_TREASURE.asComponent().withStyle(ChatFormatting.BOLD), modifier.drop, modifier.count,
+					modifier.chance, modifier.perLevel, modifier.skill, modifier.getConditions()));
+		}
+
+		public List<Component> getGUILines(Core core) {
+			List<Component> linesOut = new ArrayList<>();
+			linesOut.add(header);
+			Component dropText = drop.is(Items.AIR) ? Component.literal("itself") : drop.getDisplayName();
+			linesOut.add(LangProvider.GLM_DROP_ITEM.asComponent(count, dropText));
+			double actualChance = chance * (perLevel ? core.getData().getPlayerSkillLevel(skill, null) : 1d);
+			String actualChanceFormated = String.valueOf(actualChance * 100d);
+			linesOut.add(perLevel 
+				? LangProvider.GLM_DROP_CHANCE_SKILL.asComponent(actualChanceFormated, LangProvider.skill(skill))
+				: LangProvider.GLM_DROP_CHANCE.asComponent(actualChanceFormated)
+			);
+			int otherConditions = 0;
+			for (LootItemCondition condition : conditions) {
+				if (condition instanceof LootTableIdCondition lootCondition) {
+					linesOut.add(LangProvider.GLM_LOOT_TABLE.asComponent(lootCondition.targetLootTableId.getPath()));
+				}
+				else if (condition instanceof SkillLootConditionPlayer playerSkillCondition) {
+					int maxLevel = Math.min(playerSkillCondition.levelMax, SkillsConfig.SKILLS.get().getOrDefault(playerSkillCondition.skill, SkillData.Builder.getDefault()).getMaxLevel());
+					linesOut.add(LangProvider.GLM_SKILL_RANGE.asComponent(LangProvider.skill(playerSkillCondition.skill), 
+							playerSkillCondition.levelMin, maxLevel));
+				}
+				else if (condition instanceof SkillLootConditionHighestSkill highSkillCondition) {
+					String skills = highSkillCondition.comparables.stream().map(str -> LangProvider.skill(str).toString()).collect(Collectors.joining(", "));
+					linesOut.add(LangProvider.GLM_HIGHEST_SKILL.asComponent(LangProvider.skill(highSkillCondition.targetSkill), skills));
+				}
+				else if (condition instanceof SkillLootConditionKill killCondition) {
+					int maxLevel = Math.min(killCondition.levelMax, SkillsConfig.SKILLS.get().getOrDefault(killCondition.skill, SkillData.Builder.getDefault()).getMaxLevel());
+					linesOut.add(LangProvider.GLM_SKILL_RANGE.asComponent(LangProvider.skill(killCondition.skill),
+							killCondition.levelMin, maxLevel));
+				}
+				else if (condition instanceof ValidBlockCondition blockCondition) {
+					Component target = blockCondition.tag == null
+							? blockCondition.block.getName()
+							: Component.literal(blockCondition.tag.location().toString());
+					linesOut.add(LangProvider.GLM_VALID_BLOCK.asComponent(target));
+				}
+				else otherConditions++;
+			}
+			if (otherConditions > 0) linesOut.add(LangProvider.GLM_OTHER_CONDITIONS.asComponent(otherConditions));
+			return linesOut;
+		}
+	}
+	public final List<GLM> lootModifiers = new ArrayList<>();
 }

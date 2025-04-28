@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -23,12 +24,16 @@ import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
 import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.client.utils.DP;
+import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.codecs.*;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
+import harmonised.pmmo.features.loot_modifiers.RareDropModifier;
+import harmonised.pmmo.features.loot_modifiers.SkillLootConditionPlayer;
+import harmonised.pmmo.features.loot_modifiers.ValidBlockCondition;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
@@ -57,7 +62,11 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.client.gui.widget.ScrollPanel;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.loot.LootTableIdCondition;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -499,6 +508,16 @@ public class StatScrollWidget extends ScrollPanel{
 				content.addAll(TextElement.build(cause, this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 				content.addAll(holder);
 			}
+		}
+
+		for (DataMirror.GLM glm : ((DataMirror)core.getData()).lootModifiers) {
+			if (!skillFilter.isEmpty() && !glm.skill().equals(skillFilter)) continue;
+			List<TextElement> elements = new ArrayList<>();
+			glm.getGUILines(core).forEach(c -> elements.addAll(TextElement.build(c, this.width,
+					c.getStyle().isBold() ? 0: 1,
+					c.getStyle().isBold() ? 0xFFFFFF : 0xEEEEEE,
+					c.getStyle().isBold(), Config.SECTION_HEADER_COLOR.get())));
+			content.addAll(elements);
 		}
 	}
 	
