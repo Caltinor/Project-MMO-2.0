@@ -10,16 +10,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Scripting {
     public static void readFiles(RegistryAccess access) {
         Path filePath = FMLPaths.CONFIGDIR.get();
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(filePath, "*.pmmo")) {
-            for (Path path : stream) {
+        try (Stream<Path> stream = Files.walk(filePath)) {
+            for (Path path : stream.filter(Files::isRegularFile).filter(path -> path.toString().endsWith(".pmmo")).toList()) {
                 MsLoggy.INFO.log(MsLoggy.LOG_CODE.API, "Loading script from {}", path);
                 read(access, new String(Files.readAllBytes(path)));
-            }
+            };
         } catch (IOException e) {e.printStackTrace();}
     }
 
