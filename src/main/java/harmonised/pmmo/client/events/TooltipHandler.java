@@ -27,9 +27,11 @@ import harmonised.pmmo.setup.datagen.LangProvider.Translation;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -68,17 +70,17 @@ public class TooltipHandler {
 					.filter(type -> Config.tooltipReqEnabled(type).get())
 					.map(type -> Pair.of(type, getReqData(core, type, stack)))
 					.filter(pair -> !pair.getSecond().isEmpty())
-					.forEach(pair -> addRequirementTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond(), core));
+					.forEach(pair -> addRequirementTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond()));
 			Arrays.stream(isBlockItem ? EventType.BLOCKITEM_APPLICABLE_EVENTS : EventType.ITEM_APPLICABLE_EVENTS)
 					.filter(type -> Config.tooltipXpEnabled(type).get())
 					.map(type -> Pair.of(type, getXpData(core, type, player, stack)))
 					.filter(pair -> !pair.getSecond().isEmpty())
-					.forEach(pair -> addXpValueTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond(), core));
+					.forEach(pair -> addXpValueTooltip(pair.getFirst().tooltipTranslation, event, pair.getSecond()));
 			Stream.of(ModifierDataType.HELD, ModifierDataType.WORN)
 					.filter(type -> Config.tooltipBonusEnabled(type).get())
 					.map(type -> Pair.of(type, core.getObjectModifierMap(ObjectType.ITEM, itemID, type, TagUtils.stackTag(stack))))
 					.filter(pair -> !pair.getSecond().isEmpty())
-					.forEach(pair -> addModifierTooltip(pair.getFirst().tooltip, event, pair.getSecond(), core));
+					.forEach(pair -> addModifierTooltip(pair.getFirst().tooltip, event, pair.getSecond()));
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
             VeinData veinData = core.getLoader().ITEM_LOADER.getData(itemID).veinData();
             if (!veinData.isUnconfigured() && !veinData.isEmpty() && Config.VEIN_ENABLED.get()) {
@@ -87,25 +89,58 @@ public class TooltipHandler {
          }
 	}
 	
-	private static void addRequirementTooltip(Translation header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
-		event.getToolTip().add(header.asComponent());
-		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
-			event.getToolTip().add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(" "+String.valueOf(req.getValue()))).setStyle(CoreUtils.getSkillStyle(req.getKey())));
+	private static void addRequirementTooltip(Translation header, ItemTooltipEvent event, Map<String, Integer> reqs) {
+		MutableComponent headerComp = header.asComponent().withStyle(ChatFormatting.RED);
+		if (reqs.entrySet().size() == 1) {
+			Map.Entry<String, Integer> req = reqs.entrySet().iterator().next();
+			var singleComponent = Component.translatable("pmmo." + req.getKey()).append(Component.literal(" " + req.getValue())).setStyle(CoreUtils.getSkillStyle(req.getKey()));
+			event.getToolTip().add(headerComp.append(" ").append(singleComponent));
+		}
+		else {
+			event.getToolTip().add(headerComp);
+			for (Map.Entry<String, Integer> req : reqs.entrySet()) {
+				event.getToolTip().add(Component.literal("   ")
+						.append(Component.translatable("pmmo." + req.getKey()))
+						.append(Component.literal(" " + String.valueOf(req.getValue())))
+						.setStyle(CoreUtils.getSkillStyle(req.getKey())));
+			}
 		}
 	}
 	
-	private static void addXpValueTooltip(Translation header, ItemTooltipEvent event, Map<String, Long> values, Core core) {
-		event.getToolTip().add(header.asComponent());
-		values.entrySet().stream().filter(entry -> entry.getValue() > 0).forEach(value -> {
-			event.getToolTip().add(Component.translatable("pmmo."+value.getKey()).append(Component.literal(" "+String.valueOf(value.getValue()))).setStyle(CoreUtils.getSkillStyle(value.getKey())));
-		});
+	private static void addXpValueTooltip(Translation header, ItemTooltipEvent event, Map<String, Long> values) {
+		MutableComponent headerComp = header.asComponent().withStyle(ChatFormatting.GREEN);
+		if (values.entrySet().size() == 1) {
+			var value = values.entrySet().iterator().next();
+			var xpValue = Component.translatable("pmmo." + value.getKey()).append(Component.literal(" " + String.valueOf(value.getValue()))).setStyle(CoreUtils.getSkillStyle(value.getKey()));
+			event.getToolTip().add(headerComp.append(" ").append(xpValue));
+		}
+		else {
+			event.getToolTip().add(headerComp);
+			values.entrySet().stream().filter(entry -> entry.getValue() > 0).forEach(value -> {
+				event.getToolTip().add(Component.literal("   ")
+						.append(Component.translatable("pmmo." + value.getKey()))
+						.append(Component.literal(" " + String.valueOf(value.getValue())))
+						.setStyle(CoreUtils.getSkillStyle(value.getKey())));
+			});
+		}
 	}
 	
-	private static void addModifierTooltip(Translation header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
-		event.getToolTip().add(header.asComponent());
-		values.entrySet().stream().filter(entry -> entry.getValue() != 0.0 && entry.getValue() != 1.0).forEach(modifier -> {
-			event.getToolTip().add(Component.translatable("pmmo."+modifier.getKey()).append(Component.literal(" "+modifierPercent(modifier.getValue()))).setStyle(CoreUtils.getSkillStyle(modifier.getKey())));
-		});
+	private static void addModifierTooltip(Translation header, ItemTooltipEvent event, Map<String, Double> values) {
+		MutableComponent headerComp = header.asComponent().withStyle(ChatFormatting.BLUE);
+		if (values.entrySet().size() == 1) {
+			var modifier = values.entrySet().iterator().next();
+			var bonusComponent = Component.translatable("pmmo." + modifier.getKey()).append(Component.literal(" " + modifierPercent(modifier.getValue()))).setStyle(CoreUtils.getSkillStyle(modifier.getKey()));
+			event.getToolTip().add(headerComp.append(" ").append(bonusComponent));
+		}
+		else {
+			event.getToolTip().add(headerComp);
+			values.entrySet().stream().filter(entry -> entry.getValue() != 0.0 && entry.getValue() != 1.0).forEach(modifier -> {
+				event.getToolTip().add(Component.literal("   ")
+						.append(Component.translatable("pmmo." + modifier.getKey()))
+						.append(Component.literal(" " + modifierPercent(modifier.getValue())))
+						.setStyle(CoreUtils.getSkillStyle(modifier.getKey())));
+			});
+		}
 	}
 	
 	private static void addVeinTooltip(Translation header, ItemTooltipEvent event, VeinData data, boolean isBlockItem) {
