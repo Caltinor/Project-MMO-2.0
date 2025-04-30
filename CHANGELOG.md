@@ -1,7 +1,9 @@
 # Changelog
 
-## [1.20.1-1.6.35] - 2025-04-28
-### Bugfixes / Tweaks
+## [1.20.1-1.7.35] - 2025-04-30
+### Minor Version Changes
+- Backported party feature which stores parties in the scoreboard.  This makes parties persistent between sessions and when players leave and rejoin worlds.
+### Bugfixes / Tweaks (from v1.6.35)
 - Fixed Tooltips still showing values when zero
 - Fixed damage boost perk incorrectly applying settings when wildcards were used
 - Added Treasure and Rare drops to the glossary under Perks
