@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.scores.PlayerTeam;
-import org.apache.logging.log4j.core.jmx.Server;
+import net.minecraft.world.scores.Team;
 
 public class PartyUtils {
 	private static final Map<UUID, Invite> invites = new HashMap<>();
@@ -48,11 +48,11 @@ public class PartyUtils {
 		MutableComponent decline = LangProvider.PARTY_DECLINE_INVITE.asComponent().withStyle(declineStyle);
 		invitee.sendSystemMessage(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline));
 		
-		invites.put(requestID, new Invite(member.getTeam(), invitee.getUUID()));
+		invites.put(requestID, new Invite((PlayerTeam) member.getTeam(), invitee.getUUID()));
 	}
 	
 	public static void uninviteToParty(ServerPlayer member, Player invitee) {
-		PlayerTeam memberParty = member.getTeam();
+		Team memberParty = member.getTeam();
 		if (memberParty == null) {
 			member.sendSystemMessage(LangProvider.PARTY_NOT_IN.asComponent());
 			return;
