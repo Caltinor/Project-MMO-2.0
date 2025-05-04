@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import harmonised.pmmo.api.events.PMMORegistrationEvent;
 import harmonised.pmmo.config.scripting.Scripting;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -91,6 +93,7 @@ public class CoreLoader {
 	public ExecutableListener RELOADER;
 	public static final Consumer<RegistryAccess> RELOADER_FUNCTION = access -> {
 		Core.get(LogicalSide.SERVER).getLoader().resetData();
+		MinecraftForge.EVENT_BUS.post(new PMMORegistrationEvent());
 		Scripting.readFiles(access);
 	};
 	
