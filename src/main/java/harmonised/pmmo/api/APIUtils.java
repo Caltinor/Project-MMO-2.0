@@ -324,6 +324,9 @@ public class APIUtils {
 	}
 	
 	//===============CONFIGURATION SUPPLIERS=========================
+	/*
+	 *  Note: all registration suppliers should be invoked during {@link harmonised.pmmo.api.events.PMMORegistrationEvent}
+	 */
 	/**registers a configuration setting for a requirement to perform
 	 * and action for the specified item.
 	 * 

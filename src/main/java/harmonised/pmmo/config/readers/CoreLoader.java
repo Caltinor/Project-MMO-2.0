@@ -1,5 +1,6 @@
 package harmonised.pmmo.config.readers;
 
+import harmonised.pmmo.api.events.PMMORegistrationEvent;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.codecs.DataSource;
@@ -90,6 +91,7 @@ public class CoreLoader {
 	public ExecutableListener RELOADER;
 	public static final Consumer<RegistryAccess> RELOADER_FUNCTION = access -> {
 		Core.get(LogicalSide.SERVER).getLoader().resetData();
+		MinecraftForge.EVENT_BUS.post(new PMMORegistrationEvent());
 		Scripting.readFiles(access);
 	};
 	
