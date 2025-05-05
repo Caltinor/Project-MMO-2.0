@@ -1,119 +1,95 @@
 package harmonised.pmmo.api.events;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.codecs.CodecTypes;
-import harmonised.pmmo.core.Core;
-import harmonised.pmmo.features.party.PartyUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
 
 public class SalvageEvent extends PlayerEvent {
     ItemStack inputStack;
     Map.Entry<ResourceLocation, CodecTypes.SalvageData> salvage;
     ItemStack outputStack;
+    private APIUtils.SalvageBuilder salvageBuilder;
 
     public SalvageEvent(ServerPlayer player, ItemStack inputStack, Map.Entry<ResourceLocation, CodecTypes.SalvageData> salvage) {
         super(player);
+        this.inputStack = inputStack;
+        this.salvage = salvage;
         this.outputStack = new ItemStack(ForgeRegistries.ITEMS.getValue(salvage.getKey()));
+        this.salvageBuilder = APIUtils.SalvageBuilder.start()
+                .setChancePerLevel(salvage.getValue().chancePerLevel())
+                .setLevelReq(salvage.getValue().levelReq())
+                .setXpAward(salvage.getValue().xpAward())
+                .setSalvageMax(salvage.getValue().salvageMax())
+                .setBaseChance(salvage.getValue().baseChance())
+                .setMaxChance(salvage.getValue().maxChance());
     }
 
     public Map.Entry<ResourceLocation, CodecTypes.SalvageData> getSalvage() {
+        updateSalvage();
         return salvage;
     }
 
     public ItemStack getInputStack() {
         return inputStack;
     }
-    public void setSalvage(Map.Entry<ResourceLocation, CodecTypes.SalvageData> salvage) {
-        this.salvage = salvage;
+
+    public APIUtils.SalvageBuilder getBuilder() {
+        return salvageBuilder;
     }
 
-    public void setSalvageData(CodecTypes.SalvageData salvageData) {
-        this.salvage = new HashMap.SimpleEntry<>(salvage.getKey(), salvageData);
+    public void updateSalvage() {
+        this.salvage = new SimpleEntry<>(salvage.getKey(), salvageBuilder.build());
     }
 
     public void setChancePerLevel(Map<String, Double> chancePerLevel) {
-        CodecTypes.SalvageData data
-                = new CodecTypes.SalvageData(chancePerLevel,
-                salvage.getValue().levelReq(),
-                salvage.getValue().xpAward(),
-                salvage.getValue().salvageMax(),
-                salvage.getValue().baseChance(),
-                salvage.getValue().maxChance());
-        this.salvage = new HashMap.SimpleEntry<>(salvage.getKey(), data);
+        this.salvageBuilder.setChancePerLevel(chancePerLevel);
     }
 
     public void setLevelReq(Map<String, Integer> levelReq) {
-        CodecTypes.SalvageData data
-                = new CodecTypes.SalvageData(salvage.getValue().chancePerLevel(),
-                levelReq,
-                salvage.getValue().xpAward(),
-                salvage.getValue().salvageMax(),
-                salvage.getValue().baseChance(),
-                salvage.getValue().maxChance());
-        this.salvage = new HashMap.SimpleEntry<>(salvage.getKey(), data);
+        this.salvageBuilder.setLevelReq(levelReq);
     }
 
     public void setXpAward(Map<String, Long> xpAward) {
-        CodecTypes.SalvageData data
-                = new CodecTypes.SalvageData(salvage.getValue().chancePerLevel(),
-                salvage.getValue().levelReq(),
-                xpAward,
-                salvage.getValue().salvageMax(),
-                salvage.getValue().baseChance(),
-                salvage.getValue().maxChance());
-        this.salvage = new HashMap.SimpleEntry<>(salvage.getKey(), data);
+        this.salvageBuilder.setXpAward(xpAward);
     }
 
     public void setSalvageMax(int salvageMax) {
-        CodecTypes.SalvageData data
-                = new CodecTypes.SalvageData(salvage.getValue().chancePerLevel(),
-                salvage.getValue().levelReq(),
-                salvage.getValue().xpAward(),
-                salvageMax,
-                salvage.getValue().baseChance(),
-                salvage.getValue().maxChance());
-        this.salvage = new HashMap.SimpleEntry<>(salvage.getKey(), data);
+        this.salvageBuilder.setSalvageMax(salvageMax);
     }
 
-    public void setBaseChance(float baseChance) {
-        CodecTypes.SalvageData data
-                = new CodecTypes.SalvageData(salvage.getValue().chancePerLevel(),
-                salvage.getValue().levelReq(),
-                salvage.getValue().xpAward(),
-                salvage.getValue().salvageMax(),
-                baseChance,
-                salvage.getValue().maxChance());
-        this.salvage = new HashMap.SimpleEntry<>(salvage.getKey(), data);
+    public void setBaseChance(double baseChance) {
+        this.salvageBuilder.setBaseChance(baseChance);
     }
 
-    public void setMaxChance(float maxChance) {
-        CodecTypes.SalvageData data
-                = new CodecTypes.SalvageData(salvage.getValue().chancePerLevel(),
-                salvage.getValue().levelReq(),
-                salvage.getValue().xpAward(),
-                salvage.getValue().salvageMax(),
-                salvage.getValue().baseChance(),
-                maxChance);
-        this.salvage = new HashMap.SimpleEntry<>(salvage.getKey(), data);
+    public void setMaxChance(double maxChance) {
+        this.salvageBuilder.setMaxChance(maxChance);
     }
 
     public ItemStack getOutputStack() {
         return this.outputStack;
     }
 
-    public void setOutputStack(ItemStack inputStack) {
-        this.outputStack = inputStack;
+    public void setOutputStack(ItemStack outputStack) {
+        this.outputStack = outputStack;
+    }
+
+    public void setSalvage(ResourceLocation itemID, CodecTypes.SalvageData salvageData) {
+        this.salvage = new SimpleEntry<>(itemID, salvageData);
+        this.outputStack = new ItemStack(ForgeRegistries.ITEMS.getValue(itemID));
+        this.salvageBuilder = APIUtils.SalvageBuilder.start()
+                .setChancePerLevel(salvageData.chancePerLevel())
+                .setLevelReq(salvageData.levelReq())
+                .setXpAward(salvageData.xpAward())
+                .setSalvageMax(salvageData.salvageMax())
+                .setBaseChance(salvageData.baseChance())
+                .setMaxChance(salvageData.maxChance());
     }
 
     @Override
