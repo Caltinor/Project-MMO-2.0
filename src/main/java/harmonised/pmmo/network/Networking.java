@@ -4,12 +4,15 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
+import harmonised.pmmo.network.clientpackets.CP_GLMRareSync;
+import harmonised.pmmo.network.clientpackets.CP_GLMTreasureSync;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
 import harmonised.pmmo.network.clientpackets.CP_SyncConfig;
 import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
+import harmonised.pmmo.network.serverpackets.SP_GLMRequest;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
@@ -41,7 +44,10 @@ public class Networking {
 		.playToClient(CP_SetOtherExperience.TYPE, CP_SetOtherExperience.STREAM_CODEC, CP_SetOtherExperience::handle)
 		.playToClient(CP_ResetXP.TYPE, StreamCodec.unit(new CP_ResetXP()), CP_ResetXP::handle)
 		.playToClient(CP_SyncConfig.TYPE, CP_SyncConfig.STREAM_CODEC, CP_SyncConfig::handle)
+		.playToClient(CP_GLMRareSync.TYPE, CP_GLMRareSync.STREAM_CODEC, CP_GLMRareSync::handle)
+		.playToClient(CP_GLMTreasureSync.TYPE, CP_GLMTreasureSync.STREAM_COODEC, CP_GLMTreasureSync::handle)
 		//SERVER BOUND PACKETS
+		.playToServer(SP_GLMRequest.TYPE, SP_GLMRequest.STREAM_CODEC, SP_GLMRequest::handle)
 		.playToServer(SP_UpdateVeinTarget.TYPE, SP_UpdateVeinTarget.STREAM_CODEC, SP_UpdateVeinTarget::handle)
 		.playToServer(SP_OtherExpRequest.TYPE, SP_OtherExpRequest.STREAM_CODEC, SP_OtherExpRequest::handle)
 		.playToServer(SP_SetVeinLimit.TYPE, SP_SetVeinLimit.STREAM_CODEC, SP_SetVeinLimit::handle)

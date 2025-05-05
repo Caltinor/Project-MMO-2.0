@@ -8,6 +8,8 @@ import harmonised.pmmo.client.gui.component.SelectionWidget;
 import harmonised.pmmo.client.gui.component.SelectionWidget.SelectionEntry;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.CoreUtils;
+import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.serverpackets.SP_GLMRequest;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
@@ -84,6 +86,7 @@ public class GlossarySelectScreen extends Screen{
 		addRenderableWidget(selectSkills);
 		addRenderableWidget(selectObject);
 		addRenderableWidget(selectSection);
+		Networking.sendToServer(new SP_GLMRequest());
 	}
 
 	@Override
