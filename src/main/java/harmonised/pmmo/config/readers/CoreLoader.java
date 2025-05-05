@@ -28,6 +28,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
@@ -91,7 +92,7 @@ public class CoreLoader {
 	public ExecutableListener RELOADER;
 	public static final Consumer<RegistryAccess> RELOADER_FUNCTION = access -> {
 		Core.get(LogicalSide.SERVER).getLoader().resetData();
-		MinecraftForge.EVENT_BUS.post(new PMMORegistrationEvent());
+		NeoForge.EVENT_BUS.post(new PMMORegistrationEvent());
 		Scripting.readFiles(access);
 	};
 	
