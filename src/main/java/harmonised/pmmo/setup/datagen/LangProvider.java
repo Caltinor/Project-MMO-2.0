@@ -1830,269 +1830,392 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.UK_UA, "Зламати")
 			.addLocale(Locale.ZH_CN, "破坏需求等级")
 			.addLocale(Locale.ZH_TW, "破壞需求等級")
-			.addLocale(Locale.EN_US, "To Break").build();
-	public static final Translation XP_VALUE_ANVIL = Translation.Builder.start("pmmo.xpValueAnvil")
-			.addLocale(Locale.EN_US, "Anvil Repair Xp Value").build();
+			.addLocale(Locale.EN_US, "To Break").build();public static final Translation XP_VALUE_ANVIL = Translation.Builder.start("pmmo.xpValueAnvil")
+			.addLocale(Locale.EN_US, "Anvil Repair Xp Value")
+			.addLocale(Locale.ZH_CN, "铁砧修复经验值").build();
+
 	public static final Translation XP_VALUE_BREAK = Translation.Builder.start("pmmo.xpValueBreak")
-		.addLocale(Locale.EN_US, "Break Xp Value").build();
+			.addLocale(Locale.EN_US, "Break Xp Value")
+			.addLocale(Locale.ZH_CN, "破坏经验值").build();
 	public static final Translation XP_VALUE_CRAFT = Translation.Builder.start("pmmo.xpValueCraft")
-		.addLocale(Locale.EN_US, "Craft Xp Value").build();
+			.addLocale(Locale.EN_US, "Craft Xp Value")
+			.addLocale(Locale.ZH_CN, "合成经验值").build();
 	public static final Translation XP_VALUE_CONSUME = Translation.Builder.start("pmmo.xpValueConsume")
-			.addLocale(Locale.EN_US, "Consume Xp Value").build();
+			.addLocale(Locale.EN_US, "Consume Xp Value")
+			.addLocale(Locale.ZH_CN, "消耗经验值").build();
 	public static final Translation XP_VALUE_DEAL_DAMAGE = Translation.Builder.start("pmmo.xpValueDealDamage")
-			.addLocale(Locale.EN_US, "Deal Damage with Item Xp").build();
+			.addLocale(Locale.EN_US, "Deal Damage with Item Xp")
+			.addLocale(Locale.ZH_CN, "使用物品造成伤害经验值").build();
 	public static final Translation XP_VALUE_ENCHANT = Translation.Builder.start("pmmo.xpValueEnchant")
-			.addLocale(Locale.EN_US, "Enchant Xp Value").build();
+			.addLocale(Locale.EN_US, "Enchant Xp Value")
+			.addLocale(Locale.ZH_CN, "附魔经验值").build();
 	public static final Translation XP_VALUE_FISH = Translation.Builder.start("pmmo.xpValueFish")
-			.addLocale(Locale.EN_US, "Fishing Loot Xp Value").build();
+			.addLocale(Locale.EN_US, "Fishing Loot Xp Value")
+			.addLocale(Locale.ZH_CN, "钓鱼战利品经验值").build();
 	public static final Translation XP_VALUE_SMELT = Translation.Builder.start("pmmo.xpValueSmelt")
-		.addLocale(Locale.EN_US, "Smelt Xp Value").build();
+			.addLocale(Locale.EN_US, "Smelt Xp Value")
+			.addLocale(Locale.ZH_CN, "冶炼经验值").build();
 	public static final Translation XP_VALUE_TRADE_GIVE = Translation.Builder.start("pmmo.xpValueTradeGive")
-			.addLocale(Locale.EN_US, "Given in Trade Xp Value").build();
+			.addLocale(Locale.EN_US, "Given in Trade Xp Value")
+			.addLocale(Locale.ZH_CN, "交易给予经验值").build();
 	public static final Translation XP_VALUE_TRADE_GET = Translation.Builder.start("pmmo.xpValueTradeGet")
-			.addLocale(Locale.EN_US, "Received in Trade Xp Value").build();
+			.addLocale(Locale.EN_US, "Received in Trade Xp Value")
+			.addLocale(Locale.ZH_CN, "交易获得经验值").build();
 	public static final Translation XP_VALUE_HIT_BLOCK = Translation.Builder.start("pmmo.xpValueHitBlock")
-			.addLocale(Locale.EN_US, "Hit Block Xp Value").build();
+			.addLocale(Locale.EN_US, "Hit Block Xp Value")
+			.addLocale(Locale.ZH_CN, "击打方块经验值").build();
 	public static final Translation XP_VALUE_ACTIVATE_BLOCK = Translation.Builder.start("pmmo.xpValueActivateBlock")
-			.addLocale(Locale.EN_US, "Activate Block Xp Value").build();
+			.addLocale(Locale.EN_US, "Activate Block Xp Value")
+			.addLocale(Locale.ZH_CN, "激活方块经验值").build();
 	public static final Translation XP_VALUE_USE= Translation.Builder.start("pmmo.xpValueUse")
-			.addLocale(Locale.EN_US, "Use Item Xp Value").build();
+			.addLocale(Locale.EN_US, "Use Item Xp Value")
+			.addLocale(Locale.ZH_CN, "使用物品经验值").build();
 	public static final Translation XP_VALUE_BREW = Translation.Builder.start("pmmo.xpValueBrew")
-		.addLocale(Locale.EN_US, "Brew Xp Value").build();
+			.addLocale(Locale.EN_US, "Brew Xp Value")
+			.addLocale(Locale.ZH_CN, "酿造经验值").build();
 	public static final Translation XP_VALUE_GROW = Translation.Builder.start("pmmo.xpValueGrow")
-		.addLocale(Locale.EN_US, "Grow Xp Value").build();
+			.addLocale(Locale.EN_US, "Grow Xp Value")
+			.addLocale(Locale.ZH_CN, "生长经验值").build();
 	public static final Translation XP_VALUE_PLACE = Translation.Builder.start("pmmo.xpValuePlace")
-		.addLocale(Locale.EN_US, "Place Xp Value").build();
+			.addLocale(Locale.EN_US, "Place Xp Value")
+			.addLocale(Locale.ZH_CN, "放置经验值").build();
 	public static final Translation BOOST_HELD = Translation.Builder.start("pmmo.itemXpBoostHeld")
-		.addLocale(Locale.EN_US, "Xp Boost In Hand").build();
+			.addLocale(Locale.EN_US, "Xp Boost In Hand")
+			.addLocale(Locale.ZH_CN, "手持经验加成").build();
 	public static final Translation BOOST_WORN = Translation.Builder.start("pmmo.itemXpBoostWorn")
-		.addLocale(Locale.EN_US, "Xp Boost Worn").build();
+			.addLocale(Locale.EN_US, "Xp Boost Worn")
+			.addLocale(Locale.ZH_CN, "穿戴经验加成").build();
 	public static final Translation VEIN_TOOLTIP = Translation.Builder.start("pmmo.veintooltip")
-		.addLocale(Locale.EN_US, "Vein Mining").build();
+			.addLocale(Locale.EN_US, "Vein Mining")
+			.addLocale(Locale.ZH_CN, "连锁挖矿").build();
 	public static final Translation VEIN_DATA = Translation.Builder.start("pmmo.veindata")
-		.addLocale(Locale.EN_US, "Charge Cap %1$s, recharges %2$s/s").build();
+			.addLocale(Locale.EN_US, "Charge Cap %1$s, recharges %2$s/s")
+			.addLocale(Locale.ZH_CN, "充能上限%1$s，每秒恢复%2$s").build();
 	public static final Translation VEIN_BREAK = Translation.Builder.start("pmmo.veinbreak")
-		.addLocale(Locale.EN_US, "Cost to break as block: %s").build();
-	
+			.addLocale(Locale.EN_US, "Cost to break as block: %s")
+			.addLocale(Locale.ZH_CN, "破坏方块消耗:%s").build();
+
 	//=========STAT SCROLL WIDGET=================
 	public static final Translation OPEN_GLOSSARY = Translation.Builder.start("pmmo.gui.stat_screen.open_glossary")
-		.addLocale(Locale.EN_US, "Open Glossary").build();
+			.addLocale(Locale.EN_US, "Open Glossary")
+			.addLocale(Locale.ZH_CN, "打开术语表").build();
 	public static final Translation EVENT_HEADER = Translation.Builder.start("pmmo.event_header")
-		.addLocale(Locale.EN_US, "XP Award Events").build();
+			.addLocale(Locale.EN_US, "XP Award Events")
+			.addLocale(Locale.ZH_CN, "经验奖励事件").build();
 	public static final Translation REQ_HEADER = Translation.Builder.start("pmmo.req_header")
-		.addLocale(Locale.EN_US, "Requirements").build();
+			.addLocale(Locale.EN_US, "Requirements")
+			.addLocale(Locale.ZH_CN, "需求").build();
 	public static final Translation REQ_EFFECTS_HEADER = Translation.Builder.start("pmmo.req_effects_header")
-		.addLocale(Locale.EN_US, "Negative Effects for unmet Reqs").build();
+			.addLocale(Locale.EN_US, "Negative Effects for unmet Reqs")
+			.addLocale(Locale.ZH_CN, "未满足需求的负面效果").build();
 	public static final Translation MODIFIER_HEADER = Translation.Builder.start("pmmo.modifier_header")
-		.addLocale(Locale.EN_US, "XP Modifiers").build();
+			.addLocale(Locale.EN_US, "XP Modifiers")
+			.addLocale(Locale.ZH_CN, "经验修饰符").build();
 	public static final Translation SALVAGE_HEADER = Translation.Builder.start("pmmo.salvage_header")
-		.addLocale(Locale.EN_US, "Salvage").build();
+			.addLocale(Locale.EN_US, "Salvage")
+			.addLocale(Locale.ZH_CN, "分解").build();
 	public static final Translation SALVAGE_LEVEL_REQ = Translation.Builder.start("pmmo.salvage_levelreq")
-		.addLocale(Locale.EN_US, "Required level to obtain").build();
+			.addLocale(Locale.EN_US, "Required level to obtain")
+			.addLocale(Locale.ZH_CN, "获得所需等级").build();
 	public static final Translation SALVAGE_CHANCE = Translation.Builder.start("pmmo.salvage_chance")
-		.addLocale(Locale.EN_US, "Chance: %1$s / %2$s").build();
+			.addLocale(Locale.EN_US, "Chance: %1$s / %2$s")
+			.addLocale(Locale.ZH_CN, "几率: %1$s / %2$s").build();
 	public static final Translation SALVAGE_MAX = Translation.Builder.start("pmmo.salvage_max")
-		.addLocale(Locale.EN_US, "Max Obtainable: %1$s").build();
+			.addLocale(Locale.EN_US, "Max Obtainable: %1$s")
+			.addLocale(Locale.ZH_CN, "最大可获得: %1$s").build();
 	public static final Translation SALVAGE_CHANCE_MOD = Translation.Builder.start("pmmo.salvage_chance_modifier")
-		.addLocale(Locale.EN_US, "Chance boost based on level").build();
+			.addLocale(Locale.EN_US, "Chance boost based on level")
+			.addLocale(Locale.ZH_CN, "基于等级的额外概率").build();
 	public static final Translation SALVAGE_XP_AWARD = Translation.Builder.start("pmmo.salvage_xpAward_header")
-		.addLocale(Locale.EN_US, "Xp awarded on success").build();
+			.addLocale(Locale.EN_US, "Xp awarded on success")
+			.addLocale(Locale.ZH_CN, "成功时获得的经验").build();
 	public static final Translation VEIN_HEADER = Translation.Builder.start("pmmo.vein_header")
-		.addLocale(Locale.EN_US, "Vein Mining Attributes").build();
+			.addLocale(Locale.EN_US, "Vein Mining Attributes")
+			.addLocale(Locale.ZH_CN, "连锁挖矿属性").build();
 	public static final Translation VEIN_RATE = Translation.Builder.start("pmmo.veindata_rate")
-		.addLocale(Locale.EN_US, "Vein Recharge Rate Per Second: %1$s").build();
+			.addLocale(Locale.EN_US, "Vein Recharge Rate Per Second: %1$s")
+			.addLocale(Locale.ZH_CN, "每秒连锁充能速率: %1$s").build();
 	public static final Translation VEIN_CAP = Translation.Builder.start("pmmo.veindata_cap")
-		.addLocale(Locale.EN_US, "Vein Capacity Added By Item: %1$s").build();
+			.addLocale(Locale.EN_US, "Vein Capacity Added By Item: %1$s")
+			.addLocale(Locale.ZH_CN, "物品增加的连锁容量: %1$s").build();
 	public static final Translation VEIN_CONSUME = Translation.Builder.start("pmmo.veindata_consume")
-		.addLocale(Locale.EN_US, "Vein Consumed on Break: %1$s").build();
+			.addLocale(Locale.EN_US, "Vein Consumed on Break: %1$s")
+			.addLocale(Locale.ZH_CN, "破坏时消耗的连锁能量: %1$s").build();
 	public static final Translation PLAYER_HEADER = Translation.Builder.start("pmmo.playerspecific_header")
-		.addLocale(Locale.EN_US, "Player-Specific Settings").build();
+			.addLocale(Locale.EN_US, "Player-Specific Settings")
+			.addLocale(Locale.ZH_CN, "玩家特定设置").build();
 	public static final Translation PLAYER_IGNORE_REQ = Translation.Builder.start("pmmo.playerspecific.ignorereq")
-		.addLocale(Locale.EN_US, "Ignore Reqs: %1$s").build();
+			.addLocale(Locale.EN_US, "Ignore Reqs: %1$s")
+			.addLocale(Locale.ZH_CN, "忽略需求:%1$s").build();
 	public static final Translation PLAYER_BONUSES = Translation.Builder.start("pmmo.playerspecific.bonus")
-		.addLocale(Locale.EN_US, "Player Bonuses:").build();
+			.addLocale(Locale.EN_US, "Player Bonuses:")
+			.addLocale(Locale.ZH_CN, "玩家奖励:").build();
 	public static final Translation SKILL_LIST_HEADER = Translation.Builder.start("pmmo.skilllist_header")
-		.addLocale(Locale.EN_US, "Player Skills").build();
+			.addLocale(Locale.EN_US, "Player Skills")
+			.addLocale(Locale.ZH_CN, "玩家技能").build();
 	public static final Translation DIMENSION_HEADER = Translation.Builder.start("pmmo.dimension_header")
-		.addLocale(Locale.EN_US, "Dimension: %1$s").build();
+			.addLocale(Locale.EN_US, "Dimension: %1$s")
+			.addLocale(Locale.ZH_CN, "维度:%1$s").build();
 	public static final Translation VEIN_BLACKLIST_HEADER = Translation.Builder.start("pmmo.vein_blacklist_header")
-		.addLocale(Locale.EN_US, "Vein Blacklisted Blocks").build();
+			.addLocale(Locale.EN_US, "Vein Blacklisted Blocks")
+			.addLocale(Locale.ZH_CN, "连锁挖矿黑名单方块").build();
 	public static final Translation MOB_MODIFIER_HEADER = Translation.Builder.start("pmmo.mob_modifier_header")
-		.addLocale(Locale.EN_US, "Mob Modifiers").build();
+			.addLocale(Locale.EN_US, "Mob Modifiers")
+			.addLocale(Locale.ZH_CN, "生物修改器").build();
 	public static final Translation BIOME_HEADER = Translation.Builder.start("pmmo.biome_header")
-		.addLocale(Locale.EN_US, "Mob Modifiers").build();
+			.addLocale(Locale.EN_US, "Mob Modifiers")
+			.addLocale(Locale.ZH_CN, "生物群系修饰符").build();
 	public static final Translation BIOME_EFFECT_NEG = Translation.Builder.start("pmmo.biome_negative")
-		.addLocale(Locale.EN_US, "Penalty Effects").build();
+			.addLocale(Locale.EN_US, "Penalty Effects")
+			.addLocale(Locale.ZH_CN, "惩罚效果").build();
 	public static final Translation BIOME_EFFECT_POS = Translation.Builder.start("pmmo.biome_positive")
-		.addLocale(Locale.EN_US, "Bonus Effects").build();
+			.addLocale(Locale.EN_US, "Bonus Effects")
+			.addLocale(Locale.ZH_CN, "奖励效果").build();
 	public static final Translation ADDON_AFFECTED_ATTRIBUTE = Translation.Builder.start("pmmo.gui.statscroll.addon_affected")
-		.addLocale(Locale.EN_US, "This Property is Dynamically Defined").build();
+			.addLocale(Locale.EN_US, "This Property is Dynamically Defined")
+			.addLocale(Locale.ZH_CN, "此属性是动态定义的").build();
 	public static final Translation GLM_HEADER_RARE = Translation.Builder.start("pmmo.gui.statscroll.glm.rare_header")
-		.addLocale(Locale.EN_US, "Rare Drop Ability").build();
+			.addLocale(Locale.EN_US, "Rare Drop Ability")
+			.addLocale(Locale.ZH_CN, "掉落稀有物品的能力").build();
 	public static final Translation GLM_HEADER_TREASURE = Translation.Builder.start("pmmo.gui.statscroll.glm.treasure_header")
-		.addLocale(Locale.EN_US, "Rare Treasure Drop").build();
+			.addLocale(Locale.EN_US, "Rare Treasure Drop")
+			.addLocale(Locale.ZH_CN, "掉落稀有宝藏的能力").build();
 	public static final Translation GLM_DROP_ITEM = Translation.Builder.start("pmmo.gui.statscroll.glm.drop_item")
-		.addLocale(Locale.EN_US, "%s of %s").build();
+			.addLocale(Locale.EN_US, "%s of %s")
+			.addLocale(Locale.ZH_CN, "%s 个 %s").build();
 	public static final Translation GLM_DROP_CHANCE = Translation.Builder.start("pmmo.gui.statscroll.glm.drop_chance")
-			.addLocale(Locale.EN_US, "with %s%% flat chance").build();
+			.addLocale(Locale.EN_US, "with %s%% flat chance")
+			.addLocale(Locale.ZH_CN, "固定%s%%几率").build();
 	public static final Translation GLM_DROP_CHANCE_SKILL = Translation.Builder.start("pmmo.gui.statscroll.glm.drop_chance_skill")
-		.addLocale(Locale.EN_US, "with %s%% chance based on %s").build();
+			.addLocale(Locale.EN_US, "with %s%% chance based on %s")
+			.addLocale(Locale.ZH_CN, "基于%s的%s%%几率").build();
 	public static final Translation GLM_OTHER_CONDITIONS = Translation.Builder.start("pmmo.gui.statscroll.glm.other_conditions")
-		.addLocale(Locale.EN_US, "+%s custom conditions").build();
+			.addLocale(Locale.EN_US, "+%s custom conditions")
+			.addLocale(Locale.ZH_CN, "+%s个自定义条件").build();
 	public static final Translation GLM_SKILL_RANGE = Translation.Builder.start("pmmo.gui.statscroll.glm.skill_range")
-		.addLocale(Locale.EN_US, "and skill %s between %s and %s").build();
+			.addLocale(Locale.EN_US, "and skill %s between %s and %s")
+			.addLocale(Locale.ZH_CN, "且技能%s在%s和%s之间").build();
 	public static final Translation GLM_VALID_BLOCK = Translation.Builder.start("pmmo.gui.statscroll.glm.valid_block")
-		.addLocale(Locale.EN_US, "When breaking block(s) %s").build();
+			.addLocale(Locale.EN_US, "When breaking block(s) %s")
+			.addLocale(Locale.ZH_CN, "当破坏方块%s时").build();
 	public static final Translation GLM_HIGHEST_SKILL = Translation.Builder.start("pmmo.gui.statscroll.glm.highest_skill")
-		.addLocale(Locale.EN_US, "When %s is the highest skill of %s").build();
+			.addLocale(Locale.EN_US, "When %s is the highest skill of %s")
+			.addLocale(Locale.ZH_CN, "当%s是%s的最高技能时").build();
 	public static final Translation GLM_LOOT_TABLE = Translation.Builder.start("pmmo.gui.statscroll.glm.loot_table")
-		.addLocale(Locale.EN_US, "When loot drops from: '%s'").build();
-	
+			.addLocale(Locale.EN_US, "When loot drops from: '%s'")
+			.addLocale(Locale.ZH_CN, "当战利品从'%s'掉落时").build();
+
 	//=========GLOSSARY SELECT SCREEN=============
 	public static final Translation GLOSSARY_DEFAULT_SECTION = Translation.Builder.start("pmmo.gui.glossary.default_section")
-		.addLocale(Locale.EN_US, "Choose Section").build();
+			.addLocale(Locale.EN_US, "Choose Section")
+			.addLocale(Locale.ZH_CN, "选择").build();
 	public static final Translation GLOSSARY_SECTION_REQ = Translation.Builder.start("pmmo.gui.glossary.section.req")
-		.addLocale(Locale.EN_US, "Requirements").build();
+			.addLocale(Locale.EN_US, "Requirements")
+			.addLocale(Locale.ZH_CN, "需求").build();
 	public static final Translation GLOSSARY_SECTION_XP = Translation.Builder.start("pmmo.gui.glossary.section.xp_sources")
-		.addLocale(Locale.EN_US, "XP Sources").build();
+			.addLocale(Locale.EN_US, "XP Sources")
+			.addLocale(Locale.ZH_CN, "经验来源").build();
 	public static final Translation GLOSSARY_SECTION_BONUS = Translation.Builder.start("pmmo.gui.glossary.section.bonuses")
-		.addLocale(Locale.EN_US, "Bonuses").build();
+			.addLocale(Locale.EN_US, "Bonuses")
+			.addLocale(Locale.ZH_CN, "奖励").build();
 	public static final Translation GLOSSARY_SECTION_SALVAGE = Translation.Builder.start("pmmo.gui.glossary.section.salvage")
-		.addLocale(Locale.EN_US, "Salvage").build();
+			.addLocale(Locale.EN_US, "Salvage")
+			.addLocale(Locale.ZH_CN, "分解").build();
 	public static final Translation GLOSSARY_SECTION_VEIN = Translation.Builder.start("pmmo.gui.glossary.section.vein")
-		.addLocale(Locale.EN_US, "Vein Mining").build();
+			.addLocale(Locale.EN_US, "Vein Mining")
+			.addLocale(Locale.ZH_CN, "连锁挖矿").build();
 	public static final Translation GLOSSARY_SECTION_MOB = Translation.Builder.start("pmmo.gui.glossary.section.mobscaling")
-		.addLocale(Locale.EN_US, "Mob Scaling").build();
+			.addLocale(Locale.EN_US, "Mob Scaling")
+			.addLocale(Locale.ZH_CN, "生物增强").build();
 	public static final Translation GLOSSARY_SECTION_PERKS = Translation.Builder.start("pmmo.gui.glossary.section.perks")
-		.addLocale(Locale.EN_US, "Perks").build();
-	
+			.addLocale(Locale.EN_US, "Perks")
+			.addLocale(Locale.ZH_CN, "加成").build();
+
 	public static final Translation GLOSSARY_DEFAULT_OBJECT = Translation.Builder.start("pmmo.gui.glossary.default_object")
-		.addLocale(Locale.EN_US, "All Content").build();
+			.addLocale(Locale.EN_US, "All Content")
+			.addLocale(Locale.ZH_CN, "所有内容").build();
 	public static final Translation GLOSSARY_OBJECT_ITEMS = Translation.Builder.start("pmmo.gui.glossary.object.items")
-		.addLocale(Locale.EN_US, "Items").build();
+			.addLocale(Locale.EN_US, "Items")
+			.addLocale(Locale.ZH_CN, "物品").build();
 	public static final Translation GLOSSARY_OBJECT_BLOCKS = Translation.Builder.start("pmmo.gui.glossary.object.blocks")
-		.addLocale(Locale.EN_US, "Blocks").build();
+			.addLocale(Locale.EN_US, "Blocks")
+			.addLocale(Locale.ZH_CN, "方块").build();
 	public static final Translation GLOSSARY_OBJECT_ENTITIES = Translation.Builder.start("pmmo.gui.glossary.object.entities")
-		.addLocale(Locale.EN_US, "Animals/Mobs").build();
+			.addLocale(Locale.EN_US, "Animals/Mobs")
+			.addLocale(Locale.ZH_CN, "动物/生物").build();
 	public static final Translation GLOSSARY_OBJECT_DIMENSIONS = Translation.Builder.start("pmmo.gui.glossary.object.dimensions")
-		.addLocale(Locale.EN_US, "Dimensions").build();
+			.addLocale(Locale.EN_US, "Dimensions")
+			.addLocale(Locale.ZH_CN, "维度").build();
 	public static final Translation GLOSSARY_OBJECT_BIOMES = Translation.Builder.start("pmmo.gui.glossary.object.biomes")
-		.addLocale(Locale.EN_US, "Biomes").build();
+			.addLocale(Locale.EN_US, "Biomes")
+			.addLocale(Locale.ZH_CN, "生物群系").build();
 	public static final Translation GLOSSARY_OBJECT_ENCHANTS = Translation.Builder.start("pmmo.gui.glossary.object.enchantments")
-		.addLocale(Locale.EN_US, "Enchantments").build();
+			.addLocale(Locale.EN_US, "Enchantments")
+			.addLocale(Locale.ZH_CN, "附魔").build();
 	public static final Translation GLOSSARY_OBJECT_EFFECTS = Translation.Builder.start("pmmo.gui.glossary.object.effects")
-		.addLocale(Locale.EN_US, "Effects").build();
+			.addLocale(Locale.EN_US, "Effects")
+			.addLocale(Locale.ZH_CN, "药水效果").build();
 	public static final Translation GLOSSARY_OBJECT_PERKS = Translation.Builder.start("pmmo.gui.glossary.object.perks")
-		.addLocale(Locale.EN_US, "Perks").build();
-	
+			.addLocale(Locale.EN_US, "Perks")
+			.addLocale(Locale.ZH_CN, "加成").build();
+
 	public static final Translation GLOSSARY_DEFAULT_SKILL = Translation.Builder.start("pmmo.gui.glossary.default_skill")
-		.addLocale(Locale.EN_US, "All Skills").build();
+			.addLocale(Locale.EN_US, "All Skills")
+			.addLocale(Locale.ZH_CN, "所有技能").build();
 	public static final Translation GLOSSARY_DEFAULT_ENUM = Translation.Builder.start("pmmo.gui.glossary.default_enum")
-		.addLocale(Locale.EN_US, "All Event/Req/Type").build();
+			.addLocale(Locale.EN_US, "All Event/Req/Type")
+			.addLocale(Locale.ZH_CN, "所有事件/需求/类型").build();
 	public static final Translation GLOSSARY_VIEW_BUTTON = Translation.Builder.start("pmmo.gui.glossary.view_button")
-		.addLocale(Locale.EN_US, "View Info").build();
-	
+			.addLocale(Locale.EN_US, "View Info")
+			.addLocale(Locale.ZH_CN, "查看信息").build();
+
 	//=========FEATURES===========================
 	public static final Translation FOUND_TREASURE = Translation.Builder.start("pmmo.youFoundTreasure")
-		.addLocale(Locale.EN_US, "You Found Treasure!").build();
+			.addLocale(Locale.EN_US, "You Found Treasure!")
+			.addLocale(Locale.ZH_CN, "你发现了宝藏!").build();
 	public static final Translation LEVELED_UP = Translation.Builder.start("pmmo.leveled_up")
-		.addLocale(Locale.EN_US, "You leveled up to %s in %s").build();
+			.addLocale(Locale.EN_US, "You leveled up to %s in %s")
+			.addLocale(Locale.ZH_CN, "你的%s技能等级提升到了%s").build();
 	public static final Translation PERK_BREATH_REFRESH = Translation.Builder.start("pmmo.perks.breathrefresh")
-		.addLocale(Locale.EN_US, "Your skill extended your breath").build();
+			.addLocale(Locale.EN_US, "Your skill extended your breath")
+			.addLocale(Locale.ZH_CN, "你的技能延长了你的憋气时间").build();
 	public static final Translation VEIN_LIMIT = Translation.Builder.start("pmmo.veinLimit")
-		.addLocale(Locale.EN_US, "Vein Limit: %1$s").build();
+			.addLocale(Locale.EN_US, "Vein Limit: %1$s")
+			.addLocale(Locale.ZH_CN, "连锁挖矿上限: %1$s").build();
 	public static final Translation VEIN_CHARGE = Translation.Builder.start("pmmo.veinCharge")
-		.addLocale(Locale.EN_US, "Vein Ability: %1$s/%2$s").build();
-	
+			.addLocale(Locale.EN_US, "Vein Ability: %1$s/%2$s")
+			.addLocale(Locale.ZH_CN, "连锁挖矿能力: %1$s/%2$s").build();
+
 	//=========COMMANDS===========================
 	public static final Translation SET_LEVEL = Translation.Builder.start("pmmo.setLevel")
-		.addLocale(Locale.EN_US, "%1$s has been set to level %2$s for %3$s").build();
+			.addLocale(Locale.EN_US, "%1$s has been set to level %2$s for %3$s")
+			.addLocale(Locale.ZH_CN, "已将%3$s的%1$s等级设置为%2$s").build();
 	public static final Translation SET_XP = Translation.Builder.start("pmmo.setXp")
-		.addLocale(Locale.EN_US, "%1$s has been set to %2$sxp for %3$s").build();
+			.addLocale(Locale.EN_US, "%1$s has been set to %2$sxp for %3$s")
+			.addLocale(Locale.ZH_CN, "已将%3$s的%1$s经验值设置为%2$s").build();
 	public static final Translation ADD_LEVEL = Translation.Builder.start("pmmo.addLevel")
-		.addLocale(Locale.EN_US, "%1$s has been changed by %2$s levels for %3$s").build();
+			.addLocale(Locale.EN_US, "%1$s has been changed by %2$s levels for %3$s")
+			.addLocale(Locale.ZH_CN, "%3$s的%1$s等级已改变%2$s级").build();
 	public static final Translation ADD_XP = Translation.Builder.start("pmmo.addXp")
-		.addLocale(Locale.EN_US, "%1$s has been changed by %2$sxp for %3$s").build();
+			.addLocale(Locale.EN_US, "%1$s has been changed by %2$sxp for %3$s")
+			.addLocale(Locale.ZH_CN, "%3$s的%1$s经验值已改变%2$s点").build();
 	public static final Translation PARTY_ALREADY_IN = Translation.Builder.start("pmmo.youAreAlreadyInAParty")
-		.addLocale(Locale.EN_US, "You are already in a Party").build();
+			.addLocale(Locale.EN_US, "You are already in a Party")
+			.addLocale(Locale.ZH_CN, "你已经在一个队伍中了").build();
 	public static final Translation PARTY_CREATED = Translation.Builder.start("pmmo.partyCreated")
-		.addLocale(Locale.EN_US, "You have created a Party").build();
+			.addLocale(Locale.EN_US, "You have created a Party")
+			.addLocale(Locale.ZH_CN, "你已创建一个队伍").build();
 	public static final Translation PARTY_LEFT = Translation.Builder.start("pmmo.youLeftTheParty")
-		.addLocale(Locale.EN_US, "You have left the Party").build();
+			.addLocale(Locale.EN_US, "You have left the Party")
+			.addLocale(Locale.ZH_CN, "你已离开队伍").build();
 	public static final Translation PARTY_NOT_IN = Translation.Builder.start("pmmo.youAreNotInAParty")
-		.addLocale(Locale.EN_US, "You are not in a Party").build();
+			.addLocale(Locale.EN_US, "You are not in a Party")
+			.addLocale(Locale.ZH_CN, "你不在任何队伍中").build();
 	public static final Translation PARTY_INVITE = Translation.Builder.start("pmmo.youHaveInvitedAPlayerToYourParty")
-		.addLocale(Locale.EN_US, "You invited %1$s to your Party").build();
+			.addLocale(Locale.EN_US, "You invited %1$s to your Party")
+			.addLocale(Locale.ZH_CN, "你邀请了%1$s加入你的队伍").build();
 	public static final Translation PARTY_MEMBER_TOTAL = Translation.Builder.start("pmmo.totalMembers")
-		.addLocale(Locale.EN_US, "Total Members: %1$s").build();
+			.addLocale(Locale.EN_US, "Total Members: %1$s")
+			.addLocale(Locale.ZH_CN, "成员数: %1$s").build();
 	public static final Translation PARTY_MEMBER_LIST = Translation.Builder.start("pmmo.partyMemberListEntry")
-		.addLocale(Locale.EN_US, "%1$s").build();
+			.addLocale(Locale.EN_US, "%1$s")
+			.addLocale(Locale.ZH_CN, "%1$s").build();
 	public static final Translation PARTY_DECLINE = Translation.Builder.start("pmmo.youHaveDeclinedPartyInvitation")
-		.addLocale(Locale.EN_US, "You have declined the Party invitation").build();
+			.addLocale(Locale.EN_US, "You have declined the Party invitation")
+			.addLocale(Locale.ZH_CN, "你已拒绝队伍邀请").build();
 	public static final Translation PARTY_NO_INVITES = Translation.Builder.start("pmmo.youAreNotInvitedToAnyParty")
-		.addLocale(Locale.EN_US, "You have no pending Party invitations").build();
+			.addLocale(Locale.EN_US, "You have no pending Party invitations")
+			.addLocale(Locale.ZH_CN, "你没有待处理的队伍邀请").build();
 	public static final Translation PARTY_JOINED = Translation.Builder.start("pmmo.youJoinedAParty")
-		.addLocale(Locale.EN_US, "You have joined the Party!").build();
+			.addLocale(Locale.EN_US, "You have joined the Party!")
+			.addLocale(Locale.ZH_CN, "你已加入队伍!").build();
 	public static final Translation PARTY_RESCIND_INVITE = Translation.Builder.start("pmmo.msg.rescindInvite")
-		.addLocale(Locale.EN_US, "You have removed the invite for %1$s").build();
+			.addLocale(Locale.EN_US, "You have removed the invite for %1$s")
+			.addLocale(Locale.ZH_CN, "你已撤回对%1$s的邀请").build();
 	public static final Translation PARTY_ACCEPT = Translation.Builder.start("pmmo.msg.accept")
-		.addLocale(Locale.EN_US, "Accept").build();
+			.addLocale(Locale.EN_US, "Accept")
+			.addLocale(Locale.ZH_CN, "接受").build();
 	public static final Translation PARTY_DECLINE_INVITE = Translation.Builder.start("pmmo.msg.decline")
-		.addLocale(Locale.EN_US, "Decline").build();
+			.addLocale(Locale.EN_US, "Decline")
+			.addLocale(Locale.ZH_CN, "拒绝").build();
 	public static final Translation PARTY_PLAYER_INVITED = Translation.Builder.start("pmmo.playerInvitedYouToAParty")
-		.addLocale(Locale.EN_US, "%1$s invited you to their Party, %2$s|%3$s").build();
+			.addLocale(Locale.EN_US, "%1$s invited you to their Party, %2$s|%3$s")
+			.addLocale(Locale.ZH_CN, "%1$s邀请你加入他们的队伍, %2$s|%3$s").build();
 	public static final Translation PACK_BEGIN = Translation.Builder.start("pmmo.cmd.pack.begin")
-		.addLocale(Locale.EN_US, "Starting new genData.  Override, defaults, players, simplify, and disabler settings have all been set to false.").build();
+			.addLocale(Locale.EN_US, "Starting new genData.  Override, defaults, players, simplify, and disabler settings have all been set to false.")
+			.addLocale(Locale.ZH_CN, "开始新的数据生成。覆盖生成、默认生成、玩家、简化和禁用设置均已设为false。").build();
 	public static final Translation PACK_OVERRIDE = Translation.Builder.start("pmmo.cmd.pack.override")
-		.addLocale(Locale.EN_US, "Generated files will now include override set to true").build();
+			.addLocale(Locale.EN_US, "Generated files will now include override set to true")
+			.addLocale(Locale.ZH_CN, "现在所有生成的文件Override值将为True。").build();
 	public static final Translation PACK_DEFAULTS = Translation.Builder.start("pmmo.cmd.pack.defaults")
-		.addLocale(Locale.EN_US, "Generated files will now include existing settings and AutoValues.").build();
+			.addLocale(Locale.EN_US, "Generated files will now include existing settings and AutoValues.")
+			.addLocale(Locale.ZH_CN, "现在所有生成的文件将包含已有与自动生成的设置。").build();
 	public static final Translation PACK_DISABLER = Translation.Builder.start("pmmo.cmd.pack.disabler")
-		.addLocale(Locale.EN_US, "Generated pack will now disable all packs loaded before it.").build();
+			.addLocale(Locale.EN_US, "Generated pack will now disable all packs loaded before it.")
+			.addLocale(Locale.ZH_CN, "生成的数据包现在将禁用在它之前加载的所有数据包。").build();
 	public static final Translation PACK_PLAYERS = Translation.Builder.start("pmmo.cmd.pack.players")
-		.addLocale(Locale.EN_US, "Generated pack will now include the selected player files").build();
+			.addLocale(Locale.EN_US, "Generated pack will now include the selected player files")
+			.addLocale(Locale.ZH_CN, "生成的数据包现在将包含所选的玩家信息").build();
 	public static final Translation PACK_SIMPLE = Translation.Builder.start("pmmo.cmd.pack.simple")
-		.addLocale(Locale.EN_US, "Generated pack will exclude unused properties.").build();
+			.addLocale(Locale.EN_US, "Generated pack will exclude unused properties.")
+			.addLocale(Locale.ZH_CN, "生成的数据包将排除未使用的属性。").build();
 	public static final Translation PACK_FILTER = Translation.Builder.start("pmmo.cmd.pack.filter")
-		.addLocale(Locale.EN_US, "Generated pack will only include files from this namespace").build();
-	
+			.addLocale(Locale.EN_US, "Generated pack will only include files from this namespace")
+			.addLocale(Locale.ZH_CN, "生成的数据包将只包含来自此命名空间的文件").build();
+
 	//=========DENIAL MESSAGES====================
 	public static final Translation DENIAL_WEAR = Translation.Builder.start("pmmo.msg.denial.wear")
-		.addLocale(Locale.EN_US, "You are not skilled enough to wear %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to wear %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以穿戴 %1$s").build();
 	public static final Translation DENIAL_USE_ENCHANT = Translation.Builder.start("pmmo.msg.denial.use_enchantment")
-		.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s with %2$s enchantment").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s with %2$s enchantment")
+			.addLocale(Locale.ZH_CN, "你的技能不足以使用 %1$s 搭配 %2$s 附魔").build();
 	public static final Translation DENIAL_TOOL = Translation.Builder.start("pmmo.msg.denial.tool")
-		.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as tool").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as tool")
+			.addLocale(Locale.ZH_CN, "你的技能不足以将 %1$s 用作工具").build();
 	public static final Translation DENIAL_WEAPON = Translation.Builder.start("pmmo.msg.denial.weapon")
-		.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as a weapon").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as a weapon")
+			.addLocale(Locale.ZH_CN, "你的技能不足以将 %1$s 用作武器").build();
 	public static final Translation DENIAL_USE = Translation.Builder.start("pmmo.msg.denial.use")
-		.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以使用 %1$s").build();
 	public static final Translation DENIAL_PLACE = Translation.Builder.start("pmmo.msg.denial.place")
-		.addLocale(Locale.EN_US, "You are not skilled enough to place %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to place %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以放置 %1$s").build();
 	public static final Translation DENIAL_BREAK = Translation.Builder.start("pmmo.msg.denial.break")
-		.addLocale(Locale.EN_US, "You are not skilled enough to break %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to break %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以破坏 %1$s").build();
 	public static final Translation DENIAL_BIOME = Translation.Builder.start("pmmo.msg.denial.biome")
-		.addLocale(Locale.EN_US, "You are not skilled enough to survive in %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to survive in %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以在 %1$s 中生存").build();
 	public static final Translation DENIAL_KILL = Translation.Builder.start("pmmo.msg.denial.kill")
-		.addLocale(Locale.EN_US, "You are not skilled enough to kill %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to kill %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以击杀 %1$s").build();
 	public static final Translation DENIAL_TRAVEL = Translation.Builder.start("pmmo.msg.denial.travel")
-		.addLocale(Locale.EN_US, "Travel to %1$s requires %2$s").build();
+			.addLocale(Locale.EN_US, "Travel to %1$s requires %2$s")
+			.addLocale(Locale.ZH_CN, "前往 %1$s 需要 %2$s").build();
 	public static final Translation DENIAL_RIDE = Translation.Builder.start("pmmo.msg.denial.ride")
-		.addLocale(Locale.EN_US, "You are not skilled enough to ride %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to ride %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以骑乘 %1$s").build();
 	public static final Translation DENIAL_TAME = Translation.Builder.start("pmmo.msg.denial.tame")
-		.addLocale(Locale.EN_US, "You are not skilled enough to tame %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to tame %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以驯服 %1$s").build();
 	public static final Translation DENIAL_ENTITY_INTERACT = Translation.Builder.start("pmmo.msg.denial.entity_interact")
-		.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
+			.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以与 %1$s 互动").build();
 	public static final Translation DENIAL_SALVAGE = Translation.Builder.start("pmmo.msg.denial.salvage")
-		.addLocale(Locale.EN_US, "You cannot salvage %s. Either it cannot be salvaged or you are not skilled enough yet.").build();
+			.addLocale(Locale.EN_US, "You cannot salvage %s. Either it cannot be salvaged or you are not skilled enough yet.")
+			.addLocale(Locale.ZH_CN, "你无法分解 %s。要么它无法被分解，要么你的技能还不足够。").build();
 	public static final Translation DENIAL_INTERACT = Translation.Builder.start("pmmo.msg.denial.interact")
-	    .addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
-	
+			.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s")
+			.addLocale(Locale.ZH_CN, "你的技能不足以与 %1$s 互动").build();
 	//==========TUTORIAL TEXT======================
 	public static final Translation SALVAGE_TUTORIAL_HEADER = Translation.Builder.start("pmmo.client.tutorial.salvage.header")
-		.addLocale(Locale.EN_US, "Salvage Block").build();
+			.addLocale(Locale.EN_US, "Salvage Block")
+			.addLocale(Locale.ZH_CN, "分解站").build();
 	public static final Translation SALVAGE_TUTORIAL_USAGE = Translation.Builder.start("pmmo.client.tutorial.salvage.usage")
-		.addLocale(Locale.EN_US, "While crouching, right click this block to salvage the items in your hand.").build();
+			.addLocale(Locale.EN_US, "While crouching, right click this block to salvage the items in your hand.")
+			.addLocale(Locale.ZH_CN, "当潜行时，右键这个方块可以将手中的物品分解.").build();
 	
 	//==========COMPAT MESSAGES====================
 	public static final Translation FTBQ_XP_TITLE = Translation.Builder.start("ftbquests.reward.pmmo.xpreward")
