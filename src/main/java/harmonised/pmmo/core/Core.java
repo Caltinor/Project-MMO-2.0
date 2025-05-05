@@ -228,7 +228,7 @@ public class Core {
 		CheeseTracker.applyAntiCheese(type, objectID, player, xpGains);
 
 		loggables[3] = MsLoggy.mapToString(xpGains);
-		MsLoggy.INFO.log(LOG_CODE.XP, "XP: {} base:{}, afterBonus:{}, afterAntiCheese:{}", loggables);
+		MsLoggy.INFO.log(LOG_CODE.XP, "XP: {} base:{}, afterBonus:{}, afterAntiCheese:{}", (Object) loggables);
 
 		return xpGains;
 	}	
@@ -458,27 +458,27 @@ public class Core {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met.
 			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {
-				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l))) continue entry;
+				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0L))) continue entry;
 			}
 			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption
 			validAttempt = true;
 			//get the base calculation values including the bonuses from skills
-			double base = result.getValue().baseChance();
-			double max = result.getValue().maxChance();
+			SalvageEvent salvageEvent = new SalvageEvent(player, salvageItem, result);
+			double base = salvageEvent.getSalvage().getValue().baseChance();
+			double max = salvageEvent.getSalvage().getValue().maxChance();
 			double bonus = 0d;
-			for (Map.Entry<String, Double> skill : result.getValue().chancePerLevel().entrySet()) {
-				bonus += skill.getValue() * Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l));
+			for (Map.Entry<String, Double> skill : salvageEvent.getSalvage().getValue().chancePerLevel().entrySet()) {
+				bonus += skill.getValue() * Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0L));
 			}
 			
 			//conduct random check for the total count possible and add each succcess to the output
-			for (int i = 0; i < result.getValue().salvageMax(); i++) {
+			for (int i = 0; i < salvageEvent.getSalvage().getValue().salvageMax(); i++) {
 				if (player.getRandom().nextDouble() < Math.min(max, base + bonus)) {
-					var salvageEvent = MinecraftForge.EVENT_BUS.post(new SalvageEvent(player, salvageItem, result));
-					if (salvageEvent) continue entry;
-					player.drop(new ItemStack(ForgeRegistries.ITEMS.getValue(result.getKey())), false, true);
+					if (MinecraftForge.EVENT_BUS.post(salvageEvent)) continue entry;
+					player.drop(salvageEvent.getOutputStack(), false, true);
 
-					for (Map.Entry<String, Long> award : result.getValue().xpAward().entrySet()) {
-						xpAwards.merge(award.getKey(), award.getValue(), (o, n) -> o + n);
+					for (Map.Entry<String, Long> award : salvageEvent.getSalvage().getValue().xpAward().entrySet()) {
+						xpAwards.merge(award.getKey(), award.getValue(), Long::sum);
 					}
 				}
 			}
