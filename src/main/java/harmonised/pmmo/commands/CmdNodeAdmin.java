@@ -30,6 +30,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -105,16 +106,23 @@ public class CmdNodeAdmin {
 				}
 			}
 			else {
+				boolean leveledUp = false;
 				if (isLevel) {
 					exp.addLevel(value);
 					ctx.getSource().sendSuccess(() -> LangProvider.ADD_LEVEL.asComponent(skillName, value, player.getName()), true);
+					if (value > 0)
+						leveledUp = true;
 				}
 				else {
-					exp.addXp(value);
+					leveledUp = exp.addXp(value);
 					ctx.getSource().sendSuccess(() -> LangProvider.ADD_XP.asComponent(skillName, value, player.getName()), true);
 				}
-				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
-						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
+				if (leveledUp)
+					Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+							TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
+				else
+					Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+							new CompoundTag());
 			}
 			Networking.sendToClient(new CP_UpdateExperience(skillName, exp, 0), player);
 		}
