@@ -15,6 +15,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.core.perks.FeaturePerks;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
@@ -118,6 +119,7 @@ public class CmdNodeAdmin {
 	public static int adminClear(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {	
 		IDataStorage data = Core.get(LogicalSide.SERVER).getData();
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
+			FeaturePerks.clearAttributes(player);
 			data.setXpMap(player.getUUID(), new HashMap<>());
 			Networking.sendToClient(new CP_SyncData_ClearXp(""), player);
 		}
@@ -127,6 +129,7 @@ public class CmdNodeAdmin {
 		IDataStorage data = Core.get(LogicalSide.SERVER).getData();
 		String specifiedSkill = StringArgumentType.getString(ctx, SKILL_ARG);
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
+			FeaturePerks.clearAttribute(player, specifiedSkill);
 			data.getXpMap(player.getUUID()).remove(specifiedSkill);
 			Networking.sendToClient(new CP_SyncData_ClearXp(specifiedSkill), player);
 		}
