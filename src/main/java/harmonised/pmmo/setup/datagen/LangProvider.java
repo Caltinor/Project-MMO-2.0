@@ -181,7 +181,8 @@ public class LangProvider extends LanguageProvider{
 
     //=========SKILL NAMES=====================
     public static final Translation SKILL_HEALTH = Translation.Builder.start("pmmo.health")
-            .addLocale(Locale.EN_US, "Health").build();
+            .addLocale(Locale.EN_US, "Health")
+            .addLocale(Locale.ZH_CN, "生命值").build();
     public static final Translation SKILL_SPEED = Translation.Builder.start("pmmo.speed")
             .addLocale(Locale.HU, "Speed")
             .addLocale(Locale.JA, "Speed")
@@ -671,7 +672,8 @@ public class LangProvider extends LanguageProvider{
     public static final Translation SKILL_GUNSLINGING = Translation.Builder.start("pmmo.gunslinging")
             .addLocale(Locale.UK_UA, "Стрільба зі зброї")
             .addLocale(Locale.FR_FR, "Fusillade")
-            .addLocale(Locale.EN_US, "Gunslinging").build();
+            .addLocale(Locale.EN_US, "Gunslinging")
+            .addLocale(Locale.ZH_CN, "射击").build();
     public static final Translation SKILL_SLAYER = Translation.Builder.start("pmmo.slayer")
             .addLocale(Locale.HU, "Slayer")
             .addLocale(Locale.JA, "Slayer")
@@ -1510,7 +1512,9 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_TW, "探索")
             .addLocale(Locale.EN_US, "Exploration").build();
     public static final Translation SKILL_CHARISMA = Translation.Builder.start("pmmo.charisma")
-            .addLocale(Locale.EN_US, "Charisma").build();
+            .addLocale(Locale.EN_US, "Charisma")
+            .addLocale(Locale.ZH_CN, "魅力").build();
+
     //=========ENUM VALUES=====================
     public static final Translation ENUM_ANVIL_REPAIR = Translation.Builder.start("pmmo.enum.ANVIL_REPAIR")
             .addLocale(Locale.EN_US, "Anvil Repair")
@@ -1526,7 +1530,7 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_CN, "放置方块").build();
     public static final Translation ENUM_BREATH_CHANGE = Translation.Builder.start("pmmo.enum.BREATH_CHANGE")
             .addLocale(Locale.EN_US, "Breath Change")
-            .addLocale(Locale.ZH_CN, "呼吸值变化").build();
+            .addLocale(Locale.ZH_CN, "氧气值变化").build();
     public static final Translation ENUM_BREED = Translation.Builder.start("pmmo.enum.BREED")
             .addLocale(Locale.EN_US, "Breed")
             .addLocale(Locale.ZH_CN, "动物繁殖").build();
@@ -1753,15 +1757,20 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_TW, "Project MMO")
             .addLocale(Locale.EN_US, "Project MMO").build();
     public static final Translation KEYBIND_SHOWVEIN = Translation.Builder.start("key.pmmo.showVein")
-            .addLocale(Locale.EN_US, "Toggle Vein Gauge").build();
+            .addLocale(Locale.EN_US, "Toggle Vein Gauge")
+            .addLocale(Locale.ZH_CN, "开关连锁挖矿").build();
     public static final Translation KEYBIND_ADDVEIN = Translation.Builder.start("key.pmmo.addVein")
-            .addLocale(Locale.EN_US, "Increase Vein Size").build();
+            .addLocale(Locale.EN_US, "Increase Vein Size")
+            .addLocale(Locale.ZH_CN, "增加连锁挖矿范围").build();
     public static final Translation KEYBIND_SUBVEIN = Translation.Builder.start("key.pmmo.subVein")
-            .addLocale(Locale.EN_US, "Decrease Vein Size").build();
+            .addLocale(Locale.EN_US, "Decrease Vein Size")
+            .addLocale(Locale.ZH_CN, "减少连锁挖矿范围").build();
     public static final Translation KEYBIND_VEINCYCLE = Translation.Builder.start("key.pmmo.cyclevein")
-            .addLocale(Locale.EN_US, "Cycle Vein Mode").build();
+            .addLocale(Locale.EN_US, "Cycle Vein Mode")
+            .addLocale(Locale.ZH_CN, "轮换连锁挖矿模式").build();
     public static final Translation KEYBIND_SHOWLIST = Translation.Builder.start("key.pmmo.showList")
-            .addLocale(Locale.EN_US, "Toggle Skill List").build();
+            .addLocale(Locale.EN_US, "Toggle Skill List")
+            .addLocale(Locale.ZH_CN, "开关技能列表").build();
     public static final Translation KEYBIND_VEIN = Translation.Builder.start("key.pmmo.vein")
             .addLocale(Locale.HU, "Vein Mine")
             .addLocale(Locale.JA, "鉱脈鉱山")
@@ -1790,27 +1799,35 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_TW, "連鎖挖礦")
             .addLocale(Locale.EN_US, "Vein Mine Marker").build();
     public static final Translation KEYBIND_OPENMENU = Translation.Builder.start("key.pmmo.openMenu")
-            .addLocale(Locale.EN_US, "Open Glossary").build();
+            .addLocale(Locale.EN_US, "Open Glossary")
+            .addLocale(Locale.ZH_CN, "打开术语表").build();
 
     //=========LOGIN HANDLER===================
     public static final Translation WELCOME_TEXT = Translation.Builder.start("pmmo.welcomeText")
-            .addLocale(Locale.EN_US, "Welcome! Project MMO is more fun with datapacks. download one %s").build();
+            .addLocale(Locale.EN_US, "Welcome! Project MMO is more fun with datapacks. download one %s")
+            .addLocale(Locale.ZH_CN, "欢迎！Project MMO配合数据包会更加有趣，下载一个？ %s").build();
     public static final Translation CLICK_ME = Translation.Builder.start("pmmo.clickMe")
-            .addLocale(Locale.EN_US, "HERE").build();
+            .addLocale(Locale.EN_US, "HERE")
+            .addLocale(Locale.ZH_CN, "这里").build();
 
     //=========KEY PRESS HANLDER===============
     public static final Translation VEIN_BLACKLIST = Translation.Builder.start("pmmo.veinBlacklist")
-            .addLocale(Locale.EN_US, "Blacklisted blocks from Veining").build();
+            .addLocale(Locale.EN_US, "Blacklisted blocks from Veining")
+            .addLocale(Locale.ZH_CN, "被列入连锁挖矿黑名单的方块").build();
     public static final Translation VEIN_SHAPE = Translation.Builder.start("pmmo.veinshape")
-            .addLocale(Locale.EN_US, "Vein Shape Set To: %s").build();
+            .addLocale(Locale.EN_US, "Vein Shape Set To: %s")
+            .addLocale(Locale.ZH_CN, "连锁挖矿范围被设置为：%s").build();
 
     //=========TOOLTIP HEADERS=================
     public static final Translation LEVEL_UP_HEADER = Translation.Builder.start("pmmo.levelup")
-            .addLocale(Locale.EN_US, "You have reached level %s in %s").build();
+            .addLocale(Locale.EN_US, "You have reached level %s in %s")
+            .addLocale(Locale.ZH_CN, "你的%2$s等级已升至%1$s级").build();
     public static final Translation LEVEL_UP_HEADER_WITH_UNLOCKS = Translation.Builder.start("pmmo.levelupandunlock")
-            .addLocale(Locale.EN_US, "You have reached level %s in %s and unlocked:").build();
+            .addLocale(Locale.EN_US, "You have reached level %s in %s and unlocked:")
+            .addLocale(Locale.ZH_CN, "你的%2$s等级已升至%1$s级并解锁了：").build();
     public static final Translation REQ_WEAR = Translation.Builder.start("pmmo.toWear")
-            .addLocale(Locale.EN_US, "To Wear").build();
+            .addLocale(Locale.EN_US, "To Wear")
+            .addLocale(Locale.ZH_CN, "穿戴").build();
     public static final Translation REQ_TOOL = Translation.Builder.start("pmmo.tool")
             .addLocale(Locale.HU, "Tool")
             .addLocale(Locale.JA, "Tool")
@@ -1949,7 +1966,8 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.UK_UA, "Зламати")
             .addLocale(Locale.ZH_CN, "破坏需求等级")
             .addLocale(Locale.ZH_TW, "破壞需求等級")
-            .addLocale(Locale.EN_US, "To Break").build();public static final Translation XP_VALUE_ANVIL = Translation.Builder.start("pmmo.xpValueAnvil")
+            .addLocale(Locale.EN_US, "To Break").build();
+    public static final Translation XP_VALUE_ANVIL = Translation.Builder.start("pmmo.xpValueAnvil")
             .addLocale(Locale.EN_US, "Anvil Repair Xp Value")
             .addLocale(Locale.ZH_CN, "铁砧修复经验值").build();
     public static final Translation XP_VALUE_BREAK = Translation.Builder.start("pmmo.xpValueBreak")
