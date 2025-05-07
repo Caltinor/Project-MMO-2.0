@@ -1,5 +1,6 @@
 # Changelog
 
-## [1.20.1-1.7.36] - 2025-05-03
+## [1.20.1-1.7.37] - 2025-05-03
 ### Bugfixes / Tweaks
-- Added new event PMMORegistrationEvent for addons to use.  This is the new entry point for `APIUtils#registerXYZ` calls. 
+- Added `SavlageEvent` to capture and modify salvage by addons
+- Fixed crash when certain edible items without food properties were loaded
