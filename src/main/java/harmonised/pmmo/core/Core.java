@@ -13,6 +13,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.api.events.SalvageEvent;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.config.Config;
@@ -58,6 +59,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.LogicalSide;
@@ -454,26 +456,30 @@ public class Core {
 		entry:
 		for (Map.Entry<ResourceLocation, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(salvageItem)).salvage().entrySet()) {
 			//First look for any skills that do not meet the req and continue to the next output 
-			//item if the req is not met. 
+			//item if the req is not met.
 			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {
-				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l))) continue entry;
+				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0L))) continue entry;
 			}
 			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption
 			validAttempt = true;
 			//get the base calculation values including the bonuses from skills
-			double base = result.getValue().baseChance();
-			double max = result.getValue().maxChance();
+			SalvageEvent salvageEvent = new SalvageEvent(player, salvageItem, result);
+			SalvageData salvage = salvageEvent.getSalvage();
+			double base = salvage.baseChance();
+			double max = salvage.maxChance();
 			double bonus = 0d;
-			for (Map.Entry<String, Double> skill : result.getValue().chancePerLevel().entrySet()) {
-				bonus += skill.getValue() * Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0l));
+			for (Map.Entry<String, Double> skill : salvage.chancePerLevel().entrySet()) {
+				bonus += skill.getValue() * Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0L));
 			}
 			
 			//conduct random check for the total count possible and add each succcess to the output
-			for (int i = 0; i < result.getValue().salvageMax(); i++) {
+			for (int i = 0; i < salvage.salvageMax(); i++) {
 				if (player.getRandom().nextDouble() < Math.min(max, base + bonus)) {
-					player.drop(new ItemStack(ForgeRegistries.ITEMS.getValue(result.getKey())), false, true);
-					for (Map.Entry<String, Long> award : result.getValue().xpAward().entrySet()) {
-						xpAwards.merge(award.getKey(), award.getValue(), (o, n) -> o + n);
+					if (MinecraftForge.EVENT_BUS.post(salvageEvent)) continue entry;
+					player.drop(salvageEvent.getOutputStack(), false, true);
+
+					for (Map.Entry<String, Long> award : salvage.xpAward().entrySet()) {
+						xpAwards.merge(award.getKey(), award.getValue(), Long::sum);
 					}
 				}
 			}
