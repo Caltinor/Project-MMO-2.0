@@ -464,20 +464,21 @@ public class Core {
 			validAttempt = true;
 			//get the base calculation values including the bonuses from skills
 			SalvageEvent salvageEvent = new SalvageEvent(player, salvageItem, result);
-			double base = salvageEvent.getSalvage().getValue().baseChance();
-			double max = salvageEvent.getSalvage().getValue().maxChance();
+			SalvageData salvage = salvageEvent.getSalvage();
+			double base = salvage.baseChance();
+			double max = salvage.maxChance();
 			double bonus = 0d;
-			for (Map.Entry<String, Double> skill : salvageEvent.getSalvage().getValue().chancePerLevel().entrySet()) {
+			for (Map.Entry<String, Double> skill : salvage.chancePerLevel().entrySet()) {
 				bonus += skill.getValue() * Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0L));
 			}
 			
 			//conduct random check for the total count possible and add each succcess to the output
-			for (int i = 0; i < salvageEvent.getSalvage().getValue().salvageMax(); i++) {
+			for (int i = 0; i < salvage.salvageMax(); i++) {
 				if (player.getRandom().nextDouble() < Math.min(max, base + bonus)) {
 					if (MinecraftForge.EVENT_BUS.post(salvageEvent)) continue entry;
 					player.drop(salvageEvent.getOutputStack(), false, true);
 
-					for (Map.Entry<String, Long> award : salvageEvent.getSalvage().getValue().xpAward().entrySet()) {
+					for (Map.Entry<String, Long> award : salvage.xpAward().entrySet()) {
 						xpAwards.merge(award.getKey(), award.getValue(), Long::sum);
 					}
 				}
