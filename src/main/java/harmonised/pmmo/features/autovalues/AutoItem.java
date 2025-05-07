@@ -168,11 +168,10 @@ public class AutoItem {
 			break;
 		}
 		case CONSUME: {
-			if (stack.isEdible()) {
+			if (stack.getItem().getFoodProperties() != null) {
+				FoodProperties properties = stack.getItem().getFoodProperties();
+				final float nutritionScale = (float)properties.getNutrition() * properties.getSaturationModifier();
 				AutoValueConfig.getItemXpAward(type).forEach((skill, xp) -> {
-					@SuppressWarnings("deprecation")
-					FoodProperties properties = stack.getItem().getFoodProperties();
-					Float nutritionScale = (float)properties.getNutrition() * properties.getSaturationModifier();
 					Float xpAward = nutritionScale * (float) xp;
 					outMap.put(skill, xpAward.longValue());
 				});
