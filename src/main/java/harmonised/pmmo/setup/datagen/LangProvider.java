@@ -42,7 +42,7 @@ public class LangProvider extends LanguageProvider{
         public String str;
         Locale(String locale) {str = locale;}
     }
-    
+
     public LangProvider(PackOutput gen, String locale) {
         super(gen, Reference.MOD_ID, locale);
         this.locale = locale;
