@@ -460,10 +460,10 @@ public class Core {
 			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {
 				if (skill.getValue() > Core.get(LogicalSide.SERVER).getData().getLevelFromXP(playerXp.getOrDefault(skill.getKey(), 0L))) continue entry;
 			}
-			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption
-			validAttempt = true;
-			//get the base calculation values including the bonuses from skills
 			SalvageEvent salvageEvent = new SalvageEvent(player, salvageItem, result);
+			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption
+			validAttempt = !salvageEvent.isCanceled();
+			//get the base calculation values including the bonuses from skills
 			SalvageData salvage = salvageEvent.getSalvage();
 			double base = salvage.baseChance();
 			double max = salvage.maxChance();
@@ -485,7 +485,10 @@ public class Core {
 			}
 		}
 		if (validAttempt) {
-			if (salvageMainHand) player.getMainHandItem().shrink(1);
+			if (salvageMainHand) {
+				player.getCooldowns().addCooldown(player.getMainHandItem().getItem(), 20);
+				player.getMainHandItem().shrink(1);
+			}
 			if (salvageOffHand) player.getOffhandItem().shrink(1);
 			List<ServerPlayer> party = PartyUtils.getPartyMembersInRange(player);
 			awardXP(party, xpAwards);

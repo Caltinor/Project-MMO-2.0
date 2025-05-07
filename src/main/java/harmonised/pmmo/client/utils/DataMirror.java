@@ -18,6 +18,7 @@ import harmonised.pmmo.features.loot_modifiers.SkillLootConditionKill;
 import harmonised.pmmo.features.loot_modifiers.SkillLootConditionPlayer;
 import harmonised.pmmo.features.loot_modifiers.TreasureLootModifier;
 import harmonised.pmmo.features.loot_modifiers.ValidBlockCondition;
+import harmonised.pmmo.mixin.LootTableConditionMixin;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -150,8 +151,8 @@ public class DataMirror implements IDataStorage{
 			);
 			int otherConditions = 0;
 			for (LootItemCondition condition : conditions) {
-				if (condition instanceof LootTableIdCondition lootCondition) {
-					linesOut.add(LangProvider.GLM_LOOT_TABLE.asComponent(lootCondition.targetLootTableId.getPath()));
+				if (condition instanceof LootTableConditionMixin lootCondition) {
+					linesOut.add(LangProvider.GLM_LOOT_TABLE.asComponent(lootCondition.getTargetLootTableId().getPath()));
 				}
 				else if (condition instanceof SkillLootConditionPlayer playerSkillCondition) {
 					int maxLevel = Math.min(playerSkillCondition.levelMax, SkillsConfig.SKILLS.get().getOrDefault(playerSkillCondition.skill, SkillData.Builder.getDefault()).getMaxLevel());
