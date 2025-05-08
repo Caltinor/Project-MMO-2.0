@@ -127,6 +127,26 @@ public class FeaturePerks {
 			respawnAttributes.get(event.getEntity()).clear();
 		}
 	}
+	
+	public static void clearAttributes(Player player) {
+		for (CompoundTag nbt : Config.perks().perks().getOrDefault(EventType.SKILL_UP, new ArrayList<>()).stream()
+				.filter(tag -> tag.getString("perk").equals("pmmo:attribute")).toList()) {
+			Holder<Attribute> attribute = getAttribute(nbt);
+			AttributeInstance instance = player.getAttributes().getInstance(attribute);
+			if (instance != null)
+				instance.removeModifier(attributeID(nbt.getString(APIUtils.ATTRIBUTE), nbt.getString(APIUtils.SKILLNAME)));
+		}
+	}
+	
+	public static void clearAttribute(Player player, String skillName) {
+		for (CompoundTag nbt : Config.perks().perks().getOrDefault(EventType.SKILL_UP, new ArrayList<>()).stream()
+				.filter(tag -> tag.getString("perk").equals("pmmo:attribute")).filter(tag -> tag.getString("skill").equals(skillName)).toList()) {
+			Holder<Attribute> attribute = getAttribute(nbt);
+			AttributeInstance instance = player.getAttributes().getInstance(attribute);
+			if (instance != null)
+				instance.removeModifier(attributeID(nbt.getString(APIUtils.ATTRIBUTE), nbt.getString(APIUtils.SKILLNAME)));
+		}
+	}
 
 	public static final Perk TEMP_ATTRIBUTE = Perk.begin()
 			.addDefaults(ATTRIBUTE.propertyDefaults())
