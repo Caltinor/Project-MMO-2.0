@@ -1665,7 +1665,7 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_CN, "浸没水中").build();
     public static final Translation ENUM_SWIMMING = Translation.Builder.start("pmmo.enum.SWIMMING")
             .addLocale(Locale.EN_US, "Swimming (above surface)")
-            .addLocale(Locale.ZH_CN, "游泳（水面）").build();
+            .addLocale(Locale.ZH_CN, "在水面上浅泳").build();
     public static final Translation ENUM_DIVING = Translation.Builder.start("pmmo.enum.DIVING")
             .addLocale(Locale.EN_US, "Diving")
             .addLocale(Locale.ZH_CN, "潜水").build();
@@ -2125,7 +2125,7 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_CN, "基础几率：%s%%").build();
     public static final Translation GLM_DROP_CHANCE_SKILL = Translation.Builder.start("pmmo.gui.statscroll.glm.drop_chance_skill")
             .addLocale(Locale.EN_US, "with %s%% chance based on %s")
-            .addLocale(Locale.ZH_CN, "基于[%2$s]的%1$s%%几率").build();
+            .addLocale(Locale.ZH_CN, "基于%2$s的%1$s%%几率").build();
     public static final Translation GLM_OTHER_CONDITIONS = Translation.Builder.start("pmmo.gui.statscroll.glm.other_conditions")
             .addLocale(Locale.EN_US, "+%s custom conditions")
             .addLocale(Locale.ZH_CN, "额外条件：%s项").build();
@@ -2246,7 +2246,7 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_CN, "当前成员：%1$s人").build();
     public static final Translation PARTY_PLAYER_INVITED = Translation.Builder.start("pmmo.playerInvitedYouToAParty")
             .addLocale(Locale.EN_US, "%1$s invited you to their Party, %2$s|%3$s")
-            .addLocale(Locale.ZH_CN, "[%1$s]邀请你加入队伍，%2$s|%3$s").build();
+            .addLocale(Locale.ZH_CN, "%1$s邀请你加入队伍，%2$s|%3$s").build();
     public static final Translation PARTY_MEMBER_LIST = Translation.Builder.start("pmmo.partyMemberListEntry")
             .addLocale(Locale.EN_US, "%1$s")
             .addLocale(Locale.ZH_CN, "▶ %1$s").build();
@@ -2293,46 +2293,46 @@ public class LangProvider extends LanguageProvider{
     //=========DENIAL MESSAGES====================
     public static final Translation DENIAL_WEAR = Translation.Builder.start("pmmo.msg.denial.wear")
             .addLocale(Locale.EN_US, "You are not skilled enough to wear %1$s")
-            .addLocale(Locale.ZH_CN, "技能等级不足，无法装备[%1$s]").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以装备[%1$s]").build();
     public static final Translation DENIAL_USE_ENCHANT = Translation.Builder.start("pmmo.msg.denial.use_enchantment")
             .addLocale(Locale.EN_US, "You are not skilled enough to use %1$s with %2$s enchantment")
-            .addLocale(Locale.ZH_CN, "技能不足，无法使用[%1$s]（附魔：%2$s）").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以使用拥有%2$s附魔的%1$s").build();
     public static final Translation DENIAL_TOOL = Translation.Builder.start("pmmo.msg.denial.tool")
             .addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as tool")
-            .addLocale(Locale.ZH_CN, "技能等级不足，无法将[%1$s]作为工具使用").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以将%1$s当做工具使用").build();
     public static final Translation DENIAL_WEAPON = Translation.Builder.start("pmmo.msg.denial.weapon")
             .addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as a weapon")
-            .addLocale(Locale.ZH_CN, "技能等级不足，无法将[%1$s]作为武器使用").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以将%1$s当做武器使用").build();
     public static final Translation DENIAL_USE = Translation.Builder.start("pmmo.msg.denial.use")
             .addLocale(Locale.EN_US, "You are not skilled enough to use %1$s")
-            .addLocale(Locale.ZH_CN, "技能不足，无法使用[%1$s]").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以使用%1$s").build();
     public static final Translation DENIAL_PLACE = Translation.Builder.start("pmmo.msg.denial.place")
             .addLocale(Locale.EN_US, "You are not skilled enough to place %1$s")
-            .addLocale(Locale.ZH_CN, "技能等级不足，无法放置[%1$s]").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以放置%1$s").build();
     public static final Translation DENIAL_BREAK = Translation.Builder.start("pmmo.msg.denial.break")
             .addLocale(Locale.EN_US, "You are not skilled enough to break %1$s")
-            .addLocale(Locale.ZH_CN, "技能不足，无法破坏[%1$s]").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以破坏%1$s").build();
     public static final Translation DENIAL_BIOME = Translation.Builder.start("pmmo.msg.denial.biome")
             .addLocale(Locale.EN_US, "You are not skilled enough to survive in %1$s")
-            .addLocale(Locale.ZH_CN, "技能等级不足，无法在[%1$s]生物群系生存").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以在%1$s群系生存").build();
     public static final Translation DENIAL_KILL = Translation.Builder.start("pmmo.msg.denial.kill")
             .addLocale(Locale.EN_US, "You are not skilled enough to kill %1$s")
-            .addLocale(Locale.ZH_CN, "技能不足，无法击杀[%1$s]").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以击杀%1$s").build();
     public static final Translation DENIAL_TRAVEL = Translation.Builder.start("pmmo.msg.denial.travel")
             .addLocale(Locale.EN_US, "Travel to %1$s requires %2$s")
-            .addLocale(Locale.ZH_CN, "前往[%1$s]需要满足：%2$s").build();
+            .addLocale(Locale.ZH_CN, "前往%1$s需要满足：%2$s").build();
     public static final Translation DENIAL_RIDE = Translation.Builder.start("pmmo.msg.denial.ride")
             .addLocale(Locale.EN_US, "You are not skilled enough to ride %1$s")
-            .addLocale(Locale.ZH_CN, "技能等级不足，无法骑乘[%1$s]").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以骑乘%1$s").build();
     public static final Translation DENIAL_TAME = Translation.Builder.start("pmmo.msg.denial.tame")
             .addLocale(Locale.EN_US, "You are not skilled enough to tame %1$s")
-            .addLocale(Locale.ZH_CN, "技能不足，无法驯服[%1$s]").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以驯服%1$s").build();
     public static final Translation DENIAL_ENTITY_INTERACT = Translation.Builder.start("pmmo.msg.denial.entity_interact")
             .addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s")
-            .addLocale(Locale.ZH_CN, "技能等级不足，无法与[%1$s]交互").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以与%1$s交互").build();
     public static final Translation DENIAL_SALVAGE = Translation.Builder.start("pmmo.msg.denial.salvage")
             .addLocale(Locale.EN_US, "You cannot salvage %s. Either it cannot be salvaged or you are not skilled enough yet.")
-            .addLocale(Locale.ZH_CN, "无法分解[%s]：该物品不可分解或技能等级不足").build();
+            .addLocale(Locale.ZH_CN, "无法分解%s：该物品不可分解或技能等级不足").build();
 
     //==========TUTORIAL TEXT======================
     public static final Translation SALVAGE_TUTORIAL_HEADER = Translation.Builder.start("pmmo.client.tutorial.salvage.header")
