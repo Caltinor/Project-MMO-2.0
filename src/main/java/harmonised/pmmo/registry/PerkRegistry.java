@@ -58,25 +58,42 @@ public class PerkRegistry {
 		if (player == null) return new CompoundTag();
 		CompoundTag output = new CompoundTag();
 		Config.perks().perks().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
-			ResourceLocation perkID = Reference.of(src.getString("perk"));
-			Perk perk = perks.getOrDefault(perkID, Perk.empty());
-			CompoundTag fullSrc = new CompoundTag()
-					.merge(perk.propertyDefaults().copy())
-					.merge(src.copy())
-					.merge(dataIn.copy())
-					.merge(output.copy());
-			fullSrc.putLong(APIUtils.SKILL_LEVEL, fullSrc.contains(APIUtils.SKILLNAME)
-					? Core.get(player.level()).getData().getLevel(fullSrc.getString(APIUtils.SKILLNAME), player.getUUID())
-					: 0L);
-			if (perk.canActivate(player, fullSrc)) {
-				MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(fullSrc.toString()));
-				CompoundTag executionOutput = perk.start(player, fullSrc);
-				tickTracker.add(new TickSchedule(perk, player, fullSrc.copy(), new AtomicInteger(0)));
-				if (fullSrc.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, fullSrc))
-					coolTracker.add(new PerkCooldown(perkID, player, fullSrc, player.level().getGameTime()));
-				output.merge(executionOutput);
-			}
+			output.merge(processPerk(src, output, player, dataIn));
 		});
+		return output;
+	}
+
+	public CompoundTag executePerkFiltered(EventType cause, Player player, String filterTag, String filterValue, @NotNull CompoundTag dataIn) {
+		if (player == null) return new CompoundTag();
+		CompoundTag output = new CompoundTag();
+		Config.perks().perks().getOrDefault(cause, new ArrayList<>()).stream()
+		.filter(tag -> tag.getString(filterTag).equals(filterValue)).toList().forEach(src -> {
+			output.merge(processPerk(src, output, player, dataIn));
+		});
+		return output;
+	}
+
+	private CompoundTag processPerk(CompoundTag src, CompoundTag output,Player player, @NotNull CompoundTag dataIn) {
+		ResourceLocation perkID = Reference.of(src.getString("perk"));
+		Perk perk = perks.getOrDefault(perkID, Perk.empty());
+		CompoundTag fullSrc = new CompoundTag()
+				.merge(perk.propertyDefaults().copy())
+				.merge(src.copy())
+				.merge(dataIn.copy())
+				.merge(output.copy());
+		fullSrc.putLong(APIUtils.SKILL_LEVEL, fullSrc.contains(APIUtils.SKILLNAME)
+				? Core.get(player.level()).getData().getLevel(fullSrc.getString(APIUtils.SKILLNAME), player.getUUID())
+				: 0L);
+		if (perk.canActivate(player, fullSrc)) {
+			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(fullSrc.toString()));
+			CompoundTag executionOutput = perk.start(player, fullSrc);
+			tickTracker.add(new TickSchedule(perk, player, fullSrc.copy(), new AtomicInteger(0)));
+			if (fullSrc.contains(APIUtils.COOLDOWN) && isPerkCooledDown(player, fullSrc))
+				coolTracker.add(new PerkCooldown(perkID, player, fullSrc, player.level().getGameTime()));
+			output = executionOutput;
+		}
+		else
+			output = new CompoundTag();
 		return output;
 	}
 	

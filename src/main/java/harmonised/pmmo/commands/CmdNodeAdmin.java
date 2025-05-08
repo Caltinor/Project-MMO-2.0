@@ -10,11 +10,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
@@ -22,10 +24,12 @@ import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -71,6 +75,8 @@ public class CmdNodeAdmin {
 								.executes(CmdNodeAdmin::adminClear)
 								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
 										.executes(CmdNodeAdmin::adminClearSkill)))
+						.then(Commands.literal("rebuildAttributes")
+								.executes(CmdNodeAdmin::rebuildAttributes))
 						.then(Commands.literal("ignoreReqs")
 								.executes(CmdNodeAdmin::exemptAdmin))
 						.then(Commands.literal("adminBonus")
@@ -129,6 +135,13 @@ public class CmdNodeAdmin {
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
 			data.getXpMap(player.getUUID()).remove(specifiedSkill);
 			Networking.sendToClient(new CP_SyncData_ClearXp(specifiedSkill), player);
+		}
+		return 0;
+	}
+
+	public static int rebuildAttributes(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerkFiltered(EventType.SKILL_UP, player, "perk", "pmmo:attribute", new CompoundTag());
 		}
 		return 0;
 	}
