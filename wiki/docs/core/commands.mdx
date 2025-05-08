@@ -35,6 +35,10 @@ Note: the first argument after `admin` is a target. The following table is the l
 |`ignoreReqs`| Allows the target(s) to ignore any requirements for actions.|
 |`set`| Sets the XP/level in the chosen skill to an exact amount.|
 
+Note 1: `add` will **ALWAYS** trigger `SKILL_UP` perks to fire. 
+
+Note 2: `set` will **NEVER** trigger `SKILL_UP` perks to fire.
+
 ## `/pmmo genData`
 genData is a builder-style command.  `begin` resets everything, `create` actually generates the data, and all other commands "build", or set, the settings you want for pmmo to build your datapack.
 
