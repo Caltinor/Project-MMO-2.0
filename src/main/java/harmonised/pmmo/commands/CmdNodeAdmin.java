@@ -33,6 +33,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.neoforged.fml.LogicalSide;
 
 import java.util.Collection;
@@ -76,8 +77,11 @@ public class CmdNodeAdmin {
 								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
 										.suggests(SKILL_SUGGESTIONS)
 										.executes(CmdNodeAdmin::adminClearSkill)))
-						.then(Commands.literal("rebuildAttributes")
-								.executes(CmdNodeAdmin::rebuildAttributes))
+						.then(Commands.literal("attributes")
+								.then(Commands.literal("refresh")
+										.executes(CmdNodeAdmin::rebuildAttributes))
+								.then(Commands.literal("clear")
+										.executes(CmdNodeAdmin::clearAttributes)))
 						.then(Commands.literal("ignoreReqs")
 								.executes(CmdNodeAdmin::exemptAdmin))
 						.then(Commands.literal("adminBonus")
@@ -143,6 +147,15 @@ public class CmdNodeAdmin {
 	public static int rebuildAttributes(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerkFiltered(EventType.SKILL_UP, player, "perk", "pmmo:attribute", new CompoundTag());
+		}
+		return 0;
+	}
+	public static int clearAttributes(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
+			player.getAttributes().attributes.values().forEach(instance -> {
+				List<ResourceLocation> ids = instance.getModifiers().stream().filter(mod -> mod.id().getPath().startsWith("perk/")).map(AttributeModifier::id).toList();
+				ids.forEach(instance::removeModifier);
+			});
 		}
 		return 0;
 	}
