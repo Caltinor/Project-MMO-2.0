@@ -70,6 +70,7 @@ public class CmdNodeAdmin {
 						.then(Commands.literal("clear")
 								.executes(CmdNodeAdmin::adminClear)
 								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
+										.suggests(SKILL_SUGGESTIONS)
 										.executes(CmdNodeAdmin::adminClearSkill)))
 						.then(Commands.literal("ignoreReqs")
 								.executes(CmdNodeAdmin::exemptAdmin))
