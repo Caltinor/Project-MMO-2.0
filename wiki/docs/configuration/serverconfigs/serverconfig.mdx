@@ -54,6 +54,165 @@ WITH config(server)
     set(blacklist).value(silentgear:saw);
 END
 ```
+## Example JSON File
+```json
+{
+  "xp_gains": {
+    "reuse_penalty": 0.0,
+    "perks_plus_config": false,
+    "player_actions": {
+      "SWIM_SPRINTING": {
+        "swimming": 1.0
+      },
+      "SURFACING": {
+        "swimming": 1.0
+      },
+      "BREATH_CHANGE": {
+        "endurance": 1.0
+      },
+      "SPRINT_JUMP": {
+        "agility": 2.5
+      },
+      "DIVING": {
+        "swimming": 1.0
+      },
+      "SPRINTING": {
+        "agility": 2.0
+      },
+      "SUBMERGED": {
+        "swimming": 1.0
+      },
+      "JUMP": {
+        "agility": 2.5
+      },
+      "CROUCH_JUMP": {
+        "agility": 2.5
+      },
+      "HEALTH_DECREASE": {
+        "endurance": 1.0
+      },
+      "HEALTH_INCREASE": {
+        "endurance": 1.0
+      },
+      "SWIMMING": {
+        "swimming": 1.0
+      }
+    },
+    "damage": {
+      "RECEIVE_DAMAGE": {
+        "minecraft:generic_kill": {
+          "endurance": 1
+        },
+        "#pmmo:impact": {
+          "endurance": 15
+        },
+        "#pmmo:magic": {
+          "magic": 15
+        },
+        "#pmmo:environment": {
+          "endurance": 10
+        },
+        "#minecraft:is_projectile": {
+          "endurance": 15
+        }
+      },
+      "DEAL_DAMAGE": {
+        "minecraft:generic_kill": {
+          "combat": 1
+        },
+        "#pmmo:gun": {
+          "gunslinging": 1
+        },
+        "#pmmo:magic": {
+          "magic": 15
+        },
+        "minecraft:player_attack": {
+          "combat": 1
+        },
+        "#minecraft:is_projectile": {
+          "archery": 1
+        }
+      }
+    }
+  },
+  "party": {
+    "party_range": 50,
+    "party_bonus": {
+      "combat": 1.05,
+      "endurance": 1.1
+    }
+  },
+  "mob_scaling": {
+    "use_exponential_formula": true,
+    "per_level": 1.0,
+    "power_base": 1.104088404342588,
+    "ratios": {
+      "minecraft:generic.attack_damage": {
+        "combat": 1.0E-4
+      },
+      "minecraft:generic.movement_speed": {
+        "combat": 1.0E-6
+      },
+      "minecraft:generic.max_health": {
+        "combat": 0.001
+      }
+    },
+    "enabled": false,
+    "scaling_aoe": 150,
+    "base_level": 0,
+    "boss_scaling": 1.1
+  },
+  "vein_miner": {
+    "default_consume": 1,
+    "charge_modifier": 1.0,
+    "blacklist": [
+      "silentgear:saw"
+    ],
+    "enabled": true,
+    "require_settings": false
+  },
+  "general": {
+    "creative_reach": 50.0,
+    "salvage_block": "minecraft:smithing_table",
+    "treasure_enabled": true,
+    "brewing_tracked": true
+  },
+  "levels": {
+    "xp_min": 200,
+    "xp_base": 1.025,
+    "per_level": 1.1,
+    "global_modifier": 1.0,
+    "skill_modifiers": {
+      "example_skill": 1.0
+    },
+    "max_level": 1523,
+    "static_levels": [
+      -1
+    ],
+    "loss_on_death": 0.05,
+    "lose_only_excess": true
+  },
+  "requirements": {
+    "requirement_enabled": {
+      "TAME": true,
+      "TRAVEL": true,
+      "USE": true,
+      "ENTITY_INTERACT": true,
+      "USE_ENCHANTMENT": true,
+      "PLACE": true,
+      "INTERACT": true,
+      "WEAR": true,
+      "BREAK": true,
+      "WEAPON": true,
+      "BREED": true,
+      "KILL": true,
+      "RIDE": true,
+      "TOOL": true
+    }
+  },
+  "type": "SERVER"
+}
+```
 
 ## Syntax
 Most configurations use a combination of `set(config_keyword).value(some_value);`.  However, some have additional elements which clarify what that value is set on.  The table below lists each configuration node's keyword, purpose, any special nodes, and the value node format. 

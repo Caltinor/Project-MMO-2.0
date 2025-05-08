@@ -40,6 +40,53 @@ WITH config(anticheese)
 END
 ```
 
+## Example JSON config file
+```json
+{
+  "afk_can_subtract": false,
+  "afk": {
+    "SWIM_SPRINTING": {
+      "reduction": 0.1,
+      "cooloff_amount": 1,
+      "tolerance_percent": 0.0,
+      "strict_tolerance": true,
+      "source": [],
+      "min_time_to_apply": 200,
+      "retention_duration": 0,
+      "tolerance_flat": 0
+    }
+  },
+  "diminishing_xp": {
+    "RIDING": {
+      "reduction": 0.005,
+      "cooloff_amount": 0,
+      "tolerance_percent": 0.0,
+      "strict_tolerance": true,
+      "source": [
+        "minecraft:horse",
+        "minecraft:boat"
+      ],
+      "min_time_to_apply": 0,
+      "retention_duration": 200,
+      "tolerance_flat": 0
+    }
+  },
+  "normalization": {
+    "SPRINTING": {
+      "reduction": 0.0,
+      "cooloff_amount": 0,
+      "tolerance_percent": 0.1,
+      "strict_tolerance": true,
+      "source": [],
+      "min_time_to_apply": 0,
+      "retention_duration": 400,
+      "tolerance_flat": 10
+    }
+  },
+  "type": "ANTICHEESE"
+}
+```
+
 ## Scripting Syntax
 Each configuration uses a combination of `set(config_keyword).value(some_value);`.  The table below lists each configuration node's keyword, purpose and the value node format.
 

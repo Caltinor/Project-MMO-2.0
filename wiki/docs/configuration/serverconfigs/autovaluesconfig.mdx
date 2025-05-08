@@ -3,7 +3,7 @@ AutoValues is Project MMO's dynamic system for estimating values.  Since, the mo
 
 An important detail to note is that not all values in Project MMO have AutoValues.  Some settings are too nuanced, or the objects themselves do not provide a way to discern their properties to be able to make reasonable estimates.  What is listed below is all of what AutoValues adds.
 
-## Example File
+## Example Scripting File
 ```
 WITH config(autovalues)
     set(enabled).value(true);
@@ -118,6 +118,250 @@ WITH config(autovalues)
         Knockback_Resistance,10.0,
         Toughness,10.0);
 END
+```
+## Example JSON Config File
+```json
+{
+  "xp_awards": {
+    "axe_breakable_override": {
+      "woodcutting": 10
+    },
+    "hoe_breakable_override": {
+      "farming": 10
+    },
+    "shovel_breakable_override": {
+      "excavation": 10
+    },
+    "entity_xp": {
+      "SHIELD_BLOCK": {
+        "combat": 1
+      },
+      "TAMING": {
+        "taming": 1
+      },
+      "RIDING": {
+        "taming": 1
+      },
+      "BREED": {
+        "taming": 1
+      },
+      "ENTITY": {
+        "charisma": 1
+      },
+      "DEATH": {
+        "endurance": 1
+      }
+    },
+    "rarities_multiplier": 10.0,
+    "item_xp": {
+      "ANVIL_REPAIR": {
+        "smithing": 10
+      },
+      "CRAFT": {
+        "crafting": 10
+      },
+      "ENCHANT": {
+        "magic": 10
+      },
+      "FISH": {
+        "fishing": 10
+      },
+      "CONSUME": {
+        "cooking": 10
+      },
+      "SMELT": {
+        "smithing": 100
+      },
+      "BLOCK_PLACE": {
+        "building": 10
+      }
+    },
+    "block_xp": {
+      "BLOCK_BREAK": {
+        "mining": 1
+      },
+      "GROW": {
+        "farming": 1
+      },
+      "BLOCK_PLACE": {
+        "building": 1
+      }
+    }
+  },
+  "requirements": {
+    "axe_override": {
+      "woodcutting": 1
+    },
+    "hoe_override": {
+      "farming": 1
+    },
+    "penalties": {
+      "minecraft:weakness": 1,
+      "minecraft:slowness": 1,
+      "minecraft:mining_fatigue": 1
+    },
+    "block_default": {
+      "mining": 1
+    },
+    "items": {
+      "WEAPON": {
+        "combat": 1
+      },
+      "TOOL": {
+        "mining": 1
+      },
+      "WEAR": {
+        "endurance": 1
+      },
+      "USE_ENCHANTMENT": {
+        "magic": 1
+      }
+    },
+    "shovel_override": {
+      "excavation": 1
+    },
+    "sword_override": {
+      "farming": 1
+    }
+  },
+  "tweaks": {
+    "hardness_modifier": 0.65,
+    "tool_tweaks": {
+      "HOE": {
+        "Dig_Speed": 10.0,
+        "Durability": 0.01,
+        "Attack_Speed": 10.0,
+        "Damage": 1.5,
+        "Tier": 10.0
+      },
+      "SHOVEL": {
+        "Dig_Speed": 10.0,
+        "Durability": 0.01,
+        "Attack_Speed": 10.0,
+        "Damage": 1.5,
+        "Tier": 10.0
+      },
+      "SWORD": {
+        "Dig_Speed": 10.0,
+        "Durability": 0.01,
+        "Attack_Speed": 10.0,
+        "Damage": 1.5,
+        "Tier": 10.0
+      },
+      "PICKAXE": {
+        "Dig_Speed": 10.0,
+        "Durability": 0.01,
+        "Attack_Speed": 10.0,
+        "Damage": 1.5,
+        "Tier": 10.0
+      },
+      "AXE": {
+        "Dig_Speed": 10.0,
+        "Durability": 0.01,
+        "Attack_Speed": 10.0,
+        "Damage": 1.5,
+        "Tier": 10.0
+      }
+    },
+    "wearable_tweaks": {
+      "BOOTS": {
+        "Durability": 0.01,
+        "Armor": 10.0,
+        "Knockback_Resistance": 10.0,
+        "Toughness": 10.0
+      },
+      "WINGS": {
+        "Durability": 0.01,
+        "Armor": 10.0,
+        "Knockback_Resistance": 10.0,
+        "Toughness": 10.0
+      },
+      "LEGS": {
+        "Durability": 0.01,
+        "Armor": 10.0,
+        "Knockback_Resistance": 10.0,
+        "Toughness": 10.0
+      },
+      "HEAD": {
+        "Durability": 0.01,
+        "Armor": 10.0,
+        "Knockback_Resistance": 10.0,
+        "Toughness": 10.0
+      },
+      "CHEST": {
+        "Durability": 0.01,
+        "Armor": 10.0,
+        "Knockback_Resistance": 10.0,
+        "Toughness": 10.0
+      }
+    },
+    "entity_tweaks": {
+      "Move_Speed": 0.15,
+      "Health": 0.5,
+      "Damage": 1.5
+    }
+  },
+  "enabled": true,
+  "enabled_requirements": {
+    "WEAR": true,
+    "PLACE": true,
+    "WEAPON": true,
+    "TAME": true,
+    "RIDE": true,
+    "KILL": true,
+    "BREAK": true,
+    "INTERACT": true,
+    "TRAVEL": true,
+    "TOOL": true,
+    "USE_ENCHANTMENT": true,
+    "BREED": true,
+    "USE": true,
+    "ENTITY_INTERACT": true
+  },
+  "enabled_xp_awards": {
+    "JUMP": true,
+    "EFFECT": true,
+    "HIT_BLOCK": true,
+    "SKILL_UP": true,
+    "BREED": true,
+    "CROUCH_JUMP": true,
+    "ENTITY": true,
+    "SWIMMING": true,
+    "SMELT": true,
+    "SPRINT_JUMP": true,
+    "ACTIVATE_ITEM": true,
+    "BLOCK_BREAK": true,
+    "BREAK_SPEED": true,
+    "FISH": true,
+    "DIVING": true,
+    "SUBMERGED": true,
+    "GROW": true,
+    "HEALTH_DECREASE": true,
+    "CROUCH": true,
+    "SHIELD_BLOCK": true,
+    "TAMING": true,
+    "RIDING": true,
+    "ANVIL_REPAIR": true,
+    "BREW": true,
+    "DEAL_DAMAGE": true,
+    "ACTIVATE_BLOCK": true,
+    "SPRINTING": true,
+    "ENCHANT": true,
+    "CONSUME": true,
+    "RECEIVE_DAMAGE": true,
+    "SURFACING": true,
+    "BREATH_CHANGE": true,
+    "SWIM_SPRINTING": true,
+    "CRAFT": true,
+    "TOOL_BREAKING": true,
+    "RECEIVED_AS_TRADE": true,
+    "DEATH": true,
+    "GIVEN_AS_TRADE": true,
+    "BLOCK_PLACE": true,
+    "HEALTH_INCREASE": true
+  },
+  "type": "AUTOVALUES"
+}
 ```
 
 ## Syntax
