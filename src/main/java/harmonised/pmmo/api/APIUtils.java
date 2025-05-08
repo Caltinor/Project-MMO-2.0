@@ -368,15 +368,15 @@ public class APIUtils {
 	 *
 	 * @param oType use only ITEM or ENTITY
 	 * @param objectID the key for the object being configured
-	 * @param isDealt is Dealt Daamge config else if false will be received damage
+	 * @param type the damagesource-sensitive event type
 	 * @param damageType the id or tag string for damage type
 	 * @param award a map of skills and experience values to be awarded
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerDamageXpAward(ObjectType oType, ResourceLocation objectID, boolean isDealt, String damageType, Map<String, Long> award, boolean asOverride) {
-		if (oType == ObjectType.ENTITY || oType == ObjectType.ITEM) {
+	public static void registerDamageXpAward(ObjectType oType, ResourceLocation objectID, EventType type, String damageType, Map<String, Long> award, boolean asOverride) {
+		if ((oType == ObjectType.ENTITY || oType == ObjectType.ITEM) && EventType.is(EventType.DAMAGE_TYPES, type)) {
 			ObjectData raw = new ObjectData(asOverride);
-			raw.damageXpValues().put(isDealt ? EventType.DEAL_DAMAGE : EventType.RECEIVE_DAMAGE, Map.of(damageType, award));
+			raw.damageXpValues().put(type, Map.of(damageType, award));
 			registerConfiguration(asOverride, oType, objectID, raw);
 		}
 	}

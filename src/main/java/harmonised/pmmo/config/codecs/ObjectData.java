@@ -61,11 +61,12 @@ public record ObjectData(
 		}
 		@Override
 		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
-			boolean isDamage = type == EventType.RECEIVE_DAMAGE || type == EventType.DEAL_DAMAGE;
+			boolean isDamage = EventType.is(EventType.DAMAGE_TYPES, type);
 			if (nbtXpValues().get(type) == null && nbtDamageValues().get(type) == null) {
 				return isDamage
 					? damageXpValues()
 						.getOrDefault(type, new HashMap<>())
+						//TODO iterate over the damage values in the xp map and check if the damage type is a tag member
 						.getOrDefault(nbt.getString(APIUtils.DAMAGE_TYPE), new HashMap<>())
 					: xpValues().getOrDefault(type, new HashMap<>());
 			}

@@ -192,13 +192,22 @@ public record ServerData(
                                 "#pmmo:environment", Map.of("endurance", 10L),
                                 "#pmmo:impact", Map.of("endurance", 15L),
                                 "#pmmo:magic", Map.of("magic", 15L),
-                                "#minecraft:is_projectile", Map.of("endurance", 15L))
+                                "#minecraft:is_projectile", Map.of("endurance", 15L)
+                        ),
+                        EventType.MITIGATE_DAMAGE, Map.of(
+                                "minecraft:generic_kill", Map.of("endurance", 10L),
+                                "#pmmo:environment", Map.of("endurance", 100L),
+                                "#pmmo:impact", Map.of("endurance", 150L),
+                                "#pmmo:magic", Map.of("magic", 150L),
+                                "#minecraft:is_projectile", Map.of("endurance", 150L)
+                        )
                 ));
 
         private static final String REUSE = "reuse_penalty";
         private static final String PERKSPLUS = "perks_plus_config";
         private static final String PLAYERACTIONS = "player_actions";
         private static final String DAMAGE_DEALT = "damage_dealt";
+        private static final String DAMAGE_MITIGATED = "mitigated_damage";
         private static final String DAMAGE_RECEIVED = "damage_received";
         private static final String EVENT = "event";
         private static final String DAMAGE_TYPE = "type";
@@ -215,8 +224,13 @@ public record ServerData(
                     playerEvents.put(type, Functions.doubleMap(value.getOrDefault("value", "")));
             }
             Map<EventType, Map<String, Map<String, Long>>> damageXp = new HashMap<>(current.xpGains().damageXp());
-            if ((param.equals(DAMAGE_DEALT) || param.equals(DAMAGE_RECEIVED)) && value.containsKey(DAMAGE_TYPE)) {
-                EventType type = switch (param) {case DAMAGE_DEALT -> EventType.DEAL_DAMAGE; case DAMAGE_RECEIVED -> EventType.RECEIVE_DAMAGE; default -> null;};
+            if ((param.equals(DAMAGE_DEALT) || param.equals(DAMAGE_RECEIVED) || param.equals(DAMAGE_MITIGATED)) && value.containsKey(DAMAGE_TYPE)) {
+                EventType type = switch (param) {
+                    case DAMAGE_DEALT -> EventType.DEAL_DAMAGE;
+                    case DAMAGE_RECEIVED -> EventType.RECEIVE_DAMAGE;
+                    case DAMAGE_MITIGATED -> EventType.MITIGATE_DAMAGE;
+                    default -> null;
+                };
                 String damageType = value.get(DAMAGE_TYPE);
                 damageXp.computeIfPresent(type, (t, map) -> new HashMap<>(map)); //make the existing map mutable, if present
                 damageXp.computeIfAbsent(type, t -> new HashMap<>()).put(damageType, Functions.mapValue(value.getOrDefault("value", "")));
@@ -250,6 +264,7 @@ public record ServerData(
 
         public Map<String, Map<String, Long>> receivedDamage() {return this.damageXp().getOrDefault(EventType.RECEIVE_DAMAGE, new HashMap<>());}
         public Map<String, Map<String, Long>> dealtDamage() {return this.damageXp().getOrDefault(EventType.DEAL_DAMAGE, new HashMap<>());}
+        public Map<String, Map<String, Long>> mitigatedDamage() {return this.damageXp.getOrDefault(EventType.MITIGATE_DAMAGE, new HashMap<>());}
         public Map<String, Double> playerXp(EventType type) {return this.playerEvents().getOrDefault(type, new HashMap<>());}
     }
     //</editor-fold>

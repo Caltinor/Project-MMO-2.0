@@ -1827,6 +1827,8 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "Consume Xp Value").build();
 	public static final Translation XP_VALUE_DEAL_DAMAGE = Translation.Builder.start("pmmo.xpValueDealDamage")
 			.addLocale(Locale.EN_US, "Deal Damage with Item Xp").build();
+	public static final Translation XP_VALUE_MITIGATE_DAMAGE = Translation.Builder.start("pmmo.xpValueMitigateDamage")
+			.addLocale(Locale.EN_US, "Prevent Damage with Armor, Magic, Absorption, or Potions").build();
 	public static final Translation XP_VALUE_ENCHANT = Translation.Builder.start("pmmo.xpValueEnchant")
 			.addLocale(Locale.EN_US, "Enchant Xp Value").build();
 	public static final Translation XP_VALUE_FISH = Translation.Builder.start("pmmo.xpValueFish")

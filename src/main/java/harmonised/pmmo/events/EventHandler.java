@@ -24,6 +24,7 @@ import harmonised.pmmo.events.impl.FoodEatHandler;
 import harmonised.pmmo.events.impl.FurnaceHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
+import harmonised.pmmo.events.impl.MitigatedDamageHandler;
 import harmonised.pmmo.events.impl.MountHandler;
 import harmonised.pmmo.events.impl.PistonHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
@@ -176,6 +177,10 @@ public class EventHandler {
 		if (event.getContainer().getNewDamage() <= 0)
 			return;
 		DamageDealtHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onMitigateDamage(LivingDamageEvent.Post event) {
+		MitigatedDamageHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
