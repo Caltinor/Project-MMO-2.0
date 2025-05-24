@@ -152,7 +152,7 @@ Reduces damage received when used with the `RECEIVE_DAMAGE` event.
 | property         |   default   | description                                                                                                           |
 |:-----------------|:-----------:|:----------------------------------------------------------------------------------------------------------------------|
 | `per_level`      |    0.025    | Amount of damage per level in the specified skill to reduce by                                                        |
-| `for_damage`     | `"omitted"` | a Minecraft damage type id this reduction should apply to.  If using damage type tags, place a `#` before the tag ID. |
+| `for_damage`     | none | A Minecraft damage type id this reduction should apply to. If using damage type tags, place a `#` before the tag ID. `for_damage` is a list, and entries must be of the style `["mod:damage"]`|
 | `max_boost`      |     n/a     | limits the max reduction that can be achieved                                                                         |
 | `base`           |      0      | A flat amount added to the per_level amount for the damage reduced                                                    |
 
@@ -162,7 +162,7 @@ Increases damage to attacks.  This is the only damage booster for archery, magic
 | property         |     default     | description                                                                                |
 |:-----------------|:---------------:|:-------------------------------------------------------------------------------------------|
 | `applies_to`     | `["weapon:id"]` | Specifies which weapons will have boosted damage. The default is no weapons                |
-| `for_damage`     | none            | Specifeis which damage types will have boosted damage. the default is all damage types     |
+| `for_damage`     | none            | Specifeis which damage types will have boosted damage. the default is all damage types. `for_damage` is a list, and entries must be of the style `["mod:damage"]` |     |
 | `per_level`      |      0.05       | How much per, level in the skill will the damage be boosted by.  Omitting the skill in this perk will result in no damage boosted|
 | `base`           |        1        | Since damage is a multiplier by default, the base is added to make damage equal to at least 1x the base damage.  You could set this to zero to make players deal less damage before they reach a certain skill level, or if using `multiplicative = false`  |
 | `multiplicative` |      true       | Makes damage a multiplier.  If false, adds to the damage by a flat amount                  |
