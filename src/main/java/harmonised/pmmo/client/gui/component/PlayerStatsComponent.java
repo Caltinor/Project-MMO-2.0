@@ -2,24 +2,31 @@ package harmonised.pmmo.client.gui.component;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.Tesselator;
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.client.gui.widget.ScrollPanel;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -220,6 +227,7 @@ public class PlayerStatsComponent extends AbstractWidget {
             renderProgressBar(graphics);
             graphics.drawString(minecraft.font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
             graphics.drawString(minecraft.font, String.valueOf(xp.getLevel().getLevel()), (this.getX() + this.width - 5) - minecraft.font.width(String.valueOf(xp.getLevel().getLevel())), this.getY() + 5, skillColor.getRGB());
+            if (this.isHovered()) renderPerkTooltip(graphics, pMouseX, pMouseY, skillName);
         }
         
         public void renderProgressBar(GuiGraphics graphics) {
@@ -239,6 +247,25 @@ public class PlayerStatsComponent extends AbstractWidget {
 
                 graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
+        }
+
+        public void renderPerkTooltip(GuiGraphics graphics, int mouseX, int mouseY, String skill) {
+            List<FormattedCharSequence> holder = new ArrayList<>();
+            Player player = Minecraft.getInstance().player;
+            Config.perks().perks().getOrDefault(EventType.SKILL_UP, new ArrayList<>()).stream()
+                .filter(nbt -> skill.isEmpty() || !nbt.contains(APIUtils.SKILLNAME) || LangProvider.skill(nbt.getString(APIUtils.SKILLNAME)).getString().equals(skill))
+                .forEach(nbt -> {
+                    ResourceLocation perkID = Reference.of(nbt.getString("perk"));
+                    nbt.putLong(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME)
+                            ? Core.get(player.level()).getData().getLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
+                            : 0);
+                    holder.add(Component.translatable("perk."+perkID.getNamespace()+"."+perkID.getPath()).getVisualOrderText());
+                    holder.add(core.getPerkRegistry().getDescription(perkID).copy().getVisualOrderText());
+                    core.getPerkRegistry().getStatusLines(perkID, player, nbt).stream()
+                        .map(MutableComponent::getVisualOrderText)
+                        .forEach(holder::add);
+            });
+            minecraft.screen.setTooltipForNextRenderPass(holder);
         }
 
         private long xpToNext() {
