@@ -157,7 +157,7 @@ public class TooltipHandler {
 	
 	private static Map<String, Long> getXpData(Core core, EventType type, Player player, ItemStack stack) {
 		Map<String, Long> map = core.getExperienceAwards(type, stack, player, new CompoundTag());
-		if (stack.getItem() instanceof BlockItem) 
+		if (type.blockApplicable && stack.getItem() instanceof BlockItem)
 			map = core.getCommonXpAwardData(new HashMap<>(), type, RegistryUtil.getId(player.level().registryAccess(), stack), player, ObjectType.BLOCK, TagUtils.stackTag(stack, player.level()));
 		CoreUtils.processSkillGroupXP(map);
 		return map;
