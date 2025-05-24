@@ -2,10 +2,15 @@ package harmonised.pmmo.client.gui.component;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.Tesselator;
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,6 +20,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.widget.ScrollPanel;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
@@ -217,6 +224,7 @@ public class PlayerStatsComponent extends AbstractWidget {
             renderProgressBar(graphics);
             graphics.drawString(minecraft.font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
             graphics.drawString(minecraft.font, String.valueOf(skillLevel), (this.getX() + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.getY() + 5, skillColor.getRGB());
+            if (this.isHovered()) renderPerkTooltip(this.skillName);
         }
         
         public void renderProgressBar(GuiGraphics graphics) {
@@ -238,6 +246,25 @@ public class PlayerStatsComponent extends AbstractWidget {
 
                 graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
+        }
+
+        public void renderPerkTooltip(String skill) {
+            List<FormattedCharSequence> holder = new ArrayList<>();
+            Player player = Minecraft.getInstance().player;
+            PerksConfig.PERK_SETTINGS.get().getOrDefault(EventType.SKILL_UP, new ArrayList<>()).stream()
+                    .filter(nbt -> skill.isEmpty() || !nbt.contains(APIUtils.SKILLNAME) || LangProvider.skill(nbt.getString(APIUtils.SKILLNAME)).getString().equals(skill))
+                    .forEach(nbt -> {
+                        ResourceLocation perkID = new ResourceLocation(nbt.getString("perk"));
+                        nbt.putLong(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME)
+                                ? Core.get(player.level()).getData().getPlayerSkillLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
+                                : 0);
+                        holder.add(Component.translatable("perk."+perkID.getNamespace()+"."+perkID.getPath()).getVisualOrderText());
+                        holder.add(core.getPerkRegistry().getDescription(perkID).copy().getVisualOrderText());
+                        core.getPerkRegistry().getStatusLines(perkID, player, nbt).stream()
+                                .map(MutableComponent::getVisualOrderText)
+                                .forEach(holder::add);
+                    });
+            minecraft.screen.setTooltipForNextRenderPass(holder);
         }
     }
 }
