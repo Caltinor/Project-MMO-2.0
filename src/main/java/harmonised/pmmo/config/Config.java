@@ -55,6 +55,7 @@ public class Config {
 
     public static ModConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_X;
     public static ModConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_Y;
+    public static ModConfigSpec.BooleanValue SKILL_LIST_USE_ICONS;
     public static ModConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_X;
     public static ModConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_Y;
     public static ModConfigSpec.ConfigValue<Double> GAIN_LIST_OFFSET_X;
@@ -79,6 +80,8 @@ public class Config {
                 .defineInRange("Skill List Xoffset", 0.01d, 0, 1);
         SKILL_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the skill list should be")
                 .defineInRange("Skill List Yoffset", 0.0005d, 0, 1);
+        SKILL_LIST_USE_ICONS = builder.comment("if true, uses the icon from the skill list instead of the skill name")
+                .define("Skill List Use Icons", false);
         SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed")
                 .define("Display Skill List", true);
         VEIN_GAUGE_OFFSET_X = builder.comment("how far right from the bottom left corner the vein guage sholud be")

@@ -6,6 +6,7 @@ import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
@@ -13,6 +14,7 @@ import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -20,6 +22,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.LogicalSide;
 
 import java.util.Comparator;
@@ -120,10 +123,12 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 		}
 	}
 	
-	private record SkillLine(String xpRaw, MutableComponent skillName, String bonusLine, Experience xpValue, int color, int yOffset, int skillGap) {
-		public static SkillLine DEFAULT = new SkillLine("", Component.literal(""), "", new Experience(), 0xFFFFFF, 0, 0);
+	private record SkillLine(String xpRaw, ResourceLocation icon, int iconSize, MutableComponent skillName, String bonusLine, Experience xpValue, int color, int yOffset, int skillGap) {
+		public static SkillLine DEFAULT = new SkillLine("", Reference.mc("missing"), 16, Component.literal(""), "", new Experience(), 0xFFFFFF, 0, 0);
 		public SkillLine(String skillName, double bonus, Experience xpValue, int yOffset, int skillGap) {
-			this(rawXpLine(xpValue, skillName), 
+			this(rawXpLine(xpValue, skillName),
+				Config.skills().skills().getOrDefault(skillName, SkillData.Builder.getDefault()).getIcon(),
+					Config.skills().skills().getOrDefault(skillName, SkillData.Builder.getDefault()).getIconSize(),
 				Component.translatable("pmmo."+skillName), 
 				bonusLine(bonus), 
 				xpValue,
@@ -132,7 +137,7 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 				skillGap);
 		}
 		public SkillLine(SkillLine src, int yOffset) {
-			this(src.xpRaw(), src.skillName(), src.bonusLine(), src.xpValue(), src.color, yOffset * 9, src.skillGap());
+			this(src.xpRaw(), src.icon(), src.iconSize(), src.skillName(), src.bonusLine(), src.xpValue(), src.color, yOffset * 9, src.skillGap());
 		}
 		
 		private static String rawXpLine(Experience xpValue, String skillKey) {
@@ -155,8 +160,11 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 		public void render(GuiGraphics graphics, int skillListX, int skillListY, Font fontRenderer) {
 			int levelGap = fontRenderer.width(xpRaw());
 			graphics.drawString(fontRenderer, xpRaw(), skillListX, skillListY + 3 + yOffset(), color());
-			graphics.drawString(fontRenderer, " | " + skillName.getString(), skillListX + levelGap, skillListY + 3 + yOffset(), color());
-			graphics.drawString(fontRenderer, bonusLine, skillListX + levelGap + skillGap() + 9, skillListY + 3 + yOffset(), color());
+			if (Config.SKILL_LIST_USE_ICONS.get())
+				graphics.blit(icon(), skillListX + levelGap + 2, skillListY + 3 + yOffset(), 9, 9, 0, 0, iconSize(), iconSize(), iconSize(), iconSize());
+			else
+				graphics.drawString(fontRenderer, " | " + skillName.getString(), skillListX + levelGap, skillListY + 3 + yOffset(), color());
+			graphics.drawString(fontRenderer, bonusLine, skillListX + levelGap + (Config.SKILL_LIST_USE_ICONS.get() ? 6 : skillGap()) + 9, skillListY + 3 + yOffset(), color());
 		}
 	}
 }
