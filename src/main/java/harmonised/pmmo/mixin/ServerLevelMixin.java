@@ -45,8 +45,8 @@ public class ServerLevelMixin {
 		var breakMap = level.getChunkAt(pos).getData(DataAttachmentTypes.BREAK_MAP.get());
 		for (BlockPos neighbor : getNeighbors(pos)) {
 			UUID playerID = breakMap.get(neighbor);
-			if (playerID != null) {
-				Player player = level.getServer().getPlayerList().getPlayer(playerID);
+			Player player;
+			if (playerID != null && (player = level.getServer().getPlayerList().getPlayer(playerID)) != null) {
 				NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
 				breakMap.put(neighbor, playerID);
 				level.getChunkAt(pos).setUnsaved(true);
