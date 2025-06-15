@@ -2131,7 +2131,7 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_CN, "额外条件：%s项").build();
     public static final Translation GLM_SKILL_RANGE = Translation.Builder.start("pmmo.gui.statscroll.glm.skill_range")
             .addLocale(Locale.EN_US, "and skill %s between %s and %s")
-            .addLocale(Locale.ZH_CN, "且[%1$s]等级在%2$s~%3$s").build();
+            .addLocale(Locale.ZH_CN, "且%1$s等级在%2$s~%3$s").build();
     public static final Translation GLM_VALID_BLOCK = Translation.Builder.start("pmmo.gui.statscroll.glm.valid_block")
             .addLocale(Locale.EN_US, "When breaking block(s) %s")
             .addLocale(Locale.ZH_CN, "破坏%1$s时触发").build();
@@ -2208,7 +2208,7 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_CN, "发现宝藏！").build();
     public static final Translation LEVELED_UP = Translation.Builder.start("pmmo.leveled_up")
             .addLocale(Locale.EN_US, "You leveled up to %s in %s")
-            .addLocale(Locale.ZH_CN, "[%2$s]技能已提升至%1$s级").build();
+            .addLocale(Locale.ZH_CN, "%2$s技能已提升至%1$s级").build();
     public static final Translation PERK_BREATH_REFRESH = Translation.Builder.start("pmmo.perks.breathrefresh")
             .addLocale(Locale.EN_US, "Your skill extended your breath")
             .addLocale(Locale.ZH_CN, "技能效果延长了水下呼吸时间").build();
@@ -2222,16 +2222,22 @@ public class LangProvider extends LanguageProvider{
     //=========COMMANDS===========================
     public static final Translation SET_LEVEL = Translation.Builder.start("pmmo.setLevel")
             .addLocale(Locale.EN_US, "%1$s has been set to level %2$s for %3$s")
-            .addLocale(Locale.ZH_CN, "玩家[%3$s]的[%1$s]等级已设置为%2$s").build();
+            .addLocale(Locale.ZH_CN, "玩家%3$s的%1$s等级已设置为%2$s").build();
     public static final Translation SET_XP = Translation.Builder.start("pmmo.setXp")
             .addLocale(Locale.EN_US, "%1$s has been set to %2$sxp for %3$s")
-            .addLocale(Locale.ZH_CN, "玩家[%3$s]的[%1$s]经验值已设为%2$s").build();
+            .addLocale(Locale.ZH_CN, "玩家%3$s的%1$s经验值已设为%2$s").build();
     public static final Translation ADD_LEVEL = Translation.Builder.start("pmmo.addLevel")
             .addLocale(Locale.EN_US, "%1$s has been changed by %2$s levels for %3$s")
-            .addLocale(Locale.ZH_CN, "玩家[%3$s]的[%1$s]等级已调整%2$s级").build();
+            .addLocale(Locale.ZH_CN, "玩家%3$s的%1$s等级已调整%2$s级").build();
     public static final Translation ADD_XP = Translation.Builder.start("pmmo.addXp")
             .addLocale(Locale.EN_US, "%1$s has been changed by %2$sxp for %3$s")
-            .addLocale(Locale.ZH_CN, "玩家[%3$s]的[%1$s]经验值已增减%2$s点").build();
+            .addLocale(Locale.ZH_CN, "玩家%3$s的%1$s经验值已增减%2$s点").build();
+    public static final Translation PARTY_LEFT = Translation.Builder.start("pmmo.youLeftTheParty")
+            .addLocale(Locale.EN_US, "You have left the Party")
+            .addLocale(Locale.ZH_CN, "你已经离开了这个队伍").build();
+    public static final Translation PARTY_NOT_IN = Translation.Builder.start("pmmo.youAreNotInAParty")
+            .addLocale(Locale.EN_US, "You are not in a Party")
+            .addLocale(Locale.ZH_CN, "你尚未加入任何队伍").build();
     public static final Translation PARTY_ALREADY_IN = Translation.Builder.start("pmmo.youAreAlreadyInAParty")
             .addLocale(Locale.EN_US, "You are already in a Party")
             .addLocale(Locale.ZH_CN, "你已加入了一支队伍").build();
@@ -2240,7 +2246,7 @@ public class LangProvider extends LanguageProvider{
             .addLocale(Locale.ZH_CN, "已创建新队伍").build();
     public static final Translation PARTY_INVITE = Translation.Builder.start("pmmo.youHaveInvitedAPlayerToYourParty")
             .addLocale(Locale.EN_US, "You invited %1$s to your Party")
-            .addLocale(Locale.ZH_CN, "已邀请玩家[%1$s]加入队伍").build();
+            .addLocale(Locale.ZH_CN, "已邀请玩家%1$s加入队伍").build();
     public static final Translation PARTY_MEMBER_TOTAL = Translation.Builder.start("pmmo.totalMembers")
             .addLocale(Locale.EN_US, "Total Members: %1$s")
             .addLocale(Locale.ZH_CN, "当前成员：%1$s人").build();
@@ -2293,7 +2299,7 @@ public class LangProvider extends LanguageProvider{
     //=========DENIAL MESSAGES====================
     public static final Translation DENIAL_WEAR = Translation.Builder.start("pmmo.msg.denial.wear")
             .addLocale(Locale.EN_US, "You are not skilled enough to wear %1$s")
-            .addLocale(Locale.ZH_CN, "你的技艺不足以装备[%1$s]").build();
+            .addLocale(Locale.ZH_CN, "你的技艺不足以装备%1$s").build();
     public static final Translation DENIAL_USE_ENCHANT = Translation.Builder.start("pmmo.msg.denial.use_enchantment")
             .addLocale(Locale.EN_US, "You are not skilled enough to use %1$s with %2$s enchantment")
             .addLocale(Locale.ZH_CN, "你的技艺不足以使用拥有%2$s附魔的%1$s").build();
