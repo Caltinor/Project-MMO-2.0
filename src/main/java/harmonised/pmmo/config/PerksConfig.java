@@ -76,10 +76,12 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "fishing").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "crafting").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "magic").build());
-		bodyList.add(TagBuilder.start().withString("perk", "ars_scalaes:mana_boost").withString(APIUtils.SKILLNAME, "magic")
-				.withDouble(APIUtils.MAX_BOOST, 3000d).withDouble(APIUtils.PER_LEVEL, 3.0d).build());
-		bodyList.add(TagBuilder.start().withString("perk", "ars_scalaes:mana_regen").withString(APIUtils.SKILLNAME, "magic")
-				.withDouble(APIUtils.MAX_BOOST, 100d).withDouble(APIUtils.PER_LEVEL, 0.06d).build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "magic")
+				.withDouble(APIUtils.MAX_BOOST, 3000d).withDouble(APIUtils.PER_LEVEL, 3.0d).withString("attribute","ars_nouveau:ars_nouveau.perk.max_mana").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "magic")
+				.withDouble(APIUtils.MAX_BOOST, 100d).withDouble(APIUtils.PER_LEVEL, 0.06d).withString("attribute","ars_nouveau:ars_nouveau.perk.mana_regen").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "magic")
+				.withDouble(APIUtils.MAX_BOOST, 0d).withDouble(APIUtils.PER_LEVEL, 0.0d).withString("attribute","ars_nouveau:ars_nouveau.perk.spell_damage").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "magic")
 				.withDouble(APIUtils.MAX_BOOST, 1d).withDouble(APIUtils.PER_LEVEL, 0.005d).withString("attribute", "irons_spellbooks:cooldown_reduction").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "magic")
