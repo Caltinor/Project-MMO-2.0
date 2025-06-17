@@ -13,7 +13,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
-public class DamageTagProvider extends TagsProvider<DamageType>{
+public class DamageTagProvider extends TagsProvider<DamageType> {
 
     public DamageTagProvider(PackOutput output, CompletableFuture<Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
         super(output, Registries.DAMAGE_TYPE, lookupProvider, Reference.MOD_ID, existingFileHelper);
@@ -62,7 +62,11 @@ public class DamageTagProvider extends TagsProvider<DamageType>{
                 .addOptional(ResourceLocation.parse("ars_nouveau:frost"))
                 .addOptional(ResourceLocation.parse("ars_nouveau:flare"))
                 .addOptional(ResourceLocation.parse("ars_nouveau:crush"))
-                .addOptional(ResourceLocation.parse("ars_nouveau:windshear"));
+                .addOptional(ResourceLocation.parse("ars_nouveau:windshear"))
+                .addOptional(ResourceLocation.parse("ars_elemental:spark"))
+                .addOptional(ResourceLocation.parse("ars_elemental:hellfire"))
+                .addOptional(ResourceLocation.parse("ars_elemental:beheading"))
+                .addOptional(ResourceLocation.parse("ars_elemental:poison"));
         tag(Reference.FROM_GUN)
                 .addOptional(ResourceLocation.parse("cgm:bullet"))
                 .addOptional(ResourceLocation.parse("scguns:bullet"));
