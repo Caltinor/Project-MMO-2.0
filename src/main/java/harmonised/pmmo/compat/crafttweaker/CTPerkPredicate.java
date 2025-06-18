@@ -1,17 +1,17 @@
 package harmonised.pmmo.compat.crafttweaker;
 
-import org.openzen.zencode.java.ZenCodeType;
-
-import com.blamejared.crafttweaker.api.annotation.ZenRegister;
-import com.blamejared.crafttweaker.api.data.MapData;
-import com.blamejared.crafttweaker_annotations.annotations.Document;
-
-import net.minecraft.world.entity.player.Player;
-
-@FunctionalInterface
-@ZenRegister
-@ZenCodeType.Name("mods.pmmo.CTPerkPredicate")
-@Document("mods/PMMO/CTPerkPredicate")
+//import org.openzen.zencode.java.ZenCodeType;
+//
+//import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+//import com.blamejared.crafttweaker.api.data.MapData;
+//import com.blamejared.crafttweaker_annotations.annotations.Document;
+//
+//import net.minecraft.world.entity.player.Player;
+//
+//@FunctionalInterface
+//@ZenRegister
+//@ZenCodeType.Name("mods.pmmo.CTPerkPredicate")
+//@Document("mods/PMMO/CTPerkPredicate")
 public interface CTPerkPredicate {
 	/**PMMO checks certain default conditions such as
 	 * level requirements, and chance.  If you have
@@ -24,6 +24,6 @@ public interface CTPerkPredicate {
 	 * @param nbt data provided by PMMO
 	 * @return if the perk is permitted to execute
 	 */
-	@ZenCodeType.Method
-	boolean test(Player player, MapData nbt);
+//	@ZenCodeType.Method
+//	boolean test(Player player, MapData nbt);
 }

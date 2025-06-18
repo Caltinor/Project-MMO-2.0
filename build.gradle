@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.78'
+    id 'net.neoforged.moddev' version '2.0.95'
     id 'org.moddedmc.wiki.toolkit' version '0.2.5'
 }
 
@@ -65,8 +65,8 @@ neoForge {
             type = "gameTestServer"
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
-        data {
-            data()
+        clientData {
+            clientData()
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
@@ -105,13 +105,13 @@ dependencies {
 //    annotationProcessor "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${ct_version}"
 
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")
-    compileOnly "curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}"
-    compileOnly "curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}"
-    compileOnly "curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}"
+    //compileOnly "curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}"
+    //compileOnly "curse.maven:ftbt-${projectid_ftbt}:${version_ftbt}"
+    //compileOnly "curse.maven:ftbl-${projectid_ftbl}:${version_ftbl}"
     //compileOnly fg.deobf("curse.maven:ftbf-${projectid_ftbf}:${version_ftbf}")
-    compileOnly "curse.maven:arch-${projectid_arch}:${version_arch}"
-    compileOnly "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${ct_version}"
-    compileOnly "curse.maven:curios-${projectid_curios}:${version_curios}"
+    //compileOnly "curse.maven:arch-${projectid_arch}:${version_arch}"
+    //compileOnly "com.blamejared.crafttweaker:CraftTweaker-neoforge-${minecraft_version}:${ct_version}"
+    //compileOnly "curse.maven:curios-${projectid_curios}:${version_curios}"
 
     //runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
     //runtimeOnly "curse.maven:ftbq-${projectid_ftbq}:${version_ftbq}"

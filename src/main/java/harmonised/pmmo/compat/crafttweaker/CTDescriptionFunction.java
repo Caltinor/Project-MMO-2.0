@@ -1,18 +1,18 @@
 package harmonised.pmmo.compat.crafttweaker;
 
-import com.blamejared.crafttweaker.api.annotation.ZenRegister;
-import com.blamejared.crafttweaker.api.data.MapData;
-import com.blamejared.crafttweaker_annotations.annotations.Document;
-import net.minecraft.network.chat.contents.PlainTextContents;
-import net.minecraft.world.entity.player.Player;
-import org.openzen.zencode.java.ZenCodeType;
-
-import java.util.List;
-
-@FunctionalInterface
-@ZenRegister
-@ZenCodeType.Name("mods.pmmo.CTDescriptionFunction")
-@Document("mods/PMMO/CTDescriptionFunction")
+//import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+//import com.blamejared.crafttweaker.api.data.MapData;
+//import com.blamejared.crafttweaker_annotations.annotations.Document;
+//import net.minecraft.network.chat.contents.PlainTextContents;
+//import net.minecraft.world.entity.player.Player;
+//import org.openzen.zencode.java.ZenCodeType;
+//
+//import java.util.List;
+//
+//@FunctionalInterface
+//@ZenRegister
+//@ZenCodeType.Name("mods.pmmo.CTDescriptionFunction")
+//@Document("mods/PMMO/CTDescriptionFunction")
 public interface CTDescriptionFunction {
 	/**This function consumes information about the perk
 	 * and outputs text lines which give users specific
@@ -26,6 +26,6 @@ public interface CTDescriptionFunction {
 	 * @param nbt data provided by PMMO
 	 * @return output text.
 	 */
-	@ZenCodeType.Method
-	List<PlainTextContents.LiteralContents> apply(Player player, MapData nbt);
+//	@ZenCodeType.Method
+//	List<PlainTextContents.LiteralContents> apply(Player player, MapData nbt);
 }
