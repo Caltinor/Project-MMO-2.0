@@ -100,16 +100,6 @@ public class Core {
 	public static Core get(final Level level) {
 	    return get(level.isClientSide() ? LogicalSide.CLIENT : LogicalSide.SERVER);
 	}
-	
-	public void resetDataForReload() {
-		tooltips.clearRegistry();
-		if (side.equals(LogicalSide.SERVER)) {
-			if (ServerLifecycleHooks.getCurrentServer() == null) return;
-			for (ServerPlayer player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
-				Networking.sendToClient(new CP_ClearData(), player);
-			}
-		}
-	}
 	  
 	public CoreLoader getLoader() {return loader;}
 	public PredicateRegistry getPredicateRegistry() {return predicates;}

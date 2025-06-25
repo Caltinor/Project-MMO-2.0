@@ -11,7 +11,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 public record CP_ClearData() implements CustomPacketPayload {
 	public static void handle(CP_ClearData packet, IPayloadContext ctx) {
 		ctx.enqueueWork(() -> {
-			Core.get(LogicalSide.CLIENT).resetDataForReload();
 			Core.get(LogicalSide.CLIENT).getLoader().resetData();
 			Core.get(LogicalSide.CLIENT).getTooltipRegistry().clearRegistry();
 		});
