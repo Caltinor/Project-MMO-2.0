@@ -63,21 +63,21 @@ public class DefaultBlockConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addReq(ReqType.BREAK, Map.of("mining", 30L))
                 .setVeinConsume(25);
 
-        excavationBreak(Blocks.DIRT, 150, BlockTags.DIRT);
+        excavationBreak(Blocks.DIRT, 5, BlockTags.DIRT);
         for (Block block : List.of(Blocks.BONE_BLOCK, Blocks.CRIMSON_NYLIUM, Blocks.DIRT_PATH, Blocks.FARMLAND,
                 Blocks.GRAVEL, Blocks.RED_SAND, Blocks.SAND, Blocks.SOUL_SAND, Blocks.SOUL_SOIL, Blocks.WARPED_NYLIUM)) {
-            excavationBreak(block, 150);
+            excavationBreak(block, 10);
         }
 
         tagGet(BlockTags.LOGS)
-                .addXpValues(EventType.BLOCK_BREAK, Map.of("woodcutting", 80L))
+                .addXpValues(EventType.BLOCK_BREAK, Map.of("woodcutting", 20L))
                 .addXpValues(EventType.BLOCK_PLACE, Map.of("building", 10L))
                 .addReq(ReqType.BREAK, Map.of("woodcutting", 0L));
         tagGet(BlockTags.LEAVES)
-                .addXpValues(EventType.BLOCK_BREAK, Map.of("woodcutting", 11L))
+                .addXpValues(EventType.BLOCK_BREAK, Map.of("woodcutting", 1L))
                 .addReq(ReqType.BREAK, Map.of("woodcutting", 0L));
         tagGet(BlockTags.PLANKS)
-                .addXpValues(EventType.BLOCK_BREAK, Map.of("woodcutting", 50L))
+                .addXpValues(EventType.BLOCK_BREAK, Map.of("woodcutting", 10L))
                 .addXpValues(EventType.BLOCK_PLACE, Map.of("building", 10L))
                 .addReq(ReqType.BREAK, Map.of("woodcutting", 0L))
                 .addReq(ReqType.PLACE, Map.of("woodcutting", 0L));

@@ -24,7 +24,11 @@ public record AntiCheeseConfig(
 					EventType.DIVING, Setting.build().minTime(200).reduction(0.1).cooloff(1).build(),
 					EventType.SURFACING, Setting.build().minTime(200).reduction(0.1).cooloff(1).build(),
 					EventType.SWIM_SPRINTING, Setting.build().minTime(200).reduction(0.1).cooloff(1).build()),
-			Map.of(EventType.RIDING, Setting.build().source("minecraft:horse","minecraft:boat").retention(200).reduction(0.005).build()),
+			Map.of(EventType.RIDING, Setting.build().source("minecraft:horse","minecraft:boat").retention(200).reduction(0.005).build(),
+					EventType.SWIMMING, Setting.build().retention(200).reduction(0.01).build(),
+					EventType.DIVING, Setting.build().retention(200).reduction(0.01).build(),
+					EventType.SURFACING, Setting.build().retention(200).reduction(0.01).build(),
+					EventType.SWIM_SPRINTING, Setting.build().retention(200).reduction(0.01).build()),
 			Map.of(EventType.SPRINTING, Setting.build().retention(400).tolerance(0.1).tolerance(10).build())
 	);}
 
