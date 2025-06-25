@@ -1,6 +1,5 @@
-package harmonised.pmmo.setup.datagen.defaultpacks;
+package harmonised.pmmo.setup.datagen.defaultpack;
 
-import com.mojang.serialization.Codec;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.MobModifier;

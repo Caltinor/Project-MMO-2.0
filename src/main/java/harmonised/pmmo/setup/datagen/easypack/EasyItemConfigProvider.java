@@ -1,4 +1,4 @@
-package harmonised.pmmo.setup.datagen.defaultpacks;
+package harmonised.pmmo.setup.datagen.easypack;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
@@ -8,7 +8,6 @@ import harmonised.pmmo.core.nbt.BehaviorToPrevious;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.core.nbt.Operator;
 import harmonised.pmmo.setup.datagen.PmmoDataProvider;
-import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;

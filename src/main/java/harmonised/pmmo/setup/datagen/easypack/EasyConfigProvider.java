@@ -1,4 +1,4 @@
-package harmonised.pmmo.setup.datagen.defaultpacks;
+package harmonised.pmmo.setup.datagen.easypack;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
@@ -7,11 +7,8 @@ import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.ServerData;
-import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.readers.ConfigListener;
-import harmonised.pmmo.features.anticheese.AntiCheeseConfig;
 import harmonised.pmmo.features.autovalues.AutoBlock;
-import harmonised.pmmo.features.autovalues.AutoEntity;
 import harmonised.pmmo.features.autovalues.AutoItem;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.setup.CommonSetup;
@@ -22,9 +19,7 @@ import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import org.lwjgl.system.APIUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;

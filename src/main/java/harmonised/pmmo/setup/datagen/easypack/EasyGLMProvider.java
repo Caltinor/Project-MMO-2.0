@@ -1,4 +1,4 @@
-package harmonised.pmmo.setup.datagen.defaultpacks;
+package harmonised.pmmo.setup.datagen.easypack;
 
 import harmonised.pmmo.setup.datagen.GLMProvider;
 import net.minecraft.core.HolderLookup;

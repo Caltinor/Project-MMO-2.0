@@ -1,4 +1,4 @@
-package harmonised.pmmo.setup.datagen.defaultpacks;
+package harmonised.pmmo.setup.datagen.defaultpack;
 
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.config.codecs.LocationData;

@@ -1,4 +1,4 @@
-package harmonised.pmmo.setup.datagen.defaultpacks;
+package harmonised.pmmo.setup.datagen.defaultpack;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.codecs.ObjectData;
