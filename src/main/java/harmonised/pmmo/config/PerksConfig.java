@@ -43,39 +43,39 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 		defaultSettings.put(EventType.BREAK_SPEED, new ArrayList<>(bodyList));
 		bodyList.clear();
 		//====================SKILL_UP DEFAULTS==========================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "mining").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "mining").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "building")
 					.withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.BLOCK_INTERACTION_RANGE).toString())
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
 					.withDouble(APIUtils.MAX_BOOST, 10d).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "building").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "excavation").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "woodcutting").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "farming").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "agility")
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "building").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "excavation").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "woodcutting").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "farming").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "agility")
 					.withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.MOVEMENT_SPEED).toString())
 					.withDouble(APIUtils.PER_LEVEL, 0.000015)
 					.withDouble(APIUtils.MAX_BOOST, 1d).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "agility").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "agility").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "endurance")
 					.withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.MAX_HEALTH).toString())
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
 					.withDouble(APIUtils.MAX_BOOST, 10d).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "endurance").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "endurance").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "combat")
 				.withString(APIUtils.ATTRIBUTE, RegistryUtil.getAttributeId(Attributes.ATTACK_DAMAGE).toString())
 				.withDouble(APIUtils.PER_LEVEL, 0.005)
 				.withDouble(APIUtils.MAX_BOOST, 1d).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "combat").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "gunslinging").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "archery").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "smithing").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "flying").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "swimming").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "sailing").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "fishing").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "crafting").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "magic").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "combat").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "gunslinging").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "archery").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "smithing").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "flying").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "swimming").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "sailing").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "fishing").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "crafting").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "magic").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "magic")
 				.withDouble(APIUtils.MAX_BOOST, 3000d).withDouble(APIUtils.PER_LEVEL, 3.0d).withString("attribute","ars_nouveau:ars_nouveau.perk.max_mana").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "magic")
@@ -88,11 +88,11 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 				.withDouble(APIUtils.MAX_BOOST, 2d).withDouble(APIUtils.PER_LEVEL, 0.01d).withString("attribute", "irons_spellbooks:spell_power").build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:attribute").withString(APIUtils.SKILLNAME, "magic")
 				.withDouble(APIUtils.MAX_BOOST, 300d).withDouble(APIUtils.PER_LEVEL, 1d).withString("attribute", "irons_spellbooks:mana_regen").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "slayer").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "hunter").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "taming").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "cooking").build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.PER_LEVEL, 10).withString(APIUtils.SKILLNAME, "alchemy").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "slayer").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "hunter").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "taming").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "cooking").build());
+		bodyList.add(TagBuilder.start().withString("perk", "pmmo:fireworks").withInt(APIUtils.MODULUS, 10).withString(APIUtils.SKILLNAME, "alchemy").build());
 		
 		defaultSettings.put(EventType.SKILL_UP, new ArrayList<>(bodyList));
 		bodyList.clear();
