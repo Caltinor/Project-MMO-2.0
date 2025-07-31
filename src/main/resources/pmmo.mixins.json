@@ -3,7 +3,6 @@
   "minVersion": "0.7",
   "package": "harmonised.pmmo.mixin",
   "compatibilityLevel": "JAVA_21",
-  "refmap": "pmmo.refmap.json",
   "mixins": [
     "AbstractFurnaceTileEntityShrinkMixin",
     "CampfireMixin",
