@@ -1,5 +1,6 @@
 {
   "id": "pmmo",
+  "modid":"pmmo",
   "platforms": {
     "curseforge": "353935",
     "modrinth": "project-mmo"
