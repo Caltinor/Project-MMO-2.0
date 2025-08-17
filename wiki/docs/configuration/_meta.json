@@ -2,6 +2,7 @@
   "config_home.mdx": "Configuration Overview",
   "logging.mdx": "Logging Info",
   "scripting.mdx": "Scripting",
+  "events.mdx": "Events",
   "serverconfigs": "Server Configs",
   "datapackconfig": "Datapack Object Configs"
 }

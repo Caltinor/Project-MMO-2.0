@@ -1,0 +1,78 @@
+# Events types for [Items](#items), [Entities](#entities), and [Blocks](#blocks)
+
+## Items
+
+### Valid Reward Types For Items
+|Event| Context                                                          |
+|:---|:-----------------------------------------------------------------|
+|ANVIL_REPAIR| when this is the output item                                   |
+|BLOCK_BREAK| if this is a block item, the xp for breaking the block version of this.  good to include for tooltips. not used for xp|
+|BLOCK_PLACE| if this is a block item, the xp for placing the block          |
+|BREW| as brew ingredient, output does not matter                     |
+|CONSUME| if eaten/drank                                                 |
+|CRAFT| when this is the output itemm                                  |
+|TOOL_BREAKING|if the item has durability and breaks|
+|ENCHANT| when enchants are added to this item                           |
+|FISH| when this is the item obtained from fishing                    |
+|SMELT| when this is the item being smelted/cooked, NOT the output     |
+|GIVEN_AS_TRADE| when this item is consumed by a village during a trade|
+|ACTIVATE_ITEM|  if this item has a right-click action, when that is activated |
+|RECEIVED_AS_TRADE| when this item is received from a villager during a trade|
+
+### Valid Req Types for Items
+| Req Type | Context                                                             |
+|:---------|:--------------------------------------------------------------------|
+| WEAR     | for placing in armor slots, curio slots, or either hand             |
+| TOOL     | for use breaking blocks                                             |
+| WEAPON   | for use harming entities                                            |
+| USE      | the ability to right-click this item                                |
+| PLACE    | if this is a block item, the ability to place it                    |
+| BREAK    | if this is a block item, the ability to break it                    |
+| INTERACT | the ability to use this item on blocks/entities. eg gold on piglins |
+
+--------------------------------------------------------------------
+
+## Entities
+
+### Valid Reward Types For Entities
+
+| event        | context                                                              |
+|:-------------|:---------------------------------------------------------------------|
+| BREED        | when this entity is bred                                             |
+| DEATH        | when this entity dies                                                |
+| ENTITY       | when the player interacts with this entity, such as villager trading |
+| RIDING       | experience per tick while the player is riding this entity           |
+| SHIELD_BLOCK | when the player blocks damage with a shield dealt by this entity     |
+| TAMING       | when the player tames this entity.                                   |
+
+### Valid Req Types for Entities
+
+| requirement     | context                                                           |
+|:----------------|:------------------------------------------------------------------|
+| KILL            | dealing any damage to the entity                                  |
+| RIDE            | mounting the entity                                               |
+| TAME            | successfully taming.  note this does not prevent attempts         |
+| BREED           | breeding two of this entity.  note this does not prevent attempts |
+| ENTITY_INTERACT | right-clicking the entity                                         |
+
+--------------------------------------------------------------------
+
+## Blocks
+
+### Valid Reward Types For Blocks
+
+| event          | context                                                  |
+|:---------------|:---------------------------------------------------------|
+| BLOCK_BREAK    | when a block is broken                                   |
+| BLOCK_PLACE    | when a block is placed                                   |
+| GROW           | when a crop block grows a stage                          |
+| HIT_BLOCK      | when a player hits a block in the process of breaking it |
+| ACTIVATE_BLOCK | when a player right-clicks a block                       |
+
+### Valid Req Types for Blocks
+
+| requirement | action                                                  |
+|:------------|:--------------------------------------------------------|
+| PLACE       | the ability to place the block                          |
+| BREAK       | the ability to break the block                          |
+| INTERACT    | the ability to right click, such as activating a button |
