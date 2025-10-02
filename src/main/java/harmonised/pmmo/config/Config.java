@@ -412,14 +412,14 @@ public class Config {
 				"the value below multiplied by the damage applied.");
 			DEAL_DAMAGE_XP = TomlConfigHelper.defineObject(builder,
 					"DEAL_DAMAGE", CodecTypes.DAMAGE_XP_CODEC, Map.of(
-							"minecraft:generic_kill", Map.of("combat", 1l),
-							"minecraft:player_attack", Map.of("combat", 1l),
+							"minecraft:generic_kill", Map.of("combat", 2l),
+							"minecraft:player_attack", Map.of("combat", 2l),
 							"#minecraft:is_projectile", Map.of("archery", 1l),
 							"#pmmo:magic", Map.of("magic", 15l),
 							"#pmmo:gun", Map.of("gunslinging", 1l)));
 			RECEIVE_DAMAGE_XP = TomlConfigHelper.defineObject(builder,
 					"RECEIVE_DAMAGE", CodecTypes.DAMAGE_XP_CODEC, Map.of(
-							"minecraft:generic_kill", Map.of("endurance", 1l),
+							"minecraft:generic_kill", Map.of("endurance", 10l),
 							"#pmmo:environment", Map.of("endurance", 10l),
 							"#pmmo:impact", Map.of("endurance", 15l),
 							"#pmmo:magic", Map.of("magic", 15l),
