@@ -36,6 +36,10 @@ public class XpEvent extends PlayerEvent
     public boolean isLevelUp() {
     	return startLevel() < endLevel();
     }
+
+    public boolean isLevelDown() {
+        return startLevel() > endLevel();
+    }
     
     public CompoundTag getContext() {
     	return context;

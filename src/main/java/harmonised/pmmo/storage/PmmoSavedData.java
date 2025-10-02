@@ -75,10 +75,15 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			Networking.sendToClient(new CP_UpdateExperience(skillName, value), player);
 			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
 			//capture command cases for XP gain which should prompt a skillup event
-			if (formerRaw != getLevelFromXP(value)) {
+			long newLevel = getLevelFromXP(value);
+			if (formerRaw < newLevel) {
 				SkillUpTrigger.SKILL_UP.trigger(player);
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
+			}
+			else if (formerRaw > newLevel) {
+				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_DOWN, player,
+						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 			}
 		}
 	}
@@ -116,6 +121,9 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			
 			if (gainXpEvent.isLevelUp()) 
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
+			else if (gainXpEvent.isLevelDown())
+				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_DOWN, player,
 						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
 			setPlayerSkillLevel(gainXpEvent.skill, playerID, gainXpEvent.endLevel());
 		}

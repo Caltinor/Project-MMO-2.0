@@ -1654,6 +1654,8 @@ public class LangProvider extends LanguageProvider{
     public static final Translation ENUM_SKILL_UP = Translation.Builder.start("pmmo.enum.SKILL_UP")
             .addLocale(Locale.EN_US, "Level Up")
             .addLocale(Locale.ZH_CN, "技能升级").build();
+    public static final Translation ENUM_SKILL_DOWN = Translation.Builder.start("pmmo.enum.SKILL_DOWN")
+            .addLocale(Locale.EN_US, "Level Down").build();
     public static final Translation ENUM_SLEEP = Translation.Builder.start("pmmo.enum.SLEEP")
             .addLocale(Locale.EN_US, "Sleep")
             .addLocale(Locale.ZH_CN, "睡觉").build();
