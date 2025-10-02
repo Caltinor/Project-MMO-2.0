@@ -96,7 +96,7 @@ public class PlayerTickHandler {
 		}
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.player, eventHookOutput));
 		if (serverSide) {
-			ResourceLocation source = new ResourceLocation("player");
+			ResourceLocation source = ResourceLocation.withDefaultNamespace("player");
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
 					: new HashMap<>();
@@ -120,16 +120,13 @@ public class PlayerTickHandler {
 			}
 			case RIDING -> {
 				source = RegistryUtil.getId(event.player.getVehicle());
-				core.getExperienceAwards(type, event.player.getVehicle(), event.player, perkOutput).forEach((skill, value) -> {
-					xpAward.put(skill, value);
-				});;
+                xpAward.putAll(core.getExperienceAwards(type, event.player.getVehicle(), event.player, perkOutput));
+                ;
 			}
 			case EFFECT -> {
 				for (MobEffectInstance mei : event.player.getActiveEffects()) {	
 					source = RegistryUtil.getId(mei.getEffect());
-					core.getExperienceAwards(mei, event.player, perkOutput).forEach((skill, value) -> {
-						xpAward.put(skill, value);
-					});
+                    xpAward.putAll(core.getExperienceAwards(mei, event.player, perkOutput));
 				}
 			}
 			case SPRINTING -> {

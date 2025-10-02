@@ -492,7 +492,7 @@ public class StatScrollWidget extends ScrollPanel{
 			Player player = Minecraft.getInstance().player;
 			PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new ArrayList<>()).forEach(nbt -> {
 				if (!skillFilter.isEmpty() && nbt.contains(APIUtils.SKILLNAME) && !nbt.getString(APIUtils.SKILLNAME).equals(skillFilter)) return;
-				ResourceLocation perkID = new ResourceLocation(nbt.getString("perk"));
+				ResourceLocation perkID = ResourceLocation.parse(nbt.getString("perk"));
 				nbt.putInt(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME) 
 						? Core.get(player.level()).getData().getPlayerSkillLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
 						: 0);
@@ -641,7 +641,7 @@ public class StatScrollWidget extends ScrollPanel{
 	private void addPlayerSection(Entity entity) {
 		//Section for player-specific data as it expands
 		content.addAll(TextElement.build(LangProvider.PLAYER_HEADER.asComponent(), this.width, step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-		PlayerData data = core.getLoader().PLAYER_LOADER.getData(new ResourceLocation(entity.getUUID().toString()));
+		PlayerData data = core.getLoader().PLAYER_LOADER.getData(ResourceLocation.parse(entity.getUUID().toString()));
 		content.addAll(TextElement.build(LangProvider.PLAYER_IGNORE_REQ.asComponent(data.ignoreReq()), this.width, step(2), 0xFFFFFF, false, 0));
 		if (!data.bonuses().isEmpty()) {
 			content.addAll(TextElement.build(LangProvider.PLAYER_BONUSES.asComponent(), this.width, step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
