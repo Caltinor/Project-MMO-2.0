@@ -154,7 +154,9 @@ public class PlayerStatsComponent extends AbstractWidget {
         public void populateAbilities(Core core, Minecraft minecraft) {
             IDataStorage dataStorage = core.getData();
             
-            this.skillsKeys.addAll(dataStorage.getXpMap(null).keySet());
+            this.skillsKeys.addAll(dataStorage.getXpMap(null).keySet().stream()
+                    .filter(skill -> SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getShowInList())
+                    .toList());
             this.skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXpRaw(null, skill)).reversed());
             
             for (String skillKey : this.skillsKeys) {
