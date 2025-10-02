@@ -430,7 +430,7 @@ public class Config {
 			JUMP_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
 					"JUMP Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
 			SPRINT_JUMP_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SPRINT_JUMP Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
+					"SPRINT_JUMP Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 1d));
 			CROUCH_JUMP_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
 					"CROUCH_JUMP Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 2.5));
 		builder.pop();
@@ -445,17 +445,17 @@ public class Config {
 			HEALTH_DECREASE_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder,
 				"HEALTH_DECREASE Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("endurance", 1d));
 			SPRINTING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SPRINTING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 100d));
+					"SPRINTING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("agility", 200d));
 			SUBMERGED_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
 					"SUBMERGED Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 1d));
 			SWIMMING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SWIMMING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 100d));
+					"SWIMMING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 0.5));
 			DIVING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"DIVING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 150d));
+					"DIVING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 0.5));
 			SURFACING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SURFACING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 50d));
+					"SURFACING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 0.5));
 			SWIM_SPRINTING_XP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-					"SWIM_SPRINTING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 200d));
+					"SWIM_SPRINTING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 0.5));
 		builder.pop();
 			
 		builder.pop();
