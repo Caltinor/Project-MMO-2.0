@@ -48,6 +48,7 @@ public enum MsLoggy {
 		LOADING("loading"),
 		NETWORK("network"),
 		XP("xp"),
+		REQ("req"),
 		//unused default
 		NONE("none");
 		

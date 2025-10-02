@@ -354,8 +354,9 @@ public class Core {
 			if (SkillsConfig.SKILLS.get().getOrDefault(req.getKey(), SkillData.Builder.getDefault()).isSkillGroup()) {	
 				SkillData skillData = SkillsConfig.SKILLS.get().get(req.getKey());
 				if (skillData.getUseTotalLevels()) {
-					int total = skillData.getGroup().keySet().stream().map(skill-> getData().getPlayerSkillLevel(skill, playerID)).collect(Collectors.summingInt(Integer::intValue));
+					int total = skillData.getGroup().keySet().stream().map(skill -> getData().getPlayerSkillLevel(skill, playerID)).mapToInt(Integer::intValue).sum();
 					if (req.getValue() > total) {
+						MsLoggy.DEBUG.log(LOG_CODE.REQ, "Req not met.  required {} but only {} in {} skill", req.getValue(), total, req.getKey());
 						return false;
 					}
 				}
