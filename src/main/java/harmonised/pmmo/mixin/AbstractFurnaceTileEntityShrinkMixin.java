@@ -28,6 +28,6 @@ public class AbstractFurnaceTileEntityShrinkMixin
     {
         Level world = be.getLevel();
         BlockPos pos = be.getBlockPos();
-        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(be.getItem(0), world, pos));
+        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(be.getItem(0), be.getItem(2), world, pos));
     }
 }

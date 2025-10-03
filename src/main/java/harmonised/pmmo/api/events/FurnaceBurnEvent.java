@@ -6,7 +6,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.Event;
 
 public class FurnaceBurnEvent extends Event {
-	ItemStack input;
+	ItemStack input, output;
 	Level level;
 	BlockPos pos;
 	
@@ -21,16 +21,19 @@ public class FurnaceBurnEvent extends Event {
 	 * this event will not provide players with a smelting event they can configure.
 	 * 
 	 * @param input the item being smelted.  NOT the output item
+	 * @param output the resulting item from this smelt.
 	 * @param level the world/level the smelting is occurring in
 	 * @param pos the position of the block smelting the item
 	 */
-	public FurnaceBurnEvent(ItemStack input, Level level, BlockPos pos) {
+	public FurnaceBurnEvent(ItemStack input, ItemStack output, Level level, BlockPos pos) {
 		this.input = input;
+		this.output = output;
 		this.level = level;
 		this.pos = pos;
 	}
 	
 	public ItemStack getInput() {return input;}
+	public ItemStack getOutput() {return output;}
 	public Level getLevel() {return level;}
 	public BlockPos getPos() {return pos;}
 
