@@ -47,12 +47,7 @@ public class CmdNodeAdmin {
 	private static final String TARGET_ARG = "Target";
 	private static final String TYPE_ARG = "Change Type";
 	private static final String VALUE_ARG = "New Value";
-	private static SuggestionProvider<CommandSourceStack> SKILL_SUGGESTIONS = new SuggestionProvider<>() {
-		@Override
-		public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) throws CommandSyntaxException {
-			return SharedSuggestionProvider.suggest(Config.skills().skills().keySet(), builder);
-		}
-	};
+	private static final SuggestionProvider<CommandSourceStack> SKILL_SUGGESTIONS = (context, builder) -> SharedSuggestionProvider.suggest(Config.skills().skills().keySet(), builder);
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		return Commands.literal("admin")
@@ -89,7 +84,7 @@ public class CmdNodeAdmin {
 										.suggests(SKILL_SUGGESTIONS)
 										.then(Commands.argument(VALUE_ARG, DoubleArgumentType.doubleArg(0.0))
 												.executes(CmdNodeAdmin::adminBonuses))))
-						.executes(ctx -> displayPlayer(ctx)));
+						.executes(CmdNodeAdmin::displayPlayer));
 	}
 	
 	public static int adminSetOrAdd(CommandContext<CommandSourceStack> ctx, boolean isSet) throws CommandSyntaxException {
@@ -164,7 +159,7 @@ public class CmdNodeAdmin {
 		//TODO replace with a gui
 		IDataStorage data = Core.get(LogicalSide.SERVER).getData();
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
-			ctx.getSource().sendSuccess(() -> player.getName(), false);
+			ctx.getSource().sendSuccess(player::getName, false);
 			for (Map.Entry<String, Experience> skillMap : data.getXpMap(player.getUUID()).entrySet()) {
 				long level = skillMap.getValue().getLevel().getLevel();
 				ctx.getSource().sendSuccess(() -> Component.literal(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
@@ -179,7 +174,7 @@ public class CmdNodeAdmin {
 		ResourceLocation playerID = Reference.mc(player.getUUID().toString());
 		PlayerData existing = core.getLoader().PLAYER_LOADER.getData().get(playerID);
 		boolean exists = existing != null;
-		PlayerData updated = new PlayerData(true, exists ? !existing.ignoreReq() : true, exists ? existing.bonuses() : Map.of());
+		PlayerData updated = new PlayerData(true, !exists || !existing.ignoreReq(), exists ? existing.bonuses() : Map.of());
 		core.getLoader().PLAYER_LOADER.getData().put(playerID, updated);
 		Networking.sendToClient(new CP_SyncData(ObjectType.PLAYER, core.getLoader().PLAYER_LOADER.getData()), player);
 		return 0;
@@ -198,7 +193,7 @@ public class CmdNodeAdmin {
 		bonuses.put(skill, bonus);
 		if (skill.equals("clear"))
 			bonuses.clear();
-		PlayerData updated = new PlayerData(true, exists ? !existing.ignoreReq() : true, bonuses);
+		PlayerData updated = new PlayerData(true, !exists || !existing.ignoreReq(), bonuses);
 		core.getLoader().PLAYER_LOADER.getData().put(playerID, updated);
 		Networking.sendToClient(new CP_SyncData(ObjectType.PLAYER, core.getLoader().PLAYER_LOADER.getData()), player);
 		return 0;

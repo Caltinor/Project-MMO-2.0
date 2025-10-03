@@ -341,6 +341,7 @@ public class Core {
 				if (skillData.getUseTotalLevels()) {
 					long total = skillData.getGroup().keySet().stream().map(skill -> getData().getLevel(skill, playerID)).mapToLong(Long::longValue).sum();
 					if (req.getValue() > total) {
+						MsLoggy.DEBUG.log(LOG_CODE.REQ, "Req not met.  required {} but only {} in {} skill", req.getValue(), total, req.getKey());
 						return false;
 					}
 				}

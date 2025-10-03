@@ -29,8 +29,7 @@ public class TagUtils {
 	 */
 	public static CompoundTag mergeTags(CompoundTag tag1, CompoundTag tag2) {
 		CompoundTag output = new CompoundTag();
-		List<String> allKeys = new ArrayList<>(); 
-		tag1.getAllKeys().forEach(s -> allKeys.add(s));
+        List<String> allKeys = new ArrayList<>(tag1.getAllKeys());
 		for (String key : tag2.getAllKeys()) {
 			if (!allKeys.contains(key) && key != null)
 				allKeys.add(key);
