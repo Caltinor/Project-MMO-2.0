@@ -69,19 +69,26 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 		}
+		else if (gainXpEvent.isLevelDown())
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_DOWN, player,
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 		this.setDirty();
 		Networking.sendToClient(new CP_UpdateExperience(skillName, xp.get(playerID).get(skillName), gainXpEvent.amountAwarded), player);
 	}
 	@Override
 	public void setXp(UUID playerID, String skillName, long value) {
 		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
-		if (xp.computeIfAbsent(playerID, i -> new HashMap<>()).computeIfAbsent(skillName, s -> new Experience()).setXp(value)
+		long currentLevel = xp.computeIfAbsent(playerID, i -> new HashMap<>()).computeIfAbsent(skillName, s -> new Experience()).getLevel().getLevel();
+		if (xp.get(playerID).get(skillName).setXp(value)
 			&& player != null) {
 			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
 			SkillUpTrigger.SKILL_UP.trigger(player);
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 		}
+		if (currentLevel < xp.get(playerID).get(skillName).getLevel().getLevel())
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_DOWN, player,
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 		this.setDirty();
 		if (player != null)
 			Networking.sendToClient(new CP_UpdateExperience(skillName, xp.get(playerID).get(skillName), 0), player);
@@ -122,6 +129,9 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		if (player != null) {
 			if (change > 0)
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
+			else if (change < 0)
+				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_DOWN, player,
 						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
 			Networking.sendToClient(new CP_UpdateExperience(skill, xp.get(playerID).get(skill), 0), player);
 		}
