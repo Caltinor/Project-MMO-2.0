@@ -208,7 +208,7 @@ public record ObjectData(
 					map.forEach((dmg, xp) -> {
 						damageXP.computeIfAbsent(event, e -> new HashMap<>()).merge(dmg, xp, (oMap, nMap) -> {
 							Map<String, Long> mergedMap = new HashMap<>(oMap);
-							nMap.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
+							nMap.forEach((k, v) -> mergedMap.merge(k, v, Long::max));
 							return mergedMap;
 						});
 					});

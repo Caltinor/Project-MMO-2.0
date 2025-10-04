@@ -376,7 +376,7 @@ public class APIUtils {
 	public static void registerDamageXpAward(ObjectType oType, ResourceLocation objectID, EventType type, String damageType, Map<String, Long> award, boolean asOverride) {
 		if ((oType == ObjectType.ENTITY || oType == ObjectType.ITEM) && EventType.is(EventType.DAMAGE_TYPES, type)) {
 			ObjectData raw = new ObjectData(asOverride);
-			raw.damageXpValues().put(type, Map.of(damageType, award));
+			raw.damageXpValues().put(type, new HashMap<>(Map.of(damageType, award)));
 			registerConfiguration(asOverride, oType, objectID, raw);
 		}
 	}
