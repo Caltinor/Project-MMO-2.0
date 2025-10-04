@@ -204,8 +204,18 @@ public class Config {
 
     private static void setupCommon(ModConfigSpec.Builder builder) {
         builder.comment("===============================================", "", "",
-                "Most Configurations are found in the server config",
-                "You can find that in worldname/serverconfig/",
+                "Project MMO is primarily configured with datapacks.",
+                "you can generate one via in-game commands",
+                "start by running '/pmmo genData begin' to clear any previous settings",
+                "then run         '/pmmo genData withConfigs' to include the settings typically found in server configs",
+                "then run         '/pmmo genData create' to have a new datapack created in your world's datapacks folder",
+                "",
+                "Under every mod id, you will find pmmo folders with files for all of the items/blocks/entities in the game.",
+                "Under '/data/pmmo/configs/' are all of the server configs for things like xp, mob scaling, and AutoValues",
+                "",
+                "If you are not fond of datapacks, PMMO also provides a script-like option via '.pmmo' files.",
+                "If you would like more information on scripting or more details on the datapack configs, please check out the wiki",
+                "https://moddedmc.wiki/en/project/pmmo/1.21.1/docs",
                 "", "", "===============================================").push("Common");
 
         buildMsLoggy(builder);
