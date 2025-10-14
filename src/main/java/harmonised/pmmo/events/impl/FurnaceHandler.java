@@ -14,10 +14,7 @@ import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 public class FurnaceHandler {
@@ -37,15 +34,24 @@ public class FurnaceHandler {
 			player = new ServerPlayer(event.getLevel().getServer(), (ServerLevel) event.getLevel(), playerProfile.get(), ClientInformation.createDefault());
 		}
 		
-		//core logic 
+		//core logic
 		Core core = Core.get(event.getLevel());
 		CompoundTag eventHook = core.getEventTriggerRegistry().executeEventListeners(EventType.SMELT, event, new CompoundTag());
-		eventHook.putString(APIUtils.STACK, TagUtils.stackTag(event.getInput(), event.getLevel()).getAsString());
-		eventHook = TagUtils.mergeTags(eventHook, core.getPerkRegistry().executePerk(EventType.SMELT, player, eventHook));
-		Map<String, Long> xpAwards = core.getExperienceAwards(EventType.SMELT, event.getInput(), player, eventHook);
-		core.getExperienceAwards(EventType.SMELTED, event.getOutput(), player, eventHook).forEach((skill, award) -> xpAwards.merge(skill, award, Long::sum));
-		List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);
-		core.awardXP(partyMembersInRange, xpAwards);
-		
+		Map<String, Long> xpAwards = new HashMap<>();
+
+		if(event.getInput() != null) {
+			eventHook.putString(APIUtils.STACK, TagUtils.stackTag(event.getInput(), event.getLevel()).getAsString());
+			eventHook = TagUtils.mergeTags(eventHook, core.getPerkRegistry().executePerk(EventType.SMELT, player, eventHook));
+			core.getExperienceAwards(EventType.SMELT, event.getInput(), player, eventHook).forEach((skill, award) -> xpAwards.merge(skill, award, Long::sum));
+		}
+
+		if(event.getOutput() != null) {
+			core.getExperienceAwards(EventType.SMELTED, event.getOutput(), player, eventHook).forEach((skill, award) -> xpAwards.merge(skill, award, Long::sum));
+		}
+
+		if(!xpAwards.isEmpty()) {
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);
+			core.awardXP(partyMembersInRange, xpAwards);
+		}
 	}
 }
