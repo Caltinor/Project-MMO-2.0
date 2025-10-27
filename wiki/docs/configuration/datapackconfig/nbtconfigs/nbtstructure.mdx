@@ -76,6 +76,7 @@ Before we get to cases, let's take a look at a basic layout for an item NBT WEAR
 - `"GREATER_THAN_OR_EQUAL"`: nbt value must be greater than or equal to the comparator
 - `"LESS_THAN_OR_EQUAL"`: nbt value must be less than or equal to the comparator
 - `"EXISTS"`: is true if the nbt value exists *(if used the comparators key can be omitted)*
+- '"CONTAINS"': is true if the comparator value is part of the path value. eg. "stone" is contained in "minecraft:stone_pickaxe"
 
 `"comparators": []` is an array of values.  each one is evaluated independently so that you can group similar conditions together.  e.g. `["mymod:iron", "mymod:wood", "mymod:diamond"]` or `["5", "10", "15"]`.
 

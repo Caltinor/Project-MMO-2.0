@@ -28,6 +28,9 @@ public record Result(
 		case EXISTS: {
 			return !comparison.isEmpty();
 		}
+		case CONTAINS: {
+			return comparison.contains(comparator);
+		}
 		default: return false;}
 	}
 }
