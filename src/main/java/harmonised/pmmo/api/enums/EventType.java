@@ -29,6 +29,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 	EFFECT(false, false, true, "magic", LangProvider.ENUM_EFFECT),
 	FISH(true, false, false, "fishing", LangProvider.XP_VALUE_FISH),
 	SMELT(true, false, false, "smithing", LangProvider.XP_VALUE_SMELT),
+	SMELTED(true, false, false, "smithing", LangProvider.XP_VALUE_SMELTED),
 	GROW(false, true, false, "farming", LangProvider.XP_VALUE_GROW),
 	GIVEN_AS_TRADE(true, false, false, "charisma", LangProvider.XP_VALUE_TRADE_GIVE),
 	/**Use either of the INCREASE/DECREASE variants for future implementations.*/

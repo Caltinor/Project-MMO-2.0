@@ -7,7 +7,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 
 public class FurnaceBurnEvent extends Event{
-	ItemStack input;
+	ItemStack input, output;
 	Level level;
 	BlockPos pos;
 	
@@ -25,16 +25,18 @@ public class FurnaceBurnEvent extends Event{
 	 * @param level the world/level the smelting is occurring in
 	 * @param pos the position of the block smelting the item
 	 */
-	public FurnaceBurnEvent(ItemStack input, Level level, BlockPos pos) {
+	public FurnaceBurnEvent(ItemStack input, ItemStack output, Level level, BlockPos pos) {
 		this.input = input;
+		this.output = output;
 		this.level = level;
 		this.pos = pos;
 	}
-	
+
 	@Override
 	public boolean isCancelable() {return false;}
 	
 	public ItemStack getInput() {return input;}
+	public ItemStack getOutput() {return output;}
 	public Level getLevel() {return level;}
 	public BlockPos getPos() {return pos;}
 
