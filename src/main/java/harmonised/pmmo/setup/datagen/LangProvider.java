@@ -1606,6 +1606,8 @@ public class LangProvider extends LanguageProvider{
     public static final Translation ENUM_SMELT = Translation.Builder.start("pmmo.enum.SMELT")
             .addLocale(Locale.EN_US, "Smelt/Cook")
             .addLocale(Locale.ZH_CN, "熔炼/烹饪").build();
+    public static final Translation ENUM_SMELTED = Translation.Builder.start("pmmo.enum.SMELTED")
+            .addLocale(Locale.EN_US, "Smelted/Cooked").build();
     public static final Translation ENUM_GROW = Translation.Builder.start("pmmo.enum.GROW")
             .addLocale(Locale.EN_US, "Grow")
             .addLocale(Locale.ZH_CN, "作物生长").build();
@@ -1994,6 +1996,8 @@ public class LangProvider extends LanguageProvider{
     public static final Translation XP_VALUE_SMELT = Translation.Builder.start("pmmo.xpValueSmelt")
             .addLocale(Locale.EN_US, "Smelt Xp Value")
             .addLocale(Locale.ZH_CN, "熔炼获得经验").build();
+    public static final Translation XP_VALUE_SMELTED = Translation.Builder.start("pmmo.xpValueSmelted")
+            .addLocale(Locale.EN_US, "Smelted Xp Value").build();
     public static final Translation XP_VALUE_TRADE_GIVE = Translation.Builder.start("pmmo.xpValueTradeGive")
             .addLocale(Locale.EN_US, "Given in Trade Xp Value")
             .addLocale(Locale.ZH_CN, "交易提供经验").build();
