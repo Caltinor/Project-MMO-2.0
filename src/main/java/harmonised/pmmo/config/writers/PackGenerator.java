@@ -240,7 +240,7 @@ public class PackGenerator {
 				raw.remove("negative_effect");
 				raw.remove("isTagFor");
 				return gson.toJson(raw);}),
-		BIOMES("pmmo/biomes", server -> server.registryAccess().registryOrThrow(Registries.BIOME).keySet(), (id) -> {
+		BIOMES("pmmo/biomes", server -> server.registryAccess().lookupOrThrow(Registries.BIOME).keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			LocationData existing = core.getLoader().BIOME_LOADER.getData(id);
 
@@ -254,7 +254,7 @@ public class PackGenerator {
 					applyDefaults ? existing.mobModifiers() : new HashMap<>());
 			JsonObject raw = LocationData.CODEC.codec().encodeStart(JsonOps.INSTANCE, data).result().get().getAsJsonObject();
 			return gson.toJson(raw);}),
-		ENCHANTMENTS("pmmo/enchantments", server -> server.registryAccess().registryOrThrow(Registries.ENCHANTMENT).keySet(), (id) -> {
+		ENCHANTMENTS("pmmo/enchantments", server -> server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
 			EnhancementsData existing = core.getLoader().ENCHANTMENT_LOADER.getData(id);
 

@@ -14,6 +14,7 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -89,12 +90,11 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
 
         //====FOOD============
         BuiltInRegistries.ITEM.stream()
-                .filter(item -> new ItemStack(item).getFoodProperties(null) != null)
+                .filter(item -> new ItemStack(item).has(DataComponents.FOOD))
                 .map(ItemStack::new).forEach(item -> {
-                    FoodProperties props = item.getFoodProperties(null);
+                    FoodProperties props = item.get(DataComponents.FOOD);
                     long xp = (props.nutrition() * 5L) +
-                            (long)(props.saturation() * 50f) +
-                            ((long)props.effects().size() * 50L);
+                            (long)(props.saturation() * 50f);
                     this.get(item.getItem()).addXpValues(EventType.CONSUME, Map.of("endurance", xp));
                     this.get(item.getItem()).addXpValues(EventType.CRAFT, Map.of("cooking", xp));
                     this.get(item.getItem()).addXpValues(EventType.SMELT, Map.of("cooking", xp));
@@ -174,7 +174,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         doFor(List.of(Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS), builder -> {
             builder.addXpValues(EventType.CRAFT, Map.of("crafting", 2000L, "smithing", 300L))
                     .addReq(ReqType.WEAR, Map.of("endurance", 30L))
-                    .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 1)
+                    .addNegativeEffect(RegistryUtil.getId(MobEffects.SLOWNESS), 1)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 1)
                     .addSalvage(getId(Items.IRON_INGOT), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
@@ -185,11 +185,24 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                     .setVeinCap(10)
                     .setVeinRate(0.01);
         });
+        doFor(List.of(Items.COPPER_HELMET, Items.COPPER_CHESTPLATE, Items.COPPER_LEGGINGS, Items.COPPER_BOOTS), builder -> {
+            builder.addXpValues(EventType.CRAFT, Map.of("crafting", 2000L, "smithing", 300L))
+                    .addReq(ReqType.WEAR, Map.of("endurance", 5L))
+                    .addNegativeEffect(RegistryUtil.getId(MobEffects.SLOWNESS), 1)
+                    .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 1)
+                    .addSalvage(getId(Items.COPPER_INGOT), APIUtils.SalvageBuilder.start()
+                            .setSalvageMax(4)
+                            .setMaxChance(0.9)
+                            .setChancePerLevel(Map.of("smithing", 0.005))
+                            .setXpAward(Map.of("smithing", 30L)).build())
+                    .setVeinCap(10)
+                    .setVeinRate(0.01);
+        });
         doFor(List.of(Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS), builder -> {
             builder.addXpValues(EventType.CRAFT, Map.of("crafting", 4000L, "smithing", 700L))
                     .addXpValues(EventType.ENCHANT, Map.of("magic", 80L))
                     .addReq(ReqType.WEAR, Map.of("endurance", 60L))
-                    .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 2)
+                    .addNegativeEffect(RegistryUtil.getId(MobEffects.SLOWNESS), 2)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 2)
                     .addSalvage(getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
@@ -205,7 +218,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                     .addXpValues(EventType.ENCHANT, Map.of("magic", 60L))
                     .addReq(ReqType.WEAR, Map.of("endurance", 10L))
                     .addBonus(ModifierDataType.WORN, Map.of("mining", 1.25))
-                    .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 1)
+                    .addNegativeEffect(RegistryUtil.getId(MobEffects.SLOWNESS), 1)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 1)
                     .addSalvage(getId(Items.GOLD_INGOT), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
@@ -220,7 +233,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
             builder.addXpValues(EventType.CRAFT, Map.of("crafting", 2000L, "smithing", 300L))
                     .addXpValues(EventType.ENCHANT, Map.of("magic", 60L))
                     .addReq(ReqType.WEAR, Map.of("endurance", 30L))
-                    .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 1)
+                    .addNegativeEffect(RegistryUtil.getId(MobEffects.SLOWNESS), 1)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 1)
                     .addSalvage(getId(Items.IRON_INGOT), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
@@ -235,7 +248,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
             builder.addXpValues(EventType.CRAFT, Map.of("crafting", 6000L, "smithing", 1000L))
                     .addXpValues(EventType.ENCHANT, Map.of("magic", 120L))
                     .addReq(ReqType.WEAR, Map.of("endurance", 90L))
-                    .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 3)
+                    .addNegativeEffect(RegistryUtil.getId(MobEffects.SLOWNESS), 3)
                     .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 3)
                     .addSalvage(getId(Items.DIAMOND), APIUtils.SalvageBuilder.start()
                             .setSalvageMax(4)
@@ -266,7 +279,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         doFor(List.of(Items.STONE_AXE, Items.STONE_PICKAXE, Items.STONE_HOE, Items.STONE_SHOVEL, Items.STONE_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",1500L, "smithing",200L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 30L))
-                .addNegativeEffect(RegistryUtil.getId(MobEffects.DIG_SLOWDOWN), 2)
+                .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 2)
                 .setVeinCap(10)
                 .setVeinRate(0.01)
@@ -276,11 +289,20 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.STONE_HOE, 10, 5, "farming").addBonus(ModifierDataType.HELD, Map.of("farming", 1.05));
         toolReq(Items.STONE_SHOVEL, 10, 5, "excavation").addBonus(ModifierDataType.HELD, Map.of("excavation", 1.05));
         toolReq(Items.STONE_SWORD, 10, 10, "combat").addBonus(ModifierDataType.HELD, Map.of("combat", 1.05));
+
+        doFor(List.of(Items.COPPER_AXE, Items.COPPER_PICKAXE, Items.COPPER_HOE, Items.COPPER_SHOVEL, Items.COPPER_SWORD), builder -> builder
+                .addXpValues(EventType.CRAFT, Map.of("crafting",2000L, "smithing",250L))
+                .addXpValues(EventType.ENCHANT, Map.of("magic", 30L))
+                .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
+                .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 2)
+                .setVeinCap(5)
+                .setVeinRate(0.05)
+        );
         
         doFor(List.of(Items.DIAMOND_AXE, Items.DIAMOND_PICKAXE, Items.DIAMOND_HOE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",4000L, "smithing",700L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 120L))
-                .addNegativeEffect(RegistryUtil.getId(MobEffects.DIG_SLOWDOWN), 2)
+                .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 2)
                 .setVeinCap(30)
                 .setVeinRate(0.1)
@@ -294,7 +316,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         doFor(List.of(Items.IRON_AXE, Items.IRON_PICKAXE, Items.IRON_HOE, Items.IRON_SHOVEL, Items.IRON_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",2000L, "smithing",300L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 60L))
-                .addNegativeEffect(RegistryUtil.getId(MobEffects.DIG_SLOWDOWN), 2)
+                .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 2)
                 .setVeinCap(30)
                 .setVeinRate(0.01)
@@ -308,7 +330,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         doFor(List.of(Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL,Items.GOLDEN_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",1500L, "smithing",200L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 30L))
-                .addNegativeEffect(RegistryUtil.getId(MobEffects.DIG_SLOWDOWN), 2)
+                .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 2)
                 .setVeinCap(30)
                 .setVeinRate(0.1)
@@ -322,7 +344,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         doFor(List.of(Items.NETHERITE_AXE, Items.NETHERITE_PICKAXE, Items.NETHERITE_HOE, Items.NETHERITE_SHOVEL, Items.NETHERITE_SWORD), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",6000L, "smithing",1000L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 250L))
-                .addNegativeEffect(RegistryUtil.getId(MobEffects.DIG_SLOWDOWN), 2)
+                .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 2)
                 .setVeinCap(45)
                 .setVeinRate(0.01)
@@ -339,6 +361,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         //================SALVAGE================
         doFor(List.of(Items.WOODEN_PICKAXE, Items.WOODEN_SHOVEL, Items.WOODEN_AXE, Items.WOODEN_HOE,
                         Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_AXE, Items.STONE_HOE,
+                        Items.COPPER_PICKAXE, Items.COPPER_SHOVEL, Items.COPPER_AXE, Items.COPPER_HOE,
                         Items.GOLDEN_PICKAXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_AXE, Items.GOLDEN_HOE,
                         Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE,
                         Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE,
@@ -361,6 +384,11 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         recoverTool(Items.STONE_AXE, Items.COBBLESTONE, 3, 15L, 0.005);
         recoverTool(Items.STONE_HOE, Items.COBBLESTONE, 2, 15L, 0.005);
         recoverTool(Items.STONE_SHOVEL, Items.COBBLESTONE, 1, 15L, 0.005);
+
+        recoverTool(Items.COPPER_PICKAXE, Items.COPPER_INGOT, 3, 20L, 0.005);
+        recoverTool(Items.COPPER_AXE, Items.COPPER_INGOT, 3, 2L, 0.005);
+        recoverTool(Items.COPPER_HOE, Items.COPPER_INGOT, 2, 20L, 0.005);
+        recoverTool(Items.COPPER_SHOVEL, Items.COPPER_INGOT, 1, 20L, 0.005);
 
         recoverTool(Items.GOLDEN_PICKAXE, Items.GOLD_INGOT, 3, 50L, 0.005);
         recoverTool(Items.GOLDEN_AXE, Items.GOLD_INGOT, 3, 50L, 0.005);
@@ -465,7 +493,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 1000L))
                 .addReq(ReqType.WEAR, Map.of("crafting", 30L))
                 .addReq(ReqType.USE, Map.of("magic",15L))
-                .addNegativeEffect(RegistryUtil.getId(MobEffects.MOVEMENT_SLOWDOWN), 3)
+                .addNegativeEffect(RegistryUtil.getId(MobEffects.SLOWNESS), 3)
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.WEAKNESS), 3));
 
         //TINKERS CONSTRUCT DEFAULTS

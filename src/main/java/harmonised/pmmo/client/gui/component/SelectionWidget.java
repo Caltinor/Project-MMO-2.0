@@ -9,6 +9,8 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -49,12 +51,12 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
-        RenderSystem.enableBlend();
-        RenderSystem.enableDepthTest();
+//        graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
+//        RenderSystem.enableBlend();
+//        RenderSystem.enableDepthTest();
         ResourceLocation location = BUTTON_SPRITES.get(this.isActive(), this.isMouseOver(mouseX, mouseY));
-        graphics.blitSprite(location, this.getX(), this.getY(), this.getWidth(), this.getHeight()/*, 20, 4, 200, 20, 0, 66*/);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, location, this.getX(), this.getY(), this.getWidth(), this.getHeight()/*, 20, 4, 200, 20, 0, 66*/);
+//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (selected != null)
             selected.render(graphics, getX(), getY(), width, false, getFGColor(), alpha);
@@ -62,15 +64,15 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
             graphics.drawString(font, title, getX() + 6, getY() + (height - 8) / 2, getFGColor() | Mth.ceil(alpha * 255.0F) << 24);
 
         if (extended) {
-            graphics.pose().pushPose();
-            graphics.pose().translate(0, 0, 500);
+//            graphics.pose().pushPose();
+            graphics.pose().translate(0, 0);
 
             int boxHeight = Math.max(1, ENTRY_HEIGHT * Math.min(entries.size(), 4)) + 2;
 
-            graphics.fill(RenderType.gui(), getX(),     getY() + ENTRY_HEIGHT - 1, getX() + width,     getY() + ENTRY_HEIGHT + boxHeight - 1, 0xFFFFFFFF);
-            graphics.fill(RenderType.gui(), getX() + 1, getY() + ENTRY_HEIGHT,     getX() + width - 1, getY() + ENTRY_HEIGHT + boxHeight - 2, 0xFF000000);
+            graphics.fill(RenderPipelines.GUI, getX(),     getY() + ENTRY_HEIGHT - 1, getX() + width,     getY() + ENTRY_HEIGHT + boxHeight - 1, 0xFFFFFFFF);
+            graphics.fill(RenderPipelines.GUI, getX() + 1, getY() + ENTRY_HEIGHT,     getX() + width - 1, getY() + ENTRY_HEIGHT + boxHeight - 2, 0xFF000000);
 
-            graphics.blitSprite(SORT_UP_SPRITE, getX() + width - 22, getY() + 1, 20, 18);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SORT_UP_SPRITE, getX() + width - 22, getY() + 1, 20, 18);
 
             T hoverEntry = getEntryAtPosition(mouseX, mouseY);
 
@@ -90,14 +92,14 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
                 int barHeight = (int)(ENTRY_HEIGHT * 4 * scale + 1);
                 int scrollBotY = Math.min(scrollY + barHeight, getY() + ENTRY_HEIGHT + boxHeight - 2);
 
-                graphics.fill(RenderType.gui(), getX() + width - 5, scrollY,     getX() + width - 1, scrollBotY,     0xFF666666);
-                graphics.fill(RenderType.gui(), getX() + width - 4, scrollY + 1, getX() + width - 2, scrollBotY - 1, 0xFFAAAAAA);
+                graphics.fill(RenderPipelines.GUI, getX() + width - 5, scrollY,     getX() + width - 1, scrollBotY,     0xFF666666);
+                graphics.fill(RenderPipelines.GUI, getX() + width - 4, scrollY + 1, getX() + width - 2, scrollBotY - 1, 0xFFAAAAAA);
             }
 
-            graphics.pose().popPose();
+//            graphics.pose().popPose();
         }
         else {
-            graphics.blitSprite(SORT_DOWN_SPRITE, getX() + width - 22, getY() + 1, 20, 18);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SORT_DOWN_SPRITE, getX() + width - 22, getY() + 1, 20, 18);
         }
     }
 
@@ -112,14 +114,14 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     public boolean isExtended() { return extended; }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (active && mouseX >= getX() && mouseX <= getX() + width && mouseY >= getY() && mouseY <= getY() + getHeight()) {
+    public boolean mouseClicked(MouseButtonEvent mouseEvent, boolean doubleClicked) {
+        if (active && mouseEvent.x() >= getX() && mouseEvent.x() <= getX() + width && mouseEvent.y() >= getY() && mouseEvent.y() <= getY() + getHeight()) {
             int maxX = getX() + width - (entries.size() > 4 ? 5 : 0);
             int maxY = getY() + ENTRY_HEIGHT * Math.min(entries.size() + 1, 5);
-            if (extended && mouseX < maxX && mouseY > (getY() + ENTRY_HEIGHT) && mouseY < maxY)
-                setSelected(getEntryAtPosition(mouseX, mouseY), true);
+            if (extended && mouseEvent.x() < maxX && mouseEvent.y() > (getY() + ENTRY_HEIGHT) && mouseEvent.y() < maxY)
+                setSelected(getEntryAtPosition(mouseEvent.x(), mouseEvent.y()), true);
 
-            if ((mouseY < getY() + ENTRY_HEIGHT && mouseX < getX() + width) || mouseX < maxX) {
+            if ((mouseEvent.y() < getY() + ENTRY_HEIGHT && mouseEvent.x() < getX() + width) || mouseEvent.x() < maxX) {
                 extended = !extended;
                 scrollOffset = 0;
             }
@@ -132,7 +134,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
         extended = false;
         scrollOffset = 0;
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mouseEvent, doubleClicked);
     }
 
     @Override
@@ -154,11 +156,11 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
         return pMouseX >= getX() && pMouseY >= getY() && pMouseX < (getX() + width) && pMouseY < (getY() + getHeight());
     }
 
-    private T getEntryAtPosition(double mouseX, double mouseY) {
-        if (mouseX < getX() || mouseX > getX() + width || mouseY < (getY() + ENTRY_HEIGHT) || mouseY > (getY() + (ENTRY_HEIGHT * 5)))
+    private T getEntryAtPosition(double x, double y) {
+        if (x < getX() || x > getX() + width || y < (getY() + ENTRY_HEIGHT) || y > (getY() + (ENTRY_HEIGHT * 5)))
             return null;
 
-        double posY = mouseY - (getY() + ENTRY_HEIGHT);
+        double posY = y - (getY() + ENTRY_HEIGHT);
         int idx = (int) (posY / ENTRY_HEIGHT) + scrollOffset;
 
         return idx < entries.size() ? entries.get(idx) : null;
@@ -191,7 +193,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
 
         public void render(GuiGraphics graphics, int x, int y, int width, boolean hovered, int fgColor, float alpha) {
             if (hovered)
-                graphics.fill(RenderType.gui(), x, y, x + width, y + ENTRY_HEIGHT, 0xFFA0A0A0);
+                graphics.fill(RenderPipelines.GUI, x, y, x + width, y + ENTRY_HEIGHT, 0xFFA0A0A0);
 
             FormattedCharSequence text = Language.getInstance().getVisualOrder(FormattedText.composite(font.substrByWidth(message, width - 12)));
             graphics.drawString(font, text, x + 6, y + 6, fgColor | Mth.ceil(alpha * 255.0F) << 24);

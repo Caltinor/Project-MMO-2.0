@@ -19,11 +19,12 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.client.gui.GuiLayer;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,8 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class XPOverlayGUI implements LayeredDraw.Layer
-{
+public class XPOverlayGUI implements GuiLayer {
 	private final Core core = Core.get(LogicalSide.CLIENT);
 	private int skillGap = 0;
 	private Minecraft mc;
@@ -47,8 +47,8 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 			fontRenderer = mc.font;
 		
 		if(!mc.getDebugOverlay().showDebugScreen()){
-			guiGraphics.pose().pushPose();
-			RenderSystem.enableBlend();
+//			guiGraphics.pose().pushPose();
+//			RenderSystem.enableBlend();
 			
 			if(Config.SKILL_LIST_DISPLAY.get())
 				renderSkillList(guiGraphics, Config.SKILL_LIST_OFFSET_X.get(), Config.SKILL_LIST_OFFSET_Y.get());
@@ -59,7 +59,7 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 					ClientTickHandler.xpGains.remove(0);
 				renderGains(guiGraphics, Config.GAIN_LIST_OFFSET_X.get(), Config.GAIN_LIST_OFFSET_Y.get());
 			}
-			guiGraphics.pose().popPose();
+//			guiGraphics.pose().popPose();
 		}
 		if (ClientTickHandler.isRefreshTick()) {ClientTickHandler.resetTicks();}
 	}
@@ -109,8 +109,8 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 				currentCharge = (int)mc.player.getAttribute(CommonSetup.VEIN_AMOUNT).getValue();
 		}
 		if (currentCharge > 0) {
-			graphics.drawString(fontRenderer, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()), renderX, renderY-11, 0xFFFFFF);
-			graphics.drawString(fontRenderer, LangProvider.VEIN_CHARGE.asComponent(currentCharge, maxCharge), renderX, renderY, 0xFFFFFF);
+			graphics.drawString(fontRenderer, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()), renderX, renderY-11, 0xFFFFFFFF);
+			graphics.drawString(fontRenderer, LangProvider.VEIN_CHARGE.asComponent(currentCharge, maxCharge), renderX, renderY, 0xFFFFFFFF);
 		}
 	}
 	
@@ -161,7 +161,10 @@ public class XPOverlayGUI implements LayeredDraw.Layer
 			int levelGap = fontRenderer.width(xpRaw());
 			graphics.drawString(fontRenderer, xpRaw(), skillListX, skillListY + 3 + yOffset(), color());
 			if (Config.SKILL_LIST_USE_ICONS.get())
-				graphics.blit(icon(), skillListX + levelGap + 2, skillListY + 3 + yOffset(), 9, 9, 0, 0, iconSize(), iconSize(), iconSize(), iconSize());
+				graphics.blit(icon(),
+						skillListX + levelGap + 2,  skillListY + 3 + yOffset(),
+						skillListX + levelGap + 11, skillListY + 12 + yOffset(),
+						0, 1,0, 1);
 			else
 				graphics.drawString(fontRenderer, " | " + skillName.getString(), skillListX + levelGap, skillListY + 3 + yOffset(), color());
 			graphics.drawString(fontRenderer, bonusLine, skillListX + levelGap + (Config.SKILL_LIST_USE_ICONS.get() ? 6 : skillGap()) + 9, skillListY + 3 + yOffset(), color());

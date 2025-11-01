@@ -89,9 +89,9 @@ public record Expression(
     }
 
     private static <T> List<ResourceLocation> readRegistry(boolean forTags, RegistryAccess access, ResourceKey<Registry<T>> registry, ResourceLocation tagID) {
-        var reg = access.registryOrThrow(registry);
+        var reg = access.lookupOrThrow(registry);
         return forTags
-                ? reg.getTag(TagKey.create(registry, tagID))
+                ? reg.get(TagKey.create(registry, tagID))
                 .map(named -> named.stream().map(holder -> holder.unwrapKey().get().location()).toList())
                 .orElse(List.of())
                 : reg.keySet().stream().filter(id -> id.getNamespace().equals(tagID.getNamespace())).toList();

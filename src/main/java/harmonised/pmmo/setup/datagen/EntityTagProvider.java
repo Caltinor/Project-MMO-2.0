@@ -6,20 +6,19 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 
 public class EntityTagProvider extends EntityTypeTagsProvider{
 
-	public EntityTagProvider(PackOutput pOutput, CompletableFuture<Provider> pProvider,	@Nullable ExistingFileHelper existingFileHelper) {
-		super(pOutput, pProvider, Reference.MOD_ID, existingFileHelper);
+	public EntityTagProvider(PackOutput pOutput, CompletableFuture<Provider> pProvider) {
+		super(pOutput, pProvider, Reference.MOD_ID);
 	}
 	
 	@Override
 	protected void addTags(Provider pProvider) {
+		
 		tag(Reference.BREEDABLE_TAG)
 			.add(EntityType.AXOLOTL)
 			.add(EntityType.BEE)
@@ -45,7 +44,7 @@ public class EntityTagProvider extends EntityTypeTagsProvider{
 			.add(EntityType.WOLF);
 		
 		tag(Reference.RIDEABLE_TAG)
-			.add(EntityType.BOAT)
+			.addTag(EntityTypeTags.BOAT)
 			.add(EntityType.DONKEY)
 			.add(EntityType.HORSE)
 			.add(EntityType.MULE)

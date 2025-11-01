@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(NeoForgeEventHandler.class)
 public interface NeoEventHandlerMixin {
-    @Accessor("INSTANCE")
+    @Accessor("LOOT_MODIFIER_MANAGER")
     public static LootModifierManager getINSTANCE() {
         throw new AssertionError();
     }

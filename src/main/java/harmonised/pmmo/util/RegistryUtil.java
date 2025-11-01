@@ -21,6 +21,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RegistryUtil {
 	public static ResourceLocation getId(RegistryAccess access, ItemStack stack) {
 		return getId(access, stack.getItem());
@@ -57,7 +60,7 @@ public class RegistryUtil {
 	}
 
 	public static <T> ResourceLocation getId(RegistryAccess access, ResourceKey<Registry<T>> registry, T source) {
-		return access.registryOrThrow(registry).getKey(source);
+		return access.lookupOrThrow(registry).getKey(source);
 	}
 
 	public static ResourceLocation getAttributeId(Holder<Attribute> attribute) {
@@ -68,9 +71,21 @@ public class RegistryUtil {
 		return isInTag(access, registry, Reference.of(objectID), tagId);
 	}
 	public static <T> boolean isInTag(RegistryAccess access, ResourceKey<Registry<T>> registry, ResourceLocation objectID, String tagId) {
-		var reg = access.registryOrThrow(registry);
+		var reg = access.lookupOrThrow(registry);
 		var tag = TagKey.create(registry, Reference.of(tagId));
-		var holder = reg.getHolder(ResourceKey.create(registry, objectID));
-		return holder.map(h -> h.is(tag)).orElse(false);
+		var holder = reg.wrapAsHolder(reg.getValue(objectID));
+		return holder.is(tag);
+	}
+
+	public static <T> List<Holder<T>> getHolders(RegistryAccess access, ResourceKey<Registry<T>> reg) {
+		List<Holder<T>> holders = new ArrayList<>();
+		access.lookupOrThrow(reg).asHolderIdMap().iterator().forEachRemaining(holders::add);
+		return holders;
+	}
+
+	public static <T> List<ResourceLocation> getTagMemberIds(RegistryAccess access, ResourceKey<Registry<T>> reg, TagKey<T> tag) {
+		List<ResourceLocation> members = new ArrayList<>();
+		access.lookupOrThrow(reg).getTagOrEmpty(tag).iterator().forEachRemaining(i -> members.add(i.unwrapKey().get().location()));
+		return members;
 	}
 }

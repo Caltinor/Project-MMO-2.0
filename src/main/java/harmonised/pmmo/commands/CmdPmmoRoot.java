@@ -17,6 +17,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.neoforged.fml.ModList;
 
+import java.net.URI;
+
 public class CmdPmmoRoot {
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -69,11 +71,11 @@ public class CmdPmmoRoot {
 		MutableComponent wiki = Component.literal("the wiki").withStyle(Style.EMPTY
 				.withUnderlined(true)
 				.withColor(ChatFormatting.BLUE)
-				.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Caltinor/Project-MMO-2.0/blob/main/wiki/home.md")));
+				.withClickEvent(new ClickEvent.OpenUrl(URI.create("https://github.com/Caltinor/Project-MMO-2.0/blob/main/wiki/home.md"))));
 		MutableComponent discord = Component.literal("the discord").withStyle(Style.EMPTY
 				.withUnderlined(true)
 				.withColor(ChatFormatting.BLUE)
-				.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/5NVNkNB")));
+				.withClickEvent(new ClickEvent.OpenUrl(URI.create("https://discord.gg/5NVNkNB"))));
 		context.getSource().sendSuccess(() -> Component.literal("Help can be found on ").append(wiki).append(" or in ").append(discord), false);
 		return 0;
 	}

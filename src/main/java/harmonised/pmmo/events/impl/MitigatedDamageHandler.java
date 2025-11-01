@@ -67,8 +67,8 @@ public class MitigatedDamageHandler {
                 .filter(str -> {
                     if (!str.contains("#"))
                         return false;
-                    var registry = player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
-                    var tag = registry.getTag(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(str.substring(1))));
+                    var registry = player.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
+                    var tag = registry.get(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(str.substring(1))));
                     return tag.map(type -> type.contains(source.typeHolder())).orElse(false);
                 }).toList();
         Map<String, Long> tagXp = tags.stream().map(config::get).reduce(Functions::mergeMaps).orElse(new HashMap<>());

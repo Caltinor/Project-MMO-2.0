@@ -11,32 +11,28 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.component.DamageResistant;
+import net.minecraft.world.item.enchantment.Repairable;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AutoItem {
 	//Default values set by MC or used by wooden items
@@ -54,24 +50,24 @@ public class AutoItem {
 			return new HashMap<>();
 		
 		final Map<String, Long> outMap = new HashMap<>();
-		ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(stackID));
+		ItemStack stack = BuiltInRegistries.ITEM.getValue(stackID).getDefaultInstance();
 		switch (type) {
 		case WEAR: {
-			if (stack.getItem() instanceof TieredItem) {
-				if (stack.getItem() instanceof SwordItem)
+			if (stack.is(Tags.Items.TOOLS)) {
+				if (stack.is(ItemTags.SWORDS))
 					outMap.putAll(getUtensilData(UtensilTypes.SWORD, type, stack, true));
-				else if (stack.getItem() instanceof AxeItem)
+				else if (stack.is(ItemTags.AXES))
 					outMap.putAll(getUtensilData(UtensilTypes.AXE, type, stack, false));
-				else if (stack.getItem() instanceof PickaxeItem)
+				else if (stack.is(ItemTags.PICKAXES))
 					outMap.putAll(getUtensilData(UtensilTypes.PICKAXE, type, stack, false));
-				else if (stack.getItem() instanceof ShovelItem)
+				else if (stack.is(ItemTags.SHOVELS))
 					outMap.putAll(getUtensilData(UtensilTypes.SHOVEL, type, stack, false));
-				else if (stack.getItem() instanceof HoeItem)
+				else if (stack.is(ItemTags.HOES))
 					outMap.putAll(getUtensilData(UtensilTypes.HOE, type, stack, false));
 			}
-			else if (stack.getItem() instanceof ArmorItem)
+			else if (stack.is(Tags.Items.ARMORS))
 				outMap.putAll(getWearableData(type, stack, true));
-			else if (stack.getItem() instanceof ElytraItem)
+			else if (stack.getItem().equals(Items.ELYTRA))
 				outMap.putAll(getWearableData(type, stack, false));
 			break;
 		}
@@ -86,31 +82,31 @@ public class AutoItem {
 			break;
 		}
 		case TOOL: {
-			if (stack.getItem() instanceof TieredItem) {
-				if (stack.getItem() instanceof SwordItem) 
+			if (stack.is(Tags.Items.TOOLS)) {
+				if (stack.is(ItemTags.SWORDS))
 					outMap.putAll(getUtensilData(UtensilTypes.SWORD, type, stack, false));
-				else if (stack.getItem() instanceof AxeItem) 
+				else if (stack.is(ItemTags.AXES))
 					outMap.putAll(getUtensilData(UtensilTypes.AXE, type, stack, false));
-				else if (stack.getItem() instanceof PickaxeItem)
+				else if (stack.is(ItemTags.PICKAXES))
 					outMap.putAll(getUtensilData(UtensilTypes.PICKAXE, type, stack, false));
-				else if (stack.getItem() instanceof ShovelItem) 
+				else if (stack.is(ItemTags.SHOVELS))
 					outMap.putAll(getUtensilData(UtensilTypes.SHOVEL, type, stack, false));
-				else if (stack.getItem() instanceof HoeItem) 
+				else if (stack.is(ItemTags.HOES))
 					outMap.putAll(getUtensilData(UtensilTypes.HOE, type, stack, false));
 			}
 			break;
 		}
 		case WEAPON: {
-			if (stack.getItem() instanceof TieredItem) {
-				if (stack.getItem() instanceof SwordItem)
+			if (stack.is(Tags.Items.TOOLS)) {
+				if (stack.is(ItemTags.SWORDS))
 					outMap.putAll(getUtensilData(UtensilTypes.SWORD, type, stack, true));
-				else if (stack.getItem() instanceof AxeItem) 
+				else if (stack.is(ItemTags.AXES))
 					outMap.putAll(getUtensilData(UtensilTypes.AXE, type, stack, true));
-				else if (stack.getItem() instanceof PickaxeItem) 
+				else if (stack.is(ItemTags.PICKAXES))
 					outMap.putAll(getUtensilData(UtensilTypes.PICKAXE, type, stack, true));
-				else if (stack.getItem() instanceof ShovelItem) 
+				else if (stack.is(ItemTags.SHOVELS))
 					outMap.putAll(getUtensilData(UtensilTypes.SHOVEL, type, stack, true));
-				else if (stack.getItem() instanceof HoeItem) 
+				else if (stack.is(ItemTags.HOES))
 					outMap.putAll(getUtensilData(UtensilTypes.HOE, type, stack, true));
 			}
 			break;
@@ -132,10 +128,10 @@ public class AutoItem {
 			return new HashMap<>();
 		
 		Map<String, Long> outMap = new HashMap<>();
-		ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(stackID));
+		ItemStack stack = BuiltInRegistries.ITEM.getValue(stackID).getDefaultInstance();
 		switch (type) {
 		case ANVIL_REPAIR: {
-			if (stack.isRepairable()) {
+			if (stack.getComponents().has(DataComponents.REPAIRABLE)) {
 				Config.autovalue().xpAwards().item(type).forEach((skill, xp) -> {
 					outMap.put(skill, (long) (xp * (stack.getMaxDamage()*0.25)));
 				});
@@ -149,28 +145,28 @@ public class AutoItem {
 			break;
 		}
 		case CRAFT: {
-			if (stack.getItem() instanceof TieredItem) {
-				if (stack.getItem() instanceof SwordItem) 
+			if (stack.is(Tags.Items.TOOLS)) {
+				if (stack.is(ItemTags.SWORDS))
 					outMap.putAll(getUtensilData(UtensilTypes.SWORD, type, stack, true));
-				else if (stack.getItem() instanceof AxeItem) 
+				else if (stack.is(ItemTags.AXES))
 					outMap.putAll(getUtensilData(UtensilTypes.AXE, type, stack, false));
-				else if (stack.getItem() instanceof PickaxeItem) 
+				else if (stack.is(ItemTags.PICKAXES))
 					outMap.putAll(getUtensilData(UtensilTypes.PICKAXE, type, stack, false));
-				else if (stack.getItem() instanceof ShovelItem) 
+				else if (stack.is(ItemTags.SHOVELS))
 					outMap.putAll(getUtensilData(UtensilTypes.SHOVEL, type, stack, false));
-				else if (stack.getItem() instanceof HoeItem) 
+				else if (stack.is(ItemTags.HOES))
 					outMap.putAll(getUtensilData(UtensilTypes.HOE, type, stack, false));
 			}
-			else if (stack.getItem() instanceof ArmorItem) 					
+			else if (stack.is(Tags.Items.ARMORS))
 				outMap.putAll(getWearableData(type, stack, true));
-			else if (stack.getItem() instanceof ElytraItem) 
+			else if (stack.getItem().equals(Items.ELYTRA))
 				outMap.putAll(getWearableData(type, stack, false));
 			else
 				outMap.putAll(Config.autovalue().xpAwards().item(type));
 			break;
 		}
 		case CONSUME: {
-			if (stack.getFoodProperties(null) instanceof  FoodProperties properties) {
+			if (stack.get(DataComponents.FOOD) instanceof  FoodProperties properties) {
 				Config.autovalue().xpAwards().item(type).forEach((skill, xp) -> {
 					Float nutritionScale = (float)properties.nutrition() * properties.saturation();
 					Float xpAward = nutritionScale * (float) xp;
@@ -202,7 +198,7 @@ public class AutoItem {
 	private static Map<String, Long> getUtensilData(UtensilTypes utensil, ReqType type, ItemStack stack, boolean asWeapon) {
 		Map<String, Long> outMap = new HashMap<>();
 		//if the item being evaluated is a basic item, return a blank map
-		if (stack.getItem() instanceof TieredItem && getTier((TieredItem) stack.getItem()) <= 0 ) 
+		if (stack.is(Tags.Items.TOOLS) && getTier(stack) <= 0 )
 			return outMap;
 		
 		final double scale = getUtensilAttributes(utensil, stack, asWeapon);
@@ -229,7 +225,7 @@ public class AutoItem {
 	private static Map<String, Long> getWearableData(ReqType type, ItemStack stack, boolean isArmor) {
 		Map<String, Long> outMap = new HashMap<>();
 		//if the item being evaluated is a basic item, return a blank map
-		if (stack.getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().equals(ArmorMaterials.LEATHER))
+		if (stack.is(Tags.Items.ARMORS) && stack.getOrDefault(DataComponents.REPAIRABLE, new Repairable(HolderSet.direct())).isValidRepairItem(Items.LEATHER.getDefaultInstance()))
 			return outMap;
 		
 		final double scale = getWearableAttributes(WearableTypes.fromSlot(stack.getEquipmentSlot(), !isArmor), stack, isArmor);
@@ -253,8 +249,8 @@ public class AutoItem {
 				.filter(entry -> entry.attribute().is(attribute))
 				.mapToDouble(a -> a.modifier().amount()).sum();
 	}
-	private static double getTier(TieredItem item) {
-		return item.getTier().getAttackDamageBonus();
+	private static double getTier(ItemStack item) {
+		return item.getOrDefault(DataComponents.DAMAGE, 0).doubleValue();
 	}
 	private static double getDamage(ItemStack stack) {
 		return (getAttributeAmount(stack, EquipmentSlot.MAINHAND, Attributes.ATTACK_DAMAGE) /*There was a bonus check here*/ - BASE_DAMAGE);
@@ -269,7 +265,7 @@ public class AutoItem {
 	private static double getUtensilAttributes(UtensilTypes type, ItemStack stack, boolean asWeapon) {
 		//Universally Used Attributes
 		double durabilityScale = getDurability(stack) * Config.autovalue().tweaks().utensil(type, AttributeKey.DUR);
-		double tierScale = getTier((TieredItem) stack.getItem()) * Config.autovalue().tweaks().utensil(type, AttributeKey.TIER);
+		double tierScale = getTier(stack) * Config.autovalue().tweaks().utensil(type, AttributeKey.TIER);
 		//Weapon specific
 		double damageScale = asWeapon ? getDamage(stack) * Config.autovalue().tweaks().utensil(type, AttributeKey.DMG) : 0d;
 		double atkSpdScale = asWeapon ? getAttackSpeed(stack) * Config.autovalue().tweaks().utensil(type, AttributeKey.SPD) : 0d;
@@ -284,12 +280,19 @@ public class AutoItem {
 		//Universally Used Attributes
 		double durabilityScale = (double)stack.getMaxDamage() * Config.autovalue().tweaks().wearable(type, AttributeKey.DUR);
 		//Armor Specific
-		ArmorMaterial material = isArmor ? ((ArmorItem)stack.getItem()).getMaterial().value() : null;
-		double armorScale = isArmor ? material.getDefense(((ArmorItem)stack.getItem()).getType()) * Config.autovalue().tweaks().wearable(type, AttributeKey.AMR) : 0d;
-		double toughnessScale = isArmor? material.toughness() * Config.autovalue().tweaks().wearable(type, AttributeKey.TUF) : 0d;
-		double knockbackScale = isArmor? material.knockbackResistance() * Config.autovalue().tweaks().wearable(type, AttributeKey.KBR) : 0d;
+		double armorScale = isArmor ? getArmorValue(stack, Attributes.ARMOR.value()) * Config.autovalue().tweaks().wearable(type, AttributeKey.AMR) : 0d;
+		double toughnessScale = isArmor? getArmorValue(stack, Attributes.ARMOR_TOUGHNESS.value()) * Config.autovalue().tweaks().wearable(type, AttributeKey.TUF) : 0d;
+		double knockbackScale = isArmor? getArmorValue(stack, Attributes.KNOCKBACK_RESISTANCE.value()) * Config.autovalue().tweaks().wearable(type, AttributeKey.KBR) : 0d;
 		//return and log output
 		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Attributes: DUR="+durabilityScale+" ARM="+armorScale+" TUF="+toughnessScale+" KBR="+knockbackScale);
 		return durabilityScale + armorScale + toughnessScale + knockbackScale;
+	}
+
+	private static double getArmorValue(ItemStack stack, Attribute attribute) {
+		return stack.get(DataComponents.ATTRIBUTE_MODIFIERS).modifiers().stream()
+				.filter(entry -> entry.attribute().equals(attribute))
+				.findAny()
+				.map(attr -> attr.modifier().amount())
+				.orElse(0d);
 	}
 }

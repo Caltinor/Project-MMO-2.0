@@ -12,14 +12,10 @@ import harmonised.pmmo.config.scripting.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.SwordItem;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -249,11 +245,10 @@ public record AutoValueConfig(
 		public Map<String, Long> req(ReqType type) {return itemReqs().getOrDefault(type, new HashMap<>());}
 
 		public Map<String, Long> getToolReq(ItemStack stack) {
-			Item item = stack.getItem();
-			if (item instanceof ShovelItem) return shovelOverride();
-			else if (item instanceof SwordItem) return swordOverride();
-			else if (item instanceof AxeItem) return axeOverride();
-			else if (item instanceof HoeItem) return hoeOverride();
+			if (stack.is(ItemTags.SHOVELS)) return shovelOverride();
+			else if (stack.is(ItemTags.SWORDS)) return swordOverride();
+			else if (stack.is(ItemTags.AXES)) return axeOverride();
+			else if (stack.is(ItemTags.HOES)) return hoeOverride();
 			else return req(ReqType.TOOL);
 		}
 	}

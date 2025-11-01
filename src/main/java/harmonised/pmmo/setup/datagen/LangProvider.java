@@ -1536,6 +1536,8 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Block with Shield").build();
 	public static final Translation ENUM_SKILL_UP = Translation.Builder.start("pmmo.enum.SKILL_UP")
 		.addLocale(Locale.EN_US, "Level Up").build();
+	public static final Translation ENUM_SKILL_DOWN = Translation.Builder.start("pmmo.enum.SKILL_DOWN")
+			.addLocale(Locale.EN_US, "Level Down").build();
 	public static final Translation ENUM_SLEEP = Translation.Builder.start("pmmo.enum.SLEEP")
 		.addLocale(Locale.EN_US, "Sleep").build();
 	public static final Translation ENUM_SPRINTING = Translation.Builder.start("pmmo.enum.SPRINTING")
@@ -1584,9 +1586,13 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Interact with Entity").build();
 	public static final Translation ENUM_BIOME = Translation.Builder.start("pmmo.enum.BIOME")
 		.addLocale(Locale.EN_US, "Biome").build();
+	public static final Translation ENUM_GIVEN_AS_TRADE = Translation.Builder.start("pmmo.enum.GIVEN_AS_TRADE")
+			.addLocale(Locale.EN_US, "Given as Trade").build();
+	public static final Translation ENUM_RECEIVED_AS_TRADE = Translation.Builder.start("pmmo.enum.RECEIVED_AS_TRADE")
+			.addLocale(Locale.EN_US, "Received as Trade").build();
 
 	//=========KEY BINDINGS====================
-	public static final Translation KEYBIND_CATEGORY = Translation.Builder.start("category.pmmo")
+	public static final Translation KEYBIND_CATEGORY = Translation.Builder.start("key.category.pmmo.pmmo")
 			.addLocale(Locale.HU, "Project MMO")
 			.addLocale(Locale.JA, "Project MMO")
 			.addLocale(Locale.PL, "Project MMO")

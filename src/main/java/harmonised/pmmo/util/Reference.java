@@ -8,10 +8,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class Reference {
 	public static final String MOD_ID = "pmmo";
@@ -44,4 +48,6 @@ public class Reference {
 	public static final TagKey<DamageType> FROM_IMPACT = TagKey.create(Registries.DAMAGE_TYPE, rl("impact"));
 	public static final TagKey<DamageType> FROM_MAGIC = TagKey.create(Registries.DAMAGE_TYPE, rl("magic"));
 	public static final TagKey<DamageType> FROM_GUN = TagKey.create(Registries.DAMAGE_TYPE, rl("gun"));
+
+	public static final List<EquipmentSlot> ARMOR_SLOTS = Arrays.stream(EquipmentSlot.values()).filter(EquipmentSlot::isArmor).toList();
 }

@@ -18,6 +18,12 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.inventory.tooltip.BelowOrAboveWidgetTooltipPositioner;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -77,14 +83,12 @@ public class PlayerStatsComponent extends AbstractWidget {
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         if (this.isVisible()) {
-            graphics.pose().pushPose();
-            graphics.pose().translate(0.0D, 0.0D, 120.0D);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int i = (this.width - IMAGE_WIDTH) / 2 - this.xOffset;
             int j = (this.height - IMAGE_HEIGHT) / 2;
-            graphics.blit(TEXTURE_LOCATION, i, j, 0, 0, 147, 166);
+            graphics.blit(TEXTURE_LOCATION,
+                    i, j, i + IMAGE_WIDTH, j + IMAGE_HEIGHT
+                    , 0f, IMAGE_WIDTH/256f, 0f, IMAGE_HEIGHT/256f);
             this.statsScroller.render(graphics, mouseX, mouseY, partialTicks);
-            graphics.pose().popPose();
         }
     }
     
@@ -124,9 +128,9 @@ public class PlayerStatsComponent extends AbstractWidget {
     }
     
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+    public boolean mouseClicked(MouseButtonEvent mouseEvent, boolean doubleClicked) {
         if (!this.isVisible()) return false;
-        return this.statsScroller.mouseClicked(pMouseX, pMouseY, pButton) || super.mouseClicked(pMouseX, pMouseY, pButton);
+        return this.statsScroller.mouseClicked(mouseEvent, doubleClicked) || super.mouseClicked(mouseEvent, doubleClicked);
     }
     
     @Override
@@ -136,9 +140,9 @@ public class PlayerStatsComponent extends AbstractWidget {
     }
     
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+    public boolean mouseDragged(MouseButtonEvent mouseEvent, double pDragX, double pDragY) {
         if (!this.isVisible()) return false;
-        return this.statsScroller.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY) || super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+        return this.statsScroller.mouseDragged(mouseEvent, pDragX, pDragY) || super.mouseDragged(mouseEvent, pDragX, pDragY);
     }
     
     @Override @NotNull public NarrationPriority narrationPriority() { return NarrationPriority.NONE; }
@@ -166,7 +170,7 @@ public class PlayerStatsComponent extends AbstractWidget {
         }
     
         @Override
-        protected void drawPanel(GuiGraphics guiGraphics, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
+        protected void drawPanel(GuiGraphics guiGraphics, int entryRight, int relativeY, int mouseX, int mouseY) {
             for (StatComponent component : this.abilities) {
                 component.setPosition(component.getX(), relativeY);
                 component.render(guiGraphics, mouseX, mouseY, Minecraft.getInstance().getFrameTimeNs());
@@ -222,12 +226,19 @@ public class PlayerStatsComponent extends AbstractWidget {
         @Override
         public void renderWidget(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
             super.renderWidget(graphics, pMouseX, pMouseY, pPartialTick);
-            graphics.blit(skillData.getIcon(), this.getX() + 3, this.getY() + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
+            graphics.blit(RenderPipelines.GUI_TEXTURED, skillData.getIcon(),
+                    this.getX() + 3, this.getY() + 3,
+                    0, 0,
+                    16, 16,
+                    skillData.getIconSize(), skillData.getIconSize(),
+                    skillData.getIconSize(), skillData.getIconSize());
 
             renderProgressBar(graphics);
             graphics.drawString(minecraft.font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
             graphics.drawString(minecraft.font, String.valueOf(xp.getLevel().getLevel()), (this.getX() + this.width - 5) - minecraft.font.width(String.valueOf(xp.getLevel().getLevel())), this.getY() + 5, skillColor.getRGB());
-            if (this.isHovered()) renderPerkTooltip(graphics, pMouseX, pMouseY, skillName);
+            if (pMouseX > this.getX() + 3 && pMouseX < this.getX() + 19
+                && pMouseY > this.getY() + 3 && pMouseY < this.getY() + 19)
+                renderPerkTooltip(graphics, pMouseX, pMouseY, skillName);
         }
         
         public void renderProgressBar(GuiGraphics graphics) {
@@ -238,14 +249,19 @@ public class PlayerStatsComponent extends AbstractWidget {
                 graphics.drawString(minecraft.font, text, renderX, renderY-1, this.skillColor.getRGB());
             }
             else {
-                graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
-                graphics.blit(TEXTURE_LOCATION, renderX, renderY, 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
+                graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION,
+                        renderX, renderY,
+                        0, 217,
+                        94, 5,
+                        101, 5,256, 256);
 
-                float percent = 100.0f / xpToNext();
-                int xp = (int) Math.min(Math.floor(percent * this.xp.getXp()), 94);
-                graphics.blit(TEXTURE_LOCATION, renderX, renderY, xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
-
-                graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                float percent = (float)this.xp.getXp() / (float)this.xp.getLevel().getXpToNext() ;
+                int xp = (int) (percent * 94F);
+                graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION,
+                        renderX, renderY,
+                        0, 223,
+                        xp, 5,
+                        101, 5, 256, 256,(0xFF << 24) | skillColor.getRGB());
             }
         }
 
@@ -253,19 +269,19 @@ public class PlayerStatsComponent extends AbstractWidget {
             List<FormattedCharSequence> holder = new ArrayList<>();
             Player player = Minecraft.getInstance().player;
             Config.perks().perks().getOrDefault(EventType.SKILL_UP, new ArrayList<>()).stream()
-                .filter(nbt -> skill.isEmpty() || !nbt.contains(APIUtils.SKILLNAME) || LangProvider.skill(nbt.getString(APIUtils.SKILLNAME)).getString().equals(skill))
+                .filter(nbt -> skill.isEmpty() || !nbt.contains(APIUtils.SKILLNAME) || LangProvider.skill(nbt.getString(APIUtils.SKILLNAME).get()).getString().equals(skill))
                 .forEach(nbt -> {
-                    ResourceLocation perkID = Reference.of(nbt.getString("perk"));
+                    ResourceLocation perkID = Reference.of(nbt.getString("perk").get());
                     nbt.putLong(APIUtils.SKILL_LEVEL, nbt.contains(APIUtils.SKILLNAME)
-                            ? Core.get(player.level()).getData().getLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
+                            ? Core.get(player.level()).getData().getLevel(nbt.getString(APIUtils.SKILLNAME).get(), player.getUUID())
                             : 0);
                     holder.add(Component.translatable("perk."+perkID.getNamespace()+"."+perkID.getPath()).getVisualOrderText());
                     holder.add(core.getPerkRegistry().getDescription(perkID).copy().getVisualOrderText());
                     core.getPerkRegistry().getStatusLines(perkID, player, nbt).stream()
-                        .map(MutableComponent::getVisualOrderText)
+                        .map(component -> component.getVisualOrderText())
                         .forEach(holder::add);
             });
-            minecraft.screen.setTooltipForNextRenderPass(holder);
+            graphics.setTooltipForNextFrame(holder, mouseX, mouseY);
         }
 
         private long xpToNext() {

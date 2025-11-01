@@ -1,6 +1,7 @@
 package harmonised.pmmo.api.perks;
 
 import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
@@ -108,34 +110,34 @@ public record Perk(
 		if (src.contains(APIUtils.COOLDOWN) && !Core.get(player.level()).getPerkRegistry().isPerkCooledDown(player, src))
 			return false;
 		boolean chanceSucceed = false;
-		if (src.contains(APIUtils.CHANCE) && src.getDouble(APIUtils.CHANCE) < player.level().random.nextDouble())
+		if (src.contains(APIUtils.CHANCE) && src.getDoubleOr(APIUtils.CHANCE, 0d) < player.level().random.nextDouble())
 			return false;
 		else if (src.contains(APIUtils.CHANCE)) chanceSucceed = true;
 		if (src.contains(APIUtils.SKILLNAME)) {
 			if (src.contains(FireworkHandler.FIREWORK_SKILL) && !src.getString(APIUtils.SKILLNAME).equals(src.getString(FireworkHandler.FIREWORK_SKILL)))
 				return false;
-			int skillLevel = src.getInt(APIUtils.SKILL_LEVEL);
-			if (src.contains(APIUtils.MAX_LEVEL) && skillLevel > src.getInt(APIUtils.MAX_LEVEL))
+			int skillLevel = src.getIntOr(APIUtils.SKILL_LEVEL, 0);
+			if (src.contains(APIUtils.MAX_LEVEL) && skillLevel > src.getLongOr(APIUtils.MAX_LEVEL, Config.server().levels().maxLevel()))
 				return false;
-			if (src.contains(APIUtils.MIN_LEVEL) && skillLevel < src.getInt(APIUtils.MIN_LEVEL))
+			if (src.contains(APIUtils.MIN_LEVEL) && skillLevel < src.getIntOr(APIUtils.MIN_LEVEL, 0))
 				return false;
 			boolean modulus = src.contains(APIUtils.MODULUS), 
 					milestone = src.contains(APIUtils.MILESTONES);
 			if (modulus || milestone) {
 				boolean modulus_match = modulus,
 						milestone_match = milestone;
-				if (modulus && skillLevel % Math.max(1, src.getInt(APIUtils.MODULUS)) != 0)
+				if (modulus && skillLevel % Math.max(1, src.getIntOr(APIUtils.MODULUS, 0)) != 0)
 					modulus_match = false;
-				if (milestone && !src.getList(APIUtils.MILESTONES, Tag.TAG_DOUBLE).stream()
-						.map(tag -> ((DoubleTag)tag).getAsInt()).toList().contains(skillLevel))
+				if (milestone && !src.getList(APIUtils.MILESTONES).get().stream()
+						.map(Tag::asInt).map(Optional::get).toList().contains(skillLevel))
 					milestone_match = false;
 				if (!modulus_match && !milestone_match)
 					return false;
 			}
 		}
 		if (chanceSucceed && src.contains(APIUtils.CHANCE_SUCCESS_MSG)) {
-			String msg = src.getString(APIUtils.CHANCE_SUCCESS_MSG);
-			player.sendSystemMessage(Component.literal(msg));
+			String msg = src.getString(APIUtils.CHANCE_SUCCESS_MSG).get();
+			player.displayClientMessage(Component.literal(msg), false);
 		}
 		return true;
 	};

@@ -37,7 +37,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
                     "archery", 1.35,
                     "woodcutting", 0.75,
                     "farming", 0.75))
-                .addNegativeEffect(MobEffects.MOVEMENT_SLOWDOWN, 0)
+                .addNegativeEffect(MobEffects.SLOWNESS, 0)
                 .addNegativeEffect(MobEffects.WEAKNESS, 0)
                 .addGlobalModifier(
                         modifiers(Attributes.MOVEMENT_SPEED, 0.005),
@@ -55,7 +55,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
                         "swimming", 1.5,
                         "fishing", 1.3
                 ))
-                .addNegativeEffect(MobEffects.MOVEMENT_SLOWDOWN, 1)
+                .addNegativeEffect(MobEffects.SLOWNESS, 1)
                 .addNegativeEffect(MobEffects.WEAKNESS, 0)
                 .addReq(Map.of("swimming", 25L, "endurance", 15L));
         get(Biomes.DEEP_FROZEN_OCEAN)
@@ -63,7 +63,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
                         "swimming", 2.0,
                         "fishing", 1.5
                 ))
-                .addNegativeEffect(MobEffects.MOVEMENT_SLOWDOWN, 3)
+                .addNegativeEffect(MobEffects.SLOWNESS, 3)
                 .addNegativeEffect(MobEffects.WEAKNESS, 2)
                 .addReq(Map.of("swimming", 35L, "endurance", 25L));
         get(Biomes.DEEP_OCEAN)
@@ -71,7 +71,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
                         "swimming", 1.5,
                         "fishing", 1.2
                 ))
-                .addNegativeEffect(MobEffects.MOVEMENT_SLOWDOWN, 0)
+                .addNegativeEffect(MobEffects.SLOWNESS, 0)
                 .addReq(Map.of("swimming", 15L));
         get(Biomes.DESERT)
                 .addBonus(ModifierDataType.BIOME, Map.of("excavation", 1.1, "farming", 0.85))
@@ -85,7 +85,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
                         "swimming", 1.75,
                         "fishing", 1.4
                 ))
-                .addNegativeEffect(MobEffects.MOVEMENT_SLOWDOWN, 2)
+                .addNegativeEffect(MobEffects.SLOWNESS, 2)
                 .addNegativeEffect(MobEffects.WEAKNESS, 1)
                 .addReq(Map.of("swimming", 35L, "endurance", 15L));
         get(Biomes.JUNGLE)
@@ -98,7 +98,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
                         "archery", 1.35,
                         "woodcutting", 0.75,
                         "farming", 0.75))
-                .addNegativeEffect(MobEffects.MOVEMENT_SLOWDOWN, 0)
+                .addNegativeEffect(MobEffects.SLOWNESS, 0)
                 .addNegativeEffect(MobEffects.WEAKNESS, 0)
                 .addGlobalModifier(
                         modifiers(Attributes.MOVEMENT_SPEED, 0.005),
@@ -106,7 +106,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
                 );
         get(Biomes.MEADOW)
                 .addBonus(ModifierDataType.BIOME, Map.of("farming", 1.05))
-                .addPositiveEffect(MobEffects.MOVEMENT_SPEED, 0)
+                .addPositiveEffect(MobEffects.SPEED, 0)
                 .addReq(Map.of("agility", 0L))
                 .addGlobalModifier(
                         modifiers(Attributes.MOVEMENT_SPEED, -0.0075),
@@ -116,7 +116,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
         get(Biomes.OCEAN).addBonus(ModifierDataType.BIOME, Map.of("swimming", 1.25, "fishing", 1.1));
         get(Biomes.PLAINS)
                 .addBonus(ModifierDataType.BIOME, Map.of("farming", 1.05))
-                .addPositiveEffect(MobEffects.MOVEMENT_SPEED, 0)
+                .addPositiveEffect(MobEffects.SPEED, 0)
                 .addReq(Map.of("agility", 0L))
                 .addGlobalModifier(
                         modifiers(Attributes.MOVEMENT_SPEED, -0.0075),

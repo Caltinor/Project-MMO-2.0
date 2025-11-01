@@ -35,7 +35,7 @@ public class BreathHandler {
                 Map<String, Double> ratio = Config.server().xpGains().playerXp(EventType.BREATH_CHANGE);
                 ResourceLocation source = Reference.mc("player");
                 final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP)
-                        ? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
+                        ? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP).get())
                         : new HashMap<>();
                 ratio.keySet().forEach((skill) -> {
                     Double value = ratio.getOrDefault(skill, 0d) * diff;

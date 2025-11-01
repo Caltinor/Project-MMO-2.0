@@ -30,7 +30,7 @@ import java.util.Optional;
  * the XP system.  Things like being AFK and getting a steady stream of XP were one aspect of this feature.
  * @author Caltinor
  */
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid=Reference.MOD_ID)
 public class CheeseTracker {
 
 	public static void applyAntiCheese(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {

@@ -13,13 +13,11 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value= Dist.CLIENT)
+@EventBusSubscriber(modid=Reference.MOD_ID, value= Dist.CLIENT)
 public class WorldRenderHandler {
 
 	@SubscribeEvent
-	public static void onWorldRender(RenderLevelStageEvent event) {
-		if (!event.getStage().equals(RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS))
-			return;
+	public static void onWorldRender(RenderLevelStageEvent.AfterTripwireBlocks event) {
 		Minecraft mc = Minecraft.getInstance();
 
 		if (Config.server().veinMiner().enabled()

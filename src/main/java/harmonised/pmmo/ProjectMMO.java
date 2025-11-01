@@ -21,6 +21,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.resource.JarContentsPackResources;
 
 import java.util.Optional;
 
@@ -75,10 +76,12 @@ public class ProjectMMO {
 	@SubscribeEvent
 	public void onPackFind(AddPackFindersEvent event) {
 		GameplayPacks.getPacks().stream().filter(holder -> holder.type().equals(event.getPackType())).forEach(holder -> {
-			var resourcePath = ModList.get().getModFileById(Reference.MOD_ID).getFile().findResource("resourcepacks/%s".formatted(holder.id().getPath()));
-			var pack = Pack.readMetaAndCreate(
+			JarContentsPackResources.JarContentsResourcesSupplier supplier = new JarContentsPackResources.JarContentsResourcesSupplier(
+					ModList.get().getModFileById(Reference.MOD_ID).getFile().getContents(),
+					"resourcepacks/%s".formatted(holder.id().getPath()));
+			Pack pack = Pack.readMetaAndCreate(
 					new PackLocationInfo("builtin/%s".formatted(holder.id().getPath()), holder.titleKey().asComponent(), holder.source(), Optional.empty()),
-					new PathPackResources.PathResourcesSupplier(resourcePath), holder.type(),
+					supplier, holder.type(),
 					new PackSelectionConfig(false, Pack.Position.BOTTOM, false));
 			event.addRepositorySource(consumer -> consumer.accept(pack));
 		});

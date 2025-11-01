@@ -31,7 +31,7 @@ public class BreakHandler {
 	@SuppressWarnings("resource")
 	public static void handle(BlockEvent.BreakEvent event) {
 		Core core = Core.get(event.getPlayer().level());
-		boolean serverSide = !event.getPlayer().level().isClientSide;
+		boolean serverSide = !event.getPlayer().level().isClientSide();
 		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.BREAK, event.getPlayer(), event.getState().getBlock().getName());
@@ -40,7 +40,7 @@ public class BreakHandler {
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BLOCK_BREAK, event, new CompoundTag());
-			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
+			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
 				event.setCanceled(true);
 				return;
 			}
@@ -57,7 +57,7 @@ public class BreakHandler {
 			chunk.getData(DataAttachmentTypes.PLACED_MAP.get()).remove(event.getPos());
 			if (event.getLevel().getBlockState(event.getPos()).is(Reference.CASCADING_BREAKABLES))
 				chunk.getData(DataAttachmentTypes.BREAK_MAP.get()).put(event.getPos(), event.getPlayer().getUUID());
-			chunk.setUnsaved(true);
+			chunk.markUnsaved();
 		}
 		//==============Process Vein Miner Logic==================
 		if (core.getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {

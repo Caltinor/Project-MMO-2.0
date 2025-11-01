@@ -1,6 +1,7 @@
 package harmonised.pmmo.storage;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
@@ -15,15 +16,12 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +31,8 @@ import java.util.stream.Collectors;
 public class PmmoSavedData extends SavedData implements IDataStorage{
 	
 	private static final String NAME = Reference.MOD_ID;
+	private static final String XP_KEY = "xp_data";
+	private static final String SCHEDULED_KEY = "scheduled_xp";
 	
 	private Map<UUID, Map<String, Experience>> xp = new HashMap<>();
 	private Map<UUID, Map<String, Experience>> scheduledXP = new HashMap<>();
@@ -41,6 +41,15 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			Codec.unboundedMap(CodecTypes.UUID_CODEC, 
 					Codec.unboundedMap(Codec.STRING, Experience.CODEC)
 						.xmap(HashMap::new, HashMap::new));
+
+	public static final SavedDataType<PmmoSavedData> TYPE = new SavedDataType<>(
+		NAME,
+		PmmoSavedData::new,
+		ctx -> RecordCodecBuilder.create(instance -> instance.group(
+				XP_CODEC.fieldOf(XP_KEY).forGetter(PmmoSavedData::getCleanXP),
+				XP_CODEC.fieldOf(SCHEDULED_KEY).forGetter(PmmoSavedData::getScheduledXP)
+		).apply(instance, PmmoSavedData::new))
+	);
 	
 	//===========================GETTERS AND SETTERS================
 	@Override
@@ -69,19 +78,26 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 		}
+		else if (gainXpEvent.isLevelDown())
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_DOWN, player,
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 		this.setDirty();
 		Networking.sendToClient(new CP_UpdateExperience(skillName, xp.get(playerID).get(skillName), gainXpEvent.amountAwarded), player);
 	}
 	@Override
 	public void setXp(UUID playerID, String skillName, long value) {
 		ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerID);
-		if (xp.computeIfAbsent(playerID, i -> new HashMap<>()).computeIfAbsent(skillName, s -> new Experience()).setXp(value)
-			&& player != null) {
+		long currentLevel = xp.computeIfAbsent(playerID, i -> new HashMap<>()).computeIfAbsent(skillName, s -> new Experience()).getLevel().getLevel();
+		if (xp.get(playerID).get(skillName).setXp(value) && player != null) {
 			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
 			SkillUpTrigger.SKILL_UP.trigger(player);
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 		}
+		if (currentLevel < xp.get(playerID).get(skillName).getLevel().getLevel())
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_DOWN, player,
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
+
 		this.setDirty();
 		if (player != null)
 			Networking.sendToClient(new CP_UpdateExperience(skillName, xp.get(playerID).get(skillName), 0), player);
@@ -123,39 +139,33 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			if (change > 0)
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
+			else if (change < 0)
+				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_DOWN, player,
+						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
 			Networking.sendToClient(new CP_UpdateExperience(skill, xp.get(playerID).get(skill), 0), player);
 		}
 	}
 	//===========================CORE WSD LOGIC=====================
 	public PmmoSavedData() {}
+	public PmmoSavedData(Context ctx) {}
 	
-	private static final String XP_KEY = "xp_data";
-	private static final String SCHEDULED_KEY = "scheduled_xp";
-	
-	public PmmoSavedData(CompoundTag nbt, HolderLookup.Provider provider) {
-		xp = new HashMap<>(XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(XP_KEY)).result().orElse(new HashMap<>()));
-		scheduledXP = new HashMap<>(XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(SCHEDULED_KEY)).result().orElse(new HashMap<>()));
+	public PmmoSavedData(Map<UUID, Map<String, Experience>> xpMap, Map<UUID, Map<String, Experience>> scheduled) {
+		this.xp = new HashMap<>(xpMap);
+		this.scheduledXP = new HashMap<>(scheduled);
 	}
 
-	public static Factory<PmmoSavedData> dataFactory() {
-		return new SavedData.Factory<PmmoSavedData>(PmmoSavedData::new, PmmoSavedData::new, null);
-	}
-
-	@Override
-	public @NotNull CompoundTag save(CompoundTag nbt, HolderLookup.Provider provider) {
-		//This filter exists to scrub the data from empty values to reduce file bloat.
-		Map<UUID, Map<String, Experience>> cleanXP = xp.entrySet().stream()
+	public Map<UUID, Map<String, Experience>> getCleanXP() {
+		return xp.entrySet().stream()
 				.filter(entry -> !entry.getValue().isEmpty())
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-		nbt.put(XP_KEY, XP_CODEC.encodeStart(NbtOps.INSTANCE, cleanXP).result().orElse(new CompoundTag()));
-		nbt.put(SCHEDULED_KEY, XP_CODEC.encodeStart(NbtOps.INSTANCE, scheduledXP).result().orElse(new CompoundTag()));
-		return nbt;
 	}
+
+	public Map<UUID, Map<String, Experience>> getScheduledXP() {return scheduledXP;}
 	
 	@Override
 	public IDataStorage get() { 
 		if (ServerLifecycleHooks.getCurrentServer() != null)
-			return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(dataFactory(), NAME);
+			return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(TYPE);
 		else
 			return new PmmoSavedData();
     }

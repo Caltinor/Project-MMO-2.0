@@ -34,7 +34,7 @@ public class GrowHandler {
 	}
 
 	public static void handle(Level level, BlockState state, BlockPos pos, Event event) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			Core core = Core.get(level);
 			
 			//if this block grew to exist because of a cascading block, return the block which spawned it
@@ -50,7 +50,7 @@ public class GrowHandler {
 			
 			//this is a redundant call to make sure cascading blocks have their owner set.  for non-cascading it just reassigns the same value
 			placeMap.put(pos, placerID);
-			chunk.setUnsaved(true);
+			chunk.markUnsaved();
 			
 			//Execute event triggers from addons
 			CompoundTag hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.GROW, event, new CompoundTag());

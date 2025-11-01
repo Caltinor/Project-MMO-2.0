@@ -7,8 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.client.gui.GuiLayer;
 
-public class IndicatorsOverlayGUI implements LayeredDraw.Layer {
+public class IndicatorsOverlayGUI implements GuiLayer {
 	private static final ResourceLocation ICONS = Reference.rl("textures/gui/overlay_icons.png");
 	private Minecraft mc;
 	private BlockHitResult bhr;
@@ -23,8 +24,13 @@ public class IndicatorsOverlayGUI implements LayeredDraw.Layer {
 			bhr = (BlockHitResult) mc.hitResult;
 		if(!mc.getDebugOverlay().showDebugScreen() && VeinTracker.isLookingAtVeinTarget(bhr)
 				&& !mc.player.level().getBlockState(bhr.getBlockPos()).isAir()){
-			float iconIndex = VeinTracker.mode.ordinal() * 16;
-			guiGraphics.blit(ICONS, (guiGraphics.guiWidth()/2)-16, (guiGraphics.guiHeight()/2)-8, iconIndex, 0f, 16, 16, 48, 16);
+			float iconIndex = (float)VeinTracker.mode.ordinal() * 0.333f;
+			guiGraphics.blit(ICONS,
+					(guiGraphics.guiWidth()/2)-16,
+					(guiGraphics.guiHeight()/2)-8,
+					(guiGraphics.guiWidth()/2),
+					(guiGraphics.guiHeight()/2)+8,
+					iconIndex, iconIndex+0.333f, 0, 1f);
 		}
 	}
 

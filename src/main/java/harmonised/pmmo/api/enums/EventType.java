@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.fml.common.asm.enumextension.IExtensibleEnum;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -45,6 +44,7 @@ public enum EventType implements StringRepresentable, GuiEnumGroup {
 	RIDING(false, false, true, "taming", LangProvider.ENUM_RIDE),
 	SHIELD_BLOCK(false, false, true, "combat", LangProvider.ENUM_SHIELD_BLOCK),
 	SKILL_UP(false, false, false, "", LangProvider.ENUM_SKILL_UP),
+	SKILL_DOWN(false, false, false, "", LangProvider.ENUM_SKILL_DOWN),
 	SPRINTING(false, false, true, "agility", LangProvider.ENUM_SPRINTING),
 	SUBMERGED(false, false, true, "swimming", LangProvider.ENUM_SUBMERGED),
 		SWIMMING(false, false, true, "swimming", LangProvider.ENUM_SWIMMING),

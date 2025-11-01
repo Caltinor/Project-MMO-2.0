@@ -9,6 +9,7 @@ import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.core.nbt.Operator;
 import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.RegistryUtil;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -41,12 +42,11 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
     private void populateData() {
         //====FOOD============
         BuiltInRegistries.ITEM.stream()
-                .filter(item -> new ItemStack(item).getFoodProperties(null) != null)
+                .filter(item -> new ItemStack(item).has(DataComponents.FOOD))
                 .map(ItemStack::new).forEach(item -> {
-            FoodProperties props = item.getFoodProperties(null);
+            FoodProperties props = item.get(DataComponents.FOOD);
             long xp = (props.nutrition() * 10L) +
-                    (long)(props.saturation() * 100f) +
-                    ((long)props.effects().size() * 50L);
+                    (long)(props.saturation() * 100f);
             this.get(item.getItem()).addXpValues(EventType.CONSUME, Map.of("endurance", xp));
             this.get(item.getItem()).addXpValues(EventType.CRAFT, Map.of("cooking", xp));
             this.get(item.getItem()).addXpValues(EventType.SMELT, Map.of("cooking", xp));
@@ -150,12 +150,14 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         get(Items.TORCHFLOWER).addBonus(ModifierDataType.HELD, Map.of("farming", 10.0));
         get(Items.PITCHER_POD).addBonus(ModifierDataType.HELD, Map.of("farming", 10.0));
         get(Items.SCAFFOLDING).addBonus(ModifierDataType.HELD, Map.of("building", 5.0));
-        get(Items.CHAIN).addBonus(ModifierDataType.HELD, Map.of("woodcutting", 2.0));
+        get(Items.IRON_CHAIN).addBonus(ModifierDataType.HELD, Map.of("woodcutting", 2.0));
 
         //=============VEIN DATA=============================
         get(Items.SCULK_VEIN).setVeinCap(2000).setVeinRate(100.0);
         doFor(List.of(Items.STONE_PICKAXE, Items.STONE_AXE, Items.STONE_SHOVEL, Items.STONE_HOE), builder ->
                 builder.setVeinRate(1.0).setVeinCap(10));
+        doFor(List.of(Items.COPPER_PICKAXE, Items.COPPER_AXE, Items.COPPER_SHOVEL, Items.COPPER_HOE), builder ->
+                builder.setVeinRate(1.5).setVeinCap(5));
         doFor(List.of(Items.GOLDEN_PICKAXE, Items.GOLDEN_AXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_HOE), builder ->
                 builder.setVeinRate(1.0).setVeinCap(50));
         doFor(List.of(Items.IRON_PICKAXE, Items.IRON_AXE, Items.IRON_SHOVEL, Items.IRON_HOE), builder ->
@@ -169,6 +171,8 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 builder.setVeinCap(10));
         doFor(List.of(Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS), builder ->
                 builder.setVeinCap(20));
+        doFor(List.of(Items.COPPER_HELMET, Items.COPPER_CHESTPLATE, Items.COPPER_LEGGINGS, Items.COPPER_BOOTS), builder ->
+                builder.setVeinCap(20));
         doFor(List.of(Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS), builder ->
                 builder.setVeinCap(30));
         doFor(List.of(Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS), builder ->
@@ -179,6 +183,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         //================SALVAGE================
         doFor(List.of(Items.WOODEN_PICKAXE, Items.WOODEN_SHOVEL, Items.WOODEN_AXE, Items.WOODEN_HOE,
                 Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_AXE, Items.STONE_HOE,
+                Items.COPPER_PICKAXE, Items.COPPER_SHOVEL, Items.COPPER_AXE, Items.COPPER_HOE,
                 Items.GOLDEN_PICKAXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_AXE, Items.GOLDEN_HOE,
                 Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE,
                 Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE,
@@ -201,6 +206,11 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         recoverTool(Items.STONE_AXE, Items.COBBLESTONE, 3, 150L, 0.005);
         recoverTool(Items.STONE_HOE, Items.COBBLESTONE, 2, 150L, 0.005);
         recoverTool(Items.STONE_SHOVEL, Items.COBBLESTONE, 1, 150L, 0.005);
+
+        recoverTool(Items.COPPER_PICKAXE, Items.COPPER_INGOT, 3, 150L, 0.005);
+        recoverTool(Items.COPPER_AXE, Items.COPPER_INGOT, 3, 150L, 0.005);
+        recoverTool(Items.COPPER_HOE, Items.COPPER_INGOT, 2, 150L, 0.005);
+        recoverTool(Items.COPPER_SHOVEL, Items.COPPER_INGOT, 1, 150L, 0.005);
 
         recoverTool(Items.GOLDEN_PICKAXE, Items.GOLD_INGOT, 3, 500L, 0.005);
         recoverTool(Items.GOLDEN_AXE, Items.GOLD_INGOT, 3, 500L, 0.005);

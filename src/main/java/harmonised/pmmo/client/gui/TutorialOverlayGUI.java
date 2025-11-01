@@ -1,11 +1,6 @@
 package harmonised.pmmo.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
@@ -17,11 +12,8 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -29,13 +21,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.client.gui.GuiLayer;
 import org.joml.Matrix4f;
+import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TutorialOverlayGUI implements LayeredDraw.Layer {
+public class TutorialOverlayGUI implements GuiLayer {
 	private Minecraft mc;
 	private Font fontRenderer;
 	private List<ClientTooltipComponent> lines = new ArrayList<>();
@@ -73,54 +67,55 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 				return; // stop render if none of the viewing cases are met.
 
 			// RENDER
-			guiGraphics.pose().pushPose();
-			RenderSystem.enableBlend();
+//			guiGraphics.pose().pushPose();
+//			RenderSystem.enableBlend();
 			if (!lines.isEmpty()) {
-				int i = 0;
-				int j = lines.size() == 1 ? -2 : 0;
-
-				for (ClientTooltipComponent clienttooltipcomponent : lines) {
-					int k = clienttooltipcomponent.getWidth(mc.font);
-					if (k > i) {
-						i = k;
-					}
-
-					j += clienttooltipcomponent.getHeight();
-				}
-
-				int l = renderLeft;
-				int i1 = renderTop;
-				guiGraphics.pose().pushPose();
-				Tesselator tesselator = Tesselator.getInstance();
-				BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-				RenderSystem.setShader(GameRenderer::getPositionColorShader);
-				Matrix4f matrix4f = guiGraphics.pose().last().pose();
-				TooltipRenderUtil.renderTooltipBackground(guiGraphics, l, i1, i, j, 400);
-				RenderSystem.enableDepthTest();
-				RenderSystem.enableBlend();
-				RenderSystem.defaultBlendFunc();
-				//BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
-				MultiBufferSource.BufferSource multibuffersource$buffersource = guiGraphics.bufferSource();
-				guiGraphics.pose().translate(0.0F, 0.0F, 400.0F);
-				int k1 = i1;
-
-				for (int l1 = 0; l1 < lines.size(); ++l1) {
-					ClientTooltipComponent clienttooltipcomponent1 = lines.get(l1);
-					clienttooltipcomponent1.renderText(mc.font, l, k1, matrix4f, multibuffersource$buffersource);
-					k1 += clienttooltipcomponent1.getHeight() + (l1 == 0 ? 2 : 0);
-				}
-
-				multibuffersource$buffersource.endBatch();
-				k1 = i1;
-
-				for (int i2 = 0; i2 < lines.size(); ++i2) {
-					ClientTooltipComponent clienttooltipcomponent2 = lines.get(i2);
-					clienttooltipcomponent2.renderImage(mc.font, l, k1, guiGraphics);
-					k1 += clienttooltipcomponent2.getHeight() + (i2 == 0 ? 2 : 0);
-				}
-
+				guiGraphics.renderTooltip(mc.font, lines, renderLeft, renderTop, (sw, sh, mx, my, tw, th) -> new Vector2i(renderLeft, renderTop), null);
+//				int i = 0;
+//				int j = lines.size() == 1 ? -2 : 0;
+//
+//				for (ClientTooltipComponent clienttooltipcomponent : lines) {
+//					int k = clienttooltipcomponent.getWidth(mc.font);
+//					if (k > i) {
+//						i = k;
+//					}
+//
+//					j += clienttooltipcomponent.getHeight();
+//				}
+//
+//				int l = renderLeft;
+//				int i1 = renderTop;
+//				guiGraphics.pose().pushPose();
+//				Tesselator tesselator = Tesselator.getInstance();
+//				BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+//				RenderSystem.setShader(GameRenderer::getPositionColorShader);
+//				Matrix4f matrix4f = guiGraphics.pose().last().pose();
+//				TooltipRenderUtil.renderTooltipBackground(guiGraphics, l, i1, i, j, 400);
+//				RenderSystem.enableDepthTest();
+//				RenderSystem.enableBlend();
+//				RenderSystem.defaultBlendFunc();
+//				//BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+//				MultiBufferSource.BufferSource multibuffersource$buffersource = guiGraphics.bufferSource();
+//				guiGraphics.pose().translate(0.0F, 0.0F, 400.0F);
+//				int k1 = i1;
+//
+//				for (int l1 = 0; l1 < lines.size(); ++l1) {
+//					ClientTooltipComponent clienttooltipcomponent1 = lines.get(l1);
+//					clienttooltipcomponent1.renderText(mc.font, l, k1, matrix4f, multibuffersource$buffersource);
+//					k1 += clienttooltipcomponent1.getHeight() + (l1 == 0 ? 2 : 0);
+//				}
+//
+//				multibuffersource$buffersource.endBatch();
+//				k1 = i1;
+//
+//				for (int i2 = 0; i2 < lines.size(); ++i2) {
+//					ClientTooltipComponent clienttooltipcomponent2 = lines.get(i2);
+//					clienttooltipcomponent2.renderImage(mc.font, l, k1, guiGraphics);
+//					k1 += clienttooltipcomponent2.getHeight() + (i2 == 0 ? 2 : 0);
+//				}
+//
 			}
-			guiGraphics.pose().popPose();
+//			guiGraphics.pose().popPose();
 		}
 	}
 
@@ -145,7 +140,7 @@ public class TutorialOverlayGUI implements LayeredDraw.Layer {
 		for (Map.Entry<ResourceLocation, SalvageData> entry : Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER
 				.getData(RegistryUtil.getId(mc.level.registryAccess(), stack)).salvage().entrySet()) {
 			outList.add(MutableComponent.create(
-					new ItemStack(BuiltInRegistries.ITEM.get(entry.getKey())).getDisplayName().getContents()));
+					new ItemStack(BuiltInRegistries.ITEM.get(entry.getKey()).get()).getDisplayName().getContents()));
 			SalvageData data = entry.getValue();
 			if (!data.levelReq().isEmpty()) {
 				outList.add(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE));

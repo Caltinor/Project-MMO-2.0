@@ -28,11 +28,11 @@ public class BreedHandler {
 			Messenger.sendDenialMsg(ReqType.BREED, player, event.getChild().getName());
 			return;
 		}
-		boolean serverSide = !player.level().isClientSide;
+		boolean serverSide = !player.level().isClientSide();
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BREED, event, new CompoundTag());
-			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) { 
+			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
 				event.setCanceled(true);
 				return;
 			}

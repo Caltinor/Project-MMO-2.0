@@ -1,33 +1,52 @@
 package harmonised.pmmo.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public class AbstractFurnaceTileEntityShrinkMixin
-{
+public abstract class AbstractFurnaceTileEntityShrinkMixin {
+    @Invoker("canBurn")
+    public static boolean invokingCanBurn(RegistryAccess access, RecipeHolder<? extends AbstractCookingRecipe> recipe, SingleRecipeInput recipeInput, NonNullList<ItemStack> items, int maxStackSize) {
+        throw new AssertionError();
+    }
+
+    @Invoker("getItems")
+    abstract NonNullList<ItemStack> invokeGetItems();
+
     @Inject(at = @At(
-            	value = "INVOKE",
-            	target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"),
-            method = "burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/RecipeHolder;Lnet/minecraft/core/NonNullList;ILnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)Z")
-    private static void projectmmo$$handleSmeltingShrink(RegistryAccess p_266740_, @Nullable RecipeHolder<?> p_266780_, NonNullList<ItemStack> p_267073_, int p_267157_, AbstractFurnaceBlockEntity be, CallbackInfoReturnable<Boolean> info)
+                value = "INVOKE",
+                target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/RecipeHolder;Lnet/minecraft/world/item/crafting/SingleRecipeInput;Lnet/minecraft/core/NonNullList;I)Z"
+            ),
+            method = "serverTick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)V")
+    private static void projectmmo$$handleSmeltingShrink(ServerLevel level, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity be, CallbackInfo info,
+                                                         @Local SingleRecipeInput singlerecipeinput,
+                                                         @Local RecipeHolder<? extends AbstractCookingRecipe> recipeholder,
+                                                         @Local int i)
     {
-        Level world = be.getLevel();
-        BlockPos pos = be.getBlockPos();
-        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(be.getItem(0), world, pos));
+        if (singlerecipeinput != null && invokingCanBurn(level.registryAccess(), recipeholder, singlerecipeinput, ((AbstractFurnaceTileEntityShrinkMixin)(Object)be).invokeGetItems(), i))
+            NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(be.getItem(0), level, pos));
     }
 }

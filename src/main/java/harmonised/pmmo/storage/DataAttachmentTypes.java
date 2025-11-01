@@ -4,7 +4,11 @@ import com.mojang.serialization.Codec;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
@@ -21,15 +25,14 @@ public class DataAttachmentTypes {
      * the world do not have to wait for charge to replenish which would be irritating with slow charge rates.*/
     public static final Supplier<AttachmentType<Double>> VEIN_CHARGE = ATTACHMENT_TYPES.register(
             "vein_data", () -> AttachmentType.builder(() -> 0d)
-                    .serialize(Codec.DOUBLE).build());
+                    .serialize(CodecTypes.MAPPED_DOUBLE).build());
 
     /**Placed Data stores who placed the block at a specific position within the chunk.  This is used to
      * track player breaks to prevent players from cycling through place and break actions to farm xp from
      * high-xp blocks*/
     public static final Supplier<AttachmentType<Map<BlockPos, UUID>>> PLACED_MAP = ATTACHMENT_TYPES.register(
             "placed_data", () -> AttachmentType.<Map<BlockPos, UUID>>builder(() -> new HashMap<>())
-                    .serialize(Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, CodecTypes.UUID_CODEC)
-                            .xmap(HashMap::new, HashMap::new)).build());
+                    .serialize(CodecTypes.MAPPED_POS_UUID).build());
 
     /**Break data stores in chunks during runtime to track blocks with cascading break behavior.  No
      * serialization is necessary since the effects are largely instantaneous and inconsequential to store*/

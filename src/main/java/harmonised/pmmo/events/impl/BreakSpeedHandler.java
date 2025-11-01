@@ -51,9 +51,9 @@ public class BreakSpeedHandler {
 			return;
 		}
 		CompoundTag eventHookOutput = new CompoundTag();
-		if (!event.getEntity().level().isClientSide){
+		if (!event.getEntity().level().isClientSide()){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BREAK_SPEED, event, new CompoundTag());
-			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
+			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
 				event.setCanceled(true);
 				resultCache.put(event.getEntity().getUUID(), 
 						new DetailsCache(event.getEntity().getMainHandItem(), event.getPosition().orElse(new BlockPos(0,0,0)), event.getState(), true, event.getNewSpeed()));
@@ -66,7 +66,7 @@ public class BreakSpeedHandler {
 
 		CompoundTag perkDataOut = core.getPerkRegistry().executePerk(EventType.BREAK_SPEED, event.getEntity(), perkDataIn);
 		if (perkDataOut.contains(APIUtils.BREAK_SPEED_OUTPUT_VALUE)) {
-			float newSpeed = event.getNewSpeed() * (1 + Math.max(0, perkDataOut.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE)));
+			float newSpeed = event.getNewSpeed() * (1 + Math.max(0, perkDataOut.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE).get()));
 			MsLoggy.INFO.log(LOG_CODE.EVENT, "BreakSpeed Original{}, New:{}",event.getOriginalSpeed(), newSpeed);
 			event.setNewSpeed(newSpeed);
 			resultCache.put(event.getEntity().getUUID(), 

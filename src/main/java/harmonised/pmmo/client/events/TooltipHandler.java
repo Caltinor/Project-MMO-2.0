@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value= Dist.CLIENT)
+@EventBusSubscriber(modid=Reference.MOD_ID, value= Dist.CLIENT)
 public class TooltipHandler {
 	public static boolean tooltipOn = true;
 
@@ -59,7 +59,7 @@ public class TooltipHandler {
             if(itemID == null)
                 return;
 
-            if(!ClientSetup.OPEN_MENU.isUnbound() && InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), ClientSetup.OPEN_MENU.getKey().getValue())) {
+            if(!ClientSetup.OPEN_MENU.isUnbound() && InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), ClientSetup.OPEN_MENU.getKey().getValue())) {
                 Minecraft.getInstance().setScreen(new StatsScreen(stack));
                 return;
             }

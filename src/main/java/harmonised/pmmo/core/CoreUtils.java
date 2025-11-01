@@ -129,7 +129,7 @@ public class CoreUtils {
 	 * @return the integer skill value
 	 */
 	public static int getSkillColor(String skill) {
-		return Config.skills().get(skill).getColor();
+		return (0xFF << 24) | Config.skills().get(skill).getColor();
 	}
 	
 	/**Obtain a Component Style for the skill supplied
@@ -156,7 +156,7 @@ public class CoreUtils {
 		if (applyDefaultNegatives && config.isEmpty())
 			config = Config.autovalue().reqs().penalties();
 		for (Map.Entry<ResourceLocation, Integer> effect : config.entrySet()) {
-			Holder<MobEffect> effectRoot = BuiltInRegistries.MOB_EFFECT.getHolder(effect.getKey()).get();
+			Holder<MobEffect> effectRoot = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(BuiltInRegistries.MOB_EFFECT.getValue(effect.getKey()));
 			if (effectRoot != null)
 				effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue(), true, true));
 		}

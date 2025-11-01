@@ -17,7 +17,7 @@ public class CraftHandler {
 	public static void handle(PlayerEvent.ItemCraftedEvent event) {
 		Core core = Core.get(event.getEntity().level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !event.getEntity().level().isClientSide; 
+		boolean serverSide = !event.getEntity().level().isClientSide();
 		if (serverSide)		
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.CRAFT, event, new CompoundTag());
 		//Process perks

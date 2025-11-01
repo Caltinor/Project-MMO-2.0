@@ -4,10 +4,15 @@ import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.KeyCompressor;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.MapEncoder;
+import com.mojang.serialization.RecordBuilder;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.ChunkPos;
 
@@ -16,12 +21,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 public class CodecTypes {
 	public static final Codec<Map<String, Double>> DOUBLE_CODEC = Codec.unboundedMap(Codec.STRING, Codec.DOUBLE);
 	public static final Codec<Map<String, Long>> LONG_CODEC = Codec.unboundedMap(Codec.STRING, Codec.LONG);
 	public static final Codec<Map<String, Integer>> INTEGER_CODEC = Codec.unboundedMap(Codec.STRING, Codec.INT);
 	public static final Codec<Map<String, Map<String, Long>>> DAMAGE_XP_CODEC = Codec.unboundedMap(Codec.STRING, LONG_CODEC);
+
+	public static final MapCodec<Double> MAPPED_DOUBLE = MapCodec.assumeMapUnsafe(Codec.DOUBLE);
 	
 	public record SalvageData (
 			Map<String, Double> chancePerLevel,
@@ -52,9 +60,9 @@ public class CodecTypes {
 				t.xpAward().forEach((skill, xp) -> {
 					xpAward.merge(skill, xp, (o1, n1) -> o1 > n1 ? o1 : n1);
 				});
-				salvageMax.set(o.salvageMax() > t.salvageMax() ? o.salvageMax() : t.salvageMax());
-				baseChance.set(o.baseChance() > t.baseChance() ? o.baseChance() : t.baseChance());
-				maxChance.set(o.maxChance() > t.maxChance() ? o.maxChance() : t.maxChance());
+				salvageMax.set(Math.max(o.salvageMax(), t.salvageMax()));
+				baseChance.set(Math.max(o.baseChance(), t.baseChance()));
+				maxChance.set(Math.max(o.maxChance(), t.maxChance()));
 			};
 			Functions.biPermutation(one, two, oneOverride, twoOverride, (o, t) -> {
 				chancePerLevel.putAll(o.chancePerLevel().isEmpty() ? t.chancePerLevel() : o.chancePerLevel());
@@ -117,4 +125,8 @@ public class CodecTypes {
 		@Override
 		public String toString() { return "chunkpos";}
 	};
+
+	public static final MapCodec<Map<BlockPos, UUID>> MAPPED_POS_UUID = RecordCodecBuilder.mapCodec(instance -> instance.group(
+			Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, CodecTypes.UUID_CODEC).fieldOf("value").forGetter(m -> m)
+	).apply(instance, HashMap::new));
 }

@@ -42,6 +42,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -54,6 +55,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,7 +208,7 @@ public class Core {
 		if (xpGains.isEmpty()) {
 			xpGains = CoreUtils.mergeXpMapsWithSummateCondition(				
 					tag.contains(APIUtils.SERIALIZED_AWARD_MAP) 
-						? CoreUtils.deserializeAwardMap(tag.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
+						? CoreUtils.deserializeAwardMap(tag.getCompoundOrEmpty(APIUtils.SERIALIZED_AWARD_MAP))
 						: new HashMap<>(),
 					getObjectExperienceMap(oType, objectID, type, tag));
 			
@@ -222,7 +224,7 @@ public class Core {
 		loggables[2] = MsLoggy.mapToString(xpGains);
 		List<ResourceLocation> source = new ArrayList<>();
 		source.add(objectID);
-		if (tag.contains(APIUtils.DAMAGE_TYPE)) source.add(Reference.of(tag.getString(APIUtils.DAMAGE_TYPE)));
+		if (tag.contains(APIUtils.DAMAGE_TYPE)) source.add(Reference.of(tag.getString(APIUtils.DAMAGE_TYPE).get()));
 		CheeseTracker.applyAntiCheese(type, source, player, xpGains);
 
 		loggables[3] = MsLoggy.mapToString(xpGains);
@@ -270,7 +272,7 @@ public class Core {
 		
 		//WORN Modification
 		List<ItemStack> wornItems = new ArrayList<>();
-		player.getArmorSlots().forEach(wornItems::add);
+		Reference.ARMOR_SLOTS.forEach(slot -> wornItems.add(player.getItemBySlot(slot)));
 		if (CuriosCompat.hasCurio)
 			wornItems.addAll(CuriosCompat.getItems(player));
 		wornItems.forEach((stack) -> {
@@ -468,7 +470,7 @@ public class Core {
 			//conduct random check for the total count possible and add each succcess to the output
 			for (int i = 0; i < result.getValue().salvageMax(); i++) {
 				if (player.getRandom().nextDouble() < Math.min(max, base + bonus)) {
-					player.drop(new ItemStack(BuiltInRegistries.ITEM.get(result.getKey())), false, true);
+					player.drop(new ItemStack(BuiltInRegistries.ITEM.getValue(result.getKey())), false, true);
 					for (Map.Entry<String, Long> award : result.getValue().xpAward().entrySet()) {
 						xpAwards.merge(award.getKey(), award.getValue(), (o, n) -> o + n);
 					}

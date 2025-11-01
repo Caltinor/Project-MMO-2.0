@@ -6,9 +6,9 @@ import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.event.entity.player.AnvilCraftEvent;
 
 import java.util.List;
 import java.util.Map;
@@ -16,10 +16,10 @@ import java.util.Map;
 public class AnvilRepairHandler {
 
 	@SuppressWarnings("resource")
-	public static void handle(AnvilRepairEvent event) {
+	public static void handle(AnvilCraftEvent.Post event) {
 		Core core = Core.get(event.getEntity().level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !event.getEntity().level().isClientSide;
+		boolean serverSide = !event.getEntity().level().isClientSide();
 		EventType type = isEnchantBook(event.getLeft()) || isEnchantBook(event.getRight()) ? EventType.ENCHANT : EventType.ANVIL_REPAIR;
 		if (serverSide)		
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
@@ -33,6 +33,6 @@ public class AnvilRepairHandler {
 	}
 
 	private static boolean isEnchantBook(ItemStack stack) {
-		return stack.getItem() instanceof EnchantedBookItem;
+		return stack.getItem().equals(Items.ENCHANTED_BOOK);
 	}
 }

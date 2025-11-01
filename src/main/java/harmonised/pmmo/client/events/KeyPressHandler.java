@@ -26,7 +26,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.InputEvent;
 
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value= Dist.CLIENT)
+@EventBusSubscriber(modid=Reference.MOD_ID, value= Dist.CLIENT)
 public class KeyPressHandler {
 
 	@SubscribeEvent
@@ -48,7 +48,7 @@ public class KeyPressHandler {
 	            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));
             	}
             	else
-            		mc.player.sendSystemMessage(LangProvider.VEIN_BLACKLIST.asComponent());
+            		mc.player.displayClientMessage(LangProvider.VEIN_BLACKLIST.asComponent(), false);
             }
 			if (ClientSetup.TOGGLE_BRKSPD.isDown()) {
 				Config.BREAK_SPEED_PERKS.set(!Config.BREAK_SPEED_PERKS.get());

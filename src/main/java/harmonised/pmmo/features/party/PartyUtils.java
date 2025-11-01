@@ -40,17 +40,17 @@ public class PartyUtils {
 			return List.of(player);
 		else
 			return player.getTeam().getPlayers().stream()
-				.map(str -> player.getServer().getPlayerList().getPlayerByName(str))
+				.map(str -> player.level().getServer().getPlayerList().getPlayerByName(str))
 				.filter(Objects::nonNull).toList();
 	}
 	
 	public static void inviteToParty(ServerPlayer member, Player invitee) {
 		UUID requestID = UUID.randomUUID();
-		Style acceptStyle = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pmmo party accept "+requestID.toString())).withBold(true).withColor(ChatFormatting.GREEN).withUnderlined(true);
+		Style acceptStyle = Style.EMPTY.withClickEvent(new ClickEvent.RunCommand("/pmmo party accept "+requestID.toString())).withBold(true).withColor(ChatFormatting.GREEN).withUnderlined(true);
 		MutableComponent accept = LangProvider.PARTY_ACCEPT.asComponent().withStyle(acceptStyle);
-		Style declineStyle = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pmmo party decline "+requestID.toString())).withBold(true).withColor(ChatFormatting.RED).withUnderlined(true);
+		Style declineStyle = Style.EMPTY.withClickEvent(new ClickEvent.RunCommand("/pmmo party decline "+requestID.toString())).withBold(true).withColor(ChatFormatting.RED).withUnderlined(true);
 		MutableComponent decline = LangProvider.PARTY_DECLINE_INVITE.asComponent().withStyle(declineStyle);
-		invitee.sendSystemMessage(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline));
+		invitee.displayClientMessage(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline), false);
 		
 		invites.put(requestID, new Invite(member.getTeam(), invitee.getUUID()));
 	}
@@ -76,7 +76,7 @@ public class PartyUtils {
 		if (!invite.player().equals(invitee.getUUID()))
 			return;
 		else {
-			invitee.getScoreboard().addPlayerToTeam(invitee.getScoreboardName(), invite.team());
+			invitee.level().getScoreboard().addPlayerToTeam(invitee.getScoreboardName(), invite.team());
 			invites.remove(requestID);
 		}
 		invitee.sendSystemMessage(LangProvider.PARTY_JOINED.asComponent());

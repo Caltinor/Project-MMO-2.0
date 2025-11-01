@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value= Dist.CLIENT)
+@EventBusSubscriber(modid=Reference.MOD_ID, value= Dist.CLIENT)
 public class ClientTickHandler {
 	private static int ticksElapsed = 0;
 	

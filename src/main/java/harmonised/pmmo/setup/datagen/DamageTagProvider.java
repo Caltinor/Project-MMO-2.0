@@ -9,66 +9,65 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
 public class DamageTagProvider extends TagsProvider<DamageType> {
 
-    public DamageTagProvider(PackOutput output, CompletableFuture<Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-        super(output, Registries.DAMAGE_TYPE, lookupProvider, Reference.MOD_ID, existingFileHelper);
+    public DamageTagProvider(PackOutput output, CompletableFuture<Provider> lookupProvider) {
+        super(output, Registries.DAMAGE_TYPE, lookupProvider, Reference.MOD_ID);
     }
 
     @Override
     protected void addTags(Provider provider) {
-        tag(Reference.FROM_ENVIRONMENT)
-                .addTag(DamageTypeTags.IS_DROWNING)
-                .addTag(DamageTypeTags.IS_EXPLOSION)
-                .addTag(DamageTypeTags.IS_FIRE)
-                .addTag(DamageTypeTags.IS_FREEZING)
-                .addTag(DamageTypeTags.IS_LIGHTNING)
-                .add(DamageTypes.CACTUS)
-                .add(DamageTypes.CRAMMING)
-                .add(DamageTypes.DROWN)
-                .add(DamageTypes.FALLING_ANVIL)
-                .add(DamageTypes.FALLING_BLOCK)
-                .add(DamageTypes.FREEZE)
-                .add(DamageTypes.IN_FIRE)
-                .add(DamageTypes.LIGHTNING_BOLT)
-                .add(DamageTypes.ON_FIRE)
-                .add(DamageTypes.LAVA)
-                .add(DamageTypes.HOT_FLOOR)
-                .add(DamageTypes.IN_WALL)
-                .add(DamageTypes.STARVE)
-                .add(DamageTypes.SWEET_BERRY_BUSH);
+        getOrCreateRawBuilder(Reference.FROM_ENVIRONMENT)
+                .addTag(DamageTypeTags.IS_DROWNING.location())
+                .addTag(DamageTypeTags.IS_EXPLOSION.location())
+                .addTag(DamageTypeTags.IS_FIRE.location())
+                .addTag(DamageTypeTags.IS_FREEZING.location())
+                .addTag(DamageTypeTags.IS_LIGHTNING.location())
+                .addElement(DamageTypes.CACTUS.location())
+                .addElement(DamageTypes.CRAMMING.location())
+                .addElement(DamageTypes.DROWN.location())
+                .addElement(DamageTypes.FALLING_ANVIL.location())
+                .addElement(DamageTypes.FALLING_BLOCK.location())
+                .addElement(DamageTypes.FREEZE.location())
+                .addElement(DamageTypes.IN_FIRE.location())
+                .addElement(DamageTypes.LIGHTNING_BOLT.location())
+                .addElement(DamageTypes.ON_FIRE.location())
+                .addElement(DamageTypes.LAVA.location())
+                .addElement(DamageTypes.HOT_FLOOR.location())
+                .addElement(DamageTypes.IN_WALL.location())
+                .addElement(DamageTypes.STARVE.location())
+                .addElement(DamageTypes.SWEET_BERRY_BUSH.location());
 
-        tag(Reference.FROM_IMPACT)
-                .addTag(DamageTypeTags.IS_FALL)
-                .add(DamageTypes.FLY_INTO_WALL);
+        getOrCreateRawBuilder(Reference.FROM_IMPACT)
+                .addTag(DamageTypeTags.IS_FALL.location())
+                .addElement(DamageTypes.FLY_INTO_WALL.location());
 
-        tag(Reference.FROM_MAGIC)
-                .add(DamageTypes.MAGIC)
-                .add(DamageTypes.INDIRECT_MAGIC)
-                .addOptional(ResourceLocation.parse("irons_spellbooks:fire_magic"))
-                .addOptional(ResourceLocation.parse("irons_spellbooks:ice_magic"))
-                .addOptional(ResourceLocation.parse("irons_spellbooks:lightning_magic"))
-                .addOptional(ResourceLocation.parse("irons_spellbooks:holy_magic"))
-                .addOptional(ResourceLocation.parse("irons_spellbooks:ender_magic"))
-                .addOptional(ResourceLocation.parse("irons_spellbooks:blood_magic"))
-                .addOptional(ResourceLocation.parse("irons_spellbooks:evocation_magic"))
-                .addOptional(ResourceLocation.parse("irons_spellbooks:eldritch_magic"))
-                .addOptional(ResourceLocation.parse("irons_spellbooks:nature_magic"))
-                .addOptional(ResourceLocation.parse("ars_nouveau:spell"))
-                .addOptional(ResourceLocation.parse("ars_nouveau:frost"))
-                .addOptional(ResourceLocation.parse("ars_nouveau:flare"))
-                .addOptional(ResourceLocation.parse("ars_nouveau:crush"))
-                .addOptional(ResourceLocation.parse("ars_nouveau:windshear"))
-                .addOptional(ResourceLocation.parse("ars_elemental:spark"))
-                .addOptional(ResourceLocation.parse("ars_elemental:hellfire"))
-                .addOptional(ResourceLocation.parse("ars_elemental:beheading"))
-                .addOptional(ResourceLocation.parse("ars_elemental:poison"));
-        tag(Reference.FROM_GUN)
-                .addOptional(ResourceLocation.parse("cgm:bullet"))
-                .addOptional(ResourceLocation.parse("scguns:bullet"));
+        getOrCreateRawBuilder(Reference.FROM_MAGIC)
+                .addElement(DamageTypes.MAGIC.location())
+                .addElement(DamageTypes.INDIRECT_MAGIC.location())
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:fire_magic"))
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:ice_magic"))
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:lightning_magic"))
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:holy_magic"))
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:ender_magic"))
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:blood_magic"))
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:evocation_magic"))
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:eldritch_magic"))
+                .addOptionalElement(ResourceLocation.parse("irons_spellbooks:nature_magic"))
+                .addOptionalElement(ResourceLocation.parse("ars_nouveau:spell"))
+                .addOptionalElement(ResourceLocation.parse("ars_nouveau:frost"))
+                .addOptionalElement(ResourceLocation.parse("ars_nouveau:flare"))
+                .addOptionalElement(ResourceLocation.parse("ars_nouveau:crush"))
+                .addOptionalElement(ResourceLocation.parse("ars_nouveau:windshear"))
+                .addOptionalElement(ResourceLocation.parse("ars_elemental:spark"))
+                .addOptionalElement(ResourceLocation.parse("ars_elemental:hellfire"))
+                .addOptionalElement(ResourceLocation.parse("ars_elemental:beheading"))
+                .addOptionalElement(ResourceLocation.parse("ars_elemental:poison"));
+        getOrCreateRawBuilder(Reference.FROM_GUN)
+                .addOptionalElement(ResourceLocation.parse("cgm:bullet"))
+                .addOptionalElement(ResourceLocation.parse("scguns:bullet"));
     }
 }

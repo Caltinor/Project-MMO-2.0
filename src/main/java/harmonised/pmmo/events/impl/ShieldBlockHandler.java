@@ -29,16 +29,16 @@ public class ShieldBlockHandler {
 			ItemStack shield = player.getUseItem();
 
 			if (!core.isActionPermitted(ReqType.WEAPON, shield, player)) {
-				event.setCanceled(true);
+				event.setBlocked(false);
 				Messenger.sendDenialMsg(ReqType.WEAPON, player, shield.getDisplayName());
 				return;
 			}
-			boolean serverSide = !player.level().isClientSide;
+			boolean serverSide = !player.level().isClientSide();
 			CompoundTag hookOutput = new CompoundTag();
 			if (serverSide) {
 				hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.SHIELD_BLOCK, event, new CompoundTag());
-				if (hookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
-					event.setCanceled(true);
+				if (hookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
+					event.setBlocked(false);
 					return;
 				}
 			}

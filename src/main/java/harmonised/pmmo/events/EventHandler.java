@@ -59,7 +59,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
-import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
+import net.neoforged.neoforge.event.entity.player.AnvilCraftEvent;
 import net.neoforged.neoforge.event.entity.player.BonemealEvent;
 import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEnchantItemEvent;
@@ -83,7 +83,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * @author Caltinor
  *
  */
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid=Reference.MOD_ID)
 public class EventHandler {
 	//==========================================================
 	//                 CORE MOD EVENTS
@@ -242,12 +242,10 @@ public class EventHandler {
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onShieldBlock(LivingShieldBlockEvent event) {
-		if (event.isCanceled())
-			return;
 		ShieldBlockHandler.handle(event);
 	}
 	@SubscribeEvent
-	public static void onAnvilRepair(AnvilRepairEvent event) {
+	public static void onAnvilRepair(AnvilCraftEvent.Post event) {
 		AnvilRepairHandler.handle(event);
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)

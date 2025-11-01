@@ -6,9 +6,11 @@ import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DefaultEntityConfigProvider extends PmmoDataProvider<ObjectData> {
@@ -19,8 +21,28 @@ public class DefaultEntityConfigProvider extends PmmoDataProvider<ObjectData> {
 
     @Override
     protected void start() {
-        get(EntityType.BOAT).addXpValues(EventType.RIDING, Map.of("sailing", 20L));
-        get(EntityType.CHEST_BOAT).addXpValues(EventType.RIDING, Map.of("sailing", 20L));
+        List.of(EntityType.OAK_BOAT,
+                EntityType.SPRUCE_BOAT,
+                EntityType.BIRCH_BOAT,
+                EntityType.JUNGLE_BOAT,
+                EntityType.ACACIA_BOAT,
+                EntityType.CHERRY_BOAT,
+                EntityType.DARK_OAK_BOAT,
+                EntityType.PALE_OAK_BOAT,
+                EntityType.MANGROVE_BOAT,
+                EntityType.BAMBOO_RAFT)
+            .forEach(boat -> get(boat).addXpValues(EventType.RIDING, Map.of("sailing", 20L)));
+        List.of(EntityType.OAK_CHEST_BOAT,
+                EntityType.SPRUCE_CHEST_BOAT,
+                EntityType.BIRCH_CHEST_BOAT,
+                EntityType.JUNGLE_CHEST_BOAT,
+                EntityType.ACACIA_CHEST_BOAT,
+                EntityType.CHERRY_CHEST_BOAT,
+                EntityType.DARK_OAK_CHEST_BOAT,
+                EntityType.PALE_OAK_CHEST_BOAT,
+                EntityType.MANGROVE_CHEST_BOAT,
+                EntityType.BAMBOO_CHEST_RAFT)
+            .forEach(boat -> get(boat).addXpValues(EventType.RIDING, Map.of("sailing", 20L)));
 
         data.forEach((id, builder) -> this.add(id, builder.end()));
     }

@@ -50,7 +50,7 @@ public class CmdNodeParty {
 	public static int partyCreate(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		ServerPlayer player = ctx.getSource().getPlayerOrException();
 		String name = StringArgumentType.getString(ctx, "name");
-		Scoreboard board = player.getScoreboard();
+		Scoreboard board = player.level().getScoreboard();
 		board.addPlayerTeam(name);
 		board.addPlayerToTeam(player.getScoreboardName(), board.getPlayerTeam(name));
 		ctx.getSource().sendSuccess(LangProvider.PARTY_CREATED::asComponent, false);

@@ -26,7 +26,7 @@ public class PotionHandler {
 			return;
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
-		boolean serverSide = !player.level().isClientSide; 
+		boolean serverSide = !player.level().isClientSide();
 		//process perks
 		CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.BREW, player, new CompoundTag());
 		if (serverSide) {

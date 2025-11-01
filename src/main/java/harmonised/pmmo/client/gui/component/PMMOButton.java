@@ -23,7 +23,7 @@ public class PMMOButton extends ImageButton {
                 if (parent instanceof PlayerStatsScreen) {
                     minecraft.setScreen(new InventoryScreen(minecraft.player));
                 }
-                if (parent instanceof InventoryScreen) {
+                else if (parent instanceof InventoryScreen) {
                     minecraft.setScreen(new PlayerStatsScreen(minecraft.player));
                 }
         });

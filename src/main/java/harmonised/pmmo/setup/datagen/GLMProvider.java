@@ -112,7 +112,7 @@ public abstract class GLMProvider implements DataProvider {
 		return new RareDropModifier(
 				new LootItemCondition[] {
 						LootItemKilledByPlayerCondition.killedByPlayer().build(),
-						LootTableIdCondition.builder(mob.getDefaultLootTable().location()).build(),
+						LootTableIdCondition.builder(mob.getDefaultLootTable().get().location()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
 				}, drop.getDefaultInstance(), count, chance);
 	}

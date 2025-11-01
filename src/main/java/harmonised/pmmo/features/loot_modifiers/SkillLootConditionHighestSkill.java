@@ -24,7 +24,7 @@ public class SkillLootConditionHighestSkill implements LootItemCondition{
 	
 	@Override
 	public boolean test(LootContext t) {
-		Entity player = t.getParamOrNull(LootContextParams.THIS_ENTITY);
+		Entity player = t.getOptionalParameter(LootContextParams.THIS_ENTITY);
 		if (player == null || targetSkill == null || comparables.isEmpty()) return false;
 		
 		long targetLevel = Core.get(player.level()).getData().getLevel(targetSkill, player.getUUID());

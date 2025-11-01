@@ -37,6 +37,7 @@ import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -278,8 +279,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void postProcess(RegistryAccess registryAccess) {
-		Registry<V> activeRegistry = registryAccess.registryOrThrow(registry);
+	public void postProcess(HolderLookup.Provider provider) {
+		HolderLookup.RegistryLookup<V> activeRegistry = provider.lookupOrThrow(registry);
 		MsLoggy.DEBUG.log(LOG_CODE.DATA, "Begin PostProcessing for {}", folderName);
 		for (Map.Entry<ResourceLocation, T> dataRaw : new HashMap<>(this.data).entrySet()) {
 			DataSource<T> dataValue = dataRaw.getValue();
@@ -289,14 +290,14 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			for (String str : dataValue.getTagValues()) {
 				MsLoggy.INFO.log(LOG_CODE.DATA, "Applying Setting to Tag: {}", str);
 				if (str.startsWith("#")) {
-					activeRegistry.getTag(TagKey.create(registry, Reference.of(str.substring(1))))
+					activeRegistry.get(TagKey.create(registry, Reference.of(str.substring(1))))
 					.ifPresent(holder ->
 						tags.addAll(holder.stream()
 								.map(h -> h.unwrapKey().get().location())
 								.collect(Collectors.toSet())));
 				}
-				else if (str.endsWith(":*")) {
-					tags.addAll(activeRegistry.keySet()
+				else if (str.endsWith(":*") && provider instanceof RegistryAccess registryAccess) {
+					tags.addAll(registryAccess.lookupOrThrow(registry).keySet()
 							.stream()
 							.filter(key -> key.getNamespace().equals(str.replace(":*", "")))
 							.toList());
@@ -313,8 +314,8 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 					for (String str : values.keySet()) {
 						damageMembers.clear();
 						if (str.startsWith("#")) {
-							damageMembers.addAll(registryAccess.registryOrThrow(Registries.DAMAGE_TYPE)
-									.getTag(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(str.substring(1))))
+							damageMembers.addAll(provider.lookupOrThrow(Registries.DAMAGE_TYPE)
+									.get(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(str.substring(1))))
 									.stream()
 									.map(type -> type.unwrapKey().get().location())
 									.toList());

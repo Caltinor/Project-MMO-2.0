@@ -1,18 +1,25 @@
 package harmonised.pmmo.util;
 
+import com.mojang.serialization.DynamicOps;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
@@ -30,8 +37,8 @@ public class TagUtils {
 	public static CompoundTag mergeTags(CompoundTag tag1, CompoundTag tag2) {
 		CompoundTag output = new CompoundTag();
 		List<String> allKeys = new ArrayList<>(); 
-		tag1.getAllKeys().forEach(s -> allKeys.add(s));
-		for (String key : tag2.getAllKeys()) {
+		tag1.keySet().forEach(s -> allKeys.add(s));
+		for (String key : tag2.keySet()) {
 			if (!allKeys.contains(key) && key != null)
 				allKeys.add(key);
 		}
@@ -39,15 +46,15 @@ public class TagUtils {
 			if (tag1.contains(key) && tag2.contains(key)) {
 				if (tag1.get(key) instanceof NumericTag numTag) {
 					if (numTag instanceof DoubleTag)
-						output.putDouble(key, tag1.getDouble(key) + tag2.getDouble(key));
+						output.putDouble(key, tag1.getDoubleOr(key, 0d) + tag2.getDoubleOr(key, 0d));
 					else if (numTag instanceof FloatTag)
-						output.putFloat(key, tag1.getFloat(key) + tag2.getFloat(key));
+						output.putFloat(key, tag1.getFloatOr(key, 0f) + tag2.getFloatOr(key, 0f));
 					else if (numTag instanceof IntTag)
-						output.putInt(key, tag1.getInt(key) + tag2.getInt(key));
+						output.putInt(key, tag1.getIntOr(key, 0) + tag2.getIntOr(key, 0));
 					else if (numTag instanceof LongTag)
-						output.putLong(key, tag1.getLong(key) + tag2.getLong(key));
+						output.putLong(key, tag1.getLongOr(key, 0l) + tag2.getLongOr(key, 0l));
 					else if (numTag instanceof ShortTag) 
-						output.putShort(key, (short)(tag1.getShort(key) + tag2.getShort(key)));
+						output.putShort(key, (short)(tag1.getShortOr(key, (short)0) + tag2.getShortOr(key, (short)0)));
 					else
 						output.put(key, tag1.get(key));
 				}
@@ -69,12 +76,13 @@ public class TagUtils {
 	 */
 	public static CompoundTag stackTag(ItemStack stack, Level level) {
 		if (stack.isEmpty()) return new CompoundTag();
+		DynamicOps<Tag> regOps = level.registryAccess().createSerializationContext(NbtOps.INSTANCE);
 		if (stack.getCount() > 99) {
 			var clone = stack.copy();
 			clone.setCount(99);
-			return (CompoundTag) clone.save(level.registryAccess());
+			return (CompoundTag) ItemStack.CODEC.encodeStart(regOps, clone).result().orElse(new CompoundTag());
 		}
-		return (CompoundTag) stack.save(level.registryAccess());
+		return (CompoundTag) ItemStack.CODEC.encodeStart(regOps, stack).result().orElse(new CompoundTag());
 	}
 	 /**safely obtain the NBT tag or get a new instance
 	  * 
@@ -82,8 +90,9 @@ public class TagUtils {
 	  * @return an associated tag or new instance
 	  */
 	public static CompoundTag entityTag(Entity entity) {
-		CompoundTag data = new CompoundTag();
-		return entity == null ? data : entity.saveWithoutId(data);
+		TagValueOutput output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, HolderLookup.Provider.create(entity.registryAccess().listRegistries()));
+		entity.saveWithoutId(output);
+		return output.buildResult();
 	}
 	
 	/**safely obtain the NBT tag or get a new instance
@@ -102,10 +111,10 @@ public class TagUtils {
 	}
 	
 	public static float getFloat(CompoundTag nbt, String key, float ifAbsent) {
-		return nbt.contains(key) ? nbt.getFloat(key) : ifAbsent;
+		return nbt.contains(key) ? nbt.getFloat(key).get() : ifAbsent;
 	}
 	
 	public static BlockPos getBlockPos(CompoundTag nbt, String key, BlockPos ifAbsent) {
-		return nbt.contains(key) ? BlockPos.of(nbt.getLong(key)) : ifAbsent;
+		return nbt.contains(key) ? BlockPos.of(nbt.getLong(key).get()) : ifAbsent;
 	}
 }

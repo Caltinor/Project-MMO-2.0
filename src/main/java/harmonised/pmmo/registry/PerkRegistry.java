@@ -74,7 +74,7 @@ public class PerkRegistry {
 	}
 
 	private CompoundTag processPerk(CompoundTag src, CompoundTag output,Player player, @NotNull CompoundTag dataIn) {
-		ResourceLocation perkID = Reference.of(src.getString("perk"));
+		ResourceLocation perkID = Reference.of(src.getString("perk").get());
 		Perk perk = perks.getOrDefault(perkID, Perk.empty());
 		CompoundTag fullSrc = new CompoundTag()
 				.merge(perk.propertyDefaults().copy())
@@ -82,7 +82,7 @@ public class PerkRegistry {
 				.merge(dataIn.copy())
 				.merge(output.copy());
 		fullSrc.putLong(APIUtils.SKILL_LEVEL, fullSrc.contains(APIUtils.SKILLNAME)
-				? Core.get(player.level()).getData().getLevel(fullSrc.getString(APIUtils.SKILLNAME), player.getUUID())
+				? Core.get(player.level()).getData().getLevel(fullSrc.getString(APIUtils.SKILLNAME).get(), player.getUUID())
 				: 0L);
 		if (perk.canActivate(player, fullSrc)) {
 			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Perk Executed: %s".formatted(fullSrc.toString()));
@@ -99,7 +99,7 @@ public class PerkRegistry {
 	
 	private static record TickSchedule(Perk perk, Player player, CompoundTag src, AtomicInteger ticksElapsed) {
 		public boolean shouldTick() {
-			return src.contains(APIUtils.DURATION) && ticksElapsed.get() <= src.getInt(APIUtils.DURATION);
+			return src.contains(APIUtils.DURATION) && ticksElapsed.get() <= src.getInt(APIUtils.DURATION).get();
 		}
 		
 		public void tick() {
@@ -109,7 +109,7 @@ public class PerkRegistry {
 	}
 	private static record PerkCooldown(ResourceLocation perkID, Player player, CompoundTag src, long lastUse) {
 		public boolean cooledDown(Level level) {
-			return level.getGameTime() > lastUse + src.getInt(APIUtils.COOLDOWN);
+			return level.getGameTime() > lastUse + src.getInt(APIUtils.COOLDOWN).get();
 		}
 	}
 	
@@ -134,7 +134,7 @@ public class PerkRegistry {
 	}
 
 	public boolean isPerkCooledDown(Player player, CompoundTag src) {
-		ResourceLocation perkID = Reference.of(src.getString("perk"));
+		ResourceLocation perkID = Reference.of(src.getString("perk").get());
 		return coolTracker.stream().noneMatch(cd -> cd.player().equals(player) && cd.perkID().equals(perkID));
 	}
 }

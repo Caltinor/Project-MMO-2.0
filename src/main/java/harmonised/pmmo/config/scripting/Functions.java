@@ -7,24 +7,21 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.DataSource;
-import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.config.codecs.ObjectData;
-import harmonised.pmmo.config.codecs.ServerData;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.config.readers.ConfigListener;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.ArmorItem;
 import net.neoforged.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -34,7 +31,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Functions {
     //Map of keywords and their "registered" consumers
@@ -178,8 +174,8 @@ public class Functions {
             }
             final Pair<Float, Float> values = Pair.of(nutVal, satVal);
             final Pair<Operator, Operator> ops = Pair.of(nutOp, satOp);
-            List<ResourceLocation> food = access.registryOrThrow(Registries.ITEM).entrySet().stream()
-                .filter(entry -> entry.getValue().getFoodProperties(entry.getValue().getDefaultInstance(), null) instanceof FoodProperties props
+            List<ResourceLocation> food = access.lookupOrThrow(Registries.ITEM).entrySet().stream()
+                .filter(entry -> entry.getValue().components().get(DataComponents.FOOD) instanceof FoodProperties props
                         && ops.getFirst().evaluation.test(Integer.valueOf(props.nutrition()).floatValue(), values.getFirst())
                         && ops.getSecond().evaluation.test(props.saturation(), values.getSecond()))
                 .map(entry -> entry.getKey().location())
@@ -189,51 +185,39 @@ public class Functions {
         TARGETORS.put("tool", (param, access) -> {
             List<ResourceLocation>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.registryOrThrow(Registries.ITEM).entrySet().stream()
+                tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
                     .filter(entry -> entry.getValue().components().has(DataComponents.TOOL))
                     .map(entry -> entry.getKey().location())
                     .toList());
             else {
                 ResourceLocation tag = Reference.of(param);
-                tools.addAll(access.registryOrThrow(Registries.ITEM).getTag(TagKey.create(Registries.ITEM, tag))
-                        .map(named -> named.stream()
-                                .filter(holder -> holder.value().components().has(DataComponents.TOOL))
-                                .map(holder -> holder.getKey().location()).toList())
-                        .orElse(List.of()));
+                tools.addAll(RegistryUtil.getTagMemberIds(access, Registries.ITEM, TagKey.create(Registries.ITEM, tag)));
             }
             return new TargetSelector.Selection(ObjectType.ITEM, tools);
         });
         TARGETORS.put("armor", (param, access) -> {
             List<ResourceLocation>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.registryOrThrow(Registries.ITEM).entrySet().stream()
-                        .filter(entry -> entry.getValue() instanceof ArmorItem)
+                tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
+                        .filter(entry -> entry.getValue().components().has(DataComponents.EQUIPPABLE))
                         .map(entry -> entry.getKey().location())
                         .toList());
             else {
                 ResourceLocation tag = Reference.of(param);
-                tools.addAll(access.registryOrThrow(Registries.ITEM).getTag(TagKey.create(Registries.ITEM, tag))
-                        .map(named -> named.stream()
-                                .filter(holder -> holder.value() instanceof ArmorItem)
-                                .map(holder -> holder.getKey().location()).toList())
-                        .orElse(List.of()));
+                tools.addAll(RegistryUtil.getTagMemberIds(access, Registries.ITEM, TagKey.create(Registries.ITEM, tag)));
             }
             return new TargetSelector.Selection(ObjectType.ITEM, tools);
         });
         TARGETORS.put("weapon", (param, access) -> {
             List<ResourceLocation>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.registryOrThrow(Registries.ITEM).entrySet().stream()
+                tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
                         .filter(entry -> entry.getValue().components().has(DataComponents.DAMAGE))
                         .map(entry -> entry.getKey().location())
                         .toList());
             else {
                 ResourceLocation tag = Reference.of(param);
-                tools.addAll(access.registryOrThrow(Registries.ITEM).getTag(TagKey.create(Registries.ITEM, tag))
-                        .map(named -> named.stream()
-                                .filter(holder -> holder.value().components().has(DataComponents.DAMAGE))
-                                .map(holder -> holder.getKey().location()).toList())
-                        .orElse(List.of()));
+                tools.addAll(RegistryUtil.getTagMemberIds(access, Registries.ITEM, TagKey.create(Registries.ITEM, tag)));
             }
             return new TargetSelector.Selection(ObjectType.ITEM, tools);
         });

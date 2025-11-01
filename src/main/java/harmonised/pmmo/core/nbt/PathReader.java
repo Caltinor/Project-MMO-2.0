@@ -56,12 +56,12 @@ public class PathReader {
 		}
 		else if (isCompound(nodeEntry)) {
 			nodes.remove(0);
-			list.addAll(evaluateCompound(nodes, nbt.getCompound(rawNode(nodeEntry))));
+			list.addAll(evaluateCompound(nodes, nbt.getCompoundOrEmpty(rawNode(nodeEntry))));
 		}
 		else {
 			Tag value = nbt.get(rawNode(nodeEntry));
 			if (value != null)
-				list.add(value.getAsString());
+				list.add(value.asString().get());
 		}
 		
 		return list;
@@ -76,22 +76,22 @@ public class PathReader {
 		if (index == -1) {
 			for (int l = 0; l < lnbt.size(); l++) {
 				if (lnbt.get(0) instanceof CompoundTag) {	
-					list.addAll(evaluateCompound(new ArrayList<>(nodes), lnbt.getCompound(l)));
+					list.addAll(evaluateCompound(new ArrayList<>(nodes), lnbt.getCompoundOrEmpty(l)));
 				}
 				else if (lnbt.get(0) instanceof ListTag) {
-					list.addAll(evaluateList(new ArrayList<>(nodes), getListParameters(nodes.get(0)), lnbt.getList(l)));
+					list.addAll(evaluateList(new ArrayList<>(nodes), getListParameters(nodes.get(0)), lnbt.getListOrEmpty(l)));
 				}
-				else list.add(lnbt.get(l).getAsString());
+				else list.add(lnbt.get(l).asString().get());
 			}
 		}
 		else {
 			if (lnbt.get(0) instanceof CompoundTag) {
-				list.addAll(evaluateCompound(nodes, lnbt.getCompound(index)));
+				list.addAll(evaluateCompound(nodes, lnbt.getCompoundOrEmpty(index)));
 			}
 			else if (lnbt.get(0) instanceof ListTag) {
-				list.addAll(evaluateList(nodes, getListParameters(nodes.get(0)), lnbt.getList(index)));
+				list.addAll(evaluateList(nodes, getListParameters(nodes.get(0)), lnbt.getListOrEmpty(index)));
 			}
-			else list.add(lnbt.get(index).getAsString());
+			else list.add(lnbt.get(index).asString().get());
 		}
 		
 		return list;
@@ -111,8 +111,8 @@ public class PathReader {
 		String key = node.substring(node.indexOf("{")+1, Math.max(0, node.indexOf(":"))).replaceAll("\"", "");
 		String value = node.substring(node.indexOf(":")+1, Math.max(0, node.indexOf("}"))).replaceAll("\"", "");
 		boolean test = nbt.contains(root)
-				&& nbt.getCompound(root).contains(key)
-				&& nbt.getCompound(root).get(key).getAsString()
+				&& nbt.getCompoundOrEmpty(root).contains(key)
+				&& nbt.getCompoundOrEmpty(root).getStringOr(key, "")
 				.equalsIgnoreCase(value);
 		return test;
 	}
@@ -130,8 +130,8 @@ public class PathReader {
 		String value = param.substring(param.indexOf(":")+1, param.indexOf("}"));
 		value = rawValue(value);
 		for (int i = 0; i < lnbt.size(); i++) {
-			CompoundTag element = lnbt.getCompound(i);
-			if (element.contains(key) && element.get(key).getAsString().equalsIgnoreCase(value)) return i;
+			CompoundTag element = lnbt.getCompoundOrEmpty(i);
+			if (element.contains(key) && element.get(key).asString().get().equalsIgnoreCase(value)) return i;
 		}
 		return -2;
 	}

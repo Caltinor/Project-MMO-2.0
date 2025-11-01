@@ -33,6 +33,7 @@ public class XpEvent extends PlayerEvent implements ICancellableEvent {
     public boolean isLevelUp() {
     	return startLevel() < endLevel();
     }
+    public boolean isLevelDown() {return startLevel() > endLevel();}
     
     public CompoundTag getContext() {
     	return context;

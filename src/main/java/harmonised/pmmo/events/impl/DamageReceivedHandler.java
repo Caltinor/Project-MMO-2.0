@@ -43,7 +43,7 @@ public class DamageReceivedHandler {
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide){
 				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.RECEIVE_DAMAGE, event, new CompoundTag());
-				if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) { 
+				if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
 					container.setNewDamage(0);
 					return;
 				}
@@ -54,7 +54,7 @@ public class DamageReceivedHandler {
 			perkDataIn.putFloat(APIUtils.DAMAGE_IN, container.getNewDamage());
 			CompoundTag perkOutput = TagUtils.mergeTags(perkDataIn, core.getPerkRegistry().executePerk(EventType.RECEIVE_DAMAGE,  player, perkDataIn));
 			if (perkOutput.contains(APIUtils.DAMAGE_OUT)) {
-				float damageOut = perkOutput.getFloat(APIUtils.DAMAGE_OUT);
+				float damageOut = perkOutput.getFloat(APIUtils.DAMAGE_OUT).get();
 				MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Damage Modified from %s to %s".formatted(container.getNewDamage(), damageOut));
 				container.setNewDamage(damageOut);
 			}
@@ -78,8 +78,8 @@ public class DamageReceivedHandler {
 				.filter(str -> {
 					if (!str.contains("#"))
 						return false;
-					var registry = player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
-					var tag = registry.getTag(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(str.substring(1))));
+					var registry = player.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
+					var tag = registry.get(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(str.substring(1))));
 					return tag.map(type -> type.contains(source.typeHolder())).orElse(false);
 				}).toList();
 		Map<String, Long> tagXp = tags.stream().map(str -> config.get(str)).reduce((mapA, mapB) -> Functions.mergeMaps(mapA, mapB)).orElse(new HashMap<>());

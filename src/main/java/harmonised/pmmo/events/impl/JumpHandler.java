@@ -28,7 +28,7 @@ public class JumpHandler {
 		
 		Core core = Core.get(player.level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !player.level().isClientSide; 
+		boolean serverSide = !player.level().isClientSide();
 		if (serverSide){			
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
 		}
@@ -36,7 +36,7 @@ public class JumpHandler {
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, eventHookOutput));
 		if (serverSide) {
 			//NOTE a default value of 0.4 is consistent with the base jump amount of a player without any vanilla/modded jump modifiers
-			double jumpXpBase = perkOutput.contains(APIUtils.JUMP_OUT) ? Math.max(0.4, perkOutput.getDouble(APIUtils.JUMP_OUT)) : player.getDeltaMovement().y;
+			double jumpXpBase = perkOutput.contains(APIUtils.JUMP_OUT) ? Math.max(0.4, perkOutput.getDouble(APIUtils.JUMP_OUT).get()) : player.getDeltaMovement().y;
 			Map<String, Long> xpAward = new HashMap<>();
 			Map<String, Double> ratios = Config.server().xpGains().playerXp(type);
 			ratios.keySet().forEach((skill) -> {

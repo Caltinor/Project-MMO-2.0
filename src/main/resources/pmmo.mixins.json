@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AbstractFurnaceTileEntityShrinkMixin",
-    "CampfireMixin",
     "LootTableConditionMixin",
     "NeoEventHandlerMixin",
     "ServerLevelMixin"

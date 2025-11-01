@@ -4,6 +4,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.TagUtils;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +21,7 @@ public class FoodEatHandler {
 	private static void internalHandle(Event event, Player player, ItemStack food) {
 		Core core = Core.get(player.level());
 		CompoundTag eventHookOutput = new CompoundTag();
-		boolean serverSide = !player.level().isClientSide;
+		boolean serverSide = !player.level().isClientSide();
 		if (serverSide)
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.CONSUME, event, new CompoundTag());
 		//Process perks
@@ -32,7 +33,7 @@ public class FoodEatHandler {
 		}
 	}
 	public static void handle(LivingEntityUseItemEvent.Finish event) {
-		if (event.getEntity() instanceof Player player && (event.getItem().getFoodProperties(player) != null  || event.getItem().getItem() instanceof PotionItem)) {
+		if (event.getEntity() instanceof Player player && (event.getItem().has(DataComponents.FOOD) || event.getItem().getItem() instanceof PotionItem)) {
 			internalHandle(event, player, event.getItem());
 		}
 	}

@@ -37,7 +37,7 @@ public class VeinMiningLogic {
 	 */
 	public static void applyVein(ServerPlayer player, BlockPos pos) {
 		if (!Config.server().veinMiner().enabled()) return;
-		ServerLevel level = player.serverLevel();
+		ServerLevel level = player.level();
 		Block block = level.getBlockState(pos).getBlock();
 		int cost = Core.get(level).getBlockConsume(block);
 		if (cost <= 0) return; 

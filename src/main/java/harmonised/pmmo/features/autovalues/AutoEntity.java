@@ -32,7 +32,7 @@ public class AutoEntity {
 			return new HashMap<>();
 				
 		Map<String, Long> outMap = new HashMap<>();
-		EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.get(entityID);
+		EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.getValue(entityID);
 		switch (type) {
 		case RIDING: {
 			if (entityType.is(Reference.RIDEABLE_TAG)) {
@@ -65,7 +65,7 @@ public class AutoEntity {
 	
 	//========================GETTER METHODS==============================
 	private static Map<String, Long> getXpMap(ResourceLocation entityID, EventType type) {
-		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) BuiltInRegistries.ENTITY_TYPE.get(entityID);
+		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) BuiltInRegistries.ENTITY_TYPE.getValue(entityID);
 		Map<String, Long> outMap = new HashMap<>();
 		double healthScale = getAttribute(entity, Attributes.MAX_HEALTH) * Config.autovalue().tweaks().entityTweaks().getOrDefault(AttributeKey.HEALTH.key, 0d);
 		double speedScale = getAttribute(entity, Attributes.MOVEMENT_SPEED) * Config.autovalue().tweaks().entityTweaks().getOrDefault(AttributeKey.SPEED.key, 0d);

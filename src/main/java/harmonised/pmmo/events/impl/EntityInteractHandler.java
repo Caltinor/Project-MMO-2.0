@@ -27,11 +27,11 @@ public class EntityInteractHandler {
 			Messenger.sendDenialMsg(ReqType.ENTITY_INTERACT, event.getEntity(), event.getTarget().getName());
 			return;
 		}
-		boolean serverSide = !event.getEntity().level().isClientSide;
+		boolean serverSide = !event.getEntity().level().isClientSide();
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ENTITY, event, new CompoundTag());
-			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
+			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
 				event.setCanceled(true);
 				event.setCancellationResult(InteractionResult.FAIL);
 				return;

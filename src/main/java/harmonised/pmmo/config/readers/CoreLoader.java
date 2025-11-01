@@ -38,19 +38,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid=Reference.MOD_ID)
 public class CoreLoader {
 	private static final Logger DATA_LOGGER = LogManager.getLogger();	
 	
 	@SubscribeEvent
 	public static void onTagLoad(TagsUpdatedEvent event) {
 		Core core = Core.get(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED ? LogicalSide.CLIENT : LogicalSide.SERVER);
-		core.getLoader().ITEM_LOADER.postProcess(event.getRegistryAccess());
-		core.getLoader().BLOCK_LOADER.postProcess(event.getRegistryAccess());
-		core.getLoader().ENTITY_LOADER.postProcess(event.getRegistryAccess());
+		core.getLoader().ITEM_LOADER.postProcess(event.getLookupProvider());
+		core.getLoader().BLOCK_LOADER.postProcess(event.getLookupProvider());
+		core.getLoader().ENTITY_LOADER.postProcess(event.getLookupProvider());
 		//Until dimensions are stored as a client registry, this must remain commented.
 		//core.getLoader().DIMENSION_LOADER.postProcess(event.getRegistryAccess());
-		core.getLoader().BIOME_LOADER.postProcess(event.getRegistryAccess());
+		core.getLoader().BIOME_LOADER.postProcess(event.getLookupProvider());
 	}
 	
 	@SuppressWarnings("unchecked")

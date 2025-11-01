@@ -38,7 +38,7 @@ public class EventTriggerRegistry {
 			CompoundTag funcOutput = listeners.get(i).getSecond().apply(event, dataIn);
 			if (funcOutput.contains(APIUtils.IS_CANCELLED)) {
 				output = TagUtils.mergeTags(output, funcOutput);
-				output.putBoolean(APIUtils.IS_CANCELLED, output.getBoolean(APIUtils.IS_CANCELLED) ? true : funcOutput.getBoolean(APIUtils.IS_CANCELLED));
+				output.putBoolean(APIUtils.IS_CANCELLED, output.getBooleanOr(APIUtils.IS_CANCELLED, false));
 			}
 			else {
 				removals.add(i);

@@ -68,23 +68,23 @@ public class TreasureLootModifier extends LootModifier{
 	@Override
 	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,	LootContext context) {
 		if (!Config.server().general().treasureEnabled()) return generatedLoot;
-		if (perLevel && context.getParam(LootContextParams.THIS_ENTITY) instanceof Player player) {
+		if (perLevel && context.getParameter(LootContextParams.THIS_ENTITY) instanceof Player player) {
 			chance *= Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 		}
 		if (context.getRandom().nextDouble() <= chance) {
 			
 			//this section checks if the drop is air and replaces it with the block
 			//being broken.  this is the logic for Extra Drops
-			BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
+			BlockState state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
 			if (state != null && drop.isEmpty()) {
 				drop = Optional.of(state.getDrops(builderFromContext(context)).get(0));
 				drop.get().setCount(count);
 			}
 			
 			//Notify player that their skill awarded them an extra drop.
-			Entity breaker = context.getParamOrNull(LootContextParams.THIS_ENTITY);
+			Entity breaker = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
 			if (breaker instanceof Player player) {
-				player.sendSystemMessage(LangProvider.FOUND_TREASURE.asComponent());
+				player.displayClientMessage(LangProvider.FOUND_TREASURE.asComponent(), false);
 			}
 			generatedLoot.add(drop.get().copy());
 		}
@@ -93,7 +93,7 @@ public class TreasureLootModifier extends LootModifier{
 
 	private LootParams.Builder builderFromContext(LootContext context) {
 		return new LootParams.Builder(context.getLevel())
-				.withParameter(LootContextParams.ORIGIN, context.getParam(LootContextParams.ORIGIN))
-				.withParameter(LootContextParams.TOOL, context.getParam(LootContextParams.TOOL));
+				.withParameter(LootContextParams.ORIGIN, context.getParameter(LootContextParams.ORIGIN))
+				.withParameter(LootContextParams.TOOL, context.getParameter(LootContextParams.TOOL));
 	}
 }

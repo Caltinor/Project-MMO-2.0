@@ -7,7 +7,6 @@ import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.CoreLoader;
 import harmonised.pmmo.config.readers.ExecutableListener;
-import harmonised.pmmo.config.scripting.Scripting;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
@@ -46,10 +45,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -59,7 +57,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid=Reference.MOD_ID)
 public class CommonSetup {
 	public static final DeferredRegister<CriterionTrigger<?>> TRIGGERS = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, Reference.MOD_ID);
 	private static final Supplier<SkillUpTrigger> SKILL_UP_TRIGGER = TRIGGERS.register("skill_up", SkillUpTrigger::new);
@@ -106,51 +104,49 @@ public class CommonSetup {
 	}
 	
 	@SubscribeEvent
-	public static void onAddReloadListeners(AddReloadListenerEvent event) {
+	public static void onAddReloadListeners(AddServerReloadListenersEvent event) {
 		Core.get(LogicalSide.SERVER).getLoader().RELOADER = new ExecutableListener(event.getRegistryAccess(), CoreLoader.RELOADER_FUNCTION);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().RELOADER);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
-		event.addListener(Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
-		event.addListener(Config.CONFIG);
+		event.addListener(Reference.rl("reloader"), Core.get(LogicalSide.SERVER).getLoader().RELOADER);
+		event.addListener(Reference.rl("items"), Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
+		event.addListener(Reference.rl("blocks"), Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);
+		event.addListener(Reference.rl("entities"), Core.get(LogicalSide.SERVER).getLoader().ENTITY_LOADER);
+		event.addListener(Reference.rl("biomes"), Core.get(LogicalSide.SERVER).getLoader().BIOME_LOADER);
+		event.addListener(Reference.rl("dimensions"), Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER);
+		event.addListener(Reference.rl("players"), Core.get(LogicalSide.SERVER).getLoader().PLAYER_LOADER);
+		event.addListener(Reference.rl("enchantments"), Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER);
+		event.addListener(Reference.rl("effects"), Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER);
+		event.addListener(Reference.rl("configs"), Config.CONFIG);
 		Networking.registerDataSyncPackets();
 	}
 	
-	public static void gatherData(GatherDataEvent event) {
+	public static void gatherData(GatherDataEvent.Client event) {
 		DataGenerator generator = event.getGenerator();
 		CompletableFuture<HolderLookup.Provider> reg = event.getLookupProvider();
-		if (event.includeClient()) {
-			for (Locale locale : LangProvider.Locale.values()) {
-				generator.addProvider(true, new LangProvider(generator.getPackOutput(), locale.str));
-			}
+		//CLIENT RESOURCES
+		for (Locale locale : LangProvider.Locale.values()) {
+			generator.addProvider(true, new LangProvider(generator.getPackOutput(), locale.str));
 		}
-		if (event.includeServer()) {
-			//Easy Feature Pack Generators
-			generator.addProvider(true, new EasyGLMProvider(generator.getPackOutput(), reg));
-			generator.addProvider(true, new EasyItemConfigProvider(generator.getPackOutput()));
-			generator.addProvider(true, new EasyBlockConfigProvider(generator.getPackOutput()));
-			generator.addProvider(true, new EasyConfigProvider(generator.getPackOutput()));
-			//Default Feature Pack Generators
-			generator.addProvider(true, new DefaultGLMProvider(generator.getPackOutput(), reg));
-			generator.addProvider(true, new DefaultItemConfigProvider(generator.getPackOutput()));
-			generator.addProvider(true, new DefaultBlockConfigProvider(generator.getPackOutput()));
-			generator.addProvider(true, new DefaultDimConfigProvider(generator.getPackOutput()));
-			generator.addProvider(true, new DefaultBiomeConfigProvider(generator.getPackOutput()));
-			generator.addProvider(true, new DefaultEntityConfigProvider(generator.getPackOutput()));
-			//Hardcore Feature Pack Generators
-			generator.addProvider(true, new HardcoreGLMProvider(generator.getPackOutput(), reg));
+		//Server Resources
+		//Easy Feature Pack Generators
+		generator.addProvider(true, new EasyGLMProvider(generator.getPackOutput(), reg));
+		generator.addProvider(true, new EasyItemConfigProvider(generator.getPackOutput()));
+		generator.addProvider(true, new EasyBlockConfigProvider(generator.getPackOutput()));
+		generator.addProvider(true, new EasyConfigProvider(generator.getPackOutput()));
+		//Default Feature Pack Generators
+		generator.addProvider(true, new DefaultGLMProvider(generator.getPackOutput(), reg));
+		generator.addProvider(true, new DefaultItemConfigProvider(generator.getPackOutput()));
+		generator.addProvider(true, new DefaultBlockConfigProvider(generator.getPackOutput()));
+		generator.addProvider(true, new DefaultDimConfigProvider(generator.getPackOutput()));
+		generator.addProvider(true, new DefaultBiomeConfigProvider(generator.getPackOutput()));
+		generator.addProvider(true, new DefaultEntityConfigProvider(generator.getPackOutput()));
+		//Hardcore Feature Pack Generators
+		generator.addProvider(true, new HardcoreGLMProvider(generator.getPackOutput(), reg));
 
-			//Common mod data
-			BlockTagProvider blockProvider = new BlockTagProvider(generator.getPackOutput(), reg, event.getExistingFileHelper());
-			generator.addProvider(true, blockProvider);
-			generator.addProvider(true, new EntityTagProvider(generator.getPackOutput(), reg, event.getExistingFileHelper()));
-			generator.addProvider(true, new ItemTagProvider(generator.getPackOutput(), reg, blockProvider.contentsGetter(), event.getExistingFileHelper()));
-			generator.addProvider(true, new DamageTagProvider(generator.getPackOutput(), reg, event.getExistingFileHelper()));
-		}
+		//Common mod data
+		BlockTagProvider blockProvider = new BlockTagProvider(generator.getPackOutput(), reg);
+		generator.addProvider(true, blockProvider);
+		generator.addProvider(true, new EntityTagProvider(generator.getPackOutput(), reg));
+		generator.addProvider(true, new ItemTagProvider(generator.getPackOutput(), reg));
+		generator.addProvider(true, new DamageTagProvider(generator.getPackOutput(), reg));
 	}
 }

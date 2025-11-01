@@ -24,23 +24,20 @@ public class FurnaceHandler {
 
 	public static void handle(FurnaceBurnEvent event) {
 		//Checkers to exit early for non-applicable conditions
-		if (event.getLevel().isClientSide) return;
+		if (event.getLevel().isClientSide()) return;
 		UUID pid = event.getLevel().getChunkAt(event.getPos())
 				.getData(DataAttachmentTypes.PLACED_MAP.get())
 				.getOrDefault(event.getPos(), Reference.NIL);
 		if (pid == null) return;
 		ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(pid);
 		if (player == null) {
-			Optional<GameProfile> playerProfile = event.getLevel().getServer().getProfileCache().get(pid);
-			if (playerProfile.isEmpty()) 
-				return;
-			player = new ServerPlayer(event.getLevel().getServer(), (ServerLevel) event.getLevel(), playerProfile.get(), ClientInformation.createDefault());
+			return;
 		}
 		
 		//core logic 
 		Core core = Core.get(event.getLevel());
 		CompoundTag eventHook = core.getEventTriggerRegistry().executeEventListeners(EventType.SMELT, event, new CompoundTag());
-		eventHook.putString(APIUtils.STACK, TagUtils.stackTag(event.getInput(), event.getLevel()).getAsString());
+		eventHook.putString(APIUtils.STACK, TagUtils.stackTag(event.getInput(), event.getLevel()).asString().orElse("missing"));
 		eventHook = TagUtils.mergeTags(eventHook, core.getPerkRegistry().executePerk(EventType.SMELT, player, eventHook));
 		Map<String, Long> xpAwards = core.getExperienceAwards(EventType.SMELT, event.getInput(), player, eventHook);
 		List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);

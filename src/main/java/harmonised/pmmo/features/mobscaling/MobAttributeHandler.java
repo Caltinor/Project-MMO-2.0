@@ -28,7 +28,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid=Reference.MOD_ID)
 public class MobAttributeHandler {
 	private static final ResourceLocation ADDITION_MODIFIER_ID = Reference.rl("mob_scaling_modifier");
 	private static final ResourceLocation MULTIPLY_BASE_MODIFIER_ID = Reference.rl("mob_scaling_modifier_m");
@@ -135,9 +135,9 @@ public class MobAttributeHandler {
 	private static void applyModifiers(LivingEntity entity, ResourceLocation modifierId, AttributeModifier.Operation operation, Map<ResourceLocation, Double> collapsedModifiers) {
 		collapsedModifiers.forEach((attributeID, amount) -> {
 			if (Math.abs(amount) < 0.0001f) return;
-			var attribute = entity.level().registryAccess().registryOrThrow(Registries.ATTRIBUTE).getHolder(attributeID);
-			if (attribute.isEmpty()) return;
-			var attributeInstance = entity.getAttribute(attribute.get());
+			var registry = entity.level().registryAccess().lookupOrThrow(Registries.ATTRIBUTE);
+			var attribute = registry.wrapAsHolder(registry.getValue(attributeID));
+			var attributeInstance = entity.getAttribute(attribute);
 			if (attributeInstance == null) return;
 			var modifier = new AttributeModifier(modifierId, amount, operation);
 			attributeInstance.removeModifier(modifierId);
@@ -169,9 +169,9 @@ public class MobAttributeHandler {
 		config.forEach((attributeID, configMap) -> {
 			var attributeScalingConfig = config.getOrDefault(attributeID, new HashMap<>());
 			if (attributeScalingConfig.isEmpty()) return;
-			var attribute = entity.level().registryAccess().registryOrThrow(Registries.ATTRIBUTE).getHolder(attributeID);
-			if (attribute.isEmpty()) return;
-			var attributeInstance = entity.getAttribute(attribute.get());
+			var registry = entity.level().registryAccess().lookupOrThrow(Registries.ATTRIBUTE);
+			var attribute = registry.wrapAsHolder(registry.getValue(attributeID));
+			var attributeInstance = entity.getAttribute(attribute);
 			if (attributeInstance == null) return;
 
 			var baseValue = baseValue(entity, attributeID, attributeInstance);

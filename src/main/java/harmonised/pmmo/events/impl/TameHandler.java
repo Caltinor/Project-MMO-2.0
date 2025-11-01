@@ -30,17 +30,17 @@ public class TameHandler {
 			Messenger.sendDenialMsg(ReqType.TAME, player, target.getName());
 			return;
 		}
-		boolean serverSide = !player.level().isClientSide;
+		boolean serverSide = !player.level().isClientSide();
 		CompoundTag hookOutput = new CompoundTag();
 		if (serverSide) {
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.TAMING, event, new CompoundTag());
-			if (hookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
+			if (hookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
 				event.setCanceled(true);
 				return;
 			}
 		}
 		//Process perks
-		hookOutput.putUUID(PerksImpl.ANIMAL_ID, event.getAnimal().getUUID());
+		hookOutput.putString(PerksImpl.ANIMAL_ID, event.getAnimal().getUUID().toString());
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.TAMING, player, hookOutput));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.TAMING, target, player, hookOutput);

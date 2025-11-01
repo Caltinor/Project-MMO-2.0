@@ -16,6 +16,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -97,7 +99,7 @@ public class GlossarySelectScreen extends Screen{
 	
 	@Override
     public void renderBackground(GuiGraphics graphics, int i, int j, float k) {
-        graphics.blit(GUI_BG,  renderX, renderY, 0, 0,  256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_BG,  renderX, renderY, 0f, 0f, 256, 256, 256, 256);
 	}
 	
 	@Override
@@ -114,16 +116,16 @@ public class GlossarySelectScreen extends Screen{
 	}
 	
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int partialTicks) {
+	public boolean mouseClicked(MouseButtonEvent mouseEvent, boolean doubleClick) {
 		if (selectSection.isExtended())
-			return selectSection.mouseClicked(mouseX, mouseY, partialTicks) || super.mouseClicked(mouseX, mouseY, partialTicks);
+			return selectSection.mouseClicked(mouseEvent, doubleClick) || super.mouseClicked(mouseEvent, doubleClick);
 		if (selectObject.isExtended())
-			return selectObject.mouseClicked(mouseX, mouseY, partialTicks) || super.mouseClicked(mouseX, mouseY, partialTicks);
+			return selectObject.mouseClicked(mouseEvent, doubleClick) || super.mouseClicked(mouseEvent, doubleClick);
 		if (selectSkills.isExtended())
-			return selectSkills.mouseClicked(mouseX, mouseY, partialTicks) || super.mouseClicked(mouseX, mouseY, partialTicks);
+			return selectSkills.mouseClicked(mouseEvent, doubleClick) || super.mouseClicked(mouseEvent, doubleClick);
 		if (selectEnum.isExtended())
-			return selectEnum.mouseClicked(mouseX, mouseY, partialTicks) || super.mouseClicked(mouseX, mouseY, partialTicks);
-		return viewButton.mouseClicked(mouseX, mouseY, partialTicks) || super.mouseClicked(mouseX, mouseY, partialTicks);
+			return selectEnum.mouseClicked(mouseEvent, doubleClick) || super.mouseClicked(mouseEvent, doubleClick);
+		return viewButton.mouseClicked(mouseEvent, doubleClick) || super.mouseClicked(mouseEvent, doubleClick);
 	}
 	
 	private void updateSelection(SelectionEntry<SELECTION> sel) {

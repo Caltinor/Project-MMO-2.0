@@ -25,15 +25,15 @@ public class EnchantHandler {
 		Player player = event.getEntity();
 		Core core = Core.get(player.level());
 		event.getEnchantments().forEach(instance ->
-				handleEach(core, player, event.getEnchantedItem(), instance.level, instance.enchantment, event));
+				handleEach(core, player, event.getEnchantedItem(), instance.level(), instance.enchantment(), event));
 	}
 
 	private static void handleEach(Core core, Player player, ItemStack item, int level, Holder<Enchantment> enchantment, PlayerEnchantItemEvent event) {
 		CompoundTag hookOutput = new CompoundTag();
-		boolean serverSide = !player.level().isClientSide;
+		boolean serverSide = !player.level().isClientSide();
 		if (serverSide) {
 			CompoundTag dataIn = TagBuilder.start()
-					.withString(APIUtils.STACK, TagUtils.stackTag(item, player.level()).getAsString())
+					.withString(APIUtils.STACK, TagUtils.stackTag(item, player.level()).asString().get())
 					.withString(APIUtils.PLAYER_ID, player.getUUID().toString())
 					.withInt(APIUtils.ENCHANT_LEVEL, level)
 					.withString(APIUtils.ENCHANT_NAME, RegistryUtil.getId(enchantment).toString()).build();

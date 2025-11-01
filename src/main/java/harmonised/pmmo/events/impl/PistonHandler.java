@@ -26,7 +26,7 @@ public class PistonHandler {
 		 for (BlockPos destroyed : structure.getToDestroy()) {
 			 LevelChunk ck = level.getChunkAt(destroyed);
 			 ck.getData(DataAttachmentTypes.PLACED_MAP.get()).remove(destroyed);
-			 ck.setUnsaved(true);
+			 ck.markUnsaved();
 		 }		 
 		 Map<BlockPos, UUID> updateToMap = new HashMap<>();
 		 for (BlockPos moved : structure.getToPush()) {
@@ -36,12 +36,12 @@ public class PistonHandler {
 			 if (currentID.equals(Reference.NIL)) continue;
 			 placedData.remove(moved);
 			 updateToMap.put( moved.relative(event.getStructureHelper().getPushDirection()), currentID);
-			 oldCK.setUnsaved(true);
+			 oldCK.markUnsaved();
 		 }
 		 for (Map.Entry<BlockPos, UUID> map : updateToMap.entrySet()) {
 			 LevelChunk toCK = level.getChunkAt(map.getKey());
 			 toCK.getData(DataAttachmentTypes.PLACED_MAP.get()).put(map.getKey(), map.getValue());
-			 toCK.setUnsaved(true);
+			 toCK.markUnsaved();
 		 }
 	 }
 }

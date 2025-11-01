@@ -182,7 +182,7 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 		CompoundTag outTag = new CompoundTag();
 		values.entrySet().stream().filter(entry -> !entry.getKey().equals(EVENT)).forEach(entry -> {
 			try {
-				Tag tag = new TagParser(new StringReader(entry.getValue())).readValue();
+				Tag tag = TagParser.parseCompoundAsArgument(new StringReader(entry.getValue()));
 				outTag.put(entry.getKey(), tag);
 			}
 			catch (CommandSyntaxException e) {

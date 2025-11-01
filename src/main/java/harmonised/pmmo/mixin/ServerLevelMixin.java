@@ -49,7 +49,7 @@ public class ServerLevelMixin {
 			if (playerID != null && (player = level.getServer().getPlayerList().getPlayer(playerID)) != null) {
 				NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
 				breakMap.put(neighbor, playerID);
-				level.getChunkAt(pos).setUnsaved(true);
+				level.getChunkAt(pos).markUnsaved();
 				break;
 			}
 		}

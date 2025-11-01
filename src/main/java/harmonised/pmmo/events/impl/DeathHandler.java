@@ -49,7 +49,7 @@ public class DeathHandler {
 			CompoundTag hookOutput = new CompoundTag();
 			if (serverSide) {
 				hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.DEATH, event, new CompoundTag());
-				if (hookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
+				if (hookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
 					event.setCanceled(true);
 					return;
 				}

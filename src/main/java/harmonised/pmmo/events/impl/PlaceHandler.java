@@ -30,11 +30,11 @@ public class PlaceHandler {
 			Messenger.sendDenialMsg(ReqType.PLACE, player, event.getPlacedBlock().getBlock().getName());
 			return;
 		}
-		boolean serverSide = !player.level().isClientSide;
+		boolean serverSide = !player.level().isClientSide();
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BLOCK_PLACE, event, new CompoundTag());
-			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) { 
+			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED).get()) {
 				event.setCanceled(true);
 				return;
 			}
@@ -47,7 +47,7 @@ public class PlaceHandler {
 			//Add the newly placed block to the ChunkDataHandler
 			LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
 			chunk.getData(DataAttachmentTypes.PLACED_MAP.get()).put(event.getPos(), player.getUUID());
-			chunk.setUnsaved(true);
+			chunk.markUnsaved();
 		}
 	}
 }

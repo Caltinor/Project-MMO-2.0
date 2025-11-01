@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,7 @@ public class AutoBlock {
 		if (!type.blockApplicable || isWorldSensitive(blockID) || !Config.autovalue().reqEnabled(type))
 			return new HashMap<>();
 		
-		Block block = BuiltInRegistries.BLOCK.get(blockID);
+		Block block = BuiltInRegistries.BLOCK.getValue(blockID);
 		Map<String, Long> outMap = new HashMap<>();
 		switch (type) {
 		case BREAK -> {
@@ -54,7 +55,7 @@ public class AutoBlock {
 		if (!type.blockApplicable || isWorldSensitive(blockID) || !Config.autovalue().xpEnabled(type))
 			return new HashMap<>();
 		
-		Holder.Reference<Block> block = BuiltInRegistries.BLOCK.getHolder(ResourceKey.create(Registries.BLOCK, blockID)).orElse(null);
+		Holder<Block> block = BuiltInRegistries.BLOCK.wrapAsHolder(BuiltInRegistries.BLOCK.getValue(blockID));
 		Map<String, Long> outMap = new HashMap<>();
 		if (block == null) return outMap;
 

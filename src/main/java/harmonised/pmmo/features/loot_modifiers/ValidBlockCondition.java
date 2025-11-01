@@ -34,9 +34,9 @@ public class ValidBlockCondition implements LootItemCondition{
 
 	@Override
 	public boolean test(LootContext t) {
-		if (t.getParamOrNull(LootContextParams.THIS_ENTITY) == null)
+		if (t.getOptionalParameter(LootContextParams.THIS_ENTITY) == null)
 			return false;
-		BlockState brokenBlock = t.getParamOrNull(LootContextParams.BLOCK_STATE);
+		BlockState brokenBlock = t.getOptionalParameter(LootContextParams.BLOCK_STATE);
 		if (brokenBlock != null) {
 			if (tag.isPresent())
 				return brokenBlock.is(tag.get());
@@ -56,7 +56,7 @@ public class ValidBlockCondition implements LootItemCondition{
 					.xmap(s -> s.map(v -> TagKey.create(Registries.BLOCK, Reference.of(v))), t -> t.map(k -> k.location().toString()))
 					.forGetter(c -> c.tag),
 			Codec.STRING.optionalFieldOf("block")
-					.xmap(s -> s.map(v -> BuiltInRegistries.BLOCK.get(Reference.of(v))), t -> t.map(k -> RegistryUtil.getId(k).toString()))
+					.xmap(s -> s.map(v -> BuiltInRegistries.BLOCK.getValue(Reference.of(v))), t -> t.map(k -> RegistryUtil.getId(k).toString()))
 					.forGetter(c -> c.block)
 	).apply(instance, ValidBlockCondition::new));
 }

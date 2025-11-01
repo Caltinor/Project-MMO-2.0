@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:notice",
+  "title": "Example Title",
+  "external_title": "Example Title",
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "contents": "This is a plain message body element"
+    }
+  ],
+  "inputs": [
+    {
+      "type": "minecraft:number_range",
+      "key": "example_number",
+      "width": 50,
+      "label": "Give me a number between 0 and 10",
+      "start": 0,
+      "end": 10,
+      "step": 1,
+      "initial": 5
+    }
+  ],
+  "can_close_with_escape": true,
+  "pause": true,
+  "after_action": "close"
+}

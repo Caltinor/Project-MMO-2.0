@@ -93,7 +93,7 @@ public class PlayerTickHandler {
 			Map<String, Double> ratio = Config.server().xpGains().playerXp(type);
 			ResourceLocation source = Reference.mc("player");
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
-					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
+					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP).get())
 					: new HashMap<>();
 			switch (type) {
 			case HEALTH_INCREASE, HEALTH_DECREASE -> {

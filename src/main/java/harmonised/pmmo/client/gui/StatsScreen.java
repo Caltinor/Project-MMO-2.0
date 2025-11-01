@@ -11,6 +11,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -86,7 +88,7 @@ public class StatsScreen extends Screen{
 	
 	@Override
     public void renderBackground(GuiGraphics graphics, int i, int j, float k) {
-        graphics.blit(GUI_BG, renderX, renderY, 0, 0,  256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_BG, renderX, renderY, 0, 0,  256, 256, 256, 256);
 	}
 	
 	@Override
@@ -95,8 +97,8 @@ public class StatsScreen extends Screen{
 	}
 	
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int partialTicks) {
-		return scrollWidget.mouseClicked(mouseX, mouseY, partialTicks) || super.mouseClicked(mouseX, mouseY, partialTicks);
+	public boolean mouseClicked(MouseButtonEvent mouseEvent, boolean doubleClicked) {
+		return scrollWidget.mouseClicked(mouseEvent, doubleClicked) || super.mouseClicked(mouseEvent, doubleClicked);
 	}
 
 }

@@ -28,7 +28,7 @@ public class VeinRenderer {
         }
         
         stack.popPose();
-        RenderSystem.disableDepthTest();
+//        RenderSystem.disableDepthTest();
         buffer.endBatch();
     }
 
