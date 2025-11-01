@@ -13,7 +13,8 @@ public enum Operator implements StringRepresentable{
 	LESS_THAN,
 	GREATER_THAN_OR_EQUAL,
 	LESS_THAN_OR_EQUAL,
-	EXISTS;
+	EXISTS,
+	CONTAINS;
 	
 	public static final Codec<Operator> CODEC = StringRepresentable.fromEnum(Operator::values);
 	private static final Map<String, Operator> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(Operator::getSerializedName, s -> s));
