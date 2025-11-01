@@ -23,6 +23,6 @@ public class CampfireMixin {
     method = "cookTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/CampfireBlockEntity;)V",
     locals = LocalCapture.CAPTURE_FAILHARD)
     private static void projectmmo$handleCampfireCook(Level p_155307_, BlockPos p_155308_, BlockState p_155309_, CampfireBlockEntity p_155310_, CallbackInfo ci, boolean flag, int i, ItemStack itemstack, SingleRecipeInput container, ItemStack itemstack1) {
-        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(itemstack1, p_155307_, p_155308_));
+        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(itemstack, itemstack1, p_155307_, p_155308_));
     }
 }

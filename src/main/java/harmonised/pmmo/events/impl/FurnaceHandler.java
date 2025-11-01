@@ -40,6 +40,7 @@ public class FurnaceHandler {
 		eventHook.putString(APIUtils.STACK, TagUtils.stackTag(event.getInput(), event.getLevel()).asString().orElse("missing"));
 		eventHook = TagUtils.mergeTags(eventHook, core.getPerkRegistry().executePerk(EventType.SMELT, player, eventHook));
 		Map<String, Long> xpAwards = core.getExperienceAwards(EventType.SMELT, event.getInput(), player, eventHook);
+		core.getExperienceAwards(EventType.SMELTED, event.getOutput(), player, eventHook).forEach((skill, award) -> xpAwards.merge(skill, award, Long::sum));
 		List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);
 		core.awardXP(partyMembersInRange, xpAwards);
 		
