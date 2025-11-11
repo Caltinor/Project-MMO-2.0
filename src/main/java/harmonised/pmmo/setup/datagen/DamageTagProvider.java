@@ -65,7 +65,13 @@ public class DamageTagProvider extends TagsProvider<DamageType> {
                 .addOptionalElement(ResourceLocation.parse("ars_elemental:spark"))
                 .addOptionalElement(ResourceLocation.parse("ars_elemental:hellfire"))
                 .addOptionalElement(ResourceLocation.parse("ars_elemental:beheading"))
-                .addOptionalElement(ResourceLocation.parse("ars_elemental:poison"));
+                .addOptionalElement(ResourceLocation.parse("ars_elemental:poison"))
+                .addOptionalElement(ResourceLocation.parse("spell_power:fire"))
+                .addOptionalElement(ResourceLocation.parse("spell_power:arcane"))
+                .addOptionalElement(ResourceLocation.parse("spell_power:frost"))
+                .addOptionalElement(ResourceLocation.parse("spell_power:healing"))
+                .addOptionalElement(ResourceLocation.parse("spell_power:lightning"))
+                .addOptionalElement(ResourceLocation.parse("spell_power:soul"));
         getOrCreateRawBuilder(Reference.FROM_GUN)
                 .addOptionalElement(ResourceLocation.parse("cgm:bullet"))
                 .addOptionalElement(ResourceLocation.parse("scguns:bullet"));
