@@ -15,7 +15,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGr
 	ANVIL_REPAIR(true, false, false, "smithing", LangProvider.XP_VALUE_ANVIL),
 	BLOCK_BREAK(false, true, false, "mining", LangProvider.XP_VALUE_BREAK),
 		BREAK_SPEED(false, true, false, "mining", LangProvider.ENUM_BREAK_SPEED),
-	BLOCK_PLACE(true, true, false, "building", LangProvider.XP_VALUE_PLACE),
+	BLOCK_PLACE(false, true, false, "building", LangProvider.XP_VALUE_PLACE),
 	BREATH_CHANGE(false, false, true, "swimming", LangProvider.ENUM_BREATH_CHANGE),
 	BREED(false, false, true, "taming", LangProvider.ENUM_BREED),
 	BREW(true, false, false, "alchemy", LangProvider.XP_VALUE_BREW),
