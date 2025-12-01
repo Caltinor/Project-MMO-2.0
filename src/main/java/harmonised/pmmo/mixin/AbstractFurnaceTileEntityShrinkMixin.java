@@ -34,6 +34,6 @@ public class AbstractFurnaceTileEntityShrinkMixin
 
         Level world = ((AbstractFurnaceBlockEntity)(Object)this).getLevel();
         BlockPos pos = ((AbstractFurnaceBlockEntity)(Object)this).getBlockPos();
-        MinecraftForge.EVENT_BUS.post(new FurnaceBurnEvent(items.get(0), p_266780_.getResultItem(p_266740_), world, pos));
+        MinecraftForge.EVENT_BUS.post(new FurnaceBurnEvent(items.get(0), items.get(2), world, pos));
     }
 }
