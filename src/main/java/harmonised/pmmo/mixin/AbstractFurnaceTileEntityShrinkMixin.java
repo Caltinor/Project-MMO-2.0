@@ -30,8 +30,10 @@ public class AbstractFurnaceTileEntityShrinkMixin
             method = "burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/Recipe;Lnet/minecraft/core/NonNullList;I)Z")
     public void projectmmo$$handleSmeltingShrink(RegistryAccess p_266740_, @Nullable Recipe<?> p_266780_, NonNullList<ItemStack> p_267073_, int p_267157_, CallbackInfoReturnable<?> info)
     {
+        if (p_266780_ == null) return;
+
         Level world = ((AbstractFurnaceBlockEntity)(Object)this).getLevel();
         BlockPos pos = ((AbstractFurnaceBlockEntity)(Object)this).getBlockPos();
-        MinecraftForge.EVENT_BUS.post(new FurnaceBurnEvent(items.get(0), world, pos));
+        MinecraftForge.EVENT_BUS.post(new FurnaceBurnEvent(items.get(0), items.get(2), world, pos));
     }
 }
