@@ -28,6 +28,7 @@ Event names are used to define when XP is awarded.  Certain events can be blocke
 |**EFFECT**|Occurs every 10 ticks when the player has any active potion effects|None|defined in the effect's data|
 |**FISH**|when an item is obtained from fishing|`TOOL`(item)|each loot item's data is referenced and XP from all loot items is awarded.|
 |**SMELT**|when an item is smelted in a vanilla furnace, the player who placed the furnace gets the experience|None|from the ingredient item's data'|
+|**SMELTED**|when an item is smelted in a vanilla furnace, the player who placed the furnace gets the experience|None|from the output item's data'|
 |**GROW**|when a crop's age increases by one, the player who placed the crop gets the experience|None|from block's data|
 |**GIVEN_AS_TRADE**|when an item is given to a villager as part of a successful trade|None|from item's data times number traded|
 |**HEALTH_INCREASE**|when the players health increases|None|defined in server config|
@@ -43,6 +44,7 @@ Event names are used to define when XP is awarded.  Certain events can be blocke
 |**RIDING**|occurs every 10 ticks while riding in any vehicle (horses, boats, minecarts, etc)|None (though you can gate mounting the entity with an interact check)|from entity's data|
 |**SHIELD_BLOCK**| earn xp when damage is successfully blocked by your shield|`WEAPON`(item)|defined in the attacking entity's data|
 |**SKILL_UP**| whenever a player's level increases.  this is not used to award XP but is used by Perks.|
+|**SKILL_DOWN**| whenever a player's level increases.  this is not used to award XP but is used by Perks.|
 |**SPRINTING**| xp earned every 10 ticks while sprinting|None|defined in server config|
 |**SUBMERGED**| xp earned every 10 ticks while underwater. is awarded simultaneously with other applicable swim events|None|defined in server config|
 |**SWIMMING**|xp earned every 10 ticks while swimming above water|None|defined in server config and multiplied by travel speed|
