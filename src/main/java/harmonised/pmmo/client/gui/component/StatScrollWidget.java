@@ -8,6 +8,7 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;

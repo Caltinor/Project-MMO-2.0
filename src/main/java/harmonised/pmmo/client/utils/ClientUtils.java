@@ -2,6 +2,7 @@ package harmonised.pmmo.client.utils;
 
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.client.gui.glossary.Glossary;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -35,6 +36,7 @@ public class ClientUtils {
 	}
 	private static Map<String, Map<Long, Map<ReqType, List<Component>>>> cache = new HashMap<>();
 	public static void invalidateUnlocksCache() {cache.clear();}
+	public static Glossary glossary = null;
 
 	private static void cacheUnlocks() {
 		LocalPlayer player = mc.player;

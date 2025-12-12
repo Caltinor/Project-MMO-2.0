@@ -1,6 +1,9 @@
 package harmonised.pmmo.client.events;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import harmonised.pmmo.client.gui.StatsScreen;
+import harmonised.pmmo.client.gui.glossary.Glossary;
+import harmonised.pmmo.client.gui.glossary.GlossaryLoadingScreen;
 import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
@@ -31,8 +34,12 @@ public class KeyPressHandler {
 
 	@SubscribeEvent
     public static void keyPressEvent(InputEvent.Key event)
-    {
+	{
 		Minecraft mc = Minecraft.getInstance();
+		//debug
+		if (event.getKey() == InputConstants.KEY_PERIOD)
+			mc.setScreen(new GlossaryLoadingScreen());
+		//end DEBUG
         if(mc.player != null)
         {
             if(ClientSetup.VEIN_KEY.isDown() && mc.hitResult != null && mc.hitResult.getType().equals(Type.BLOCK)) {

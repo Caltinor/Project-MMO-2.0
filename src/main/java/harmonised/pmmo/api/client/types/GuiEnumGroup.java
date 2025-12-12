@@ -1,5 +1,7 @@
-package harmonised.pmmo.client.gui.component;
+package harmonised.pmmo.api.client.types;
 
 public interface GuiEnumGroup {
 	public String getName();
+
+
 }

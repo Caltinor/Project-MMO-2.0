@@ -1,0 +1,81 @@
+package harmonised.pmmo.client.gui.glossary.components.parts;
+
+import harmonised.pmmo.api.client.types.DisplayType;
+import harmonised.pmmo.api.client.types.PositionType;
+import harmonised.pmmo.api.client.types.SELECTION;
+import harmonised.pmmo.api.client.wrappers.Positioner;
+import harmonised.pmmo.api.client.wrappers.SizeConstraints;
+import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
+import harmonised.pmmo.config.codecs.LocationData;
+import harmonised.pmmo.config.codecs.MobModifier;
+import harmonised.pmmo.setup.datagen.LangProvider;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Block;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
+public class MobModifierSectionWidget extends ReactiveWidget {
+    private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
+
+    private final List<MobModifier> globals;
+    private final Map<ResourceLocation, List<MobModifier>> mobModifiers;
+    public MobModifierSectionWidget(LocationData data) {
+        super(0, 0, 0, 0);
+        this.globals = data.globalModifiers();
+        this.mobModifiers = data.mobModifiers();
+        Font font = Minecraft.getInstance().font;
+        if (!globals.isEmpty()) {
+            addChild(build(LangProvider.GLOSSARY_HEADER_GLOBAL_MOB_MODIFIERS.asComponent(), font));
+            var registry = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.ATTRIBUTE);
+            globals.forEach(m -> addChild(build(Component.literal("   ").append(m.component(registry)), font)));
+        }
+        if (!mobModifiers.isEmpty()) {
+            var access = Minecraft.getInstance().player.registryAccess();
+            var entities = access.registryOrThrow(Registries.ENTITY_TYPE);
+            var attributes = access.registryOrThrow(Registries.ATTRIBUTE);
+            addChild(build(LangProvider.MOB_MODIFIER_HEADER.asComponent(), font));
+            mobModifiers.forEach((mobID, modifierList) -> {
+                Entity entity = entities.get(mobID).create(Minecraft.getInstance().level);
+                if (entity instanceof LivingEntity living) {
+                    addChild(build(living.getDisplayName(), font));
+                    modifierList.forEach(m -> addChild(build(Component.literal("   ").append(m.component(attributes)), font)));
+                }
+            });
+        }
+        setHeight((getChildren().size() * 12) + 2);
+    }
+
+    private static Positioner<?> build(Component text, Font font) {
+        return new Positioner.Widget(new StringWidget(text, font).alignLeft(), PositionType.STATIC.constraint, textConstraint);
+    }
+
+    @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
+
+    @Override
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {}
+
+    @Override
+    public boolean applyFilter(Filter filter) {
+        boolean filtered = (globals.isEmpty() && mobModifiers.isEmpty())
+//                || mobModifiers.keySet().stream().noneMatch(rl -> filter.matchesTextFilter(rl.toString()))
+                || !filter.matchesSelection(SELECTION.MOB_SCALING);
+        this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
+        return filtered;
+    }
+
+    @Override
+    public void visitChildren(Consumer<LayoutElement> visitor) {
+        visitor.accept(this);
+    }
+}

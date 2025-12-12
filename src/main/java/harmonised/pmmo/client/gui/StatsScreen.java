@@ -2,7 +2,7 @@ package harmonised.pmmo.client.gui;
 
 import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
-import harmonised.pmmo.client.gui.component.GuiEnumGroup;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.client.gui.component.StatScrollWidget;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
