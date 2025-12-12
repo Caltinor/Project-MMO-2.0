@@ -1,4 +1,4 @@
-package harmonised.pmmo.client.gui.glossary.components.panels;
+package harmonised.pmmo.api.client;
 
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;

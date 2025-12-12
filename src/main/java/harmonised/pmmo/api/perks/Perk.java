@@ -28,7 +28,7 @@ import java.util.function.BiPredicate;
  * @param stop a function which executes after ticks have concluded.  if no ticks
  * were executed, this will execute the tick after the start function.
  * @param description a translatable description of what the perk does for use
- * in infomational displays.
+ * in informational displays.
  * @param status a function which provides player-specific information about this
  * perk as it pertains to the player.  For example, if the perk provides a per-level
  * bonus, this function would return the value at the player's level. 
