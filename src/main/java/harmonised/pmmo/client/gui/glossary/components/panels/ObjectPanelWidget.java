@@ -13,7 +13,5 @@ public class ObjectPanelWidget extends PanelWidget {
         this.core = core;
     }
 
-    protected static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
-
     @Override public DisplayType getDisplayType() {return DisplayType.GRID;}
 }

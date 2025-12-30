@@ -262,10 +262,10 @@ public class PlayerStatsComponent extends AbstractWidget {
                             ? Core.get(player.level()).getData().getLevel(nbt.getString(APIUtils.SKILLNAME), player.getUUID())
                             : 0);
                     holder.add(Component.translatable("perk."+perkID.getNamespace()+"."+perkID.getPath()).getVisualOrderText());
-                    holder.add(core.getPerkRegistry().getDescription(perkID).copy().getVisualOrderText());
-                    core.getPerkRegistry().getStatusLines(perkID, player, nbt).stream()
-                        .map(MutableComponent::getVisualOrderText)
-                        .forEach(holder::add);
+//                    holder.add(core.getPerkRegistry().getDescription(perkID).copy().getVisualOrderText());
+//                    core.getPerkRegistry().getStatusLines(perkID, player, nbt).stream()
+//                        .map(MutableComponent::getVisualOrderText)
+//                        .forEach(holder::add);
             });
             minecraft.screen.setTooltipForNextRenderPass(holder);
         }

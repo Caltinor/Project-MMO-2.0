@@ -499,11 +499,11 @@ public class StatScrollWidget extends ScrollPanel {
 						: 0);
 				holder.addAll(TextElement.build(Component.translatable("perk."+perkID.getNamespace()+"."+perkID.getPath()), 
 						this.width,	step(1), 0x00ff00, false, 0x00ff00));
-				holder.addAll(TextElement.build(core.getPerkRegistry().getDescription(perkID).copy(), 
-						this.width,	step(1), 0x99ccff, false, 0x99ccff));
-				for (MutableComponent line : core.getPerkRegistry().getStatusLines(perkID, player, nbt)) {
-					holder.addAll(TextElement.build(line, this.width, step(2), 0xAAFFFF, false, 0xAAFFFF));
-				}
+//				holder.addAll(TextElement.build(core.getPerkRegistry().getDescription(perkID).copy(),
+//						this.width,	step(1), 0x99ccff, false, 0x99ccff));
+//				for (MutableComponent line : core.getPerkRegistry().getStatusLines(perkID, player, nbt)) {
+//					holder.addAll(TextElement.build(line, this.width, step(2), 0xAAFFFF, false, 0xAAFFFF));
+//				}
 			});
 			if (holder.size() > 0) {
 				content.addAll(TextElement.build(cause, this.width, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));

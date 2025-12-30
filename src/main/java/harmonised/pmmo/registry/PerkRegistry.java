@@ -2,8 +2,10 @@ package harmonised.pmmo.registry;
 
 import com.google.common.base.Preconditions;
 import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.perks.Perk;
+import harmonised.pmmo.api.perks.PerkRenderer;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
@@ -26,7 +28,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PerkRegistry {
 	public PerkRegistry() {}
 
-	private final Map<ResourceLocation, Perk> perks = new HashMap<>(); 
+	private final Map<ResourceLocation, Perk> perks = new HashMap<>();
+	private final Map<ResourceLocation, PerkRenderer> renderers = new HashMap<>();
 	
 	public void registerPerk(ResourceLocation perkID, Perk perk) {
 		Preconditions.checkNotNull(perkID);
@@ -41,18 +44,16 @@ public class PerkRegistry {
 		Perk clientCopy = new Perk(perk.conditions(), perk.propertyDefaults(), 
 				(a,b) -> new CompoundTag(), 
 				(a,b,c) -> new CompoundTag(), 
-				(a,b) -> new CompoundTag(), 
-				perk.description(), perk.status());
+				(a,b) -> new CompoundTag());
 		perks.putIfAbsent(perkID, clientCopy);
 	}
-	
-	public MutableComponent getDescription(ResourceLocation id) {
-		return perks.getOrDefault(id, Perk.empty()).description();
+
+	public void registerRenderer(ResourceLocation perkID, PerkRenderer renderer) {
+		Preconditions.checkNotNull(perkID);
+		Preconditions.checkNotNull(renderer);
+		this.renderers.put(perkID, renderer);
 	}
-	
-	public List<MutableComponent> getStatusLines(ResourceLocation id, Player player, CompoundTag settings) {
-		return perks.getOrDefault(id, Perk.empty()).status().apply(player, settings);
-	}
+	public PerkRenderer getRenderer(ResourceLocation id) {return renderers.getOrDefault(id, PerkRenderer::DEFAULT);}
 	
 	public CompoundTag executePerk(EventType cause, Player player, @NotNull CompoundTag dataIn) {
 		if (player == null) return new CompoundTag();

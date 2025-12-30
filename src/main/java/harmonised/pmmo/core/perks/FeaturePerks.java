@@ -79,19 +79,20 @@ public class FeaturePerks {
 				instance.addPermanentModifier(modifier);
 				return NONE;
 			})
-			.setDescription(LangProvider.PERK_ATTRIBUTE_DESC.asComponent())
-			.setStatus((player, settings) -> {
-				double perLevel = settings.getDouble(APIUtils.PER_LEVEL);
-				String skillname = settings.getString(APIUtils.SKILLNAME);
-				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
-				String attrName = getAttribute(settings) == null
-						? settings.getString(APIUtils.ATTRIBUTE)
-						: getAttribute(settings).value().getDescriptionId();
-				return List.of(
-				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(attrName)),
-				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
-				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
-			}).build();
+//			.setDescription(LangProvider.PERK_ATTRIBUTE_DESC.asComponent())
+//			.setStatus((player, settings) -> {
+//				double perLevel = settings.getDouble(APIUtils.PER_LEVEL);
+//				String skillname = settings.getString(APIUtils.SKILLNAME);
+//				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
+//				String attrName = getAttribute(settings) == null
+//						? settings.getString(APIUtils.ATTRIBUTE)
+//						: getAttribute(settings).value().getDescriptionId();
+//				return List.of(
+//				LangProvider.PERK_ATTRIBUTE_STATUS_1.asComponent(Component.translatable(attrName)),
+//				LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel, Component.translatable("pmmo."+skillname)),
+//				LangProvider.PERK_ATTRIBUTE_STATUS_3.asComponent(perLevel * skillLevel));
+//			})
+			.build();
 
 	private static final LinkedListMultimap<Player, AttributeRecord> respawnAttributes = LinkedListMultimap.create();
 	private static record AttributeRecord(Holder<Attribute> attribute, AttributeModifier modifier) {}
@@ -149,8 +150,9 @@ public class FeaturePerks {
 				player.getAttribute(getAttribute(nbt)).removeModifier(attributeID);
 				return NONE;
 			})
-			.setDescription(ATTRIBUTE.description())
-			.setStatus(ATTRIBUTE.status()).build();
+//			.setDescription(ATTRIBUTE.description())
+//			.setStatus(ATTRIBUTE.status())
+			.build();
 	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Effect Perk">
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
@@ -188,11 +190,11 @@ public class FeaturePerks {
 					.withBool(APIUtils.SHOW_ICON, true).build())
 			.setStart(EFFECT_SETTER)
 			.setTick((player, nbt, ticks) -> EFFECT_SETTER.apply(player, nbt))
-			.setDescription(LangProvider.PERK_EFFECT_DESC.asComponent())
-			.setStatus((player, nbt) -> List.of(
-					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(BuiltInRegistries.MOB_EFFECT.get(Reference.of(nbt.getString("effect"))).getDescriptionId())),
-					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER),
-							(nbt.getInt(APIUtils.DURATION) * nbt.getDouble(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL))/20)))
+//			.setDescription(LangProvider.PERK_EFFECT_DESC.asComponent())
+//			.setStatus((player, nbt) -> List.of(
+//					LangProvider.PERK_EFFECT_STATUS_1.asComponent(Component.translatable(BuiltInRegistries.MOB_EFFECT.get(Reference.of(nbt.getString("effect"))).getDescriptionId())),
+//					LangProvider.PERK_EFFECT_STATUS_2.asComponent(nbt.getInt(APIUtils.MODIFIER),
+//							(nbt.getInt(APIUtils.DURATION) * nbt.getDouble(APIUtils.PER_LEVEL) * nbt.getInt(APIUtils.SKILL_LEVEL))/20)))
 			.build();
 	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Jump Perks">
@@ -212,8 +214,9 @@ public class FeaturePerks {
 	        player.hurtMarked = true; 
 	        return NONE;
 		})
-		.setDescription(LangProvider.PERK_JUMP_BOOST_DESC.asComponent())
-		.setStatus(JUMP_LINES).build();
+//		.setDescription(LangProvider.PERK_JUMP_BOOST_DESC.asComponent())
+//		.setStatus(JUMP_LINES)
+			.build();
 	
 	public static final Perk JUMP_SERVER = Perk.begin()
 		.addDefaults(JUMP_DEFAULTS)
@@ -221,8 +224,9 @@ public class FeaturePerks {
 			double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)) + nbt.getDouble(APIUtils.BASE);
 	        return TagBuilder.start().withDouble(APIUtils.JUMP_OUT, player.getDeltaMovement().y + jumpBoost).build();
 		})
-		.setDescription(LangProvider.PERK_JUMP_BOOST_DESC.asComponent())
-		.setStatus(JUMP_LINES).build();
+//		.setDescription(LangProvider.PERK_JUMP_BOOST_DESC.asComponent())
+//		.setStatus(JUMP_LINES)
+			.build();
 	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Breath Perk">
 	public static final Perk BREATH = Perk.begin()
@@ -239,10 +243,11 @@ public class FeaturePerks {
 				player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
 				return NONE;
 			})
-			.setDescription(LangProvider.PERK_BREATH_DESC.asComponent())
-			.setStatus((player, nbt) -> List.of(
-					LangProvider.PERK_BREATH_STATUS_1.asComponent((int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL))),
-					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
+//			.setDescription(LangProvider.PERK_BREATH_DESC.asComponent())
+//			.setStatus((player, nbt) -> List.of(
+//					LangProvider.PERK_BREATH_STATUS_1.asComponent((int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL))),
+//					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20)))
+			.build();
 	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Damage Boost/Reduce Perks">
 	public static final Perk DAMAGE_REDUCE = Perk.begin()
@@ -275,10 +280,11 @@ public class FeaturePerks {
 				nbt.putFloat(APIUtils.DAMAGE_OUT, Math.max(baseDamage - saved, 0));
 				return nbt;
 			})
-			.setDescription(LangProvider.PERK_FALL_SAVE_DESC.asComponent())
-			.setStatus((player, nbt) -> List.of(
-					LangProvider.PERK_FALL_SAVE_STATUS_1.asComponent(nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)),
-					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20))).build();
+//			.setDescription(LangProvider.PERK_FALL_SAVE_DESC.asComponent())
+//			.setStatus((player, nbt) -> List.of(
+//					LangProvider.PERK_FALL_SAVE_STATUS_1.asComponent(nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)),
+//					LangProvider.PERK_BREATH_STATUS_2.asComponent(nbt.getInt(APIUtils.COOLDOWN)/20)))
+			.build();
 
 	public static final String APPLICABLE_TO = "applies_to";
 	public static final Perk DAMAGE_BOOST = Perk.begin()
@@ -318,26 +324,27 @@ public class FeaturePerks {
 						: nbt.getFloat(APIUtils.DAMAGE_OUT) + damageModification;
 				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, damage).build();
 			})
-			.setDescription(LangProvider.PERK_DAMAGE_BOOST_DESC.asComponent())
-			.setStatus((player, nbt) ->{
-				List<MutableComponent> lines = new ArrayList<>();
-				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
-				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
-					Component description = Component.literal(entry.getAsString());
-					if (ResourceLocation.tryParse(entry.getAsString()) != null) {
-						Item item = BuiltInRegistries.ITEM.get(Reference.of(entry.getAsString()));
-						if (!item.equals(Items.AIR)) description = item.getDescription();
-					}
-					line1.append(description);
-					line1.append(Component.literal(", "));
-				}
-				lines.add(line1);
-				lines.add(LangProvider.PERK_DAMAGE_BOOST_STATUS_2.asComponent(
-						nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? "x" : "+",
-						(double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)
-				));
-				return lines;
-			}).build();
+//			.setDescription(LangProvider.PERK_DAMAGE_BOOST_DESC.asComponent())
+//			.setStatus((player, nbt) ->{
+//				List<MutableComponent> lines = new ArrayList<>();
+//				MutableComponent line1 = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
+//				for (Tag entry : nbt.getList(APPLICABLE_TO, Tag.TAG_STRING)) {
+//					Component description = Component.literal(entry.getAsString());
+//					if (ResourceLocation.tryParse(entry.getAsString()) != null) {
+//						Item item = BuiltInRegistries.ITEM.get(Reference.of(entry.getAsString()));
+//						if (!item.equals(Items.AIR)) description = item.getDescription();
+//					}
+//					line1.append(description);
+//					line1.append(Component.literal(", "));
+//				}
+//				lines.add(line1);
+//				lines.add(LangProvider.PERK_DAMAGE_BOOST_STATUS_2.asComponent(
+//						nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? "x" : "+",
+//						(double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)
+//				));
+//				return lines;
+//			})
+			.build();
 	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Command Perk">
 	private static final String COMMAND = "command";
@@ -358,11 +365,12 @@ public class FeaturePerks {
 			}
 			return NONE;
 		})
-		.setDescription(LangProvider.PERK_COMMAND_DESC.asComponent())
-		.setStatus((player, nbt) -> List.of(
-				LangProvider.PERK_COMMAND_STATUS_1.asComponent(
-				nbt.contains(FUNCTION) ? "Function" : "Command",
-				nbt.contains(FUNCTION) ? nbt.getString(FUNCTION) : nbt.getString(COMMAND)))).build();
+//		.setDescription(LangProvider.PERK_COMMAND_DESC.asComponent())
+//		.setStatus((player, nbt) -> List.of(
+//				LangProvider.PERK_COMMAND_STATUS_1.asComponent(
+//				nbt.contains(FUNCTION) ? "Function" : "Command",
+//				nbt.contains(FUNCTION) ? nbt.getString(FUNCTION) : nbt.getString(COMMAND))))
+			.build();
 	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Villager Trading Perk">
 	public static final Perk VILLAGER_TRADING = Perk.begin()
@@ -380,11 +388,12 @@ public class FeaturePerks {
 				player.sendSystemMessage(LangProvider.PERK_VILLAGE_FEEDBACK.asComponent());
 				return NONE;
 			})
-			.setDescription(LangProvider.PERK_VILLAGER_DESC.asComponent())
-			.setStatus((player, nbt) -> List.of(
-				LangProvider.PERK_VILLAGE_STATUS_1.asComponent(
-						nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)
-				)
-			)).build();
+//			.setDescription(LangProvider.PERK_VILLAGER_DESC.asComponent())
+//			.setStatus((player, nbt) -> List.of(
+//				LangProvider.PERK_VILLAGE_STATUS_1.asComponent(
+//						nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)
+//				)
+//			))
+			.build();
 	//</editor-fold>
 }

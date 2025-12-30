@@ -1,0 +1,86 @@
+package harmonised.pmmo.client.gui.glossary.components.perks;
+
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.client.PanelWidget;
+import harmonised.pmmo.api.client.types.DisplayType;
+import harmonised.pmmo.api.client.types.OBJECT;
+import harmonised.pmmo.api.client.types.PositionType;
+import harmonised.pmmo.api.client.wrappers.PositionConstraints;
+import harmonised.pmmo.api.client.wrappers.SizeConstraints;
+import harmonised.pmmo.api.perks.PerkRenderer;
+import harmonised.pmmo.client.gui.glossary.components.parts.DividerWidget;
+import harmonised.pmmo.core.Core;
+import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.fml.LogicalSide;
+
+import java.util.Optional;
+
+public class AttributePanel extends PanelWidget {
+    private final String id;
+    private final String name;
+    private final String skill;
+    private final boolean invalidAttribute;
+
+    public AttributePanel(int width, Player player, CompoundTag config) {
+        super(0x88394045, width);
+        ResourceLocation rl = Reference.of(config.getString("perk"));
+        ResourceLocation attribID = Reference.of(config.getString(APIUtils.ATTRIBUTE));
+        Optional<Holder.Reference<Attribute>> attribute = player.registryAccess()
+                .lookupOrThrow(Registries.ATTRIBUTE).get(ResourceKey.create(Registries.ATTRIBUTE, attribID));
+        this.id = rl.toString();
+        MutableComponent title = Component.translatable("perk.%s.%s".formatted(rl.getNamespace(), rl.getPath()));
+        this.name = title.toString();
+        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.invalidAttribute = attribute.isEmpty();
+        if (!invalidAttribute) {
+            long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
+            addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
+            MutableComponent descr = Component.translatable("perk.%s.%s.description".formatted(rl.getNamespace(), rl.getPath()));
+            addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
+
+            double perLevel = config.getDouble(APIUtils.PER_LEVEL);
+            double maxBoost = config.getDouble(APIUtils.MAX_BOOST);
+            double boost = Math.min(perLevel * skillLevel, maxBoost) + config.getDouble(APIUtils.BASE);
+            AttributeModifier.Operation operation = config.getBoolean(APIUtils.MULTIPLICATIVE) ? AttributeModifier.Operation.ADD_MULTIPLIED_BASE : AttributeModifier.Operation.ADD_VALUE;
+            AttributeModifier mod = new AttributeModifier(attribID, boost, operation);
+            MutableComponent attribMsg = attribute.get().value().toComponent(mod, TooltipFlag.NORMAL).withStyle(ChatFormatting.BOLD);
+            //display of the actual modification
+            addString(attribMsg, PositionConstraints.offset(10, 0), textConstraint);
+            addString(LangProvider.PERK_ATTRIBUTE_STATUS_2.asComponent(perLevel), PositionConstraints.offset(10, 0), textConstraint);
+
+            PerkRenderer.commonElements(this, config);
+
+            addChild(new DividerWidget(200, 2, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder()
+                    .absoluteHeight(2).build());
+        }
+        this.setHeight(getChildren().stream().map(poser -> poser.get().getHeight()).reduce(Integer::sum).orElse(0));
+    }
+
+    @Override
+    public DisplayType getDisplayType() {return DisplayType.BLOCK;}
+
+    @Override
+    public boolean applyFilter(Filter filter) {
+        return invalidAttribute
+                || !(filter.matchesSkill(skill))
+                || !filter.matchesObject(OBJECT.PERKS)
+                || (!filter.matchesTextFilter(id)
+                    && !filter.matchesTextFilter(name));
+    }
+}

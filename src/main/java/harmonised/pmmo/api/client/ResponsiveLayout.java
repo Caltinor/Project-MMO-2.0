@@ -7,9 +7,12 @@ import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.util.MsLoggy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +101,10 @@ public interface ResponsiveLayout extends Layout {
         addChild(new Positioner.Layout(layout, type, constraints));
         return this;
     }
+
+    default ResponsiveLayout addString(Component text, PositionConstraints type, SizeConstraints constraints) {
+        return addChild(new StringWidget(this.getWidth(), 12, text, Minecraft.getInstance().font).alignLeft(), type, constraints);
+    }
     
     default int getInternalWidth() {return getWidth();}
     default int getInternalHeight() {return getHeight();}
@@ -120,11 +127,11 @@ public interface ResponsiveLayout extends Layout {
                 child.constraints().apply(child, this.getRight() - child.get().getX(), this.getBottom() - child.get().getY());
                 continue;
             }
-            child.get().setPosition(this.getX() + getPadding().left(), currentRowY);
+            child.get().setPosition(this.getX() + getPadding().left() + child.positioning().xOffset(), currentRowY + child.positioning().yOffset());
             child.constraints().apply(child,
-                    this.getInternalWidth() - getPadding().left() - getPadding().right(),
-                    this.getInternalHeight() - getPadding().bottom() - getPadding().top());
-            currentRowY += child.get().getHeight();
+                    this.getInternalWidth() - getPadding().left() - getPadding().right() - child.positioning().xOffset(),
+                    this.getInternalHeight() - getPadding().bottom() - getPadding().top() - child.positioning().yOffset());
+            currentRowY += child.get().getHeight() + child.positioning().yOffset();
         }
     }
 
@@ -146,15 +153,18 @@ public interface ResponsiveLayout extends Layout {
                 continue;
             }
             LayoutElement element = child.get();
-            child.constraints().apply(child, this.getRight() - currentRowX, this.getBottom()-currentRowY);
-            if (currentRowX + getPadding().right() + inWidth(element) > this.getX() + this.getInternalWidth()) {
+            child.constraints().apply(child,
+                    this.getRight() - getPadding().right() - currentRowX - child.positioning().xOffset(),
+                    this.getBottom() - getPadding().bottom() -currentRowY - child.positioning().yOffset());
+            element.setPosition(currentRowX + child.positioning().xOffset(), currentRowY + child.positioning().yOffset());
+            currentRowX += inWidth(element) + child.positioning().xOffset();
+            lastRowMaxHeight = Math.max(lastRowMaxHeight, inHeight(element) + child.positioning().yOffset());
+            //if the updated constraints fall at or outside the boundary dimensions, update the next widget position indices
+            if (currentRowX + getPadding().right() >= this.getX() + this.getInternalWidth()) {
                 currentRowY += lastRowMaxHeight;
                 lastRowMaxHeight = 0;
                 currentRowX = this.getX() + getPadding().left();
             }
-            element.setPosition(currentRowX, currentRowY);
-            currentRowX += inWidth(element);
-            lastRowMaxHeight = Math.max(lastRowMaxHeight, inHeight(element));
         }
     }
 
@@ -165,14 +175,14 @@ public interface ResponsiveLayout extends Layout {
     //TODO make sure to note how sizing is not recursively self-adaptive (for performance) and special attention is needed
     // for configuring grids so as not to overflow. (eg. don't put grid dimensions in the thousands if you don't have thousands of elements)
     private void grid() {
-        int maxRowCount = getChildren().stream().map(poser -> poser.positioning().gridRow()).reduce(Integer::max).orElse(0) +1; //+1 necessary to translate zero index to array size count
-        int maxColCount = getChildren().stream().map(poser -> poser.positioning().gridColumn()).reduce(Integer::max).orElse(0) +1;
+        int maxRowCount = getChildren().stream().map(poser -> poser.positioning().row()).reduce(Integer::max).orElse(0) +1; //+1 necessary to translate zero index to array size count
+        int maxColCount = getChildren().stream().map(poser -> poser.positioning().col()).reduce(Integer::max).orElse(0) +1;
 
         final Positioner<?>[][] cells = new Positioner<?>[maxRowCount][maxColCount];
         //Map posers to cells so that we can iterate on them in order
         getChildren().forEach(poser -> {
-            int row = poser.positioning().gridRow();
-            int col = poser.positioning().gridColumn();
+            int row = poser.positioning().row();
+            int col = poser.positioning().col();
             if (cells[row][col] != null) {
                 MsLoggy.ERROR.log(MsLoggy.LOG_CODE.GUI, "Duplicate GUI element coded in row {}, column {}, for {}, defined as {}", row, col, this, poser.get().getClass());
                 return;
@@ -218,10 +228,10 @@ public interface ResponsiveLayout extends Layout {
     @Override
     default void visitWidgets(Consumer<AbstractWidget> consumer) {
         getChildren().forEach(poser -> {
-            if (poser.get() instanceof ResponsiveLayout layout)
-                layout.visitWidgets(consumer);
             if (poser.get() instanceof AbstractWidget widget)
                 consumer.accept(widget);
+            if (poser.get() instanceof ResponsiveLayout layout)
+                layout.visitWidgets(consumer);
         });
     }
 

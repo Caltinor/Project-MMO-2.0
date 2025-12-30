@@ -20,9 +20,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public abstract class ReactiveWidget extends AbstractWidget implements GlossaryFilter, ResponsiveLayout{
+    protected static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
     private final List<Positioner<?>> children = new ArrayList<>();
-    private int cachedChildCount = 0;
-    private final List<AbstractWidget> widgets = new ArrayList<>();
     BoxDimensions margin, padding;
 
     protected ReactiveWidget(int x, int y, int width, int height) {
@@ -73,11 +72,7 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     }
 
     protected List<AbstractWidget> widgets() {
-        if (children.size() == cachedChildCount) return widgets;
-        cachedChildCount = children.size();
-        widgets.clear();
-        this.visitWidgets(widgets::add);
-        return widgets;
+        return getChildren().stream().filter(poser -> poser.get() instanceof  AbstractWidget).map(poser -> (AbstractWidget)poser.get()).toList();
     }
 
     @Override

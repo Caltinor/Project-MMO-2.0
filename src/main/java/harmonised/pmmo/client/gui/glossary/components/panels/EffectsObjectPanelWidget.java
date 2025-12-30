@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.glossary.components.panels;
 
 import harmonised.pmmo.api.client.types.OBJECT;
+import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.parts.DividerWidget;
@@ -96,6 +97,7 @@ public class EffectsObjectPanelWidget extends ObjectPanelWidget {
         this.setHeight((getChildren().size() * 12) - 16);
         return !filter.matchesSkill(skills)
                 || !filter.matchesObject(OBJECT.EFFECTS)
+                || !filter.matchesSelection(SELECTION.XP)
                 || (!filter.matchesTextFilter(id)
                 && !filter.matchesTextFilter(name));
     }

@@ -6,6 +6,7 @@ import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -27,7 +28,7 @@ public class VeinBlacklistSectionWidget extends ReactiveWidget {
     public VeinBlacklistSectionWidget(List<ResourceLocation> data) {
         super(0, 0, 0, 0);
         this.data = data;
-        if (!data.isEmpty()) {
+        if (!data.isEmpty() && Config.server().veinMiner().enabled()) {
             Font font = Minecraft.getInstance().font;
             var reg = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.BLOCK);
             addChild(build(LangProvider.VEIN_BLACKLIST_HEADER.asComponent(), font));

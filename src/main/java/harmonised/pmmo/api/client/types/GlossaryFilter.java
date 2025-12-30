@@ -50,6 +50,7 @@ public interface GlossaryFilter {
             return textFilter.isEmpty() || str.contains(textFilter);
         }
         public boolean matchesSkill(Collection<String> skills) {return skill.isEmpty() || skills.contains(skill);}
+        public boolean matchesSkill(String skillMatch) {return skill.isEmpty() || skill.equals(skillMatch);}
 
         public boolean matchesObject(OBJECT obj) {
             return objectType == null || objectType == OBJECT.NONE || objectType == obj;
@@ -57,6 +58,10 @@ public interface GlossaryFilter {
 
         public boolean matchesSelection(SELECTION sel) {
             return selection == null || selection == SELECTION.NONE || selection == sel;
+        }
+
+        public boolean matchesEnum(GuiEnumGroup value) {
+            return enumGroup == null || enumGroup == value;
         }
     }
 }

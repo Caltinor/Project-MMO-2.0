@@ -7,6 +7,7 @@ import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import harmonised.pmmo.client.utils.DP;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.VeinData;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.ChatFormatting;
@@ -25,7 +26,7 @@ public class VeinSectionWidget extends ReactiveWidget {
     public VeinSectionWidget(VeinData data, boolean isItem) {
         super(0, 0, 0, 0);
         this.data = data;
-        if (!data.isEmpty()) {
+        if (!data.isEmpty() && Config.server().veinMiner().enabled()) {
             Font font = Minecraft.getInstance().font;
             addChild(build(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.YELLOW), font));
             if (isItem) {

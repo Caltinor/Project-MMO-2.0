@@ -18,6 +18,8 @@ import harmonised.pmmo.client.gui.glossary.components.panels.EffectsObjectPanelW
 import harmonised.pmmo.client.gui.glossary.components.panels.EnchantmentsObjectPanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.EntityObjectPanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.ItemObjectPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.PerkObjectPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.ServerConfigPanelWidget;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -72,10 +74,10 @@ public class Glossary extends Screen {
     @Override
     protected void init() {
         super.init();
-        ResponsiveLayout outer = new ResponsiveLayout.Impl(this.width, this.height, DisplayType.INLINE);
+        ResponsiveLayout outer = new ResponsiveLayout.Impl(this.width-8, this.height, DisplayType.INLINE);
         DetailScroll content = new DetailScroll(this.width/3 -3, 0, this.width, this.height);
-        buildContent(content);
         int selectionWidth = this.width/3 - 17;
+        buildContent(content, content.getWidth());
         searchBar = new EditBox(font, 8, 11, selectionWidth, 20, Component.literal("search bar"));
         searchBar.setResponder(str -> {content.applyFilter(getFilter(str));});
         selectionWidget = SELECTION.createSelectionWidget(8, 31, selectionWidth, choice -> {
@@ -112,6 +114,7 @@ public class Glossary extends Screen {
         outer
             .addChild(panel , PositionType.STATIC.constraint, SizeConstraints.builder().internalWidth().build())
             .addChild((ResponsiveLayout) content, PositionType.STATIC.constraint, SizeConstraints.DEFAULT);
+        outer.arrangeElements();
         outer.visitWidgets(this::addRenderableWidget);
     }
 
@@ -135,7 +138,11 @@ public class Glossary extends Screen {
         return widget;
     }
 
-    private void buildContent(ResponsiveLayout layout) {
+    private void buildContent(ResponsiveLayout layout, int width) {
+        layout.addChild((ResponsiveLayout)
+                        new ServerConfigPanelWidget(width),
+                PositionType.STATIC.constraint,
+                SizeConstraints.builder().internalHeight().build());
         CreativeModeTabs.searchTab().getDisplayItems().forEach(stack -> layout.addChild((ResponsiveLayout)
                 new ItemObjectPanelWidget(0x882e332e, width, stack),
                 PositionType.STATIC.constraint,
@@ -176,6 +183,10 @@ public class Glossary extends Screen {
                 .filter(Objects::nonNull)
                 .forEach(enchant -> layout.addChild((ResponsiveLayout)
                     new EnchantmentsObjectPanelWidget(0x88394045, width, enchant.value()),
+                    PositionType.STATIC.constraint,
+                    SizeConstraints.builder().internalHeight().build()));
+        Config.perks().perks().forEach((event, configs) -> layout.addChild((ResponsiveLayout)
+                    new PerkObjectPanelWidget(0x88394045, width, event, configs),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()));
     }

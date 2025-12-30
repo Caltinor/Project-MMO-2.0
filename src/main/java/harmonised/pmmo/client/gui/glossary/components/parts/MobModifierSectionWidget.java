@@ -6,6 +6,7 @@ import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -35,6 +36,10 @@ public class MobModifierSectionWidget extends ReactiveWidget {
         this.globals = data.globalModifiers();
         this.mobModifiers = data.mobModifiers();
         Font font = Minecraft.getInstance().font;
+        if (!Config.server().mobScaling().enabled()) {
+            this.visible = false;
+            return;
+        }
         if (!globals.isEmpty()) {
             addChild(build(LangProvider.GLOSSARY_HEADER_GLOBAL_MOB_MODIFIERS.asComponent(), font));
             var registry = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.ATTRIBUTE);

@@ -4,6 +4,7 @@ import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 
 public enum PositionType {
     STATIC(),     //normal flow
+    OFFSET(),     //normal with position shifting
     ABSOLUTE(),   //specific screen position
     GRID();
 
