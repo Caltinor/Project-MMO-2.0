@@ -3,6 +3,7 @@ package harmonised.pmmo.client.gui.glossary.components.parts;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
+import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
@@ -29,19 +30,14 @@ public class VeinBlacklistSectionWidget extends ReactiveWidget {
         super(0, 0, 0, 0);
         this.data = data;
         if (!data.isEmpty() && Config.server().veinMiner().enabled()) {
-            Font font = Minecraft.getInstance().font;
             var reg = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.BLOCK);
-            addChild(build(LangProvider.VEIN_BLACKLIST_HEADER.asComponent(), font));
+            addString(LangProvider.VEIN_BLACKLIST_HEADER.asComponent(), PositionType.STATIC.constraint, textConstraint);
             for (ResourceLocation id : data) {
                 Block block = reg.get(id);
-                addChild(build(block != null ? block.asItem().getDefaultInstance().getDisplayName() : Component.literal(id.toString()), font));
+                addString(block != null ? block.asItem().getDefaultInstance().getDisplayName() : Component.literal(id.toString()), PositionConstraints.offset(10, 0), textConstraint);
             }
         }
         setHeight((getChildren().size() * 12) + 2);
-    }
-
-    private static Positioner<?> build(Component text, Font font) {
-        return new Positioner.Widget(new StringWidget(text, font).alignLeft(), PositionType.STATIC.constraint, textConstraint);
     }
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}

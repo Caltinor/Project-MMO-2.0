@@ -11,6 +11,7 @@ import harmonised.pmmo.client.gui.glossary.components.CollapsingPanel;
 import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.client.gui.glossary.components.DetailScroll;
+import harmonised.pmmo.client.gui.glossary.components.panels.AntiCheesePanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.BiomeObjectPanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.BlockObjectPanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.DimensionObjectPanelWidget;
@@ -20,6 +21,7 @@ import harmonised.pmmo.client.gui.glossary.components.panels.EntityObjectPanelWi
 import harmonised.pmmo.client.gui.glossary.components.panels.ItemObjectPanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.PerkObjectPanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.ServerConfigPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.SkillsConfigPanelWidget;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -140,9 +142,29 @@ public class Glossary extends Screen {
 
     private void buildContent(ResponsiveLayout layout, int width) {
         layout.addChild((ResponsiveLayout)
-                        new ServerConfigPanelWidget(width),
+                new ServerConfigPanelWidget(width),
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build());
+        Config.skills().skills().forEach((skill, data) -> layout.addChild((AbstractWidget)
+                new SkillsConfigPanelWidget(width, skill, data),
+                PositionType.STATIC.constraint,
+                SizeConstraints.builder().internalHeight().build()
+        ));
+        layout.addChild((ResponsiveLayout)
+                AntiCheesePanelWidget.AFK(0x88394045, width, Config.anticheese().afk(), Config.anticheese().afkSubtract()),
+                PositionType.STATIC.constraint,
+                SizeConstraints.builder().internalHeight().build()
+        );
+        layout.addChild((ResponsiveLayout)
+                AntiCheesePanelWidget.DIM(0x88394045, width, Config.anticheese().diminish()),
+                PositionType.STATIC.constraint,
+                SizeConstraints.builder().internalHeight().build()
+        );
+        layout.addChild((ResponsiveLayout)
+                AntiCheesePanelWidget.NORM(0x88394045, width, Config.anticheese().normal()),
+                PositionType.STATIC.constraint,
+                SizeConstraints.builder().internalHeight().build()
+        );
         CreativeModeTabs.searchTab().getDisplayItems().forEach(stack -> layout.addChild((ResponsiveLayout)
                 new ItemObjectPanelWidget(0x882e332e, width, stack),
                 PositionType.STATIC.constraint,

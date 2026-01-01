@@ -1961,6 +1961,44 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Formula = (skill_level - %s) * %s").build();
 	public static final Translation GLOSSARY_CONFIG_SERVER_SCALING_RATIOS = Translation.Builder.start("pmmo.gui.glossary.config.server.scaling.ratios")
 		.addLocale(Locale.EN_US, "Mob attributes scaled by average skill level of nearby players:").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_VEIN_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.vein.header")
+		.addLocale(Locale.EN_US, "Global Vein Settings").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_VEIN_CONSUME = Translation.Builder.start("pmmo.gui.glossary.config.server.vein.consume")
+		.addLocale(Locale.EN_US, "Blocks consume %s charge unless otherwise stated").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_VEIN_MODIFIER = Translation.Builder.start("pmmo.gui.glossary.config.server.vein.modifier")
+		.addLocale(Locale.EN_US, "Vein charge rate is boosted by %s%%").build();
+	public static final Translation GLOSSARY_CONFIG_SKILLS_MAX = Translation.Builder.start("pmmo.gui.glossary.config.skills.max")
+		.addLocale(Locale.EN_US, "Max Level of this skill: %s").build();
+	public static final Translation GLOSSARY_CONFIG_SKILLS_GROUP = Translation.Builder.start("pmmo.gui.glossary.config.skills.group")
+		.addLocale(Locale.EN_US, "This skill groups the following skills by proportion:").build();
+	public static final Translation GLOSSARY_CONFIG_SKILLS_AFK = Translation.Builder.start("pmmo.gui.glossary.config.skills.afk")
+		.addLocale(Locale.EN_US, "This skill is unaffected by AFK reductions").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_AFKSUB = Translation.Builder.start("pmmo.gui.glossary.config.ac.afksub")
+		.addLocale(Locale.EN_US, "Xp reduction from being afk can subtract from earned XP").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_EVENT =  Translation.Builder.start("pmmo.gui.glossary.config.ac.event")
+		.addLocale(Locale.EN_US, "Setting applied to %s").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_RETENTION = Translation.Builder.start("pmmo.gui.glossary.config.ac.retention")
+		.addLocale(Locale.EN_US, "Reduction removed after %s ticks").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_SOURCE = Translation.Builder.start("pmmo.gui.glossary.config.ac.source")
+		.addLocale(Locale.EN_US, "XP reductions only apply to the following objects:").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_COOLDOWN = Translation.Builder.start("pmmo.gui.glossary.config.ac.cooldown")
+		.addLocale(Locale.EN_US, "%s reduction removed every tick while no longer AFK").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_MINDUR = Translation.Builder.start("pmmo.gui.glossary.config.ac.mindur")
+		.addLocale(Locale.EN_US, "earning this XP for %s ticks starts XP reductions").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_REDUX = Translation.Builder.start("pmmo.gui.glossary.config.ac.redux")
+		.addLocale(Locale.EN_US, "Xp reduced by %s%% every tick this is active").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_TOLERANCE_AFK = Translation.Builder.start("pmmo.gui.glossary.config.ac.tolerance.afk")
+		.addLocale(Locale.EN_US, "Not moving at least %s blocks for %s ticks counts as AFK").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_STRICT_AFK = Translation.Builder.start("pmmo.gui.glossary.config.ac.strict.afk")
+		.addLocale(Locale.EN_US, "Moving the view angle counts as not being AFK.").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_TOLERANCE_NORM = Translation.Builder.start("pmmo.gui.glossary.config.ac.tolerance.norm")
+		.addLocale(Locale.EN_US, "Xp greater than %s%% or a flat %s above the last XP of this type will be reduced").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_AFK = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.afk")
+			.addLocale(Locale.EN_US, "XP reduced while AFK").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_DIM = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.dim")
+			.addLocale(Locale.EN_US, "XP reduced from earning the same XP repeatedly").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_NORM = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.norm")
+			.addLocale(Locale.EN_US, "XP bracketed to prevent extreme values").build();
 	public static final Translation EVENT_HEADER = Translation.Builder.start("pmmo.event_header")
 		.addLocale(Locale.EN_US, "XP Award Events").build();
 	public static final Translation REQ_HEADER = Translation.Builder.start("pmmo.req_header")

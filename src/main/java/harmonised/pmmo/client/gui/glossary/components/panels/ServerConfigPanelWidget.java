@@ -8,6 +8,7 @@ import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.parts.ConfigServerLevelsSectionWidget;
 import harmonised.pmmo.client.gui.glossary.components.parts.ConfigServerPartySectionWidget;
 import harmonised.pmmo.client.gui.glossary.components.parts.ConfigServerScalingSectionWidget;
+import harmonised.pmmo.client.gui.glossary.components.parts.ConfigServerVeinSectionWidget;
 import harmonised.pmmo.client.gui.glossary.components.parts.ConfigServerXpSectionWidget;
 import harmonised.pmmo.client.gui.glossary.components.parts.DividerWidget;
 import harmonised.pmmo.config.Config;
@@ -31,6 +32,7 @@ public class ServerConfigPanelWidget extends ObjectPanelWidget{
     private final ConfigServerXpSectionWidget xpGains;
     private final ConfigServerPartySectionWidget party;
     private final ConfigServerScalingSectionWidget scaling;
+    private final ConfigServerVeinSectionWidget vein;
 
     public ServerConfigPanelWidget(int width) {
         super(0x88394045, width, Core.get(LogicalSide.CLIENT));
@@ -52,8 +54,10 @@ public class ServerConfigPanelWidget extends ObjectPanelWidget{
         addChild((AbstractWidget) party, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
         scaling = new ConfigServerScalingSectionWidget(data.mobScaling());
         addChild((AbstractWidget) scaling, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
+        vein = new ConfigServerVeinSectionWidget(data.veinMiner());
+        addChild((AbstractWidget) vein, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
         addChild(new DividerWidget(this.width, 2, 0xFFFFFFFF), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
-        setHeight(levels.getHeight() + xpGains.getHeight() + party.getHeight() + scaling.getHeight() + 42);
+        setHeight(levels.getHeight() + xpGains.getHeight() + party.getHeight() + scaling.getHeight() + vein.getHeight() + 42);
     }
 
     @Override
@@ -65,7 +69,8 @@ public class ServerConfigPanelWidget extends ObjectPanelWidget{
         xpGains.visible = !xpGains.applyFilter(filter);
         party.visible = !party.applyFilter(filter);
         scaling.visible = !scaling.applyFilter(filter);
-        setHeight(levels.getHeight() + xpGains.getHeight() + party.getHeight() + scaling.getHeight() + 42);
+        vein.visible = !vein.applyFilter(filter);
+        setHeight(levels.getHeight() + xpGains.getHeight() + party.getHeight() + scaling.getHeight() + vein.getHeight() + 42);
         return !filter.matchesObject(OBJECT.NONE);
     }
 
