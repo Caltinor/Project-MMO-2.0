@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public enum OBJECT {
     NONE(LangProvider.GLOSSARY_DEFAULT_OBJECT.asComponent()),
@@ -34,39 +35,44 @@ public enum OBJECT {
     }
     
     public static void onSelect(SelectionWidget.SelectionEntry<SELECTION> sel, SelectionWidget.SelectionEntry<OBJECT> choice, SelectionWidget<SelectionWidget.SelectionEntry<GuiEnumGroup>> enumWidget) {
-        var selection = sel == null ? null : sel.reference;
+        SELECTION selection = sel == null ? null : sel.reference;
         enumWidget.setEntries(switch (choice.reference) {
             case ITEMS -> {
-                if (selection == SELECTION.REQS) yield enumToList(ReqType.ITEM_APPLICABLE_EVENTS);
+                if (selection == SELECTION.REQS)yield enumToList(ReqType.ITEM_APPLICABLE_EVENTS);
                 if (selection == SELECTION.XP) yield enumToList(EventType.ITEM_APPLICABLE_EVENTS);
-                if (selection == SELECTION.BONUS) yield enumToList(new ModifierDataType[]{ModifierDataType.HELD, ModifierDataType.WORN});
-                else yield new ArrayList<>();
+                ModifierDataType[] itemTypes = new ModifierDataType[]{ModifierDataType.HELD, ModifierDataType.WORN};
+                if (selection == SELECTION.BONUS) yield enumToList(itemTypes);
+                yield enumToList(GuiEnumGroup.combine(EventType.ITEM_APPLICABLE_EVENTS, ReqType.ITEM_APPLICABLE_EVENTS, itemTypes));
             }
             case BLOCKS ->  {
                 if (selection == SELECTION.REQS) yield enumToList(ReqType.BLOCK_APPLICABLE_EVENTS);
                 if (selection == SELECTION.XP) yield enumToList(EventType.BLOCK_APPLICABLE_EVENTS);
-                else yield new ArrayList<>();
+                yield enumToList(GuiEnumGroup.combine(EventType.BLOCK_APPLICABLE_EVENTS, ReqType.BLOCK_APPLICABLE_EVENTS));
             }
             case ENTITY -> {
                 if (selection == SELECTION.REQS) yield enumToList(ReqType.ENTITY_APPLICABLE_EVENTS);
                 if (selection == SELECTION.XP) yield enumToList(EventType.ENTITY_APPLICABLE_EVENTS);
-                else yield new ArrayList<>();
+                yield enumToList(GuiEnumGroup.combine(EventType.ENTITY_APPLICABLE_EVENTS, ReqType.ENTITY_APPLICABLE_EVENTS));
             }
             case DIMENSIONS -> {
                 if (selection == SELECTION.REQS) yield enumToList(new ReqType[]{ReqType.TRAVEL});
                 if (selection == SELECTION.BONUS) yield enumToList(new ModifierDataType[] {ModifierDataType.DIMENSION});
-                else yield new ArrayList<>();
+                yield enumToList(GuiEnumGroup.combine(new ReqType[]{ReqType.TRAVEL}, new ModifierDataType[]{ModifierDataType.DIMENSION}));
             }
             case BIOMES ->  {
                 if (selection == SELECTION.REQS) yield enumToList(new ReqType[]{ReqType.TRAVEL});
                 if (selection == SELECTION.BONUS) yield enumToList(new ModifierDataType[] {ModifierDataType.BIOME});
-                else yield new ArrayList<>();
+                yield enumToList(GuiEnumGroup.combine(new ReqType[]{ReqType.TRAVEL}, new ModifierDataType[]{ModifierDataType.BIOME}));
             }
-            case ENCHANTS -> {
-                if (selection == SELECTION.REQS) yield enumToList(new ReqType[]{ReqType.USE_ENCHANTMENT});
-                else yield new ArrayList<>();
+            case ENCHANTS -> enumToList(new ReqType[]{ReqType.USE_ENCHANTMENT});
+            case EFFECTS -> enumToList(new EventType[]{EventType.EFFECT});
+            case NONE -> {
+                if (selection == SELECTION.REQS) yield enumToList(ReqType.values());
+                if (selection == SELECTION.XP) yield enumToList(EventType.values());
+                if (selection == SELECTION.BONUS) yield enumToList(ModifierDataType.values());
+                yield enumToList(GuiEnumGroup.combine(EventType.values(), ReqType.values(), ModifierDataType.values()));
             }
-            default -> new ArrayList<>();
+            case PERKS -> enumToList(EventType.values());
         });
     }
 

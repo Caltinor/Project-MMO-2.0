@@ -88,7 +88,7 @@ public class PosNegEffectSectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = (reqs.isEmpty() && pos.isEmpty()) || !filter.matchesSelection(SELECTION.REQS);
+        boolean filtered = (reqs.isEmpty() && pos.isEmpty()) || !filter.matchesSelection(SELECTION.REQS) || !filter.matchesSkill(reqs.keySet());
         this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
         return filtered;
     }

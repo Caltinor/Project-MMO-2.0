@@ -1622,6 +1622,10 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Interact with Entity").build();
 	public static final Translation ENUM_BIOME = Translation.Builder.start("pmmo.enum.BIOME")
 		.addLocale(Locale.EN_US, "Biome").build();
+	public static final Translation ENUM_GIVEN_AS_TRADE = Translation.Builder.start("pmmo.enum.GIVEN_AS_TRADE")
+			.addLocale(Locale.EN_US, "Given As Trade").build();
+	public static final Translation ENUM_RECEIVED_AS_TRADE = Translation.Builder.start("pmmo.enum.RECIEVED_AS_TRADE")
+			.addLocale(Locale.EN_US, "Received As Trade").build();
 
 	//=========KEY BINDINGS====================
 	public static final Translation KEYBIND_CATEGORY = Translation.Builder.start("category.pmmo")

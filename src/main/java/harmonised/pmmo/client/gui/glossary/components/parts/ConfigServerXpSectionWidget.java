@@ -13,6 +13,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +23,8 @@ public class ConfigServerXpSectionWidget extends ReactiveWidget {
 
     public ConfigServerXpSectionWidget(ServerData.XpGains data) {
         super(0,0,0,0);
+        skills.addAll(data.damageXp().values().stream().map(Map::values).flatMap(Collection::stream).map(Map::keySet).flatMap(Set::stream).toList());
+        skills.addAll(data.playerEvents().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
         addString(LangProvider.GLOSSARY_CONFIG_SERVER_XP_HEADER.asComponent().withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE, ChatFormatting.GREEN),
                 PositionType.STATIC.constraint, textConstraint);
         String reuse = DP.dpSoft(data.reusePenalty() * 100);

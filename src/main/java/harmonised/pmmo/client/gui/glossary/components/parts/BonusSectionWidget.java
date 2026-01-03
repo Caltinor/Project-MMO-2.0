@@ -3,6 +3,7 @@ package harmonised.pmmo.client.gui.glossary.components.parts;
 import com.mojang.datafixers.util.Pair;
 import harmonised.pmmo.api.client.ResponsiveLayout;
 import harmonised.pmmo.api.client.types.DisplayType;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.Positioner;
@@ -46,13 +47,15 @@ import java.util.stream.Collectors;
 
 public class BonusSectionWidget extends ReactiveWidget {
     Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
-    List<String> skills = new ArrayList<>();
+    final List<String> skills;
+    final List<GuiEnumGroup> types;
     private BonusSectionWidget(Map<ModifierDataType, Map<String, Double>> nbtBonuses, Function<ResponsiveLayout,Map<ModifierDataType, Map<String, Double>>> layoutBuilder) {
         super(0, 0, 0, 0);
         //store them in the widget for use in the filter
         bonuses.putAll(nbtBonuses);
         bonuses.putAll(layoutBuilder.apply(this));
         skills = bonuses.values().stream().map(Map::keySet).flatMap(Set::stream).toList();
+        types = new ArrayList<>(bonuses.keySet());
         setHeight((getChildren().size() * 12) + 2);
     }
 
@@ -129,7 +132,8 @@ public class BonusSectionWidget extends ReactiveWidget {
     public boolean applyFilter(Filter filter) {
         boolean filtered = bonuses.isEmpty()
                 || !filter.matchesSelection(SELECTION.BONUS)
-                || (!filter.getSkill().isEmpty() && !skills.contains(filter.getSkill()));
+                || (!filter.getSkill().isEmpty() && !skills.contains(filter.getSkill()))
+                || (!filter.matchesEnum(types));
         this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
         return filtered;
     }

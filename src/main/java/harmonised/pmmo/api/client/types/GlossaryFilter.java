@@ -63,5 +63,8 @@ public interface GlossaryFilter {
         public boolean matchesEnum(GuiEnumGroup value) {
             return enumGroup == null || enumGroup == value;
         }
+        public boolean matchesEnum(Collection<GuiEnumGroup> value) {
+            return enumGroup == null || value.contains(enumGroup);
+        }
     }
 }
