@@ -406,6 +406,6 @@ public class CTUtils implements IRuntimeAction{
 		BiFunction<Player, CompoundTag, CompoundTag> conclude = (p, c) -> onStop.apply(p, (MapData) TagToDataConverter.convert(c)).getInternal();
 		PerkSide perkSide = PerkSide.values()[Math.min(side, 2)];
         Perk perk = new Perk(conditions, defaults.getInternal(), execute, tick, conclude);
-		APIUtils.registerPerk(perkID, perk, perkSide, null);
+		APIUtils.registerPerk(perkID, perk, perkSide);
 	}
 }

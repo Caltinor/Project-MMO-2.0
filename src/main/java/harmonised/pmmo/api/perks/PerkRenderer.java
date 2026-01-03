@@ -12,8 +12,6 @@ import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -67,7 +65,7 @@ public interface PerkRenderer {
         if (config.contains(APIUtils.CHANCE))
             layout.addString(LangProvider.PERK_DEFAULT_CHANCE.asComponent(DP.dpSoft(config.getDouble(APIUtils.CHANCE)) + "%"), PositionConstraints.offset(10, 0), textConstraint);
         if (config.contains(APIUtils.COOLDOWN))
-            layout.addString(LangProvider.PERK_DEFAULT_COOLDOWN.asComponent(config.getInt(APIUtils.CHANCE)/2), PositionConstraints.offset(10, 0), textConstraint);
+            layout.addString(LangProvider.PERK_DEFAULT_COOLDOWN.asComponent(config.getInt(APIUtils.COOLDOWN)/2), PositionConstraints.offset(10, 0), textConstraint);
     }
 
     /// A default implementation capturing only the common elements of Perks.

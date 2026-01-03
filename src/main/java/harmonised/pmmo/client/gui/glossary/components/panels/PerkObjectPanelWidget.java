@@ -57,7 +57,8 @@ public class PerkObjectPanelWidget extends ObjectPanelWidget {
                     PositionType.STATIC.constraint, textConstraint);
             configurations.forEach(tag -> {
                 ResourceLocation perkID = Reference.of(tag.getString("perk"));
-                addChild((AbstractWidget) reg.getRenderer(perkID).getWidget(this.width, player, tag), PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
+                CompoundTag settings = new CompoundTag().merge(reg.getDefaults(perkID)).merge(tag.copy());
+                addChild((AbstractWidget) reg.getRenderer(perkID).getWidget(this.width, player, settings), PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
             });
             addChild(new DividerWidget(427, 2, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder()
                     .absoluteHeight(2).build());

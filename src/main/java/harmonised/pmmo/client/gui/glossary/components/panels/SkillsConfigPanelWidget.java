@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.glossary.components.panels;
 
 import harmonised.pmmo.api.client.types.OBJECT;
+import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.parts.DividerWidget;
@@ -50,7 +51,7 @@ public class SkillsConfigPanelWidget extends ObjectPanelWidget{
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = !filter.matchesSkill(skill) || !filter.matchesObject(OBJECT.NONE);
+        boolean filtered = !filter.matchesSkill(skill) || !filter.matchesObject(OBJECT.NONE) || !filter.matchesSelection(SELECTION.XP);
         setHeight(filtered ? 0 : internalHeight);
         return filtered;
     }

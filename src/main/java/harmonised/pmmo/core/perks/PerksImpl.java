@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PerksImpl {
-	private static Set<ItemAbility> DIG_ACTIONS = Set.of(
+	public static Set<ItemAbility> DIG_ACTIONS = Set.of(
 			ItemAbilities.PICKAXE_DIG,
 			ItemAbilities.AXE_DIG, 
 			ItemAbilities.SHOVEL_DIG, 
@@ -86,7 +86,7 @@ public class PerksImpl {
 	}
 	
 	private static final ResourceLocation ATTRIBUTE_ID = Reference.rl("tame_boost");
-	private static final Map<Holder<Attribute>, Double> ANIMAL_ATTRIBUTES = Map.of(
+	public static final Map<Holder<Attribute>, Double> ANIMAL_ATTRIBUTES = Map.of(
 			Attributes.JUMP_STRENGTH, 0.005, 
 			Attributes.MAX_HEALTH, 1.0,
 			Attributes.MOVEMENT_SPEED, 0.01,

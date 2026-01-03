@@ -32,26 +32,23 @@ import net.neoforged.fml.LogicalSide;
 import java.util.Optional;
 
 public class AttributePanel extends PanelWidget {
-    private final String id;
     private final String name;
     private final String skill;
     private final boolean invalidAttribute;
 
     public AttributePanel(int width, Player player, CompoundTag config) {
         super(0x88394045, width);
-        ResourceLocation rl = Reference.of(config.getString("perk"));
         ResourceLocation attribID = Reference.of(config.getString(APIUtils.ATTRIBUTE));
         Optional<Holder.Reference<Attribute>> attribute = player.registryAccess()
                 .lookupOrThrow(Registries.ATTRIBUTE).get(ResourceKey.create(Registries.ATTRIBUTE, attribID));
-        this.id = rl.toString();
-        MutableComponent title = Component.translatable("perk.%s.%s".formatted(rl.getNamespace(), rl.getPath()));
+        MutableComponent title = LangProvider.PERK_ATTRIBUTE.asComponent();
         this.name = title.toString();
         this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
         this.invalidAttribute = attribute.isEmpty();
         if (!invalidAttribute) {
             long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
             addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
-            MutableComponent descr = Component.translatable("perk.%s.%s.description".formatted(rl.getNamespace(), rl.getPath()));
+            MutableComponent descr = LangProvider.PERK_ATTRIBUTE_DESC.asComponent();
             addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
 
             double perLevel = config.getDouble(APIUtils.PER_LEVEL);
@@ -80,7 +77,7 @@ public class AttributePanel extends PanelWidget {
         return invalidAttribute
                 || !(filter.matchesSkill(skill))
                 || !filter.matchesObject(OBJECT.PERKS)
-                || (!filter.matchesTextFilter(id)
+                || (!filter.matchesTextFilter("pmmo:attribute")
                     && !filter.matchesTextFilter(name));
     }
 }

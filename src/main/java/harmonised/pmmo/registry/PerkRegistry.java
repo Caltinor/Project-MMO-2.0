@@ -54,6 +54,8 @@ public class PerkRegistry {
 		this.renderers.put(perkID, renderer);
 	}
 	public PerkRenderer getRenderer(ResourceLocation id) {return renderers.getOrDefault(id, PerkRenderer::DEFAULT);}
+
+	public CompoundTag getDefaults(ResourceLocation id) {return perks.getOrDefault(id, Perk.empty()).propertyDefaults().copy();}
 	
 	public CompoundTag executePerk(EventType cause, Player player, @NotNull CompoundTag dataIn) {
 		if (player == null) return new CompoundTag();
