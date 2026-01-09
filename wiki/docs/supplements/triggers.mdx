@@ -12,44 +12,17 @@ This new trigger is `pmmo:skill_up`, and it can be used like this:
     "requirement": {
         "trigger": "pmmo:skill_up",
         "conditions": {
-        "player": [
-            {
-                "condition":"pmmo:skill_level",
-                "skill":"agility",
-                "level_min": 5,
-                "level_max": 20
-            }
-        ]
+            "level": {
+              "max": 20,
+              "min": 3
+            },
+            "skill": "agility"
         }
     }
 },
 ```
 
-This criteria attached to an advancement would trigger when the player reaches level 5 in agility. You can also have multiple skill requirements in order for the advancement to activate:
-
-```json
-"criteria": {
-        "requirement": {
-            "trigger": "pmmo:skill_up",
-            "conditions": {
-            "player": [
-                {"condition":"pmmo:skill_level",
-                "skill":"agility",
-                "level_min": 3,
-                "level_max": 20
-                },
-                {"condition":"pmmo:skill_level",
-                "skill":"swimming",
-                "level_min": 3,
-                "level_max": 20
-                }
-            ]
-            }
-        }
-    }
-```
-
-This criteria requires the player to be level 3 in agility and swimming in order to trigger. For more information on creating advancements refer to [The Minecraft Wiki](https://minecraft.wiki/w/Advancement_definition). There is also [this](https://misode.github.io/advancement/) tool that will do a lot of the setup for you for all your datapack needs, advancements included.
+This criteria requires the player to be level 3 in agility to trigger. For more information on creating advancements refer to [The Minecraft Wiki](https://minecraft.wiki/w/Advancement_definition). There is also [this](https://misode.github.io/advancement/) tool that will do a lot of the setup for you for all your datapack needs, advancements included.
 
 # What this can do.
 
