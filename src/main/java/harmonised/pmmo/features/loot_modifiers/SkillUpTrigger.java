@@ -19,9 +19,11 @@ public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.Trigge
 	public Codec<TriggerInstance> codec() {
 		return TriggerInstance.CODEC;
 	}
+
 	public void trigger(ServerPlayer player) {
 		this.trigger(player, ti -> {
 			long level = Core.get(LogicalSide.SERVER).getData().getLevel(ti.skill(), player.getUUID());
+			System.out.println(ti);
 			return ti.level.matches(level);
 		});
 	}
@@ -38,7 +40,7 @@ public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.Trigge
 		public static Codec<Longs> CODEC = MinMaxBounds.createCodec(Codec.LONG, Longs::new);
 
 		public boolean matches(long value) {
-			return min.orElse(0L) >= value && value <= max.orElse(Long.MAX_VALUE);
+			return value <= max.orElse(Long.MAX_VALUE) && value >= min.orElse(0L);
 		}
 
 		public static Longs between(long min, long max) {return new Longs(Optional.of(min), Optional.of(max));}
