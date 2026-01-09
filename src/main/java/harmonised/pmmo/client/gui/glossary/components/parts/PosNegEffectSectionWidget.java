@@ -5,6 +5,7 @@ import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
+import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.codecs.LocationData;
@@ -88,7 +89,10 @@ public class PosNegEffectSectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = (reqs.isEmpty() && pos.isEmpty()) || !filter.matchesSelection(SELECTION.REQS) || !filter.matchesSkill(reqs.keySet());
+        boolean filtered = (reqs.isEmpty() && pos.isEmpty())
+                || !filter.matchesSelection(SELECTION.REQS)
+                || !filter.matchesEnum(ReqType.TRAVEL)
+                || !filter.matchesSkill(reqs.keySet());
         this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
         return filtered;
     }

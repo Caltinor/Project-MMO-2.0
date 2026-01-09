@@ -73,11 +73,12 @@ public class BiomeObjectPanelWidget extends ObjectPanelWidget {
         bonuses.visible = !bonuses.applyFilter(filter);
         blacklist.visible = !blacklist.applyFilter(filter);
         modifiers.visible = !modifiers.applyFilter(filter);
-        this.setHeight(18 + effects.getHeight() + bonuses.getHeight() + blacklist.getHeight() + modifiers.getHeight() + 2);
-        return (!effects.visible && !bonuses.visible && !blacklist.visible && !modifiers.visible)
+        boolean filtered = (!effects.visible && !bonuses.visible && !blacklist.visible && !modifiers.visible)
                 || !filter.matchesSkill(skills)
                 || !filter.matchesObject(OBJECT.BIOMES)
                 || (!filter.matchesTextFilter(id)
                 && !filter.matchesTextFilter(name));
+        this.setHeight(filtered ? 0 : 18 + effects.getHeight() + bonuses.getHeight() + blacklist.getHeight() + modifiers.getHeight() + 2);
+        return filtered;
     }
 }

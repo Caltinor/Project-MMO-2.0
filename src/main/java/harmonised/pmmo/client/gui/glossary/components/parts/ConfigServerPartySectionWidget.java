@@ -37,7 +37,9 @@ public class ConfigServerPartySectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = !filter.matchesSkill(skills) || !filter.matchesSelection(SELECTION.XP);
+        boolean filtered = !filter.matchesSkill(skills)
+                || filter.getEnumGroup() != null
+                || !filter.matchesSelection(SELECTION.XP);
         setHeight(filtered ? 0 : getChildren().size() * 12);
         return filtered;
     }

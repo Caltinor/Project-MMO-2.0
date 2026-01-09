@@ -3,6 +3,7 @@ package harmonised.pmmo.client.gui.glossary.components.parts;
 import com.mojang.datafixers.util.Pair;
 import harmonised.pmmo.api.client.ResponsiveLayout;
 import harmonised.pmmo.api.client.types.DisplayType;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.Positioner;
@@ -44,11 +45,13 @@ import java.util.stream.Collectors;
 public class XpSectionWidget extends ReactiveWidget {
     Map<EventType, Map<String, Long>> xpAwards = new HashMap<>();
     List<String> skills = new ArrayList<>();
+    List<GuiEnumGroup> types = new ArrayList<>();
     private XpSectionWidget(Map<EventType, Map<String, Long>> nbtXp, Function<ResponsiveLayout, Map<EventType, Map<String, Long>>> layoutBuilder) {
         super(0, 0, 0, 0);
         //store them in the widget for use in the filter
         xpAwards.putAll(nbtXp);
         xpAwards.putAll(layoutBuilder.apply(this));
+        types.addAll(xpAwards.keySet());
         skills = xpAwards.entrySet().stream().map(entry -> entry.getValue().keySet()).flatMap(Set::stream).toList();
         this.setHeight((getChildren().size() * 12) + 2);
     }
@@ -158,6 +161,7 @@ public class XpSectionWidget extends ReactiveWidget {
     public boolean applyFilter(Filter filter) {
         boolean filtered = xpAwards.isEmpty()
                 || !filter.matchesSelection(SELECTION.XP)
+                || !filter.matchesEnum(types)
                 || (!filter.getSkill().isEmpty() && !skills.contains(filter.getSkill()));
         this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
         return  filtered;

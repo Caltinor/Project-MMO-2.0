@@ -74,7 +74,9 @@ public class ConfigServerLevelsSectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = !filter.matchesSkill(skills) || (!filter.matchesSelection(SELECTION.XP) && !filter.matchesSelection(SELECTION.BONUS));
+        boolean filtered = !filter.matchesSkill(skills)
+                || filter.getEnumGroup() != null
+                || (!filter.matchesSelection(SELECTION.XP) && !filter.matchesSelection(SELECTION.BONUS));
         setHeight(filtered ? 0 : getChildren().size() * 12);
         return filtered;
     }

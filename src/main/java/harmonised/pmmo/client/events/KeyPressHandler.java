@@ -1,6 +1,8 @@
 package harmonised.pmmo.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import harmonised.pmmo.api.client.types.GlossaryFilter;
+import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.gui.glossary.Glossary;
 import harmonised.pmmo.client.gui.glossary.GlossaryLoadingScreen;
@@ -18,6 +20,7 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -37,8 +40,8 @@ public class KeyPressHandler {
 	{
 		Minecraft mc = Minecraft.getInstance();
 		//debug
-		if (event.getKey() == InputConstants.KEY_PERIOD)
-			mc.setScreen(new GlossaryLoadingScreen());
+//		if (event.getKey() == InputConstants.KEY_PERIOD)
+//			mc.setScreen(new GlossaryLoadingScreen());
 		//end DEBUG
         if(mc.player != null)
         {
@@ -86,18 +89,24 @@ public class KeyPressHandler {
             }
             if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {
             	if (mc.hitResult != null && !mc.player.isCrouching()) {
-            		if (mc.hitResult.getType().equals(Type.BLOCK)) 
-            			mc.setScreen(new StatsScreen(((BlockHitResult)mc.hitResult).getBlockPos()));
+            		if (mc.hitResult.getType().equals(Type.BLOCK)) {
+						BlockHitResult bhr = (BlockHitResult) mc.hitResult;
+						String id = RegistryUtil.getId(mc.level.getBlockState(bhr.getBlockPos())).toString();
+						mc.setScreen(new GlossaryLoadingScreen(new GlossaryFilter.Filter(id, OBJECT.BLOCKS)));
+					}
             		else if (mc.hitResult.getType().equals(Type.ENTITY)) {
             			EntityHitResult ehr = (EntityHitResult) mc.hitResult;
+						String id = RegistryUtil.getId(ehr.getEntity()).toString();
             			Networking.sendToServer(new SP_OtherExpRequest(ehr.getEntity().getUUID()));
-            			mc.setScreen(new StatsScreen(ehr.getEntity()));
+            			mc.setScreen(new GlossaryLoadingScreen(new GlossaryFilter.Filter(id, OBJECT.ENTITY)));
             		}
             		else if (mc.hitResult.getType().equals(Type.MISS))
-            			mc.setScreen(new StatsScreen(mc.player));
+            			mc.setScreen(new GlossaryLoadingScreen(null));
             	}
-            	else if (mc.player.isCrouching())
-            		mc.setScreen(new StatsScreen()); 
+            	else if (mc.player.isCrouching()) {
+					String id = mc.level.getBiome(mc.player.blockPosition()).unwrapKey().get().location().toString();
+					mc.setScreen(new GlossaryLoadingScreen(new GlossaryFilter.Filter(id, OBJECT.BIOMES)));
+				}
             }
         }
     }

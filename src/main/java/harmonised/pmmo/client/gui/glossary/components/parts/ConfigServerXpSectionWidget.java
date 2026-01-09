@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
 import harmonised.pmmo.api.client.types.DisplayType;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.PositionConstraints;
@@ -20,11 +21,13 @@ import java.util.Set;
 
 public class ConfigServerXpSectionWidget extends ReactiveWidget {
     private final Set<String> skills = new HashSet<>();
-
+    private final Set<GuiEnumGroup> types = new HashSet<>();
     public ConfigServerXpSectionWidget(ServerData.XpGains data) {
         super(0,0,0,0);
         skills.addAll(data.damageXp().values().stream().map(Map::values).flatMap(Collection::stream).map(Map::keySet).flatMap(Set::stream).toList());
         skills.addAll(data.playerEvents().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
+        types.addAll(data.playerEvents().keySet());
+        types.addAll(data.damageXp().keySet());
         addString(LangProvider.GLOSSARY_CONFIG_SERVER_XP_HEADER.asComponent().withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE, ChatFormatting.GREEN),
                 PositionType.STATIC.constraint, textConstraint);
         String reuse = DP.dpSoft(data.reusePenalty() * 100);
@@ -71,7 +74,9 @@ public class ConfigServerXpSectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = !filter.matchesSkill(skills) || !filter.matchesSelection(SELECTION.XP);
+        boolean filtered = !filter.matchesSkill(skills)
+                || !filter.matchesEnum(types)
+                || !filter.matchesSelection(SELECTION.XP);
         setHeight(filtered ? 0 : getChildren().size() * 12);
         return filtered;
     }

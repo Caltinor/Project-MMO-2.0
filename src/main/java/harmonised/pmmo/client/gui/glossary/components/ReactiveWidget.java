@@ -78,7 +78,10 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (AbstractWidget widget : widgets()) {
-            if (widget.mouseClicked(mouseX, mouseY, button)) return true;
+            if (widget.isMouseOver(mouseX, mouseY) && widget.mouseClicked(mouseX, mouseY, button)) {
+                widget.setFocused(true);
+                return true;
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -86,7 +89,7 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         for (AbstractWidget widget : widgets()) {
-            if (widget.mouseReleased(mouseX, mouseY, button)) return true;
+            if (widget.isMouseOver(mouseX, mouseY) && widget.mouseReleased(mouseX, mouseY, button)) return true;
         }
         return super.mouseReleased(mouseX, mouseY, button);
     }
@@ -147,13 +150,14 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
         return super.charTyped(codePoint, modifiers);
     }
 
-    @Override
-    public void setFocused(boolean focused) {
-        for (AbstractWidget widget : widgets()) {
-            widget.setFocused(focused);
-        }
-        super.setFocused(focused);
-    }
+//    @Override
+//    public void setFocused(boolean focused) {
+//        for (AbstractWidget widget : widgets()) {
+//            if (this.is)
+//            widget.setFocused(focused);
+//        }
+//        super.setFocused(focused);
+//    }
 
     @Override
     public void onClick(double mouseX, double mouseY) {

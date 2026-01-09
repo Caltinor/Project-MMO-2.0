@@ -47,7 +47,10 @@ public class VeinBlacklistSectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = data.isEmpty() || data.stream().noneMatch(rl -> filter.matchesTextFilter(rl.toString())) || !filter.matchesSelection(SELECTION.VEIN);
+        boolean filtered = data.isEmpty()
+                || filter.getEnumGroup() != null
+                || data.stream().noneMatch(rl -> filter.matchesTextFilter(rl.toString()))
+                || !filter.matchesSelection(SELECTION.VEIN);
         this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
         return filtered;
     }

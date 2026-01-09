@@ -51,7 +51,11 @@ public class SkillsConfigPanelWidget extends ObjectPanelWidget{
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = !filter.matchesSkill(skill) || !filter.matchesObject(OBJECT.NONE) || !filter.matchesSelection(SELECTION.XP);
+        boolean filtered = !filter.getTextFilter().isEmpty()
+                || !filter.matchesSkill(skill)
+                || !filter.matchesObject(OBJECT.NONE)
+                || filter.getEnumGroup() != null
+                || !filter.matchesSelection(SELECTION.XP);
         setHeight(filtered ? 0 : internalHeight);
         return filtered;
     }

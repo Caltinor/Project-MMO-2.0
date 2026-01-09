@@ -1524,8 +1524,10 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "Crouch").build();
 	public static final Translation ENUM_RECEIVE_DAMAGE = Translation.Builder.start("pmmo.enum.RECEIVE_DAMAGE")
 		.addLocale(Locale.EN_US, "Receive Damage").build();
-	public static final Translation ENUM_DEAL_MELEE_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_DAMAGE")
+	public static final Translation ENUM_DEAL_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_DAMAGE")
 		.addLocale(Locale.EN_US, "Deal Damage").build();
+	public static final Translation ENUM_MITIGATE_DAMAGE = Translation.Builder.start("pmmo.enum.MITIGATE_DAMAGE")
+			.addLocale(Locale.EN_US, "Mitigated Damage").build();
 	public static final Translation ENUM_DEATH = Translation.Builder.start("pmmo.enum.DEATH")
 		.addLocale(Locale.EN_US, "Death").build();
 	public static final Translation ENUM_ENCHANT = Translation.Builder.start("pmmo.enum.ENCHANT")
@@ -1622,9 +1624,15 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Interact with Entity").build();
 	public static final Translation ENUM_BIOME = Translation.Builder.start("pmmo.enum.BIOME")
 		.addLocale(Locale.EN_US, "Biome").build();
+	public static final Translation ENUM_DIMENSION = Translation.Builder.start("pmmo.enum.DIMENSION")
+			.addLocale(Locale.EN_US, "Dimension").build();
+	public static final Translation ENUM_WORN = Translation.Builder.start("pmmo.enum.WORN")
+			.addLocale(Locale.EN_US, "Item Worn").build();
+	public static final Translation ENUM_HELD = Translation.Builder.start("pmmo.enum.HELD")
+			.addLocale(Locale.EN_US, "Item Held").build();
 	public static final Translation ENUM_GIVEN_AS_TRADE = Translation.Builder.start("pmmo.enum.GIVEN_AS_TRADE")
 			.addLocale(Locale.EN_US, "Given As Trade").build();
-	public static final Translation ENUM_RECEIVED_AS_TRADE = Translation.Builder.start("pmmo.enum.RECIEVED_AS_TRADE")
+	public static final Translation ENUM_RECEIVED_AS_TRADE = Translation.Builder.start("pmmo.enum.RECEIVED_AS_TRADE")
 			.addLocale(Locale.EN_US, "Received As Trade").build();
 
 	//=========KEY BINDINGS====================
@@ -1869,6 +1877,8 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "Consume Xp Value").build();
 	public static final Translation XP_VALUE_DEAL_DAMAGE = Translation.Builder.start("pmmo.xpValueDealDamage")
 			.addLocale(Locale.EN_US, "Deal Damage with Item Xp").build();
+	public static final Translation XP_VALUE_RECEIVE_DAMAGE = Translation.Builder.start("pmmo.xpValueReceiveDamage")
+			.addLocale(Locale.EN_US, "Receive Damage from Source Xp").build();
 	public static final Translation XP_VALUE_MITIGATE_DAMAGE = Translation.Builder.start("pmmo.xpValueMitigateDamage")
 			.addLocale(Locale.EN_US, "Prevent Damage with Armor, Magic, Absorption, or Potions").build();
 	public static final Translation XP_VALUE_ENCHANT = Translation.Builder.start("pmmo.xpValueEnchant")
@@ -2121,7 +2131,7 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation GLOSSARY_OBJECT_BLOCKS = Translation.Builder.start("pmmo.gui.glossary.object.blocks")
 		.addLocale(Locale.EN_US, "Blocks").build();
 	public static final Translation GLOSSARY_OBJECT_ENTITIES = Translation.Builder.start("pmmo.gui.glossary.object.entities")
-		.addLocale(Locale.EN_US, "Animals/Mobs").build();
+		.addLocale(Locale.EN_US, "Animals/Mobs/Entities").build();
 	public static final Translation GLOSSARY_OBJECT_DIMENSIONS = Translation.Builder.start("pmmo.gui.glossary.object.dimensions")
 		.addLocale(Locale.EN_US, "Dimensions").build();
 	public static final Translation GLOSSARY_OBJECT_BIOMES = Translation.Builder.start("pmmo.gui.glossary.object.biomes")

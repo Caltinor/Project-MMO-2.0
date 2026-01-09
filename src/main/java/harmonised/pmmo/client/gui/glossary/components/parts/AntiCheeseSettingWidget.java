@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
 import harmonised.pmmo.api.client.types.DisplayType;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
@@ -25,9 +26,11 @@ import java.util.List;
 
 public class AntiCheeseSettingWidget extends ReactiveWidget {
     private final List<String> sources;
+    private final GuiEnumGroup type;
     public AntiCheeseSettingWidget(EventType event, CheeseTracker.Setting setting, AntiCheesePanelWidget.Type type) {
         super(0,0, 0, 0);
         this.sources = setting.source();
+        this.type = event;
         addString(LangProvider.GLOSSARY_CONFIG_ANTI_EVENT.asComponent(event.getName()).withStyle(ChatFormatting.GREEN), PositionType.STATIC.constraint, textConstraint);
         addString(LangProvider.GLOSSARY_CONFIG_ANTI_RETENTION.asComponent(setting.retention()), PositionConstraints.offset(10, 0), textConstraint);
 
@@ -86,7 +89,7 @@ public class AntiCheeseSettingWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = sources.stream().noneMatch(filter::matchesTextFilter);
+        boolean filtered = !filter.matchesEnum(type) || sources.stream().noneMatch(filter::matchesTextFilter);
         setHeight(filtered ? 0 : getChildren().stream().map(poser -> poser.get().getHeight()).reduce(Integer::sum).orElse(0));
         return filtered;
     }

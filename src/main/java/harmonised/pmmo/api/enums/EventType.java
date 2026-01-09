@@ -21,7 +21,7 @@ public enum EventType implements StringRepresentable, GuiEnumGroup {
 	CRAFT(true, false, false, "crafting", LangProvider.XP_VALUE_CRAFT),
 	CROUCH(false, false, true, "endurance", LangProvider.ENUM_CROUCH),
 	TOOL_BREAKING(true, false, false, "smithing", LangProvider.ENUM_TOOL_BREAKING),
-	RECEIVE_DAMAGE(false, false, true, "endurance", LangProvider.ENUM_RECEIVE_DAMAGE),
+	RECEIVE_DAMAGE(false, false, true, "endurance", LangProvider.XP_VALUE_RECEIVE_DAMAGE),
 	DEAL_DAMAGE(true, false, true, "combat", LangProvider.XP_VALUE_DEAL_DAMAGE),
 	MITIGATE_DAMAGE(false, false, true, "endurance", LangProvider.XP_VALUE_MITIGATE_DAMAGE),
 	DEATH(false, false, true, "endurance", LangProvider.ENUM_DEATH),

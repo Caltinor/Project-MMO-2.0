@@ -34,7 +34,9 @@ public class ConfigServerVeinSectionWidget extends ReactiveWidget {
     @Override
     public boolean applyFilter(Filter filter) {
         blacklist.visible = !blacklist.applyFilter(filter);
-        boolean filtered = !filter.matchesSelection(SELECTION.VEIN) || !filter.getSkill().isEmpty();
+        boolean filtered = !filter.matchesSelection(SELECTION.VEIN)
+                || filter.getEnumGroup() != null
+                || !filter.getSkill().isEmpty();
         setHeight(filtered ? 0 : visibleChildren().stream().map(poser -> poser.get().getHeight()).reduce(Integer::sum).orElse(0));
         return filtered;
     }

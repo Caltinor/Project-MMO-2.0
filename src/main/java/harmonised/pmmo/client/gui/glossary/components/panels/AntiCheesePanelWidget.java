@@ -5,6 +5,7 @@ import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.PositionConstraints;
+import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.client.gui.glossary.components.parts.AntiCheeseSettingWidget;
@@ -65,6 +66,13 @@ public class AntiCheesePanelWidget extends ObjectPanelWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        return !filter.matchesObject(OBJECT.NONE) || !filter.matchesSelection(SELECTION.XP);
+        boolean visibleChildren = false;
+        for (Positioner<?> poser : getChildren().stream().filter(poser -> poser.get() instanceof AntiCheeseSettingWidget).toList()) {
+            if (((AntiCheeseSettingWidget)poser.get()).visible = !((AntiCheeseSettingWidget)poser.get()).applyFilter(filter))
+                visibleChildren = true;
+        }
+        boolean filtered = !visibleChildren || !filter.getTextFilter().isEmpty() || !filter.matchesObject(OBJECT.NONE) || !filter.matchesSelection(SELECTION.XP);
+        setHeight(filtered ? 0 : getChildren().stream().map(poser -> poser.get().getHeight()).reduce(Integer::sum).orElse(0));
+        return filtered;
     }
 }

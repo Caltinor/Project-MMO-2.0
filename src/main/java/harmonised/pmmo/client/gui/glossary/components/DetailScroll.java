@@ -54,7 +54,12 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 	}
 
 	@Override
-	protected double scrollRate() {return 20;}
+	protected int getMaxScrollAmount() {
+		return Math.max(1, this.getInnerHeight() - this.height) /2;
+	}
+
+	@Override
+	protected double scrollRate() {return Math.max(10, getMaxScrollAmount()/100);}
 
 	private List<PanelWidget> widgets() {
 		return getChildren().stream()

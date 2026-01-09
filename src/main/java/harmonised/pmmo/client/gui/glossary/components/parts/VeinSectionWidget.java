@@ -51,7 +51,10 @@ public class VeinSectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = data.isEmpty() || !filter.getSkill().isEmpty() || !filter.matchesSelection(SELECTION.VEIN);
+        boolean filtered = data.isEmpty()
+                || !filter.getSkill().isEmpty()
+                || filter.getEnumGroup() != null
+                || !filter.matchesSelection(SELECTION.VEIN);
         this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
         return filtered;
     }

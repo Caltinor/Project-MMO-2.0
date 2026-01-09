@@ -79,6 +79,7 @@ public class SalvageSectionWidget extends ReactiveWidget {
         }
         boolean filtered = salvage.isEmpty()
                 || childrenHidden
+                || filter.getEnumGroup() != null
                 || !filter.matchesSelection(SELECTION.SALVAGE);
         this.setHeight(filtered ? 0 : calculateHeight());
         return filtered;

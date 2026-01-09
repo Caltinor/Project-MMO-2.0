@@ -70,8 +70,11 @@ public class ServerConfigPanelWidget extends ObjectPanelWidget{
         party.visible = !party.applyFilter(filter);
         scaling.visible = !scaling.applyFilter(filter);
         vein.visible = !vein.applyFilter(filter);
-        setHeight(levels.getHeight() + xpGains.getHeight() + party.getHeight() + scaling.getHeight() + vein.getHeight() + 42);
-        return !filter.matchesObject(OBJECT.NONE);
+        boolean filtered = (!levels.visible && ! xpGains.visible && !party.visible && !scaling.visible && !vein.visible)
+                || !filter.getTextFilter().isEmpty()
+                || !filter.matchesObject(OBJECT.NONE);
+        setHeight(filtered ? 0 : levels.getHeight() + xpGains.getHeight() + party.getHeight() + scaling.getHeight() + vein.getHeight() + 42);
+        return filtered;
     }
 
     private static void general(ResponsiveLayout layout, ServerData.General data, RegistryAccess access, Font font) {

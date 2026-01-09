@@ -3,6 +3,7 @@ package harmonised.pmmo.client.gui.glossary.components.parts;
 import com.mojang.datafixers.util.Pair;
 import harmonised.pmmo.api.client.ResponsiveLayout;
 import harmonised.pmmo.api.client.types.DisplayType;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.Positioner;
@@ -45,11 +46,13 @@ import java.util.stream.Collectors;
 public class ReqSectionWidget extends ReactiveWidget {
     Map<ReqType, Map<String, Long>> reqs = new HashMap<>();
     List<String> skills = new ArrayList<>();
+    List<GuiEnumGroup> types = new ArrayList<>();
     private ReqSectionWidget(Map<ReqType, Map<String, Long>> nbtReqs, Function<ResponsiveLayout,Map<ReqType, Map<String, Long>>> layoutBuilder) {
         super(0, 0, 0, 0);
         //store them in the widget for use in the filter
         reqs.putAll(nbtReqs);
         reqs.putAll(layoutBuilder.apply(this));
+        types.addAll(reqs.keySet());
         skills = reqs.entrySet().stream().map(entry -> entry.getValue().keySet()).flatMap(Set::stream).toList();
         setHeight((getChildren().size() * 12) + 2);
     }
@@ -144,6 +147,7 @@ public class ReqSectionWidget extends ReactiveWidget {
     public boolean applyFilter(Filter filter) {
         boolean filtered = reqs.isEmpty()
                 || !filter.matchesSelection(SELECTION.REQS)
+                || !filter.matchesEnum(types)
                 || (!filter.getSkill().isEmpty() && !skills.contains(filter.getSkill()));
         this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
         return filtered;

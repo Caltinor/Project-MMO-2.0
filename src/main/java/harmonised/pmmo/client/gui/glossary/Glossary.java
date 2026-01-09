@@ -50,11 +50,15 @@ import java.util.function.Consumer;
 public class Glossary extends Screen {
     private final Font font;
     private final Screen priorScreen;
-    public Glossary() {this(null);}
-    public Glossary(Screen priorScreen) {
+    private GlossaryFilter.Filter inboundFilter;
+
+    public Glossary(GlossaryFilter.Filter filter) {this(null, filter);}
+    public Glossary() {this(null, null);}
+    public Glossary(Screen priorScreen, GlossaryFilter.Filter filter) {
         super(Component.literal("glossary"));
         this.priorScreen = priorScreen;
         this.font = Minecraft.getInstance().font;
+        this.inboundFilter = filter;
     }
 
     //widgets
@@ -71,6 +75,11 @@ public class Glossary extends Screen {
         if (skillWidget.getSelected() != null) filter.with(skillWidget.getSelected().reference);
         if (enumWidget.getSelected() != null) filter.with(enumWidget.getSelected().reference);
         return filter;
+    }
+
+    public Glossary withFilter(GlossaryFilter.Filter filter) {
+        this.inboundFilter = filter;
+        return this;
     }
 
     @Override
@@ -94,6 +103,7 @@ public class Glossary extends Screen {
         enumWidget = new SelectionWidget<>(8, 91, selectionWidth, LangProvider.GLOSSARY_DEFAULT_ENUM.asComponent(), choice -> {
             content.applyFilter(getFilter(searchBar.getValue()));
         });
+        enumWidget.setEntries(OBJECT.ALL);
 
         SizeConstraints buttonConstraints = SizeConstraints.builder().absoluteHeight(20).minWidthPercent(1.0).build();
 
@@ -118,6 +128,10 @@ public class Glossary extends Screen {
             .addChild((ResponsiveLayout) content, PositionType.STATIC.constraint, SizeConstraints.DEFAULT);
         outer.arrangeElements();
         outer.visitWidgets(this::addRenderableWidget);
+
+        if (this.inboundFilter != null) {
+            content.applyFilter(inboundFilter);
+        }
     }
 
     @Override

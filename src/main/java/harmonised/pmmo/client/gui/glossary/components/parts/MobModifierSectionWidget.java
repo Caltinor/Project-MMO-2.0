@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
 import harmonised.pmmo.api.client.types.DisplayType;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.Positioner;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Block;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -31,10 +33,12 @@ public class MobModifierSectionWidget extends ReactiveWidget {
 
     private final List<MobModifier> globals;
     private final Map<ResourceLocation, List<MobModifier>> mobModifiers;
+    private final List<GuiEnumGroup> types = new ArrayList<>();
     public MobModifierSectionWidget(LocationData data) {
         super(0, 0, 0, 0);
         this.globals = data.globalModifiers();
         this.mobModifiers = data.mobModifiers();
+        this.types.addAll(data.bonusMap().keySet());
         Font font = Minecraft.getInstance().font;
         if (!Config.server().mobScaling().enabled()) {
             this.visible = false;
@@ -73,6 +77,7 @@ public class MobModifierSectionWidget extends ReactiveWidget {
     @Override
     public boolean applyFilter(Filter filter) {
         boolean filtered = (globals.isEmpty() && mobModifiers.isEmpty())
+                || !filter.matchesEnum(types)
 //                || mobModifiers.keySet().stream().noneMatch(rl -> filter.matchesTextFilter(rl.toString()))
                 || !filter.matchesSelection(SELECTION.MOB_SCALING);
         this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);

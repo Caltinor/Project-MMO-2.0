@@ -70,13 +70,22 @@ public enum OBJECT {
                 if (selection == SELECTION.REQS) yield enumToList(ReqType.values());
                 if (selection == SELECTION.XP) yield enumToList(EventType.values());
                 if (selection == SELECTION.BONUS) yield enumToList(ModifierDataType.values());
-                yield enumToList(GuiEnumGroup.combine(EventType.values(), ReqType.values(), ModifierDataType.values()));
+                yield ALL;
             }
             case PERKS -> enumToList(EventType.values());
         });
     }
 
     private static List<SelectionWidget.SelectionEntry<GuiEnumGroup>> enumToList(GuiEnumGroup[] array) {
-        return Arrays.stream(array).map(val -> new SelectionWidget.SelectionEntry<>(Component.translatable("pmmo.enum."+val.getName()), val)).toList();
+        List<SelectionWidget.SelectionEntry<GuiEnumGroup>> outList = new ArrayList<>(List.of(
+            new SelectionWidget.SelectionEntry<>(LangProvider.PERK_DAMAGE_BOOST_STATUS_1a.asComponent(), null)
+        ));
+        outList.addAll(Arrays.stream(array)
+            .map(val -> new SelectionWidget.SelectionEntry<>(Component.translatable("pmmo.enum."+val.getName()), val))
+            .toList()
+        );
+        return outList;
     }
+
+    public static final List<SelectionWidget.SelectionEntry<GuiEnumGroup>> ALL = enumToList(GuiEnumGroup.combine(EventType.values(), ReqType.values(), ModifierDataType.values()));
 }
