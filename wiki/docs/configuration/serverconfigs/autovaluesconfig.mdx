@@ -25,6 +25,7 @@ WITH config(autovalues)
     set(item_xp).event(FISH).value(fishing,10);
     set(item_xp).event(CONSUME).value(cooking,10);
     set(item_xp).event(SMELT).value(smithing,100);
+    set(item_xp).event(SMELTED).value(smithing,100);
     set(item_xp).event(CRAFT).value(crafting,10);
     
     set(block_xp).event(GROW).value(farming,1);
@@ -170,6 +171,9 @@ END
         "cooking": 10
       },
       "SMELT": {
+        "smithing": 100
+      },
+      "SMELTED": {
         "smithing": 100
       },
       "BLOCK_PLACE": {
@@ -323,11 +327,13 @@ END
     "EFFECT": true,
     "HIT_BLOCK": true,
     "SKILL_UP": true,
+    "SKILL_DOWN": true,
     "BREED": true,
     "CROUCH_JUMP": true,
     "ENTITY": true,
     "SWIMMING": true,
     "SMELT": true,
+    "SMELTED": true,
     "SPRINT_JUMP": true,
     "ACTIVATE_ITEM": true,
     "BLOCK_BREAK": true,
