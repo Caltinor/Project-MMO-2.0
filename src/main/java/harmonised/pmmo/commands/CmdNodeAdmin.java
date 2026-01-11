@@ -12,6 +12,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
+import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.PlayerData;
 import harmonised.pmmo.core.Core;
@@ -35,6 +36,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -96,6 +98,7 @@ public class CmdNodeAdmin {
 		
 		for (ServerPlayer player : players) {
 			Experience exp = data.getXpMap(player.getUUID()).computeIfAbsent(skillName, s -> new Experience());
+			Experience old = new Experience(exp.getLevel(), exp.getXp());
 			if (isSet) {
 				if (isLevel) {
 					exp.setLevel(value);
@@ -113,6 +116,7 @@ public class CmdNodeAdmin {
 				}
 				else {
 					exp.addXp(value);
+					NeoForge.EVENT_BUS.post(new XpEvent(player, skillName, old, value, new CompoundTag()));
 					ctx.getSource().sendSuccess(() -> LangProvider.ADD_XP.asComponent(skillName, value, player.getName()), true);
 				}
 			}
