@@ -11,6 +11,7 @@ import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.features.loot_modifiers.SkillUpTrigger;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
+import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
@@ -65,7 +66,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		if (xp.computeIfAbsent(playerID, i -> new HashMap<>())
 				.computeIfAbsent(gainXpEvent.skill, s -> new Experience())
 				.addXp(gainXpEvent.amountAwarded)) {
-			SkillUpTrigger.SKILL_UP.trigger(player);
+			CommonSetup.SKILL_UP_TRIGGER.get().trigger(player);
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
 		}
