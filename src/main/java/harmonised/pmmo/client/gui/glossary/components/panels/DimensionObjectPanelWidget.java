@@ -10,6 +10,7 @@ import harmonised.pmmo.client.gui.glossary.components.parts.PosNegEffectSectionW
 import harmonised.pmmo.client.gui.glossary.components.parts.VeinBlacklistSectionWidget;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.util.Functions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageWidget;
@@ -35,11 +36,13 @@ public class DimensionObjectPanelWidget extends ObjectPanelWidget {
 
     public DimensionObjectPanelWidget(int color, int width, ResourceKey<Level> dimension) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        ResourceLocation rl = dimension.location();
+        ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(
+                dimension.location().getNamespace(),
+                "textures/dimension/" + dimension.location().getPath() + ".png");
         LocationData data = core.getLoader().BIOME_LOADER.getData(rl);
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
         skills.addAll(data.travelReq().keySet());
-        this.id = rl.toString();
+        this.id = dimension.location().toString();
         this.name = this.id;
         addChild(ImageWidget.texture(18, 18, rl, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
@@ -47,7 +50,7 @@ public class DimensionObjectPanelWidget extends ObjectPanelWidget {
                 SizeConstraints.builder().absoluteHeight(12).build());
         this.effects = new PosNegEffectSectionWidget(data, true);
         addChild((AbstractWidget) effects, PositionConstraints.grid(1,1), SizeConstraints.builder().internalHeight().build());
-        this.bonuses = BonusSectionWidget.create(rl);
+        this.bonuses = BonusSectionWidget.create(dimension.location());
         addChild((AbstractWidget) bonuses, PositionConstraints.grid(2,1), SizeConstraints.builder().internalHeight().build());
         this.blacklist = new VeinBlacklistSectionWidget(data.veinBlacklist());
         addChild((AbstractWidget) blacklist, PositionConstraints.grid(3, 1), SizeConstraints.builder().internalHeight().build());

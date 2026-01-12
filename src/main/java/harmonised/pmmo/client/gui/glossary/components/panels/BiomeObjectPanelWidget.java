@@ -44,12 +44,14 @@ public class BiomeObjectPanelWidget extends ObjectPanelWidget {
     public BiomeObjectPanelWidget(int color, int width, Holder<Biome> biome) {
         super(color, width, Core.get(LogicalSide.CLIENT));
         ResourceLocation rl = RegistryUtil.getId(biome);
+        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(rl.getNamespace(),
+                "textures/biome/" +rl.getPath()+ ".png");
         LocationData data = core.getLoader().BIOME_LOADER.getData(rl);
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
         skills.addAll(data.travelReq().keySet());
         this.id = rl.toString();
         this.name = this.id;
-        addChild(ImageWidget.texture(18, 18, Reference.rl("missing"), 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
+        addChild(ImageWidget.texture(18, 18, texture, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
         addChild(new StringWidget(Component.literal(name), Minecraft.getInstance().font).alignLeft(), PositionConstraints.grid(0,1),
                 SizeConstraints.builder().absoluteHeight(12).build());
