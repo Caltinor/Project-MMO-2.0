@@ -29,3 +29,10 @@ forge*changelog.txt
 #Ignore CT's docsFolder     
 docsOut
 /runs/
+
+# vscode
+.vscode/*
+*.code-workspace
+
+# Built Visual Studio Code Extensions
+*.vsix
