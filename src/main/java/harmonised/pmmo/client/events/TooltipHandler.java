@@ -2,6 +2,7 @@ package harmonised.pmmo.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.datafixers.util.Pair;
+import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.enums.EventType;
@@ -10,6 +11,7 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.gui.glossary.GlossaryLoadingScreen;
+import harmonised.pmmo.client.gui.glossary.components.panels.ItemObjectPanelWidget;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.SkillData;
@@ -63,8 +65,8 @@ public class TooltipHandler {
                 return;
 
             if(!ClientSetup.OPEN_MENU.isUnbound() && InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), ClientSetup.OPEN_MENU.getKey().getValue())) {
-				String id = RegistryUtil.getId(event.getEntity().registryAccess(), stack).toString();
-                Minecraft.getInstance().setScreen(new GlossaryLoadingScreen(new GlossaryFilter.Filter(id, OBJECT.ITEMS)));
+				PanelWidget widget = new ItemObjectPanelWidget(0x88304045, 400, stack);
+                Minecraft.getInstance().setScreen(new GlossaryLoadingScreen(widget));
                 return;
             }
 			Arrays.stream(isBlockItem ? ReqType.BLOCKITEM_APPLICABLE_EVENTS : ReqType.ITEM_APPLICABLE_EVENTS)

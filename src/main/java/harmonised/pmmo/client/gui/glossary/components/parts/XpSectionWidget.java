@@ -30,6 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -138,9 +139,14 @@ public class XpSectionWidget extends ReactiveWidget {
         return new XpSectionWidget(nbtXp, layout -> buildLayout(layout, nbtXp, ObjectType.ITEM, id));
     }
 
-    public static XpSectionWidget create(Block block) {
+    public static XpSectionWidget create(Block block, BlockEntity be) {
         ResourceLocation id = RegistryUtil.getId(block);
-        Map<EventType, Map<String, Long>> nbtXp = new HashMap<>();
+        Map<EventType, Map<String, Long>> nbtXp = be != null ?
+                Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS)
+                .map(xpType -> Pair.of(xpType, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getBlockXpGainTooltipData(id, xpType, be)))
+                .filter(pair -> !pair.getSecond().isEmpty())
+                .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))
+                : new HashMap<>();
         return new XpSectionWidget(nbtXp, layout -> buildLayout(layout, nbtXp, ObjectType.BLOCK, id));
     }
 

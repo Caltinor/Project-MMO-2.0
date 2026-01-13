@@ -8,6 +8,7 @@ import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
@@ -31,6 +32,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -124,9 +126,14 @@ public class ReqSectionWidget extends ReactiveWidget {
         return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, nbtReqs, ObjectType.ITEM, id));
     }
 
-    public static ReqSectionWidget create(Block block) {
+    public static ReqSectionWidget create(Block block, BlockEntity be) {
         ResourceLocation id = RegistryUtil.getId(block);
-        Map<ReqType, Map<String, Long>> nbtReqs = new HashMap<>();
+        Map<ReqType, Map<String, Long>> nbtReqs = be != null ?
+                Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS)
+                .map(req -> Pair.of(req, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getBlockRequirementTooltipData(id, req, be)))
+                .filter(pair -> !pair.getSecond().isEmpty())
+                .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))
+                : new HashMap<>();
         return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, nbtReqs, ObjectType.BLOCK, id));
     }
 

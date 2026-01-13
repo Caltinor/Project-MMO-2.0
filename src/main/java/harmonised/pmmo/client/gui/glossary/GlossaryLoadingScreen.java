@@ -1,5 +1,6 @@
 package harmonised.pmmo.client.gui.glossary;
 
+import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -16,11 +17,11 @@ import net.minecraft.world.item.CreativeModeTabs;
 import java.util.concurrent.CompletableFuture;
 
 public class GlossaryLoadingScreen extends Screen {
-    private final GlossaryFilter.Filter filter;
-    public GlossaryLoadingScreen(GlossaryFilter.Filter filter) {
+    private final PanelWidget target;
+    public GlossaryLoadingScreen(PanelWidget inbound) {
         super(Component.literal("Loading Screen"));
         LocalPlayer player = Minecraft.getInstance().player;
-        this.filter = filter;
+        this.target = inbound;
         CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), player.canUseGameMasterBlocks(), player.clientLevel.registryAccess());
     }
 
@@ -35,8 +36,8 @@ public class GlossaryLoadingScreen extends Screen {
                 layout.addChild(new StringWidget(Component.literal(fcs.getString()), this.font).alignCenter()));
         layout.arrangeElements();
         layout.visitWidgets(this::addRenderableWidget);
-        if (ClientUtils.glossary == null) {
-            CompletableFuture.supplyAsync(() -> new Glossary(this.filter)).thenAccept(glossary -> ClientUtils.glossary = glossary);
+        if (ClientUtils.glossary == null || ClientUtils.glossary.targetedObject != target) {
+            CompletableFuture.supplyAsync(() -> new Glossary(this.target)).thenAccept(glossary -> ClientUtils.glossary = glossary);
         }
     }
 
@@ -44,7 +45,7 @@ public class GlossaryLoadingScreen extends Screen {
     public void tick() {
         super.tick();
         if (ClientUtils.glossary != null) {
-            Minecraft.getInstance().setScreen(ClientUtils.glossary.withFilter(filter));
+            Minecraft.getInstance().setScreen(ClientUtils.glossary);
         }
     }
 }

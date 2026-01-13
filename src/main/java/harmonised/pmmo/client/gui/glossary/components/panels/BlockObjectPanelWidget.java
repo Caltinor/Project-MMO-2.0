@@ -15,6 +15,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.fml.LogicalSide;
 
 public class BlockObjectPanelWidget extends ObjectPanelWidget {
@@ -24,7 +25,8 @@ public class BlockObjectPanelWidget extends ObjectPanelWidget {
     private final ReqSectionWidget reqSection;
     private final VeinSectionWidget veinSection;
 
-    public BlockObjectPanelWidget(int color, int width, Block block) {
+    public BlockObjectPanelWidget(int color, int width, Block block) {this(color, width, block, null);}
+    public BlockObjectPanelWidget(int color, int width, Block block, BlockEntity be) {
         super(color, width, Core.get(LogicalSide.CLIENT));
         ResourceLocation rl = RegistryUtil.getId(block);
         this.id = rl.toString();
@@ -33,9 +35,9 @@ public class BlockObjectPanelWidget extends ObjectPanelWidget {
                 .absoluteHeight(18).absoulteWidth(18).build());
         addChild(new StringWidget(block.getName(), Minecraft.getInstance().font).alignLeft(), PositionConstraints.grid(0,1),
                 SizeConstraints.builder().absoluteHeight(12).build());
-        this.xpSection = XpSectionWidget.create(block);
+        this.xpSection = XpSectionWidget.create(block, be);
         addChild((AbstractWidget) xpSection, PositionConstraints.grid(1,1), SizeConstraints.builder().internalHeight().build());
-        this.reqSection = ReqSectionWidget.create(block);
+        this.reqSection = ReqSectionWidget.create(block, be);
         addChild((AbstractWidget) reqSection, PositionConstraints.grid(2,1), SizeConstraints.builder().internalHeight().build());
         this.veinSection = new VeinSectionWidget(core.getLoader().BLOCK_LOADER.getData(rl).veinData(), false);
         addChild((AbstractWidget) veinSection, PositionConstraints.grid(3, 1), SizeConstraints.builder().internalHeight().build());

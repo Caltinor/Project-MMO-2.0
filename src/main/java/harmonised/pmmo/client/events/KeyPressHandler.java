@@ -1,11 +1,16 @@
 package harmonised.pmmo.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.gui.glossary.Glossary;
 import harmonised.pmmo.client.gui.glossary.GlossaryLoadingScreen;
+import harmonised.pmmo.client.gui.glossary.components.panels.BiomeObjectPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.BlockObjectPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.EntityObjectPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.PlayerObjectPanelWidget;
 import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
@@ -21,7 +26,10 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult.Type;
@@ -39,10 +47,6 @@ public class KeyPressHandler {
     public static void keyPressEvent(InputEvent.Key event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		//debug
-//		if (event.getKey() == InputConstants.KEY_PERIOD)
-//			mc.setScreen(new GlossaryLoadingScreen());
-		//end DEBUG
         if(mc.player != null)
         {
             if(ClientSetup.VEIN_KEY.isDown() && mc.hitResult != null && mc.hitResult.getType().equals(Type.BLOCK)) {
@@ -91,21 +95,28 @@ public class KeyPressHandler {
             	if (mc.hitResult != null && !mc.player.isCrouching()) {
             		if (mc.hitResult.getType().equals(Type.BLOCK)) {
 						BlockHitResult bhr = (BlockHitResult) mc.hitResult;
-						String id = RegistryUtil.getId(mc.level.getBlockState(bhr.getBlockPos())).toString();
-						mc.setScreen(new GlossaryLoadingScreen(new GlossaryFilter.Filter(id, OBJECT.BLOCKS)));
+						BlockState state = mc.level.getBlockState(bhr.getBlockPos());
+						BlockEntity be = mc.level.getBlockEntity(bhr.getBlockPos());
+						PanelWidget widget = new BlockObjectPanelWidget(0x88394045, 400, state.getBlock(), be);
+						mc.setScreen(new GlossaryLoadingScreen(widget));
 					}
             		else if (mc.hitResult.getType().equals(Type.ENTITY)) {
             			EntityHitResult ehr = (EntityHitResult) mc.hitResult;
-						String id = RegistryUtil.getId(ehr.getEntity()).toString();
-            			Networking.sendToServer(new SP_OtherExpRequest(ehr.getEntity().getUUID()));
-            			mc.setScreen(new GlossaryLoadingScreen(new GlossaryFilter.Filter(id, OBJECT.ENTITY)));
+						PanelWidget widget;
+						if (ehr.getEntity() instanceof Player player) {
+							Networking.sendToServer(new SP_OtherExpRequest(ehr.getEntity().getUUID()));
+							widget = new PlayerObjectPanelWidget(0x88394045, 400, player);
+						}
+						else
+							widget = new EntityObjectPanelWidget(0x88394045, 400, ehr.getEntity());
+            			mc.setScreen(new GlossaryLoadingScreen(widget));
             		}
             		else if (mc.hitResult.getType().equals(Type.MISS))
             			mc.setScreen(new GlossaryLoadingScreen(null));
             	}
             	else if (mc.player.isCrouching()) {
-					String id = mc.level.getBiome(mc.player.blockPosition()).unwrapKey().get().location().toString();
-					mc.setScreen(new GlossaryLoadingScreen(new GlossaryFilter.Filter(id, OBJECT.BIOMES)));
+					PanelWidget widget = new BiomeObjectPanelWidget(0x88394045, 400, mc.level.getBiome(mc.player.blockPosition()));
+					mc.setScreen(new GlossaryLoadingScreen(widget));
 				}
             }
         }
