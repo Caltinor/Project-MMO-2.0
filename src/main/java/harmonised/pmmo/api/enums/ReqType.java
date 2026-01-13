@@ -1,10 +1,9 @@
 package harmonised.pmmo.api.enums;
 
 import com.mojang.serialization.Codec;
-import harmonised.pmmo.client.gui.component.GuiEnumGroup;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.fml.common.asm.enumextension.IExtensibleEnum;
 
 import java.util.Arrays;
 import java.util.Map;

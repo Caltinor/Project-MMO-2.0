@@ -3,7 +3,7 @@ package harmonised.pmmo.client.gui;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.client.gui.component.GuiEnumGroup;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.client.gui.component.SelectionWidget;
 import harmonised.pmmo.client.gui.component.SelectionWidget.SelectionEntry;
 import harmonised.pmmo.config.Config;

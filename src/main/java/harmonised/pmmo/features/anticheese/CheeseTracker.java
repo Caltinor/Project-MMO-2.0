@@ -241,9 +241,9 @@ public class CheeseTracker {
 					.computeIfAbsent(event, e -> new AFKTracker(player, minTime(), cooloff(), toleranceFlat(), strictTolerance())).update(player);
 			if ((this.source().isEmpty() || this.source().contains(source.toString())) && afkData.isAFK()) {
 				awardIn.keySet().forEach(skill -> {
-					MsLoggy.DEBUG.log(LOG_CODE.XP, "AFK reduction factor: {}", reduction * (double)afkData.getAFKDuration());
+					double scaledRedux = MsLoggy.DEBUG.logAndReturn(reduction * (double)afkData.getAFKDuration(), LOG_CODE.XP, "AFK reduction factor: {}");
 					awardIn.compute(skill, (key, xp) -> {
-						long reductionAmount = Double.valueOf(xp * (reduction * (double)afkData.getAFKDuration())).longValue();						
+						long reductionAmount = Double.valueOf(xp * scaledRedux).longValue();
 						return xp - (Config.anticheese().afkSubtract()
 									? reductionAmount
 									: reductionAmount > xp ? xp : reductionAmount);

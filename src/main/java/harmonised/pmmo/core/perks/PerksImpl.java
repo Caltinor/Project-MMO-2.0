@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PerksImpl {
-	private static Set<ItemAbility> DIG_ACTIONS = Set.of(
+	public static Set<ItemAbility> DIG_ACTIONS = Set.of(
 			ItemAbilities.PICKAXE_DIG,
 			ItemAbilities.AXE_DIG, 
 			ItemAbilities.SHOVEL_DIG, 
@@ -54,17 +54,18 @@ public class PerksImpl {
 				speedModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), speedModification);
 				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			})
-			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())
-			.setStatus((player, settings) -> {
-				List<MutableComponent> lines = new ArrayList<>();
-				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
-				DIG_ACTIONS.stream()
-					.filter(action -> settings.getFloat(action.name()) > 0)
-					.forEach(action -> lines.add(LangProvider.PERK_BREAK_SPEED_STATUS_1
-							.asComponent(action.name(), settings.getFloat(action.name()) * (float)skillLevel))
-				);
-				return lines;
-			}).build();
+//			.setDescription(LangProvider.PERK_BREAK_SPEED_DESC.asComponent())
+//			.setStatus((player, settings) -> {
+//				List<MutableComponent> lines = new ArrayList<>();
+//				int skillLevel = settings.getInt(APIUtils.SKILL_LEVEL);
+//				DIG_ACTIONS.stream()
+//					.filter(action -> settings.getFloat(action.name()) > 0)
+//					.forEach(action -> lines.add(LangProvider.PERK_BREAK_SPEED_STATUS_1
+//							.asComponent(action.name(), settings.getFloat(action.name()) * (float)skillLevel))
+//				);
+//				return lines;
+//			})
+			.build();
 	
 	private static float getRatioForTool(ItemStack tool, CompoundTag nbt) {
 		float ratio = 0f;
@@ -85,7 +86,7 @@ public class PerksImpl {
 	}
 	
 	private static final ResourceLocation ATTRIBUTE_ID = Reference.rl("tame_boost");
-	private static final Map<Holder<Attribute>, Double> ANIMAL_ATTRIBUTES = Map.of(
+	public static final Map<Holder<Attribute>, Double> ANIMAL_ATTRIBUTES = Map.of(
 			Attributes.JUMP_STRENGTH, 0.005, 
 			Attributes.MAX_HEALTH, 1.0,
 			Attributes.MOVEMENT_SPEED, 0.01,
@@ -116,15 +117,16 @@ public class PerksImpl {
 				}
 				return NONE;
 			})
-			.setDescription(LangProvider.PERK_TAME_BOOST_DESC.asComponent())
-			.setStatus((player, settings) -> {
-				List<MutableComponent> lines = new ArrayList<>();
-				double perLevel = settings.getDouble(APIUtils.PER_LEVEL);
-				for (Map.Entry<Holder<Attribute>, Double> atr : ANIMAL_ATTRIBUTES.entrySet()) {
-					lines.add(LangProvider.PERK_TAME_BOOST_STATUS_1.asComponent(
-							Component.translatable(atr.getKey().value().getDescriptionId()),
-							DP.dpCustom(perLevel * atr.getValue(), 4)));
-				}
-				return lines;
-			}).build();
+//			.setDescription(LangProvider.PERK_TAME_BOOST_DESC.asComponent())
+//			.setStatus((player, settings) -> {
+//				List<MutableComponent> lines = new ArrayList<>();
+//				double perLevel = settings.getDouble(APIUtils.PER_LEVEL);
+//				for (Map.Entry<Holder<Attribute>, Double> atr : ANIMAL_ATTRIBUTES.entrySet()) {
+//					lines.add(LangProvider.PERK_TAME_BOOST_STATUS_1.asComponent(
+//							Component.translatable(atr.getKey().value().getDescriptionId()),
+//							DP.dpCustom(perLevel * atr.getValue(), 4)));
+//				}
+//				return lines;
+//			})
+			.build();
 }

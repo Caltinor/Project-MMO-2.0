@@ -1,6 +1,7 @@
 package harmonised.pmmo.network.clientpackets;
 
 
+import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -13,6 +14,7 @@ public record CP_ClearData() implements CustomPacketPayload {
 		ctx.enqueueWork(() -> {
 			Core.get(LogicalSide.CLIENT).getLoader().resetData();
 			Core.get(LogicalSide.CLIENT).getTooltipRegistry().clearRegistry();
+			ClientUtils.glossary = null;
 		});
 	}
 

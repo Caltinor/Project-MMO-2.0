@@ -130,10 +130,12 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 		//=====================FROM_IMPACT==============================
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_reduce").withString(APIUtils.SKILLNAME, "agility")
 				.withString(APIUtils.DAMAGE_TYPE_IN, "minecraft:fall")
-				.withDouble(APIUtils.PER_LEVEL, 0.025).build());
+				.withDouble(APIUtils.PER_LEVEL, 0.025)
+				.withDouble(APIUtils.MAX_BOOST, 18).build());
 		bodyList.add(TagBuilder.start().withString("perk", "pmmo:damage_reduce").withString(APIUtils.SKILLNAME, "endurance")
 				.withString(APIUtils.DAMAGE_TYPE_IN, "minecraft:mob_attack")
-				.withDouble(APIUtils.PER_LEVEL, 0.025).build());
+				.withDouble(APIUtils.PER_LEVEL, 0.025)
+				.withDouble(APIUtils.MAX_BOOST, 18).build());
 		defaultSettings.put(EventType.RECEIVE_DAMAGE, new ArrayList<>(bodyList));
 		bodyList.clear();
 		

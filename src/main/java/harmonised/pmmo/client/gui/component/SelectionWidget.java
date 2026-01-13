@@ -58,8 +58,11 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
 
         if (selected != null)
             selected.render(graphics, getX(), getY(), width, false, getFGColor(), alpha);
-        else
+        else {
+            graphics.enableScissor(this.getX(), this.getY(), this.getRight(), this.getBottom());
             graphics.drawString(font, title, getX() + 6, getY() + (height - 8) / 2, getFGColor() | Mth.ceil(alpha * 255.0F) << 24);
+            graphics.disableScissor();
+        }
 
         if (extended) {
             graphics.pose().pushPose();
@@ -164,7 +167,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
         return idx < entries.size() ? entries.get(idx) : null;
     }
 
-    public void setEntries(Collection<T> entry) { entries = new ArrayList<>(entry); }
+    public SelectionWidget<T> setEntries(Collection<T> entry) { entries = new ArrayList<>(entry); return this;}
 
     public void setSelected(T selected, boolean notify) {
         this.selected = selected;
