@@ -85,4 +85,16 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 
 	@Override
 	protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {}
+
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		double transY = mouseY + this.scrollAmount();
+		for (AbstractWidget widget : widgets()) {
+			if (widget.visible && widget.isMouseOver(mouseX, transY) && widget.mouseClicked(mouseX, transY, button)) {
+				widget.setFocused(true);
+				break;
+			}
+		}
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
 }

@@ -35,6 +35,8 @@ public class CollapsingPanel extends ReactiveWidget {
         return this;
     }
 
+    @Override public void resize() {} //Panel does not adjust height beyond parent size constraints
+
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.enableScissor(this.getX(), this.getY(), this.getWidth(), this.getHeight());
@@ -56,6 +58,7 @@ public class CollapsingPanel extends ReactiveWidget {
             this.setWidth(collapsed() ? this.expandedWidth : (int)(20d / scale));
             if (this.callback != null)
                 callback.accept(this);
+            return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }

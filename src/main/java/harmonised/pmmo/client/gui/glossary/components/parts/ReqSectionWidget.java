@@ -12,12 +12,17 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
+import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.nbt.LogicEntry;
+import harmonised.pmmo.core.nbt.NBTUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
@@ -49,20 +54,26 @@ public class ReqSectionWidget extends ReactiveWidget {
     Map<ReqType, Map<String, Long>> reqs = new HashMap<>();
     List<String> skills = new ArrayList<>();
     List<GuiEnumGroup> types = new ArrayList<>();
-    private ReqSectionWidget(Map<ReqType, Map<String, Long>> nbtReqs, Function<ResponsiveLayout,Map<ReqType, Map<String, Long>>> layoutBuilder) {
+    private ReqSectionWidget(Map<ReqType, Map<String, Long>> nbtReqs, Function<ReqSectionWidget,Map<ReqType, Map<String, Long>>> layoutBuilder) {
         super(0, 0, 0, 0);
         //store them in the widget for use in the filter
         reqs.putAll(nbtReqs);
         reqs.putAll(layoutBuilder.apply(this));
         types.addAll(reqs.keySet());
         skills = reqs.entrySet().stream().map(entry -> entry.getValue().keySet()).flatMap(Set::stream).toList();
-        setHeight((getChildren().size() * 12) + 2);
     }
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
+    @Override
+    public void resize() {
+        getChildren().stream()
+                .filter(poser -> poser.get() instanceof NBTSettingWidget)
+                .forEach(poser -> ((NBTSettingWidget) poser.get()).visible = this.visible);
+        super.resize();
+    }
 
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
-    private static Map<ReqType, Map<String, Long>> buildLayout(ResponsiveLayout layout, Map<ReqType, Map<String, Long>> nbtReqs, ObjectType type, ResourceLocation id) {
+    private static Map<ReqType, Map<String, Long>> buildLayout(ReqSectionWidget layout, Map<ReqType, List<LogicEntry>> nbtSettings, Map<ReqType, Map<String, Long>> nbtReqs, ObjectType type, ResourceLocation id) {
         Font font = Minecraft.getInstance().font;
         Core core = Core.get(LogicalSide.CLIENT);
         Map<ReqType, Map<String, Long>> regReqs = new HashMap<>();
@@ -79,9 +90,12 @@ public class ReqSectionWidget extends ReactiveWidget {
 
         for (ReqType req : ReqType.values()) {
             Map<String, Long> skillmap;
-            if (!nbtReqs.getOrDefault(req, new HashMap<>()).isEmpty()) {
-                //TODO replace with a widget that when hovered gives the NBT logic via tooltip
-                contentWidgets.addAll(setSkills(nbtReqs.get(req), new StringWidget(req.tooltipTranslation.asComponent().append(" [NBT]"), font).alignLeft(), font));
+            if (nbtSettings.containsKey(req)) {
+                contentWidgets.add(new Positioner.Widget(new NBTSettingWidget(
+                        nbtSettings.get(req),
+                        nbtReqs.getOrDefault(req, new HashMap<>()),
+                        req.tooltipTranslation.asComponent()),
+                    PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build()));
             }
             else if (!(skillmap = core.getCommonReqData(new HashMap<>(), type, id, req, new CompoundTag())).isEmpty()){
                 regReqs.put(req, skillmap);
@@ -119,32 +133,37 @@ public class ReqSectionWidget extends ReactiveWidget {
     public static ReqSectionWidget create(ItemStack stack) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         ResourceLocation id = RegistryUtil.getId(access, stack);
+        ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER.getData().getOrDefault(id, ObjectData.build().end());
+        var reqSettings = setting.nbtReqs();
         var nbtReqs = Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS)
-                .map(req -> Pair.of(req, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getItemRequirementTooltipData(id, req, stack)))
+                .filter(req -> setting.nbtReqs().containsKey(req))
+                .map(req -> Pair.of(req, setting.getReqs(req, TagUtils.stackTag(stack, access))))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
-        return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, nbtReqs, ObjectType.ITEM, id));
+        return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, reqSettings, nbtReqs, ObjectType.ITEM, id));
     }
 
     public static ReqSectionWidget create(Block block, BlockEntity be) {
         ResourceLocation id = RegistryUtil.getId(block);
+        var reqSettings = Core.get(LogicalSide.CLIENT).getLoader().BLOCK_LOADER.getData().getOrDefault(id, ObjectData.build().end()).nbtReqs();
         Map<ReqType, Map<String, Long>> nbtReqs = be != null ?
                 Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS)
                 .map(req -> Pair.of(req, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getBlockRequirementTooltipData(id, req, be)))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))
                 : new HashMap<>();
-        return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, nbtReqs, ObjectType.BLOCK, id));
+        return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, reqSettings, nbtReqs, ObjectType.BLOCK, id));
     }
 
     public static ReqSectionWidget create(Entity entity) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         ResourceLocation id = RegistryUtil.getId(access, entity);
+        var reqSettings = Core.get(LogicalSide.CLIENT).getLoader().ENTITY_LOADER.getData().getOrDefault(id, ObjectData.build().end()).nbtReqs();
         var nbtReqs = Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS)
                 .map(req -> Pair.of(req, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getEntityRequirementTooltipData(id, req, entity)))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
-        return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, nbtReqs, ObjectType.ENTITY, id));
+        return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, reqSettings, nbtReqs, ObjectType.ENTITY, id));
     }
 
     @Override
@@ -156,7 +175,6 @@ public class ReqSectionWidget extends ReactiveWidget {
                 || !filter.matchesSelection(SELECTION.REQS)
                 || !filter.matchesEnum(types)
                 || (!filter.getSkill().isEmpty() && !skills.contains(filter.getSkill()));
-        this.setHeight(filtered ? 0 : (getChildren().size() * 12) + 2);
         return filtered;
     }
 

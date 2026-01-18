@@ -1,6 +1,7 @@
 package harmonised.pmmo.util;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.FloatTag;
@@ -61,19 +62,22 @@ public class TagUtils {
 		return output;
 	}
 
+	public static CompoundTag stackTag(ItemStack stack, Level level) {
+		return stackTag(stack, level.registryAccess());
+	}
 	/**safely obtain the NBT tag or get a new instance
 	 *
 	 * @param stack the item whose NBT is being obtained
 	 * @return an associated tag or new instance
 	 */
-	public static CompoundTag stackTag(ItemStack stack, Level level) {
+	public static CompoundTag stackTag(ItemStack stack, RegistryAccess access) {
 		if (stack.isEmpty()) return new CompoundTag();
 		if (stack.getCount() > 99) {
 			var clone = stack.copy();
 			clone.setCount(99);
-			return (CompoundTag) clone.save(level.registryAccess());
+			return (CompoundTag) clone.save(access);
 		}
-		return (CompoundTag) stack.save(level.registryAccess());
+		return (CompoundTag) stack.save(access);
 	}
 	 /**safely obtain the NBT tag or get a new instance
 	  * 

@@ -43,11 +43,12 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     }
 
     public ResponsiveLayout setPadding(int left, int top, int right, int bottom, double scale) {
-        Double scaledLeft = (double)left / scale;
-        Double scaledTop = (double)top / scale;
-        Double scaledBottom = (double)bottom / scale;
-        Double scaledRight = (double)right / scale;
-        this.setPadding(scaledLeft.intValue(), scaledTop.intValue(), scaledBottom.intValue(), scaledBottom.intValue());
+        this.setPadding(left, top, right, bottom);
+//        Double scaledLeft = (double)left / scale;
+//        Double scaledTop = (double)top / scale;
+//        Double scaledBottom = (double)bottom / scale;
+//        Double scaledRight = (double)right / scale;
+//        this.setPadding(scaledLeft.intValue(), scaledTop.intValue(), scaledRight.intValue(), scaledBottom.intValue());
         return this;
     }
 
@@ -62,12 +63,24 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
                 || poser.get() instanceof ResponsiveLayout).toList();
     }
 
+    /// Function to allow custom resizing of the widget dimensions after
+    /// the children have been arranged.  The default behavior of this
+    /// method is to summate the height of all children.  width is not
+    /// affected, nor is consideration for grids or inline.
+    ///
+    ///*Note: if the sizing of this widget should be entirely defined by
+    /// sizing constraints, override with a NOOP implementation*
+    public void resize() {
+        setHeight(this.visible ? getChildren().stream().map(poser -> poser.get().getHeight()).reduce(Integer::sum).orElse(0) : 0);
+    }
+
     @Override
     public void addChild(Positioner<?> child) {children.add(child);}
 
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.arrangeElements();
+        resize();
         widgets().forEach(widget -> widget.render(guiGraphics, mouseX, mouseY, partialTick));
     }
 
@@ -77,7 +90,7 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        for (AbstractWidget widget : widgets()) {
+        for (AbstractWidget widget : widgets().stream().filter(a -> a.visible).toList()) {
             if (widget.isMouseOver(mouseX, mouseY) && widget.mouseClicked(mouseX, mouseY, button)) {
                 widget.setFocused(true);
                 return true;
@@ -100,14 +113,6 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
             if (widget.mouseDragged(mouseX, mouseY, button, dragX, dragY)) return true;
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
-    }
-
-    @Override
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        for (AbstractWidget widget : widgets()) {
-            if (widget.isMouseOver(mouseX, mouseY)) return true;
-        }
-        return super.isMouseOver(mouseX, mouseY);
     }
 
     @Override
@@ -149,15 +154,6 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
         }
         return super.charTyped(codePoint, modifiers);
     }
-
-//    @Override
-//    public void setFocused(boolean focused) {
-//        for (AbstractWidget widget : widgets()) {
-//            if (this.is)
-//            widget.setFocused(focused);
-//        }
-//        super.setFocused(focused);
-//    }
 
     @Override
     public void onClick(double mouseX, double mouseY) {

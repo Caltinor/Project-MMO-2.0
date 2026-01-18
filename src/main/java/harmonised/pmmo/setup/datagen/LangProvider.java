@@ -2022,11 +2022,43 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation GLOSSARY_CONFIG_ANTI_TOLERANCE_NORM = Translation.Builder.start("pmmo.gui.glossary.config.ac.tolerance.norm")
 		.addLocale(Locale.EN_US, "Xp greater than %s%% or a flat %s above the last XP of this type will be reduced").build();
 	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_AFK = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.afk")
-			.addLocale(Locale.EN_US, "XP reduced while AFK").build();
+		.addLocale(Locale.EN_US, "XP reduced while AFK").build();
 	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_DIM = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.dim")
-			.addLocale(Locale.EN_US, "XP reduced from earning the same XP repeatedly").build();
+		.addLocale(Locale.EN_US, "XP reduced from earning the same XP repeatedly").build();
 	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_NORM = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.norm")
-			.addLocale(Locale.EN_US, "XP bracketed to prevent extreme values").build();
+		.addLocale(Locale.EN_US, "XP bracketed to prevent extreme values").build();
+	public static final Translation GLOSSARY_NBT_ENTRY_HEADER = Translation.Builder.start("pmmo.gui.glossary.nbt.entry.header")
+		.addLocale(Locale.EN_US, "Logic for Entry #%s").build();
+	public static final Translation GLOSSARY_NBT_BTP_ADD = Translation.Builder.start("pmmo.gui.glossary.nbt.btp.add")
+		.addLocale(Locale.EN_US, "Adds this result to the previous result").build();
+	public static final Translation GLOSSARY_NBT_BTP_SUB = Translation.Builder.start("pmmo.gui.glossary.nbt.btp.sub")
+		.addLocale(Locale.EN_US, "Subtracts this result from the previous result").build();
+	public static final Translation GLOSSARY_NBT_BTP_HIGH = Translation.Builder.start("pmmo.gui.glossary.nbt.btp.high")
+		.addLocale(Locale.EN_US, "Uses the highest values from this result and the prior one").build();
+	public static final Translation GLOSSARY_NBT_BTP_REPL = Translation.Builder.start("pmmo.gui.glossary.nbt.btp.replace")
+		.addLocale(Locale.EN_US, "Ignores previous results and uses this one instead").build();
+	public static final Translation GLOSSARY_NBT_CASE_ADD = Translation.Builder.start("pmmo.gui.glossary.nbt.case.add")
+		.addLocale(Locale.EN_US, "The following results will add together if multiple are true:").build();
+	public static final Translation GLOSSARY_NBT_CASE_NOADD = Translation.Builder.start("pmmo.gui.glossary.nbt.case.noadd")
+		.addLocale(Locale.EN_US, "The result will be the highest value from these cases:").build();
+	public static final Translation GLOSSARY_NBT_CASE_PATH = Translation.Builder.start("pmmo.gui.glossary.nbt.case.path")
+		.addLocale(Locale.EN_US, "For NBT value of: %s").build();
+	public static final Translation GLOSSARY_NBT_ANY_OF = Translation.Builder.start("pmmo.gui.glossary.nbt.op.anyof")
+		.addLocale(Locale.EN_US, "any of [%s]").build();
+	public static final Translation GLOSSARY_NBT_OP_EQ = Translation.Builder.start("pmmo.gui.glossary.nbt.op.eq")
+			.addLocale(Locale.EN_US, "%s, if value matches %s").build();
+	public static final Translation GLOSSARY_NBT_OP_GT = Translation.Builder.start("pmmo.gui.glossary.nbt.op.gt")
+			.addLocale(Locale.EN_US, "%s, if value > %s").build();
+	public static final Translation GLOSSARY_NBT_OP_LT = Translation.Builder.start("pmmo.gui.glossary.nbt.op.lt")
+			.addLocale(Locale.EN_US, "%s, if value < %s").build();
+	public static final Translation GLOSSARY_NBT_OP_GTOE = Translation.Builder.start("pmmo.gui.glossary.nbt.op.gtoe")
+			.addLocale(Locale.EN_US, "%s, if value >= %s").build();
+	public static final Translation GLOSSARY_NBT_OP_LTOE = Translation.Builder.start("pmmo.gui.glossary.nbt.op.ltoe")
+			.addLocale(Locale.EN_US, "%s, if value <= %s").build();
+	public static final Translation GLOSSARY_NBT_OP_EXISTS = Translation.Builder.start("pmmo.gui.glossary.nbt.op.exists")
+			.addLocale(Locale.EN_US, "%s, if value is present").build();
+	public static final Translation GLOSSARY_NBT_OP_CONTAINS = Translation.Builder.start("pmmo.gui.glossary.nbt.op.contains")
+			.addLocale(Locale.EN_US, "%s, if value partially contains %s").build();
 	public static final Translation EVENT_HEADER = Translation.Builder.start("pmmo.event_header")
 		.addLocale(Locale.EN_US, "XP Award Events").build();
 	public static final Translation REQ_HEADER = Translation.Builder.start("pmmo.req_header")
