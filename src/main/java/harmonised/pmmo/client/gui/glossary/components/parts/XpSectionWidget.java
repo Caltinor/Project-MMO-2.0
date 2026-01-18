@@ -13,8 +13,10 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -60,7 +62,7 @@ public class XpSectionWidget extends ReactiveWidget {
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
 
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
-    private static Map<EventType, Map<String, Long>> buildLayout(ResponsiveLayout layout, Map<EventType, Map<String, Long>> nbtReqs, ObjectType type, ResourceLocation id) {
+    private static Map<EventType, Map<String, Long>> buildLayout(ResponsiveLayout layout, Map<EventType, List<LogicEntry>> nbtSettings, Map<EventType, Map<String, Long>> xpAwards, ObjectType type, ResourceLocation id) {
         Font font = Minecraft.getInstance().font;
         Core core = Core.get(LogicalSide.CLIENT);
         ObjectData objectData = (ObjectData) core.getLoader().getLoader(type).getData(id);
@@ -69,9 +71,12 @@ public class XpSectionWidget extends ReactiveWidget {
         for (EventType xpType : EventType.values()) {
             if (EventType.is(EventType.DAMAGE_TYPES, xpType)) continue;
             Map<String, Long> skillmap;
-            if (!nbtReqs.getOrDefault(xpType, new HashMap<>()).isEmpty()) {
-                //TODO replace with a widget that when hovered gives the NBT logic via tooltip
-                contentWidgets.addAll(setSkills(nbtReqs.get(xpType), new StringWidget(xpType.tooltipTranslation.asComponent().append(" [NBT]"), font).alignLeft(), font));
+            if (nbtSettings.containsKey(xpType)) {
+                contentWidgets.add(new Positioner.Widget(new NBTSettingWidget(
+                        nbtSettings.get(xpType),
+                        xpAwards.getOrDefault(xpType, new HashMap<>()),
+                        xpType.tooltipTranslation.asComponent()),
+                        PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build()));
             }
             else if (!(skillmap = core.getCommonXpAwardData(new HashMap<>(), xpType, id, Minecraft.getInstance().player, type, new CompoundTag())).isEmpty()){
                 regXP.put(xpType, skillmap);
@@ -132,32 +137,41 @@ public class XpSectionWidget extends ReactiveWidget {
     public static XpSectionWidget create(ItemStack stack) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         ResourceLocation id = RegistryUtil.getId(access, stack);
+        ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER.getData().getOrDefault(id, ObjectData.build().end());
+        var xpSettings = setting.nbtXpValues();
         var nbtXp = Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS)
-                .map(xpType -> Pair.of(xpType, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getItemXpGainTooltipData(id, xpType, stack)))
+                .filter(xpType -> setting.nbtXpValues().containsKey(xpType))
+                .map(xpType -> Pair.of(xpType, setting.getXpValues(xpType, TagUtils.stackTag(stack, access))))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
-        return new XpSectionWidget(nbtXp, layout -> buildLayout(layout, nbtXp, ObjectType.ITEM, id));
+        return new XpSectionWidget(nbtXp, layout -> buildLayout(layout, xpSettings, nbtXp, ObjectType.ITEM, id));
     }
 
     public static XpSectionWidget create(Block block, BlockEntity be) {
         ResourceLocation id = RegistryUtil.getId(block);
+        ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().BLOCK_LOADER.getData().getOrDefault(id, ObjectData.build().end());
+        var xpSettings = setting.nbtXpValues();
         Map<EventType, Map<String, Long>> nbtXp = be != null ?
                 Arrays.stream(EventType.BLOCK_APPLICABLE_EVENTS)
-                .map(xpType -> Pair.of(xpType, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getBlockXpGainTooltipData(id, xpType, be)))
+                .filter(xpType -> setting.nbtXpValues().containsKey(xpType))
+                .map(xpType -> Pair.of(xpType, setting.getXpValues(xpType, TagUtils.tileTag(be))))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))
                 : new HashMap<>();
-        return new XpSectionWidget(nbtXp, layout -> buildLayout(layout, nbtXp, ObjectType.BLOCK, id));
+        return new XpSectionWidget(nbtXp, layout -> buildLayout(layout, xpSettings, nbtXp, ObjectType.BLOCK, id));
     }
 
     public static XpSectionWidget create(Entity entity) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         ResourceLocation id = RegistryUtil.getId(access, entity);
+        ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ENTITY_LOADER.getData().getOrDefault(id, ObjectData.build().end());
+        var xpSettings = setting.nbtXpValues();
         var nbtXp = Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS)
-                .map(xpType -> Pair.of(xpType, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getEntityXpGainTooltipData(id, xpType, entity)))
+                .filter(xpType -> setting.nbtXpValues().containsKey(xpType))
+                .map(xpType -> Pair.of(xpType, setting.getXpValues(xpType, TagUtils.entityTag(entity))))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
-        return new XpSectionWidget(nbtXp, layout -> buildLayout(layout, nbtXp, ObjectType.ENTITY, id));
+        return new XpSectionWidget(nbtXp, layout -> buildLayout(layout, xpSettings, nbtXp, ObjectType.ENTITY, id));
     }
 
     @Override

@@ -25,12 +25,15 @@ public class NBTSettingWidget extends ReactiveWidget {
     private boolean expanded = false;
     private final List<Positioner<?>> results = new ArrayList<>();
     private final List<Positioner<?>> nbtLogic = new ArrayList<>();
-    private static final Component SUFFIX = Component.literal(" [NBT]").withStyle(ChatFormatting.UNDERLINE, ChatFormatting.BLUE);
+    private static final Component SUFFIX = Component.literal(" [NBT] ").withStyle(ChatFormatting.UNDERLINE, ChatFormatting.BLUE);
 
     public NBTSettingWidget(List<LogicEntry> setting, Map<String, ? extends Number> outputs, MutableComponent header) {
         super(0, 0, 0, 12);
         header.append(SUFFIX.copy());
-        if (outputs.size() == 1) {
+        if (outputs.isEmpty()) {
+            results.add(fromString(header, PositionType.STATIC.constraint));
+        }
+        else if (outputs.size() == 1) {
             Map.Entry<String, ?> entry = outputs.entrySet().iterator().next();
             Component skill = LangProvider.skill(entry.getKey()).append(": ").append(String.valueOf(entry.getValue()));
             results.add(fromString(header.append(skill), PositionType.STATIC.constraint));

@@ -145,10 +145,12 @@ public class ReqSectionWidget extends ReactiveWidget {
 
     public static ReqSectionWidget create(Block block, BlockEntity be) {
         ResourceLocation id = RegistryUtil.getId(block);
-        var reqSettings = Core.get(LogicalSide.CLIENT).getLoader().BLOCK_LOADER.getData().getOrDefault(id, ObjectData.build().end()).nbtReqs();
+        ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().BLOCK_LOADER.getData().getOrDefault(id, ObjectData.build().end());
+        var reqSettings = setting.nbtReqs();
         Map<ReqType, Map<String, Long>> nbtReqs = be != null ?
                 Arrays.stream(ReqType.BLOCK_APPLICABLE_EVENTS)
-                .map(req -> Pair.of(req, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getBlockRequirementTooltipData(id, req, be)))
+                .filter(req -> setting.nbtReqs().containsKey(req))
+                .map(req -> Pair.of(req, setting.getReqs(req, TagUtils.tileTag(be))))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond))
                 : new HashMap<>();
@@ -158,9 +160,11 @@ public class ReqSectionWidget extends ReactiveWidget {
     public static ReqSectionWidget create(Entity entity) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         ResourceLocation id = RegistryUtil.getId(access, entity);
-        var reqSettings = Core.get(LogicalSide.CLIENT).getLoader().ENTITY_LOADER.getData().getOrDefault(id, ObjectData.build().end()).nbtReqs();
+        ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ENTITY_LOADER.getData().getOrDefault(id, ObjectData.build().end());
+        var reqSettings = setting.nbtReqs();
         var nbtReqs = Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS)
-                .map(req -> Pair.of(req, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getEntityRequirementTooltipData(id, req, entity)))
+                .filter(req -> setting.nbtReqs().containsKey(req))
+                .map(req -> Pair.of(req, setting.getReqs(req, TagUtils.entityTag(entity))))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
         return new ReqSectionWidget(nbtReqs, layout -> buildLayout(layout, reqSettings, nbtReqs, ObjectType.ENTITY, id));
@@ -171,11 +175,10 @@ public class ReqSectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = reqs.isEmpty()
+        return reqs.isEmpty()
                 || !filter.matchesSelection(SELECTION.REQS)
                 || !filter.matchesEnum(types)
                 || (!filter.getSkill().isEmpty() && !skills.contains(filter.getSkill()));
-        return filtered;
     }
 
     @Override

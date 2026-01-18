@@ -12,10 +12,13 @@ import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import harmonised.pmmo.client.utils.DP;
+import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -47,9 +50,10 @@ import java.util.stream.Collectors;
 
 public class BonusSectionWidget extends ReactiveWidget {
     Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
+    Map<ModifierDataType, List<LogicEntry>> nbtSettings = new HashMap<>();
     final List<String> skills;
     final List<GuiEnumGroup> types;
-    private BonusSectionWidget(Map<ModifierDataType, Map<String, Double>> nbtBonuses, Function<ResponsiveLayout,Map<ModifierDataType, Map<String, Double>>> layoutBuilder) {
+    private BonusSectionWidget(Map<ModifierDataType, Map<String, Double>> nbtBonuses, Function<BonusSectionWidget,Map<ModifierDataType, Map<String, Double>>> layoutBuilder) {
         super(0, 0, 0, 0);
         //store them in the widget for use in the filter
         bonuses.putAll(nbtBonuses);
@@ -62,16 +66,20 @@ public class BonusSectionWidget extends ReactiveWidget {
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
 
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
-    private static Map<ModifierDataType, Map<String, Double>> buildLayout(ResponsiveLayout layout, Map<ModifierDataType, Map<String, Double>> nbtBonuses, ObjectType type, ResourceLocation id) {
+    private static Map<ModifierDataType, Map<String, Double>> buildLayout(BonusSectionWidget layout, Map<ModifierDataType, List<LogicEntry>> nbtSettings, Map<ModifierDataType, Map<String, Double>> nbtBonuses, ObjectType type, ResourceLocation id) {
+        layout.nbtSettings.putAll(nbtSettings);
         Font font = Minecraft.getInstance().font;
         Core core = Core.get(LogicalSide.CLIENT);
         Map<ModifierDataType, Map<String, Double>> regBonuses = new HashMap<>();
         List<Positioner<?>> contentWidgets = new ArrayList<>();
         for (ModifierDataType bonus : ModifierDataType.values()) {
             Map<String, Double> skillmap;
-            if (!nbtBonuses.getOrDefault(bonus, new HashMap<>()).isEmpty()) {
-                //TODO replace with a widget that when hovered gives the NBT logic via tooltip
-                contentWidgets.addAll(setSkills(nbtBonuses.get(bonus), new StringWidget(bonus.tooltip.asComponent().append(" [NBT]"), font).alignLeft(), font));
+            if (nbtSettings.containsKey(bonus)) {
+                contentWidgets.add(new Positioner.Widget(new NBTSettingWidget(
+                        nbtSettings.get(bonus),
+                        nbtBonuses.getOrDefault(bonus, new HashMap<>()),
+                        bonus.tooltip.asComponent()),
+                        PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build()));
             }
             else if (!(skillmap = core.getObjectModifierMap(type, id, bonus, new CompoundTag())).isEmpty()){
                 regBonuses.put(bonus, skillmap);
@@ -109,20 +117,23 @@ public class BonusSectionWidget extends ReactiveWidget {
     public static BonusSectionWidget create(ItemStack stack) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         ResourceLocation id = RegistryUtil.getId(access, stack);
+        ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER.getData().getOrDefault(id, ObjectData.build().end());
+        var bonusSettings = setting.nbtBonuses();
         var nbtBonuses = Arrays.stream(ModifierDataType.values())
-                .map(type -> Pair.of(type, Core.get(LogicalSide.CLIENT).getTooltipRegistry().getBonusTooltipData(id, type, stack)))
+                .filter(type -> setting.nbtBonuses().containsKey(type))
+                .map(type -> Pair.of(type, setting.getBonuses(type, TagUtils.stackTag(stack, access))))
                 .filter(pair -> !pair.getSecond().isEmpty())
                 .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
-        return new BonusSectionWidget(nbtBonuses, layout -> buildLayout(layout, nbtBonuses, ObjectType.ITEM, id));
+        return new BonusSectionWidget(nbtBonuses, layout -> buildLayout(layout, bonusSettings, nbtBonuses, ObjectType.ITEM, id));
     }
 
     public static BonusSectionWidget create(Holder<Biome> biome) {
         ResourceLocation id = biome.unwrapKey().orElse(ResourceKey.create(Registries.BIOME, Reference.mc("missing"))).location();
-        return new BonusSectionWidget(new HashMap<>(), layout -> buildLayout(layout, new HashMap<>(), ObjectType.BIOME, id));
+        return new BonusSectionWidget(new HashMap<>(), layout -> buildLayout(layout, new HashMap<>(), new HashMap<>(), ObjectType.BIOME, id));
     }
 
     public static BonusSectionWidget create(ResourceLocation id) {
-        return new BonusSectionWidget(new HashMap<>(), layout -> buildLayout(layout, new HashMap<>(), ObjectType.DIMENSION, id));
+        return new BonusSectionWidget(new HashMap<>(), layout -> buildLayout(layout, new HashMap<>(), new HashMap<>(), ObjectType.DIMENSION, id));
     }
 
     @Override
@@ -130,7 +141,7 @@ public class BonusSectionWidget extends ReactiveWidget {
 
     @Override
     public boolean applyFilter(Filter filter) {
-        boolean filtered = bonuses.isEmpty()
+        boolean filtered = (bonuses.isEmpty() && nbtSettings.isEmpty())
                 || !filter.matchesSelection(SELECTION.BONUS)
                 || (!filter.getSkill().isEmpty() && !skills.contains(filter.getSkill()))
                 || (!filter.matchesEnum(types));
