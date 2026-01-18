@@ -72,7 +72,10 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 	protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
 		setPadding(padding.left(), -(int)scrollAmount(), padding.right(), padding.bottom());
 		arrangeElements();
-		visibleChildren().forEach(poser -> ((AbstractWidget)poser.get()).render(guiGraphics, mouseX, mouseY, partialTick));
+		visibleChildren().forEach(poser -> {
+			AbstractWidget widget = ((AbstractWidget)poser.get());
+			widget.setFocused(widget.isMouseOver(mouseX, mouseY + scrollAmount()));
+			widget.render(guiGraphics, mouseX, mouseY, partialTick);});
 	}
 
 	@Override

@@ -20,10 +20,14 @@ public class CollapsingPanel extends ReactiveWidget {
     private Consumer<CollapsingPanel> callback;
 
     public CollapsingPanel(int x, int y, int width, int height) {
+        this(x, y, width, height, true);
+    }
+    public CollapsingPanel(int x, int y, int width, int height, boolean open) {
         super(x, y, width, height);
         this.expandedWidth = width;
         this.scale = Minecraft.getInstance().getWindow().getGuiScale();
         this.setPadding(5, 5, 7, 7);
+        this.setWidth(open ? this.expandedWidth : (int)(20d / scale));
     }
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}

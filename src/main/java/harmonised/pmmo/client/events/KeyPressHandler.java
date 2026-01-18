@@ -1,11 +1,6 @@
 package harmonised.pmmo.client.events;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import harmonised.pmmo.api.client.PanelWidget;
-import harmonised.pmmo.api.client.types.GlossaryFilter;
-import harmonised.pmmo.api.client.types.OBJECT;
-import harmonised.pmmo.client.gui.StatsScreen;
-import harmonised.pmmo.client.gui.glossary.Glossary;
 import harmonised.pmmo.client.gui.glossary.GlossaryLoadingScreen;
 import harmonised.pmmo.client.gui.glossary.components.panels.BiomeObjectPanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.BlockObjectPanelWidget;
@@ -25,7 +20,6 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -37,7 +31,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.InputEvent;
 
 @EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME, value= Dist.CLIENT)
