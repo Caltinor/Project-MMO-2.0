@@ -48,6 +48,7 @@ public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<
 				"endurance", 0.3,
 				"archery", 0.2))
 				.build());
+		defaultSkills.put("charisma", SkillData.Builder.start().withIcon(Reference.mc("textures/item/emerald.png")).withIconSize(16).build());
 		return defaultSkills;
 	}
 

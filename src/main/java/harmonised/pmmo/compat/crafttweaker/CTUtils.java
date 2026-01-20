@@ -381,7 +381,6 @@ public class CTUtils implements IRuntimeAction{
 	 * @param onStart the logic executed by this perk when it is triggered
      * @param onTick logic executed over the "duration" of the perk, if duration is set
 	 * @param onStop the logic executed after the start behavior and all ticking has concluded
-     * @param description a short explanation of what the perk does.
 	 * @param side which logical side this fires on CLIENT=0, SERVER=1, BOTH=2
 	 *
 	 * @docparam perkID <resource:namespace:path>
@@ -400,16 +399,13 @@ public class CTUtils implements IRuntimeAction{
 			CTPerkFunction onStart,
             CTTickFunction onTick,
 			CTPerkFunction onStop,
-            PlainTextContents.LiteralContents description,
-            CTDescriptionFunction status,
 			int side) {
 		BiPredicate<Player, CompoundTag> conditions = (p, c) -> customConditions.test(p, (MapData) TagToDataConverter.convert(c));
 		BiFunction<Player, CompoundTag, CompoundTag> execute = (p, c) -> onStart.apply(p,(MapData) TagToDataConverter.convert(c)).getInternal();
         TriFunction<Player, CompoundTag, Integer, CompoundTag> tick = (p, c, t) -> onTick.apply(p,(MapData) TagToDataConverter.convert(c), t).getInternal();
 		BiFunction<Player, CompoundTag, CompoundTag> conclude = (p, c) -> onStop.apply(p, (MapData) TagToDataConverter.convert(c)).getInternal();
-        BiFunction<Player, CompoundTag, List<MutableComponent>> statusOut = (p, c) -> status.apply(p, ((MapData) TagToDataConverter.convert(c))).stream().map(MutableComponent::create).toList();
-		PerkSide perkSide = PerkSide.values()[side > 2 ? 2 : side];
-        Perk perk = new Perk(conditions, defaults.getInternal(), execute, tick, conclude, MutableComponent.create(description), statusOut);
+		PerkSide perkSide = PerkSide.values()[Math.min(side, 2)];
+        Perk perk = new Perk(conditions, defaults.getInternal(), execute, tick, conclude);
 		APIUtils.registerPerk(perkID, perk, perkSide);
 	}
 }

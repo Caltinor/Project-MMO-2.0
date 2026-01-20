@@ -56,7 +56,7 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation PERK_BREAK_SPEED_DESC = Translation.Builder.start("perk.pmmo.break_speed.description")
 		.addLocale(Locale.EN_US, "Increases how fast you can break blocks when using the correct tool.").build();
 	public static final Translation PERK_BREAK_SPEED_STATUS_1 = Translation.Builder.start("perk.pmmo.break_speed.status1")
-		.addLocale(Locale.EN_US, "%s speed +%s").build();
+		.addLocale(Locale.EN_US, "%s speed +%s (+%s per level)").build();
 	public static final Translation PERK_FIREWORK = Translation.Builder.start("perk.pmmo.fireworks")
 		.addLocale(Locale.EN_US, "Firework").build();
 	public static final Translation PERK_FIREWORK_DESC = Translation.Builder.start("perk.pmmo.fireworks.description")
@@ -69,22 +69,34 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Give extra height to your jumps").build();
 	public static final Translation PERK_JUMP_BOOST_STATUS_1 = Translation.Builder.start("perk.pmmo.jump_boost.status1")
 		.addLocale(Locale.EN_US, "Extra Height: %s").build();
+	public static final Translation PERK_JUMP_BOOST_STATUS_2 = Translation.Builder.start("perk.pmmo.jump_boost.status2")
+		.addLocale(Locale.EN_US, "Max jump boost: %s").build();
 	public static final Translation PERK_BREATH = Translation.Builder.start("perk.pmmo.breath")
 		.addLocale(Locale.EN_US, "Breath Refresh").build();
 	public static final Translation PERK_BREATH_DESC = Translation.Builder.start("perk.pmmo.breath.description")
 		.addLocale(Locale.EN_US, "Restores breath when not on cooldown").build();
 	public static final Translation PERK_BREATH_STATUS_1 = Translation.Builder.start("perk.pmmo.breath.status1")
-		.addLocale(Locale.EN_US, "Breath Restored: %s").build();
+		.addLocale(Locale.EN_US, "Breath Restored: %s (+%s per level)").build();
 	public static final Translation PERK_BREATH_STATUS_2 = Translation.Builder.start("perk.pmmo.breath.status2")
-			.addLocale(Locale.EN_US, "Cooldown: %ss").build();
+		.addLocale(Locale.EN_US, "Cooldown: %ss").build();
 	public static final Translation PERK_DAMAGE_BOOST = Translation.Builder.start("perk.pmmo.damage_boost")
 		.addLocale(Locale.EN_US, "Damage Modifier").build();
 	public static final Translation PERK_DAMAGE_BOOST_DESC = Translation.Builder.start("perk.pmmo.damage_boost.description")
 		.addLocale(Locale.EN_US, "Increases damage dealt by the applicable items").build();
 	public static final Translation PERK_DAMAGE_BOOST_STATUS_1 = Translation.Builder.start("perk.pmmo.damage_boost.status1")
-		.addLocale(Locale.EN_US, "Applicable to: ").build();
+		.addLocale(Locale.EN_US, "Applicable items: ").build();
+	public static final Translation PERK_DAMAGE_BOOST_STATUS_1a = Translation.Builder.start("perk.pmmo.damage_boost.status1a")
+		.addLocale(Locale.EN_US, "All Sources").build();
 	public static final Translation PERK_DAMAGE_BOOST_STATUS_2 = Translation.Builder.start("perk.pmmo.damage_boost.status2")
-			.addLocale(Locale.EN_US, "Damage Boost: %s%s").build();
+		.addLocale(Locale.EN_US, "Damage Boost: %s%s (+%s per level)").build();
+	public static final Translation PERK_DAMAGE_BOOST_STATUS_3 = Translation.Builder.start("perk.pmmo.damage_boost.status3")
+		.addLocale(Locale.EN_US, "Items in Tag: %s").build();
+	public static final Translation PERK_DAMAGE_BOOST_STATUS_4 = Translation.Builder.start("perk.pmmo.damage_boost.status4")
+		.addLocale(Locale.EN_US, "Items from mod: %s").build();
+	public static final Translation PERK_DAMAGE_BOOST_STATUS_5 = Translation.Builder.start("perk.pmmo.damage_boost.status5")
+		.addLocale(Locale.EN_US, "Max Damage Boost: %s").build();
+	public static final Translation PERK_DAMAGE_BOOST_STATUS_6 = Translation.Builder.start("perk.pmmo.damage_boost.status6")
+		.addLocale(Locale.EN_US, "When Dealing Damage type(s): ").build();
 	public static final Translation PERK_COMMAND = Translation.Builder.start("perk.pmmo.command")
 		.addLocale(Locale.EN_US, "Custom Commands").build();
 	public static final Translation PERK_COMMAND_DESC = Translation.Builder.start("perk.pmmo.command.description")
@@ -96,25 +108,27 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation PERK_EFFECT_DESC = Translation.Builder.start("perk.pmmo.effect.description")
 		.addLocale(Locale.EN_US, "Grants the player an effect. If the player already has the effect, it pauses the cooldown").build();
 	public static final Translation PERK_EFFECT_STATUS_1 = Translation.Builder.start("perk.pmmo.effect.status1")
-		.addLocale(Locale.EN_US, "Effect: %s").build();
+		.addLocale(Locale.EN_US, "Effect Type: %s").build();
 	public static final Translation PERK_EFFECT_STATUS_2 = Translation.Builder.start("perk.pmmo.effect.status2")
-			.addLocale(Locale.EN_US, "Lvl:%s for %ss").build();
-	public static final Translation PERK_FALL_SAVE = Translation.Builder.start("perk.pmmo.damage_reduce")
+		.addLocale(Locale.EN_US, "Effect Level: %s for %ss").build();
+	public static final Translation PERK_EFFECT_STATUS_3 = Translation.Builder.start("perk.pmmo.effect.status3")
+		.addLocale(Locale.EN_US, "Duration increases: %s per level").build();
+	public static final Translation PERK_DAMAGE_REDUCE = Translation.Builder.start("perk.pmmo.damage_reduce")
 		.addLocale(Locale.EN_US, "Reduce Received Damage").build();
-	public static final Translation PERK_FALL_SAVE_DESC = Translation.Builder.start("perk.pmmo.fall_save.description")
+	public static final Translation PERK_DAMAGE_REDUCE_DESC = Translation.Builder.start("perk.pmmo.damage_reduce.description")
 		.addLocale(Locale.EN_US, "Prevents damage when not on cooldown").build();
 	public static final Translation PERK_FALL_SAVE_STATUS_1 = Translation.Builder.start("perk.pmmo.fall_save.status1")
-		.addLocale(Locale.EN_US, "Damage Prevented: %s").build();
+		.addLocale(Locale.EN_US, "Damage Prevented: %s%s (+%s per level)").build();
 	public static final Translation PERK_FALL_SAVE_STATUS_2 = Translation.Builder.start("perk.pmmo.fall_save.status2")
-			.addLocale(Locale.EN_US, "For Damage: %s").build();
+		.addLocale(Locale.EN_US, "From Damage: ").build();
 	public static final Translation PERK_FALL_SAVE_STATUS_3 = Translation.Builder.start("perk.pmmo.fall_save.status3")
-			.addLocale(Locale.EN_US, "Max Reduction: %s").build();
+		.addLocale(Locale.EN_US, "Max Reduction: %s").build();
 	public static final Translation PERK_TAME_BOOST = Translation.Builder.start("perk.pmmo.tame_boost")
 		.addLocale(Locale.EN_US, "Tamed Animal Boost").build();
 	public static final Translation PERK_TAME_BOOST_DESC = Translation.Builder.start("perk.pmmo.tame_boost.description")
 		.addLocale(Locale.EN_US, "Increases an animal's attributes when it is tamed, based on your skill").build();
 	public static final Translation PERK_TAME_BOOST_STATUS_1 = Translation.Builder.start("perk.pmmo.tame_boost.status1")
-		.addLocale(Locale.EN_US, "%s increased by %s").build();
+		.addLocale(Locale.EN_US, "%s +%s (+%s per level)").build();
 	public static final Translation PERK_ATTRIBUTE = Translation.Builder.start("perk.pmmo.attribute")
 		.addLocale(Locale.EN_US, "Modified Player Attributes").build();
 	public static final Translation PERK_TEMP_ATTRIBUTE = Translation.Builder.start("perk.pmmo.temp_attribute")
@@ -124,17 +138,33 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation PERK_ATTRIBUTE_STATUS_1 = Translation.Builder.start("perk.pmmo.attribute.status1")
 		.addLocale(Locale.EN_US, "Specified Attribute: %s").build();
 	public static final Translation PERK_ATTRIBUTE_STATUS_2 = Translation.Builder.start("perk.pmmo.attribute.status2")
-			.addLocale(Locale.EN_US, "%s from %s").build();
+			.addLocale(Locale.EN_US, "Increases by %s per level").build();
 	public static final Translation PERK_ATTRIBUTE_STATUS_3 = Translation.Builder.start("perk.pmmo.attribute.status3")
 			.addLocale(Locale.EN_US, "Current Modification: %s").build();
 	public static final Translation PERK_VILLAGER = Translation.Builder.start("perk.pmmo.villager_boost")
 			.addLocale(Locale.EN_US, "Villager Price Reduction").build();
-	public static final Translation PERK_VILLAGER_DESC = Translation.Builder.start("perk.pmmo.villager.description")
+	public static final Translation PERK_VILLAGER_DESC = Translation.Builder.start("perk.pmmo.villager_boost.description")
 			.addLocale(Locale.EN_US, "Periodically lets you reduce the price of villager trades.").build();
 	public static final Translation PERK_VILLAGE_STATUS_1 = Translation.Builder.start("perk.pmmo.villager.status_1")
 			.addLocale(Locale.EN_US, "Reputation increased by %s with each activation.").build();
 	public static final Translation PERK_VILLAGE_FEEDBACK = Translation.Builder.start("perk.pmmo.villager.notice")
 			.addLocale(Locale.EN_US, "You have convinced this villager to lower their prices").build();
+	public static final Translation PERK_DEFAULT_MIN_LEVEL = Translation.Builder.start("perk.generic.min_level")
+			.addLocale(Locale.EN_US, "Minimum Level to Activate: %s").build();
+	public static final Translation PERK_DEFAULT_MAX_LEVEL = Translation.Builder.start("perk.generic.max_level")
+			.addLocale(Locale.EN_US, "Maximum Level to Activate: %s").build();
+	public static final Translation PERK_DEFAULT_MOD_LEVEL = Translation.Builder.start("perk.generic.modulus_level")
+			.addLocale(Locale.EN_US, "Activated every %s levels").build();
+	public static final Translation PERK_DEFAULT_MILESTONE = Translation.Builder.start("perk.generic.milestone_level")
+			.addLocale(Locale.EN_US, "Activated only on levels: %s").build();
+	public static final Translation PERK_DEFAULT_SKILLNAME = Translation.Builder.start("perk.generic.skillname")
+			.addLocale(Locale.EN_US, "Uses level from %s skill").build();
+	public static final Translation PERK_DEFAULT_CHANCE = Translation.Builder.start("perk.generic.chance")
+			.addLocale(Locale.EN_US, "Activates with a chance of: %s").build();
+	public static final Translation PERK_DEFAULT_COOLDOWN = Translation.Builder.start("perk.generic.cooldown")
+			.addLocale(Locale.EN_US, "Can activate again after a cooldown of %s seconds").build();
+	public static final Translation PERK_GLOSSARY_EVENT_HEADER = Translation.Builder.start("pmmo.gui.glossary.perk.header")
+			.addLocale(Locale.EN_US, "Perks activated by %s").build();
 	
 	//=========SKILL NAMES=====================
 	public static final Translation SKILL_HEALTH = Translation.Builder.start("pmmo.health")
@@ -1494,8 +1524,10 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "Crouch").build();
 	public static final Translation ENUM_RECEIVE_DAMAGE = Translation.Builder.start("pmmo.enum.RECEIVE_DAMAGE")
 		.addLocale(Locale.EN_US, "Receive Damage").build();
-	public static final Translation ENUM_DEAL_MELEE_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_DAMAGE")
+	public static final Translation ENUM_DEAL_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_DAMAGE")
 		.addLocale(Locale.EN_US, "Deal Damage").build();
+	public static final Translation ENUM_MITIGATE_DAMAGE = Translation.Builder.start("pmmo.enum.MITIGATE_DAMAGE")
+			.addLocale(Locale.EN_US, "Mitigated Damage").build();
 	public static final Translation ENUM_DEATH = Translation.Builder.start("pmmo.enum.DEATH")
 		.addLocale(Locale.EN_US, "Death").build();
 	public static final Translation ENUM_ENCHANT = Translation.Builder.start("pmmo.enum.ENCHANT")
@@ -1510,6 +1542,10 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Grow").build();
 	public static final Translation ENUM_HEALTH_CHANGE = Translation.Builder.start("pmmo.enum.HEALTH_CHANGE")
 		.addLocale(Locale.EN_US, "Health Change").build();
+	public static final Translation ENUM_HEALTH_INCREASE = Translation.Builder.start("pmmo.enum.HEALTH_INCREASE")
+		.addLocale(Locale.EN_US, "Health Gain").build();
+	public static final Translation ENUM_HEALTH_DECREASE = Translation.Builder.start("pmmo.enum.HEALTH_DECREASE")
+		.addLocale(Locale.EN_US, "Health Loss").build();
 	public static final Translation ENUM_JUMP = Translation.Builder.start("pmmo.enum.JUMP")
 		.addLocale(Locale.EN_US, "Jump").build();
 	public static final Translation ENUM_SPRINT_JUMP = Translation.Builder.start("pmmo.enum.SPRINT_JUMP")
@@ -1588,6 +1624,16 @@ public class LangProvider extends LanguageProvider {
 		.addLocale(Locale.EN_US, "Interact with Entity").build();
 	public static final Translation ENUM_BIOME = Translation.Builder.start("pmmo.enum.BIOME")
 		.addLocale(Locale.EN_US, "Biome").build();
+	public static final Translation ENUM_DIMENSION = Translation.Builder.start("pmmo.enum.DIMENSION")
+			.addLocale(Locale.EN_US, "Dimension").build();
+	public static final Translation ENUM_WORN = Translation.Builder.start("pmmo.enum.WORN")
+			.addLocale(Locale.EN_US, "Item Worn").build();
+	public static final Translation ENUM_HELD = Translation.Builder.start("pmmo.enum.HELD")
+			.addLocale(Locale.EN_US, "Item Held").build();
+	public static final Translation ENUM_GIVEN_AS_TRADE = Translation.Builder.start("pmmo.enum.GIVEN_AS_TRADE")
+			.addLocale(Locale.EN_US, "Given As Trade").build();
+	public static final Translation ENUM_RECEIVED_AS_TRADE = Translation.Builder.start("pmmo.enum.RECEIVED_AS_TRADE")
+			.addLocale(Locale.EN_US, "Received As Trade").build();
 
 	//=========KEY BINDINGS====================
 	public static final Translation KEYBIND_CATEGORY = Translation.Builder.start("category.pmmo")
@@ -1831,6 +1877,8 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "Consume Xp Value").build();
 	public static final Translation XP_VALUE_DEAL_DAMAGE = Translation.Builder.start("pmmo.xpValueDealDamage")
 			.addLocale(Locale.EN_US, "Deal Damage with Item Xp").build();
+	public static final Translation XP_VALUE_RECEIVE_DAMAGE = Translation.Builder.start("pmmo.xpValueReceiveDamage")
+			.addLocale(Locale.EN_US, "Receive Damage from Source Xp").build();
 	public static final Translation XP_VALUE_MITIGATE_DAMAGE = Translation.Builder.start("pmmo.xpValueMitigateDamage")
 			.addLocale(Locale.EN_US, "Prevent Damage with Armor, Magic, Absorption, or Potions").build();
 	public static final Translation XP_VALUE_ENCHANT = Translation.Builder.start("pmmo.xpValueEnchant")
@@ -1868,9 +1916,149 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation VEIN_BREAK = Translation.Builder.start("pmmo.veinbreak")
 		.addLocale(Locale.EN_US, "Cost to break as block: %s").build();
 	
-	//=========STAT SCROLL WIDGET=================
+	//=========GLOSSARY TRANSLATIONS=================
+	public static final Translation LOADING_HEADER = Translation.Builder.start("pmmo.gui.glossary.loading.header")
+		.addLocale(Locale.EN_US, "Loading Glossary").build();
+	public static final Translation LOADING_EXPLANATION = Translation.Builder.start("pmmo.gui.glossary.loading.explain")
+		.addLocale(Locale.EN_US, "Please wait while the glossary loads.  Once the glossary loads, opening the glossary again will be instant.  If you leave the world or the server reloads data, this loading screen will appear again to update your glossary.").build();
 	public static final Translation OPEN_GLOSSARY = Translation.Builder.start("pmmo.gui.stat_screen.open_glossary")
 		.addLocale(Locale.EN_US, "Open Glossary").build();
+	public static final Translation GLOSSARY_HEADER_AS_ITEM = Translation.Builder.start("pmmo.gui.glossary.header.as_item")
+		.addLocale(Locale.EN_US, " As Item").build();
+	public static final Translation GLOSSARY_HEADER_TRAVEL_REQ = Translation.Builder.start("pmmo.gui.glossary.header.travel_req")
+		.addLocale(Locale.EN_US, "Requirements to travel here").build();
+	public static final Translation GLOSSARY_HEADER_GLOBAL_MOB_MODIFIERS = Translation.Builder.start("pmmo.gui.glossary.header.mob_global_modifiers")
+		.addLocale(Locale.EN_US, "Modifiers applied to all mobs: ").build();
+	public static final Translation GLOSSARY_HEADER_EFFECT_XP = Translation.Builder.start("pmmo.gui.glossary.header.effect")
+		.addLocale(Locale.EN_US, "Experience from potion effects, by level: ").build();
+	public static final Translation GLOSSARY_HEADER_ENCHANT_REQ = Translation.Builder.start("pmmo.gui.glossary.header.enchant")
+		.addLocale(Locale.EN_US, "Requirements to use items with this enchantment, by level: ").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_GENERAL_TREASURE = Translation.Builder.start("pmmo.gui.glossary.config.server.treasure")
+		.addLocale(Locale.EN_US, "Rare drops from mobs/blocks enabled: %s ").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.header")
+		.addLocale(Locale.EN_US, "General Settings").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVEL_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.level.header")
+		.addLocale(Locale.EN_US, "XP Settings").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.levels.header")
+		.addLocale(Locale.EN_US, "XP to level up is defined for each level as follows:").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_STATIC_LEVEL = Translation.Builder.start("pmmo.gui.glossary.config.server.level.static.level")
+		.addLocale(Locale.EN_US, "Level %s => %s XP").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_FORMULA = Translation.Builder.start("pmmo.gui.glossary.config.server.level.formula")
+		.addLocale(Locale.EN_US, "Formula = %s + ( %s ^ (%s * level) )").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_MAX = Translation.Builder.start("pmmo.gui.glossary.config.server.level.max")
+		.addLocale(Locale.EN_US, "Max Level per skill = %s").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_MODIFIERS_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.level.modifiers.header")
+		.addLocale(Locale.EN_US, "Modifiers to XP by skill").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_MODIFIERS_GLOBAL = Translation.Builder.start("pmmo.gui.glossary.config.server.level.modifiers.global")
+		.addLocale(Locale.EN_US, "All Skills: %s").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_DEATH = Translation.Builder.start("pmmo.gui.glossary.config.server.level.death")
+		.addLocale(Locale.EN_US, "On death, lose %s%% of ").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_DEATH_EXCESS = Translation.Builder.start("pmmo.gui.glossary.config.server.level.death.excess")
+		.addLocale(Locale.EN_US, "XP above current level").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_LEVELS_DEATH_TOTAL = Translation.Builder.start("pmmo.gui.glossary.config.server.level.death.total")
+		.addLocale(Locale.EN_US, "total XP").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_XP_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.xp.header")
+		.addLocale(Locale.EN_US, "Global XP Sources").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_XP_REUSE = Translation.Builder.start("pmmo.gui.glossary.config.server.xp.reuse")
+		.addLocale(Locale.EN_US, "Breaking blocks you placed gives %s%% xp than normal").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_XP_PLAYER = Translation.Builder.start("pmmo.gui.glossary.config.server.xp.player")
+		.addLocale(Locale.EN_US, "XP earned from player actions").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_XP_PLAYER_DESC = Translation.Builder.start("pmmo.gui.glossary.config.server.xp.player.desc")
+		.addLocale(Locale.EN_US, "movement actions scale off player speed/distance.").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_XP_DMG_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.xp.dmg.header")
+		.addLocale(Locale.EN_US, "XP sources from damage when not specified by a mob").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_XP_DMG_DESC = Translation.Builder.start("pmmo.gui.glossary.config.server.xp.dmg.desc")
+		.addLocale(Locale.EN_US, "Damage XP scales on the damage amount").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_PARTY_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.party.header")
+		.addLocale(Locale.EN_US, "Party Settings").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_PARTY_RANGE = Translation.Builder.start("pmmo.gui.glossary.config.server.party.range")
+		.addLocale(Locale.EN_US, "Party members within %s blocks of each other will share XP.").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_PARTY_BONUS = Translation.Builder.start("pmmo.gui.glossary.config.server.party.bonus")
+		.addLocale(Locale.EN_US, "Bonus XP, by skill, when in a party:").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_SCALING_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.scaling.header")
+		.addLocale(Locale.EN_US, "Mob Scaling Settings").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_SCALING_DESC = Translation.Builder.start("pmmo.gui.glossary.config.server.scaling.description")
+		.addLocale(Locale.EN_US, "Monsters in the pmmo:mobs tag will have attributes scaled based on player skill levels").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_SCALING_AOE = Translation.Builder.start("pmmo.gui.glossary.config.server.scaling.aoe")
+		.addLocale(Locale.EN_US, "Mobs spawning within %s blocks of a player will be scaled").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_SCALING_BOSS = Translation.Builder.start("pmmo.gui.glossary.config.server.scaling.boss")
+		.addLocale(Locale.EN_US, "Bosses will be scaled an additional %s%%").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_SCALING_FORMULA_EXPO = Translation.Builder.start("pmmo.gui.glossary.config.server.scaling.formula_expo")
+		.addLocale(Locale.EN_US, "Formula = %s ^ (%s * (skill_level - %s) )").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_SCALING_FORMULA_LIN = Translation.Builder.start("pmmo.gui.glossary.config.server.scaling.formula_lin")
+		.addLocale(Locale.EN_US, "Formula = (skill_level - %s) * %s").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_SCALING_RATIOS = Translation.Builder.start("pmmo.gui.glossary.config.server.scaling.ratios")
+		.addLocale(Locale.EN_US, "Mob attributes scaled by average skill level of nearby players:").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_VEIN_HEADER = Translation.Builder.start("pmmo.gui.glossary.config.server.vein.header")
+		.addLocale(Locale.EN_US, "Global Vein Settings").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_VEIN_CONSUME = Translation.Builder.start("pmmo.gui.glossary.config.server.vein.consume")
+		.addLocale(Locale.EN_US, "Blocks consume %s charge unless otherwise stated").build();
+	public static final Translation GLOSSARY_CONFIG_SERVER_VEIN_MODIFIER = Translation.Builder.start("pmmo.gui.glossary.config.server.vein.modifier")
+		.addLocale(Locale.EN_US, "Vein charge rate is boosted by %s%%").build();
+	public static final Translation GLOSSARY_CONFIG_SKILLS_MAX = Translation.Builder.start("pmmo.gui.glossary.config.skills.max")
+		.addLocale(Locale.EN_US, "Max Level of this skill: %s").build();
+	public static final Translation GLOSSARY_CONFIG_SKILLS_GROUP = Translation.Builder.start("pmmo.gui.glossary.config.skills.group")
+		.addLocale(Locale.EN_US, "This skill groups the following skills by proportion:").build();
+	public static final Translation GLOSSARY_CONFIG_SKILLS_AFK = Translation.Builder.start("pmmo.gui.glossary.config.skills.afk")
+		.addLocale(Locale.EN_US, "This skill is unaffected by AFK reductions").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_AFKSUB = Translation.Builder.start("pmmo.gui.glossary.config.ac.afksub")
+		.addLocale(Locale.EN_US, "Xp reduction from being afk can subtract from earned XP").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_EVENT =  Translation.Builder.start("pmmo.gui.glossary.config.ac.event")
+		.addLocale(Locale.EN_US, "Setting applied to %s").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_RETENTION = Translation.Builder.start("pmmo.gui.glossary.config.ac.retention")
+		.addLocale(Locale.EN_US, "Reduction removed after %s ticks").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_SOURCE = Translation.Builder.start("pmmo.gui.glossary.config.ac.source")
+		.addLocale(Locale.EN_US, "XP reductions only apply to the following objects:").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_COOLDOWN = Translation.Builder.start("pmmo.gui.glossary.config.ac.cooldown")
+		.addLocale(Locale.EN_US, "%s reduction removed every tick while no longer AFK").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_MINDUR = Translation.Builder.start("pmmo.gui.glossary.config.ac.mindur")
+		.addLocale(Locale.EN_US, "earning this XP for %s ticks starts XP reductions").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_REDUX = Translation.Builder.start("pmmo.gui.glossary.config.ac.redux")
+		.addLocale(Locale.EN_US, "Xp reduced by %s%% every tick this is active").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_TOLERANCE_AFK = Translation.Builder.start("pmmo.gui.glossary.config.ac.tolerance.afk")
+		.addLocale(Locale.EN_US, "Not moving at least %s blocks for %s ticks counts as AFK").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_STRICT_AFK = Translation.Builder.start("pmmo.gui.glossary.config.ac.strict.afk")
+		.addLocale(Locale.EN_US, "Moving the view angle counts as not being AFK.").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_TOLERANCE_NORM = Translation.Builder.start("pmmo.gui.glossary.config.ac.tolerance.norm")
+		.addLocale(Locale.EN_US, "Xp greater than %s%% or a flat %s above the last XP of this type will be reduced").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_AFK = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.afk")
+		.addLocale(Locale.EN_US, "XP reduced while AFK").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_DIM = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.dim")
+		.addLocale(Locale.EN_US, "XP reduced from earning the same XP repeatedly").build();
+	public static final Translation GLOSSARY_CONFIG_ANTI_HEADER_NORM = Translation.Builder.start("pmmo.gui.glossary.config.ac.header.norm")
+		.addLocale(Locale.EN_US, "XP bracketed to prevent extreme values").build();
+	public static final Translation GLOSSARY_NBT_ENTRY_HEADER = Translation.Builder.start("pmmo.gui.glossary.nbt.entry.header")
+		.addLocale(Locale.EN_US, "Logic for Entry #%s").build();
+	public static final Translation GLOSSARY_NBT_BTP_ADD = Translation.Builder.start("pmmo.gui.glossary.nbt.btp.add")
+		.addLocale(Locale.EN_US, "Adds this result to the previous result").build();
+	public static final Translation GLOSSARY_NBT_BTP_SUB = Translation.Builder.start("pmmo.gui.glossary.nbt.btp.sub")
+		.addLocale(Locale.EN_US, "Subtracts this result from the previous result").build();
+	public static final Translation GLOSSARY_NBT_BTP_HIGH = Translation.Builder.start("pmmo.gui.glossary.nbt.btp.high")
+		.addLocale(Locale.EN_US, "Uses the highest values from this result and the prior one").build();
+	public static final Translation GLOSSARY_NBT_BTP_REPL = Translation.Builder.start("pmmo.gui.glossary.nbt.btp.replace")
+		.addLocale(Locale.EN_US, "Ignores previous results and uses this one instead").build();
+	public static final Translation GLOSSARY_NBT_CASE_ADD = Translation.Builder.start("pmmo.gui.glossary.nbt.case.add")
+		.addLocale(Locale.EN_US, "The following results will add together if multiple are true:").build();
+	public static final Translation GLOSSARY_NBT_CASE_NOADD = Translation.Builder.start("pmmo.gui.glossary.nbt.case.noadd")
+		.addLocale(Locale.EN_US, "The result will be the highest value from these cases:").build();
+	public static final Translation GLOSSARY_NBT_CASE_PATH = Translation.Builder.start("pmmo.gui.glossary.nbt.case.path")
+		.addLocale(Locale.EN_US, "For NBT value of: %s").build();
+	public static final Translation GLOSSARY_NBT_ANY_OF = Translation.Builder.start("pmmo.gui.glossary.nbt.op.anyof")
+		.addLocale(Locale.EN_US, "any of [%s]").build();
+	public static final Translation GLOSSARY_NBT_OP_EQ = Translation.Builder.start("pmmo.gui.glossary.nbt.op.eq")
+			.addLocale(Locale.EN_US, "%s, if value matches %s").build();
+	public static final Translation GLOSSARY_NBT_OP_GT = Translation.Builder.start("pmmo.gui.glossary.nbt.op.gt")
+			.addLocale(Locale.EN_US, "%s, if value > %s").build();
+	public static final Translation GLOSSARY_NBT_OP_LT = Translation.Builder.start("pmmo.gui.glossary.nbt.op.lt")
+			.addLocale(Locale.EN_US, "%s, if value < %s").build();
+	public static final Translation GLOSSARY_NBT_OP_GTOE = Translation.Builder.start("pmmo.gui.glossary.nbt.op.gtoe")
+			.addLocale(Locale.EN_US, "%s, if value >= %s").build();
+	public static final Translation GLOSSARY_NBT_OP_LTOE = Translation.Builder.start("pmmo.gui.glossary.nbt.op.ltoe")
+			.addLocale(Locale.EN_US, "%s, if value <= %s").build();
+	public static final Translation GLOSSARY_NBT_OP_EXISTS = Translation.Builder.start("pmmo.gui.glossary.nbt.op.exists")
+			.addLocale(Locale.EN_US, "%s, if value is present").build();
+	public static final Translation GLOSSARY_NBT_OP_CONTAINS = Translation.Builder.start("pmmo.gui.glossary.nbt.op.contains")
+			.addLocale(Locale.EN_US, "%s, if value partially contains %s").build();
 	public static final Translation EVENT_HEADER = Translation.Builder.start("pmmo.event_header")
 		.addLocale(Locale.EN_US, "XP Award Events").build();
 	public static final Translation REQ_HEADER = Translation.Builder.start("pmmo.req_header")
@@ -1882,15 +2070,15 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation SALVAGE_HEADER = Translation.Builder.start("pmmo.salvage_header")
 		.addLocale(Locale.EN_US, "Salvage").build();
 	public static final Translation SALVAGE_LEVEL_REQ = Translation.Builder.start("pmmo.salvage_levelreq")
-		.addLocale(Locale.EN_US, "Required level to obtain").build();
+		.addLocale(Locale.EN_US, "Required level to obtain: ").build();
 	public static final Translation SALVAGE_CHANCE = Translation.Builder.start("pmmo.salvage_chance")
-		.addLocale(Locale.EN_US, "Chance: %1$s / %2$s").build();
+		.addLocale(Locale.EN_US, "Chance: %1$s (Max: %2$s)").build();
 	public static final Translation SALVAGE_MAX = Translation.Builder.start("pmmo.salvage_max")
 		.addLocale(Locale.EN_US, "Max Obtainable: %1$s").build();
 	public static final Translation SALVAGE_CHANCE_MOD = Translation.Builder.start("pmmo.salvage_chance_modifier")
-		.addLocale(Locale.EN_US, "Chance boost based on level").build();
+		.addLocale(Locale.EN_US, "Per level chance increase: ").build();
 	public static final Translation SALVAGE_XP_AWARD = Translation.Builder.start("pmmo.salvage_xpAward_header")
-		.addLocale(Locale.EN_US, "Xp awarded on success").build();
+		.addLocale(Locale.EN_US, "Xp awarded on salvage: ").build();
 	public static final Translation VEIN_HEADER = Translation.Builder.start("pmmo.vein_header")
 		.addLocale(Locale.EN_US, "Vein Mining Attributes").build();
 	public static final Translation VEIN_RATE = Translation.Builder.start("pmmo.veindata_rate")
@@ -1914,17 +2102,19 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation SKILL_LIST_HEADER = Translation.Builder.start("pmmo.skilllist_header")
 		.addLocale(Locale.EN_US, "Player Skills").build();
 	public static final Translation DIMENSION_HEADER = Translation.Builder.start("pmmo.dimension_header")
-		.addLocale(Locale.EN_US, "Dimension: %1$s").build();
+		.addLocale(Locale.EN_US, "When in Dimension").build();
 	public static final Translation VEIN_BLACKLIST_HEADER = Translation.Builder.start("pmmo.vein_blacklist_header")
 		.addLocale(Locale.EN_US, "Vein Blacklisted Blocks").build();
 	public static final Translation MOB_MODIFIER_HEADER = Translation.Builder.start("pmmo.mob_modifier_header")
 		.addLocale(Locale.EN_US, "Mob Modifiers").build();
 	public static final Translation BIOME_HEADER = Translation.Builder.start("pmmo.biome_header")
-		.addLocale(Locale.EN_US, "Mob Modifiers").build();
+		.addLocale(Locale.EN_US, "When in biome").build();
 	public static final Translation BIOME_EFFECT_NEG = Translation.Builder.start("pmmo.biome_negative")
 		.addLocale(Locale.EN_US, "Penalty Effects").build();
 	public static final Translation BIOME_EFFECT_POS = Translation.Builder.start("pmmo.biome_positive")
 		.addLocale(Locale.EN_US, "Bonus Effects").build();
+	public static final Translation LOCATION_EFFECT_POS = Translation.Builder.start("pmmo.gui.glossary.location.pos")
+		.addLocale(Locale.EN_US, "Positive Effects When Requirements are Met:").build();
 	public static final Translation ADDON_AFFECTED_ATTRIBUTE = Translation.Builder.start("pmmo.gui.statscroll.addon_affected")
 		.addLocale(Locale.EN_US, "This Property is Dynamically Defined").build();
 	public static final Translation GLM_HEADER_RARE = Translation.Builder.start("pmmo.gui.statscroll.glm.rare_header")
@@ -1973,7 +2163,7 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation GLOSSARY_OBJECT_BLOCKS = Translation.Builder.start("pmmo.gui.glossary.object.blocks")
 		.addLocale(Locale.EN_US, "Blocks").build();
 	public static final Translation GLOSSARY_OBJECT_ENTITIES = Translation.Builder.start("pmmo.gui.glossary.object.entities")
-		.addLocale(Locale.EN_US, "Animals/Mobs").build();
+		.addLocale(Locale.EN_US, "Animals/Mobs/Entities").build();
 	public static final Translation GLOSSARY_OBJECT_DIMENSIONS = Translation.Builder.start("pmmo.gui.glossary.object.dimensions")
 		.addLocale(Locale.EN_US, "Dimensions").build();
 	public static final Translation GLOSSARY_OBJECT_BIOMES = Translation.Builder.start("pmmo.gui.glossary.object.biomes")

@@ -1,10 +1,9 @@
 package harmonised.pmmo.api.enums;
 
 import com.mojang.serialization.Codec;
-import harmonised.pmmo.client.gui.component.GuiEnumGroup;
+import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.fml.common.asm.enumextension.IExtensibleEnum;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -22,7 +21,7 @@ public enum EventType implements StringRepresentable, GuiEnumGroup {
 	CRAFT(true, false, false, "crafting", LangProvider.XP_VALUE_CRAFT),
 	CROUCH(false, false, true, "endurance", LangProvider.ENUM_CROUCH),
 	TOOL_BREAKING(true, false, false, "smithing", LangProvider.ENUM_TOOL_BREAKING),
-	RECEIVE_DAMAGE(false, false, true, "endurance", LangProvider.ENUM_RECEIVE_DAMAGE),
+	RECEIVE_DAMAGE(false, false, true, "endurance", LangProvider.XP_VALUE_RECEIVE_DAMAGE),
 	DEAL_DAMAGE(true, false, true, "combat", LangProvider.XP_VALUE_DEAL_DAMAGE),
 	MITIGATE_DAMAGE(false, false, true, "endurance", LangProvider.XP_VALUE_MITIGATE_DAMAGE),
 	DEATH(false, false, true, "endurance", LangProvider.ENUM_DEATH),
@@ -33,8 +32,8 @@ public enum EventType implements StringRepresentable, GuiEnumGroup {
 	SMELTED(true, false, false, "smithing", LangProvider.XP_VALUE_SMELTED),
 	GROW(false, true, false, "farming", LangProvider.XP_VALUE_GROW),
 	GIVEN_AS_TRADE(true, false, false, "charisma", LangProvider.XP_VALUE_TRADE_GIVE),
-	HEALTH_INCREASE(false, false, false, "", LangProvider.ENUM_HEALTH_CHANGE),
-	HEALTH_DECREASE(false, false, false, "", LangProvider.ENUM_HEALTH_CHANGE),
+	HEALTH_INCREASE(false, false, false, "", LangProvider.ENUM_HEALTH_INCREASE),
+	HEALTH_DECREASE(false, false, false, "", LangProvider.ENUM_HEALTH_DECREASE),
 	JUMP(false, false, true, "agility", LangProvider.ENUM_JUMP),
 		SPRINT_JUMP(false, false, true, "agility", LangProvider.ENUM_SPRINT_JUMP),
 		CROUCH_JUMP(false, false, true, "agility", LangProvider.ENUM_CROUCH_JUMP),

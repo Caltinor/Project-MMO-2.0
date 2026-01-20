@@ -2,8 +2,13 @@ package harmonised.pmmo.config.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.TooltipFlag;
 
 import static org.w3c.dom.events.MutationEvent.ADDITION;
 
@@ -26,5 +31,13 @@ public record MobModifier(
             case ADD_MULTIPLIED_BASE -> "*";
             case ADD_MULTIPLIED_TOTAL -> "**";
         };
+    }
+
+    public MutableComponent component(Registry<Attribute> registry) {
+        Attribute attr = registry.get(attribute);
+        if (attr != null)
+            return attr.toComponent(new AttributeModifier(attribute, amount, operation), TooltipFlag.NORMAL);
+        else
+            return Component.literal(attribute.toString() + " " + amount + " " + operation.toString());
     }
 }
