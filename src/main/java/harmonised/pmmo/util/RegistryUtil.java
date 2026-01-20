@@ -31,6 +31,8 @@ public class RegistryUtil {
 
 	public static ResourceLocation getId(RegistryAccess access, Item item) {return getId(access, Registries.ITEM, item);}
 
+	public static ResourceLocation getId(RegistryAccess access, Entity entity) {return getId(access, Registries.ENTITY_TYPE, entity.getType());}
+
 	public static ResourceLocation getId(BlockState blockState) {
 		return getId(blockState.getBlock());
 	}

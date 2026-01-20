@@ -31,11 +31,7 @@ public class FireworkHandler {
 				BlockPos pos = player.blockPosition();
 				spawnRocket(player.level(), new Vec3(pos.getX(), pos.getY(), pos.getZ()), nbt.getString(FIREWORK_SKILL).get());
 				return new CompoundTag();
-			})
-			.setDescription(LangProvider.PERK_FIREWORK_DESC.asComponent())
-			.setStatus((p, nbt) -> List.of(LangProvider.PERK_FIREWORK_STATUS_1
-					.asComponent(Component.translatable("pmmo."+nbt.getString(APIUtils.SKILLNAME))
-							.withStyle(CoreUtils.getSkillStyle(nbt.getString(APIUtils.SKILLNAME).get()))))).build();
+			}).build();
 	
 	public static void spawnRocket(Level world, Vec3 pos, String skill/*, @Nullable WorldText explosionText*/)
 	{

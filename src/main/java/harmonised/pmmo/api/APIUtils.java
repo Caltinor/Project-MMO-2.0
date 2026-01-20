@@ -7,6 +7,7 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.api.perks.Perk;
+import harmonised.pmmo.api.perks.PerkRenderer;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.codecs.DataSource;
@@ -397,7 +398,7 @@ public class APIUtils {
 		raw.setBonuses(type, bonus);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
-	/**registers a configuration setting for what status effects should be applied to the player
+	/**registers a configuration setting for what guiPanel effects should be applied to the player
 	 * if they attempt to wear/hold/travel, and they are not skilled enough to do so.
 	 * 
 	 * @param oType the object type this effect is being stored on
@@ -414,7 +415,7 @@ public class APIUtils {
 		raw.setNegativeEffects(effects);
 		registerConfiguration(asOverride, oType, objectID, raw);
 	}
-	/**registers a configuration setting for what status effects should be applied to the player
+	/**registers a configuration setting for what guiPanel effects should be applied to the player
 	 * based on their meeting or not meeting the requirements for the specified location.
 	 * <p>Note: a "negative" effect on a dimension will have no use in-game</p>
 	 * 
@@ -795,7 +796,7 @@ public class APIUtils {
 	public static final String VISIBLE = "visible";
 	public static final String SHOW_ICON = "show_icon";
 	
-	public static final String EFFECTS = "effects";
+	public static final String EFFECT = "effect";
 	
 	public static final String MULTIPLICATIVE = "multiplicative";
 	public static final String BASE = "base";
@@ -808,6 +809,7 @@ public class APIUtils {
 	 * reasonable triggers, and sidedness.
 	 * 
 	 * @param perkID a custom id for your perk that can be used in perks.json to reference this perk
+	 * @param perk the actual perk object defining the behavior
 	 * @param side the logical sides this perk should execute on.  Your implementation should factor in sidedness to avoid crashes.
 	 */
 	public static void registerPerk(
@@ -823,7 +825,23 @@ public class APIUtils {
 			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, perk);
 			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, perk);}
 		}
-	}	
+	}
+
+	/**Called during FMLClientSetupEvent, this event adds renderers to perks to replace the default
+	 * renderer.  A Perk is not required to register a renderer, but it is strongly advised to convey
+	 * to users the unique behavior and level interactions of the perk.
+	 *
+	 * Calling this method multiple times on the same ID will replace all previous renderers from previous
+	 * calls.
+	 *
+	 * @param perkID the ID of the perk.
+	 * @param renderer a custom implementation of the Glossary display object.  Note, this is optional, but omission
+  	 *                 will default to a basic text-based widget which only contains details about common config settings
+  	 *                 and will not contain custom behavior details.
+	 */
+	public static void registerPerkRenderer(ResourceLocation perkID, PerkRenderer renderer) {
+		Core.get(LogicalSide.CLIENT).getPerkRegistry().registerRenderer(perkID, renderer);
+	}
 	
 	//===============UTILITY METHODS=================================
 	/** A standard key for use in providing PMMO with custom award maps

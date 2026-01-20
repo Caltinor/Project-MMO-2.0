@@ -1,6 +1,11 @@
 package harmonised.pmmo.client.events;
 
-import harmonised.pmmo.client.gui.StatsScreen;
+import harmonised.pmmo.api.client.PanelWidget;
+import harmonised.pmmo.client.gui.glossary.GlossaryLoadingScreen;
+import harmonised.pmmo.client.gui.glossary.components.panels.BiomeObjectPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.BlockObjectPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.EntityObjectPanelWidget;
+import harmonised.pmmo.client.gui.glossary.components.panels.PlayerObjectPanelWidget;
 import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
@@ -15,7 +20,10 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult.Type;
@@ -23,7 +31,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.InputEvent;
 
 @EventBusSubscriber(modid=Reference.MOD_ID, value= Dist.CLIENT)
@@ -31,7 +38,7 @@ public class KeyPressHandler {
 
 	@SubscribeEvent
     public static void keyPressEvent(InputEvent.Key event)
-    {
+	{
 		Minecraft mc = Minecraft.getInstance();
         if(mc.player != null)
         {
@@ -79,18 +86,31 @@ public class KeyPressHandler {
             }
             if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {
             	if (mc.hitResult != null && !mc.player.isCrouching()) {
-            		if (mc.hitResult.getType().equals(Type.BLOCK)) 
-            			mc.setScreen(new StatsScreen(((BlockHitResult)mc.hitResult).getBlockPos()));
+            		if (mc.hitResult.getType().equals(Type.BLOCK)) {
+						BlockHitResult bhr = (BlockHitResult) mc.hitResult;
+						BlockState state = mc.level.getBlockState(bhr.getBlockPos());
+						BlockEntity be = mc.level.getBlockEntity(bhr.getBlockPos());
+						PanelWidget widget = new BlockObjectPanelWidget(0x88394045, 400, state.getBlock(), be);
+						mc.setScreen(new GlossaryLoadingScreen(widget));
+					}
             		else if (mc.hitResult.getType().equals(Type.ENTITY)) {
             			EntityHitResult ehr = (EntityHitResult) mc.hitResult;
-            			Networking.sendToServer(new SP_OtherExpRequest(ehr.getEntity().getUUID()));
-            			mc.setScreen(new StatsScreen(ehr.getEntity()));
+						PanelWidget widget;
+						if (ehr.getEntity() instanceof Player player) {
+							Networking.sendToServer(new SP_OtherExpRequest(ehr.getEntity().getUUID()));
+							widget = new PlayerObjectPanelWidget(0x88394045, 400, player);
+						}
+						else
+							widget = new EntityObjectPanelWidget(0x88394045, 400, ehr.getEntity());
+            			mc.setScreen(new GlossaryLoadingScreen(widget));
             		}
             		else if (mc.hitResult.getType().equals(Type.MISS))
-            			mc.setScreen(new StatsScreen(mc.player));
+            			mc.setScreen(new GlossaryLoadingScreen(null));
             	}
-            	else if (mc.player.isCrouching())
-            		mc.setScreen(new StatsScreen()); 
+            	else if (mc.player.isCrouching()) {
+					PanelWidget widget = new BiomeObjectPanelWidget(0x88394045, 400, mc.level.getBiome(mc.player.blockPosition()));
+					mc.setScreen(new GlossaryLoadingScreen(widget));
+				}
             }
         }
     }

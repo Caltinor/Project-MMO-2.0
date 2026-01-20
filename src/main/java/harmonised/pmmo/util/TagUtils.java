@@ -2,7 +2,7 @@ package harmonised.pmmo.util;
 
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.FloatTag;
@@ -68,12 +68,15 @@ public class TagUtils {
 		return output;
 	}
 
+	public static CompoundTag stackTag(ItemStack stack, Level level) {
+		return stackTag(stack, level.registryAccess());
+	}
 	/**safely obtain the NBT tag or get a new instance
 	 *
 	 * @param stack the item whose NBT is being obtained
 	 * @return an associated tag or new instance
 	 */
-	public static CompoundTag stackTag(ItemStack stack, Level level) {
+	public static CompoundTag stackTag(ItemStack stack, RegistryAccess access) {
 		if (stack.isEmpty()) return new CompoundTag();
 		DynamicOps<Tag> regOps = level.registryAccess().createSerializationContext(NbtOps.INSTANCE);
 		if (stack.getCount() > 99) {

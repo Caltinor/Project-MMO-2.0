@@ -8,12 +8,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.function.TriFunction;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
@@ -29,20 +26,13 @@ import java.util.function.BiPredicate;
  * skipped.
  * @param stop a function which executes after ticks have concluded.  if no ticks
  * were executed, this will execute the tick after the start function.
- * @param description a translatable description of what the perk does for use
- * in infomational displays.
- * @param status a function which provides player-specific information about this
- * perk as it pertains to the player.  For example, if the perk provides a per-level
- * bonus, this function would return the value at the player's level. 
  */
 public record Perk(
 		BiPredicate<Player, CompoundTag> conditions,
 		CompoundTag propertyDefaults,
 		BiFunction<Player, CompoundTag, CompoundTag> start,
 		TriFunction<Player, CompoundTag, Integer, CompoundTag> tick,
-		BiFunction<Player, CompoundTag, CompoundTag> stop,
-		MutableComponent description,
-		BiFunction<Player, CompoundTag, List<MutableComponent>> status) {
+		BiFunction<Player, CompoundTag, CompoundTag> stop) {
 	
 	public static class Builder {
 		BiPredicate<Player, CompoundTag> conditions = (p,n) -> true;
@@ -50,8 +40,6 @@ public record Perk(
 		BiFunction<Player, CompoundTag, CompoundTag> start = (p,c) -> new CompoundTag();
 		TriFunction<Player, CompoundTag, Integer, CompoundTag> tick = (p,c,i) -> new CompoundTag();
 		BiFunction<Player, CompoundTag, CompoundTag> stop = (p,c) -> new CompoundTag();
-		MutableComponent description = Component.empty();
-		BiFunction<Player, CompoundTag, List<MutableComponent>> status = (p,s) -> List.of();
 		
 		protected Builder() {}
 		public Builder addConditions(BiPredicate<Player, CompoundTag> conditions) {
@@ -74,16 +62,8 @@ public record Perk(
 			this.stop = stop;
 			return this;
 		}
-		public Builder setDescription(MutableComponent description) {
-			this.description = description;
-			return this;
-		}
-		public Builder setStatus(BiFunction<Player, CompoundTag, List<MutableComponent>> status) {
-			this.status = status;
-			return this;
-		}
 		public Perk build() {
-			return new Perk(conditions, propertyDefaults, start, tick, stop, description, status);
+			return new Perk(conditions, propertyDefaults, start, tick, stop);
 		}
 	}
 	
