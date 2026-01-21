@@ -29,12 +29,12 @@ public class TamingPanel extends PanelWidget {
         MutableComponent title = LangProvider.PERK_TAME_BOOST.asComponent();
         MutableComponent descr = LangProvider.PERK_TAME_BOOST_DESC.asComponent();
         this.name = title.toString();
-        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.skill = config.getString(APIUtils.SKILLNAME).orElse(null);
         long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
         addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
 
-        double perLevel = config.getDouble(APIUtils.PER_LEVEL);
+        double perLevel = config.getDoubleOr(APIUtils.PER_LEVEL, 0d);
         PerksImpl.ANIMAL_ATTRIBUTES.forEach((attr, value) -> {
             Component attribute = Component.translatable(attr.value().getDescriptionId()).withStyle(ChatFormatting.GREEN);
             Component val = Component.literal(DP.dpCustom(perLevel * value, 4)).withStyle(ChatFormatting.GRAY);

@@ -36,16 +36,16 @@ public class EffectsPanel extends PanelWidget {
         MutableComponent title = LangProvider.PERK_EFFECT.asComponent();
         MutableComponent descr = LangProvider.PERK_EFFECT_DESC.asComponent();
         this.name = title.toString();
-        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.skill = config.getString(APIUtils.SKILLNAME).orElse(null);
         long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
         addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
 
-        var effectID = ResourceKey.create(Registries.MOB_EFFECT ,Reference.of(config.getString(APIUtils.EFFECT)));
+        var effectID = ResourceKey.create(Registries.MOB_EFFECT ,Reference.of(config.getStringOr(APIUtils.EFFECT, "missing")));
         Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.MOB_EFFECT).get(effectID).ifPresent(effect -> {
             addString(LangProvider.PERK_EFFECT_STATUS_1.asComponent(effect.value().getDisplayName()).withStyle(ChatFormatting.BOLD), PositionConstraints.offset(10, 0), textConstraint);
-            int modifier = config.getInt(APIUtils.MODIFIER) + 1;
-            double per_level = config.getDouble(APIUtils.DURATION) * config.getDouble(APIUtils.PER_LEVEL);
+            int modifier = config.getIntOr(APIUtils.MODIFIER, 0) + 1;
+            double per_level = config.getDoubleOr(APIUtils.DURATION, 0) * config.getDoubleOr(APIUtils.PER_LEVEL, 0);
             double duration = (per_level * skillLevel)/20;
             addString(LangProvider.PERK_EFFECT_STATUS_2.asComponent(modifier, duration), PositionConstraints.offset(10, 0), textConstraint);
             addString(LangProvider.PERK_EFFECT_STATUS_3.asComponent(DP.dpSoft(per_level/20)), PositionConstraints.offset(10, 0), textConstraint);

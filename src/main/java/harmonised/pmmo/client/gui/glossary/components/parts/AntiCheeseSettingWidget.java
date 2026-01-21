@@ -21,6 +21,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class AntiCheeseSettingWidget extends ReactiveWidget {
                 }
                 if (event.entityApplicable) {
                     entityReg.get(ResourceKey.create(Registries.ENTITY_TYPE, entry)).ifPresent(entity -> {
-                        addChild(new EntityWidget(entity.value().create(Minecraft.getInstance().level)), PositionConstraints.offset(20, 0),
+                        addChild(new EntityWidget(entity.value().create(Minecraft.getInstance().level, EntitySpawnReason.COMMAND)), PositionConstraints.offset(20, 0),
                                 SizeConstraints.builder().absoluteHeight(18).absoulteWidth(18).build());
                         addString(entity.value().getDescription(), PositionType.STATIC.constraint, textConstraint);
                     });

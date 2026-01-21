@@ -51,7 +51,7 @@ public interface PerkRenderer {
     /// @param layout the {@link PanelWidget} to add the common elements to
     /// @param config pass through for the config provided by {@link PerkRenderer}
     static void commonElements(ResponsiveLayout layout, CompoundTag config) {
-        String skill = config.getString(APIUtils.SKILLNAME);
+        String skill = config.getStringOr(APIUtils.SKILLNAME, "missing");
         if (!skill.isBlank())
             layout.addString(LangProvider.PERK_DEFAULT_SKILLNAME.asComponent(LangProvider.skill(skill)), PositionConstraints.offset(10, 0), textConstraint);
         if (config.contains(APIUtils.MIN_LEVEL))
@@ -61,11 +61,11 @@ public interface PerkRenderer {
         if (config.contains(APIUtils.MODULUS))
             layout.addString(LangProvider.PERK_DEFAULT_MOD_LEVEL.asComponent(config.getLong(APIUtils.MODULUS)), PositionConstraints.offset(10, 0), textConstraint);
         if (config.contains(APIUtils.MILESTONES))
-            layout.addString(LangProvider.PERK_DEFAULT_MILESTONE.asComponent(config.getList(APIUtils.MILESTONES, CompoundTag.TAG_INT)), PositionConstraints.offset(10, 0), textConstraint);
+            layout.addString(LangProvider.PERK_DEFAULT_MILESTONE.asComponent(config.getListOrEmpty(APIUtils.MILESTONES)), PositionConstraints.offset(10, 0), textConstraint);
         if (config.contains(APIUtils.CHANCE))
-            layout.addString(LangProvider.PERK_DEFAULT_CHANCE.asComponent(DP.dpSoft(config.getDouble(APIUtils.CHANCE)) + "%"), PositionConstraints.offset(10, 0), textConstraint);
+            layout.addString(LangProvider.PERK_DEFAULT_CHANCE.asComponent(DP.dpSoft(config.getDoubleOr(APIUtils.CHANCE, 0d)) + "%"), PositionConstraints.offset(10, 0), textConstraint);
         if (config.contains(APIUtils.COOLDOWN))
-            layout.addString(LangProvider.PERK_DEFAULT_COOLDOWN.asComponent(config.getInt(APIUtils.COOLDOWN)/2), PositionConstraints.offset(10, 0), textConstraint);
+            layout.addString(LangProvider.PERK_DEFAULT_COOLDOWN.asComponent(config.getIntOr(APIUtils.COOLDOWN, 0)/2), PositionConstraints.offset(10, 0), textConstraint);
     }
 
     /// A default implementation capturing only the common elements of Perks.
@@ -79,11 +79,11 @@ public interface PerkRenderer {
 
         public DefaultPerkPanel(int color, int width, Player player, CompoundTag config) {
             super(color, width);
-            ResourceLocation rl = Reference.of(config.getString("perk"));
+            ResourceLocation rl = Reference.of(config.getStringOr("perk", "missing"));
             this.id = rl.toString();
             MutableComponent title = Component.translatable("perk.%s.%s".formatted(rl.getNamespace(), rl.getPath()));
             this.name = title.toString();
-            this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+            this.skill = config.contains(APIUtils.SKILLNAME) ? config.getStringOr(APIUtils.SKILLNAME, "missing") : null;
             addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
             MutableComponent descr = Component.translatable("perk.%s.%s.description".formatted(rl.getNamespace(), rl.getPath()));
             addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);

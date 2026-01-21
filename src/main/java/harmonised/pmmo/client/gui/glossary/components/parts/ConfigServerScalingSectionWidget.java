@@ -28,7 +28,7 @@ public class ConfigServerScalingSectionWidget extends ReactiveWidget {
         super(0,0,0,0);
         if (data.enabled()) {
             skills.addAll(data.ratios().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
-            var registry = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.ATTRIBUTE);
+            var registry = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.ATTRIBUTE);
 
             addString(LangProvider.GLOSSARY_CONFIG_SERVER_SCALING_HEADER.asComponent().withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE, ChatFormatting.LIGHT_PURPLE), PositionType.STATIC.constraint, textConstraint);
             addString(LangProvider.GLOSSARY_CONFIG_SERVER_SCALING_DESC.asComponent().withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
@@ -40,7 +40,7 @@ public class ConfigServerScalingSectionWidget extends ReactiveWidget {
             addString(formula, PositionConstraints.offset(10, 0), textConstraint);
             addString(LangProvider.GLOSSARY_CONFIG_SERVER_SCALING_RATIOS.asComponent(), PositionConstraints.offset(10, 0), textConstraint);
             data.ratios().forEach((attrID, map) -> {
-                MutableComponent header = Component.translatable(registry.get(attrID).getDescriptionId());
+                MutableComponent header = Component.translatable(registry.get(attrID).get().value().getDescriptionId());
                 if (map.size() == 1) {
                     Map.Entry<String, Double> solo = map.entrySet().iterator().next();
                     addString(header.append(": ").append(LangProvider.skill(solo.getKey()).append(": ").append(solo.getValue().toString())), PositionConstraints.offset(20, 0), textConstraint);

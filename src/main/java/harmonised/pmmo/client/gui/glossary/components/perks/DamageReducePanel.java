@@ -38,12 +38,12 @@ public class DamageReducePanel extends PanelWidget {
         MutableComponent title = LangProvider.PERK_DAMAGE_REDUCE.asComponent();
         MutableComponent descr = LangProvider.PERK_DAMAGE_REDUCE_DESC.asComponent();
         this.name = title.toString();
-        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.skill = config.getString(APIUtils.SKILLNAME).orElse(null);
         long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
         addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
         //When the following damage types are applied
-        List<String> dmgTypes = config.getList(APIUtils.DAMAGE_TYPE_IN, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
+        List<String> dmgTypes = config.getListOrEmpty(APIUtils.DAMAGE_TYPE_IN).stream().map(t -> t.asString().orElse("")).toList();
         MutableComponent dmgTypeHeader = LangProvider.PERK_FALL_SAVE_STATUS_2.asComponent();
         if (dmgTypes.isEmpty())
             dmgTypeHeader.append(LangProvider.PERK_DAMAGE_BOOST_STATUS_1a.asComponent());
@@ -52,9 +52,9 @@ public class DamageReducePanel extends PanelWidget {
             addString(Component.literal(dmgType), PositionConstraints.offset(20, 0), textConstraint);
         }
         //display the actual boosted values
-        int maxBoost = config.getInt(APIUtils.MAX_BOOST);
-        float perLevel = config.getFloat(APIUtils.PER_LEVEL);
-        float saved = (perLevel * (float)skillLevel) + config.getFloat(APIUtils.BASE);
+        int maxBoost = config.getIntOr(APIUtils.MAX_BOOST, 0);
+        float perLevel = config.getFloatOr(APIUtils.PER_LEVEL, 0);
+        float saved = (perLevel * (float)skillLevel) + config.getFloatOr(APIUtils.BASE, 0);
         saved = Math.min(maxBoost, saved);
         addString(LangProvider.PERK_FALL_SAVE_STATUS_1.asComponent(saved >= 0 ? "+" : "-", DP.dpSoft(saved), DP.dpSoft(perLevel)), PositionConstraints.offset(10, 0), textConstraint);
         addString(LangProvider.PERK_FALL_SAVE_STATUS_3.asComponent(maxBoost), PositionConstraints.offset(10, 0), textConstraint);

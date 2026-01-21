@@ -61,7 +61,7 @@ public class TooltipHandler {
             if(itemID == null)
                 return;
 
-            if(!ClientSetup.OPEN_MENU.isUnbound() && InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), ClientSetup.OPEN_MENU.getKey().getValue())) {
+            if(!ClientSetup.OPEN_MENU.isUnbound() && InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), ClientSetup.OPEN_MENU.getKey().getValue())) {
 				PanelWidget widget = new ItemObjectPanelWidget(0x88304045, 400, stack);
                 Minecraft.getInstance().setScreen(new GlossaryLoadingScreen(widget));
                 return;

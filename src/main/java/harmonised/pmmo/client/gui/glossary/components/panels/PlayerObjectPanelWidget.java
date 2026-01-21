@@ -31,8 +31,7 @@ public class PlayerObjectPanelWidget extends ObjectPanelWidget {
         this.name = entity.getDisplayName().getString();
         addChild(new EntityWidget(entity), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
-        addChild(new StringWidget(entity.getDisplayName(), Minecraft.getInstance().font).alignLeft(), PositionConstraints.grid(0,1),
-                SizeConstraints.builder().absoluteHeight(12).build());
+        addString(entity.getDisplayName(), PositionConstraints.grid(0,1), textConstraint);
         this.xpMap = new PlayerXpMapWidget(core.getData().getXpMap(entity.getUUID()));
         addChild((AbstractWidget) xpMap, PositionConstraints.grid(1, 1), SizeConstraints.builder().internalHeight().build());
         addChild(new DividerWidget(200, 2, 0xFF000000), PositionConstraints.grid(2,1), SizeConstraints.builder()

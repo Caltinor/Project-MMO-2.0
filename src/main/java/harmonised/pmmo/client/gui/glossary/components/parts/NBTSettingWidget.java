@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -87,15 +88,15 @@ public class NBTSettingWidget extends ReactiveWidget {
     }
 
     private static Positioner<?> fromString(Component text, PositionConstraints constraints) {
-        return new Positioner.Widget(new StringWidget(text, Minecraft.getInstance().font).alignLeft(), constraints, textConstraint);
+        return new Positioner.Widget(new StringWidget(text, Minecraft.getInstance().font), constraints, textConstraint);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent mbe, boolean isDoubleClick) {
         expanded = !expanded;
         results.forEach(poser -> {if (poser.get() instanceof AbstractWidget widget) widget.visible = !expanded;});
         nbtLogic.forEach(poser -> {if (poser.get() instanceof AbstractWidget widget) widget.visible = expanded;});
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mbe, isDoubleClick);
     }
 
     @Override

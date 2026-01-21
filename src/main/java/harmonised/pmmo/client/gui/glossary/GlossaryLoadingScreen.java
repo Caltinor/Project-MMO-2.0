@@ -22,7 +22,7 @@ public class GlossaryLoadingScreen extends Screen {
         super(Component.literal("Loading Screen"));
         LocalPlayer player = Minecraft.getInstance().player;
         this.target = inbound;
-        CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), player.canUseGameMasterBlocks(), player.clientLevel.registryAccess());
+        CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), player.canUseGameMasterBlocks(), player.registryAccess());
     }
 
     @Override
@@ -33,7 +33,7 @@ public class GlossaryLoadingScreen extends Screen {
         layout.defaultCellSetting().alignHorizontallyCenter().alignVerticallyMiddle();
         layout.addChild(new StringWidget(LangProvider.LOADING_HEADER.asComponent().withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE), this.font));
         this.font.getSplitter().splitLines(LangProvider.LOADING_EXPLANATION.asComponent().getString(), this.width/2, Style.EMPTY).forEach(fcs ->
-                layout.addChild(new StringWidget(Component.literal(fcs.getString()), this.font).alignCenter()));
+                layout.addChild(new StringWidget(Component.literal(fcs.getString()), this.font)));
         layout.arrangeElements();
         layout.visitWidgets(this::addRenderableWidget);
         if (ClientUtils.glossary == null || ClientUtils.glossary.targetedObject != target) {

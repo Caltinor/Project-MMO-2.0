@@ -103,7 +103,7 @@ public interface ResponsiveLayout extends Layout {
     }
 
     default ResponsiveLayout addString(Component text, PositionConstraints type, SizeConstraints constraints) {
-        return addChild(new StringWidget(this.getWidth(), 12, text, Minecraft.getInstance().font).alignLeft(), type, constraints);
+        return addChild(new StringWidget(this.getWidth(), 12, text, Minecraft.getInstance().font), type, constraints);
     }
     
     default int getInternalWidth() {return getWidth();}

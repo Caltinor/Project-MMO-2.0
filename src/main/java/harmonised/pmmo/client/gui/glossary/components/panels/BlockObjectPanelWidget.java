@@ -33,8 +33,7 @@ public class BlockObjectPanelWidget extends ObjectPanelWidget {
         this.name = block.getName().getString();
         addChild(new ItemStackWidget(block.asItem().getDefaultInstance()), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
-        addChild(new StringWidget(block.getName(), Minecraft.getInstance().font).alignLeft(), PositionConstraints.grid(0,1),
-                SizeConstraints.builder().absoluteHeight(12).build());
+        addString(block.getName(), PositionConstraints.grid(0,1), textConstraint);
         this.xpSection = XpSectionWidget.create(block, be);
         addChild((AbstractWidget) xpSection, PositionConstraints.grid(1,1), SizeConstraints.builder().internalHeight().build());
         this.reqSection = ReqSectionWidget.create(block, be);

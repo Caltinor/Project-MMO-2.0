@@ -56,7 +56,7 @@ public class PerkObjectPanelWidget extends ObjectPanelWidget {
                             .withStyle(ChatFormatting.AQUA),
                     PositionType.STATIC.constraint, textConstraint);
             configurations.forEach(tag -> {
-                ResourceLocation perkID = Reference.of(tag.getString("perk"));
+                ResourceLocation perkID = Reference.of(tag.getStringOr("perk", "missing"));
                 CompoundTag settings = new CompoundTag().merge(reg.getDefaults(perkID)).merge(tag.copy());
                 addChild((AbstractWidget) reg.getRenderer(perkID).getWidget(this.width, player, settings), PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
             });

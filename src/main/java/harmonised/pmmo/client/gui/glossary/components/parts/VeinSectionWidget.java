@@ -41,7 +41,7 @@ public class VeinSectionWidget extends ReactiveWidget {
     }
 
     private static Positioner<?> build(Component text, Font font) {
-        return new Positioner.Widget(new StringWidget(text, font).alignLeft(), PositionType.STATIC.constraint, textConstraint);
+        return new Positioner.Widget(new StringWidget(text, font), PositionType.STATIC.constraint, textConstraint);
     }
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}

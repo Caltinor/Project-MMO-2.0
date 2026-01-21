@@ -53,8 +53,7 @@ public class BiomeObjectPanelWidget extends ObjectPanelWidget {
         this.name = this.id;
         addChild(ImageWidget.texture(18, 18, texture, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
-        addChild(new StringWidget(Component.literal(name), Minecraft.getInstance().font).alignLeft(), PositionConstraints.grid(0,1),
-                SizeConstraints.builder().absoluteHeight(12).build());
+        addString(Component.literal(name), PositionConstraints.grid(0,1), SizeConstraints.builder().absoluteHeight(12).build());
         this.effects = new PosNegEffectSectionWidget(data, true);
         addChild((AbstractWidget) effects, PositionConstraints.grid(1,1), SizeConstraints.builder().internalHeight().build());
         this.bonuses = BonusSectionWidget.create(biome);

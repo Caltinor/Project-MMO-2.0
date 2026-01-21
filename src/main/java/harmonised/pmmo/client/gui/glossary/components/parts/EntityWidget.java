@@ -26,7 +26,7 @@ public class EntityWidget extends AbstractWidget{
             int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));Quaternionf quaternionf = new Quaternionf().rotateZ((float) Math.PI);
             Quaternionf quaternionf1 = new Quaternionf().rotateX(90 * 20.0F * (float) (Math.PI / 180.0));
             quaternionf.mul(quaternionf1);
-            InventoryScreen.renderEntityInInventory(guiGraphics, this.getX()+9, this.getY()+9, scale, new Vector3f(0, 1, 0), quaternionf, null, living);
+            InventoryScreen.renderEntityInInventory(guiGraphics, this.getX(), this.getY(), this.getRight(), this.getBottom(), scale, new Vector3f(0, 1, 0), quaternionf, null, living);
         }
     }
 

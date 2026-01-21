@@ -14,9 +14,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,8 +28,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.village.ReputationEventType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -44,15 +39,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-@EventBusSubscriber(modid=Reference.MOD_ID, bus=EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid=Reference.MOD_ID)
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
 	//<editor-fold defaultstate="collapsed" desc="Attribute Perk">
 	private static final Map<String, Holder.Reference<Attribute>> attributeCache = new HashMap<>();
 	
 	private static Holder.Reference<Attribute> getAttribute(CompoundTag nbt) {
-		return attributeCache.computeIfAbsent(nbt.getString(APIUtils.ATTRIBUTE), 
-				name -> BuiltInRegistries.ATTRIBUTE.getHolder(Reference.of(name)).orElse(null));
+		return attributeCache.computeIfAbsent(nbt.getStringOr(APIUtils.ATTRIBUTE, "missing"),
+				name -> BuiltInRegistries.ATTRIBUTE.get(Reference.of(name)).orElse(null));
 	}
 
 	private static ResourceLocation attributeID(String attribute, String skill) {
@@ -66,14 +61,14 @@ public class FeaturePerks {
 					.withDouble(APIUtils.BASE, 0d)
 					.withBool(APIUtils.MULTIPLICATIVE, false).build())
 			.setStart((player, nbt) -> {
-				double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
-				double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
+				double perLevel = nbt.getDoubleOr(APIUtils.PER_LEVEL, 0d);
+				double maxBoost = nbt.getDoubleOr(APIUtils.MAX_BOOST, 0d);
 				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
 				if (instance == null) return NONE;
-				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
-				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
+				double boost = Math.min(perLevel * nbt.getIntOr(APIUtils.SKILL_LEVEL, 0), maxBoost) + nbt.getDoubleOr(APIUtils.BASE, 0d);
+				AttributeModifier.Operation operation = nbt.getBooleanOr(APIUtils.MULTIPLICATIVE, false) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 				
-				ResourceLocation attributeID = attributeID(nbt.getString(APIUtils.ATTRIBUTE), nbt.getString(APIUtils.SKILLNAME));
+				ResourceLocation attributeID = attributeID(nbt.getStringOr(APIUtils.ATTRIBUTE, "missing"), nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
 				AttributeModifier modifier = new AttributeModifier(attributeID, boost, operation);
 				instance.removeModifier(attributeID);
 				instance.addPermanentModifier(modifier);
@@ -91,7 +86,7 @@ public class FeaturePerks {
 				AttributeInstance instance = player.getAttributes().getInstance(attribute);
 				if (instance != null)
 						instance.getModifiers().stream()
-						.filter(mod -> mod.id().equals(attributeID(nbt.getString(APIUtils.ATTRIBUTE), nbt.getString(APIUtils.SKILLNAME))))
+						.filter(mod -> mod.id().equals(attributeID(nbt.getStringOr(APIUtils.ATTRIBUTE, "missing"), nbt.getStringOr(APIUtils.SKILLNAME, "missing"))))
 						.forEach(mod -> respawnAttributes.put(player, new AttributeRecord(attribute, mod)));
 			}
 
@@ -118,13 +113,13 @@ public class FeaturePerks {
 	public static final Perk TEMP_ATTRIBUTE = Perk.begin()
 			.addDefaults(ATTRIBUTE.propertyDefaults())
 			.setStart((player, nbt) -> {
-				double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
-				double maxBoost = nbt.getDouble(APIUtils.MAX_BOOST);
+				double perLevel = nbt.getDoubleOr(APIUtils.PER_LEVEL, 0d);
+				double maxBoost = nbt.getDoubleOr(APIUtils.MAX_BOOST, 0d);
 				AttributeInstance instance = player.getAttribute(getAttribute(nbt));
-				double boost = Math.min(perLevel * nbt.getInt(APIUtils.SKILL_LEVEL), maxBoost) + nbt.getDouble(APIUtils.BASE);
-				AttributeModifier.Operation operation = nbt.getBoolean(APIUtils.MULTIPLICATIVE) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
+				double boost = Math.min(perLevel * nbt.getIntOr(APIUtils.SKILL_LEVEL, 0), maxBoost) + nbt.getDoubleOr(APIUtils.BASE, 0d);
+				AttributeModifier.Operation operation = nbt.getBooleanOr(APIUtils.MULTIPLICATIVE, false) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 
-				ResourceLocation attributeID = Reference.rl("temp+perk/"+nbt.getString(APIUtils.ATTRIBUTE).replace(':','_')+"/"+nbt.getString(APIUtils.SKILLNAME));
+				ResourceLocation attributeID = Reference.rl("temp+perk/"+nbt.getStringOr(APIUtils.ATTRIBUTE, "missing").replace(':','_')+"/"+nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
 				AttributeModifier modifier = new AttributeModifier(attributeID, boost, operation);
 				if (instance.hasModifier(modifier.id()))
 					instance.removeModifier(attributeID);
@@ -132,7 +127,7 @@ public class FeaturePerks {
 				return NONE;
 			})
 			.setStop((player, nbt) -> {
-				ResourceLocation attributeID = Reference.rl("temp+perk/"+nbt.getString(APIUtils.ATTRIBUTE).replace(':','_')+"/"+nbt.getString(APIUtils.SKILLNAME));
+				ResourceLocation attributeID = Reference.rl("temp+perk/"+nbt.getStringOr(APIUtils.ATTRIBUTE, "missing").replace(':','_')+"/"+nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
 				player.getAttribute(getAttribute(nbt)).removeModifier(attributeID);
 				return NONE;
 			})
@@ -143,21 +138,21 @@ public class FeaturePerks {
 	//<editor-fold defaultstate="collapsed" desc="Effect Perk">
 	public static BiFunction<Player, CompoundTag, CompoundTag> EFFECT_SETTER = (player, nbt) -> {
 		Holder<MobEffect> effect;
-		if ((effect = BuiltInRegistries.MOB_EFFECT.getHolder(Reference.of(nbt.getString("effect"))).get()) != null) {
-			int skillLevel = nbt.getInt(APIUtils.SKILL_LEVEL);
-			int configDuration = nbt.getInt(APIUtils.DURATION);
-			double perLevel = nbt.getDouble(APIUtils.PER_LEVEL);
-			int base = nbt.getInt(APIUtils.BASE);
+		if ((effect = BuiltInRegistries.MOB_EFFECT.get(Reference.of(nbt.getStringOr("effect", "missing"))).orElse(null)) != null) {
+			int skillLevel = nbt.getIntOr(APIUtils.SKILL_LEVEL, 0);
+			int configDuration = nbt.getIntOr(APIUtils.DURATION, 100);
+			double perLevel = nbt.getDoubleOr(APIUtils.PER_LEVEL, 1d);
+			int base = nbt.getIntOr(APIUtils.BASE, 0);
 			int calculatedDuration = (int)((double)skillLevel * (double) configDuration * perLevel) + base;
-			calculatedDuration = Math.min(nbt.getInt(APIUtils.MAX_BOOST), calculatedDuration);
+			calculatedDuration = Math.min(nbt.getIntOr(APIUtils.MAX_BOOST, 0), calculatedDuration);
 			int duration = player.hasEffect(effect) && player.getEffect(effect).getDuration() > calculatedDuration
 					? player.getEffect(effect).getDuration() 
 					: calculatedDuration;
 
-			int amplifier = nbt.getInt(APIUtils.MODIFIER);
-			boolean ambient = nbt.getBoolean(APIUtils.AMBIENT);
-			boolean visible = nbt.getBoolean(APIUtils.VISIBLE);
-			boolean showIcon = nbt.getBoolean(APIUtils.SHOW_ICON);
+			int amplifier = nbt.getIntOr(APIUtils.MODIFIER, 0);
+			boolean ambient = nbt.getBooleanOr(APIUtils.AMBIENT, false);
+			boolean visible = nbt.getBooleanOr(APIUtils.VISIBLE, true);
+			boolean showIcon = nbt.getBooleanOr(APIUtils.SHOW_ICON, true);
 			player.addEffect(new MobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon));
 		}
 		return NONE;
@@ -186,7 +181,7 @@ public class FeaturePerks {
 	public static final Perk JUMP_CLIENT = Perk.begin()
 		.addDefaults(JUMP_DEFAULTS)
 		.setStart((player, nbt) -> {
-	        double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)) + nbt.getDouble(APIUtils.BASE);
+	        double jumpBoost = Math.min(nbt.getDoubleOr(APIUtils.MAX_BOOST, 0), -0.011 + nbt.getIntOr(APIUtils.SKILL_LEVEL, 0) * nbt.getDoubleOr(APIUtils.PER_LEVEL, 0d)) + nbt.getDoubleOr(APIUtils.BASE, 0d);
 	        player.setDeltaMovement(player.getDeltaMovement().add(0, jumpBoost, 0));
 	        player.hurtMarked = true; 
 	        return NONE;
@@ -195,7 +190,7 @@ public class FeaturePerks {
 	public static final Perk JUMP_SERVER = Perk.begin()
 		.addDefaults(JUMP_DEFAULTS)
 		.setStart((player, nbt) -> {
-			double jumpBoost = Math.min(nbt.getDouble(APIUtils.MAX_BOOST), -0.011 + nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)) + nbt.getDouble(APIUtils.BASE);
+			double jumpBoost = Math.min(nbt.getDoubleOr(APIUtils.MAX_BOOST, 0), -0.011 + nbt.getIntOr(APIUtils.SKILL_LEVEL, 0) * nbt.getDoubleOr(APIUtils.PER_LEVEL, 0)) + nbt.getDoubleOr(APIUtils.BASE, 0);
 	        return TagBuilder.start().withDouble(APIUtils.JUMP_OUT, player.getDeltaMovement().y + jumpBoost).build();
 		}).build();
 	//</editor-fold>
@@ -208,27 +203,27 @@ public class FeaturePerks {
 					.withDouble(APIUtils.PER_LEVEL, 1d)
 					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE).build())
 			.setStart((player, nbt) -> {
-				int perLevel = Math.max(1, (int)((double)nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL))) + nbt.getInt(APIUtils.BASE);
-				perLevel = Math.min(nbt.getInt(APIUtils.MAX_BOOST), perLevel);
+				int perLevel = Math.max(1, (int)((double)nbt.getIntOr(APIUtils.SKILL_LEVEL, 0) * nbt.getDoubleOr(APIUtils.PER_LEVEL, 0d))) + nbt.getIntOr(APIUtils.BASE, 0);
+				perLevel = Math.min(nbt.getIntOr(APIUtils.MAX_BOOST, Integer.MAX_VALUE), perLevel);
 				player.setAirSupply(player.getAirSupply() + perLevel);
-				player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
+				player.displayClientMessage(LangProvider.PERK_BREATH_REFRESH.asComponent(), true);
 				return NONE;
 			}).build();
 	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Damage Boost/Reduce Perks">
 	public static final Perk DAMAGE_REDUCE = Perk.begin()
 			.addConditions((player, nbt) -> {
-				String perkApplicableDamageType = nbt.getString(APIUtils.DAMAGE_TYPE_IN);
-				Registry<DamageType> damageRegistry = player.level().registryAccess().registry(Registries.DAMAGE_TYPE).get();
-				ResourceKey<DamageType> resourceKey = ResourceKey.create(damageRegistry.key(), Reference.of(nbt.getString(APIUtils.DAMAGE_TYPE)));
+				String perkApplicableDamageType = nbt.getStringOr(APIUtils.DAMAGE_TYPE_IN, "missing");
+				Registry<DamageType> damageRegistry = player.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE);
+				ResourceKey<DamageType> resourceKey = ResourceKey.create(damageRegistry.key(), Reference.of(nbt.getStringOr(APIUtils.DAMAGE_TYPE, "missing")));
 				if (perkApplicableDamageType.startsWith("#") && damageRegistry
-						.getTag(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(perkApplicableDamageType.substring(1)))
-								).stream().anyMatch(typeTag -> typeTag.contains(damageRegistry.getHolder(resourceKey).get())))
+						.get(TagKey.create(Registries.DAMAGE_TYPE, Reference.of(perkApplicableDamageType.substring(1)))
+								).stream().anyMatch(typeTag -> typeTag.contains(damageRegistry.get(resourceKey).get())))
 					return true;
 				else if (perkApplicableDamageType.endsWith(":*") && perkApplicableDamageType.substring(0, perkApplicableDamageType.indexOf(':'))
-						.equals(nbt.getString(APIUtils.DAMAGE_TYPE).substring(0, nbt.getString(APIUtils.DAMAGE_TYPE).indexOf(':'))))
+						.equals(nbt.getStringOr(APIUtils.DAMAGE_TYPE, "missing").substring(0, nbt.getStringOr(APIUtils.DAMAGE_TYPE, "missing").indexOf(':'))))
 					return true;
-				return perkApplicableDamageType.equals(nbt.getString(APIUtils.DAMAGE_TYPE));
+				return perkApplicableDamageType.equals(nbt.getStringOr(APIUtils.DAMAGE_TYPE, "missing"));
 			})
 			.addDefaults(TagBuilder.start()
 					.withDouble(APIUtils.PER_LEVEL, 0.025)
@@ -238,11 +233,11 @@ public class FeaturePerks {
 					.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 					.withString(APIUtils.DAMAGE_TYPE_IN, "omitted").build())
 			.setStart((player, nbt) -> {
-				float saved = (nbt.getFloat(APIUtils.PER_LEVEL) * (float)nbt.getInt(APIUtils.SKILL_LEVEL)) + nbt.getFloat(APIUtils.BASE);
-				saved = Math.min(nbt.getFloat(APIUtils.MAX_BOOST), saved);
+				float saved = (nbt.getFloatOr(APIUtils.PER_LEVEL, 0f) * (float)nbt.getIntOr(APIUtils.SKILL_LEVEL, 0)) + nbt.getFloatOr(APIUtils.BASE, 0f);
+				saved = Math.min(nbt.getFloatOr(APIUtils.MAX_BOOST, 0f), saved);
 				float baseDamage = nbt.contains(APIUtils.DAMAGE_OUT)
-						? nbt.getFloat(APIUtils.DAMAGE_OUT)
-						: nbt.getFloat(APIUtils.DAMAGE_IN);
+						? nbt.getFloatOr(APIUtils.DAMAGE_OUT, 0)
+						: nbt.getFloatOr(APIUtils.DAMAGE_IN, 0);
 				nbt.putFloat(APIUtils.DAMAGE_OUT, Math.max(baseDamage - saved, 0));
 				return nbt;
 			}).build();
@@ -250,8 +245,8 @@ public class FeaturePerks {
 	public static final String APPLICABLE_TO = "applies_to";
 	public static final Perk DAMAGE_BOOST = Perk.begin()
 			.addConditions((player, nbt) -> {
-				String perkApplicableDamageType = nbt.getString(APIUtils.DAMAGE_TYPE);
-				List<String> dmgType = nbt.getList(APIUtils.DAMAGE_TYPE_IN, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
+				String perkApplicableDamageType = nbt.getStringOr(APIUtils.DAMAGE_TYPE, "missing");
+				List<String> dmgType = nbt.getListOrEmpty(APIUtils.DAMAGE_TYPE_IN).stream().map(t -> t.asString().orElse("")).toList();
 				boolean damageMatch = dmgType.isEmpty() || dmgType.stream().anyMatch(key -> {
 					if (key.startsWith("#") && RegistryUtil.isInTag(player.level().registryAccess(), Registries.DAMAGE_TYPE, perkApplicableDamageType, key.substring(1)))
 						return true;
@@ -259,7 +254,7 @@ public class FeaturePerks {
 						return true;
 					else return key.equals(perkApplicableDamageType);
 				});
-				List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
+				List<String> type = nbt.getListOrEmpty(APPLICABLE_TO).stream().map(t -> t.asString().orElse("")).toList();
 				boolean weaponMatch = type.isEmpty() || type.stream().anyMatch(key -> {
 					if (key.startsWith("#") && RegistryUtil.isInTag(player.level().registryAccess(), Registries.ITEM, RegistryUtil.getId(player.level().registryAccess(), player.getMainHandItem()), key.substring(1)))
 						return true;
@@ -278,11 +273,11 @@ public class FeaturePerks {
 				.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE)
 				.withBool(APIUtils.MULTIPLICATIVE, true).build())
 			.setStart((player, nbt) -> {
-				float damageModification = (float)(nbt.getDouble(APIUtils.BASE) + nbt.getDouble(APIUtils.PER_LEVEL) * (double)nbt.getInt(APIUtils.SKILL_LEVEL));
-				damageModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST), damageModification);
-				float damage = nbt.getBoolean(APIUtils.MULTIPLICATIVE) 
-						? nbt.getFloat(APIUtils.DAMAGE_OUT) * damageModification
-						: nbt.getFloat(APIUtils.DAMAGE_OUT) + damageModification;
+				float damageModification = (float)(nbt.getDoubleOr(APIUtils.BASE, 0d) + nbt.getDoubleOr(APIUtils.PER_LEVEL ,0d) * (double)nbt.getIntOr(APIUtils.SKILL_LEVEL, 0));
+				damageModification = Math.min(nbt.getIntOr(APIUtils.MAX_BOOST, 0), damageModification);
+				float damage = nbt.getBooleanOr(APIUtils.MULTIPLICATIVE, true)
+						? nbt.getFloatOr(APIUtils.DAMAGE_OUT, 0) * damageModification
+						: nbt.getFloatOr(APIUtils.DAMAGE_OUT, 0) + damageModification;
 				return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, damage).build();
 			}).build();
 	//</editor-fold>
@@ -294,23 +289,17 @@ public class FeaturePerks {
 			if (!(p instanceof ServerPlayer)) return NONE;
 			ServerPlayer player = (ServerPlayer) p;
 			if (nbt.contains(FUNCTION)) {
-				player.getServer().getFunctions().execute(
-						player.getServer().getFunctions().get(Reference.of(nbt.getString(FUNCTION))).get(),
+				player.level().getServer().getFunctions().execute(
+						player.level().getServer().getFunctions().get(Reference.of(nbt.getStringOr(FUNCTION, "missing"))).get(),
 						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2));			
 			}
 			else if (nbt.contains(COMMAND)) {
-				player.getServer().getCommands().performPrefixedCommand(
+				player.level().getServer().getCommands().performPrefixedCommand(
 						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2), 
-						nbt.getString(COMMAND));
+						nbt.getStringOr(COMMAND, "tell @s command perk missing command property"));
 			}
 			return NONE;
-		})
-//		.setDescription(LangProvider.PERK_COMMAND_DESC.asComponent())
-//		.setStatus((player, nbt) -> List.of(
-//				LangProvider.PERK_COMMAND_STATUS_1.asComponent(
-//				nbt.contains(FUNCTION) ? "Function" : "Command",
-//				nbt.contains(FUNCTION) ? nbt.getString(FUNCTION) : nbt.getString(COMMAND))))
-			.build();
+		}).build();
 	//</editor-fold>
 	//<editor-fold defaultstate="collapsed" desc="Villager Trading Perk">
 	public static final Perk VILLAGER_TRADING = Perk.begin()
@@ -322,18 +311,11 @@ public class FeaturePerks {
 					.withDouble(APIUtils.PER_LEVEL, 0.05)
 					.withLong(APIUtils.COOLDOWN, 1000L).build())
 			.setStart((player, nbt) -> {
-				int villagerID = nbt.getInt(APIUtils.ENTITY_ID);
+				int villagerID = nbt.getIntOr(APIUtils.ENTITY_ID, 0);
 				Villager villager = (Villager) player.level().getEntity(villagerID);
 				villager.onReputationEventFrom(ReputationEventType.ZOMBIE_VILLAGER_CURED, player);
-				player.sendSystemMessage(LangProvider.PERK_VILLAGE_FEEDBACK.asComponent());
+				player.displayClientMessage(LangProvider.PERK_VILLAGE_FEEDBACK.asComponent(), true);
 				return NONE;
-			})
-//			.setDescription(LangProvider.PERK_VILLAGER_DESC.asComponent())
-//			.setStatus((player, nbt) -> List.of(
-//				LangProvider.PERK_VILLAGE_STATUS_1.asComponent(
-//						nbt.getInt(APIUtils.SKILL_LEVEL) * nbt.getDouble(APIUtils.PER_LEVEL)
-//				)
-//			))
-			.build();
+			}).build();
 	//</editor-fold>
 }

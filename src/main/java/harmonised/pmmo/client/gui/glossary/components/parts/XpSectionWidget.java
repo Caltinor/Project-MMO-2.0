@@ -85,17 +85,17 @@ public class XpSectionWidget extends ReactiveWidget {
                     String skill = skillmap.keySet().iterator().next();
                     if (skillmap.get(skill) > 0)
                         combine.append(" ").append(LangProvider.skill(skill)).append(": ").append(skillmap.get(skill).toString());
-                    contentWidgets.add(new Positioner.Widget(new StringWidget(combine, font).alignLeft(), PositionType.STATIC.constraint, textConstraint));
+                    contentWidgets.add(new Positioner.Widget(new StringWidget(combine, font), PositionType.STATIC.constraint, textConstraint));
                 }
                 else {
-                    contentWidgets.addAll(setSkills(skillmap, new StringWidget(combine, font).alignLeft(), font));
+                    contentWidgets.addAll(setSkills(skillmap, new StringWidget(combine, font), font));
                 }
             }
         }
         for (EventType dmgType : EventType.DAMAGE_TYPES) {
             var dmgMap = objectData.damageXpValues().getOrDefault(dmgType, new HashMap<>());
             if (!dmgMap.isEmpty()) {
-                contentWidgets.add(new Positioner.Widget(new StringWidget(dmgType.tooltipTranslation.asComponent(), font).alignLeft(), PositionType.STATIC.constraint, textConstraint));
+                contentWidgets.add(new Positioner.Widget(new StringWidget(dmgType.tooltipTranslation.asComponent(), font), PositionType.STATIC.constraint, textConstraint));
                 for (String dmgKey : dmgMap.keySet()) {
                     MutableComponent prefix = Component.literal("   ");
                     var skillmap = dmgMap.getOrDefault(dmgKey, new HashMap<>());
@@ -104,16 +104,16 @@ public class XpSectionWidget extends ReactiveWidget {
                         String skill = skillmap.keySet().iterator().next();
                         if (skillmap.get(skill) > 0)
                             combine.append(" ").append(LangProvider.skill(skill)).append(": ").append(skillmap.get(skill).toString());
-                        contentWidgets.add(new Positioner.Widget(new StringWidget(combine, font).alignLeft(), PositionType.STATIC.constraint, textConstraint));
+                        contentWidgets.add(new Positioner.Widget(new StringWidget(combine, font), PositionType.STATIC.constraint, textConstraint));
                     }
                     else {
-                        contentWidgets.addAll(setSkills(skillmap, new StringWidget(combine, font).alignLeft(), font, true));
+                        contentWidgets.addAll(setSkills(skillmap, new StringWidget(combine, font), font, true));
                     }
                 }
             }
         }
         if (!contentWidgets.isEmpty()) {
-            layout.addChild(new StringWidget(LangProvider.EVENT_HEADER.asComponent().withStyle(ChatFormatting.GREEN), font).alignLeft(), PositionType.STATIC.constraint, textConstraint);
+            layout.addChild(new StringWidget(LangProvider.EVENT_HEADER.asComponent().withStyle(ChatFormatting.GREEN), font), PositionType.STATIC.constraint, textConstraint);
             contentWidgets.forEach(layout::addChild);
             layout.addChild(new DividerWidget(100, 1, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
         }
@@ -128,7 +128,7 @@ public class XpSectionWidget extends ReactiveWidget {
         MutableComponent prefix = Component.literal(map.values().stream().filter(s -> s > 0).count() > 1 ? "   " : "").append(dmgEntry? "   ": "");
         map.forEach((skill, value) -> {
             if (value > 0)
-                skillWidgets.add(new Positioner.Widget(new StringWidget(prefix.copy().append(LangProvider.skill(skill)).append(": ").append(value.toString()), font).alignLeft(),
+                skillWidgets.add(new Positioner.Widget(new StringWidget(prefix.copy().append(LangProvider.skill(skill)).append(": ").append(value.toString()), font),
                         PositionType.STATIC.constraint, textConstraint));
         });
         return skillWidgets.size() > 1 ? skillWidgets : new ArrayList<>();

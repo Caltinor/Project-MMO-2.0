@@ -6,6 +6,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -44,11 +46,11 @@ public class CollapsingPanel extends ReactiveWidget {
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.enableScissor(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        guiGraphics.blit(TEXTURE_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(),
+        guiGraphics.blit(RenderPipelines.GUI, TEXTURE_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(),
                 collapsed() ? 140 : 0, 0, collapsed() ? 7 : 147, 165, 256, 256);
         int offset = (int) (28d / scale);
         int hScaled = (int) (80d / scale);
-        guiGraphics.blit(collapsed() ? RIGHT : LEFT, this.getX()+this.width-offset,
+        guiGraphics.blit(RenderPipelines.GUI, collapsed() ? RIGHT : LEFT, this.getX()+this.width-offset,
                 this.getY()+ (this.height/2) - (hScaled/2) - 1, offset, hScaled,
                 0, 0, 7, 20, 7, 20);
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
@@ -56,15 +58,15 @@ public class CollapsingPanel extends ReactiveWidget {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (mouseY > this.getY() && mouseY < this.getY() + this.getHeight()
-           && mouseX > this.getRight() - (20/scale) && mouseX < this.getX() + this.getRight()) {
+    public boolean mouseClicked(MouseButtonEvent mbe, boolean isDoubleClick) {
+        if (mbe.y() > this.getY() && mbe.y() < this.getY() + this.getHeight()
+           && mbe.x() > this.getRight() - (20/scale) && mbe.x() < this.getX() + this.getRight()) {
             this.setWidth(collapsed() ? this.expandedWidth : (int)(20d / scale));
             if (this.callback != null)
                 callback.accept(this);
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mbe, isDoubleClick);
     }
 
     @Override

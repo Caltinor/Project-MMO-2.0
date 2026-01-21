@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.function.TriFunction;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
@@ -108,8 +109,8 @@ public record Perk(
 						milestone_match = milestone;
 				if (modulus && skillLevel % Math.max(1, src.getIntOr(APIUtils.MODULUS, 0)) != 0)
 					modulus_match = false;
-				if (milestone && !src.getList(APIUtils.MILESTONES).get().stream()
-						.map(Tag::asInt).map(Optional::get).toList().contains(skillLevel))
+				if (milestone && !src.getListOrEmpty(APIUtils.MILESTONES).stream()
+						.map(t -> t.asInt().orElse(0)).toList().contains(skillLevel))
 					milestone_match = false;
 				if (!modulus_match && !milestone_match)
 					return false;

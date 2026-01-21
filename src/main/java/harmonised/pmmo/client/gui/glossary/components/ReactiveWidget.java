@@ -11,6 +11,9 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 import javax.swing.text.Position;
@@ -89,30 +92,30 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent mbe, boolean isRelease) {
         for (AbstractWidget widget : widgets().stream().filter(a -> a.visible).toList()) {
-            if (widget.isMouseOver(mouseX, mouseY) && widget.mouseClicked(mouseX, mouseY, button)) {
+            if (widget.isMouseOver(mbe.x(), mbe.y()) && widget.mouseClicked(mbe, isRelease)) {
                 widget.setFocused(true);
                 return true;
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mbe, isRelease);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(MouseButtonEvent mbe) {
         for (AbstractWidget widget : widgets()) {
-            if (widget.isMouseOver(mouseX, mouseY) && widget.mouseReleased(mouseX, mouseY, button)) return true;
+            if (widget.isMouseOver(mbe.x(), mbe.y()) && widget.mouseReleased(mbe)) return true;
         }
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(mbe);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+    public boolean mouseDragged(MouseButtonEvent mbe, double dragX, double dragY) {
         for (AbstractWidget widget : widgets()) {
-            if (widget.mouseDragged(mouseX, mouseY, button, dragX, dragY)) return true;
+            if (widget.mouseDragged(mbe, dragX, dragY)) return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(mbe, dragX, dragY);
     }
 
     @Override
@@ -132,35 +135,35 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent ke) {
         for (AbstractWidget widget : widgets()) {
-            if (widget.isHoveredOrFocused() && widget.keyPressed(keyCode, scanCode, modifiers)) return true;
+            if (widget.isHoveredOrFocused() && widget.keyPressed(ke)) return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(ke);
     }
 
     @Override
-    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+    public boolean keyReleased(KeyEvent ke) {
         for (AbstractWidget widget : widgets()) {
-            if (widget.isHoveredOrFocused() && widget.keyReleased(keyCode, scanCode, modifiers)) return true;
+            if (widget.isHoveredOrFocused() && widget.keyReleased(ke)) return true;
         }
-        return super.keyReleased(keyCode, scanCode, modifiers);
+        return super.keyReleased(ke);
     }
 
     @Override
-    public boolean charTyped(char codePoint, int modifiers) {
+    public boolean charTyped(CharacterEvent ce) {
         for (AbstractWidget widget : widgets()) {
-            if (widget.isHoveredOrFocused() && widget.charTyped(codePoint, modifiers)) return true;
+            if (widget.isHoveredOrFocused() && widget.charTyped(ce)) return true;
         }
-        return super.charTyped(codePoint, modifiers);
+        return super.charTyped(ce);
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY) {
+    public void onClick(MouseButtonEvent mbe, boolean isDoubleClick) {
         widgets().stream()
                 .filter(AbstractWidget::isHoveredOrFocused)
-                .forEach(widget -> widget.onClick(mouseX, mouseY));
-        super.onClick(mouseX, mouseY);
+                .forEach(widget -> widget.onClick(mbe, isDoubleClick));
+        super.onClick(mbe, isDoubleClick);
     }
 
     @Override

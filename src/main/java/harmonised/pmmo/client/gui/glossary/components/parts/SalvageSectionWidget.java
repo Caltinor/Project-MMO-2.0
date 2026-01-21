@@ -42,16 +42,16 @@ public class SalvageSectionWidget extends ReactiveWidget {
     public SalvageSectionWidget(ItemStack stack) {
         super(0, 0, 0, 0);
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
-        Registry<Item> registry = access.registryOrThrow(Registries.ITEM);
+        Registry<Item> registry = access.lookupOrThrow(Registries.ITEM);
         ResourceLocation id = RegistryUtil.getId(access, stack);
         Font font = Minecraft.getInstance().font;
         Core core = Core.get(LogicalSide.CLIENT);
         this.salvage = core.getLoader().ITEM_LOADER.getData(id).salvage();
         List<Positioner<?>> contentWidgets = new ArrayList<>();
-        this.salvage.forEach((sid, data) -> contentWidgets.add(new Positioner.Widget(new SalvageEntryWidget(registry.get(sid).getDefaultInstance(), data, font), PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build())));
+        this.salvage.forEach((sid, data) -> contentWidgets.add(new Positioner.Widget(new SalvageEntryWidget(registry.get(sid).get().value().getDefaultInstance(), data, font), PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build())));
 
         if (!salvage.isEmpty()) {
-            addChild(new Positioner.Widget(new StringWidget(LangProvider.SALVAGE_HEADER.asComponent(), font).alignLeft(), PositionType.STATIC.constraint, textConstraint));
+            addChild(new Positioner.Widget(new StringWidget(LangProvider.SALVAGE_HEADER.asComponent(), font), PositionType.STATIC.constraint, textConstraint));
             contentWidgets.forEach(this::addChild);
             addChild(new DividerWidget(100, 1, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
         }

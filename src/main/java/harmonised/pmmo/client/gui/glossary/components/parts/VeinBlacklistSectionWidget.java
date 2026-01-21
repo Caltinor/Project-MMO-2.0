@@ -30,10 +30,10 @@ public class VeinBlacklistSectionWidget extends ReactiveWidget {
         super(0, 0, 0, 0);
         this.data = data;
         if (!data.isEmpty() && Config.server().veinMiner().enabled()) {
-            var reg = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.BLOCK);
+            var reg = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.BLOCK);
             addString(LangProvider.VEIN_BLACKLIST_HEADER.asComponent(), PositionType.STATIC.constraint, textConstraint);
             for (ResourceLocation id : data) {
-                Block block = reg.get(id);
+                Block block = reg.get(id).get().value();
                 addString(block != null ? block.asItem().getDefaultInstance().getDisplayName() : Component.literal(id.toString()), PositionConstraints.offset(10, 0), textConstraint);
             }
         }

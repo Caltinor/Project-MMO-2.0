@@ -41,7 +41,7 @@ public class ItemObjectPanelWidget extends ObjectPanelWidget {
         addChild(new StringWidget(Component.literal("")
                         .append(stack.getDisplayName())
                         .append(stack.getItem() instanceof BlockItem ? LangProvider.GLOSSARY_HEADER_AS_ITEM.asComponent() : Component.literal(""))
-                , Minecraft.getInstance().font).alignLeft(), PositionConstraints.grid(0,1),
+                , Minecraft.getInstance().font), PositionConstraints.grid(0,1),
                 SizeConstraints.builder().absoluteHeight(12).build());
         this.xpSection = XpSectionWidget.create(stack);
         addChild((AbstractWidget) xpSection, PositionConstraints.grid(1,1), SizeConstraints.builder().internalHeight().build());

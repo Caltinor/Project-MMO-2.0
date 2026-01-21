@@ -26,11 +26,11 @@ public class BreathPanel extends PanelWidget {
         MutableComponent title = LangProvider.PERK_BREATH.asComponent();
         MutableComponent descr = LangProvider.PERK_BREATH_DESC.asComponent();
         this.name = title.toString();
-        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.skill = config.getString(APIUtils.SKILLNAME).orElse(null);
         long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
         addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
-        double perLevel = config.getDouble(APIUtils.PER_LEVEL);
+        double perLevel = config.getDoubleOr(APIUtils.PER_LEVEL, 0);
         int breath = (int)((double)skillLevel * perLevel);
         addString(LangProvider.PERK_BREATH_STATUS_1.asComponent(breath, perLevel), PositionConstraints.offset(10, 0), textConstraint);
 

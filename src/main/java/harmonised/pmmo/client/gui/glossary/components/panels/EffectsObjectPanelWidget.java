@@ -35,17 +35,17 @@ public class EffectsObjectPanelWidget extends ObjectPanelWidget {
 
     public EffectsObjectPanelWidget(int color, int width, MobEffect effect) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        var reg = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.MOB_EFFECT);
+        var reg = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.MOB_EFFECT);
         ResourceLocation rl = reg.getKey(effect);
-        Optional<Holder.Reference<MobEffect>> holder = reg.getHolder(rl);
+        Optional<Holder.Reference<MobEffect>> holder = reg.get(rl);
         EnhancementsData data = core.getLoader().EFFECT_LOADER.getData(rl);
         this.id = rl.toString();
         this.name = this.id;
         this.skills = data.skillArray().values().stream().map(Map::keySet).flatMap(Set::stream).toList();
         if (holder.isPresent()) {
-            addChild(new MobEffectWidget(reg.getHolder(rl).get()), PositionConstraints.grid(0, 0), SizeConstraints.builder()
+            addChild(new MobEffectWidget(reg.get(rl).get()), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                     .absoluteHeight(18).absoulteWidth(18).build());
-            addChild(new StringWidget(effect.getDisplayName(), Minecraft.getInstance().font).alignLeft(), PositionConstraints.grid(0, 1),
+            addChild(new StringWidget(effect.getDisplayName(), Minecraft.getInstance().font), PositionConstraints.grid(0, 1),
                     SizeConstraints.builder().absoluteHeight(12).build());
             int row = 1;
             for (AbstractWidget widget : build(data, Minecraft.getInstance().font)) {
@@ -61,17 +61,17 @@ public class EffectsObjectPanelWidget extends ObjectPanelWidget {
     private List<AbstractWidget> build(EnhancementsData data, Font font) {
         List<AbstractWidget> entries = new ArrayList<>();
         if (!data.skillArray().isEmpty())
-            entries.add(new StringWidget(LangProvider.GLOSSARY_HEADER_EFFECT_XP.asComponent(), font).alignLeft());
+            entries.add(new StringWidget(LangProvider.GLOSSARY_HEADER_EFFECT_XP.asComponent(), font));
         data.skillArray().forEach((level, map) -> {
             if (map.isEmpty()) return;
             MutableComponent text = levelAsComponent(level);
             if (map.size() > 1) {
-                entries.add(new StringWidget(text, font).alignLeft());
-                map.forEach((skill, xp) -> entries.add(new StringWidget(Component.literal("      ").append(LangProvider.skill(skill)).append(" ").append(xp.toString()), font).alignLeft()));
+                entries.add(new StringWidget(text, font));
+                map.forEach((skill, xp) -> entries.add(new StringWidget(Component.literal("      ").append(LangProvider.skill(skill)).append(" ").append(xp.toString()), font)));
             }
             else {
                 map.forEach((key, xp) -> text.append(LangProvider.skill(key)).append(" ").append(xp.toString()));
-                entries.add(new StringWidget(text, font).alignLeft());
+                entries.add(new StringWidget(text, font));
             }
         });
         return entries;

@@ -31,11 +31,11 @@ public class JumpBoostPanel extends PanelWidget {
         MutableComponent title = LangProvider.PERK_JUMP_BOOST.asComponent();
         MutableComponent descr = LangProvider.PERK_JUMP_BOOST_DESC.asComponent();
         this.name = title.toString();
-        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.skill = config.getString(APIUtils.SKILLNAME).orElse(null);
         long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
         addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
-        double boost = config.getDouble(APIUtils.PER_LEVEL) * (double)skillLevel;
+        double boost = config.getDoubleOr(APIUtils.PER_LEVEL, 0) * (double)skillLevel;
         addString(LangProvider.PERK_JUMP_BOOST_STATUS_1.asComponent(boost), PositionConstraints.offset(10, 0), textConstraint);
         addString(LangProvider.PERK_JUMP_BOOST_STATUS_2.asComponent(config.getDouble(APIUtils.MAX_BOOST)), PositionConstraints.offset(10, 0), textConstraint);
 

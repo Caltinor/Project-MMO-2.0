@@ -20,6 +20,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Block;
 
@@ -46,16 +47,16 @@ public class MobModifierSectionWidget extends ReactiveWidget {
         }
         if (!globals.isEmpty()) {
             addChild(build(LangProvider.GLOSSARY_HEADER_GLOBAL_MOB_MODIFIERS.asComponent(), font));
-            var registry = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.ATTRIBUTE);
+            var registry = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.ATTRIBUTE);
             globals.forEach(m -> addChild(build(Component.literal("   ").append(m.component(registry)), font)));
         }
         if (!mobModifiers.isEmpty()) {
             var access = Minecraft.getInstance().player.registryAccess();
-            var entities = access.registryOrThrow(Registries.ENTITY_TYPE);
-            var attributes = access.registryOrThrow(Registries.ATTRIBUTE);
+            var entities = access.lookupOrThrow(Registries.ENTITY_TYPE);
+            var attributes = access.lookupOrThrow(Registries.ATTRIBUTE);
             addChild(build(LangProvider.MOB_MODIFIER_HEADER.asComponent(), font));
             mobModifiers.forEach((mobID, modifierList) -> {
-                Entity entity = entities.get(mobID).create(Minecraft.getInstance().level);
+                Entity entity = entities.get(mobID).get().value().create(Minecraft.getInstance().level, EntitySpawnReason.COMMAND);
                 if (entity instanceof LivingEntity living) {
                     addChild(build(living.getDisplayName(), font));
                     modifierList.forEach(m -> addChild(build(Component.literal("   ").append(m.component(attributes)), font)));
@@ -66,7 +67,7 @@ public class MobModifierSectionWidget extends ReactiveWidget {
     }
 
     private static Positioner<?> build(Component text, Font font) {
-        return new Positioner.Widget(new StringWidget(text, font).alignLeft(), PositionType.STATIC.constraint, textConstraint);
+        return new Positioner.Widget(new StringWidget(text, font), PositionType.STATIC.constraint, textConstraint);
     }
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}

@@ -2,6 +2,7 @@ package harmonised.pmmo.util;
 
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
@@ -78,7 +79,7 @@ public class TagUtils {
 	 */
 	public static CompoundTag stackTag(ItemStack stack, RegistryAccess access) {
 		if (stack.isEmpty()) return new CompoundTag();
-		DynamicOps<Tag> regOps = level.registryAccess().createSerializationContext(NbtOps.INSTANCE);
+		DynamicOps<Tag> regOps = access.createSerializationContext(NbtOps.INSTANCE);
 		if (stack.getCount() > 99) {
 			var clone = stack.copy();
 			clone.setCount(99);

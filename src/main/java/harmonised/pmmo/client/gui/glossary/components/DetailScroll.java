@@ -7,15 +7,16 @@ import harmonised.pmmo.api.client.wrappers.BoxDimensions;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.PanelWidget;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractScrollWidget;
+import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter, ResponsiveLayout {
+public class DetailScroll extends AbstractTextAreaWidget implements GlossaryFilter, ResponsiveLayout {
 	private final List<Positioner<?>> children = new ArrayList<>();
 	private BoxDimensions margin, padding;
 
@@ -44,6 +45,9 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 	}
 
 	@Override
+	public int contentHeight() {return 0;} //TODO
+
+	@Override
 	public List<Positioner<?>> visibleChildren() {
 		return children.stream().filter(poser -> poser.get() instanceof AbstractWidget widget && widget.visible).toList();
 	}
@@ -54,12 +58,12 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 	}
 
 	@Override
-	protected int getMaxScrollAmount() {
+	public int maxScrollAmount() {
 		return Math.max(1, this.getInnerHeight() - this.height) /2;
 	}
 
 	@Override
-	protected double scrollRate() {return Math.min(50, getMaxScrollAmount()/100);}
+	protected double scrollRate() {return Math.min(50, maxScrollAmount()/100);}
 
 	private List<PanelWidget> widgets() {
 		return getChildren().stream()
@@ -90,14 +94,14 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 	protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		double transY = mouseY + this.scrollAmount();
+	public boolean mouseClicked(MouseButtonEvent mbe, boolean isRelease) {
+		double transY = mbe.y() + this.scrollAmount();
 		for (AbstractWidget widget : widgets()) {
-			if (widget.visible && widget.isMouseOver(mouseX, transY) && widget.mouseClicked(mouseX, transY, button)) {
+			if (widget.visible && widget.isMouseOver(mbe.x(), transY) && widget.mouseClicked(mbe, isRelease)) {
 				widget.setFocused(true);
 				break;
 			}
 		}
-		return super.mouseClicked(mouseX, mouseY, button);
+		return super.mouseClicked(mbe, isRelease);
 	}
 }

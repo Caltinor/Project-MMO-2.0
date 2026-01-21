@@ -55,7 +55,7 @@ public class PosNegEffectSectionWidget extends ReactiveWidget {
     }
 
     private static Positioner<?> build(Component text, Font font) {
-        return new Positioner.Widget(new StringWidget(text, font).alignLeft(), PositionType.STATIC.constraint, textConstraint);
+        return new Positioner.Widget(new StringWidget(text, font), PositionType.STATIC.constraint, textConstraint);
     }
 
     private static List<Positioner<?>> setSkills(Map<String, Long> map, Component header, Font font) {
@@ -71,12 +71,13 @@ public class PosNegEffectSectionWidget extends ReactiveWidget {
     private static List<Positioner<?>> setEffects(Map<ResourceLocation, Integer> map, Component header, Font font) {
         List<Positioner<?>> skillWidgets = new ArrayList<>(List.of(build(header, font)));
         MutableComponent prefix = Component.literal(map.values().stream().filter(s -> s > 0).count() > 1 ? "   " : "");
-        var reg = Minecraft.getInstance().player.registryAccess().registryOrThrow(Registries.MOB_EFFECT);
+        var reg = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.MOB_EFFECT);
         map.forEach((skill, value) -> {
             if (value > 0) {
                 var effect = reg.get(skill);
-                if (effect == null) return;
-                skillWidgets.add(build(prefix.copy().append(effect.getDisplayName()).append(": ").append(String.valueOf(value + 1)), font));
+                effect.ifPresent(holder ->
+                    skillWidgets.add(build(prefix.copy().append(holder.value().getDisplayName()).append(": ").append(String.valueOf(value + 1)), font))
+                );
             }
         });
         return skillWidgets.size() > 1 ? skillWidgets : new ArrayList<>();

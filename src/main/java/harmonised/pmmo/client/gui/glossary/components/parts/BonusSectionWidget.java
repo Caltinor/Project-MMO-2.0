@@ -88,15 +88,15 @@ public class BonusSectionWidget extends ReactiveWidget {
                     String skill = skillmap.keySet().iterator().next();
                     if (skillmap.get(skill) > 0)
                         combine.append(" ").append(LangProvider.skill(skill)).append(":").append(" "+DP.dpSoft((skillmap.get(skill)*100)-100)+"%");
-                    contentWidgets.add(new Positioner.Widget(new StringWidget(combine, font).alignLeft(), PositionType.STATIC.constraint, textConstraint));
+                    contentWidgets.add(new Positioner.Widget(new StringWidget(combine, font), PositionType.STATIC.constraint, textConstraint));
                 }
                 else {
-                    contentWidgets.addAll(setSkills(skillmap, new StringWidget(combine, font).alignLeft(), font));
+                    contentWidgets.addAll(setSkills(skillmap, new StringWidget(combine, font), font));
                 }
             }
         }
         if (!contentWidgets.isEmpty()) {
-            layout.addChild(new StringWidget(LangProvider.GLOSSARY_SECTION_BONUS.asComponent().withStyle(ChatFormatting.BLUE), font).alignLeft(), PositionType.STATIC.constraint, textConstraint);
+            layout.addString(LangProvider.GLOSSARY_SECTION_BONUS.asComponent().withStyle(ChatFormatting.BLUE), PositionType.STATIC.constraint, textConstraint);
             contentWidgets.forEach(layout::addChild);
             layout.addChild(new DividerWidget(100, 1, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
         }
@@ -108,7 +108,7 @@ public class BonusSectionWidget extends ReactiveWidget {
         MutableComponent prefix = Component.literal(map.values().stream().filter(s -> s > 0).count() > 1 ? "   " : "");
         map.forEach((skill, value) -> {
             if (value != 0)
-                skillWidgets.add(new Positioner.Widget(new StringWidget(prefix.copy().append(LangProvider.skill(skill)).append(":").append(" "+DP.dpSoft((value*100)-100)+"%"), font).alignLeft(),
+                skillWidgets.add(new Positioner.Widget(new StringWidget(prefix.copy().append(LangProvider.skill(skill)).append(":").append(" "+DP.dpSoft((value*100)-100)+"%"), font),
                         PositionType.STATIC.constraint, textConstraint));
         });
         return skillWidgets.size() > 1 ? skillWidgets : new ArrayList<>();

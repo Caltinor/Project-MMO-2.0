@@ -41,6 +41,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.CreativeModeTabs;
 
 import java.util.ArrayList;
@@ -185,7 +186,7 @@ public class Glossary extends Screen {
                 SizeConstraints.builder().internalHeight().build()
         ));
         access.lookupOrThrow(Registries.ENTITY_TYPE).listElements()
-                .map(ref -> ref.value().create(Minecraft.getInstance().level))
+                .map(ref -> ref.value().create(Minecraft.getInstance().level, EntitySpawnReason.COMMAND))
                 .filter(Objects::nonNull)
                 .forEach(entity -> layout.addChild((ResponsiveLayout)
                     new EntityObjectPanelWidget(0x88394045, width, entity),

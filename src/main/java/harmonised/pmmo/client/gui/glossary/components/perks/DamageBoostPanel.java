@@ -38,12 +38,12 @@ public class DamageBoostPanel extends PanelWidget {
         MutableComponent title = LangProvider.PERK_DAMAGE_BOOST.asComponent();
         MutableComponent descr = LangProvider.PERK_DAMAGE_BOOST_DESC.asComponent();
         this.name = title.toString();
-        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.skill = config.getString(APIUtils.SKILLNAME).orElse(null);
         long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
         addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
         //When the following damage types are applied
-        List<String> dmgTypes = config.getList(APIUtils.DAMAGE_TYPE_IN, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
+        List<String> dmgTypes = config.getListOrEmpty(APIUtils.DAMAGE_TYPE_IN).stream().map(t -> t.asString().orElse("")).toList();
         MutableComponent dmgTypeHeader = LangProvider.PERK_DAMAGE_BOOST_STATUS_6.asComponent();
         if (dmgTypes.isEmpty())
             dmgTypeHeader.append(LangProvider.PERK_DAMAGE_BOOST_STATUS_1a.asComponent());
@@ -52,7 +52,7 @@ public class DamageBoostPanel extends PanelWidget {
             addString(Component.literal(dmgType), PositionConstraints.offset(20, 0), textConstraint);
         }
         //When using any of the following items
-        List<String> applicalbeTo = config.getList(FeaturePerks.APPLICABLE_TO, CompoundTag.TAG_STRING).stream().map(Tag::getAsString).toList();
+        List<String> applicalbeTo = config.getListOrEmpty(FeaturePerks.APPLICABLE_TO).stream().map(t -> t.asString().orElse("")).toList();
         MutableComponent applicableHeader = LangProvider.PERK_DAMAGE_BOOST_STATUS_1.asComponent();
         if (applicalbeTo.isEmpty())
             applicableHeader.append(LangProvider.PERK_DAMAGE_BOOST_STATUS_1a.asComponent());
@@ -74,9 +74,9 @@ public class DamageBoostPanel extends PanelWidget {
             }
         }
         //display the actual boosted values
-        int maxBoost = config.getInt(APIUtils.MAX_BOOST);
-        double perLevel = config.getDouble(APIUtils.PER_LEVEL);
-        float damageModification = (float)(config.getDouble(APIUtils.BASE) + perLevel * (double)skillLevel);
+        int maxBoost = config.getIntOr(APIUtils.MAX_BOOST, 0);
+        double perLevel = config.getDoubleOr(APIUtils.PER_LEVEL, 0);
+        float damageModification = (float)(config.getDoubleOr(APIUtils.BASE, 0) + perLevel * (double)skillLevel);
         damageModification = Math.min(maxBoost, damageModification);
         addString(LangProvider.PERK_DAMAGE_BOOST_STATUS_2.asComponent(damageModification >= 0 ? "+" : "-", DP.dpSoft(damageModification), DP.dpSoft(perLevel)), PositionConstraints.offset(10, 0), textConstraint);
         addString(LangProvider.PERK_DAMAGE_BOOST_STATUS_5.asComponent(maxBoost), PositionConstraints.offset(10, 0), textConstraint);

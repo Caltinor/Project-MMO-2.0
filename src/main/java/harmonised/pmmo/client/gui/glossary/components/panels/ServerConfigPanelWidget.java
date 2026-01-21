@@ -40,8 +40,7 @@ public class ServerConfigPanelWidget extends ObjectPanelWidget{
         Font font = Minecraft.getInstance().font;
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         ServerData data = Config.server();
-        addChild(new StringWidget(LangProvider.GLOSSARY_CONFIG_SERVER_HEADER.asComponent()
-                        .withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE), font).alignLeft(),
+        addString(LangProvider.GLOSSARY_CONFIG_SERVER_HEADER.asComponent().withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
                 PositionType.STATIC.constraint, textConstraint);
         general(this, data.general(), access, font);
         addChild(new DividerWidget(this.width, 2, 0xFFFFFFFF), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
@@ -82,9 +81,8 @@ public class ServerConfigPanelWidget extends ObjectPanelWidget{
         blockRef.ifPresent(ref -> {
             Component block = ref.value().asItem().getDefaultInstance().getDisplayName();
             MutableComponent text = LangProvider.SALVAGE_TUTORIAL_HEADER.asComponent().append(": ").append(block);
-            layout.addChild(new StringWidget(text, font).alignLeft(), PositionType.STATIC.constraint, textConstraint);
+            layout.addString(text, PositionType.STATIC.constraint, textConstraint);
         });
-        layout.addChild(new StringWidget(LangProvider.GLOSSARY_CONFIG_SERVER_GENERAL_TREASURE.asComponent(data.treasureEnabled()), font).alignLeft(),
-                PositionType.STATIC.constraint, textConstraint);
+        layout.addString(LangProvider.GLOSSARY_CONFIG_SERVER_GENERAL_TREASURE.asComponent(data.treasureEnabled()), PositionType.STATIC.constraint, textConstraint);
     }
 }

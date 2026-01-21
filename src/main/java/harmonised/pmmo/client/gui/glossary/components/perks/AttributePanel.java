@@ -38,12 +38,12 @@ public class AttributePanel extends PanelWidget {
 
     public AttributePanel(int width, Player player, CompoundTag config) {
         super(0x88394045, width);
-        ResourceLocation attribID = Reference.of(config.getString(APIUtils.ATTRIBUTE));
+        ResourceLocation attribID = Reference.of(config.getStringOr(APIUtils.ATTRIBUTE, "missing"));
         Optional<Holder.Reference<Attribute>> attribute = player.registryAccess()
                 .lookupOrThrow(Registries.ATTRIBUTE).get(ResourceKey.create(Registries.ATTRIBUTE, attribID));
         MutableComponent title = LangProvider.PERK_ATTRIBUTE.asComponent();
         this.name = title.toString();
-        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.skill = config.getString(APIUtils.SKILLNAME).orElse(null);
         this.invalidAttribute = attribute.isEmpty();
         if (!invalidAttribute) {
             long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
@@ -51,10 +51,10 @@ public class AttributePanel extends PanelWidget {
             MutableComponent descr = LangProvider.PERK_ATTRIBUTE_DESC.asComponent();
             addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
 
-            double perLevel = config.getDouble(APIUtils.PER_LEVEL);
-            double maxBoost = config.getDouble(APIUtils.MAX_BOOST);
-            double boost = Math.min(perLevel * skillLevel, maxBoost) + config.getDouble(APIUtils.BASE);
-            AttributeModifier.Operation operation = config.getBoolean(APIUtils.MULTIPLICATIVE) ? AttributeModifier.Operation.ADD_MULTIPLIED_BASE : AttributeModifier.Operation.ADD_VALUE;
+            double perLevel = config.getDoubleOr(APIUtils.PER_LEVEL, 0);
+            double maxBoost = config.getDoubleOr(APIUtils.MAX_BOOST, 0);
+            double boost = Math.min(perLevel * skillLevel, maxBoost) + config.getDoubleOr(APIUtils.BASE, 0);
+            AttributeModifier.Operation operation = config.getBooleanOr(APIUtils.MULTIPLICATIVE, true) ? AttributeModifier.Operation.ADD_MULTIPLIED_BASE : AttributeModifier.Operation.ADD_VALUE;
             AttributeModifier mod = new AttributeModifier(attribID, boost, operation);
             MutableComponent attribMsg = attribute.get().value().toComponent(mod, TooltipFlag.NORMAL).withStyle(ChatFormatting.BOLD);
             //display of the actual modification

@@ -27,15 +27,15 @@ public class BreakSpeedPanel extends PanelWidget {
         MutableComponent title = LangProvider.PERK_BREAK_SPEED.asComponent();
         MutableComponent descr = LangProvider.PERK_BREAK_SPEED_DESC.asComponent();
         this.name = title.toString();
-        this.skill = config.contains(APIUtils.SKILLNAME) ? config.getString(APIUtils.SKILLNAME) : null;
+        this.skill = config.getString(APIUtils.SKILLNAME).orElse(null);
         long skillLevel = skill == null ? 0 : Core.get(LogicalSide.CLIENT).getData().getLevel(skill, null);
         addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
 
         PerksImpl.DIG_ACTIONS.stream()
-                .filter(action -> config.getFloat(action.name()) > 0)
+                .filter(action -> config.getFloatOr(action.name(), 0f) > 0)
                 .forEach(action ->
-                        addString(LangProvider.PERK_BREAK_SPEED_STATUS_1.asComponent(action.name(), config.getFloat(action.name()) * skillLevel, config.getFloat(action.name())),
+                        addString(LangProvider.PERK_BREAK_SPEED_STATUS_1.asComponent(action.name(), config.getFloatOr(action.name(), 0f) * skillLevel, config.getFloat(action.name())),
                                 PositionConstraints.offset(10, 0), textConstraint));
 
         PerkRenderer.commonElements(this, config);

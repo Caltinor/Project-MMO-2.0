@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PerksImpl {
-	private static Set<ItemAbility> DIG_ACTIONS = Set.of(
+	public static Set<ItemAbility> DIG_ACTIONS = Set.of(
 			//TODO find a replacement for this logic
 //			ItemAbilities.PICKAXE_DIG,
 //			ItemAbilities.AXE_DIG,
