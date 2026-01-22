@@ -7,7 +7,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,7 @@ public class PredicateRegistry {
 	 * @param reqType the requirement type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public void registerPredicate(ResourceLocation res, ReqType reqType, BiPredicate<Player, ItemStack> pred) {
+	public void registerPredicate(Identifier res, ReqType reqType, BiPredicate<Player, ItemStack> pred) {
 		Preconditions.checkNotNull(pred);
 		String condition = reqType.toString()+";"+res.toString();
 		reqPredicates.get(condition).add(pred);
@@ -48,14 +48,14 @@ public class PredicateRegistry {
 	 * @param reqType the requirement type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public void registerBreakPredicate(ResourceLocation res, ReqType reqType, BiPredicate<Player, BlockEntity> pred) {
+	public void registerBreakPredicate(Identifier res, ReqType reqType, BiPredicate<Player, BlockEntity> pred) {
 		Preconditions.checkNotNull(pred);
 		String condition = reqType.toString()+";"+res.toString();
 		reqBreakPredicates.get(condition).add(pred);
 		MsLoggy.INFO.log(LOG_CODE.API, "Predicate Registered: "+condition);
 	}
 	
-	public void registerEntityPredicate(ResourceLocation res, ReqType type, BiPredicate<Player, Entity> pred) {
+	public void registerEntityPredicate(Identifier res, ReqType type, BiPredicate<Player, Entity> pred) {
 		Preconditions.checkNotNull(pred);
 		String condition = type.toString()+";"+res.toString();
 		reqEntityPredicates.get(condition).add(pred);
@@ -68,7 +68,7 @@ public class PredicateRegistry {
 	 * @param type the requirement type
 	 * @return whether a predicate is registered for the parameters
 	 */
-	public boolean predicateExists(ResourceLocation res, ReqType type) 
+	public boolean predicateExists(Identifier res, ReqType type) 
 	{
 		String key = type.toString()+";"+res.toString();
 		return reqPredicates.containsKey(key) ||
@@ -104,7 +104,7 @@ public class PredicateRegistry {
 	 */
 	public boolean checkPredicateReq(Player player, BlockEntity tile, ReqType jType) 
 	{
-		ResourceLocation res = RegistryUtil.getId(tile.getBlockState());
+		Identifier res = RegistryUtil.getId(tile.getBlockState());
 		if (!predicateExists(res, jType)) 
 			return false;
 		for (BiPredicate<Player, BlockEntity> pred : reqBreakPredicates.get(jType.toString()+";"+res.toString())) {
@@ -114,7 +114,7 @@ public class PredicateRegistry {
 	}
 	
 	public boolean checkPredicateReq(Player player, Entity entity, ReqType type) {
-		ResourceLocation res = RegistryUtil.getId(entity);
+		Identifier res = RegistryUtil.getId(entity);
 		if (!predicateExists(res, type))
 			return false;
 		for (BiPredicate<Player, Entity> pred : reqEntityPredicates.get(type.toString()+";"+res.toString())) {

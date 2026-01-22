@@ -6,7 +6,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,54 +25,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegistryUtil {
-	public static ResourceLocation getId(RegistryAccess access, ItemStack stack) {
+	public static Identifier getId(RegistryAccess access, ItemStack stack) {
 		return getId(access, stack.getItem());
 	}
 
-	public static ResourceLocation getId(RegistryAccess access, Item item) {return getId(access, Registries.ITEM, item);}
+	public static Identifier getId(RegistryAccess access, Item item) {return getId(access, Registries.ITEM, item);}
 
-	public static ResourceLocation getId(RegistryAccess access, Entity entity) {return getId(access, Registries.ENTITY_TYPE, entity.getType());}
+	public static Identifier getId(RegistryAccess access, Entity entity) {return getId(access, Registries.ENTITY_TYPE, entity.getType());}
 
-	public static ResourceLocation getId(BlockState blockState) {
+	public static Identifier getId(BlockState blockState) {
 		return getId(blockState.getBlock());
 	}
 
-	public static ResourceLocation getId(Block block) {
+	public static Identifier getId(Block block) {
 		return BuiltInRegistries.BLOCK.getKey(block);
 	}
 
-	public static ResourceLocation getId(Holder<?> holder) {
-		return holder.unwrapKey().get().location();
+	public static Identifier getId(Holder<?> holder) {
+		return holder.unwrapKey().get().identifier();
 	}
 
-	public static ResourceLocation getId(SoundEvent sound) {
+	public static Identifier getId(SoundEvent sound) {
 		return BuiltInRegistries.SOUND_EVENT.getKey(sound);
 	}
 
-	public static ResourceLocation getId(Entity entity) {
+	public static Identifier getId(Entity entity) {
 		return getId(entity.getType());
 	}
 
-	public static ResourceLocation getId(EntityType<?> entity) {
+	public static Identifier getId(EntityType<?> entity) {
 		return BuiltInRegistries.ENTITY_TYPE.getKey(entity);
 	}
 
-	public static ResourceLocation getId(MobEffect effect) {
+	public static Identifier getId(MobEffect effect) {
 		return BuiltInRegistries.MOB_EFFECT.getKey(effect);
 	}
 
-	public static <T> ResourceLocation getId(RegistryAccess access, ResourceKey<Registry<T>> registry, T source) {
+	public static <T> Identifier getId(RegistryAccess access, ResourceKey<Registry<T>> registry, T source) {
 		return access.lookupOrThrow(registry).getKey(source);
 	}
 
-	public static ResourceLocation getAttributeId(Holder<Attribute> attribute) {
+	public static Identifier getAttributeId(Holder<Attribute> attribute) {
 		return BuiltInRegistries.ATTRIBUTE.getKey(attribute.value());
 	}
 
 	public static <T> boolean isInTag(RegistryAccess access, ResourceKey<Registry<T>> registry, String objectID, String tagId) {
 		return isInTag(access, registry, Reference.of(objectID), tagId);
 	}
-	public static <T> boolean isInTag(RegistryAccess access, ResourceKey<Registry<T>> registry, ResourceLocation objectID, String tagId) {
+	public static <T> boolean isInTag(RegistryAccess access, ResourceKey<Registry<T>> registry, Identifier objectID, String tagId) {
 		var reg = access.lookupOrThrow(registry);
 		var tag = TagKey.create(registry, Reference.of(tagId));
 		var holder = reg.wrapAsHolder(reg.getValue(objectID));
@@ -85,9 +85,9 @@ public class RegistryUtil {
 		return holders;
 	}
 
-	public static <T> List<ResourceLocation> getTagMemberIds(RegistryAccess access, ResourceKey<Registry<T>> reg, TagKey<T> tag) {
-		List<ResourceLocation> members = new ArrayList<>();
-		access.lookupOrThrow(reg).getTagOrEmpty(tag).iterator().forEachRemaining(i -> members.add(i.unwrapKey().get().location()));
+	public static <T> List<Identifier> getTagMemberIds(RegistryAccess access, ResourceKey<Registry<T>> reg, TagKey<T> tag) {
+		List<Identifier> members = new ArrayList<>();
+		access.lookupOrThrow(reg).getTagOrEmpty(tag).iterator().forEachRemaining(i -> members.add(i.unwrapKey().get().identifier()));
 		return members;
 	}
 }

@@ -9,7 +9,7 @@ import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 import java.nio.file.Path;
@@ -22,7 +22,7 @@ public abstract class PmmoDataProvider<T extends DataSource<?>> implements DataP
     private final String dataPath;
     private final PackOutput output;
     private final Codec<T> codec;
-    private final Map<ResourceLocation, JsonElement> toSerialize = new HashMap<>();
+    private final Map<Identifier, JsonElement> toSerialize = new HashMap<>();
     public PmmoDataProvider(PackOutput gen, String packName, String dataPath, Codec<T> codec) {
         this.output = gen;
         this.destination = Path.of("resourcepacks").resolve(packName).resolve("data");
@@ -30,13 +30,13 @@ public abstract class PmmoDataProvider<T extends DataSource<?>> implements DataP
         this.codec = codec;
     }
 
-    public void add(ResourceLocation id, T instance) {
+    public void add(Identifier id, T instance) {
         JsonElement json = codec.encodeStart(JsonOps.INSTANCE, instance).resultOrPartial(s -> MsLoggy.WARN.log(MsLoggy.LOG_CODE.DATA, s)).get();
         this.toSerialize.put(id, json);
     }
     protected abstract void start();
 
-    protected ResourceLocation getId(Item item) {return item.builtInRegistryHolder().unwrapKey().get().location();}
+    protected Identifier getId(Item item) {return item.builtInRegistryHolder().unwrapKey().get().identifier();}
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         start();

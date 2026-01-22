@@ -13,7 +13,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.fml.LogicalSide;
@@ -28,7 +28,7 @@ public class BlockObjectPanelWidget extends ObjectPanelWidget {
     public BlockObjectPanelWidget(int color, int width, Block block) {this(color, width, block, null);}
     public BlockObjectPanelWidget(int color, int width, Block block, BlockEntity be) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        ResourceLocation rl = RegistryUtil.getId(block);
+        Identifier rl = RegistryUtil.getId(block);
         this.id = rl.toString();
         this.name = block.getName().getString();
         addChild(new ItemStackWidget(block.asItem().getDefaultInstance()), PositionConstraints.grid(0, 0), SizeConstraints.builder()

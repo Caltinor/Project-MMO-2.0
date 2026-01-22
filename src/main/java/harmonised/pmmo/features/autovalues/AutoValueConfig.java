@@ -11,7 +11,7 @@ import harmonised.pmmo.config.readers.ConfigListener;
 import harmonised.pmmo.config.scripting.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -175,7 +175,7 @@ public record AutoValueConfig(
 			Map<String, Long> swordOverride,
 			Map<String, Long> axeOverride,
 			Map<String, Long> hoeOverride,
-			Map<ResourceLocation, Integer> penalties,
+			Map<Identifier, Integer> penalties,
 			Map<String, Long> blockDefault
 	) {
 		public static final Requirements DEFAULT = new Requirements(
@@ -223,8 +223,8 @@ public record AutoValueConfig(
 			return new Requirements(items, shovel, sword, axe, hoe, penalties, block);
 		}
 
-		private static Map<ResourceLocation, Integer> rlMap(Map<String, String> values) {
-			Map<ResourceLocation, Integer> outMap = new HashMap<>();
+		private static Map<Identifier, Integer> rlMap(Map<String, String> values) {
+			Map<Identifier, Integer> outMap = new HashMap<>();
 			String[] elements = values.getOrDefault("value", "").replaceAll("\\)", "").split(",");
 			for (int i = 0; i <= elements.length-2; i += 2) {
 				outMap.put(Reference.of(elements[i]), Integer.parseInt(elements[i+1]));
@@ -238,7 +238,7 @@ public record AutoValueConfig(
 				CodecTypes.LONG_CODEC.fieldOf(SWORD_OVERRIDE).forGetter(Requirements::swordOverride),
 				CodecTypes.LONG_CODEC.fieldOf(AXE_OVERRIDE).forGetter(Requirements::axeOverride),
 				CodecTypes.LONG_CODEC.fieldOf(HOE_OVERRIDE).forGetter(Requirements::hoeOverride),
-				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(PENALTIES).forGetter(Requirements::penalties),
+				Codec.unboundedMap(Identifier.CODEC, Codec.INT).fieldOf(PENALTIES).forGetter(Requirements::penalties),
 				CodecTypes.LONG_CODEC.fieldOf(BLOCK_DEFAULT).forGetter(Requirements::blockDefault)
 		).apply(instance, Requirements::new));
 

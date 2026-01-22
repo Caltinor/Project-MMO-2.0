@@ -9,7 +9,7 @@ import harmonised.pmmo.config.readers.ConfigListener;
 import harmonised.pmmo.config.scripting.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public record ServerData(
     //<editor-fold> General Class
     public record General(
             double creativeReach,
-            ResourceLocation salvageBlock,
+            Identifier salvageBlock,
             boolean treasureEnabled,
             boolean brewingTracked) {
         public static final General DEFAULT = new General(50d, Reference.mc("smithing_table"),true, true);
@@ -74,14 +74,14 @@ public record ServerData(
         //Scripting Builder
         public static General build(String param, Map<String, String> value, ServerData current) {
             double creativeReach = param.equals(CREATIVE_REACH) ? Functions.getDouble(value) : current.general().creativeReach();;
-            ResourceLocation salvageBlock = param.equals(SALVAGE_BLOCK) ? Functions.getId(value) : current.general().salvageBlock();
+            Identifier salvageBlock = param.equals(SALVAGE_BLOCK) ? Functions.getId(value) : current.general().salvageBlock();
             boolean treasureEnabled = param.equals(TREASURE) ? Functions.getBool(value) : current.general().treasureEnabled();
             boolean brewingTracked = param.equals(BREWING) ? Functions.getBool(value) : current.general().brewingTracked();
             return new General(creativeReach, salvageBlock, treasureEnabled, brewingTracked);
         }
         public static final Codec<General> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.DOUBLE.fieldOf(CREATIVE_REACH).forGetter(General::creativeReach),
-                ResourceLocation.CODEC.fieldOf(SALVAGE_BLOCK).forGetter(General::salvageBlock),
+                Identifier.CODEC.fieldOf(SALVAGE_BLOCK).forGetter(General::salvageBlock),
                 Codec.BOOL.fieldOf(TREASURE).forGetter(General::treasureEnabled),
                 Codec.BOOL.fieldOf(BREWING).forGetter(General::brewingTracked)
         ).apply(instance, General::new));
@@ -298,7 +298,7 @@ public record ServerData(
             boolean useExponential,
             double perLevel,
             double powerBase,
-            Map<ResourceLocation, Map<String, Double>> ratios
+            Map<Identifier, Map<String, Double>> ratios
     ) {
         public static final MobScaling DEFAULT = new MobScaling(
                 false,
@@ -332,9 +332,9 @@ public record ServerData(
             boolean exponent = param.equals(USE_EXPONENT) ? Functions.getBool(value) : current.mobScaling().useExponential();
             double perLevel = param.equals(PER_LEVEL) ? Functions.getDouble(value) : current.mobScaling().perLevel();
             double powerBase = param.equals(POWER_BASE) ? Functions.getDouble(value) : current.mobScaling().powerBase();
-            Map<ResourceLocation, Map<String, Double>> ratios = new HashMap<>(current.mobScaling().ratios());
+            Map<Identifier, Map<String, Double>> ratios = new HashMap<>(current.mobScaling().ratios());
             if (param.equals(RATIOS)) {
-                ResourceLocation attributeID = Reference.of(value.getOrDefault(ATTRIBUTE_ID, "mob_scale_attribute_id:missing"));
+                Identifier attributeID = Reference.of(value.getOrDefault(ATTRIBUTE_ID, "mob_scale_attribute_id:missing"));
                 Map<String, Double> ratio = Functions.doubleMap(value.getOrDefault("value", ""));
                 ratios.put(attributeID, ratio);
             }
@@ -350,7 +350,7 @@ public record ServerData(
                 Codec.BOOL.fieldOf(USE_EXPONENT).forGetter(MobScaling::useExponential),
                 Codec.DOUBLE.fieldOf(PER_LEVEL).forGetter(MobScaling::perLevel),
                 Codec.DOUBLE.fieldOf(POWER_BASE).forGetter(MobScaling::powerBase),
-                Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).fieldOf(RATIOS).forGetter(MobScaling::ratios)
+                Codec.unboundedMap(Identifier.CODEC, CodecTypes.DOUBLE_CODEC).fieldOf(RATIOS).forGetter(MobScaling::ratios)
         ).apply(instance, MobScaling::new));
     }
     //</editor-fold>
@@ -360,7 +360,7 @@ public record ServerData(
             boolean requireSettings,
             int defaultConsume,
             double chargeModifier,
-            List<ResourceLocation> blacklist
+            List<Identifier> blacklist
 
     ) {
         public static final VeinMiner DEFAULT = new VeinMiner(
@@ -381,7 +381,7 @@ public record ServerData(
             boolean require = param.equals(REQUIRE) ? Functions.getBool(value) : current.veinMiner().requireSettings();
             int defaultConsume = param.equals(DEFAULT_CONSUME) ? Functions.getInt(value) : current.veinMiner().defaultConsume();
             double chargeMod = param.equals(CHARGE_MODIFIER) ? Functions.getDouble(value) : current.veinMiner().chargeModifier();
-            List<ResourceLocation> blacklist = param.equals(BLACKLIST)
+            List<Identifier> blacklist = param.equals(BLACKLIST)
                     ? Arrays.stream(value.getOrDefault("value", "").split(",")).map(Reference::of).toList()
                     : current.veinMiner().blacklist();
 
@@ -393,14 +393,14 @@ public record ServerData(
                 Codec.BOOL.fieldOf(REQUIRE).forGetter(VeinMiner::requireSettings),
                 Codec.INT.fieldOf(DEFAULT_CONSUME).forGetter(VeinMiner::defaultConsume),
                 Codec.DOUBLE.fieldOf(CHARGE_MODIFIER).forGetter(VeinMiner::chargeModifier),
-                ResourceLocation.CODEC.listOf().fieldOf(BLACKLIST).forGetter(VeinMiner::blacklist)
+                Identifier.CODEC.listOf().fieldOf(BLACKLIST).forGetter(VeinMiner::blacklist)
         ).apply(instance, VeinMiner::new));
 
         public class VeinBuilder {
             boolean enabled = true, require = false;
             int defaultConsume = 1;
             double modifier = 1.0;
-            List<ResourceLocation> blacklist = new ArrayList<>();
+            List<Identifier> blacklist = new ArrayList<>();
 
             public VeinBuilder() {}
             public VeinBuilder(VeinMiner from) {
@@ -414,7 +414,7 @@ public record ServerData(
             public VeinBuilder require() {require = true; return this;}
             public VeinBuilder setDefaultConsume(int i) {defaultConsume = i; return this;}
             public VeinBuilder setModifier(double d) {modifier = d; return this;}
-            public VeinBuilder addBlacklist(ResourceLocation...ids) {blacklist.addAll(Arrays.asList(ids)); return this;}
+            public VeinBuilder addBlacklist(Identifier...ids) {blacklist.addAll(Arrays.asList(ids)); return this;}
             public VeinMiner build() {return new VeinMiner(enabled, require, defaultConsume, modifier, blacklist);}
         }
     }

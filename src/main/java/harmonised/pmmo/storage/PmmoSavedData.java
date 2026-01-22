@@ -16,6 +16,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
@@ -147,10 +148,10 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	}
 	//===========================CORE WSD LOGIC=====================
 	public PmmoSavedData() {}
-	public PmmoSavedData(Context ctx) {}
+	public PmmoSavedData(ServerLevel level) {}
 	
 	public PmmoSavedData(Map<UUID, Map<String, Experience>> xpMap, Map<UUID, Map<String, Experience>> scheduled) {
-		this.xp = new HashMap<>(xpMap);
+        this.xp = new HashMap<>(xpMap);
 		this.scheduledXP = new HashMap<>(scheduled);
 	}
 

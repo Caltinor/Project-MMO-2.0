@@ -2,7 +2,7 @@ package harmonised.pmmo.setup;
 
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.PackSource;
 
@@ -17,7 +17,7 @@ public class GameplayPacks {
         return List.of(DEFAULT, EASY, HARDCORE);
     }
 
-    public record PackHolder(ResourceLocation id, LangProvider.Translation titleKey, boolean required, PackType type, PackSource source) {
+    public record PackHolder(Identifier id, LangProvider.Translation titleKey, boolean required, PackType type, PackSource source) {
         public PackHolder(String id, LangProvider.Translation titleKey, boolean required, PackType type, PackSource source) {
             this(Reference.rl(id), titleKey, required, type, source);
         }

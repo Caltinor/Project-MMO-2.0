@@ -22,7 +22,7 @@ import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.lwjgl.system.APIUtil;
 

@@ -35,7 +35,7 @@ public class BreakSpeedPanel extends PanelWidget {
         PerksImpl.DIG_ACTIONS.stream()
                 .filter(action -> config.getFloatOr(action.name(), 0f) > 0)
                 .forEach(action ->
-                        addString(LangProvider.PERK_BREAK_SPEED_STATUS_1.asComponent(action.name(), config.getFloatOr(action.name(), 0f) * skillLevel, config.getFloat(action.name())),
+                        addString(LangProvider.PERK_BREAK_SPEED_STATUS_1.asComponent(action.name(), config.getFloatOr(action.name(), 0f) * skillLevel, config.getFloatOr(action.name(), 0)),
                                 PositionConstraints.offset(10, 0), textConstraint));
 
         PerkRenderer.commonElements(this, config);

@@ -28,7 +28,7 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagFile;
@@ -222,7 +222,7 @@ public class PackGenerator {
 			raw.remove("salvage");
 			raw.remove(VeinMiningLogic.VEIN_DATA);
 			return gson.toJson(raw);}),
-		DIMENSIONS("pmmo/dimensions", server -> new HashSet<>(server.levelKeys().stream().map(ResourceKey::location).toList()),
+		DIMENSIONS("pmmo/dimensions", server -> new HashSet<>(server.levelKeys().stream().map(ResourceKey::identifier).toList()),
 				(id) -> {
 				Core core = Core.get(LogicalSide.SERVER);
 				LocationData existing = core.getLoader().DIMENSION_LOADER.getData(id);
@@ -294,9 +294,9 @@ public class PackGenerator {
 
 		
 		public String route;
-		public Function<MinecraftServer, Set<ResourceLocation>> valueList;
-		private Function<ResourceLocation, String> defaultData;
-		Category(String route, Function<MinecraftServer, Set<ResourceLocation>> values, Function<ResourceLocation, String> defaultData) {
+		public Function<MinecraftServer, Set<Identifier>> valueList;
+		private Function<Identifier, String> defaultData;
+		Category(String route, Function<MinecraftServer, Set<Identifier>> values, Function<Identifier, String> defaultData) {
 			this.route = route;
 			this.valueList = values;
 			this.defaultData = defaultData;
@@ -327,10 +327,10 @@ public class PackGenerator {
 				continue;
 			if ((!category.equals(Category.CONFIGS) && !category.equals(Category.TAGS) && !applyObjects))
 				continue;
-			Collection<ResourceLocation> filteredList = namespaceFilter.isEmpty() || category == Category.TAGS
+			Collection<Identifier> filteredList = namespaceFilter.isEmpty() || category == Category.TAGS
 					? category.valueList.apply(server)
 					: category.valueList.apply(server).stream().filter(id -> namespaceFilter.contains(id.getNamespace())).toList();
-			for (ResourceLocation id : filteredList) {
+			for (Identifier id : filteredList) {
 				int index = id.getPath().lastIndexOf('/');
 				String pathRoute = id.getPath().substring(0, Math.max(index, 0));
 				Path finalPath = filepath.resolve("data/"+id.getNamespace()+"/"+category.route+"/"+pathRoute);

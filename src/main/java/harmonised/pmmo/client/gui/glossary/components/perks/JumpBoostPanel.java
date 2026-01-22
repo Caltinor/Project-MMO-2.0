@@ -37,7 +37,7 @@ public class JumpBoostPanel extends PanelWidget {
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
         double boost = config.getDoubleOr(APIUtils.PER_LEVEL, 0) * (double)skillLevel;
         addString(LangProvider.PERK_JUMP_BOOST_STATUS_1.asComponent(boost), PositionConstraints.offset(10, 0), textConstraint);
-        addString(LangProvider.PERK_JUMP_BOOST_STATUS_2.asComponent(config.getDouble(APIUtils.MAX_BOOST)), PositionConstraints.offset(10, 0), textConstraint);
+        addString(LangProvider.PERK_JUMP_BOOST_STATUS_2.asComponent(config.getDoubleOr(APIUtils.MAX_BOOST, 0d)), PositionConstraints.offset(10, 0), textConstraint);
 
         PerkRenderer.commonElements(this, config);
         addChild(new DividerWidget(200, 2, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder()

@@ -11,11 +11,10 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
@@ -31,8 +30,8 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
         Reference.mc("widget/button_disabled"),
         Reference.mc("widget/button_highlighted")
     );
-    private static final ResourceLocation SORT_UP_SPRITE = Reference.mc("statistics/sort_up");
-    private static final ResourceLocation SORT_DOWN_SPRITE = Reference.mc("statistics/sort_down");
+    private static final Identifier SORT_UP_SPRITE = Reference.mc("statistics/sort_up");
+    private static final Identifier SORT_DOWN_SPRITE = Reference.mc("statistics/sort_down");
     
     private static final int ENTRY_HEIGHT = 20;
     private final Component title;
@@ -54,7 +53,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
 //        graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
 //        RenderSystem.enableBlend();
 //        RenderSystem.enableDepthTest();
-        ResourceLocation location = BUTTON_SPRITES.get(this.isActive(), this.isMouseOver(mouseX, mouseY));
+        Identifier location = BUTTON_SPRITES.get(this.isActive(), this.isMouseOver(mouseX, mouseY));
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, location, this.getX(), this.getY(), this.getWidth(), this.getHeight()/*, 20, 4, 200, 20, 0, 66*/);
 //        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 

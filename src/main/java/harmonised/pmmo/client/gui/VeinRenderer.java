@@ -1,11 +1,10 @@
 package harmonised.pmmo.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -17,11 +16,11 @@ public class VeinRenderer {
 	public static void drawBoxHighlights(PoseStack stack, Set<BlockPos> vein)
     {
 		Minecraft mc = Minecraft.getInstance();
-        Vec3 cameraPos = mc.getEntityRenderDispatcher().camera.getPosition();
+        Vec3 cameraPos = mc.getEntityRenderDispatcher().camera.position();
         stack.pushPose();
         stack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
-        VertexConsumer builder = buffer.getBuffer(RenderType.lines());
+        VertexConsumer builder = buffer.getBuffer(RenderTypes.lines());
 
         for(BlockPos pos : vein) {
             drawBoxHighlight(stack, builder, pos);

@@ -7,7 +7,7 @@ import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DefaultBlockConfigProvider extends PmmoDataProvider<ObjectData> {
-    Map<ResourceLocation, ObjectData.Builder> data = new HashMap<>();
+    Map<Identifier, ObjectData.Builder> data = new HashMap<>();
     public DefaultBlockConfigProvider(PackOutput gen) {
         super(gen, "default", "pmmo/blocks", ObjectData.CODEC.codec());
     }

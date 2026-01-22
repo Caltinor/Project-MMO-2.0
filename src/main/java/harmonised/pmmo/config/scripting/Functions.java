@@ -18,7 +18,7 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
@@ -98,7 +98,7 @@ public class Functions {
             }
         });
         KEYWORDS.put("mob_scale", (param, id, type, value) -> {
-            ResourceLocation entityID = ResourceLocation.parse(param);
+            Identifier entityID = Identifier.parse(param);
             List<MobModifier> modifiers = new ArrayList<>();
             for (String raw : value.getOrDefault("attribute", "").split(",")) {
                 var modifier = getModifier(raw);
@@ -110,9 +110,9 @@ public class Functions {
             DataSource<?> data = Core.get(LogicalSide.SERVER).getLoader().getLoader(type).getData(id);
             String[] splitParam = param.split(",");
             if (splitParam.length < 2) return;
-            ResourceLocation effectID = ResourceLocation.parse(splitParam[0]);
+            Identifier effectID = Identifier.parse(splitParam[0]);
             int amplifier = Integer.parseInt(splitParam[1]);
-            Map<ResourceLocation, Integer> current = new HashMap<>(data.getPositiveEffect());
+            Map<Identifier, Integer> current = new HashMap<>(data.getPositiveEffect());
             current.put(effectID, amplifier);
             APIUtils.registerPositiveEffect(type, id, current, true);
         });
@@ -120,9 +120,9 @@ public class Functions {
             DataSource<?> data = Core.get(LogicalSide.SERVER).getLoader().getLoader(type).getData(id);
             String[] splitParam = param.split(",");
             if (splitParam.length < 2) return;
-            ResourceLocation effectID = ResourceLocation.parse(splitParam[0]);
+            Identifier effectID = Identifier.parse(splitParam[0]);
             int amplifier = Integer.parseInt(splitParam[1]);
-            Map<ResourceLocation, Integer> current = new HashMap<>(data.getNegativeEffect());
+            Map<Identifier, Integer> current = new HashMap<>(data.getNegativeEffect());
             current.put(effectID, amplifier);
             APIUtils.registerNegativeEffect(type, id, current, true);
         });
@@ -140,7 +140,7 @@ public class Functions {
                 builder.setXpAward(mapValue(value.get("salvage_award")));
             if (value.containsKey("max_drops"))
                 builder.setSalvageMax(Integer.parseInt(value.get("max_drops")));
-            ResourceLocation drop = ResourceLocation.parse(param);
+            Identifier drop = Identifier.parse(param);
             APIUtils.registerSalvage(id, Map.of(drop, builder), true);
         });
         KEYWORDS.put("set", (param, configId, type, value) -> {
@@ -174,49 +174,49 @@ public class Functions {
             }
             final Pair<Float, Float> values = Pair.of(nutVal, satVal);
             final Pair<Operator, Operator> ops = Pair.of(nutOp, satOp);
-            List<ResourceLocation> food = access.lookupOrThrow(Registries.ITEM).entrySet().stream()
+            List<Identifier> food = access.lookupOrThrow(Registries.ITEM).entrySet().stream()
                 .filter(entry -> entry.getValue().components().get(DataComponents.FOOD) instanceof FoodProperties props
                         && ops.getFirst().evaluation.test(Integer.valueOf(props.nutrition()).floatValue(), values.getFirst())
                         && ops.getSecond().evaluation.test(props.saturation(), values.getSecond()))
-                .map(entry -> entry.getKey().location())
+                .map(entry -> entry.getKey().identifier())
                 .toList();
             return new TargetSelector.Selection(ObjectType.ITEM, food);
         });
         TARGETORS.put("tool", (param, access) -> {
-            List<ResourceLocation>  tools = new ArrayList<>();
+            List<Identifier>  tools = new ArrayList<>();
             if (param.isEmpty())
                 tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
                     .filter(entry -> entry.getValue().components().has(DataComponents.TOOL))
-                    .map(entry -> entry.getKey().location())
+                    .map(entry -> entry.getKey().identifier())
                     .toList());
             else {
-                ResourceLocation tag = Reference.of(param);
+                Identifier tag = Reference.of(param);
                 tools.addAll(RegistryUtil.getTagMemberIds(access, Registries.ITEM, TagKey.create(Registries.ITEM, tag)));
             }
             return new TargetSelector.Selection(ObjectType.ITEM, tools);
         });
         TARGETORS.put("armor", (param, access) -> {
-            List<ResourceLocation>  tools = new ArrayList<>();
+            List<Identifier>  tools = new ArrayList<>();
             if (param.isEmpty())
                 tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
                         .filter(entry -> entry.getValue().components().has(DataComponents.EQUIPPABLE))
-                        .map(entry -> entry.getKey().location())
+                        .map(entry -> entry.getKey().identifier())
                         .toList());
             else {
-                ResourceLocation tag = Reference.of(param);
+                Identifier tag = Reference.of(param);
                 tools.addAll(RegistryUtil.getTagMemberIds(access, Registries.ITEM, TagKey.create(Registries.ITEM, tag)));
             }
             return new TargetSelector.Selection(ObjectType.ITEM, tools);
         });
         TARGETORS.put("weapon", (param, access) -> {
-            List<ResourceLocation>  tools = new ArrayList<>();
+            List<Identifier>  tools = new ArrayList<>();
             if (param.isEmpty())
                 tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
                         .filter(entry -> entry.getValue().components().has(DataComponents.DAMAGE))
-                        .map(entry -> entry.getKey().location())
+                        .map(entry -> entry.getKey().identifier())
                         .toList());
             else {
-                ResourceLocation tag = Reference.of(param);
+                Identifier tag = Reference.of(param);
                 tools.addAll(RegistryUtil.getTagMemberIds(access, Registries.ITEM, TagKey.create(Registries.ITEM, tag)));
             }
             return new TargetSelector.Selection(ObjectType.ITEM, tools);
@@ -267,7 +267,7 @@ public class Functions {
     public static double getDouble(Map<String, String> values) {
         return Double.parseDouble(values.getOrDefault("value", "0"));
     }
-    public static ResourceLocation getId(Map<String, String> values) {
+    public static Identifier getId(Map<String, String> values) {
         return Reference.of(values.getOrDefault("value", "pmmo_scripting:missing_value"));
     }
     public static boolean getBool(Map<String, String> values) {
@@ -285,7 +285,7 @@ public class Functions {
     private static MobModifier getModifier(String raw) {
         var match = attributeRegex.matcher(raw);
         if (!match.find()) return null;
-        ResourceLocation attrId = Reference.of(match.group(1));
+        Identifier attrId = Reference.of(match.group(1));
         AttributeModifier.Operation operation = switch (match.group(2)) {
             case "+" -> AttributeModifier.Operation.ADD_VALUE;
             case "*" -> AttributeModifier.Operation.ADD_MULTIPLIED_BASE;

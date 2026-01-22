@@ -12,7 +12,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
-    Map<ResourceLocation, ObjectData.Builder> data = new HashMap<>();
+    Map<Identifier, ObjectData.Builder> data = new HashMap<>();
     public EasyItemConfigProvider(PackOutput gen) {
         super(gen, "easy", "pmmo/items", ObjectData.CODEC.codec());
     }
@@ -64,7 +64,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
                         BuiltInRegistries.POTION.entrySet().stream().map(entry ->
                         equalsCriteria("endurance",
                                 entry.getValue().getEffects().stream().mapToInt(MobEffectInstance::getDuration).max().orElseGet(() -> 1),
-                                entry.getKey().location())).toList())
+                                entry.getKey().identifier())).toList())
         ));
         get(Items.POTION).addNBTXp(EventType.CONSUME, List.of(logic));
         logic = new LogicEntry(BehaviorToPrevious.ADD_TO, false, List.of(
@@ -72,7 +72,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
                         BuiltInRegistries.POTION.entrySet().stream().map(entry ->
                                 equalsCriteria("crafting",
                                         entry.getValue().getEffects().stream().mapToInt(MobEffectInstance::getDuration).max().orElseGet(() -> 1),
-                                        entry.getKey().location())).toList())
+                                        entry.getKey().identifier())).toList())
         ));
         get(Items.POTION).addNBTXp(EventType.BREW, List.of(logic));
 
@@ -238,7 +238,7 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         get(block.asItem()).addXpValues(EventType.BLOCK_BREAK, Map.of("mining", amount));
     }
 
-    protected LogicEntry.Criteria equalsCriteria(String skill, double value, ResourceLocation key) {
+    protected LogicEntry.Criteria equalsCriteria(String skill, double value, Identifier key) {
         return new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of(key.toString())), Map.of(skill, value));
     }
 

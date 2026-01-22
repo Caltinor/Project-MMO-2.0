@@ -23,7 +23,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
@@ -38,12 +38,12 @@ import java.util.function.Consumer;
 public class SalvageSectionWidget extends ReactiveWidget {
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
 
-    Map<ResourceLocation, CodecTypes.SalvageData> salvage = new HashMap<>();
+    Map<Identifier, CodecTypes.SalvageData> salvage = new HashMap<>();
     public SalvageSectionWidget(ItemStack stack) {
         super(0, 0, 0, 0);
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         Registry<Item> registry = access.lookupOrThrow(Registries.ITEM);
-        ResourceLocation id = RegistryUtil.getId(access, stack);
+        Identifier id = RegistryUtil.getId(access, stack);
         Font font = Minecraft.getInstance().font;
         Core core = Core.get(LogicalSide.CLIENT);
         this.salvage = core.getLoader().ITEM_LOADER.getData(id).salvage();

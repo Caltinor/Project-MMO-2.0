@@ -6,7 +6,7 @@ import harmonised.pmmo.config.codecs.ObjectData;
 import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EasyBlockConfigProvider extends PmmoDataProvider<ObjectData> {
-    Map<ResourceLocation, ObjectData.Builder> data = new HashMap<>();
+    Map<Identifier, ObjectData.Builder> data = new HashMap<>();
     public EasyBlockConfigProvider(PackOutput gen) {
         super(gen, "easy", "pmmo/blocks", ObjectData.CODEC.codec());
     }

@@ -28,7 +28,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -56,7 +56,7 @@ public class PerkObjectPanelWidget extends ObjectPanelWidget {
                             .withStyle(ChatFormatting.AQUA),
                     PositionType.STATIC.constraint, textConstraint);
             configurations.forEach(tag -> {
-                ResourceLocation perkID = Reference.of(tag.getStringOr("perk", "missing"));
+                Identifier perkID = Reference.of(tag.getStringOr("perk", "missing"));
                 CompoundTag settings = new CompoundTag().merge(reg.getDefaults(perkID)).merge(tag.copy());
                 addChild((AbstractWidget) reg.getRenderer(perkID).getWidget(this.width, player, settings), PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
             });

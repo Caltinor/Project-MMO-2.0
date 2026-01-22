@@ -37,7 +37,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -160,7 +160,7 @@ public class Core {
 
 	//======DATA OBTAINING METHODS======
 	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
-		ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
+		Identifier itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 		dataIn.merge(TagUtils.stackTag(stack, player.level()));
   
 		Map<String, Long> xpGains = tooltips.xpGainTooltipExists(itemID, type)
@@ -170,7 +170,7 @@ public class Core {
 		return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, dataIn);
 	}
 	public Map<String, Long> getExperienceAwards(MobEffectInstance mei, Player player, CompoundTag dataIn) {
-		ResourceLocation effectID = RegistryUtil.getId(mei.getEffect().value());
+		Identifier effectID = RegistryUtil.getId(mei.getEffect().value());
 		EnhancementsData data = (EnhancementsData) loader.getLoader(ObjectType.EFFECT).getData().get(effectID);
 		Map<String, Long> xpGains = new HashMap<>();
 		if (data != null) {
@@ -181,7 +181,7 @@ public class Core {
 		return getCommonXpAwardData(xpGains, EventType.EFFECT, effectID, player, ObjectType.EFFECT, dataIn);
 	}
 	public Map<String, Long> getExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
-		ResourceLocation res = RegistryUtil.getId(level.getBlockState(pos));
+		Identifier res = RegistryUtil.getId(level.getBlockState(pos));
 		BlockEntity tile = level.getBlockEntity(pos);
 		dataIn.merge(TagUtils.tileTag(tile));
 		dataIn.put("state", TagUtils.stateTag(level.getBlockState(pos)));
@@ -193,7 +193,7 @@ public class Core {
 		return getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, dataIn);
 	}
 	public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
-		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
+		Identifier entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
 		dataIn.merge(TagUtils.entityTag(entity));
 		  
 		Map<String, Long> xpGains = tooltips.xpGainTooltipExists(entityID, type)
@@ -203,7 +203,7 @@ public class Core {
 		return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, dataIn);
 	}
 	
-	public Map<String, Long> getCommonXpAwardData(Map<String, Long> xpGains, EventType type, ResourceLocation objectID, Player player, ObjectType oType, CompoundTag tag) {
+	public Map<String, Long> getCommonXpAwardData(Map<String, Long> xpGains, EventType type, Identifier objectID, Player player, ObjectType oType, CompoundTag tag) {
 		String[] loggables = new String[4];
 		if (xpGains.isEmpty()) {
 			xpGains = CoreUtils.mergeXpMapsWithSummateCondition(				
@@ -222,7 +222,7 @@ public class Core {
 		if (player != null && !(player instanceof FakePlayer))
 			CoreUtils.applyXpModifiers(xpGains, getConsolidatedModifierMap(player));
 		loggables[2] = MsLoggy.mapToString(xpGains);
-		List<ResourceLocation> source = new ArrayList<>();
+		List<Identifier> source = new ArrayList<>();
 		source.add(objectID);
 		if (tag.contains(APIUtils.DAMAGE_TYPE)) source.add(Reference.of(tag.getString(APIUtils.DAMAGE_TYPE).get()));
 		CheeseTracker.applyAntiCheese(type, source, player, xpGains);
@@ -234,11 +234,11 @@ public class Core {
 	}	
 	
 	//======DATA OBTAINING UTILITY METHODS=======
-	public Map<String, Long> getObjectExperienceMap(ObjectType type, ResourceLocation objectID, EventType eventType, CompoundTag tag) {
+	public Map<String, Long> getObjectExperienceMap(ObjectType type, Identifier objectID, EventType eventType, CompoundTag tag) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
 		return new HashMap<>(data != null ? MsLoggy.DEBUG.logAndReturn(data.getXpValues(eventType, tag), LOG_CODE.XP, "getObjectExperienceMap= {}") : new HashMap<>());
 	}
-	public Map<String, Double> getObjectModifierMap(ObjectType type, ResourceLocation objectID, ModifierDataType modifierType, CompoundTag tag) {
+	public Map<String, Double> getObjectModifierMap(ObjectType type, Identifier objectID, ModifierDataType modifierType, CompoundTag tag) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
 		return new HashMap<>(data != null ? data.getBonuses(modifierType, tag) : new HashMap<>());
 	}
@@ -247,13 +247,13 @@ public class Core {
 		if (player instanceof FakePlayer) return mapOut;		
 		
 		//BIOME Modification
-		ResourceLocation biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()));
+		Identifier biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()));
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {
 			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> o + (n-1));
 		}
 		
 		//DIMENSION Modification
-		ResourceLocation dimensionID = player.level().dimension().location();
+		Identifier dimensionID = player.level().dimension().identifier();
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.DIMENSION, dimensionID, ModifierDataType.DIMENSION, new CompoundTag()).entrySet()) {
 			mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> o + (n-1));
 		}
@@ -261,7 +261,7 @@ public class Core {
 		Map<String, Double> modifiers = new HashMap<>();
 		//HELD Modification
 		for (ItemStack stack : List.of(player.getOffhandItem(), player.getMainHandItem())) {
-			ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
+			Identifier itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 			modifiers = tooltips.bonusTooltipExists(itemID, ModifierDataType.HELD) 
 					? tooltips.getBonusTooltipData(itemID, ModifierDataType.HELD, stack) 
 					: getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.HELD, TagUtils.stackTag(stack, player.level()));
@@ -276,7 +276,7 @@ public class Core {
 		if (CuriosCompat.hasCurio)
 			wornItems.addAll(CuriosCompat.getItems(player));
 		wornItems.forEach((stack) -> {
-			ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
+			Identifier itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 			Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, ModifierDataType.WORN) ?
 					tooltips.getBonusTooltipData(itemID, ModifierDataType.WORN, stack):
 					getObjectModifierMap(ObjectType.ITEM, itemID, ModifierDataType.WORN, TagUtils.stackTag(stack ,player.level()));
@@ -301,7 +301,7 @@ public class Core {
 		if (player instanceof FakePlayer
 			|| !Config.server().requirements().isEnabled(type)
 			|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
-		ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
+		Identifier itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 		
 		return (predicates.predicateExists(itemID, type)) 
 			? predicates.checkPredicateReq(player, stack, type)
@@ -312,7 +312,7 @@ public class Core {
 				|| !Config.server().requirements().isEnabled(type)
 				|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
 		BlockEntity tile = player.level().getBlockEntity(pos);
-		ResourceLocation res = RegistryUtil.getId(player.level().getBlockState(pos));
+		Identifier res = RegistryUtil.getId(player.level().getBlockState(pos));
 		return tile != null && predicates.predicateExists(res, type)
 			? predicates.checkPredicateReq(player, tile, type)
 			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, pos, player.level()));
@@ -321,7 +321,7 @@ public class Core {
 		if (player instanceof FakePlayer
 				|| !Config.server().requirements().isEnabled(type)
 				|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
-		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
+		Identifier entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
 		return (predicates.predicateExists(entityID, type))
 			? predicates.checkPredicateReq(player, entity, type)
 			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, entity));
@@ -340,7 +340,7 @@ public class Core {
 				|| !Config.server().requirements().isEnabled(type)
 				|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
 		return doesPlayerMeetReq(player.getUUID(),
-				getObjectSkillMap(ObjectType.DIMENSION, dimension.location(), type, new CompoundTag()));
+				getObjectSkillMap(ObjectType.DIMENSION, dimension.identifier(), type, new CompoundTag()));
 	}
 	
 	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Long> requirements) {
@@ -365,12 +365,12 @@ public class Core {
 	}
 
 	//======DATA OBTAINING METHODS=======
-	public Map<String, Long> getObjectSkillMap(ObjectType type, ResourceLocation objectID, ReqType reqType, CompoundTag nbt) {
+	public Map<String, Long> getObjectSkillMap(ObjectType type, Identifier objectID, ReqType reqType, CompoundTag nbt) {
 		DataSource<?> data = loader.getLoader(type).getData().get(objectID);
 		return new HashMap<>(data != null ? data.getReqs(reqType, nbt) : new HashMap<>()); 
 	}
 	public Map<String, Long> getReqMap(ReqType reqType, ItemStack stack, Level level, boolean ignoreEnchants) {
-		ResourceLocation itemID = RegistryUtil.getId(level.registryAccess(), stack);
+		Identifier itemID = RegistryUtil.getId(level.registryAccess(), stack);
 		Map<String, Long> reqMap = ignoreEnchants ? new HashMap<>() : getEnchantReqs(stack);
 		if (tooltips.requirementTooltipExists(itemID, reqType)) 
 			tooltips.getItemRequirementTooltipData(itemID, reqType, stack).forEach((skill, lvl) -> {
@@ -382,14 +382,14 @@ public class Core {
 		Map<String, Long> outMap = new HashMap<>();
 		if (!stack.isEnchanted() || !Config.server().requirements().isEnabled(ReqType.USE_ENCHANTMENT)) return outMap;
 		for (var enchant : stack.getEnchantments().entrySet()) {
-			getEnchantmentReqs(enchant.getKey().unwrapKey().get().location(), enchant.getValue()-1).forEach((skill, level) -> {
+			getEnchantmentReqs(enchant.getKey().unwrapKey().get().identifier(), enchant.getValue()-1).forEach((skill, level) -> {
 				outMap.merge(skill, level, Long::max);
 			});
 		}
 		return outMap;
 	}
 	public Map<String, Long> getReqMap(ReqType reqType, Entity entity) {
-		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? Reference.mc("player") : RegistryUtil.getId(entity);
+		Identifier entityID = entity.getType().equals(EntityType.PLAYER) ? Reference.mc("player") : RegistryUtil.getId(entity);
 		Map<String, Long> reqMap = tooltips.requirementTooltipExists(entityID, reqType)
 			? tooltips.getEntityRequirementTooltipData(entityID, reqType, entity)
 			: new HashMap<>();
@@ -397,7 +397,7 @@ public class Core {
 	}	
 	public Map<String, Long> getReqMap(ReqType reqType, BlockPos pos, Level level) {
 		BlockEntity tile = level.getBlockEntity(pos);
-		ResourceLocation blockID = RegistryUtil.getId(level.getBlockState(pos));
+		Identifier blockID = RegistryUtil.getId(level.getBlockState(pos));
 		Map<String, Long> reqMap = (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
 			? tooltips.getBlockRequirementTooltipData(blockID, reqType, tile)
 			: new HashMap<>();
@@ -415,7 +415,7 @@ public class Core {
 	 * @param tag object's tag if present
 	 * @return a map of skills and levels required to perform the action
 	 */
-	public Map<String, Long> getCommonReqData(Map<String, Long> reqsIn, ObjectType oType, ResourceLocation objectID, ReqType type, CompoundTag tag) {
+	public Map<String, Long> getCommonReqData(Map<String, Long> reqsIn, ObjectType oType, Identifier objectID, ReqType type, CompoundTag tag) {
 		if (reqsIn.isEmpty()) {
 			reqsIn = getObjectSkillMap(oType, objectID, type, tag);
 			if (Config.autovalue().enabled() && reqsIn.isEmpty())
@@ -424,9 +424,9 @@ public class Core {
 		return CoreUtils.processSkillGroupReqs(reqsIn);
 	}
 	//======DATA OBTAINING UTILITY METHODS======
-	private ResourceLocation playerID = Reference.mc("player");
+	private Identifier playerID = Reference.mc("player");
 	
-	public Map<String, Long> getEnchantmentReqs(ResourceLocation enchantID, int enchantLvl) {
+	public Map<String, Long> getEnchantmentReqs(Identifier enchantID, int enchantLvl) {
 		return ((EnhancementsData) loader.getLoader(ObjectType.ENCHANTMENT).getData(enchantID)).skillArray().getOrDefault(enchantLvl, new HashMap<>());
 	}
 	
@@ -452,7 +452,7 @@ public class Core {
 		Map<String, Long> xpAwards = new HashMap<>();
 		boolean validAttempt = false;
 		entry:
-		for (Map.Entry<ResourceLocation, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(player.level().registryAccess(), salvageItem)).salvage().entrySet()) {
+		for (Map.Entry<Identifier, SalvageData> result : loader.ITEM_LOADER.getData(RegistryUtil.getId(player.level().registryAccess(), salvageItem)).salvage().entrySet()) {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met. 
 			for (Map.Entry<String, Long> skill : result.getValue().levelReq().entrySet()) {

@@ -22,7 +22,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.client.gui.GuiLayer;
 
@@ -123,7 +123,7 @@ public class XPOverlayGUI implements GuiLayer {
 		}
 	}
 	
-	private record SkillLine(String xpRaw, ResourceLocation icon, int iconSize, MutableComponent skillName, String bonusLine, Experience xpValue, int color, int yOffset, int skillGap) {
+	private record SkillLine(String xpRaw, Identifier icon, int iconSize, MutableComponent skillName, String bonusLine, Experience xpValue, int color, int yOffset, int skillGap) {
 		public static SkillLine DEFAULT = new SkillLine("", Reference.mc("missing"), 16, Component.literal(""), "", new Experience(), 0xFFFFFF, 0, 0);
 		public SkillLine(String skillName, double bonus, Experience xpValue, int yOffset, int skillGap) {
 			this(rawXpLine(xpValue, skillName),

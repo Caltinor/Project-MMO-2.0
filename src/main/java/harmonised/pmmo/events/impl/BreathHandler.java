@@ -10,7 +10,7 @@ import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.LogicalSide;
@@ -33,7 +33,7 @@ public class BreathHandler {
             CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BREATH_CHANGE, player, eventHookOutput));
             if (serverSide) {
                 Map<String, Double> ratio = Config.server().xpGains().playerXp(EventType.BREATH_CHANGE);
-                ResourceLocation source = Reference.mc("player");
+                Identifier source = Reference.mc("player");
                 final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP)
                         ? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP).get())
                         : new HashMap<>();

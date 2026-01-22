@@ -14,7 +14,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -44,7 +44,7 @@ public class AutoItem {
 	public static final EventType[] EVENTTYPES = {EventType.ANVIL_REPAIR, EventType.BLOCK_PLACE, EventType.CRAFT,
 			EventType.CONSUME, EventType.ENCHANT, EventType.FISH, EventType.SMELT};	
 
-	public static Map<String, Long> processReqs(ReqType type, ResourceLocation stackID) {
+	public static Map<String, Long> processReqs(ReqType type, Identifier stackID) {
 		//exit early if the event type is not valid for an item
 		if (!type.itemApplicable || !Config.autovalue().reqEnabled(type))
 			return new HashMap<>();
@@ -122,7 +122,7 @@ public class AutoItem {
 		return outMap;
 	}
 	
-	public static Map<String, Long> processXpGains(EventType type, ResourceLocation stackID) {
+	public static Map<String, Long> processXpGains(EventType type, Identifier stackID) {
 		//exit early if the event type is not valid for an item
 		if (!type.itemApplicable || !Config.autovalue().xpEnabled(type))
 			return new HashMap<>();

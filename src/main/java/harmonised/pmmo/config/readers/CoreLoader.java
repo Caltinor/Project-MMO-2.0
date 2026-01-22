@@ -15,7 +15,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -54,18 +54,18 @@ public class CoreLoader {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends DataSource<T>> void applyData(ObjectType type, Map<ResourceLocation, T> data) {
+	public <T extends DataSource<T>> void applyData(ObjectType type, Map<Identifier, T> data) {
 		switch (type) {
-		case ITEM -> {ITEM_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends ObjectData>) data);}
-		case BLOCK -> {BLOCK_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends ObjectData>) data);}
-		case ENTITY -> {ENTITY_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends ObjectData>) data);}
-		case DIMENSION -> {DIMENSION_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends LocationData>) data);}
-		case BIOME -> {BIOME_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends LocationData>) data);}
-		case PLAYER -> {PLAYER_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends PlayerData>) data);}
-		case ENCHANTMENT -> {ENCHANTMENT_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends EnhancementsData>) data);}
-		case EFFECT -> {EFFECT_LOADER.data.putAll((Map<? extends ResourceLocation, ? extends EnhancementsData>) data);}
+		case ITEM -> {ITEM_LOADER.data.putAll((Map<? extends Identifier, ? extends ObjectData>) data);}
+		case BLOCK -> {BLOCK_LOADER.data.putAll((Map<? extends Identifier, ? extends ObjectData>) data);}
+		case ENTITY -> {ENTITY_LOADER.data.putAll((Map<? extends Identifier, ? extends ObjectData>) data);}
+		case DIMENSION -> {DIMENSION_LOADER.data.putAll((Map<? extends Identifier, ? extends LocationData>) data);}
+		case BIOME -> {BIOME_LOADER.data.putAll((Map<? extends Identifier, ? extends LocationData>) data);}
+		case PLAYER -> {PLAYER_LOADER.data.putAll((Map<? extends Identifier, ? extends PlayerData>) data);}
+		case ENCHANTMENT -> {ENCHANTMENT_LOADER.data.putAll((Map<? extends Identifier, ? extends EnhancementsData>) data);}
+		case EFFECT -> {EFFECT_LOADER.data.putAll((Map<? extends Identifier, ? extends EnhancementsData>) data);}
 		default -> {}}
-		printData((Map<ResourceLocation, ? extends Record>) data);
+		printData((Map<Identifier, ? extends Record>) data);
 	}
 	
 	public MergeableCodecDataManager<?, ?> getLoader(ObjectType type) {
@@ -128,7 +128,7 @@ public class CoreLoader {
 		return raws.stream().filter(raw -> !raw.isUnconfigured()).reduce(DataSource::combine).orElse(null);
 	}
 	
-	private void printData(Map<ResourceLocation, ? extends Record> data) {
+	private void printData(Map<Identifier, ? extends Record> data) {
 		data.forEach((id, value) -> {
 			if (id == null || value == null) return;
 			MsLoggy.INFO.log(LOG_CODE.DATA, "Object: {} with Data: {}", id.toString(), value.toString());

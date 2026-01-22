@@ -33,7 +33,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.fml.LogicalSide;
@@ -66,7 +66,7 @@ public class BonusSectionWidget extends ReactiveWidget {
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
 
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
-    private static Map<ModifierDataType, Map<String, Double>> buildLayout(BonusSectionWidget layout, Map<ModifierDataType, List<LogicEntry>> nbtSettings, Map<ModifierDataType, Map<String, Double>> nbtBonuses, ObjectType type, ResourceLocation id) {
+    private static Map<ModifierDataType, Map<String, Double>> buildLayout(BonusSectionWidget layout, Map<ModifierDataType, List<LogicEntry>> nbtSettings, Map<ModifierDataType, Map<String, Double>> nbtBonuses, ObjectType type, Identifier id) {
         layout.nbtSettings.putAll(nbtSettings);
         Font font = Minecraft.getInstance().font;
         Core core = Core.get(LogicalSide.CLIENT);
@@ -116,7 +116,7 @@ public class BonusSectionWidget extends ReactiveWidget {
 
     public static BonusSectionWidget create(ItemStack stack) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
-        ResourceLocation id = RegistryUtil.getId(access, stack);
+        Identifier id = RegistryUtil.getId(access, stack);
         ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER.getData().getOrDefault(id, ObjectData.build().end());
         var bonusSettings = setting.nbtBonuses();
         var nbtBonuses = Arrays.stream(ModifierDataType.values())
@@ -128,11 +128,11 @@ public class BonusSectionWidget extends ReactiveWidget {
     }
 
     public static BonusSectionWidget create(Holder<Biome> biome) {
-        ResourceLocation id = biome.unwrapKey().orElse(ResourceKey.create(Registries.BIOME, Reference.mc("missing"))).location();
+        Identifier id = biome.unwrapKey().orElse(ResourceKey.create(Registries.BIOME, Reference.mc("missing"))).identifier();
         return new BonusSectionWidget(new HashMap<>(), layout -> buildLayout(layout, new HashMap<>(), new HashMap<>(), ObjectType.BIOME, id));
     }
 
-    public static BonusSectionWidget create(ResourceLocation id) {
+    public static BonusSectionWidget create(Identifier id) {
         return new BonusSectionWidget(new HashMap<>(), layout -> buildLayout(layout, new HashMap<>(), new HashMap<>(), ObjectType.DIMENSION, id));
     }
 

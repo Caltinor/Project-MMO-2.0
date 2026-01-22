@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.scripting.Functions;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public record SkillData (
 	Optional<Boolean> useTotalLevels,
 	Optional<Map<String, Double>> groupedSkills,
 	Optional<Long> maxLevel,
-	Optional<ResourceLocation> icon,
+	Optional<Identifier> icon,
 	Optional<Integer> iconSize) {
 
 	private static final String COLOR = "color";
@@ -40,7 +40,7 @@ public record SkillData (
 			Codec.BOOL.optionalFieldOf(USE_TOTAL_LVL).forGetter(SkillData::useTotalLevels),
 			CodecTypes.DOUBLE_CODEC.optionalFieldOf(GROUP_FOR).forGetter(SkillData::groupedSkills),
 			Codec.LONG.optionalFieldOf(MAX_LEVEL).forGetter(SkillData::maxLevel),
-			ResourceLocation.CODEC.optionalFieldOf(ICON).forGetter(SkillData::icon),
+			Identifier.CODEC.optionalFieldOf(ICON).forGetter(SkillData::icon),
 			Codec.INT.optionalFieldOf(ICON_SIZE).forGetter(SkillData::iconSize)
 			).apply(instance, SkillData::new));
 	
@@ -50,7 +50,7 @@ public record SkillData (
 	public boolean getShowInList() {return showInList.orElse(true);}
 	public boolean getUseTotalLevels() { return useTotalLevels.orElse(false); }
 	public long getMaxLevel() { return maxLevel.orElse(Config.server().levels().maxLevel()); }
-	public ResourceLocation getIcon() { return icon.orElse(Reference.rl("textures/skills/missing_icon.png")); }
+	public Identifier getIcon() { return icon.orElse(Reference.rl("textures/skills/missing_icon.png")); }
 	public int getIconSize() { return iconSize.orElse(18); }
 	
 	public boolean isSkillGroup() { return !getGroup().isEmpty(); }
@@ -116,7 +116,7 @@ public record SkillData (
 		int color, iconSize;
 		long maxLevel;
 		boolean afkExempt, displayName, useTotal, showInList;
-		ResourceLocation icon;
+		Identifier icon;
 		Map<String, Double> groupOf;
 		
 		private Builder() {
@@ -150,7 +150,7 @@ public record SkillData (
 			this.color = color;
 			return this;
 		}
-		public Builder withIcon(ResourceLocation icon) {
+		public Builder withIcon(Identifier icon) {
 			this.icon = icon;
 			return this;
 		}

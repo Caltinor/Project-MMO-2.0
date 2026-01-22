@@ -6,7 +6,7 @@ package harmonised.pmmo.compat.ftb_quests;
 //import dev.ftb.mods.ftbquests.quest.task.TaskType;
 //import dev.ftb.mods.ftbquests.quest.task.TaskTypes;
 //import harmonised.pmmo.util.Reference;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 
 public class FTBQHandler
 {

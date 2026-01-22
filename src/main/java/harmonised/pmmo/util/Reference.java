@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
@@ -20,17 +20,17 @@ import java.util.stream.Stream;
 public class Reference {
 	public static final String MOD_ID = "pmmo";
 
-	public static ResourceLocation rl(String path) {return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);}
-	public static ResourceLocation rl(String name, String path) {return ResourceLocation.fromNamespaceAndPath(name, path);}
-	public static ResourceLocation mc(String path) {return ResourceLocation.withDefaultNamespace(path);}
-	public static ResourceLocation of(String path) {return ResourceLocation.tryParse(path);}
+	public static Identifier rl(String path) {return Identifier.fromNamespaceAndPath(MOD_ID, path);}
+	public static Identifier rl(String name, String path) {return Identifier.fromNamespaceAndPath(name, path);}
+	public static Identifier mc(String path) {return Identifier.withDefaultNamespace(path);}
+	public static Identifier of(String path) {return Identifier.tryParse(path);}
 	
 	public static final UUID NIL = UUID.fromString("00000000-0000-0000-0000-000000000000");
 	
 	public static final String API_MAP_SERIALIZER_KEY = "key";
 	public static final String API_MAP_SERIALIZER_VALUE = "value";
 	
-	public static final ResourceLocation CREATIVE_REACH_ATTRIBUTE = Reference.rl("creative_reach");
+	public static final Identifier CREATIVE_REACH_ATTRIBUTE = Reference.rl("creative_reach");
 
 	public static final TagKey<EntityType<?>> MOB_TAG = TagKey.create(Registries.ENTITY_TYPE, rl("mobs"));
 	public static final TagKey<EntityType<?>> TAMABLE_TAG = TagKey.create(Registries.ENTITY_TYPE, rl("tamable"));

@@ -33,7 +33,7 @@ package harmonised.pmmo.compat.crafttweaker;
 //import harmonised.pmmo.config.codecs.ObjectData;
 //import harmonised.pmmo.core.Core;
 //import net.minecraft.nbt.CompoundTag;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.world.entity.player.Player;
 //
 //@ZenRegister
@@ -64,7 +64,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam requirements {skillname: 00 as int?, otherskillname: 00 as int?}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setReq(ObjectType objectType, ResourceLocation objectID, ReqType type, Map<String, Long> requirements) {
+//	public static void setReq(ObjectType objectType, Identifier objectID, ReqType type, Map<String, Long> requirements) {
 //		switch (objectType) {
 //		case ITEM -> {Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).reqs().put(type, requirements);}
 //		case BLOCK -> {Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).reqs().put(type, requirements);}
@@ -92,7 +92,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam reqs {skillname: 00 as int?, otherskillname: 00 as int?}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setEnchantment(ResourceLocation enchantID, int enchantLevel, Map<String, Long> reqs) {
+//	public static void setEnchantment(Identifier enchantID, int enchantLevel, Map<String, Long> reqs) {
 //		var data = Core.get(LogicalSide.SERVER).getLoader().ENCHANTMENT_LOADER.getData().computeIfAbsent(enchantID, rl -> new EnhancementsData());
 //		data.skillArray().clear();
 //		data.skillArray().put(enchantLevel, reqs);
@@ -111,7 +111,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam award {skillname: 00 as long?, otherskillname: 00 as long?}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setXpAward(ObjectType objectType, ResourceLocation objectID, EventType type, Map<String, Long> award) {
+//	public static void setXpAward(ObjectType objectType, Identifier objectID, EventType type, Map<String, Long> award) {
 //		switch (objectType) {
 //		case ITEM -> {Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).xpValues().put(type, award);}
 //		case BLOCK -> {Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).xpValues().put(type, award);}
@@ -129,7 +129,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam xpGains {skillname: 00 as int?, otherskillname: 00 as int?}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setEffectXp(ResourceLocation effectID, int effectLevel, Map<String, Long> xpGains) {
+//	public static void setEffectXp(Identifier effectID, int effectLevel, Map<String, Long> xpGains) {
 //		var data = Core.get(LogicalSide.SERVER).getLoader().EFFECT_LOADER.getData().computeIfAbsent(effectID, rl -> new EnhancementsData());
 //		data.skillArray().clear();
 //		data.skillArray().put(effectLevel, xpGains);
@@ -147,7 +147,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam bonus {skillname: 0.0 as double?, otherskillname: 0.0 as double?}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setBonus(ObjectType objectType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus) {
+//	public static void setBonus(ObjectType objectType, Identifier objectID, ModifierDataType type, Map<String, Double> bonus) {
 //		switch (objectType) {
 //		case ITEM -> {Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData()).bonuses().put(type, bonus);}
 //		case DIMENSION -> {Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData()).bonusMap().put(type, bonus);}
@@ -166,7 +166,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam effects {<resource:namespace:path>: 00 as int?, <resource:othernamespace:otherpath>: 00 as int?}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setNegativeEffect(ObjectType objectType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects) {
+//	public static void setNegativeEffect(ObjectType objectType, Identifier objectID, Map<Identifier, Integer> effects) {
 //		switch (objectType) {
 //		case ITEM -> {
 //			var data = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectData());
@@ -198,7 +198,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam effects {<resource:namespace:path>: 00 as int?, <resource:othernamespace:otherpath>: 00 as int?}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setPositiveEffect(ObjectType objectType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects) {
+//	public static void setPositiveEffect(ObjectType objectType, Identifier objectID, Map<Identifier, Integer> effects) {
 //		switch (objectType) {
 //		case DIMENSION -> {
 //			var data = Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationData());
@@ -224,7 +224,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam salvage {<resource:namespace:path>:builderInstance, <resource:othernamespace:otherpath>:otherbuilderInstance}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage) {
+//	public static void setSalvage(Identifier item, Map<Identifier, SalvageBuilder> salvage) {
 //		var data = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER.getData().computeIfAbsent(item, rl -> new ObjectData());
 //		data.salvage().clear();
 //		data.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().build())));
@@ -249,7 +249,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 * @docParam effects {skillname: 0.0 as double?, otherskillname: 0.0 as double?}
 //	 */
 //	@ZenCodeType.Method
-//	public static void setMobModifier(ObjectType objectType, ResourceLocation locationID, ResourceLocation mobID, List<MobModifier> modifiers) {
+//	public static void setMobModifier(ObjectType objectType, Identifier locationID, Identifier mobID, List<MobModifier> modifiers) {
 //		switch (objectType) {
 //		case DIMENSION -> {
 //			var data = Core.get(LogicalSide.SERVER).getLoader().DIMENSION_LOADER.getData().computeIfAbsent(locationID, rl -> new LocationData()).mobModifiers();
@@ -393,7 +393,7 @@ public class CTUtils /*implements IRuntimeAction*/{
 //	 */
 //	@ZenCodeType.Method
 //	public static void registerPerk(
-//			ResourceLocation perkID,
+//			Identifier perkID,
 //			MapData defaults,
 //			CTPerkPredicate customConditions,
 //			CTPerkFunction onStart,

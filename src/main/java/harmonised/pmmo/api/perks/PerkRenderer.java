@@ -16,7 +16,7 @@ import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
@@ -51,21 +51,20 @@ public interface PerkRenderer {
     /// @param layout the {@link PanelWidget} to add the common elements to
     /// @param config pass through for the config provided by {@link PerkRenderer}
     static void commonElements(ResponsiveLayout layout, CompoundTag config) {
-        String skill = config.getStringOr(APIUtils.SKILLNAME, "missing");
-        if (!skill.isBlank())
-            layout.addString(LangProvider.PERK_DEFAULT_SKILLNAME.asComponent(LangProvider.skill(skill)), PositionConstraints.offset(10, 0), textConstraint);
-        if (config.contains(APIUtils.MIN_LEVEL))
-            layout.addString(LangProvider.PERK_DEFAULT_MIN_LEVEL.asComponent(config.getLong(APIUtils.MIN_LEVEL)), PositionConstraints.offset(10, 0), textConstraint);
-        if (config.contains(APIUtils.MAX_LEVEL))
-            layout.addString(LangProvider.PERK_DEFAULT_MAX_LEVEL.asComponent(config.getLong(APIUtils.MAX_LEVEL)), PositionConstraints.offset(10, 0), textConstraint);
-        if (config.contains(APIUtils.MODULUS))
-            layout.addString(LangProvider.PERK_DEFAULT_MOD_LEVEL.asComponent(config.getLong(APIUtils.MODULUS)), PositionConstraints.offset(10, 0), textConstraint);
-        if (config.contains(APIUtils.MILESTONES))
-            layout.addString(LangProvider.PERK_DEFAULT_MILESTONE.asComponent(config.getListOrEmpty(APIUtils.MILESTONES)), PositionConstraints.offset(10, 0), textConstraint);
-        if (config.contains(APIUtils.CHANCE))
-            layout.addString(LangProvider.PERK_DEFAULT_CHANCE.asComponent(DP.dpSoft(config.getDoubleOr(APIUtils.CHANCE, 0d)) + "%"), PositionConstraints.offset(10, 0), textConstraint);
-        if (config.contains(APIUtils.COOLDOWN))
-            layout.addString(LangProvider.PERK_DEFAULT_COOLDOWN.asComponent(config.getIntOr(APIUtils.COOLDOWN, 0)/2), PositionConstraints.offset(10, 0), textConstraint);
+        config.getString(APIUtils.SKILLNAME).ifPresent(skill ->
+            layout.addString(LangProvider.PERK_DEFAULT_SKILLNAME.asComponent(LangProvider.skill(skill)), PositionConstraints.offset(10, 0), textConstraint));
+        config.getLong(APIUtils.MIN_LEVEL).ifPresent(minLevel ->
+            layout.addString(LangProvider.PERK_DEFAULT_MIN_LEVEL.asComponent(minLevel), PositionConstraints.offset(10, 0), textConstraint));
+        config.getLong(APIUtils.MAX_LEVEL).ifPresent(maxLevel ->
+            layout.addString(LangProvider.PERK_DEFAULT_MAX_LEVEL.asComponent(maxLevel), PositionConstraints.offset(10, 0), textConstraint));
+        config.getLong(APIUtils.MODULUS).ifPresent(modulus ->
+            layout.addString(LangProvider.PERK_DEFAULT_MOD_LEVEL.asComponent(modulus), PositionConstraints.offset(10, 0), textConstraint));
+        config.getList(APIUtils.MILESTONES).ifPresent(milestones ->
+            layout.addString(LangProvider.PERK_DEFAULT_MILESTONE.asComponent(milestones), PositionConstraints.offset(10, 0), textConstraint));
+        config.getDouble(APIUtils.CHANCE).ifPresent(chance ->
+            layout.addString(LangProvider.PERK_DEFAULT_CHANCE.asComponent(DP.dpSoft(chance) + "%"), PositionConstraints.offset(10, 0), textConstraint));
+        config.getInt(APIUtils.COOLDOWN).ifPresent(cooldown ->
+            layout.addString(LangProvider.PERK_DEFAULT_COOLDOWN.asComponent(cooldown/2), PositionConstraints.offset(10, 0), textConstraint));
     }
 
     /// A default implementation capturing only the common elements of Perks.
@@ -79,7 +78,7 @@ public interface PerkRenderer {
 
         public DefaultPerkPanel(int color, int width, Player player, CompoundTag config) {
             super(color, width);
-            ResourceLocation rl = Reference.of(config.getStringOr("perk", "missing"));
+            Identifier rl = Reference.of(config.getStringOr("perk", "missing"));
             this.id = rl.toString();
             MutableComponent title = Component.translatable("perk.%s.%s".formatted(rl.getNamespace(), rl.getPath()));
             this.name = title.toString();

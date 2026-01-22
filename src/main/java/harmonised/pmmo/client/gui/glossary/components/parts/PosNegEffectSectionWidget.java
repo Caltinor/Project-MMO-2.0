@@ -20,7 +20,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,8 @@ public class PosNegEffectSectionWidget extends ReactiveWidget {
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
 
     private final Map<String, Long> reqs;
-    private final Map<ResourceLocation, Integer> pos;
-    private final Map<ResourceLocation, Integer> neg;
+    private final Map<Identifier, Integer> pos;
+    private final Map<Identifier, Integer> neg;
     public PosNegEffectSectionWidget(LocationData data, boolean isBiome) {
         super(0, 0, 0, 0);
         this.reqs = data.travelReq();
@@ -68,7 +68,7 @@ public class PosNegEffectSectionWidget extends ReactiveWidget {
         return skillWidgets.size() > 1 ? skillWidgets : new ArrayList<>();
     }
 
-    private static List<Positioner<?>> setEffects(Map<ResourceLocation, Integer> map, Component header, Font font) {
+    private static List<Positioner<?>> setEffects(Map<Identifier, Integer> map, Component header, Font font) {
         List<Positioner<?>> skillWidgets = new ArrayList<>(List.of(build(header, font)));
         MutableComponent prefix = Component.literal(map.values().stream().filter(s -> s > 0).count() > 1 ? "   " : "");
         var reg = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.MOB_EFFECT);

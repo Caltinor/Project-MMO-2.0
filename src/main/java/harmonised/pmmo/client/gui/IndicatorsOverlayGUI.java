@@ -5,12 +5,12 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.gui.GuiLayer;
 
 public class IndicatorsOverlayGUI implements GuiLayer {
-	private static final ResourceLocation ICONS = Reference.rl("textures/gui/overlay_icons.png");
+	private static final Identifier ICONS = Reference.rl("textures/gui/overlay_icons.png");
 	private Minecraft mc;
 	private BlockHitResult bhr;
 	

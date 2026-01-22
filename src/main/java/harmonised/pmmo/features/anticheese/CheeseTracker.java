@@ -9,7 +9,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -33,19 +33,19 @@ import java.util.Optional;
 @EventBusSubscriber(modid=Reference.MOD_ID)
 public class CheeseTracker {
 
-	public static void applyAntiCheese(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
+	public static void applyAntiCheese(EventType event, Identifier source, Player player, Map<String, Long> awardIn) {
 		applyAntiCheese(event, List.of(source), player, awardIn);
 	}
-	public static void applyAntiCheese(EventType event, List<ResourceLocation> source, Player player, Map<String, Long> awardIn) {
+	public static void applyAntiCheese(EventType event, List<Identifier> source, Player player, Map<String, Long> awardIn) {
 		if (!(player instanceof ServerPlayer) || event == null)
 			return;
 		Setting setting = Config.anticheese().afk().get(event);
 		if (setting != null)
-			for (ResourceLocation src : source) {setting.applyAFK(event, src, player, awardIn);}
+			for (Identifier src : source) {setting.applyAFK(event, src, player, awardIn);}
 		if ((setting =  Config.anticheese().diminish().get(event)) != null)
-			for (ResourceLocation src : source) {setting.applyDiminuation(event, src, player, awardIn);}
+			for (Identifier src : source) {setting.applyDiminuation(event, src, player, awardIn);}
 		if ((setting = Config.anticheese().normal().get(event)) != null)
-			for (ResourceLocation src : source) {setting.applyNormalization(event, src, player, awardIn);}
+			for (Identifier src : source) {setting.applyNormalization(event, src, player, awardIn);}
 	}
 	
 	@SubscribeEvent
@@ -236,7 +236,7 @@ public class CheeseTracker {
 						strict.orElse(true)
 				)));
 		
-		public void applyAFK(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
+		public void applyAFK(EventType event, Identifier source, Player player, Map<String, Long> awardIn) {
 			AFKTracker afkData = AFK_DATA.computeIfAbsent(player, p -> new HashMap<>())
 					.computeIfAbsent(event, e -> new AFKTracker(player, minTime(), cooloff(), toleranceFlat(), strictTolerance())).update(player);
 			if ((this.source().isEmpty() || this.source().contains(source.toString())) && afkData.isAFK()) {
@@ -251,7 +251,7 @@ public class CheeseTracker {
 				});
 			}
 		}
-		public void applyDiminuation(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
+		public void applyDiminuation(EventType event, Identifier source, Player player, Map<String, Long> awardIn) {
 			var tracker = DIMINISH_DATA.computeIfAbsent(player, p -> new HashMap<>()).computeIfAbsent(event, e -> new DiminishTracker(retention));
 			if (this.source().isEmpty() || this.source().contains(source.toString())) {				
 				tracker.diminish();
@@ -261,7 +261,7 @@ public class CheeseTracker {
 				});
 			}
 		}
-		public void applyNormalization(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {			
+		public void applyNormalization(EventType event, Identifier source, Player player, Map<String, Long> awardIn) {			
 			if (this.source().isEmpty() || this.source().contains(source.toString())) {
 				NormTracker norms = NORMALIZED_DATA.computeIfAbsent(player, p -> new HashMap<>()).computeIfAbsent(event, e -> new NormTracker(retention));
 				norms.retainTimeRemaining = retention;

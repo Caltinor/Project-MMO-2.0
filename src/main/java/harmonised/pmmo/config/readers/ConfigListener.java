@@ -16,7 +16,7 @@ import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.network.clientpackets.CP_SyncConfig;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -89,7 +89,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
     @Override
     protected ConfigData<?> prepare(ResourceManager manager, ProfilerFiller profilerFiller) {
         this.configs.clear();
-        for (Map.Entry<ResourceLocation, Resource> entry : manager.listResources("config",
+        for (Map.Entry<Identifier, Resource> entry : manager.listResources("config",
                 file -> file.getNamespace().equals("pmmo") && file.getPath().endsWith(".json")).entrySet()
         ){
             try (final Reader reader = entry.getValue().openAsReader()) {

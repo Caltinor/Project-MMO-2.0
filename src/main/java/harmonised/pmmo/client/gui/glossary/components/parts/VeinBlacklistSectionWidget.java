@@ -14,27 +14,31 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class VeinBlacklistSectionWidget extends ReactiveWidget {
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
 
-    private final List<ResourceLocation> data;
-    public VeinBlacklistSectionWidget(List<ResourceLocation> data) {
+    private final List<Identifier> data;
+    public VeinBlacklistSectionWidget(List<Identifier> data) {
         super(0, 0, 0, 0);
         this.data = data;
         if (!data.isEmpty() && Config.server().veinMiner().enabled()) {
             var reg = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.BLOCK);
             addString(LangProvider.VEIN_BLACKLIST_HEADER.asComponent(), PositionType.STATIC.constraint, textConstraint);
-            for (ResourceLocation id : data) {
-                Block block = reg.get(id).get().value();
-                addString(block != null ? block.asItem().getDefaultInstance().getDisplayName() : Component.literal(id.toString()), PositionConstraints.offset(10, 0), textConstraint);
+            for (Identifier id : data) {
+                addString(reg.get(id)
+                        .map(blockReference -> blockReference.value().asItem().getDefaultInstance().getDisplayName())
+                        .orElseGet(() -> Component.literal(id.toString())),
+                        PositionConstraints.offset(10, 0), textConstraint);
             }
         }
         setHeight((getChildren().size() * 12) + 2);

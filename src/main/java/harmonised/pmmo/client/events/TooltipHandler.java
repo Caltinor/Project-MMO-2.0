@@ -26,7 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -56,7 +56,7 @@ public class TooltipHandler {
         	Core core = Core.get(LogicalSide.CLIENT);
             ItemStack stack = event.getItemStack();
 			boolean isBlockItem = stack.getItem() instanceof BlockItem;
-			ResourceLocation itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
+			Identifier itemID = RegistryUtil.getId(player.level().registryAccess(), stack);
 
             if(itemID == null)
                 return;

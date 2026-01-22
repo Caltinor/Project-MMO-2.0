@@ -19,7 +19,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.fml.LogicalSide;
@@ -38,7 +38,7 @@ public class EnchantmentsObjectPanelWidget extends ObjectPanelWidget {
     public EnchantmentsObjectPanelWidget(int color, int width, Enchantment enchant) {
         super(color, width, Core.get(LogicalSide.CLIENT));
         var reg = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-        ResourceLocation rl = reg.getKey(enchant);
+        Identifier rl = reg.getKey(enchant);
         Optional<Holder.Reference<Enchantment>> holder = reg.get(rl);
         EnhancementsData data = core.getLoader().ENCHANTMENT_LOADER.getData(rl);
         this.id = rl.toString();

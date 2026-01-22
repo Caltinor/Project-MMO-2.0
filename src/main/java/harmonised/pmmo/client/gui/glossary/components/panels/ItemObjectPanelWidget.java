@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
@@ -33,7 +33,7 @@ public class ItemObjectPanelWidget extends ObjectPanelWidget {
 
     public ItemObjectPanelWidget(int color, int width, ItemStack stack) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        ResourceLocation rl = RegistryUtil.getId(Minecraft.getInstance().level.registryAccess() ,stack);
+        Identifier rl = RegistryUtil.getId(Minecraft.getInstance().level.registryAccess() ,stack);
         this.id = rl.toString();
         this.name = stack.getDisplayName().getString();
         addChild(new ItemStackWidget(stack), PositionConstraints.grid(0, 0), SizeConstraints.builder()

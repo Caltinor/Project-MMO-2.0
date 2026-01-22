@@ -17,7 +17,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -99,7 +99,7 @@ public abstract class GLMProvider implements DataProvider {
 	public RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel, int maxLevel) {
 		return new RareDropModifier(
 				new LootItemCondition[] {
-						LootTableIdCondition.builder(BuiltInLootTables.FISHING.location()).build(),
+						LootTableIdCondition.builder(BuiltInLootTables.FISHING.identifier()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
 				}, drop.getDefaultInstance(), count, chance);
 	}
@@ -112,7 +112,7 @@ public abstract class GLMProvider implements DataProvider {
 		return new RareDropModifier(
 				new LootItemCondition[] {
 						LootItemKilledByPlayerCondition.killedByPlayer().build(),
-						LootTableIdCondition.builder(mob.getDefaultLootTable().get().location()).build(),
+						LootTableIdCondition.builder(mob.getDefaultLootTable().get().identifier()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
 				}, drop.getDefaultInstance(), count, chance);
 	}
@@ -130,7 +130,7 @@ public abstract class GLMProvider implements DataProvider {
 
 		Path forgePath = output.getOutputFolder().resolve(destination).resolve("neoforge").resolve("loot_modifiers").resolve("global_loot_modifiers.json");
 		Path modifierFolderPath = output.getOutputFolder().resolve(destination).resolve(this.modid).resolve("loot_modifiers");
-		List<ResourceLocation> entries = new ArrayList<>();
+		List<Identifier> entries = new ArrayList<>();
 
 		ImmutableList.Builder<CompletableFuture<?>> futuresBuilder = new ImmutableList.Builder<>();
 
@@ -144,7 +144,7 @@ public abstract class GLMProvider implements DataProvider {
 
 		JsonObject forgeJson = new JsonObject();
 		forgeJson.addProperty("replace", false);
-		forgeJson.add("entries", GSON.toJsonTree(entries.stream().map(ResourceLocation::toString).collect(Collectors.toList())));
+		forgeJson.add("entries", GSON.toJsonTree(entries.stream().map(Identifier::toString).collect(Collectors.toList())));
 
 		futuresBuilder.add(DataProvider.saveStable(cache, forgeJson, forgePath));
 

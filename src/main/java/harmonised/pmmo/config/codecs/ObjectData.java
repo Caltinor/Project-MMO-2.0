@@ -15,7 +15,7 @@ import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Items;
@@ -37,14 +37,14 @@ public record ObjectData(
 		Set<String> tagValues,
 		Map<ReqType, Map<String, Long>> reqs,
 		Map<ReqType, List<LogicEntry>> nbtReqs,
-		Map<ResourceLocation, Integer> negativeEffects,
+		Map<Identifier, Integer> negativeEffects,
 		Map<EventType, Map<String, Long>> xpValues,
 		Map<EventType, Map<String, Map<String, Long>>> damageXpValues,
 		Map<EventType, Map<String, List<LogicEntry>>> nbtDamageValues,
 		Map<EventType, List<LogicEntry>> nbtXpValues,
 		Map<ModifierDataType, Map<String, Double>> bonuses,
 		Map<ModifierDataType, List<LogicEntry>> nbtBonuses,
-		Map<ResourceLocation, SalvageData> salvage,
+		Map<Identifier, SalvageData> salvage,
 		VeinData veinData) implements DataSource<ObjectData>{
 		public ObjectData(boolean override) {this(override, new HashSet<>(), new HashMap<>(), new HashMap<>(),
 			new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
@@ -54,7 +54,7 @@ public record ObjectData(
 			new HashMap<>(), VeinData.EMPTY);
 		}
 
-		public Map<ResourceLocation, SalvageData> salvage() {
+		public Map<Identifier, SalvageData> salvage() {
 			return salvage.entrySet().stream()
 					.filter(entry -> !BuiltInRegistries.ITEM.get(entry.getKey()).equals(Items.AIR))
 					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -102,11 +102,11 @@ public record ObjectData(
 			reqs().put(type, reqs);
 		}
 		@Override
-		public Map<ResourceLocation, Integer> getNegativeEffect() {
+		public Map<Identifier, Integer> getNegativeEffect() {
 			return negativeEffects();
 		}
 		@Override
-		public void setNegativeEffects(Map<ResourceLocation, Integer> neg) {
+		public void setNegativeEffects(Map<Identifier, Integer> neg) {
 			negativeEffects().clear();
 			negativeEffects().putAll(neg);
 		}
@@ -121,7 +121,7 @@ public record ObjectData(
 				Codec.optionalField("nbt_requirements",
 					Codec.simpleMap(ReqType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ReqType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.nbtReqs())),
-				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
+				Codec.unboundedMap(Identifier.CODEC, Codec.INT)
 					.optionalFieldOf("negative_effect")					
 					.forGetter(od -> Optional.of(od.negativeEffects())),
 				Codec.optionalField("xp_values",
@@ -142,7 +142,7 @@ public record ObjectData(
 				Codec.optionalField("nbt_bonuses",
 					Codec.simpleMap(ModifierDataType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ModifierDataType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.nbtBonuses())),
-				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).optionalFieldOf("salvage").forGetter(od -> Optional.of(od.salvage())),
+				Codec.unboundedMap(Identifier.CODEC, CodecTypes.SALVAGE_CODEC).optionalFieldOf("salvage").forGetter(od -> Optional.of(od.salvage())),
 				VeinData.VEIN_DATA_CODEC.optionalFieldOf(VeinMiningLogic.VEIN_DATA).forGetter(od -> Optional.of(od.veinData()))
 				).apply(instance, (override, tags, reqs, nbtreqs, effects, xp, nbtXp, dmg, nbtdmg, bonus, nbtbonus, salvage, vein) ->
 					new ObjectData(
@@ -172,8 +172,8 @@ public record ObjectData(
 			Map<ModifierDataType, List<LogicEntry>> nbtBonus = new HashMap<>();
 			Map<ReqType, Map<String, Long>> reqs = new HashMap<>();
 			Map<ReqType, List<LogicEntry>> nbtReq = new HashMap<>();
-			Map<ResourceLocation, Integer> reqEffects = new HashMap<>();
-			Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
+			Map<Identifier, Integer> reqEffects = new HashMap<>();
+			Map<Identifier, SalvageData> salvage = new HashMap<>();
 			VeinData[] combinedVein = {this.veinData()};
 			
 			BiConsumer<ObjectData, ObjectData> bothOrNeither = (o, t) -> {
@@ -284,14 +284,14 @@ public record ObjectData(
 			Set<String> tagValues = new HashSet<>();
 			Map<ReqType, Map<String, Long>> reqs = new HashMap<>();
 			Map<ReqType, List<LogicEntry>> nbtReqs = new HashMap<>();
-			Map<ResourceLocation, Integer> negativeEffects = new HashMap<>();
+			Map<Identifier, Integer> negativeEffects = new HashMap<>();
 			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
 			Map<EventType, Map<String, Map<String, Long>>> damageXpValues = new HashMap<>();
 			Map<EventType, Map<String, List<LogicEntry>>> nbtDamageXpValues = new HashMap<>();
 			Map<EventType, List<LogicEntry>> nbtXpValues = new HashMap<>();
 			Map<ModifierDataType, Map<String, Double>> bonuses = new HashMap<>();
 			Map<ModifierDataType, List<LogicEntry>> nbtBonuses = new HashMap<>();
-			Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
+			Map<Identifier, SalvageData> salvage = new HashMap<>();
 			public Optional<Integer> chargeCap = Optional.empty();
 			public Optional<Double> chargeRate = Optional.empty();
 			public Optional<Integer> consumeAmount = Optional.empty();
@@ -317,7 +317,7 @@ public record ObjectData(
 				this.nbtReqs.put(type, req);
 				return this;
 			}
-			public Builder addNegativeEffect(ResourceLocation id, int level) {
+			public Builder addNegativeEffect(Identifier id, int level) {
 				this.negativeEffects.put(id, level);
 				return this;
 			}
@@ -345,7 +345,7 @@ public record ObjectData(
 				this.nbtBonuses.put(type, bonus);
 				return this;
 			}
-			public Builder addSalvage(ResourceLocation outputID, SalvageData details) {
+			public Builder addSalvage(Identifier outputID, SalvageData details) {
 				this.salvage.put(outputID, details);
 				return this;
 			}

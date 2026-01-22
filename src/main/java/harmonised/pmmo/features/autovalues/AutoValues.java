@@ -4,7 +4,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,16 +13,16 @@ import java.util.concurrent.ConcurrentMap;
 
 public class AutoValues {
 	//============================DATA CACHES==============================================================
-	private static ConcurrentMap<ReqType, Map<ResourceLocation, Map<String, Long>>> reqValues = new ConcurrentHashMap<>();
-	private static ConcurrentMap<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainValues = new ConcurrentHashMap<>();
+	private static ConcurrentMap<ReqType, Map<Identifier, Map<String, Long>>> reqValues = new ConcurrentHashMap<>();
+	private static ConcurrentMap<EventType, Map<Identifier, Map<String, Long>>> xpGainValues = new ConcurrentHashMap<>();
 	
 	//============================CACHE GETTERS============================================================	
-	private static Map<String, Long> cacheRequirement(ReqType reqType, ResourceLocation objectID, Map<String, Long> requirementMap) {
+	private static Map<String, Long> cacheRequirement(ReqType reqType, Identifier objectID, Map<String, Long> requirementMap) {
 		reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).put(objectID, requirementMap);
 		return requirementMap;
 	}
 	
-	private static Map<String, Long> cacheXpGainValue(EventType eventType, ResourceLocation objectID, Map<String, Long> xpGainMap) {
+	private static Map<String, Long> cacheXpGainValue(EventType eventType, Identifier objectID, Map<String, Long> xpGainMap) {
 		xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).put(objectID, xpGainMap);
 		return xpGainMap;
 	}
@@ -33,7 +33,7 @@ public class AutoValues {
 	}
 
 	//============================AUTO VALUE GETTERS=======================================================
-	public static Map<String, Long> getRequirements(ReqType reqType, ResourceLocation objectID, ObjectType autoValueType) {
+	public static Map<String, Long> getRequirements(ReqType reqType, Identifier objectID, ObjectType autoValueType) {
 		//ignore processing if individual req is disabled and clear the cache for this object
 		if (!Config.autovalue().reqEnabled().getOrDefault(reqType, true)) {
 			reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).remove(objectID);
@@ -59,7 +59,7 @@ public class AutoValues {
 		return cacheRequirement(reqType, objectID, finalReqs);
 	}
 	
-	public static Map<String, Long> getExperienceAward(EventType eventType, ResourceLocation objectID, ObjectType autoValueType) {
+	public static Map<String, Long> getExperienceAward(EventType eventType, Identifier objectID, ObjectType autoValueType) {
 		//ignore processing if individual event is disabled and clear existing data
 		if (!Config.autovalue().xpEnabled().getOrDefault(eventType, true)) {
 			xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).remove(objectID);

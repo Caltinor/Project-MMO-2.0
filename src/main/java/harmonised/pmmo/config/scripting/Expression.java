@@ -7,7 +7,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public record Expression(
         ObjectType targetType,
-        ResourceLocation targetID,
+        Identifier targetID,
         Map<String, String> value,
         List<Node> features) {
     public record Node(String param, NodeConsumer consumer) {@Override public String toString() {return param;}}
@@ -28,7 +28,7 @@ public record Expression(
         String[] nodes = str.replace(";", "").split("\\)\\.");
         List<Node> features = new ArrayList<>();
         Map<String, String> values = new HashMap<>();
-        List<ResourceLocation> targetIDs = new ArrayList<>();
+        List<Identifier> targetIDs = new ArrayList<>();
         ObjectType targetType = null;
         for (String node : nodes) {
             MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.DATA, "NODE: {}", node);
@@ -49,7 +49,7 @@ public record Expression(
             else values.put(keyword, param);
         }
 
-        for (ResourceLocation id : targetIDs) {expressions.add(new Expression(targetType, id, values, features));}
+        for (Identifier id : targetIDs) {expressions.add(new Expression(targetType, id, values, features));}
         expressions.forEach(expr -> MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.DATA, "Expressions: {}", expr));
         return expressions;
     }
@@ -60,16 +60,16 @@ public record Expression(
         features.forEach(c -> c.consumer().consume(c.param(), targetID, targetType, value));
     }
 
-    public static List<ResourceLocation> parseIDs(String raw, ObjectType type, RegistryAccess access) {
-        List<ResourceLocation> ids = new ArrayList<>();
+    public static List<Identifier> parseIDs(String raw, ObjectType type, RegistryAccess access) {
+        List<Identifier> ids = new ArrayList<>();
         String[] rawSplit = raw.split(",");
         for (String str : rawSplit) {
             if (str.startsWith("#")) {
-                ResourceLocation tagID = Reference.of(str.substring(1));
+                Identifier tagID = Reference.of(str.substring(1));
                 ids.addAll(getMembers(true, tagID, access, type));
             }
             else if (str.endsWith(":*")) {
-                ResourceLocation namespace = Reference.of(str.replace("*", "wildcard"));
+                Identifier namespace = Reference.of(str.replace("*", "wildcard"));
                 ids.addAll(getMembers(false, namespace, access, type));
             }
             else ids.add(Reference.of(str));
@@ -77,7 +77,7 @@ public record Expression(
         return ids;
     }
 
-    private static List<ResourceLocation> getMembers(boolean isTag, ResourceLocation tagID, RegistryAccess access, ObjectType type) {
+    private static List<Identifier> getMembers(boolean isTag, Identifier tagID, RegistryAccess access, ObjectType type) {
         return switch (type) {
             case ITEM -> readRegistry(isTag, access, Registries.ITEM, tagID);
             case BLOCK -> readRegistry(isTag, access, Registries.BLOCK, tagID);
@@ -88,11 +88,11 @@ public record Expression(
         };
     }
 
-    private static <T> List<ResourceLocation> readRegistry(boolean forTags, RegistryAccess access, ResourceKey<Registry<T>> registry, ResourceLocation tagID) {
+    private static <T> List<Identifier> readRegistry(boolean forTags, RegistryAccess access, ResourceKey<Registry<T>> registry, Identifier tagID) {
         var reg = access.lookupOrThrow(registry);
         return forTags
                 ? reg.get(TagKey.create(registry, tagID))
-                .map(named -> named.stream().map(holder -> holder.unwrapKey().get().location()).toList())
+                .map(named -> named.stream().map(holder -> holder.unwrapKey().get().identifier()).toList())
                 .orElse(List.of())
                 : reg.keySet().stream().filter(id -> id.getNamespace().equals(tagID.getNamespace())).toList();
     }

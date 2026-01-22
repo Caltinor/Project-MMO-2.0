@@ -26,7 +26,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -36,7 +36,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -245,7 +245,7 @@ public class APIUtils {
 	 * @param side the side to execute the data getter
 	 * @return a map of skill names and experience values
 	 */
-	public static Map<String, Long> getXpAwardMap(ObjectType oType, EventType type, ResourceLocation objectID, LogicalSide side, @Nullable Player player) {
+	public static Map<String, Long> getXpAwardMap(ObjectType oType, EventType type, Identifier objectID, LogicalSide side, @Nullable Player player) {
 		Preconditions.checkNotNull(oType);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(objectID);
@@ -316,7 +316,7 @@ public class APIUtils {
 	 * @param side the side to execute the data getter
 	 * @return a map of skill names an associated level requirements
 	 */
-	public static Map<String, Long> getRequirementMap(ObjectType oType, ResourceLocation objectID, ReqType type, LogicalSide side) {
+	public static Map<String, Long> getRequirementMap(ObjectType oType, Identifier objectID, ReqType type, LogicalSide side) {
 		Preconditions.checkNotNull(oType);
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(objectID);
@@ -336,7 +336,7 @@ public class APIUtils {
 	 * @param requirements a map of skills and levels needed to perform the action
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerRequirement(ObjectType oType, ResourceLocation objectID, ReqType type, Map<String, Long> requirements, boolean asOverride) {
+	public static void registerRequirement(ObjectType oType, Identifier objectID, ReqType type, Map<String, Long> requirements, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData(asOverride); }
@@ -353,7 +353,7 @@ public class APIUtils {
 	 * @param award a map of skills and experience values to be awarded
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerXpAward(ObjectType oType, ResourceLocation objectID, EventType type, Map<String, Long> award, boolean asOverride) {
+	public static void registerXpAward(ObjectType oType, Identifier objectID, EventType type, Map<String, Long> award, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData(asOverride);}
@@ -374,7 +374,7 @@ public class APIUtils {
 	 * @param award a map of skills and experience values to be awarded
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerDamageXpAward(ObjectType oType, ResourceLocation objectID, EventType type, String damageType, Map<String, Long> award, boolean asOverride) {
+	public static void registerDamageXpAward(ObjectType oType, Identifier objectID, EventType type, String damageType, Map<String, Long> award, boolean asOverride) {
 		if ((oType == ObjectType.ENTITY || oType == ObjectType.ITEM) && EventType.is(EventType.DAMAGE_TYPES, type)) {
 			ObjectData raw = new ObjectData(asOverride);
 			raw.damageXpValues().put(type, new HashMap<>(Map.of(damageType, award)));
@@ -388,7 +388,7 @@ public class APIUtils {
 	 * @param bonus a map of skills and multipliers (1.0 = no bonus)
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerBonus(ObjectType oType, ResourceLocation objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
+	public static void registerBonus(ObjectType oType, Identifier objectID, ModifierDataType type, Map<String, Double> bonus, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData(asOverride);}
@@ -406,7 +406,7 @@ public class APIUtils {
 	 * @param effects a map of effect ids and levels
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerNegativeEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
+	public static void registerNegativeEffect(ObjectType oType, Identifier objectID, Map<Identifier, Integer> effects, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData(asOverride);}
@@ -424,7 +424,7 @@ public class APIUtils {
 	 * @param effects a map of effect ids and levels
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerPositiveEffect(ObjectType oType, ResourceLocation objectID, Map<ResourceLocation, Integer> effects, boolean asOverride) {
+	public static void registerPositiveEffect(ObjectType oType, Identifier objectID, Map<Identifier, Integer> effects, boolean asOverride) {
 		DataSource<?> raw;
 		switch (oType) {
 		case BIOME, DIMENSION -> {raw = new LocationData(asOverride);}
@@ -442,7 +442,7 @@ public class APIUtils {
 	 * @param salvage a map of output item keys and the conditions for salvage
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerSalvage(ResourceLocation item, Map<ResourceLocation, SalvageBuilder> salvage, boolean asOverride) {
+	public static void registerSalvage(Identifier item, Map<Identifier, SalvageBuilder> salvage, boolean asOverride) {
 		ObjectData raw = new ObjectData(asOverride);
 		raw.salvage().putAll(salvage.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().build())));
 		registerConfiguration(asOverride, ObjectType.ITEM, item, raw);
@@ -457,7 +457,7 @@ public class APIUtils {
 	 * @param consumeAmount optional value (only used on blocks) for vein consumed when broken
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerVeinData(ObjectType oType, ResourceLocation objectID, Optional<Integer> chargeCap, Optional<Double> chargeRate, Optional<Integer> consumeAmount, boolean asOverride) {
+	public static void registerVeinData(ObjectType oType, Identifier objectID, Optional<Integer> chargeCap, Optional<Double> chargeRate, Optional<Integer> consumeAmount, boolean asOverride) {
 		if (oType != ObjectType.ITEM && oType != ObjectType.BLOCK)
 			return;
 		VeinData data = new VeinData(chargeCap, chargeRate, consumeAmount);
@@ -476,7 +476,7 @@ public class APIUtils {
 	 * @param mob_modifiers a map of mob keys with a value map of attribute types and values
 	 * @param asOverride should this apply after datapacks as an override
 	 */
-	public static void registerMobModifier(ObjectType oType, ResourceLocation locationID, Map<ResourceLocation, List<MobModifier>> mob_modifiers, boolean asOverride) {
+	public static void registerMobModifier(ObjectType oType, Identifier locationID, Map<Identifier, List<MobModifier>> mob_modifiers, boolean asOverride) {
 		if (oType != ObjectType.BIOME && oType != ObjectType.DIMENSION) 
 			return;
 		LocationData raw = new LocationData(asOverride);
@@ -491,7 +491,7 @@ public class APIUtils {
 	 * @param oType the type of data being registered
 	 * @param data a configuration object to be stored for the type provided
 	 */
-	private static void registerConfiguration(boolean asOverride, ObjectType oType, ResourceLocation objectID, DataSource<?> data) {
+	private static void registerConfiguration(boolean asOverride, ObjectType oType, Identifier objectID, DataSource<?> data) {
 		if (asOverride)
 			Core.get(LogicalSide.SERVER).getLoader().getLoader(oType).registerOverride(objectID, data);
 		else
@@ -499,7 +499,7 @@ public class APIUtils {
 	}
 	
 	/**A builder class used to create a {@link harmonised.pmmo.config.codecs.CodecTypes SalvageData}
-	 * for use in {@link APIUtils#registerSalvage(ResourceLocation, Map, boolean) registerSalvage}
+	 * for use in {@link APIUtils#registerSalvage(Identifier, Map, boolean) registerSalvage}
 	 * 
 	 * @author Caltinor
 	 *
@@ -590,7 +590,7 @@ public class APIUtils {
 	 * @param reqType the requirement type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public static void registerActionPredicate(ResourceLocation res, ReqType reqType, BiPredicate<Player, ItemStack> pred) {
+	public static void registerActionPredicate(Identifier res, ReqType reqType, BiPredicate<Player, ItemStack> pred) {
 		Core.get(LogicalSide.SERVER).getPredicateRegistry().registerPredicate(res, reqType, pred);
 	}
 	
@@ -603,7 +603,7 @@ public class APIUtils {
 	 * @param reqType the requirement type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public static void registerBreakPredicate(ResourceLocation res, ReqType reqType, BiPredicate<Player, BlockEntity> pred) {
+	public static void registerBreakPredicate(Identifier res, ReqType reqType, BiPredicate<Player, BlockEntity> pred) {
 		Core.get(LogicalSide.SERVER).getPredicateRegistry().registerBreakPredicate(res, reqType, pred);
 	}
 	
@@ -617,7 +617,7 @@ public class APIUtils {
 	 * @param reqType the requirement type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public static void registerEntityPredicate(ResourceLocation res, ReqType reqType, BiPredicate<Player, Entity> pred) {
+	public static void registerEntityPredicate(Identifier res, ReqType reqType, BiPredicate<Player, Entity> pred) {
 		Core.get(LogicalSide.SERVER).getPredicateRegistry().registerEntityPredicate(res, reqType, pred);
 	}
 	
@@ -631,7 +631,7 @@ public class APIUtils {
 	 * @param reqType the requirement type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerItemRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<ItemStack, Map<String, Long>> func)  {
+	public static void registerItemRequirementTooltipData(Identifier res, ReqType reqType, Function<ItemStack, Map<String, Long>> func)  {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemRequirementTooltipData(res, reqType, func);
 	}
 	
@@ -645,7 +645,7 @@ public class APIUtils {
 	 * @param reqType the PMMO behavior type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<BlockEntity, Map<String, Long>> func) {
+	public static void registerBlockRequirementTooltipData(Identifier res, ReqType reqType, Function<BlockEntity, Map<String, Long>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerBlockRequirementTooltipData(res, reqType, func);
 	}
 	
@@ -659,7 +659,7 @@ public class APIUtils {
 	 * @param reqType the requirement type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<Entity, Map<String, Long>> func) {
+	public static void registerEntityRequirementTooltipData(Identifier res, ReqType reqType, Function<Entity, Map<String, Long>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerEntityRequirementTooltipData(res, reqType, func);
 	}
 	
@@ -672,7 +672,7 @@ public class APIUtils {
 	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerItemXpGainTooltipData(ResourceLocation res, EventType eventType, Function<ItemStack, Map<String, Long>> func) {
+	public static void registerItemXpGainTooltipData(Identifier res, EventType eventType, Function<ItemStack, Map<String, Long>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemXpGainTooltipData(res, eventType, func);
 	}
 	
@@ -685,7 +685,7 @@ public class APIUtils {
 	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerBlockXpGainTooltipData(ResourceLocation res, EventType eventType, Function<BlockEntity, Map<String, Long>> func) {
+	public static void registerBlockXpGainTooltipData(Identifier res, EventType eventType, Function<BlockEntity, Map<String, Long>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerBlockXpGainTooltipData(res, eventType, func);
 	}
 	
@@ -698,7 +698,7 @@ public class APIUtils {
 	 * @param eventType the event type
 	 * @param func returns a map of skills and required levels to pmmo on apply.
 	 */
-	public static void registerEntityXpGainTooltipData(ResourceLocation res, EventType eventType, Function<Entity, Map<String, Long>> func) {
+	public static void registerEntityXpGainTooltipData(Identifier res, EventType eventType, Function<Entity, Map<String, Long>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerEntityXpGainTooltipData(res, eventType, func);
 	}
 	
@@ -710,7 +710,7 @@ public class APIUtils {
 	 * @param type the modifier type (HELD or WORN)
 	 * @param func the custom logic outputting the resulting modifier map
 	 */
-	public static void registerItemBonusData(ResourceLocation res, ModifierDataType type, Function<ItemStack, Map<String, Double>> func) {
+	public static void registerItemBonusData(Identifier res, ModifierDataType type, Function<ItemStack, Map<String, Double>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemBonusTooltipData(res, type, func);
 	}
 	
@@ -750,7 +750,7 @@ public class APIUtils {
 	 * @param executeOnTrigger the function to execute when conditions are met to trigger custom listeners.
 	 */
 	public static void registerListener(
-			@NonNull ResourceLocation listenerID, 
+			@NonNull Identifier listenerID,
 			@NonNull EventType eventType, 
 			@NonNull BiFunction<? super Event, CompoundTag, CompoundTag> executeOnTrigger) {
 		Core.get(LogicalSide.SERVER).getEventTriggerRegistry().registerListener(listenerID, eventType, executeOnTrigger);
@@ -813,7 +813,7 @@ public class APIUtils {
 	 * @param side the logical sides this perk should execute on.  Your implementation should factor in sidedness to avoid crashes.
 	 */
 	public static void registerPerk(
-			@NonNull ResourceLocation perkID,
+			@NonNull Identifier perkID,
 			@NonNull Perk perk,
 			@NonNull PerkSide side) {
 		switch (side) {
@@ -839,7 +839,7 @@ public class APIUtils {
   	 *                 will default to a basic text-based widget which only contains details about common config settings
   	 *                 and will not contain custom behavior details.
 	 */
-	public static void registerPerkRenderer(ResourceLocation perkID, PerkRenderer renderer) {
+	public static void registerPerkRenderer(Identifier perkID, PerkRenderer renderer) {
 		Core.get(LogicalSide.CLIENT).getPerkRegistry().registerRenderer(perkID, renderer);
 	}
 	

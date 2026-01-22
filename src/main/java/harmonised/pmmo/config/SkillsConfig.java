@@ -7,7 +7,7 @@ import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.readers.ConfigListener;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;

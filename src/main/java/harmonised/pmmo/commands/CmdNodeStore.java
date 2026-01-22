@@ -15,6 +15,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.neoforged.fml.LogicalSide;
@@ -30,7 +31,7 @@ public class CmdNodeStore {
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		return Commands.literal("store")
-				.requires(p -> p.hasPermission(2))
+				.requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
 				.then(Commands.argument(TARGET_ARG, EntityArgument.players())
 						.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
 								.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(Config.skills().skills().keySet(), builder))

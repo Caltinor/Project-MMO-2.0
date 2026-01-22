@@ -13,7 +13,7 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -91,7 +91,7 @@ public class PlayerTickHandler {
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.getEntity(), eventHookOutput));
 		if (serverSide) {
 			Map<String, Double> ratio = Config.server().xpGains().playerXp(type);
-			ResourceLocation source = Reference.mc("player");
+			Identifier source = Reference.mc("player");
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP).get())
 					: new HashMap<>();
@@ -105,7 +105,7 @@ public class PlayerTickHandler {
 			}
 			case EFFECT -> {
 				for (MobEffectInstance mei : event.getEntity().getActiveEffects()) {	
-					source = mei.getEffect().unwrapKey().get().location();
+					source = mei.getEffect().unwrapKey().get().identifier();
 					xpAward.putAll(core.getExperienceAwards(mei, event.getEntity(), perkOutput));
 				}
 			}

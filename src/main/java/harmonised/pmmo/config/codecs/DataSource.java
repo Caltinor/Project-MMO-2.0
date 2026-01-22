@@ -4,7 +4,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,14 +44,14 @@ public interface DataSource<T> {
 		return new HashMap<>();
 	};
 	public default void setReqs(ReqType type, Map<String, Long> reqs) {}
-	public default Map<ResourceLocation, Integer> getNegativeEffect() {
+	public default Map<Identifier, Integer> getNegativeEffect() {
 		return new HashMap<>();
 	};
-	public default void setNegativeEffects(Map<ResourceLocation, Integer> neg) {}
-	public default Map<ResourceLocation, Integer> getPositiveEffect() {
+	public default void setNegativeEffects(Map<Identifier, Integer> neg) {}
+	public default Map<Identifier, Integer> getPositiveEffect() {
 		return new HashMap<>();
 	};
-	public default void setPositiveEffects(Map<ResourceLocation, Integer> pos) {}
+	public default void setPositiveEffects(Map<Identifier, Integer> pos) {}
 	
 	//======SHARED CODEC UTILITIES===================
 	public static <K, V> HashMap<K,V> clearEmptyValues(Map<K,V> map) {

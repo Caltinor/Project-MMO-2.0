@@ -21,7 +21,7 @@ import net.minecraft.client.gui.components.ImageWidget;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.fml.LogicalSide;
@@ -43,8 +43,8 @@ public class BiomeObjectPanelWidget extends ObjectPanelWidget {
 
     public BiomeObjectPanelWidget(int color, int width, Holder<Biome> biome) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        ResourceLocation rl = RegistryUtil.getId(biome);
-        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(rl.getNamespace(),
+        Identifier rl = RegistryUtil.getId(biome);
+        Identifier texture = Identifier.fromNamespaceAndPath(rl.getNamespace(),
                 "textures/biome/" +rl.getPath()+ ".png");
         LocationData data = core.getLoader().BIOME_LOADER.getData(rl);
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());

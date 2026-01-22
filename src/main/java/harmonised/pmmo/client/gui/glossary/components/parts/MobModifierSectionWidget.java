@@ -18,7 +18,7 @@ import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,7 +33,7 @@ public class MobModifierSectionWidget extends ReactiveWidget {
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
 
     private final List<MobModifier> globals;
-    private final Map<ResourceLocation, List<MobModifier>> mobModifiers;
+    private final Map<Identifier, List<MobModifier>> mobModifiers;
     private final List<GuiEnumGroup> types = new ArrayList<>();
     public MobModifierSectionWidget(LocationData data) {
         super(0, 0, 0, 0);

@@ -12,7 +12,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.fml.LogicalSide;
 
@@ -24,7 +24,7 @@ public class EntityObjectPanelWidget extends ObjectPanelWidget {
 
     public EntityObjectPanelWidget(int color, int width, Entity entity) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        ResourceLocation rl = RegistryUtil.getId(Minecraft.getInstance().player.registryAccess(), entity);
+        Identifier rl = RegistryUtil.getId(Minecraft.getInstance().player.registryAccess(), entity);
         this.id = rl.toString();
         this.name = entity.getDisplayName().getString();
         addChild(new EntityWidget(entity), PositionConstraints.grid(0, 0), SizeConstraints.builder()

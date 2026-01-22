@@ -8,7 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -26,7 +26,7 @@ public class AutoBlock {
 	public static final ReqType[] REQTYPES = {ReqType.BREAK};
 	public static final EventType[] EVENTTYPES = {EventType.BLOCK_BREAK, EventType.BLOCK_PLACE, EventType.GROW};
 	
-	public static Map<String, Long> processReqs(ReqType type, ResourceLocation blockID) {
+	public static Map<String, Long> processReqs(ReqType type, Identifier blockID) {
 
 		//exit early if the type is not valid for a block
 		if (!type.blockApplicable || isWorldSensitive(blockID) || !Config.autovalue().reqEnabled(type))
@@ -50,7 +50,7 @@ public class AutoBlock {
 		return outMap;
 	}
 	
-	public static Map<String, Long> processXpGains(EventType type, ResourceLocation blockID) {
+	public static Map<String, Long> processXpGains(EventType type, Identifier blockID) {
 		//exit early if the type is not valid for a block
 		if (!type.blockApplicable || isWorldSensitive(blockID) || !Config.autovalue().xpEnabled(type))
 			return new HashMap<>();
@@ -98,7 +98,7 @@ public class AutoBlock {
 	 * @param id the object ID being checked
 	 * @return whether the namespace exists in the known incompatibility list
 	 */
-	private static boolean isWorldSensitive(ResourceLocation id) {
+	private static boolean isWorldSensitive(Identifier id) {
 		return WORLD_SENSITIVE_MOD_IDS.contains(id.getNamespace());
 	}
 }

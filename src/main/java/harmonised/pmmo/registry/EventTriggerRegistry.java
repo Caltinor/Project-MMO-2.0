@@ -10,9 +10,9 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.TagBuilder;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.Event;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +21,9 @@ import java.util.function.BiFunction;
 public class EventTriggerRegistry {
 	public EventTriggerRegistry() {}
 	
-	private LinkedListMultimap<EventType, Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> eventListeners = LinkedListMultimap.create();
+	private LinkedListMultimap<EventType, Pair<Identifier, BiFunction<? super Event, CompoundTag, CompoundTag>>> eventListeners = LinkedListMultimap.create();
 	
-	public void registerListener(@NonNull ResourceLocation listenerID, @NonNull EventType eventType, @NonNull BiFunction<? super Event, CompoundTag, CompoundTag> executeOnTrigger) {
+	public void registerListener(@NonNull Identifier listenerID, @NonNull EventType eventType, @NonNull BiFunction<? super Event, CompoundTag, CompoundTag> executeOnTrigger) {
 		Preconditions.checkNotNull(eventType);
 		Preconditions.checkNotNull(executeOnTrigger);
 		Preconditions.checkNotNull(listenerID);
@@ -31,7 +31,7 @@ public class EventTriggerRegistry {
 	}
 	
 	public CompoundTag executeEventListeners(EventType eventType, Event event, CompoundTag dataIn) {
-		List<Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> listeners = eventListeners.get(eventType);
+		List<Pair<Identifier, BiFunction<? super Event, CompoundTag, CompoundTag>>> listeners = eventListeners.get(eventType);
 		CompoundTag output = TagBuilder.start().withBool(APIUtils.IS_CANCELLED, false).build();
 		List<Integer> removals = new ArrayList<>();
 		for (int i = 0; i < listeners.size(); i++) {

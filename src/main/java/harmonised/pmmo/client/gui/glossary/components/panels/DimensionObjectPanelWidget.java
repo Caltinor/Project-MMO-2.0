@@ -17,7 +17,7 @@ import net.minecraft.client.gui.components.ImageWidget;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.LogicalSide;
 
@@ -36,20 +36,20 @@ public class DimensionObjectPanelWidget extends ObjectPanelWidget {
 
     public DimensionObjectPanelWidget(int color, int width, ResourceKey<Level> dimension) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(
-                dimension.location().getNamespace(),
-                "textures/dimension/" + dimension.location().getPath() + ".png");
+        Identifier rl = Identifier.fromNamespaceAndPath(
+                dimension.identifier().getNamespace(),
+                "textures/dimension/" + dimension.identifier().getPath() + ".png");
         LocationData data = core.getLoader().BIOME_LOADER.getData(rl);
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
         skills.addAll(data.travelReq().keySet());
-        this.id = dimension.location().toString();
+        this.id = dimension.identifier().toString();
         this.name = this.id;
         addChild(ImageWidget.texture(18, 18, rl, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
         addString(Component.literal(name), PositionConstraints.grid(0,1), textConstraint);
         this.effects = new PosNegEffectSectionWidget(data, true);
         addChild((AbstractWidget) effects, PositionConstraints.grid(1,1), SizeConstraints.builder().internalHeight().build());
-        this.bonuses = BonusSectionWidget.create(dimension.location());
+        this.bonuses = BonusSectionWidget.create(dimension.identifier());
         addChild((AbstractWidget) bonuses, PositionConstraints.grid(2,1), SizeConstraints.builder().internalHeight().build());
         this.blacklist = new VeinBlacklistSectionWidget(data.veinBlacklist());
         addChild((AbstractWidget) blacklist, PositionConstraints.grid(3, 1), SizeConstraints.builder().internalHeight().build());

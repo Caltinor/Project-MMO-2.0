@@ -78,7 +78,7 @@ public class ClientUtils {
 			}
 			if (reqType == ReqType.TRAVEL) {
 				player.level().registryAccess().lookupOrThrow(Registries.BIOME).entrySet().stream()
-						.map(entry -> entry.getKey().location())
+						.map(entry -> entry.getKey().identifier())
 						.forEach(biomeID -> core.getCommonReqData(new HashMap<>(), ObjectType.BIOME, biomeID, reqType, new CompoundTag())
 								.forEach((key, value) -> cache
 										.computeIfAbsent(key, s -> new HashMap<>())
@@ -87,7 +87,7 @@ public class ClientUtils {
 										.add(Component.literal(biomeID.toString())))
 						);
 				player.connection.levels().stream()
-						.map(ResourceKey::location)
+						.map(ResourceKey::identifier)
 						.forEach(dimID -> core.getCommonReqData(new HashMap<>(), ObjectType.DIMENSION, dimID, reqType, new CompoundTag())
 								.forEach((key, value) -> cache
 										.computeIfAbsent(key, s -> new HashMap<>())

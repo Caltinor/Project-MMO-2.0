@@ -43,7 +43,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -76,24 +76,24 @@ import java.util.stream.Collectors;
  * @param <T> The type of the objects that the codec is parsing jsons as
  * @param <V> The type of the object associated with a registry
  */
-public class MergeableCodecDataManager<T extends DataSource<T>, V> extends SimplePreparableReloadListener<Map<ResourceLocation, T>>
+public class MergeableCodecDataManager<T extends DataSource<T>, V> extends SimplePreparableReloadListener<Map<Identifier, T>>
 {
 	protected static final String JSON_EXTENSION = ".json";
 	protected static final int JSON_EXTENSION_LENGTH = JSON_EXTENSION.length();
 	protected static final Gson STANDARD_GSON = new Gson();
-	protected Map<ResourceLocation, T> data = new HashMap<>();
+	protected Map<Identifier, T> data = new HashMap<>();
 	
 	private final String folderName;
 	private final Logger logger;
 	private final MapCodec<T> codec;
 	private final Function<List<T>, T> merger;
-	private final Consumer<Map<ResourceLocation, T>> finalizer;
+	private final Consumer<Map<Identifier, T>> finalizer;
 	private final Gson gson;
 	private final Supplier<T> defaultImpl;
 	private final ResourceKey<Registry<V>> registry;
 
-	private final Map<ResourceLocation, T> defaultSettings = new HashMap<>();
-	private final Map<ResourceLocation, T> overrideSettings = new HashMap<>();
+	private final Map<Identifier, T> defaultSettings = new HashMap<>();
+	private final Map<Identifier, T> overrideSettings = new HashMap<>();
 	
 	/**
      * Initialize a data manager with the given folder name, codec, and merger
@@ -110,7 +110,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
      * and then all tag jsons defined with the same ID are merged additively into a single set of items, etc
      */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, MapCodec<T> codec, final Function<List<T>, T> merger
-			, final Consumer<Map<ResourceLocation, T>> finalizer, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
+			, final Consumer<Map<Identifier, T>> finalizer, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
 	{
 		this(folderName, logger, codec, merger, finalizer, STANDARD_GSON, defaultImpl, registry);
 	}
@@ -133,7 +133,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
      * raw json to a JsonElement, which the Codec then parses into a proper java object.
      */
 	public MergeableCodecDataManager(final String folderName, final Logger logger, MapCodec<T> codec, final Function<List<T>, T> merger
-			, final Consumer<Map<ResourceLocation, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
+			, final Consumer<Map<Identifier, T>> finalizer, final Gson gson, Supplier<T> defaultImpl, ResourceKey<Registry<V>> registry)
 	{
 		this.folderName = folderName;
 		this.logger = logger;
@@ -145,7 +145,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 		this.registry = registry;
 	}
 	
-	public Map<ResourceLocation, T> getData() {return data;}
+	public Map<Identifier, T> getData() {return data;}
 	
 	public void clearData() {
 		this.data.clear();
@@ -153,7 +153,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 		this.defaultSettings.clear();
 	}
 	
-	public T getData(ResourceLocation id) {
+	public T getData(Identifier id) {
 		return data.computeIfAbsent(id, res -> getGenericTypeInstance());
 	}
 	
@@ -172,7 +172,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * @param data the object containing the specific data
 	 */
 	@SuppressWarnings("unchecked")
-	public void registerDefault(ResourceLocation id, DataSource<?> data) {
+	public void registerDefault(Identifier id, DataSource<?> data) {
 		defaultSettings.merge(id, (T) data, (currID, currData) -> currData.combine((T) data));
 	}
 	
@@ -190,31 +190,31 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 * @param data the object containing the specific data
 	 */
 	@SuppressWarnings("unchecked")
-	public void registerOverride(ResourceLocation id, DataSource<?> data) {
+	public void registerOverride(Identifier id, DataSource<?> data) {
 		overrideSettings.merge(id, (T) data, DataSource::combine);
 	}
 
 	/** Off-thread processing (can include reading files from hard drive) **/
 	@NotNull
 	@Override
-	protected  Map<ResourceLocation, T> prepare(final ResourceManager resourceManager, final @NotNull ProfilerFiller profiler)
+	protected  Map<Identifier, T> prepare(final ResourceManager resourceManager, final @NotNull ProfilerFiller profiler)
 	{
-		final Map<ResourceLocation, List<T>> map = new HashMap<>();
+		final Map<Identifier, List<T>> map = new HashMap<>();
 		defaultSettings.forEach((id, data) -> {map.put(id, new ArrayList<>(List.of(data)));});
 
-		for (ResourceLocation resourceLocation : resourceManager.listResources(this.folderName, MergeableCodecDataManager::isStringJsonFile).keySet())
+		for (Identifier Identifier : resourceManager.listResources(this.folderName, MergeableCodecDataManager::isStringJsonFile).keySet())
 		{
-			final String namespace = resourceLocation.getNamespace();
-			final String filePath = resourceLocation.getPath();
+			final String namespace = Identifier.getNamespace();
+			final String filePath = Identifier.getPath();
 			final String dataPath = filePath.substring(this.folderName.length() + 1, filePath.length() - JSON_EXTENSION_LENGTH);
 			
 			// this is a json with identifier "somemodid:somedata"
-			final ResourceLocation jsonIdentifier = Reference.rl(namespace, dataPath);
+			final Identifier jsonIdentifier = Reference.rl(namespace, dataPath);
 			// this is the list of all json objects with the given resource location (i.e. in multiple datapacks)
 			final List<T> unmergedRaws = new ArrayList<>();
 			// it's entirely possible that there are multiple jsons with this identifier,
 			// we can query the resource manager for these
-			for (Resource resource : resourceManager.getResourceStack(resourceLocation))
+			for (Resource resource : resourceManager.getResourceStack(Identifier))
 			{
 				try // with resources
 				(final Reader reader = resource.openAsReader();	)
@@ -229,7 +229,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 				}
 				catch(RuntimeException | IOException exception)
 				{
-					this.logger.error("Data loader for {} could not read data {} from file {} in data pack {}", this.folderName, jsonIdentifier, resourceLocation, resource.sourcePackId(), exception); 
+					this.logger.error("Data loader for {} could not read data {} from file {} in data pack {}", this.folderName, jsonIdentifier, Identifier, resource.sourcePackId(), exception); 
 				}
 			}			
 			
@@ -239,7 +239,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 		return MergeableCodecDataManager.mapValues(map, this.merger);
 	}
 	
-	static boolean isStringJsonFile(final ResourceLocation file)
+	static boolean isStringJsonFile(final Identifier file)
 	{
 		return file.getPath().endsWith(".json");
 	}
@@ -265,7 +265,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	/** Main-thread processing, runs after prepare concludes **/
 	@Override
 	protected void apply(
-			final @NotNull Map<ResourceLocation, T> processedData,
+			final @NotNull Map<Identifier, T> processedData,
 			final @NotNull ResourceManager resourceManager,
 			final @NotNull ProfilerFiller profiler)
 	{
@@ -282,18 +282,18 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	public void postProcess(HolderLookup.Provider provider) {
 		HolderLookup.RegistryLookup<V> activeRegistry = provider.lookupOrThrow(registry);
 		MsLoggy.DEBUG.log(LOG_CODE.DATA, "Begin PostProcessing for {}", folderName);
-		for (Map.Entry<ResourceLocation, T> dataRaw : new HashMap<>(this.data).entrySet()) {
+		for (Map.Entry<Identifier, T> dataRaw : new HashMap<>(this.data).entrySet()) {
 			DataSource<T> dataValue = dataRaw.getValue();
 			if (dataValue.getTagValues().isEmpty()) continue;
 			MsLoggy.INFO.log(LOG_CODE.DATA, "Tag Data Found for {}", dataRaw.getKey().toString());
-			List<ResourceLocation> tags = new ArrayList<>();
+			List<Identifier> tags = new ArrayList<>();
 			for (String str : dataValue.getTagValues()) {
 				MsLoggy.INFO.log(LOG_CODE.DATA, "Applying Setting to Tag: {}", str);
 				if (str.startsWith("#")) {
 					activeRegistry.get(TagKey.create(registry, Reference.of(str.substring(1))))
 					.ifPresent(holder ->
 						tags.addAll(holder.stream()
-								.map(h -> h.unwrapKey().get().location())
+								.map(h -> h.unwrapKey().get().identifier())
 								.collect(Collectors.toSet())));
 				}
 				else if (str.endsWith(":*") && provider instanceof RegistryAccess registryAccess) {
@@ -308,7 +308,7 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 			dataValue.getTagValues().clear();
 
 			if (dataValue instanceof ObjectData entityData) {
-				List<ResourceLocation> damageMembers = new ArrayList<>();
+				List<Identifier> damageMembers = new ArrayList<>();
 				for (EventType event : List.of(EventType.RECEIVE_DAMAGE, EventType.DEAL_DAMAGE)) {
 					Map<String, Map<String, Long>> values = entityData.damageXpValues().getOrDefault(event, new HashMap<>());
 					for (String str : values.keySet()) {
@@ -342,17 +342,17 @@ public class MergeableCodecDataManager<T extends DataSource<T>, V> extends Simpl
 	 *
 	 * @param packetFactory A packet constructor or factory method that converts the given map to a packet object to send on the given channel
 	 */
-	public void subscribeAsSyncable(final Function<Map<ResourceLocation, T>, CustomPacketPayload> packetFactory) {
+	public void subscribeAsSyncable(final Function<Map<Identifier, T>, CustomPacketPayload> packetFactory) {
 		NeoForge.EVENT_BUS.addListener(this.getDatapackSyncListener(packetFactory));
 	}
 	
 	/** Generate an event listener function for the on-datapack-sync event **/
-	private Consumer<OnDatapackSyncEvent> getDatapackSyncListener(final Function<Map<ResourceLocation, T>, CustomPacketPayload> packetFactory)
+	private Consumer<OnDatapackSyncEvent> getDatapackSyncListener(final Function<Map<Identifier, T>, CustomPacketPayload> packetFactory)
 	{
 		return event -> {
 			ServerPlayer player = event.getPlayer();
 			List<CustomPacketPayload> packets = new ArrayList<>();
-			for (Map.Entry<ResourceLocation, T> entry : new HashMap<>(this.data).entrySet()) {
+			for (Map.Entry<Identifier, T> entry : new HashMap<>(this.data).entrySet()) {
 				if (entry.getKey() == null) continue;
 				packets.add(packetFactory.apply(Map.of(entry.getKey(), entry.getValue())));
 			}

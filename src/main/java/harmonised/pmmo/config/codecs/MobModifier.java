@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.TooltipFlag;
@@ -17,13 +17,13 @@ import java.util.Optional;
 import static org.w3c.dom.events.MutationEvent.ADDITION;
 
 public record MobModifier(
-    ResourceLocation attribute,
+    Identifier attribute,
     double amount,
     AttributeModifier.Operation operation
 ){
     public static final Codec<MobModifier> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    ResourceLocation.CODEC.fieldOf( "attribute" ).forGetter( MobModifier::attribute),
+                    Identifier.CODEC.fieldOf( "attribute" ).forGetter( MobModifier::attribute),
                     Codec.DOUBLE.fieldOf( "amount" ).forGetter( MobModifier::amount ),
                     AttributeModifier.Operation.CODEC.fieldOf( "operation" ).forGetter( MobModifier::operation )
             ).apply( instance, MobModifier::new )

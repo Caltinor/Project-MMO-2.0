@@ -19,7 +19,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -44,7 +44,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
-    Map<ResourceLocation, ObjectData.Builder> data = new HashMap<>();
+    Map<Identifier, ObjectData.Builder> data = new HashMap<>();
     public DefaultItemConfigProvider(PackOutput gen) {
         super(gen, "default", "pmmo/items", ObjectData.CODEC.codec());
     }
@@ -118,7 +118,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                         BuiltInRegistries.POTION.entrySet().stream().map(entry ->
                                 equalsCriteria("magic",
                                         entry.getValue().getEffects().stream().mapToInt(MobEffectInstance::getDuration).max().orElseGet(() -> 1),
-                                        entry.getKey().location())).toList())
+                                        entry.getKey().identifier())).toList())
         ));
         get(Items.POTION).addNBTXp(EventType.CONSUME, List.of(logic));
         logic = new LogicEntry(BehaviorToPrevious.ADD_TO, false, List.of(
@@ -126,7 +126,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                         BuiltInRegistries.POTION.entrySet().stream().map(entry ->
                                 equalsCriteria("magic",
                                         entry.getValue().getEffects().stream().mapToInt(MobEffectInstance::getDuration).max().orElseGet(() -> 1),
-                                        entry.getKey().location())).toList())
+                                        entry.getKey().identifier())).toList())
         ));
         get(Items.POTION).addNBTXp(EventType.BREW, List.of(logic));
         get(Items.LINGERING_POTION).addNBTXp(EventType.ACTIVATE_ITEM, List.of(logic));
@@ -827,7 +827,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         get(block.asItem()).addXpValues(EventType.BLOCK_BREAK, Map.of("mining", amount)).addTag(tagStrings);
     }
 
-    protected LogicEntry.Criteria equalsCriteria(String skill, double value, ResourceLocation key) {
+    protected LogicEntry.Criteria equalsCriteria(String skill, double value, Identifier key) {
         return new LogicEntry.Criteria(Operator.EQUALS, Optional.of(List.of(key.toString())), Map.of(skill, value));
     }
 

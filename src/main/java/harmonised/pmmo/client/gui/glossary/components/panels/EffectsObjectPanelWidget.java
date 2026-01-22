@@ -18,7 +18,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.neoforged.fml.LogicalSide;
 
@@ -36,7 +36,7 @@ public class EffectsObjectPanelWidget extends ObjectPanelWidget {
     public EffectsObjectPanelWidget(int color, int width, MobEffect effect) {
         super(color, width, Core.get(LogicalSide.CLIENT));
         var reg = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.MOB_EFFECT);
-        ResourceLocation rl = reg.getKey(effect);
+        Identifier rl = reg.getKey(effect);
         Optional<Holder.Reference<MobEffect>> holder = reg.get(rl);
         EnhancementsData data = core.getLoader().EFFECT_LOADER.getData(rl);
         this.id = rl.toString();

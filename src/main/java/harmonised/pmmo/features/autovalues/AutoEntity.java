@@ -7,7 +7,7 @@ import harmonised.pmmo.features.autovalues.AutoValueConfig.AttributeKey;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -22,11 +22,11 @@ public class AutoEntity {
 	public static final EventType[] EVENTTYPES = {EventType.BREED, EventType.DEATH, EventType.ENTITY, EventType.RIDING,
 			EventType.SHIELD_BLOCK,	EventType.TAMING};
 
-	public static Map<String, Long> processReqs(ReqType type, ResourceLocation entityID) {
+	public static Map<String, Long> processReqs(ReqType type, Identifier entityID) {
 		return new HashMap<>();
 	}
 	
-	public static Map<String, Long> processXpGains(EventType type, ResourceLocation entityID) {
+	public static Map<String, Long> processXpGains(EventType type, Identifier entityID) {
 		//exit early if not an applicable type
 		if (!type.entityApplicable || !Config.autovalue().xpEnabled(type))
 			return new HashMap<>();
@@ -64,7 +64,7 @@ public class AutoEntity {
 	}
 	
 	//========================GETTER METHODS==============================
-	private static Map<String, Long> getXpMap(ResourceLocation entityID, EventType type) {
+	private static Map<String, Long> getXpMap(Identifier entityID, EventType type) {
 		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) BuiltInRegistries.ENTITY_TYPE.getValue(entityID);
 		Map<String, Long> outMap = new HashMap<>();
 		double healthScale = getAttribute(entity, Attributes.MAX_HEALTH) * Config.autovalue().tweaks().entityTweaks().getOrDefault(AttributeKey.HEALTH.key, 0d);

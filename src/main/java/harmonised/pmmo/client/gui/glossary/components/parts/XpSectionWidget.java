@@ -28,7 +28,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -62,7 +62,7 @@ public class XpSectionWidget extends ReactiveWidget {
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
 
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
-    private static Map<EventType, Map<String, Long>> buildLayout(ResponsiveLayout layout, Map<EventType, List<LogicEntry>> nbtSettings, Map<EventType, Map<String, Long>> xpAwards, ObjectType type, ResourceLocation id) {
+    private static Map<EventType, Map<String, Long>> buildLayout(ResponsiveLayout layout, Map<EventType, List<LogicEntry>> nbtSettings, Map<EventType, Map<String, Long>> xpAwards, ObjectType type, Identifier id) {
         Font font = Minecraft.getInstance().font;
         Core core = Core.get(LogicalSide.CLIENT);
         ObjectData objectData = (ObjectData) core.getLoader().getLoader(type).getData(id);
@@ -136,7 +136,7 @@ public class XpSectionWidget extends ReactiveWidget {
 
     public static XpSectionWidget create(ItemStack stack) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
-        ResourceLocation id = RegistryUtil.getId(access, stack);
+        Identifier id = RegistryUtil.getId(access, stack);
         ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER.getData().getOrDefault(id, ObjectData.build().end());
         var xpSettings = setting.nbtXpValues();
         var nbtXp = Arrays.stream(EventType.ITEM_APPLICABLE_EVENTS)
@@ -148,7 +148,7 @@ public class XpSectionWidget extends ReactiveWidget {
     }
 
     public static XpSectionWidget create(Block block, BlockEntity be) {
-        ResourceLocation id = RegistryUtil.getId(block);
+        Identifier id = RegistryUtil.getId(block);
         ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().BLOCK_LOADER.getData().getOrDefault(id, ObjectData.build().end());
         var xpSettings = setting.nbtXpValues();
         Map<EventType, Map<String, Long>> nbtXp = be != null ?
@@ -163,7 +163,7 @@ public class XpSectionWidget extends ReactiveWidget {
 
     public static XpSectionWidget create(Entity entity) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
-        ResourceLocation id = RegistryUtil.getId(access, entity);
+        Identifier id = RegistryUtil.getId(access, entity);
         ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ENTITY_LOADER.getData().getOrDefault(id, ObjectData.build().end());
         var xpSettings = setting.nbtXpValues();
         var nbtXp = Arrays.stream(EventType.ENTITY_APPLICABLE_EVENTS)

@@ -46,7 +46,7 @@ public class KeyPressHandler {
             	BlockHitResult bhr = (BlockHitResult) mc.hitResult;
             	Block block = mc.player.level().getBlockState(bhr.getBlockPos()).getBlock();
             	if (!Core.get(LogicalSide.CLIENT).getLoader().DIMENSION_LOADER
-            			.getData(mc.player.level().dimension().location())
+            			.getData(mc.player.level().dimension().identifier())
             			.veinBlacklist().contains(RegistryUtil.getId(block))
             		&& !Core.get(LogicalSide.CLIENT).getLoader().BIOME_LOADER
             			.getData(RegistryUtil.getId(mc.player.level().getBiome(mc.player.blockPosition())))

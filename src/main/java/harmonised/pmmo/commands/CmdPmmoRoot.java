@@ -15,6 +15,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.permissions.Permissions;
 import net.neoforged.fml.ModList;
 
 import java.net.URI;
@@ -26,7 +27,7 @@ public class CmdPmmoRoot {
 				.then(CmdNodeAdmin.register(dispatcher))
 				.then(CmdNodeParty.register(dispatcher))					
 				.then(Commands.literal("genData")
-						.requires(ctx -> ctx.hasPermission(2))
+						.requires(ctx -> ctx.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
 						.then(Commands.literal("begin")
 								.executes(ctx -> set(ctx, Setting.RESET)))
 						.then(Commands.literal("withoutObjects")

@@ -17,7 +17,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPosition
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.LogicalSide;
@@ -137,7 +137,7 @@ public class TutorialOverlayGUI implements GuiLayer {
 
 	private List<MutableComponent> gatherSalvageData(ItemStack stack) {
 		List<MutableComponent> outList = new ArrayList<>();
-		for (Map.Entry<ResourceLocation, SalvageData> entry : Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER
+		for (Map.Entry<Identifier, SalvageData> entry : Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER
 				.getData(RegistryUtil.getId(mc.level.registryAccess(), stack)).salvage().entrySet()) {
 			outList.add(MutableComponent.create(
 					new ItemStack(BuiltInRegistries.ITEM.get(entry.getKey()).get()).getDisplayName().getContents()));

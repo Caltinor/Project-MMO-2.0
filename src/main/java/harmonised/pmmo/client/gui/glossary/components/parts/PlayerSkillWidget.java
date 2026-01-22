@@ -13,13 +13,13 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.LogicalSide;
 
 import java.awt.Color;
 
 public class PlayerSkillWidget extends PanelWidget {
-    protected static final ResourceLocation TEXTURE_LOCATION = Reference.rl("textures/gui/player_stats.png");
+    protected static final Identifier TEXTURE_LOCATION = Reference.rl("textures/gui/player_stats.png");
     private static final WidgetSprites BACKGROUND_SPRITES = new WidgetSprites(
             Reference.rl("stat_background"),
             Reference.rl("stat_background_highlighted")

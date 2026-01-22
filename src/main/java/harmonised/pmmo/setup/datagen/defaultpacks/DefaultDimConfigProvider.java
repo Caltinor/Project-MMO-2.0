@@ -8,7 +8,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultDimConfigProvider extends PmmoDataProvider<LocationData> {
-    Map<ResourceLocation, LocationData.Builder> data = new HashMap<>();
+    Map<Identifier, LocationData.Builder> data = new HashMap<>();
     public DefaultDimConfigProvider(PackOutput gen) {
         super(gen, "default", "pmmo/dimensions", LocationData.CODEC.codec());
     }
@@ -66,7 +66,7 @@ public class DefaultDimConfigProvider extends PmmoDataProvider<LocationData> {
     }
 
     private LocationData.Builder get(ResourceKey<?> key) {
-        return data.computeIfAbsent(key.location(), i -> LocationData.build());
+        return data.computeIfAbsent(key.identifier(), i -> LocationData.build());
     }
 
     private MobModifier modifiers(Holder<Attribute> attribute, double value) {

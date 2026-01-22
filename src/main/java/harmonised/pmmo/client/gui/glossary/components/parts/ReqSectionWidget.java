@@ -33,7 +33,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -73,13 +73,13 @@ public class ReqSectionWidget extends ReactiveWidget {
     }
 
     private static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
-    private static Map<ReqType, Map<String, Long>> buildLayout(ReqSectionWidget layout, Map<ReqType, List<LogicEntry>> nbtSettings, Map<ReqType, Map<String, Long>> nbtReqs, ObjectType type, ResourceLocation id) {
+    private static Map<ReqType, Map<String, Long>> buildLayout(ReqSectionWidget layout, Map<ReqType, List<LogicEntry>> nbtSettings, Map<ReqType, Map<String, Long>> nbtReqs, ObjectType type, Identifier id) {
         Font font = Minecraft.getInstance().font;
         Core core = Core.get(LogicalSide.CLIENT);
         Map<ReqType, Map<String, Long>> regReqs = new HashMap<>();
         List<Positioner<?>> contentWidgets = new ArrayList<>();
 
-        Map<ResourceLocation, Integer> negativeEffects = core.getLoader().getLoader(type).getData(id).getNegativeEffect();
+        Map<Identifier, Integer> negativeEffects = core.getLoader().getLoader(type).getData(id).getNegativeEffect();
         if (!negativeEffects.isEmpty()) {
             contentWidgets.add(new Positioner.Widget(new StringWidget(LangProvider.BIOME_EFFECT_NEG.asComponent().withStyle(ChatFormatting.UNDERLINE), font), PositionType.STATIC.constraint, textConstraint));
             negativeEffects.forEach((key, value) -> {
@@ -132,7 +132,7 @@ public class ReqSectionWidget extends ReactiveWidget {
 
     public static ReqSectionWidget create(ItemStack stack) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
-        ResourceLocation id = RegistryUtil.getId(access, stack);
+        Identifier id = RegistryUtil.getId(access, stack);
         ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ITEM_LOADER.getData().getOrDefault(id, ObjectData.build().end());
         var reqSettings = setting.nbtReqs();
         var nbtReqs = Arrays.stream(ReqType.ITEM_APPLICABLE_EVENTS)
@@ -144,7 +144,7 @@ public class ReqSectionWidget extends ReactiveWidget {
     }
 
     public static ReqSectionWidget create(Block block, BlockEntity be) {
-        ResourceLocation id = RegistryUtil.getId(block);
+        Identifier id = RegistryUtil.getId(block);
         ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().BLOCK_LOADER.getData().getOrDefault(id, ObjectData.build().end());
         var reqSettings = setting.nbtReqs();
         Map<ReqType, Map<String, Long>> nbtReqs = be != null ?
@@ -159,7 +159,7 @@ public class ReqSectionWidget extends ReactiveWidget {
 
     public static ReqSectionWidget create(Entity entity) {
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
-        ResourceLocation id = RegistryUtil.getId(access, entity);
+        Identifier id = RegistryUtil.getId(access, entity);
         ObjectData setting = Core.get(LogicalSide.CLIENT).getLoader().ENTITY_LOADER.getData().getOrDefault(id, ObjectData.build().end());
         var reqSettings = setting.nbtReqs();
         var nbtReqs = Arrays.stream(ReqType.ENTITY_APPLICABLE_EVENTS)

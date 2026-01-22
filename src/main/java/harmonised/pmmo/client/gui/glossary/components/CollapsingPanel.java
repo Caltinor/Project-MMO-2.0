@@ -9,14 +9,14 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Consumer;
 
 public class CollapsingPanel extends ReactiveWidget {
-    protected static final ResourceLocation TEXTURE_LOCATION = Reference.rl("textures/gui/player_stats.png");
-    protected static final ResourceLocation RIGHT = Reference.rl("textures/gui/arrow_right.png");
-    protected static final ResourceLocation LEFT = Reference.rl("textures/gui/arrow_left.png");
+    protected static final Identifier TEXTURE_LOCATION = Reference.rl("textures/gui/player_stats.png");
+    protected static final Identifier RIGHT = Reference.rl("textures/gui/arrow_right.png");
+    protected static final Identifier LEFT = Reference.rl("textures/gui/arrow_left.png");
     public final int expandedWidth;
     private final double scale;
     private Consumer<CollapsingPanel> callback;

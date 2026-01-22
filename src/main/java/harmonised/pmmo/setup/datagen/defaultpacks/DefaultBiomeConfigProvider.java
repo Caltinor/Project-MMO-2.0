@@ -9,7 +9,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
-    Map<ResourceLocation, LocationData.Builder> data = new HashMap<>();
+    Map<Identifier, LocationData.Builder> data = new HashMap<>();
     public DefaultBiomeConfigProvider(PackOutput gen) {
         super(gen, "default", "pmmo/biomes", LocationData.CODEC.codec());
     }
@@ -135,7 +135,7 @@ public class DefaultBiomeConfigProvider extends PmmoDataProvider<LocationData> {
     }
 
     private LocationData.Builder get(ResourceKey<?> key) {
-        return data.computeIfAbsent(key.location(), i -> LocationData.build());
+        return data.computeIfAbsent(key.identifier(), i -> LocationData.build());
     }
 
     private MobModifier modifiers(Holder<Attribute> attribute, double value) {

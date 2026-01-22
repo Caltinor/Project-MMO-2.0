@@ -1,7 +1,7 @@
 package harmonised.pmmo.util;
 
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,15 +71,15 @@ public class Functions<X, Y> {
 		return outMap;
 	}
 
-	/**Returns a new {@link ResourceLocation} with a modified path attribute.
+	/**Returns a new {@link Identifier} with a modified path attribute.
 	 * The path modification prepends the supplied string to the front of the
 	 * path and includes a "/" between the values.  
 	 * 
-	 * @param original The {@link ResourceLocation} being copied and modified
+	 * @param original The {@link Identifier} being copied and modified
 	 * @param prepend The text being prepended to the path
-	 * @return a new ResourceLocation with the prepended path.
+	 * @return a new Identifier with the prepended path.
 	 */
-	public static ResourceLocation pathPrepend(ResourceLocation original, String prepend) {
+	public static Identifier pathPrepend(Identifier original, String prepend) {
 		return Reference.rl(original.getNamespace(), prepend +"/"+ original.getPath());
 	}
 }

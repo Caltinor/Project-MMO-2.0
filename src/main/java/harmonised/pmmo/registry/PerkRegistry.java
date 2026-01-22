@@ -13,7 +13,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
@@ -28,17 +28,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PerkRegistry {
 	public PerkRegistry() {}
 
-	private final Map<ResourceLocation, Perk> perks = new HashMap<>();
-	private final Map<ResourceLocation, PerkRenderer> renderers = new HashMap<>();
+	private final Map<Identifier, Perk> perks = new HashMap<>();
+	private final Map<Identifier, PerkRenderer> renderers = new HashMap<>();
 	
-	public void registerPerk(ResourceLocation perkID, Perk perk) {
+	public void registerPerk(Identifier perkID, Perk perk) {
 		Preconditions.checkNotNull(perkID);
 		Preconditions.checkNotNull(perk);
 		perks.put(perkID, perk);
 		MsLoggy.DEBUG.log(LOG_CODE.API, "Registered Perk: "+perkID.toString());
 	}
 	
-	public void registerClientClone(ResourceLocation perkID, Perk perk) {
+	public void registerClientClone(Identifier perkID, Perk perk) {
 		Preconditions.checkNotNull(perkID);
 		Preconditions.checkNotNull(perk);
 		Perk clientCopy = new Perk(perk.conditions(), perk.propertyDefaults(), 
@@ -48,14 +48,14 @@ public class PerkRegistry {
 		perks.putIfAbsent(perkID, clientCopy);
 	}
 
-	public void registerRenderer(ResourceLocation perkID, PerkRenderer renderer) {
+	public void registerRenderer(Identifier perkID, PerkRenderer renderer) {
 		Preconditions.checkNotNull(perkID);
 		Preconditions.checkNotNull(renderer);
 		this.renderers.put(perkID, renderer);
 	}
-	public PerkRenderer getRenderer(ResourceLocation id) {return renderers.getOrDefault(id, PerkRenderer::DEFAULT);}
+	public PerkRenderer getRenderer(Identifier id) {return renderers.getOrDefault(id, PerkRenderer::DEFAULT);}
 
-	public CompoundTag getDefaults(ResourceLocation id) {return perks.getOrDefault(id, Perk.empty()).propertyDefaults().copy();}
+	public CompoundTag getDefaults(Identifier id) {return perks.getOrDefault(id, Perk.empty()).propertyDefaults().copy();}
 	
 	public CompoundTag executePerk(EventType cause, Player player, @NotNull CompoundTag dataIn) {
 		if (player == null) return new CompoundTag();
@@ -77,7 +77,7 @@ public class PerkRegistry {
 	}
 
 	private CompoundTag processPerk(CompoundTag src, CompoundTag output,Player player, @NotNull CompoundTag dataIn) {
-		ResourceLocation perkID = Reference.of(src.getString("perk").get());
+		Identifier perkID = Reference.of(src.getString("perk").get());
 		Perk perk = perks.getOrDefault(perkID, Perk.empty());
 		CompoundTag fullSrc = new CompoundTag()
 				.merge(perk.propertyDefaults().copy())
@@ -110,7 +110,7 @@ public class PerkRegistry {
 			perk.tick(player, src, ticksElapsed.get());
 		}
 	}
-	private static record PerkCooldown(ResourceLocation perkID, Player player, CompoundTag src, long lastUse) {
+	private static record PerkCooldown(Identifier perkID, Player player, CompoundTag src, long lastUse) {
 		public boolean cooledDown(Level level) {
 			return level.getGameTime() > lastUse + src.getInt(APIUtils.COOLDOWN).get();
 		}
@@ -137,7 +137,7 @@ public class PerkRegistry {
 	}
 
 	public boolean isPerkCooledDown(Player player, CompoundTag src) {
-		ResourceLocation perkID = Reference.of(src.getString("perk").get());
+		Identifier perkID = Reference.of(src.getString("perk").get());
 		return coolTracker.stream().noneMatch(cd -> cd.player().equals(player) && cd.perkID().equals(perkID));
 	}
 }

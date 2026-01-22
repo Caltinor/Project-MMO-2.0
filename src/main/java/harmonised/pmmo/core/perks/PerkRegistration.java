@@ -4,7 +4,7 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class PerkRegistration {
 	public static void init() {
@@ -27,7 +27,7 @@ public class PerkRegistration {
 		APIUtils.registerPerk(rl("tame_boost"), PerksImpl.TAME_BOOST, PerkSide.SERVER);
 	}
 	
-	private static ResourceLocation rl(String str) {
+	private static Identifier rl(String str) {
 		return Reference.rl(str);
 	}
 }

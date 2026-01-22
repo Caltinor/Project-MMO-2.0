@@ -13,7 +13,7 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -30,15 +30,15 @@ import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 
 @EventBusSubscriber(modid=Reference.MOD_ID)
 public class MobAttributeHandler {
-	private static final ResourceLocation ADDITION_MODIFIER_ID = Reference.rl("mob_scaling_modifier");
-	private static final ResourceLocation MULTIPLY_BASE_MODIFIER_ID = Reference.rl("mob_scaling_modifier_m");
-	private static final ResourceLocation MULTIPLY_TOTAL_MODIFIER_ID = Reference.rl("mob_scaling_modifier_mt");
+	private static final Identifier ADDITION_MODIFIER_ID = Reference.rl("mob_scaling_modifier");
+	private static final Identifier MULTIPLY_BASE_MODIFIER_ID = Reference.rl("mob_scaling_modifier_m");
+	private static final Identifier MULTIPLY_TOTAL_MODIFIER_ID = Reference.rl("mob_scaling_modifier_mt");
 	/**Used for balancing purposes to ensure configurations do not exceed known limits.*/
-	private static final Map<ResourceLocation, Float> CAPS = Map.of(
-			Attributes.MAX_HEALTH.unwrapKey().get().location(), 1024f,
-			Attributes.MOVEMENT_SPEED.unwrapKey().get().location(), 1.5f,
-			Attributes.ATTACK_DAMAGE.unwrapKey().get().location(), 2048f,
-			Attributes.SPAWN_REINFORCEMENTS_CHANCE.unwrapKey().get().location(), 1f
+	private static final Map<Identifier, Float> CAPS = Map.of(
+			Attributes.MAX_HEALTH.unwrapKey().get().identifier(), 1024f,
+			Attributes.MOVEMENT_SPEED.unwrapKey().get().identifier(), 1.5f,
+			Attributes.ATTACK_DAMAGE.unwrapKey().get().identifier(), 2048f,
+			Attributes.SPAWN_REINFORCEMENTS_CHANCE.unwrapKey().get().identifier(), 1f
 	);
 
 	@SubscribeEvent
@@ -73,7 +73,7 @@ public class MobAttributeHandler {
 
 		//get values for biome and dimension scaling
 		Core core = Core.get(level.getLevel());
-		LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(level.getLevel().dimension().location());
+		LocationData dimData = core.getLoader().DIMENSION_LOADER.getData(level.getLevel().dimension().identifier());
 		LocationData bioData = core.getLoader().BIOME_LOADER.getData(RegistryUtil.getId(level.getBiome(entity.getOnPos())));
 
 		var dimMods = dimData.mobModifiers().getOrDefault(RegistryUtil.getId(entity), new ArrayList<>(0));
@@ -132,7 +132,7 @@ public class MobAttributeHandler {
 	 * @param operation the operation to apply
 	 * @param collapsedModifiers the map of modifiers to apply
 	 */
-	private static void applyModifiers(LivingEntity entity, ResourceLocation modifierId, AttributeModifier.Operation operation, Map<ResourceLocation, Double> collapsedModifiers) {
+	private static void applyModifiers(LivingEntity entity, Identifier modifierId, AttributeModifier.Operation operation, Map<Identifier, Double> collapsedModifiers) {
 		collapsedModifiers.forEach((attributeID, amount) -> {
 			if (Math.abs(amount) < 0.0001f) return;
 			var registry = entity.level().registryAccess().lookupOrThrow(Registries.ATTRIBUTE);
@@ -153,8 +153,8 @@ public class MobAttributeHandler {
 	 * @param modifiers the list of modifiers to collapse
 	 * @return the collapsed map of modifiers
 	 */
-	private static HashMap<ResourceLocation, Double> collapseModifiers(List<MobModifier> modifiers) {
-		var modifierMap = new HashMap<ResourceLocation, Double>();
+	private static HashMap<Identifier, Double> collapseModifiers(List<MobModifier> modifiers) {
+		var modifierMap = new HashMap<Identifier, Double>();
 		for (MobModifier mod : modifiers) {
 			if (modifierMap.containsKey(mod.attribute())) {
 				modifierMap.put(mod.attribute(), modifierMap.get(mod.attribute()) + mod.amount());
@@ -165,7 +165,7 @@ public class MobAttributeHandler {
 		return modifierMap;
 	}
 
-	private static void applyMobScaling(HashMap<ResourceLocation, Double> collapsedModifiers, LivingEntity entity, Map<ResourceLocation, Map<String, Double>> config, List<Player> nearbyPlayers, int difficultyScale) {
+	private static void applyMobScaling(HashMap<Identifier, Double> collapsedModifiers, LivingEntity entity, Map<Identifier, Map<String, Double>> config, List<Player> nearbyPlayers, int difficultyScale) {
 		config.forEach((attributeID, configMap) -> {
 			var attributeScalingConfig = config.getOrDefault(attributeID, new HashMap<>());
 			if (attributeScalingConfig.isEmpty()) return;
@@ -187,7 +187,7 @@ public class MobAttributeHandler {
 		});
 	}
 
-	private static void applyBossMultiplier(HashMap<ResourceLocation, Double> collapsedModifiers, float multiplier) {
+	private static void applyBossMultiplier(HashMap<Identifier, Double> collapsedModifiers, float multiplier) {
 		if (Math.abs(multiplier - 1f) < 0.0001f) return;
 		collapsedModifiers.replaceAll((attribute, value) -> value * multiplier);
 	}
@@ -203,7 +203,7 @@ public class MobAttributeHandler {
 	 * @param ai
 	 * @return
 	 */
-	private static double baseValue(LivingEntity entity, ResourceLocation id, AttributeInstance ai) {
+	private static double baseValue(LivingEntity entity, Identifier id, AttributeInstance ai) {
 		return switch (id.toString()) {
 			case "minecraft:generic.attack_damage" -> 1f;
 			case "minecraft:generic.movement_speed" -> entity.getSpeed();

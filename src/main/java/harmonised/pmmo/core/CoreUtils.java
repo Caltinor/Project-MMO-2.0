@@ -11,7 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 
@@ -151,11 +151,11 @@ public class CoreUtils {
 	 * @param config the settings
 	 * @return a list of applicable effects
 	 */
-	public static List<MobEffectInstance> getEffects(Map<ResourceLocation, Integer> config, boolean applyDefaultNegatives) {
+	public static List<MobEffectInstance> getEffects(Map<Identifier, Integer> config, boolean applyDefaultNegatives) {
 		List<MobEffectInstance> effects = new ArrayList<>();
 		if (applyDefaultNegatives && config.isEmpty())
 			config = Config.autovalue().reqs().penalties();
-		for (Map.Entry<ResourceLocation, Integer> effect : config.entrySet()) {
+		for (Map.Entry<Identifier, Integer> effect : config.entrySet()) {
 			Holder<MobEffect> effectRoot = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(BuiltInRegistries.MOB_EFFECT.getValue(effect.getKey()));
 			if (effectRoot != null)
 				effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue(), true, true));

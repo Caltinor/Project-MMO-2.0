@@ -31,8 +31,9 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.neoforged.fml.LogicalSide;
 
@@ -51,7 +52,7 @@ public class CmdNodeAdmin {
 
 	public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		return Commands.literal("admin")
-				.requires(p -> p.hasPermission(2))
+				.requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
 				.then(Commands.argument(TARGET_ARG, EntityArgument.players())
 						.then(Commands.literal("set")
 								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
@@ -148,7 +149,7 @@ public class CmdNodeAdmin {
 	public static int clearAttributes(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		for (ServerPlayer player : EntityArgument.getPlayers(ctx, TARGET_ARG)) {
 			player.getAttributes().attributes.values().forEach(instance -> {
-				List<ResourceLocation> ids = instance.getModifiers().stream().filter(mod -> mod.id().getPath().startsWith("perk/")).map(AttributeModifier::id).toList();
+				List<Identifier> ids = instance.getModifiers().stream().filter(mod -> mod.id().getPath().startsWith("perk/")).map(AttributeModifier::id).toList();
 				ids.forEach(instance::removeModifier);
 			});
 		}
@@ -171,7 +172,7 @@ public class CmdNodeAdmin {
 	public static int exemptAdmin(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		Core core = Core.get(ctx.getSource().getLevel());
 		ServerPlayer player = EntityArgument.getPlayer(ctx, TARGET_ARG);
-		ResourceLocation playerID = Reference.mc(player.getUUID().toString());
+		Identifier playerID = Reference.mc(player.getUUID().toString());
 		PlayerData existing = core.getLoader().PLAYER_LOADER.getData().get(playerID);
 		boolean exists = existing != null;
 		PlayerData updated = new PlayerData(true, !exists || !existing.ignoreReq(), exists ? existing.bonuses() : Map.of());
@@ -186,7 +187,7 @@ public class CmdNodeAdmin {
 
 		Core core = Core.get(ctx.getSource().getLevel());
 		ServerPlayer player = EntityArgument.getPlayer(ctx, TARGET_ARG);
-		ResourceLocation playerID = Reference.mc(player.getUUID().toString());
+		Identifier playerID = Reference.mc(player.getUUID().toString());
 		PlayerData existing = core.getLoader().PLAYER_LOADER.getData().get(playerID);
 		boolean exists = existing != null;
 		Map<String, Double> bonuses = exists ? new HashMap<>(existing.bonuses()) : new HashMap<>();

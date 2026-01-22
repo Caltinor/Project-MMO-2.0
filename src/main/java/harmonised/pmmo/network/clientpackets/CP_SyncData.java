@@ -20,7 +20,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -28,7 +28,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import java.util.HashMap;
 import java.util.Map;
 
-public record CP_SyncData(ObjectType oType, Map<ResourceLocation, ? extends DataSource<?>> data) implements CustomPacketPayload {
+public record CP_SyncData(ObjectType oType, Map<Identifier, ? extends DataSource<?>> data) implements CustomPacketPayload {
 	public static final Type<CP_SyncData> TYPE = new Type<>(Reference.rl("s2c_sync_data"));
 	public static final StreamCodec<FriendlyByteBuf, CP_SyncData> STREAM_CODEC = StreamCodec.of(CP_SyncData::write, CP_SyncData::decode);
 	private static final Codec<DataSource<?>> CODEC = Codec.lazyInitialized(() -> ObjectType.CODEC.dispatch("type",
@@ -47,7 +47,7 @@ public record CP_SyncData(ObjectType oType, Map<ResourceLocation, ? extends Data
 	@SuppressWarnings("unchecked")
 	private static final Codec<CP_SyncData> MAPPER = RecordCodecBuilder.create(instance -> instance.group(
 			ObjectType.CODEC.fieldOf("type").forGetter(CP_SyncData::oType),
-			Codec.unboundedMap(ResourceLocation.CODEC, CODEC).fieldOf("data").forGetter(pkt -> (Map<ResourceLocation, DataSource<?>>)pkt.data())
+			Codec.unboundedMap(Identifier.CODEC, CODEC).fieldOf("data").forGetter(pkt -> (Map<Identifier, DataSource<?>>)pkt.data())
 			).apply(instance, CP_SyncData::new));
 	
 	public static CP_SyncData decode(FriendlyByteBuf buf) {
@@ -61,7 +61,7 @@ public record CP_SyncData(ObjectType oType, Map<ResourceLocation, ? extends Data
 	public static void handle(CP_SyncData packet, IPayloadContext ctx) {
 		ctx.enqueueWork(() -> {
 			@SuppressWarnings("unchecked")
-			Map<ResourceLocation, DataSource<?>> map = (Map<ResourceLocation, DataSource<?>>) Core.get(LogicalSide.CLIENT).getLoader().getLoader(packet.oType()).getData();
+			Map<Identifier, DataSource<?>> map = (Map<Identifier, DataSource<?>>) Core.get(LogicalSide.CLIENT).getLoader().getLoader(packet.oType()).getData();
 			map.putAll(packet.data());
 		});
 	}

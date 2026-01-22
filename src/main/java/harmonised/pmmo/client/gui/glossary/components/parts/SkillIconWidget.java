@@ -5,12 +5,12 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class SkillIconWidget extends AbstractWidget {
-    private final ResourceLocation icon;
+    private final Identifier icon;
     private final int iconSize;
-    public SkillIconWidget(ResourceLocation icon, int iconSize) {
+    public SkillIconWidget(Identifier icon, int iconSize) {
         super(0, 0, 18, 18, Component.literal("skill icon"));
         this.icon = icon;
         this.iconSize = iconSize;

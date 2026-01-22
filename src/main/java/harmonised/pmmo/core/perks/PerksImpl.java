@@ -11,7 +11,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -75,7 +75,7 @@ public class PerksImpl {
 		return builder.build();
 	}
 	
-	private static final ResourceLocation ATTRIBUTE_ID = Reference.rl("tame_boost");
+	private static final Identifier ATTRIBUTE_ID = Reference.rl("tame_boost");
 	public static final Map<Holder<Attribute>, Double> ANIMAL_ATTRIBUTES = Map.of(
 			Attributes.JUMP_STRENGTH, 0.005, 
 			Attributes.MAX_HEALTH, 1.0,

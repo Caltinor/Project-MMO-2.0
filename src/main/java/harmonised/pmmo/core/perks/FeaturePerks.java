@@ -15,8 +15,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.PermissionSet;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
@@ -26,7 +27,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.village.ReputationEventType;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -50,7 +51,7 @@ public class FeaturePerks {
 				name -> BuiltInRegistries.ATTRIBUTE.get(Reference.of(name)).orElse(null));
 	}
 
-	private static ResourceLocation attributeID(String attribute, String skill) {
+	private static Identifier attributeID(String attribute, String skill) {
 		return Reference.rl("perk/"+attribute.replace(':','_')+"/"+skill);
 	}
 	
@@ -68,7 +69,7 @@ public class FeaturePerks {
 				double boost = Math.min(perLevel * nbt.getIntOr(APIUtils.SKILL_LEVEL, 0), maxBoost) + nbt.getDoubleOr(APIUtils.BASE, 0d);
 				AttributeModifier.Operation operation = nbt.getBooleanOr(APIUtils.MULTIPLICATIVE, false) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 				
-				ResourceLocation attributeID = attributeID(nbt.getStringOr(APIUtils.ATTRIBUTE, "missing"), nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
+				Identifier attributeID = attributeID(nbt.getStringOr(APIUtils.ATTRIBUTE, "missing"), nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
 				AttributeModifier modifier = new AttributeModifier(attributeID, boost, operation);
 				instance.removeModifier(attributeID);
 				instance.addPermanentModifier(modifier);
@@ -119,7 +120,7 @@ public class FeaturePerks {
 				double boost = Math.min(perLevel * nbt.getIntOr(APIUtils.SKILL_LEVEL, 0), maxBoost) + nbt.getDoubleOr(APIUtils.BASE, 0d);
 				AttributeModifier.Operation operation = nbt.getBooleanOr(APIUtils.MULTIPLICATIVE, false) ? Operation.ADD_MULTIPLIED_BASE :  Operation.ADD_VALUE;
 
-				ResourceLocation attributeID = Reference.rl("temp+perk/"+nbt.getStringOr(APIUtils.ATTRIBUTE, "missing").replace(':','_')+"/"+nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
+				Identifier attributeID = Reference.rl("temp+perk/"+nbt.getStringOr(APIUtils.ATTRIBUTE, "missing").replace(':','_')+"/"+nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
 				AttributeModifier modifier = new AttributeModifier(attributeID, boost, operation);
 				if (instance.hasModifier(modifier.id()))
 					instance.removeModifier(attributeID);
@@ -127,7 +128,7 @@ public class FeaturePerks {
 				return NONE;
 			})
 			.setStop((player, nbt) -> {
-				ResourceLocation attributeID = Reference.rl("temp+perk/"+nbt.getStringOr(APIUtils.ATTRIBUTE, "missing").replace(':','_')+"/"+nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
+				Identifier attributeID = Reference.rl("temp+perk/"+nbt.getStringOr(APIUtils.ATTRIBUTE, "missing").replace(':','_')+"/"+nbt.getStringOr(APIUtils.SKILLNAME, "missing"));
 				player.getAttribute(getAttribute(nbt)).removeModifier(attributeID);
 				return NONE;
 			})
@@ -291,11 +292,11 @@ public class FeaturePerks {
 			if (nbt.contains(FUNCTION)) {
 				player.level().getServer().getFunctions().execute(
 						player.level().getServer().getFunctions().get(Reference.of(nbt.getStringOr(FUNCTION, "missing"))).get(),
-						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2));			
+						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(PermissionSet.ALL_PERMISSIONS));
 			}
 			else if (nbt.contains(COMMAND)) {
 				player.level().getServer().getCommands().performPrefixedCommand(
-						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2), 
+						player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(PermissionSet.ALL_PERMISSIONS),
 						nbt.getStringOr(COMMAND, "tell @s command perk missing command property"));
 			}
 			return NONE;

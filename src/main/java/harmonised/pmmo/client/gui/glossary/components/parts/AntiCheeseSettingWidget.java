@@ -20,7 +20,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntitySpawnReason;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class AntiCheeseSettingWidget extends ReactiveWidget {
             var blockReg = access.lookupOrThrow(Registries.BLOCK);
             var entityReg = access.lookupOrThrow(Registries.ENTITY_TYPE);
             addString(LangProvider.GLOSSARY_CONFIG_ANTI_SOURCE.asComponent(), PositionConstraints.offset(10, 0), textConstraint);
-            for (ResourceLocation entry : setting.source().stream().map(Reference::of).toList()) {
+            for (Identifier entry : setting.source().stream().map(Reference::of).toList()) {
                 if (event.itemApplicable) {
                     itemReg.get(ResourceKey.create(Registries.ITEM, entry)).ifPresent(item -> {
                         addChild(new ItemStackWidget(item.value()), PositionConstraints.offset(20, 0),
