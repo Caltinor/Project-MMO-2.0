@@ -36,9 +36,11 @@ public class GlossaryLoadingScreen extends Screen {
                 layout.addChild(new StringWidget(Component.literal(fcs.getString()), this.font).alignCenter()));
         layout.arrangeElements();
         layout.visitWidgets(this::addRenderableWidget);
-        if (ClientUtils.glossary == null || ClientUtils.glossary.targetedObject != target) {
-            CompletableFuture.supplyAsync(() -> new Glossary(this.target)).thenAccept(glossary -> ClientUtils.glossary = glossary);
+        if (ClientUtils.glossary == null) {
+            CompletableFuture.supplyAsync(() -> new Glossary()).thenAccept(glossary -> ClientUtils.glossary = glossary);
         }
+        if (ClientUtils.glossary != null && target != null)
+            ClientUtils.glossary.targetedObject = target;
     }
 
     @Override
