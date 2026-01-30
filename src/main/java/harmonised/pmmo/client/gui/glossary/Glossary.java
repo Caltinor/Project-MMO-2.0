@@ -52,15 +52,18 @@ import java.util.function.Consumer;
 public class Glossary extends Screen {
     private final Font font;
     private final Screen priorScreen;
-    public final PanelWidget targetedObject;
+    public PanelWidget targetedObject = new PanelWidget(0xFF000000, 400);
 
-    public Glossary(PanelWidget inbound) {this(null, inbound);}
-    public Glossary() {this(null, null);}
-    public Glossary(Screen priorScreen, PanelWidget targetedObject) {
+    public Glossary() {this(null);}
+    public Glossary(Screen priorScreen) {
         super(Component.literal("glossary"));
         this.priorScreen = priorScreen;
         this.font = Minecraft.getInstance().font;
+    }
+
+    public Glossary withTarget(PanelWidget targetedObject) {
         this.targetedObject = targetedObject;
+        return this;
     }
 
     //widgets
@@ -148,17 +151,22 @@ public class Glossary extends Screen {
     }
 
     private void buildContent(ResponsiveLayout layout, int width) {
+        var profiler = Minecraft.getInstance().getProfiler();
+        profiler.push("glossary start");
         if (targetedObject != null)
             layout.addChild((AbstractWidget) targetedObject, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
+        profiler.popPush("glossary server config");
         layout.addChild((ResponsiveLayout)
                 new ServerConfigPanelWidget(width),
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build());
+        profiler.popPush("glossary skills");
         Config.skills().skills().forEach((skill, data) -> layout.addChild((AbstractWidget)
                 new SkillsConfigPanelWidget(width, skill, data),
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build()
         ));
+        profiler.popPush("glossary anticheese");
         layout.addChild((ResponsiveLayout)
                 AntiCheesePanelWidget.AFK(0x88394045, width, Config.anticheese().afk(), Config.anticheese().afkSubtract()),
                 PositionType.STATIC.constraint,
@@ -174,17 +182,20 @@ public class Glossary extends Screen {
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build()
         );
+        profiler.popPush("glossary items");
         CreativeModeTabs.searchTab().getDisplayItems().forEach(stack -> layout.addChild((ResponsiveLayout)
                 new ItemObjectPanelWidget(0x882e332e, width, stack),
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build())
         );
+        profiler.popPush("glossary blocks");
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
         access.lookupOrThrow(Registries.BLOCK).listElements().forEach(ref -> layout.addChild((ResponsiveLayout)
             new BlockObjectPanelWidget(0x882e2f33, width, ref.value()),
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build()
         ));
+        profiler.popPush("glossary entities");
         access.lookupOrThrow(Registries.ENTITY_TYPE).listElements()
                 .map(ref -> ref.value().create(Minecraft.getInstance().level, EntitySpawnReason.COMMAND))
                 .filter(Objects::nonNull)
@@ -192,33 +203,39 @@ public class Glossary extends Screen {
                     new EntityObjectPanelWidget(0x88394045, width, entity),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()));
+        profiler.popPush("glossary biomes");
         access.lookupOrThrow(Registries.BIOME).listElements()
                 .filter(Objects::nonNull)
                 .forEach(biome -> layout.addChild((ResponsiveLayout)
                     new BiomeObjectPanelWidget(0x88394045, width, biome),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()));
+        profiler.popPush("glossary dimensions");
         Minecraft.getInstance().getConnection().levels().stream()
                 .filter(Objects::nonNull)
                 .forEach(key -> layout.addChild((ResponsiveLayout)
                     new DimensionObjectPanelWidget(0x88394045, width, key),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()));
+        profiler.popPush("glossary effects");
         access.lookupOrThrow(Registries.MOB_EFFECT).listElements()
                 .filter(Objects::nonNull)
                 .forEach(holder -> layout.addChild((ResponsiveLayout)
                     new EffectsObjectPanelWidget(0x88394045, width, holder.value()),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()));
+        profiler.popPush("glossary enchantments");
         access.lookupOrThrow(Registries.ENCHANTMENT).listElements()
                 .filter(Objects::nonNull)
                 .forEach(enchant -> layout.addChild((ResponsiveLayout)
                     new EnchantmentsObjectPanelWidget(0x88394045, width, enchant.value()),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()));
+        profiler.popPush("glossary perks");
         Config.perks().perks().forEach((event, configs) -> layout.addChild((ResponsiveLayout)
                     new PerkObjectPanelWidget(0x88394045, width, event, configs),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()));
+        profiler.pop();
     }
 }
