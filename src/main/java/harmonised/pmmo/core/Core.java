@@ -463,7 +463,7 @@ public class Core {
 			}
 			SalvageEvent salvageEvent = new SalvageEvent(player, salvageItem, result);
 			//ensures that only salvage where the reqs have been met AND the item has entries result in item consumption
-			validAttempt = !salvageEvent.isCanceled();
+			validAttempt = !MinecraftForge.EVENT_BUS.post(salvageEvent);
 			//get the base calculation values including the bonuses from skills
 			SalvageData salvage = salvageEvent.getSalvage();
 			double base = salvage.baseChance();
@@ -476,8 +476,7 @@ public class Core {
 			//conduct random check for the total count possible and add each succcess to the output
 			for (int i = 0; i < salvage.salvageMax(); i++) {
 				if (player.getRandom().nextDouble() < Math.min(max, base + bonus)) {
-					if (MinecraftForge.EVENT_BUS.post(salvageEvent)) continue entry;
-					player.drop(salvageEvent.getOutputStack(), false, true);
+					player.drop(salvageEvent.getOutputStack().copy(), false, true);
 
 					for (Map.Entry<String, Long> award : salvage.xpAward().entrySet()) {
 						xpAwards.merge(award.getKey(), award.getValue(), Long::sum);
