@@ -20,9 +20,7 @@ public class GlossaryLoadingScreen extends Screen {
     private final PanelWidget target;
     public GlossaryLoadingScreen(PanelWidget inbound) {
         super(Component.literal("Loading Screen"));
-        LocalPlayer player = Minecraft.getInstance().player;
         this.target = inbound;
-        CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), player.canUseGameMasterBlocks(), player.registryAccess());
     }
 
     @Override
@@ -36,11 +34,13 @@ public class GlossaryLoadingScreen extends Screen {
                 layout.addChild(new StringWidget(Component.literal(fcs.getString()), this.font)));
         layout.arrangeElements();
         layout.visitWidgets(this::addRenderableWidget);
+        LocalPlayer player = Minecraft.getInstance().player;
+        CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), player.canUseGameMasterBlocks(), player.clientLevel.registryAccess());
         if (ClientUtils.glossary == null) {
-            CompletableFuture.supplyAsync(() -> new Glossary()).thenAccept(glossary -> ClientUtils.glossary = glossary);
+            CompletableFuture.supplyAsync(() -> new Glossary().setTargetedObject(target)).thenAccept(glossary -> ClientUtils.glossary = glossary);
         }
         if (ClientUtils.glossary != null && target != null)
-            ClientUtils.glossary.targetedObject = target;
+            ClientUtils.glossary.setTargetedObject(target);
     }
 
     @Override

@@ -44,6 +44,9 @@ public class DimensionObjectPanelWidget extends ObjectPanelWidget {
         skills.addAll(data.travelReq().keySet());
         this.id = dimension.identifier().toString();
         this.name = this.id;
+        var hasTexture = Minecraft.getInstance().getTextureManager().getTexture(rl, null);
+        if (hasTexture == null)
+            rl = ResourceLocation.withDefaultNamespace("textures/biome/overworld.png");
         addChild(ImageWidget.texture(18, 18, rl, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
         addString(Component.literal(name), PositionConstraints.grid(0,1), textConstraint);

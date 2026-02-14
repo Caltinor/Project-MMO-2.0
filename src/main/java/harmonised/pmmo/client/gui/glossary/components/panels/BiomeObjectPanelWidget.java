@@ -51,6 +51,9 @@ public class BiomeObjectPanelWidget extends ObjectPanelWidget {
         skills.addAll(data.travelReq().keySet());
         this.id = rl.toString();
         this.name = this.id;
+        var hasTexture = Minecraft.getInstance().getTextureManager().getTexture(rl, null);
+        if (hasTexture == null)
+            texture = ResourceLocation.withDefaultNamespace("textures/biome/plains.png");
         addChild(ImageWidget.texture(18, 18, texture, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
         addString(Component.literal(name), PositionConstraints.grid(0,1), SizeConstraints.builder().absoluteHeight(12).build());
