@@ -131,6 +131,9 @@ dependencies {
     //runtimeOnly fg.deobf('curse.maven:maxhealthfix-492246:4714765')
     //runtimeOnly 'curse.maven:sophback-422301:5621986'
     //runtimeOnly 'curse.maven:sophcore-618298:5621984'
+    //runtimeOnly 'curse.maven:bop-220318:7251965'
+    //runtimeOnly 'curse.maven:terrablender-940057:6054947'
+    //runtimeOnly 'curse.maven:glitchcore-955399:5660740'
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
