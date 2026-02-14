@@ -21,6 +21,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.LogicalSide;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -36,18 +38,20 @@ public class DimensionObjectPanelWidget extends ObjectPanelWidget {
 
     public DimensionObjectPanelWidget(int color, int width, ResourceKey<Level> dimension) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        Identifier rl = Identifier.fromNamespaceAndPath(
-                dimension.identifier().getNamespace(),
-                "textures/dimension/" + dimension.identifier().getPath() + ".png");
-        LocationData data = core.getLoader().BIOME_LOADER.getData(rl);
+        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(
+                dimension.location().getNamespace(),
+                "textures/dimension/" + dimension.location().getPath() + ".png");
+        try {
+            Minecraft.getInstance().getTextureManager().register(texture, Minecraft.getInstance().getTextureManager().getTexture(texture));
+        }catch (Exception e) {
+            texture = ResourceLocation.withDefaultNamespace("textures/dimension/overworld.png");
+        }
+        LocationData data = core.getLoader().BIOME_LOADER.getData(dimension.location());
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
         skills.addAll(data.travelReq().keySet());
         this.id = dimension.identifier().toString();
         this.name = this.id;
-        var hasTexture = Minecraft.getInstance().getTextureManager().getTexture(rl, null);
-        if (hasTexture == null)
-            rl = ResourceLocation.withDefaultNamespace("textures/biome/overworld.png");
-        addChild(ImageWidget.texture(18, 18, rl, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
+        addChild(ImageWidget.texture(18, 18, texture, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
         addString(Component.literal(name), PositionConstraints.grid(0,1), textConstraint);
         this.effects = new PosNegEffectSectionWidget(data, true);
