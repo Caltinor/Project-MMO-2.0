@@ -9,6 +9,7 @@ import harmonised.pmmo.api.client.PanelWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractScrollWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
@@ -74,8 +75,17 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 		arrangeElements();
 		visibleChildren().forEach(poser -> {
 			AbstractWidget widget = ((AbstractWidget)poser.get());
-			widget.setFocused(widget.isMouseOver(mouseX, mouseY + scrollAmount()));
-			widget.render(guiGraphics, mouseX, mouseY, partialTick);});
+			if (isInFrame(widget)) {
+				widget.setFocused(widget.isMouseOver(mouseX, mouseY + scrollAmount()));
+				widget.render(guiGraphics, mouseX, mouseY, partialTick);
+			}
+		});
+	}
+
+	private boolean isInFrame(AbstractWidget widget) {
+		return widget.visible
+				&& (widget.getY() + this.getPadding().top()) < this.getBottom()
+				&& widget.getBottom() > (this.getY() + this.getPadding().top());
 	}
 
 	@Override
