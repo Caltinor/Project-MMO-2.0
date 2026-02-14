@@ -46,14 +46,16 @@ public class BiomeObjectPanelWidget extends ObjectPanelWidget {
         ResourceLocation rl = RegistryUtil.getId(biome);
         ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(rl.getNamespace(),
                 "textures/biome/" +rl.getPath()+ ".png");
+        try {
+            Minecraft.getInstance().getTextureManager().register(texture, Minecraft.getInstance().getTextureManager().getTexture(texture));
+        }catch (Exception e) {
+            texture = ResourceLocation.withDefaultNamespace("textures/biome/plains.png");
+        }
         LocationData data = core.getLoader().BIOME_LOADER.getData(rl);
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
         skills.addAll(data.travelReq().keySet());
         this.id = rl.toString();
         this.name = this.id;
-        var hasTexture = Minecraft.getInstance().getTextureManager().getTexture(rl, null);
-        if (hasTexture == null)
-            texture = ResourceLocation.withDefaultNamespace("textures/biome/plains.png");
         addChild(ImageWidget.texture(18, 18, texture, 18, 18), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
         addChild(new StringWidget(Component.literal(name), Minecraft.getInstance().font).alignLeft(), PositionConstraints.grid(0,1),
