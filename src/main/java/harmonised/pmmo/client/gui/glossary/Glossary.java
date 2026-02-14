@@ -6,12 +6,14 @@ import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.api.client.types.PositionType;
+import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.component.SelectionWidget;
 import harmonised.pmmo.client.gui.glossary.components.CollapsingPanel;
 import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.client.gui.glossary.components.DetailScroll;
+import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.AntiCheesePanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.BiomeObjectPanelWidget;
 import harmonised.pmmo.client.gui.glossary.components.panels.BlockObjectPanelWidget;
@@ -26,12 +28,14 @@ import harmonised.pmmo.client.gui.glossary.components.panels.SkillsConfigPanelWi
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.CoreUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -41,17 +45,22 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.CreativeModeTabs;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class Glossary extends Screen {
     private final Font font;
     private final Screen priorScreen;
-    public PanelWidget targetedObject = new PanelWidget(0xFF000000, 400);
+    private PanelWidget targetedObject = new PanelWidget(0xFF000000, 400);
+    private final List<Positioner<?>> coreDetailData = new ArrayList<>();
 
     public Glossary() {this(null);}
     public Glossary(Screen priorScreen) {
@@ -60,8 +69,8 @@ public class Glossary extends Screen {
         this.font = Minecraft.getInstance().font;
     }
 
-    public Glossary withTarget(PanelWidget targetedObject) {
-        this.targetedObject = targetedObject;
+    public Glossary setTargetedObject(PanelWidget widget) {
+        this.targetedObject = widget;
         return this;
     }
 
@@ -85,9 +94,14 @@ public class Glossary extends Screen {
     protected void init() {
         super.init();
         ResponsiveLayout outer = new ResponsiveLayout.Impl(this.width-8, this.height, DisplayType.INLINE);
-        DetailScroll content = new DetailScroll(this.width/3 -3, 0, this.width, this.height);
+        DetailScroll content = new DetailScroll(this.width / 3 - 3, 0, this.width, this.height);
+        if (targetedObject != null)
+            content.addChild((AbstractWidget) targetedObject, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
+        if (coreDetailData.isEmpty())
+            buildContent(coreDetailData, content.getWidth(), content);
+        else
+            coreDetailData.forEach(content::addChild);
         int selectionWidth = this.width/3 - 17;
-        buildContent(content, content.getWidth());
         searchBar = new EditBox(font, 8, 11, selectionWidth, 20, Component.literal("search bar"));
         searchBar.setResponder(str -> {content.applyFilter(getFilter(str));});
         selectionWidget = SELECTION.createSelectionWidget(8, 31, selectionWidth, choice -> {
@@ -149,92 +163,142 @@ public class Glossary extends Screen {
         return widget;
     }
 
-    private void buildContent(ResponsiveLayout layout, int width) {
-        var profiler = Minecraft.getInstance().getProfiler();
-        profiler.push("glossary start");
-        if (targetedObject != null)
-            layout.addChild((AbstractWidget) targetedObject, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
-        profiler.popPush("glossary server config");
-        layout.addChild((ResponsiveLayout)
-                new ServerConfigPanelWidget(width),
+    private void buildContent(List<Positioner<?>> cache, int width, ResponsiveLayout layout) {
+        //OMG threads are soooo cool.  you wouldn't get it.
+        Executor executor= Executors.newCachedThreadPool();
+        List<Positioner.Widget> explanation = this.font.getSplitter()
+                .splitLines(LangProvider.LOADING_EXPLANATION.asComponent().getString(), this.width/2, Style.EMPTY)
+                .stream().map(fcs -> new Positioner.Widget(
+                        new StringWidget(Component.literal(fcs.getString()), font),
+                        PositionType.STATIC.constraint,
+                        SizeConstraints.builder().absoluteHeight(12).build()))
+                .toList();
+
+        explanation.forEach(layout::addChild);
+
+        CompletableFuture<Positioner<?>> server = CompletableFuture.supplyAsync(() -> new Positioner.Layout(new ServerConfigPanelWidget(width),
                 PositionType.STATIC.constraint,
-                SizeConstraints.builder().internalHeight().build());
-        profiler.popPush("glossary skills");
-        Config.skills().skills().forEach((skill, data) -> layout.addChild((AbstractWidget)
-                new SkillsConfigPanelWidget(width, skill, data),
-                PositionType.STATIC.constraint,
-                SizeConstraints.builder().internalHeight().build()
-        ));
-        profiler.popPush("glossary anticheese");
-        layout.addChild((ResponsiveLayout)
-                AntiCheesePanelWidget.AFK(0x88394045, width, Config.anticheese().afk(), Config.anticheese().afkSubtract()),
-                PositionType.STATIC.constraint,
-                SizeConstraints.builder().internalHeight().build()
-        );
-        layout.addChild((ResponsiveLayout)
-                AntiCheesePanelWidget.DIM(0x88394045, width, Config.anticheese().diminish()),
-                PositionType.STATIC.constraint,
-                SizeConstraints.builder().internalHeight().build()
-        );
-        layout.addChild((ResponsiveLayout)
-                AntiCheesePanelWidget.NORM(0x88394045, width, Config.anticheese().normal()),
-                PositionType.STATIC.constraint,
-                SizeConstraints.builder().internalHeight().build()
-        );
-        profiler.popPush("glossary items");
-        CreativeModeTabs.searchTab().getDisplayItems().forEach(stack -> layout.addChild((ResponsiveLayout)
+                SizeConstraints.builder().internalHeight().build()), executor);
+
+        CompletableFuture<List<Positioner.Widget>> skills = CompletableFuture.supplyAsync(() -> Config.skills().skills().entrySet().stream().map(entry -> new Positioner.Widget(
+                    new SkillsConfigPanelWidget(width, entry.getKey(), entry.getValue()),
+                    PositionType.STATIC.constraint,
+                    SizeConstraints.builder().internalHeight().build()
+            )).toList(), executor);
+
+        CompletableFuture<List<Positioner<?>>> anticheese = CompletableFuture.supplyAsync(() -> {
+            List<Positioner<?>> children = new ArrayList<>();
+            children.add(new Positioner.Layout(
+                    AntiCheesePanelWidget.AFK(0x88394045, width, Config.anticheese().afk(), Config.anticheese().afkSubtract()),
+                    PositionType.STATIC.constraint,
+                    SizeConstraints.builder().internalHeight().build()
+            ));
+            children.add(new Positioner.Layout(
+                    AntiCheesePanelWidget.DIM(0x88394045, width, Config.anticheese().diminish()),
+                    PositionType.STATIC.constraint,
+                    SizeConstraints.builder().internalHeight().build()
+            ));
+            children.add(new Positioner.Layout(
+                    AntiCheesePanelWidget.NORM(0x88394045, width, Config.anticheese().normal()),
+                    PositionType.STATIC.constraint,
+                    SizeConstraints.builder().internalHeight().build()
+            ));
+            return children;
+        }, executor);
+
+        CompletableFuture<List<Positioner.Layout>> items = CompletableFuture.supplyAsync(() ->
+        CreativeModeTabs.searchTab().getDisplayItems().stream().map(stack -> new Positioner.Layout(
                 new ItemObjectPanelWidget(0x882e332e, width, stack),
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build())
-        );
-        profiler.popPush("glossary blocks");
+        ).toList(), executor);
+
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
-        access.lookupOrThrow(Registries.BLOCK).listElements().forEach(ref -> layout.addChild((ResponsiveLayout)
+        CompletableFuture<List<Positioner.Layout>> blocks = CompletableFuture.supplyAsync(() ->
+        access.lookupOrThrow(Registries.BLOCK).listElements().map(ref -> new Positioner.Layout(
             new BlockObjectPanelWidget(0x882e2f33, width, ref.value()),
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build()
-        ));
-        profiler.popPush("glossary entities");
+        )).toList(), executor);
+
+        CompletableFuture<List<Positioner.Layout>> entities = CompletableFuture.supplyAsync(() ->
         access.lookupOrThrow(Registries.ENTITY_TYPE).listElements()
-                .map(ref -> ref.value().create(Minecraft.getInstance().level))
-                .filter(Objects::nonNull)
-                .forEach(entity -> layout.addChild((ResponsiveLayout)
-                    new EntityObjectPanelWidget(0x88394045, width, entity),
-                    PositionType.STATIC.constraint,
-                    SizeConstraints.builder().internalHeight().build()));
-        profiler.popPush("glossary biomes");
+            .map(ref -> ref.value().create(Minecraft.getInstance().level))
+            .filter(Objects::nonNull)
+            .map(entity -> new Positioner.Layout(
+                new EntityObjectPanelWidget(0x88394045, width, entity),
+                PositionType.STATIC.constraint,
+                SizeConstraints.builder().internalHeight().build())
+        ).toList(), executor);
+
+        CompletableFuture<List<Positioner.Layout>> biomes = CompletableFuture.supplyAsync(() ->
         access.lookupOrThrow(Registries.BIOME).listElements()
                 .filter(Objects::nonNull)
-                .forEach(biome -> layout.addChild((ResponsiveLayout)
+                .map(biome -> new Positioner.Layout(
                     new BiomeObjectPanelWidget(0x88394045, width, biome),
                     PositionType.STATIC.constraint,
-                    SizeConstraints.builder().internalHeight().build()));
-        profiler.popPush("glossary dimensions");
+                    SizeConstraints.builder().internalHeight().build())).toList(), executor);
+
+        CompletableFuture<List<Positioner.Layout>> dimensions = CompletableFuture.supplyAsync(() ->
         Minecraft.getInstance().getConnection().levels().stream()
                 .filter(Objects::nonNull)
-                .forEach(key -> layout.addChild((ResponsiveLayout)
+                .map(key -> new Positioner.Layout(
                     new DimensionObjectPanelWidget(0x88394045, width, key),
                     PositionType.STATIC.constraint,
-                    SizeConstraints.builder().internalHeight().build()));
-        profiler.popPush("glossary effects");
+                    SizeConstraints.builder().internalHeight().build())).toList(), executor);
+
+        CompletableFuture<List<Positioner.Layout>> effects = CompletableFuture.supplyAsync(() ->
         access.lookupOrThrow(Registries.MOB_EFFECT).listElements()
                 .filter(Objects::nonNull)
-                .forEach(holder -> layout.addChild((ResponsiveLayout)
+                .map(holder -> new Positioner.Layout(
                     new EffectsObjectPanelWidget(0x88394045, width, holder.value()),
                     PositionType.STATIC.constraint,
-                    SizeConstraints.builder().internalHeight().build()));
-        profiler.popPush("glossary enchantments");
+                    SizeConstraints.builder().internalHeight().build())).toList(), executor);
+
+        CompletableFuture<List<Positioner.Layout>> enchantments = CompletableFuture.supplyAsync(() ->
         access.lookupOrThrow(Registries.ENCHANTMENT).listElements()
                 .filter(Objects::nonNull)
-                .forEach(enchant -> layout.addChild((ResponsiveLayout)
+                .map(enchant -> new Positioner.Layout(
                     new EnchantmentsObjectPanelWidget(0x88394045, width, enchant.value()),
                     PositionType.STATIC.constraint,
-                    SizeConstraints.builder().internalHeight().build()));
-        profiler.popPush("glossary perks");
-        Config.perks().perks().forEach((event, configs) -> layout.addChild((ResponsiveLayout)
-                    new PerkObjectPanelWidget(0x88394045, width, event, configs),
+                    SizeConstraints.builder().internalHeight().build())).toList(), executor);
+
+        CompletableFuture<List<Positioner.Layout>> perks = CompletableFuture.supplyAsync(() ->
+        Config.perks().perks().entrySet().stream().map(entry -> new Positioner.Layout(
+                    new PerkObjectPanelWidget(0x88394045, width, entry.getKey(), entry.getValue()),
                     PositionType.STATIC.constraint,
-                    SizeConstraints.builder().internalHeight().build()));
-        profiler.pop();
+                    SizeConstraints.builder().internalHeight().build())).toList(), executor);
+
+        CompletableFuture.allOf(
+                server,
+                skills,
+                anticheese,
+                items,
+                blocks,
+                entities,
+                biomes,
+                dimensions,
+                effects,
+                enchantments,
+                perks
+        ).thenRun(() -> {
+            try {
+                cache.add(server.get());
+                cache.addAll(skills.join());
+                cache.addAll(anticheese.join());
+                cache.addAll(items.join());
+                cache.addAll(blocks.join());
+                cache.addAll(entities.join());
+                cache.addAll(biomes.join());
+                cache.addAll(dimensions.join());
+                cache.addAll(effects.join());
+                cache.addAll(enchantments.join());
+                cache.addAll(perks.join());
+                explanation.forEach(poser -> poser.get().visible = false);
+                cache.forEach(layout::addChild);
+            } catch (Exception e) {
+                MsLoggy.ERROR.log(MsLoggy.LOG_CODE.GUI, e.getLocalizedMessage());
+            }
+        });
     }
 }

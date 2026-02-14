@@ -45,7 +45,7 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 
 	@Override
 	public List<Positioner<?>> visibleChildren() {
-		return children.stream().filter(poser -> poser.get() instanceof AbstractWidget widget && widget.visible).toList();
+		return new ArrayList<>(children).stream().filter(poser -> poser.get() instanceof AbstractWidget widget && widget.visible).toList();
 	}
 
 	@Override
