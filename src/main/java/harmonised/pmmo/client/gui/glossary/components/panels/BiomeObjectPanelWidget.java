@@ -49,7 +49,7 @@ public class BiomeObjectPanelWidget extends ObjectPanelWidget {
         try {
             Minecraft.getInstance().getTextureManager().register(texture, Minecraft.getInstance().getTextureManager().getTexture(texture));
         }catch (Exception e) {
-            texture = ResourceLocation.withDefaultNamespace("textures/biome/plains.png");
+            texture = Identifier.withDefaultNamespace("textures/biome/plains.png");
         }
         LocationData data = core.getLoader().BIOME_LOADER.getData(rl);
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());

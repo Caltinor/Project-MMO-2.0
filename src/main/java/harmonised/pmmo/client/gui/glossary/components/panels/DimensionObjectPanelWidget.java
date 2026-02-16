@@ -38,15 +38,15 @@ public class DimensionObjectPanelWidget extends ObjectPanelWidget {
 
     public DimensionObjectPanelWidget(int color, int width, ResourceKey<Level> dimension) {
         super(color, width, Core.get(LogicalSide.CLIENT));
-        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(
-                dimension.location().getNamespace(),
-                "textures/dimension/" + dimension.location().getPath() + ".png");
+        Identifier texture = Identifier.fromNamespaceAndPath(
+                dimension.identifier().getNamespace(),
+                "textures/dimension/" + dimension.identifier().getPath() + ".png");
         try {
             Minecraft.getInstance().getTextureManager().register(texture, Minecraft.getInstance().getTextureManager().getTexture(texture));
         }catch (Exception e) {
-            texture = ResourceLocation.withDefaultNamespace("textures/dimension/overworld.png");
+            texture = Identifier.withDefaultNamespace("textures/dimension/overworld.png");
         }
-        LocationData data = core.getLoader().BIOME_LOADER.getData(dimension.location());
+        LocationData data = core.getLoader().BIOME_LOADER.getData(dimension.identifier());
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
         skills.addAll(data.travelReq().keySet());
         this.id = dimension.identifier().toString();

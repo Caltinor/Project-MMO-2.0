@@ -35,7 +35,7 @@ public class GlossaryLoadingScreen extends Screen {
         layout.arrangeElements();
         layout.visitWidgets(this::addRenderableWidget);
         LocalPlayer player = Minecraft.getInstance().player;
-        CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), player.canUseGameMasterBlocks(), player.clientLevel.registryAccess());
+        CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), player.canUseGameMasterBlocks(), player.registryAccess());
         if (ClientUtils.glossary == null) {
             CompletableFuture.supplyAsync(() -> new Glossary().setTargetedObject(target)).thenAccept(glossary -> ClientUtils.glossary = glossary);
         }

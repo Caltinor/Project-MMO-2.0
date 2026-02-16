@@ -224,7 +224,7 @@ public class Glossary extends Screen {
 
         CompletableFuture<List<Positioner.Layout>> entities = CompletableFuture.supplyAsync(() ->
         access.lookupOrThrow(Registries.ENTITY_TYPE).listElements()
-            .map(ref -> ref.value().create(Minecraft.getInstance().level))
+            .map(ref -> ref.value().create(Minecraft.getInstance().level, EntitySpawnReason.COMMAND))
             .filter(Objects::nonNull)
             .map(entity -> new Positioner.Layout(
                 new EntityObjectPanelWidget(0x88394045, width, entity),

@@ -46,13 +46,13 @@ public class CollapsingPanel extends ReactiveWidget {
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.enableScissor(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        guiGraphics.blit(RenderPipelines.GUI, TEXTURE_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(),
-                collapsed() ? 140 : 0, 0, collapsed() ? 7 : 147, 165, 256, 256);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION, this.getX(), this.getY(), collapsed() ? 140 : 0, 0,
+                this.getWidth(), this.getHeight(), collapsed() ? 7 : 147, 165, 256, 256);
         int offset = (int) (28d / scale);
         int hScaled = (int) (80d / scale);
-        guiGraphics.blit(RenderPipelines.GUI, collapsed() ? RIGHT : LEFT, this.getX()+this.width-offset,
-                this.getY()+ (this.height/2) - (hScaled/2) - 1, offset, hScaled,
-                0, 0, 7, 20, 7, 20);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, collapsed() ? RIGHT : LEFT, this.getX()+this.width-offset,
+                this.getY()+ (this.height/2) - (hScaled/2) - 1,
+                0, 0, offset, hScaled, 7, 20, 7, 20);
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.disableScissor();
     }
