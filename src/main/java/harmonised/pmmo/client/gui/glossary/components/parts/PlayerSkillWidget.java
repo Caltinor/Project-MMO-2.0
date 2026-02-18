@@ -43,8 +43,8 @@ public class PlayerSkillWidget extends PanelWidget {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blitSprite(RenderPipelines.GUI, BACKGROUND_SPRITES.get(this.isActive(), this.isFocused()), this.getX(), this.getY(), this.width, this.height);
-        graphics.blit(RenderPipelines.GUI, skillData.getIcon(), this.getX() + 3, this.getY() + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITES.get(this.isActive(), this.isFocused()), this.getX(), this.getY(), this.width, this.height);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, skillData.getIcon(), this.getX() + 3, this.getY() + 3, 0, 0, 18, 18, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
 
         renderProgressBar(graphics);
         graphics.drawString(font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
@@ -60,11 +60,11 @@ public class PlayerSkillWidget extends PanelWidget {
         }
         else {
 //            graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
-            graphics.blit(RenderPipelines.GUI, TEXTURE_LOCATION, renderX, renderY, 0, 217, 94, 5, 102, 5, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION, renderX, renderY, 0, 217, 94, 5, 102, 5, 256, 256);
 
             float percent = 100.0f / xpToNext();
             int xp = (int) Math.min(Math.floor(percent * this.xp.getXp()), 94);
-            graphics.blit(RenderPipelines.GUI, TEXTURE_LOCATION, renderX, renderY, 0, 223, xp, 5, 102, 5, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION, renderX, renderY, 0, 223, xp, 5, 102, 5, 256, 256, skillColor.getRGB());
 
 //            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }

@@ -11,6 +11,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -31,6 +32,10 @@ public class ScreenHandler {
             CollapsingPanel panel = new CollapsingPanel(0, y, 130, screen.height, false);
             DetailScroll scroll = new DetailScroll(0, 0, 103, screen.height) {
                 @Override protected boolean scrollbarVisible() {return false;}
+                @Override public boolean updateScrolling(MouseButtonEvent event) {
+                    this.scrolling = true;
+                    return true;
+                }
             };
 
             Config.skills().skills().forEach((skill, data) -> scroll.addChild(

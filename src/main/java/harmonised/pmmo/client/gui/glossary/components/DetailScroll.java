@@ -46,9 +46,6 @@ public class DetailScroll extends AbstractTextAreaWidget implements GlossaryFilt
 	}
 
 	@Override
-	public int contentHeight() {return 0;} //TODO
-
-	@Override
 	public List<Positioner<?>> visibleChildren() {
 		return new ArrayList<>(children).stream().filter(poser -> poser.get() instanceof AbstractWidget widget && widget.visible).toList();
 	}
