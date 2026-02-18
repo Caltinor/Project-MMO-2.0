@@ -88,10 +88,10 @@ public class BonusSectionWidget extends ReactiveWidget {
                     String skill = skillmap.keySet().iterator().next();
                     if (skillmap.get(skill) > 0)
                         combine.append(" ").append(LangProvider.skill(skill)).append(":").append(" "+DP.dpSoft((skillmap.get(skill)*100)-100)+"%");
-                    contentWidgets.add(new Positioner.Widget(new StringWidget(combine, font), PositionType.STATIC.constraint, textConstraint));
+                    contentWidgets.add(new Positioner.Widget(new StringWidget(layout.getWidth(), 9, combine, font), PositionType.STATIC.constraint, textConstraint));
                 }
                 else {
-                    contentWidgets.addAll(setSkills(skillmap, new StringWidget(combine, font), font));
+                    contentWidgets.addAll(setSkills(skillmap, new StringWidget(layout.getWidth(), 9,combine, font), font));
                 }
             }
         }
@@ -108,7 +108,7 @@ public class BonusSectionWidget extends ReactiveWidget {
         MutableComponent prefix = Component.literal(map.values().stream().filter(s -> s > 0).count() > 1 ? "   " : "");
         map.forEach((skill, value) -> {
             if (value != 0)
-                skillWidgets.add(new Positioner.Widget(new StringWidget(prefix.copy().append(LangProvider.skill(skill)).append(":").append(" "+DP.dpSoft((value*100)-100)+"%"), font),
+                skillWidgets.add(new Positioner.Widget(new StringWidget(header.getWidth(), 9, prefix.copy().append(LangProvider.skill(skill)).append(":").append(" "+DP.dpSoft((value*100)-100)+"%"), font),
                         PositionType.STATIC.constraint, textConstraint));
         });
         return skillWidgets.size() > 1 ? skillWidgets : new ArrayList<>();

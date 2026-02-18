@@ -41,42 +41,42 @@ public class PosNegEffectSectionWidget extends ReactiveWidget {
         if (!pos.isEmpty() || !reqs.isEmpty()) {
             Font font = Minecraft.getInstance().font;
             if (!reqs.isEmpty()) {
-                setSkills(reqs, LangProvider.GLOSSARY_HEADER_TRAVEL_REQ.asComponent(), font).forEach(this::addChild);
+                setSkills(reqs, LangProvider.GLOSSARY_HEADER_TRAVEL_REQ.asComponent(), font, this.width).forEach(this::addChild);
                 if (isBiome && !neg.isEmpty()) {
-                    setEffects(neg, LangProvider.BIOME_EFFECT_NEG.asComponent(), font).forEach(this::addChild);
+                    setEffects(neg, LangProvider.BIOME_EFFECT_NEG.asComponent(), font, this.width).forEach(this::addChild);
                 }
             }
             if (!pos.isEmpty()) {
-                setEffects(pos, LangProvider.LOCATION_EFFECT_POS.asComponent(), font).forEach(this::addChild);
+                setEffects(pos, LangProvider.LOCATION_EFFECT_POS.asComponent(), font, this.width).forEach(this::addChild);
             }
             addChild(new DividerWidget(100, 1, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
         }
         setHeight((getChildren().size() * 12) + 2);
     }
 
-    private static Positioner<?> build(Component text, Font font) {
-        return new Positioner.Widget(new StringWidget(text, font), PositionType.STATIC.constraint, textConstraint);
+    private static Positioner<?> build(Component text, Font font, int width) {
+        return new Positioner.Widget(new StringWidget(width, 9, text, font), PositionType.STATIC.constraint, textConstraint);
     }
 
-    private static List<Positioner<?>> setSkills(Map<String, Long> map, Component header, Font font) {
-        List<Positioner<?>> skillWidgets = new ArrayList<>(List.of(build(header, font)));
+    private static List<Positioner<?>> setSkills(Map<String, Long> map, Component header, Font font, int width) {
+        List<Positioner<?>> skillWidgets = new ArrayList<>(List.of(build(header, font, width)));
         MutableComponent prefix = Component.literal(map.values().stream().filter(s -> s > 0).count() > 1 ? "   " : "");
         map.forEach((skill, value) -> {
             if (value > 0)
-                skillWidgets.add(build(prefix.copy().append(LangProvider.skill(skill)).append(": ").append(value.toString()), font));
+                skillWidgets.add(build(prefix.copy().append(LangProvider.skill(skill)).append(": ").append(value.toString()), font, width));
         });
         return skillWidgets.size() > 1 ? skillWidgets : new ArrayList<>();
     }
 
-    private static List<Positioner<?>> setEffects(Map<Identifier, Integer> map, Component header, Font font) {
-        List<Positioner<?>> skillWidgets = new ArrayList<>(List.of(build(header, font)));
+    private static List<Positioner<?>> setEffects(Map<Identifier, Integer> map, Component header, Font font, int width) {
+        List<Positioner<?>> skillWidgets = new ArrayList<>(List.of(build(header, font, width)));
         MutableComponent prefix = Component.literal(map.values().stream().filter(s -> s > 0).count() > 1 ? "   " : "");
         var reg = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.MOB_EFFECT);
         map.forEach((skill, value) -> {
             if (value > 0) {
                 var effect = reg.get(skill);
                 effect.ifPresent(holder ->
-                    skillWidgets.add(build(prefix.copy().append(holder.value().getDisplayName()).append(": ").append(String.valueOf(value + 1)), font))
+                    skillWidgets.add(build(prefix.copy().append(holder.value().getDisplayName()).append(": ").append(String.valueOf(value + 1)), font, width))
                 );
             }
         });

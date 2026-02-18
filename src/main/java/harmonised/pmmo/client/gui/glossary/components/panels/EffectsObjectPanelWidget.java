@@ -45,7 +45,7 @@ public class EffectsObjectPanelWidget extends ObjectPanelWidget {
         if (holder.isPresent()) {
             addChild(new MobEffectWidget(reg.get(rl).get()), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                     .absoluteHeight(18).absoulteWidth(18).build());
-            addChild(new StringWidget(effect.getDisplayName(), Minecraft.getInstance().font), PositionConstraints.grid(0, 1),
+            addString(effect.getDisplayName(), PositionConstraints.grid(0, 1),
                     SizeConstraints.builder().absoluteHeight(12).build());
             int row = 1;
             for (AbstractWidget widget : build(data, Minecraft.getInstance().font)) {
@@ -61,17 +61,17 @@ public class EffectsObjectPanelWidget extends ObjectPanelWidget {
     private List<AbstractWidget> build(EnhancementsData data, Font font) {
         List<AbstractWidget> entries = new ArrayList<>();
         if (!data.skillArray().isEmpty())
-            entries.add(new StringWidget(LangProvider.GLOSSARY_HEADER_EFFECT_XP.asComponent(), font));
+            entries.add(new StringWidget(this.width, 9 ,LangProvider.GLOSSARY_HEADER_EFFECT_XP.asComponent(), font));
         data.skillArray().forEach((level, map) -> {
             if (map.isEmpty()) return;
             MutableComponent text = levelAsComponent(level);
             if (map.size() > 1) {
-                entries.add(new StringWidget(text, font));
-                map.forEach((skill, xp) -> entries.add(new StringWidget(Component.literal("      ").append(LangProvider.skill(skill)).append(" ").append(xp.toString()), font)));
+                entries.add(new StringWidget(this.width, 9, text, font));
+                map.forEach((skill, xp) -> entries.add(new StringWidget(this.width, 9, Component.literal("      ").append(LangProvider.skill(skill)).append(" ").append(xp.toString()), font)));
             }
             else {
                 map.forEach((key, xp) -> text.append(LangProvider.skill(key)).append(" ").append(xp.toString()));
-                entries.add(new StringWidget(text, font));
+                entries.add(new StringWidget(this.width, 9, text, font));
             }
         });
         return entries;

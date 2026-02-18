@@ -56,6 +56,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Glossary extends Screen {
     private final Font font;
@@ -164,6 +165,26 @@ public class Glossary extends Screen {
         return widget;
     }
 
+    private CompletableFuture<List<Positioner.Widget>> widgetAsync(Supplier<List<Positioner.Widget>> supplies, Executor executor) {
+        return CompletableFuture.supplyAsync(supplies, executor).handle((result, err) -> {
+            if (err != null) {
+                err.printStackTrace();
+                return new ArrayList<>();
+            }
+            return result;
+        });
+    }
+
+    private CompletableFuture<List<Positioner.Layout>> layoutAsync(Supplier<List<Positioner.Layout>> supplies, Executor executor) {
+        return CompletableFuture.supplyAsync(supplies, executor).handle((result, err) -> {
+            if (err != null) {
+                err.printStackTrace();
+                return new ArrayList<>();
+            }
+            return result;
+        });
+    }
+
     private void buildContent(List<Positioner<?>> cache, int width, ResponsiveLayout layout) {
         //OMG threads are soooo cool.  you wouldn't get it.
         Executor executor= Executors.newCachedThreadPool();
@@ -181,14 +202,14 @@ public class Glossary extends Screen {
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build()), executor);
 
-        CompletableFuture<List<Positioner.Widget>> skills = CompletableFuture.supplyAsync(() -> Config.skills().skills().entrySet().stream().map(entry -> new Positioner.Widget(
+        CompletableFuture<List<Positioner.Widget>> skills = widgetAsync(() -> Config.skills().skills().entrySet().stream().map(entry -> new Positioner.Widget(
                     new SkillsConfigPanelWidget(width, entry.getKey(), entry.getValue()),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()
             )).toList(), executor);
 
-        CompletableFuture<List<Positioner<?>>> anticheese = CompletableFuture.supplyAsync(() -> {
-            List<Positioner<?>> children = new ArrayList<>();
+        CompletableFuture<List<Positioner.Layout>> anticheese = layoutAsync(() -> {
+            List<Positioner.Layout> children = new ArrayList<>();
             children.add(new Positioner.Layout(
                     AntiCheesePanelWidget.AFK(0x88394045, width, Config.anticheese().afk(), Config.anticheese().afkSubtract()),
                     PositionType.STATIC.constraint,
@@ -207,7 +228,7 @@ public class Glossary extends Screen {
             return children;
         }, executor);
 
-        CompletableFuture<List<Positioner.Layout>> items = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<List<Positioner.Layout>> items = layoutAsync(() ->
         CreativeModeTabs.searchTab().getDisplayItems().stream().map(stack -> new Positioner.Layout(
                 new ItemObjectPanelWidget(0x882e332e, width, stack),
                 PositionType.STATIC.constraint,
@@ -215,14 +236,14 @@ public class Glossary extends Screen {
         ).toList(), executor);
 
         RegistryAccess access = Minecraft.getInstance().player.registryAccess();
-        CompletableFuture<List<Positioner.Layout>> blocks = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<List<Positioner.Layout>> blocks = layoutAsync(() ->
         access.lookupOrThrow(Registries.BLOCK).listElements().map(ref -> new Positioner.Layout(
             new BlockObjectPanelWidget(0x882e2f33, width, ref.value()),
                 PositionType.STATIC.constraint,
                 SizeConstraints.builder().internalHeight().build()
         )).toList(), executor);
 
-        CompletableFuture<List<Positioner.Layout>> entities = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<List<Positioner.Layout>> entities = layoutAsync(() ->
         access.lookupOrThrow(Registries.ENTITY_TYPE).listElements()
             .map(ref -> ref.value().create(Minecraft.getInstance().level, EntitySpawnReason.COMMAND))
             .filter(Objects::nonNull)
@@ -232,7 +253,7 @@ public class Glossary extends Screen {
                 SizeConstraints.builder().internalHeight().build())
         ).toList(), executor);
 
-        CompletableFuture<List<Positioner.Layout>> biomes = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<List<Positioner.Layout>> biomes = layoutAsync(() ->
         access.lookupOrThrow(Registries.BIOME).listElements()
                 .filter(Objects::nonNull)
                 .map(biome -> new Positioner.Layout(
@@ -240,7 +261,7 @@ public class Glossary extends Screen {
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build())).toList(), executor);
 
-        CompletableFuture<List<Positioner.Layout>> dimensions = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<List<Positioner.Layout>> dimensions = layoutAsync(() ->
         Minecraft.getInstance().getConnection().levels().stream()
                 .filter(Objects::nonNull)
                 .map(key -> new Positioner.Layout(
@@ -248,7 +269,7 @@ public class Glossary extends Screen {
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build())).toList(), executor);
 
-        CompletableFuture<List<Positioner.Layout>> effects = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<List<Positioner.Layout>> effects = layoutAsync(() ->
         access.lookupOrThrow(Registries.MOB_EFFECT).listElements()
                 .filter(Objects::nonNull)
                 .map(holder -> new Positioner.Layout(
@@ -256,7 +277,7 @@ public class Glossary extends Screen {
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build())).toList(), executor);
 
-        CompletableFuture<List<Positioner.Layout>> enchantments = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<List<Positioner.Layout>> enchantments = layoutAsync(() ->
         access.lookupOrThrow(Registries.ENCHANTMENT).listElements()
                 .filter(Objects::nonNull)
                 .map(enchant -> new Positioner.Layout(
@@ -264,7 +285,7 @@ public class Glossary extends Screen {
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build())).toList(), executor);
 
-        CompletableFuture<List<Positioner.Layout>> perks = CompletableFuture.supplyAsync(() ->
+        CompletableFuture<List<Positioner.Layout>> perks = layoutAsync(() ->
         Config.perks().perks().entrySet().stream().map(entry -> new Positioner.Layout(
                     new PerkObjectPanelWidget(0x88394045, width, entry.getKey(), entry.getValue()),
                     PositionType.STATIC.constraint,

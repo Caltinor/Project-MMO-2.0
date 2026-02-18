@@ -1,14 +1,11 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
-import harmonised.pmmo.api.client.ResponsiveLayout;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
-import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
-import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -16,13 +13,11 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +25,6 @@ import net.neoforged.fml.LogicalSide;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -51,7 +45,7 @@ public class SalvageSectionWidget extends ReactiveWidget {
         this.salvage.forEach((sid, data) -> contentWidgets.add(new Positioner.Widget(new SalvageEntryWidget(registry.get(sid).get().value().getDefaultInstance(), data, font), PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build())));
 
         if (!salvage.isEmpty()) {
-            addChild(new Positioner.Widget(new StringWidget(LangProvider.SALVAGE_HEADER.asComponent(), font), PositionType.STATIC.constraint, textConstraint));
+            addString(LangProvider.SALVAGE_HEADER.asComponent(), PositionType.STATIC.constraint, textConstraint);
             contentWidgets.forEach(this::addChild);
             addChild(new DividerWidget(100, 1, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
         }

@@ -18,7 +18,7 @@ public class SkillIconWidget extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v) {
-        guiGraphics.blit(RenderPipelines.GUI, icon, this.getX() + 3, this.getY() + 3, 18, 18, 0, 0, iconSize, iconSize, iconSize, iconSize);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, icon, this.getX() + 3, this.getY() + 3,  0, 0,18, 18, iconSize, iconSize, iconSize, iconSize);
     }
 
     @Override

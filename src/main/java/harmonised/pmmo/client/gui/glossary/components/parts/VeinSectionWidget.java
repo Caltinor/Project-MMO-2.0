@@ -28,20 +28,16 @@ public class VeinSectionWidget extends ReactiveWidget {
         this.data = data;
         if (!data.isEmpty() && Config.server().veinMiner().enabled()) {
             Font font = Minecraft.getInstance().font;
-            addChild(build(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.YELLOW), font));
+            addString(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.YELLOW), PositionType.STATIC.constraint, textConstraint);
             if (isItem) {
-                addChild(build(LangProvider.VEIN_RATE.asComponent(DP.dpSoft(data.chargeRate.orElse(0d) * 2d)), font));
-                addChild(build(LangProvider.VEIN_CAP.asComponent(data.chargeCap.orElse(0)), font));
+                addString(LangProvider.VEIN_RATE.asComponent(DP.dpSoft(data.chargeRate.orElse(0d) * 2d)), PositionType.STATIC.constraint, textConstraint);
+                addString(LangProvider.VEIN_CAP.asComponent(data.chargeCap.orElse(0)), PositionType.STATIC.constraint, textConstraint);
             } else {
-                addChild(build(LangProvider.VEIN_CONSUME.asComponent(data.consumeAmount.orElse(0)), font));
+                addString(LangProvider.VEIN_CONSUME.asComponent(data.consumeAmount.orElse(0)), PositionType.STATIC.constraint, textConstraint);
             }
             addChild(new DividerWidget(100, 1, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
         }
         setHeight((getChildren().size() * 12) + 2);
-    }
-
-    private static Positioner<?> build(Component text, Font font) {
-        return new Positioner.Widget(new StringWidget(text, font), PositionType.STATIC.constraint, textConstraint);
     }
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}

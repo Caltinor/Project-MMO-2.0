@@ -32,35 +32,35 @@ public class NBTSettingWidget extends ReactiveWidget {
         super(0, 0, 0, 12);
         header.append(SUFFIX.copy());
         if (outputs.isEmpty()) {
-            results.add(fromString(header, PositionType.STATIC.constraint));
+            results.add(fromString(header, PositionType.STATIC.constraint, this.width));
         }
         else if (outputs.size() == 1) {
             Map.Entry<String, ?> entry = outputs.entrySet().iterator().next();
             Component skill = LangProvider.skill(entry.getKey()).append(": ").append(String.valueOf(entry.getValue()));
-            results.add(fromString(header.append(skill), PositionType.STATIC.constraint));
+            results.add(fromString(header.append(skill), PositionType.STATIC.constraint, this.width));
         }
         else {
-            results.add(fromString(header, PositionType.STATIC.constraint));
+            results.add(fromString(header, PositionType.STATIC.constraint, this.width));
             for (Map.Entry<String, ?> entry : outputs.entrySet()) {
                 Component skill = LangProvider.skill(entry.getKey()).append(": ").append(String.valueOf(entry.getValue()));
-                results.add(fromString(skill, PositionConstraints.offset(10, 0)));
+                results.add(fromString(skill, PositionConstraints.offset(10, 0), this.width));
             }
         }
 
         for (int i = 0; i < setting.size(); i++) {
             LogicEntry logic = setting.get(i);
-            nbtLogic.add(fromString(LangProvider.GLOSSARY_NBT_ENTRY_HEADER.asComponent(i), PositionType.STATIC.constraint));
-            nbtLogic.add(fromString(logic.behavior().translation.asComponent(), PositionConstraints.offset(10, 0)));
+            nbtLogic.add(fromString(LangProvider.GLOSSARY_NBT_ENTRY_HEADER.asComponent(i), PositionType.STATIC.constraint, this.width));
+            nbtLogic.add(fromString(logic.behavior().translation.asComponent(), PositionConstraints.offset(10, 0), this.width));
             nbtLogic.add(fromString(logic.addCases()
                 ? LangProvider.GLOSSARY_NBT_CASE_ADD.asComponent()
                 : LangProvider.GLOSSARY_NBT_CASE_NOADD.asComponent(),
-                PositionConstraints.offset(10, 0)));
+                PositionConstraints.offset(10, 0), this.width));
             for (LogicEntry.Case caso : logic.cases()) {
                 if (caso.paths().size() == 1)
-                    nbtLogic.add(fromString(LangProvider.GLOSSARY_NBT_CASE_PATH.asComponent(caso.paths().getFirst()), PositionConstraints.offset(20, 0)));
+                    nbtLogic.add(fromString(LangProvider.GLOSSARY_NBT_CASE_PATH.asComponent(caso.paths().getFirst()), PositionConstraints.offset(20, 0), this.width));
                 else {
-                    nbtLogic.add(fromString(LangProvider.GLOSSARY_NBT_CASE_PATH.asComponent(), PositionConstraints.offset(20, 0)));
-                    caso.paths().forEach(path -> nbtLogic.add(fromString(Component.literal(path), PositionConstraints.offset(30, 0))));
+                    nbtLogic.add(fromString(LangProvider.GLOSSARY_NBT_CASE_PATH.asComponent(), PositionConstraints.offset(20, 0), this.width));
+                    caso.paths().forEach(path -> nbtLogic.add(fromString(Component.literal(path), PositionConstraints.offset(30, 0), this.width)));
                 }
                 for (LogicEntry.Criteria criteria : caso.criteria()) {
                     List<String> comparators = criteria.comparators().orElse(new ArrayList<>());
@@ -70,7 +70,7 @@ public class NBTSettingWidget extends ReactiveWidget {
                     Component values = criteria.skillMap().entrySet().stream()
                             .map(entry -> LangProvider.skill(entry.getKey()).append(": ").append(String.valueOf(entry.getValue())).append(" "))
                             .reduce(MutableComponent::append).orElse(Component.literal(""));
-                    nbtLogic.add(fromString(criteria.operator().translation.asComponent(values, compComp), PositionConstraints.offset(30, 0)));
+                    nbtLogic.add(fromString(criteria.operator().translation.asComponent(values, compComp), PositionConstraints.offset(30, 0), this.width));
                 }
             }
         }
@@ -87,8 +87,8 @@ public class NBTSettingWidget extends ReactiveWidget {
         setHeight(visibleChildren().stream().map(poser -> poser.get().getHeight()).reduce(Integer::sum).orElse(0));
     }
 
-    private static Positioner<?> fromString(Component text, PositionConstraints constraints) {
-        return new Positioner.Widget(new StringWidget(text, Minecraft.getInstance().font), constraints, textConstraint);
+    private static Positioner<?> fromString(Component text, PositionConstraints constraints, int width) {
+        return new Positioner.Widget(new StringWidget(width, 9, text, Minecraft.getInstance().font), constraints, textConstraint);
     }
 
     @Override

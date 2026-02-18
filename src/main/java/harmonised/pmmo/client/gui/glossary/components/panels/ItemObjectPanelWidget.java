@@ -15,7 +15,6 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
@@ -38,10 +37,10 @@ public class ItemObjectPanelWidget extends ObjectPanelWidget {
         this.name = stack.getDisplayName().getString();
         addChild(new ItemStackWidget(stack), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
-        addChild(new StringWidget(Component.literal("")
+        addString(Component.literal("")
                         .append(stack.getDisplayName())
-                        .append(stack.getItem() instanceof BlockItem ? LangProvider.GLOSSARY_HEADER_AS_ITEM.asComponent() : Component.literal(""))
-                , Minecraft.getInstance().font), PositionConstraints.grid(0,1),
+                        .append(stack.getItem() instanceof BlockItem ? LangProvider.GLOSSARY_HEADER_AS_ITEM.asComponent() : Component.literal("")),
+                PositionConstraints.grid(0,1),
                 SizeConstraints.builder().absoluteHeight(12).build());
         this.xpSection = XpSectionWidget.create(stack);
         addChild((AbstractWidget) xpSection, PositionConstraints.grid(1,1), SizeConstraints.builder().internalHeight().build());

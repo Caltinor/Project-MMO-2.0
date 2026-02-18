@@ -41,11 +41,6 @@ public class DimensionObjectPanelWidget extends ObjectPanelWidget {
         Identifier texture = Identifier.fromNamespaceAndPath(
                 dimension.identifier().getNamespace(),
                 "textures/dimension/" + dimension.identifier().getPath() + ".png");
-        try {
-            Minecraft.getInstance().getTextureManager().register(texture, Minecraft.getInstance().getTextureManager().getTexture(texture));
-        }catch (Exception e) {
-            texture = Identifier.withDefaultNamespace("textures/dimension/overworld.png");
-        }
         LocationData data = core.getLoader().BIOME_LOADER.getData(dimension.identifier());
         skills.addAll(data.bonusMap().values().stream().map(Map::keySet).flatMap(Set::stream).toList());
         skills.addAll(data.travelReq().keySet());

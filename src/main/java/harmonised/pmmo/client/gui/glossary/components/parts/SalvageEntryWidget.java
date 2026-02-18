@@ -32,13 +32,13 @@ public class SalvageEntryWidget extends ReactiveWidget {
         addChild(new Positioner.Widget(new ItemStackWidget(salvage), PositionConstraints.grid(0, 0), SizeConstraints.builder().absoluteHeight(18).absoulteWidth(18).build()));
         addString(Component.literal(data.salvageMax()+"x ").append(salvage.getDisplayName()), PositionConstraints.grid(0, 1), textConstraint);
         addString(LangProvider.SALVAGE_CHANCE.asComponent(DP.dpSoft(data.baseChance()*100)+"%", DP.dpSoft(data.maxChance()*100)+"%"), PositionConstraints.grid(1,1), textConstraint);
-        var chanceSkills = inlineSkills(data.chancePerLevel(), 2, LangProvider.SALVAGE_CHANCE_MOD.asComponent(), font);
+        var chanceSkills = inlineSkills(data.chancePerLevel(), 2, LangProvider.SALVAGE_CHANCE_MOD.asComponent(), font, this.width);
         chanceSkills.forEach(this::addChild);
         int lastRow = 2 + chanceSkills.size();
-        var reqSkills = inlineSkills(data.levelReq(), lastRow, LangProvider.SALVAGE_LEVEL_REQ.asComponent(), font);
+        var reqSkills = inlineSkills(data.levelReq(), lastRow, LangProvider.SALVAGE_LEVEL_REQ.asComponent(), font, this.width);
         reqSkills.forEach(this::addChild);
         lastRow += reqSkills.size();
-        var xpSkills = inlineSkills(data.xpAward(), lastRow, LangProvider.SALVAGE_XP_AWARD.asComponent(), font);
+        var xpSkills = inlineSkills(data.xpAward(), lastRow, LangProvider.SALVAGE_XP_AWARD.asComponent(), font, this.width);
         xpSkills.forEach(this::addChild);
         setHeight(getChildren().stream().map(poser -> poser.get().getHeight()).reduce(Integer::sum).orElse(18));
         skills.addAll(data.xpAward().keySet());
@@ -52,13 +52,13 @@ public class SalvageEntryWidget extends ReactiveWidget {
         return getChildren().stream().map(poser -> poser.get().getHeight()).reduce(Integer::sum).orElse(0) + 2;
     }
 
-    private static List<Positioner<?>> inlineSkills(Map<String, ? extends Number> skills, int startRow, Component header, Font font) {
+    private static List<Positioner<?>> inlineSkills(Map<String, ? extends Number> skills, int startRow, Component header, Font font, int width) {
         List<Positioner<?>> outLines = new ArrayList<>();
         return switch (skills.size()) {
             case 0 -> outLines;
             case 1 -> {
                 String skill = skills.keySet().iterator().next();
-                StringWidget headWidget = new StringWidget(header.copy()
+                StringWidget headWidget = new StringWidget(width, 9, header.copy()
                         .append(LangProvider.skill(skill))
                         .append(": ")
                         .append(parse(skills.get(skill))), font);
@@ -66,12 +66,12 @@ public class SalvageEntryWidget extends ReactiveWidget {
                 yield outLines;
             }
             default -> {
-                outLines.add(new Positioner.Widget(new StringWidget(header, font), PositionConstraints.grid(startRow, 1), textConstraint));
+                outLines.add(new Positioner.Widget(new StringWidget(width, 9, header, font), PositionConstraints.grid(startRow, 1), textConstraint));
                 Iterator<String> keys = skills.keySet().iterator();
                 for (int row = 0; row < skills.size(); row++) {
                     String skill = keys.next();
                     outLines.add(new Positioner.Widget(
-                            new StringWidget(Component.literal("   ").append(LangProvider.skill(skill)).append(": ").append(parse(skills.get(skill))), font),
+                            new StringWidget(width, 9, Component.literal("   ").append(LangProvider.skill(skill)).append(": ").append(parse(skills.get(skill))), font),
                             PositionConstraints.grid(row + startRow + 1, 1),
                             textConstraint));
                 }

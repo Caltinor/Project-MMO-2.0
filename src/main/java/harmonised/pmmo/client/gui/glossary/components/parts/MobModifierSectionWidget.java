@@ -46,28 +46,28 @@ public class MobModifierSectionWidget extends ReactiveWidget {
             return;
         }
         if (!globals.isEmpty()) {
-            addChild(build(LangProvider.GLOSSARY_HEADER_GLOBAL_MOB_MODIFIERS.asComponent(), font));
+            addChild(build(LangProvider.GLOSSARY_HEADER_GLOBAL_MOB_MODIFIERS.asComponent(), font, this.width));
             var registry = Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.ATTRIBUTE);
-            globals.forEach(m -> addChild(build(Component.literal("   ").append(m.component(registry)), font)));
+            globals.forEach(m -> addChild(build(Component.literal("   ").append(m.component(registry)), font, this.width)));
         }
         if (!mobModifiers.isEmpty()) {
             var access = Minecraft.getInstance().player.registryAccess();
             var entities = access.lookupOrThrow(Registries.ENTITY_TYPE);
             var attributes = access.lookupOrThrow(Registries.ATTRIBUTE);
-            addChild(build(LangProvider.MOB_MODIFIER_HEADER.asComponent(), font));
+            addChild(build(LangProvider.MOB_MODIFIER_HEADER.asComponent(), font, this.width));
             mobModifiers.forEach((mobID, modifierList) -> {
                 Entity entity = entities.get(mobID).get().value().create(Minecraft.getInstance().level, EntitySpawnReason.COMMAND);
                 if (entity instanceof LivingEntity living) {
-                    addChild(build(living.getDisplayName(), font));
-                    modifierList.forEach(m -> addChild(build(Component.literal("   ").append(m.component(attributes)), font)));
+                    addChild(build(living.getDisplayName(), font, this.width));
+                    modifierList.forEach(m -> addChild(build(Component.literal("   ").append(m.component(attributes)), font, this.width)));
                 }
             });
         }
         setHeight((getChildren().size() * 12) + 2);
     }
 
-    private static Positioner<?> build(Component text, Font font) {
-        return new Positioner.Widget(new StringWidget(text, font), PositionType.STATIC.constraint, textConstraint);
+    private static Positioner<?> build(Component text, Font font, int width) {
+        return new Positioner.Widget(new StringWidget(width, 9, text, font), PositionType.STATIC.constraint, textConstraint);
     }
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}

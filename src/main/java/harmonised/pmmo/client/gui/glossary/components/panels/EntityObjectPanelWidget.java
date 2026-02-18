@@ -29,7 +29,7 @@ public class EntityObjectPanelWidget extends ObjectPanelWidget {
         this.name = entity.getDisplayName().getString();
         addChild(new EntityWidget(entity), PositionConstraints.grid(0, 0), SizeConstraints.builder()
                 .absoluteHeight(18).absoulteWidth(18).build());
-        addChild(new StringWidget(entity.getDisplayName(), Minecraft.getInstance().font), PositionConstraints.grid(0,1),
+        addString(entity.getDisplayName(), PositionConstraints.grid(0,1),
                 SizeConstraints.builder().absoluteHeight(12).build());
         this.xpSection = XpSectionWidget.create(entity);
         addChild((AbstractWidget) xpSection, PositionConstraints.grid(1,1), SizeConstraints.builder().internalHeight().build());
@@ -38,7 +38,6 @@ public class EntityObjectPanelWidget extends ObjectPanelWidget {
         addChild(new DividerWidget(200, 2, 0xFF000000), PositionConstraints.grid(4,1), SizeConstraints.builder()
                 .absoluteHeight(2).build());
         this.setHeight(18 + xpSection.getHeight() + reqSection.getHeight() + 2);
-
     }
 
     @Override

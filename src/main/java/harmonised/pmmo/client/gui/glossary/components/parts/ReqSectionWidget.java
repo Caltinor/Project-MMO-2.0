@@ -81,10 +81,10 @@ public class ReqSectionWidget extends ReactiveWidget {
 
         Map<Identifier, Integer> negativeEffects = core.getLoader().getLoader(type).getData(id).getNegativeEffect();
         if (!negativeEffects.isEmpty()) {
-            contentWidgets.add(new Positioner.Widget(new StringWidget(LangProvider.BIOME_EFFECT_NEG.asComponent().withStyle(ChatFormatting.UNDERLINE), font), PositionType.STATIC.constraint, textConstraint));
+            contentWidgets.add(new Positioner.Widget(new StringWidget(layout.getWidth(), 9, LangProvider.BIOME_EFFECT_NEG.asComponent().withStyle(ChatFormatting.UNDERLINE), font), PositionType.STATIC.constraint, textConstraint));
             negativeEffects.forEach((key, value) -> {
                 MutableComponent effect = Component.literal("   ").append(Minecraft.getInstance().player.registryAccess().lookupOrThrow(Registries.MOB_EFFECT).get(ResourceKey.create(Registries.MOB_EFFECT, key)).get().value().getDisplayName());
-                contentWidgets.add(new Positioner.Widget(new StringWidget(effect.append(" ").append(String.valueOf(value + 1)), font), PositionType.STATIC.constraint, textConstraint));
+                contentWidgets.add(new Positioner.Widget(new StringWidget(layout.getWidth(), 9, effect.append(" ").append(String.valueOf(value + 1)), font), PositionType.STATIC.constraint, textConstraint));
             });
         }
 
@@ -104,15 +104,15 @@ public class ReqSectionWidget extends ReactiveWidget {
                     String skill = skillmap.keySet().iterator().next();
                     if (skillmap.get(skill) > 0)
                         combine.append(" ").append(LangProvider.skill(skill)).append(": ").append(skillmap.get(skill).toString());
-                    contentWidgets.add(new Positioner.Widget(new StringWidget(combine, font), PositionType.STATIC.constraint, textConstraint));
+                    contentWidgets.add(new Positioner.Widget(new StringWidget(layout.getWidth(), 9, combine, font), PositionType.STATIC.constraint, textConstraint));
                 }
                 else {
-                    contentWidgets.addAll(setSkills(skillmap, new StringWidget(combine, font), font));
+                    contentWidgets.addAll(setSkills(skillmap, new StringWidget(layout.getWidth(), 9, combine, font), font));
                 }
             }
         }
         if (!contentWidgets.isEmpty()) {
-            layout.addChild(new StringWidget(LangProvider.REQ_HEADER.asComponent().withStyle(ChatFormatting.RED), font), PositionType.STATIC.constraint, textConstraint);
+            layout.addChild(new StringWidget(layout.getWidth(), 9, LangProvider.REQ_HEADER.asComponent().withStyle(ChatFormatting.RED), font), PositionType.STATIC.constraint, textConstraint);
             contentWidgets.forEach(layout::addChild);
             layout.addChild(new DividerWidget(100, 1, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(2).build());
         }
@@ -124,7 +124,7 @@ public class ReqSectionWidget extends ReactiveWidget {
         MutableComponent prefix = Component.literal(map.values().stream().filter(s -> s > 0).count() > 1 ? "   " : "");
         map.forEach((skill, value) -> {
             if (value > 0)
-                skillWidgets.add(new Positioner.Widget(new StringWidget(prefix.copy().append(LangProvider.skill(skill)).append(": ").append(value.toString()), font),
+                skillWidgets.add(new Positioner.Widget(new StringWidget(header.getWidth(), 9, prefix.copy().append(LangProvider.skill(skill)).append(": ").append(value.toString()), font),
                         PositionType.STATIC.constraint, textConstraint));
         });
         return skillWidgets.size() > 1 ? skillWidgets : new ArrayList<>();
