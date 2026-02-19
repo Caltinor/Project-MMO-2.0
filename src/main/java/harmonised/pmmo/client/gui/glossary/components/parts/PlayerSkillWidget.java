@@ -1,6 +1,5 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
@@ -37,6 +36,7 @@ public class PlayerSkillWidget extends PanelWidget {
         this.skillData = data;
         this.skillColor = new Color(data.getColor());
         this.xp = Core.get(LogicalSide.CLIENT).getData().getXpMap(null).getOrDefault(skillName, new Experience());
+        this.visible = !(xp.getLevel().getLevel() == 0 && xp.getXp() == 0);
     }
 
     @Override public void resize() {setHeight(24);}
@@ -59,14 +59,10 @@ public class PlayerSkillWidget extends PanelWidget {
             graphics.drawString(font, text, renderX, renderY-1, this.skillColor.getRGB());
         }
         else {
-//            graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
             graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION, renderX, renderY, 0, 217, 94, 5, 102, 5, 256, 256);
-
             float percent = 100.0f / xpToNext();
             int xp = (int) Math.min(Math.floor(percent * this.xp.getXp()), 94);
             graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION, renderX, renderY, 0, 223, xp, 5, 102, 5, 256, 256, skillColor.getRGB());
-
-//            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
