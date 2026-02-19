@@ -181,13 +181,13 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 builder.setVeinCap(20));
 
         //================SALVAGE================
-        doFor(List.of(Items.WOODEN_PICKAXE, Items.WOODEN_SHOVEL, Items.WOODEN_AXE, Items.WOODEN_HOE,
-                Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_AXE, Items.STONE_HOE,
-                Items.COPPER_PICKAXE, Items.COPPER_SHOVEL, Items.COPPER_AXE, Items.COPPER_HOE,
-                Items.GOLDEN_PICKAXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_AXE, Items.GOLDEN_HOE,
-                Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE,
-                Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE,
-                Items.NETHERITE_PICKAXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_AXE, Items.NETHERITE_HOE),
+        doFor(List.of(Items.WOODEN_PICKAXE, Items.WOODEN_SHOVEL, Items.WOODEN_AXE, Items.WOODEN_HOE, Items.WOODEN_SPEAR,
+                Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_AXE, Items.STONE_HOE, Items.STONE_SPEAR,
+                Items.COPPER_PICKAXE, Items.COPPER_SHOVEL, Items.COPPER_AXE, Items.COPPER_HOE, Items.COPPER_SPEAR,
+                Items.GOLDEN_PICKAXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_AXE, Items.GOLDEN_HOE, Items.GOLDEN_SPEAR,
+                Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE, Items.IRON_SPEAR,
+                Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_SPEAR,
+                Items.NETHERITE_PICKAXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_AXE, Items.NETHERITE_HOE, Items.NETHERITE_SPEAR),
                 builder -> builder.addSalvage(getId(Items.STICK), APIUtils.SalvageBuilder.start()
                         .setBaseChance(0.8)
                         .setChancePerLevel(Map.of("crafting", 0.005, "smithing", 0.005))
@@ -201,36 +201,43 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         recoverTool(Items.WOODEN_AXE, Items.OAK_PLANKS, 3, 100L, 0.005);
         recoverTool(Items.WOODEN_HOE, Items.OAK_PLANKS, 2, 100L, 0.005);
         recoverTool(Items.WOODEN_SHOVEL, Items.OAK_PLANKS, 1, 100L, 0.005);
+        recoverTool(Items.WOODEN_SPEAR, Items.OAK_PLANKS, 1, 100L, 0.005);
 
         recoverTool(Items.STONE_PICKAXE, Items.COBBLESTONE, 3, 150L, 0.005);
         recoverTool(Items.STONE_AXE, Items.COBBLESTONE, 3, 150L, 0.005);
         recoverTool(Items.STONE_HOE, Items.COBBLESTONE, 2, 150L, 0.005);
         recoverTool(Items.STONE_SHOVEL, Items.COBBLESTONE, 1, 150L, 0.005);
+        recoverTool(Items.STONE_SPEAR, Items.COBBLESTONE, 1, 150L, 0.005);
 
         recoverTool(Items.COPPER_PICKAXE, Items.COPPER_INGOT, 3, 150L, 0.005);
         recoverTool(Items.COPPER_AXE, Items.COPPER_INGOT, 3, 150L, 0.005);
         recoverTool(Items.COPPER_HOE, Items.COPPER_INGOT, 2, 150L, 0.005);
         recoverTool(Items.COPPER_SHOVEL, Items.COPPER_INGOT, 1, 150L, 0.005);
+        recoverTool(Items.COPPER_SPEAR, Items.COPPER_INGOT, 1, 150L, 0.005);
 
         recoverTool(Items.GOLDEN_PICKAXE, Items.GOLD_INGOT, 3, 500L, 0.005);
         recoverTool(Items.GOLDEN_AXE, Items.GOLD_INGOT, 3, 500L, 0.005);
         recoverTool(Items.GOLDEN_HOE, Items.GOLD_INGOT, 2, 500L, 0.005);
         recoverTool(Items.GOLDEN_SHOVEL, Items.GOLD_INGOT, 1, 500L, 0.005);
+        recoverTool(Items.GOLDEN_SPEAR, Items.GOLD_INGOT, 1, 500L, 0.005);
 
         recoverTool(Items.IRON_PICKAXE, Items.IRON_INGOT, 3, 1500L, 0.0025);
         recoverTool(Items.IRON_AXE, Items.IRON_INGOT, 3, 1500L, 0.0025);
         recoverTool(Items.IRON_HOE, Items.IRON_INGOT, 2, 1500L, 0.0025);
         recoverTool(Items.IRON_SHOVEL, Items.IRON_INGOT, 1, 1500L, 0.0025);
+        recoverTool(Items.IRON_SPEAR, Items.IRON_INGOT, 1, 1500L, 0.0025);
 
         recoverTool(Items.DIAMOND_PICKAXE, Items.DIAMOND, 3, 5000L, 0.00125);
         recoverTool(Items.DIAMOND_AXE, Items.DIAMOND, 3, 5000L, 0.00125);
         recoverTool(Items.DIAMOND_HOE, Items.DIAMOND, 2, 5000L, 0.00125);
         recoverTool(Items.DIAMOND_SHOVEL, Items.DIAMOND, 1, 5000L, 0.00125);
+        recoverTool(Items.DIAMOND_SPEAR, Items.DIAMOND, 1, 5000L, 0.00125);
 
         recoverTool(Items.NETHERITE_PICKAXE, Items.NETHERITE_INGOT, 3, 10000L, 0.00125);
         recoverTool(Items.NETHERITE_AXE, Items.NETHERITE_INGOT, 3, 10000L, 0.00125);
         recoverTool(Items.NETHERITE_HOE, Items.NETHERITE_INGOT, 2, 10000L, 0.00125);
         recoverTool(Items.NETHERITE_SHOVEL, Items.NETHERITE_INGOT, 1, 10000L, 0.00125);
+        recoverTool(Items.NETHERITE_SPEAR, Items.NETHERITE_INGOT, 1, 10000L, 0.00125);
 
     }
 

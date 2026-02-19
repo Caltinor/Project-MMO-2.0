@@ -267,7 +267,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         });
         
         //TOOLS
-        doFor(List.of(Items.WOODEN_AXE, Items.WOODEN_PICKAXE, Items.WOODEN_HOE, Items.WOODEN_SHOVEL, Items.WOODEN_SWORD), builder -> builder
+        doFor(List.of(Items.WOODEN_AXE, Items.WOODEN_PICKAXE, Items.WOODEN_HOE, Items.WOODEN_SHOVEL, Items.WOODEN_SWORD, Items.WOODEN_SPEAR), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",4000L, "smithing",700L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 120L))
                 .addReq(ReqType.WEAPON, Map.of("combat", 0L))
@@ -276,7 +276,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .setVeinCap(30)
                 .setVeinRate(0.1)
         );
-        doFor(List.of(Items.STONE_AXE, Items.STONE_PICKAXE, Items.STONE_HOE, Items.STONE_SHOVEL, Items.STONE_SWORD), builder -> builder
+        doFor(List.of(Items.STONE_AXE, Items.STONE_PICKAXE, Items.STONE_HOE, Items.STONE_SHOVEL, Items.STONE_SWORD, Items.STONE_SPEAR), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",1500L, "smithing",200L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 30L))
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
@@ -289,8 +289,9 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.STONE_HOE, 10, 5, "farming").addBonus(ModifierDataType.HELD, Map.of("farming", 1.05));
         toolReq(Items.STONE_SHOVEL, 10, 5, "excavation").addBonus(ModifierDataType.HELD, Map.of("excavation", 1.05));
         toolReq(Items.STONE_SWORD, 10, 10, "combat").addBonus(ModifierDataType.HELD, Map.of("combat", 1.05));
+        toolReq(Items.STONE_SPEAR, 10, 10, "combat").addBonus(ModifierDataType.HELD, Map.of("combat", 1.05));
 
-        doFor(List.of(Items.COPPER_AXE, Items.COPPER_PICKAXE, Items.COPPER_HOE, Items.COPPER_SHOVEL, Items.COPPER_SWORD), builder -> builder
+        doFor(List.of(Items.COPPER_AXE, Items.COPPER_PICKAXE, Items.COPPER_HOE, Items.COPPER_SHOVEL, Items.COPPER_SWORD, Items.COPPER_SPEAR), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",2000L, "smithing",250L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 30L))
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
@@ -299,7 +300,7 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
                 .setVeinRate(0.05)
         );
         
-        doFor(List.of(Items.DIAMOND_AXE, Items.DIAMOND_PICKAXE, Items.DIAMOND_HOE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD), builder -> builder
+        doFor(List.of(Items.DIAMOND_AXE, Items.DIAMOND_PICKAXE, Items.DIAMOND_HOE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD, Items.DIAMOND_SPEAR), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",4000L, "smithing",700L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 120L))
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
@@ -312,8 +313,9 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.DIAMOND_HOE, 60, 30, "farming");
         toolReq(Items.DIAMOND_SHOVEL, 60, 30, "excavation");
         toolReq(Items.DIAMOND_SWORD, 60, 60, "combat");
+        toolReq(Items.DIAMOND_SPEAR, 60, 60, "combat");
 
-        doFor(List.of(Items.IRON_AXE, Items.IRON_PICKAXE, Items.IRON_HOE, Items.IRON_SHOVEL, Items.IRON_SWORD), builder -> builder
+        doFor(List.of(Items.IRON_AXE, Items.IRON_PICKAXE, Items.IRON_HOE, Items.IRON_SHOVEL, Items.IRON_SWORD, Items.IRON_SPEAR), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",2000L, "smithing",300L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 60L))
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
@@ -326,8 +328,9 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.IRON_HOE, 30, 15, "farming");
         toolReq(Items.IRON_SHOVEL, 30, 15, "excavation");
         toolReq(Items.IRON_SWORD, 30, 30, "combat");
+        toolReq(Items.IRON_SPEAR, 30, 30, "combat");
 
-        doFor(List.of(Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL,Items.GOLDEN_SWORD), builder -> builder
+        doFor(List.of(Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL,Items.GOLDEN_SWORD, Items.GOLDEN_SPEAR), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",1500L, "smithing",200L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 30L))
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
@@ -340,8 +343,9 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.GOLDEN_HOE, 10, 5, "farming").addBonus(ModifierDataType.HELD, Map.of("farming", 1.5));
         toolReq(Items.GOLDEN_SHOVEL, 10, 5, "excavation").addBonus(ModifierDataType.HELD, Map.of("excavation", 1.5));
         toolReq(Items.GOLDEN_SWORD, 10, 10, "combat").addBonus(ModifierDataType.HELD, Map.of("combat", 1.5));
+        toolReq(Items.GOLDEN_SPEAR, 10, 10, "combat").addBonus(ModifierDataType.HELD, Map.of("combat", 1.5));
 
-        doFor(List.of(Items.NETHERITE_AXE, Items.NETHERITE_PICKAXE, Items.NETHERITE_HOE, Items.NETHERITE_SHOVEL, Items.NETHERITE_SWORD), builder -> builder
+        doFor(List.of(Items.NETHERITE_AXE, Items.NETHERITE_PICKAXE, Items.NETHERITE_HOE, Items.NETHERITE_SHOVEL, Items.NETHERITE_SWORD, Items.NETHERITE_SPEAR), builder -> builder
                 .addXpValues(EventType.CRAFT, Map.of("crafting",6000L, "smithing",1000L))
                 .addXpValues(EventType.ENCHANT, Map.of("magic", 250L))
                 .addNegativeEffect(RegistryUtil.getId(MobEffects.MINING_FATIGUE), 2)
@@ -354,18 +358,19 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         toolReq(Items.NETHERITE_HOE, 90, 45, "farming");
         toolReq(Items.NETHERITE_SHOVEL, 90, 45, "excavation");
         toolReq(Items.NETHERITE_SWORD, 90, 90, "combat");
+        toolReq(Items.NETHERITE_SPEAR, 90, 90, "combat");
 
         //MISC
         get(Items.HEART_OF_THE_SEA).addBonus(ModifierDataType.HELD, Map.of("swimming",1.25, "fishing",1.1));
         
         //================SALVAGE================
-        doFor(List.of(Items.WOODEN_PICKAXE, Items.WOODEN_SHOVEL, Items.WOODEN_AXE, Items.WOODEN_HOE,
-                        Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_AXE, Items.STONE_HOE,
-                        Items.COPPER_PICKAXE, Items.COPPER_SHOVEL, Items.COPPER_AXE, Items.COPPER_HOE,
-                        Items.GOLDEN_PICKAXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_AXE, Items.GOLDEN_HOE,
-                        Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE,
-                        Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE,
-                        Items.NETHERITE_PICKAXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_AXE, Items.NETHERITE_HOE),
+        doFor(List.of(Items.WOODEN_PICKAXE, Items.WOODEN_SHOVEL, Items.WOODEN_AXE, Items.WOODEN_HOE, Items.WOODEN_SPEAR,
+                        Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_AXE, Items.STONE_HOE, Items.STONE_SPEAR,
+                        Items.COPPER_PICKAXE, Items.COPPER_SHOVEL, Items.COPPER_AXE, Items.COPPER_HOE, Items.COPPER_SPEAR,
+                        Items.GOLDEN_PICKAXE, Items.GOLDEN_SHOVEL, Items.GOLDEN_AXE, Items.GOLDEN_HOE, Items.GOLDEN_SPEAR,
+                        Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_AXE, Items.IRON_HOE, Items.IRON_SPEAR,
+                        Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_SPEAR,
+                        Items.NETHERITE_PICKAXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_AXE, Items.NETHERITE_HOE, Items.NETHERITE_SPEAR),
                 builder -> builder.addSalvage(getId(Items.STICK), APIUtils.SalvageBuilder.start()
                         .setBaseChance(0.8)
                         .setChancePerLevel(Map.of("crafting", 0.005, "smithing", 0.005))
@@ -379,37 +384,44 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         recoverTool(Items.WOODEN_AXE, Items.OAK_PLANKS, 3, 10L, 0.005);
         recoverTool(Items.WOODEN_HOE, Items.OAK_PLANKS, 2, 10L, 0.005);
         recoverTool(Items.WOODEN_SHOVEL, Items.OAK_PLANKS, 1, 10L, 0.005);
+        recoverTool(Items.WOODEN_SPEAR, Items.OAK_PLANKS, 1, 10L, 0.005);
 
         recoverTool(Items.STONE_PICKAXE, Items.COBBLESTONE, 3, 15L, 0.005);
         recoverTool(Items.STONE_AXE, Items.COBBLESTONE, 3, 15L, 0.005);
         recoverTool(Items.STONE_HOE, Items.COBBLESTONE, 2, 15L, 0.005);
         recoverTool(Items.STONE_SHOVEL, Items.COBBLESTONE, 1, 15L, 0.005);
+        recoverTool(Items.STONE_SPEAR, Items.COBBLESTONE, 1, 15L, 0.005);
 
         recoverTool(Items.COPPER_PICKAXE, Items.COPPER_INGOT, 3, 20L, 0.005);
         recoverTool(Items.COPPER_AXE, Items.COPPER_INGOT, 3, 2L, 0.005);
         recoverTool(Items.COPPER_HOE, Items.COPPER_INGOT, 2, 20L, 0.005);
         recoverTool(Items.COPPER_SHOVEL, Items.COPPER_INGOT, 1, 20L, 0.005);
+        recoverTool(Items.COPPER_SPEAR, Items.COPPER_INGOT, 1, 20L, 0.005);
 
         recoverTool(Items.GOLDEN_PICKAXE, Items.GOLD_INGOT, 3, 50L, 0.005);
         recoverTool(Items.GOLDEN_AXE, Items.GOLD_INGOT, 3, 50L, 0.005);
         recoverTool(Items.GOLDEN_HOE, Items.GOLD_INGOT, 2, 50L, 0.005);
         recoverTool(Items.GOLDEN_SHOVEL, Items.GOLD_INGOT, 1, 50L, 0.005);
+        recoverTool(Items.GOLDEN_SPEAR, Items.GOLD_INGOT, 1, 50L, 0.005);
 
         recoverTool(Items.IRON_PICKAXE, Items.IRON_INGOT, 3, 150L, 0.0025);
         recoverTool(Items.IRON_AXE, Items.IRON_INGOT, 3, 150L, 0.0025);
         recoverTool(Items.IRON_HOE, Items.IRON_INGOT, 2, 150L, 0.0025);
         recoverTool(Items.IRON_SHOVEL, Items.IRON_INGOT, 1, 150L, 0.0025);
+        recoverTool(Items.IRON_SPEAR, Items.IRON_INGOT, 1, 150L, 0.0025);
 
         recoverTool(Items.DIAMOND_PICKAXE, Items.DIAMOND, 3, 500L, 0.00125);
         recoverTool(Items.DIAMOND_AXE, Items.DIAMOND, 3, 500L, 0.00125);
         recoverTool(Items.DIAMOND_HOE, Items.DIAMOND, 2, 500L, 0.00125);
         recoverTool(Items.DIAMOND_SHOVEL, Items.DIAMOND, 1, 500L, 0.00125);
+        recoverTool(Items.DIAMOND_SPEAR, Items.DIAMOND, 1, 500L, 0.00125);
 
         recoverTool(Items.NETHERITE_PICKAXE, Items.NETHERITE_INGOT, 3, 1000L, 0.00125);
         recoverTool(Items.NETHERITE_AXE, Items.NETHERITE_INGOT, 3, 1000L, 0.00125);
         recoverTool(Items.NETHERITE_HOE, Items.NETHERITE_INGOT, 2, 1000L, 0.00125);
         recoverTool(Items.NETHERITE_SHOVEL, Items.NETHERITE_INGOT, 1, 1000L, 0.00125);
-        
+        recoverTool(Items.NETHERITE_SPEAR, Items.NETHERITE_INGOT, 1, 1000L, 0.00125);
+
         //CONSTRUCTION WAND DEFAULTS
         get("constructionwand:core_angel").setOverride(true)
                 .addXpValues(EventType.CRAFT, Map.of("crafting",2000L,"smithing",300L))
