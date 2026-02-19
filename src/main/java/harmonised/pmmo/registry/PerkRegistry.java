@@ -2,7 +2,6 @@ package harmonised.pmmo.registry;
 
 import com.google.common.base.Preconditions;
 import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.api.perks.PerkRenderer;
@@ -12,7 +11,6 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

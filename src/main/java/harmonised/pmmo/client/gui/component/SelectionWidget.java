@@ -1,6 +1,5 @@
 package harmonised.pmmo.client.gui.component;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

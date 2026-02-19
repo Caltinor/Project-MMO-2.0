@@ -1,9 +1,6 @@
 package harmonised.pmmo.util;
 
-import com.mojang.serialization.Codec;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
@@ -15,7 +12,6 @@ import net.minecraft.world.level.block.Block;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 public class Reference {
 	public static final String MOD_ID = "pmmo";

@@ -1,17 +1,13 @@
 package harmonised.pmmo.features.mobscaling;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.MobModifier;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -27,6 +23,13 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @EventBusSubscriber(modid=Reference.MOD_ID)
 public class MobAttributeHandler {

@@ -5,7 +5,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import org.jspecify.annotations.NonNull;
 
-
 import java.util.Arrays;
 
 public class TagBuilder {

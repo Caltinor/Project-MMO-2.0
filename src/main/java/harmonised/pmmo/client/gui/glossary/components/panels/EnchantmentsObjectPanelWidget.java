@@ -4,7 +4,6 @@ import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
-import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.glossary.components.parts.DividerWidget;
 import harmonised.pmmo.client.gui.glossary.components.parts.ItemStackWidget;

@@ -10,19 +10,14 @@ import harmonised.pmmo.client.gui.glossary.components.parts.PosNegEffectSectionW
 import harmonised.pmmo.client.gui.glossary.components.parts.VeinBlacklistSectionWidget;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.util.Functions;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageWidget;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.neoforged.fml.LogicalSide;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;

@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class EntityWidget extends AbstractWidget{
     private final Entity entity;

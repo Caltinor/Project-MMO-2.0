@@ -1,6 +1,5 @@
 package harmonised.pmmo.features.loot_modifiers;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;

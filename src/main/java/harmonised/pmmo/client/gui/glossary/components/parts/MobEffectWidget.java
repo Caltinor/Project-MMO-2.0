@@ -1,17 +1,13 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
-import harmonised.pmmo.util.Functions;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 public class MobEffectWidget extends AbstractWidget{
     private final Identifier sprite;

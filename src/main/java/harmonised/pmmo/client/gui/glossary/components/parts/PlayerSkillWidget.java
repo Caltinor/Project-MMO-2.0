@@ -15,7 +15,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.neoforged.fml.LogicalSide;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class PlayerSkillWidget extends PanelWidget {
     protected static final Identifier TEXTURE_LOCATION = Reference.rl("textures/gui/player_stats.png");

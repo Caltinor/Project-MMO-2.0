@@ -1,7 +1,6 @@
 package harmonised.pmmo.api.client;
 
 import harmonised.pmmo.api.client.types.DisplayType;
-import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarrationElementOutput;

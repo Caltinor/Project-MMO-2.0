@@ -1,7 +1,6 @@
 package harmonised.pmmo.client.gui.glossary;
 
 import harmonised.pmmo.api.client.PanelWidget;
-import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.client.utils.ClientUtils;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.ChatFormatting;

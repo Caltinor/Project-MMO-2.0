@@ -1,7 +1,6 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
 import com.mojang.datafixers.util.Pair;
-import harmonised.pmmo.api.client.ResponsiveLayout;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.GuiEnumGroup;
 import harmonised.pmmo.api.client.types.PositionType;
@@ -32,8 +31,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.fml.LogicalSide;

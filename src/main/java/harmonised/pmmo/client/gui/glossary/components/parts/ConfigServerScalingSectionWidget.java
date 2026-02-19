@@ -10,13 +10,10 @@ import harmonised.pmmo.config.codecs.ServerData;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.HashSet;
 import java.util.Map;

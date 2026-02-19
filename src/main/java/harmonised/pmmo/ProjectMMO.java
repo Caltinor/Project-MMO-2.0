@@ -10,7 +10,6 @@ import harmonised.pmmo.storage.DataAttachmentTypes;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
-import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;

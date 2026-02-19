@@ -2,21 +2,17 @@ package harmonised.pmmo.client.gui.glossary.components;
 
 import harmonised.pmmo.api.client.ResponsiveLayout;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
-import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.wrappers.BoxDimensions;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.layouts.FrameLayout;
-import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
-import javax.swing.text.Position;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;

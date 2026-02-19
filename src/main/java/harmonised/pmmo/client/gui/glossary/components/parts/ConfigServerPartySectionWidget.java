@@ -11,12 +11,9 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.MutableComponent;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class ConfigServerPartySectionWidget extends ReactiveWidget {

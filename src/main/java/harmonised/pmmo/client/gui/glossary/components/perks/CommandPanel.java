@@ -1,6 +1,5 @@
 package harmonised.pmmo.client.gui.glossary.components.perks;
 
-import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.OBJECT;
@@ -9,14 +8,12 @@ import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.api.perks.PerkRenderer;
 import harmonised.pmmo.client.gui.glossary.components.parts.DividerWidget;
-import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.FeaturePerks;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.fml.LogicalSide;
 
 public class CommandPanel extends PanelWidget {
     private final String name;

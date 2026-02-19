@@ -1,7 +1,6 @@
 package harmonised.pmmo.api.client.wrappers;
 
 import harmonised.pmmo.api.client.ResponsiveLayout;
-import harmonised.pmmo.api.client.types.PositionType;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 

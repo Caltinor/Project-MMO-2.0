@@ -6,7 +6,6 @@ import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.HashMap;

@@ -1,6 +1,5 @@
 package harmonised.pmmo.setup.datagen.defaultpacks;
 
-import com.mojang.serialization.Codec;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.config.codecs.LocationData;
 import harmonised.pmmo.config.codecs.MobModifier;
@@ -8,8 +7,8 @@ import harmonised.pmmo.setup.datagen.PmmoDataProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

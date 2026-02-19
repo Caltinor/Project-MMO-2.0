@@ -9,9 +9,9 @@ import harmonised.pmmo.util.TagBuilder;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.neoforge.event.entity.player.PlayerEnchantItemEvent;
 

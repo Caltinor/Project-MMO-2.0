@@ -8,7 +8,6 @@ import harmonised.pmmo.core.nbt.BehaviorToPrevious;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.core.nbt.Operator;
 import harmonised.pmmo.setup.datagen.PmmoDataProvider;
-import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;

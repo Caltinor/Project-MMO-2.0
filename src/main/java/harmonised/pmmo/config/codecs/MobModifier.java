@@ -10,11 +10,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.TooltipFlag;
-import org.w3c.dom.Attr;
 
 import java.util.Optional;
-
-import static org.w3c.dom.events.MutationEvent.ADDITION;
 
 public record MobModifier(
     Identifier attribute,

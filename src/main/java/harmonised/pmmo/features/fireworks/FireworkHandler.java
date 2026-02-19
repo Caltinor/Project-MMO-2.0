@@ -1,17 +1,12 @@
 package harmonised.pmmo.features.fireworks;
 
-import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.core.CoreUtils;
-import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.TagBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.FireworkExplosion;

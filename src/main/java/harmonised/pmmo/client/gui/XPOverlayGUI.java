@@ -1,12 +1,9 @@
 package harmonised.pmmo.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.client.events.ClientTickHandler;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
-import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.CoreUtils;
@@ -19,7 +16,6 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;

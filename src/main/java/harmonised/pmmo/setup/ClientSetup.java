@@ -23,6 +23,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
+
 import static harmonised.pmmo.util.Reference.rl;
 
 @EventBusSubscriber(modid=Reference.MOD_ID, value= Dist.CLIENT)

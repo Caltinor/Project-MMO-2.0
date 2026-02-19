@@ -2,13 +2,11 @@ package harmonised.pmmo.client.gui.glossary.components;
 
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 import java.util.function.Consumer;

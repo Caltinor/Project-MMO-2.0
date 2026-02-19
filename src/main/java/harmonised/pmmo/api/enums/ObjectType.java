@@ -2,8 +2,6 @@ package harmonised.pmmo.api.enums;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.fml.common.asm.enumextension.IExtensibleEnum;
-import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
 
 import java.util.Arrays;
 import java.util.Map;

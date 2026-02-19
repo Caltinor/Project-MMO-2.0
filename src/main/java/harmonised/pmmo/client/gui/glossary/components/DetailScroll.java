@@ -1,15 +1,14 @@
 package harmonised.pmmo.client.gui.glossary.components;
 
+import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.ResponsiveLayout;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.wrappers.BoxDimensions;
 import harmonised.pmmo.api.client.wrappers.Positioner;
-import harmonised.pmmo.api.client.PanelWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;

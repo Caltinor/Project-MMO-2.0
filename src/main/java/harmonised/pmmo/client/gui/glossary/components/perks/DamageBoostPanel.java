@@ -2,7 +2,6 @@ package harmonised.pmmo.client.gui.glossary.components.perks;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.client.PanelWidget;
-import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.wrappers.PositionConstraints;
@@ -19,7 +18,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;

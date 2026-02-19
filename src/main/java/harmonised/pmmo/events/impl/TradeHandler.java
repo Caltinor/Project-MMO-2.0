@@ -4,13 +4,10 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Functions;
-import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.event.entity.player.TradeWithVillagerEvent;
 

@@ -4,16 +4,11 @@ import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.KeyCompressor;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.MapEncoder;
-import com.mojang.serialization.RecordBuilder;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.util.Functions;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.ChunkPos;
 
 import java.util.HashMap;
@@ -21,7 +16,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.stream.Stream;
 
 public class CodecTypes {
 	public static final Codec<Map<String, Double>> DOUBLE_CODEC = Codec.unboundedMap(Codec.STRING, Codec.DOUBLE);

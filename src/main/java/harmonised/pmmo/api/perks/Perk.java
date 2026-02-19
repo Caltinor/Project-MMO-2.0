@@ -5,13 +5,10 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.DoubleTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.function.TriFunction;
 
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 

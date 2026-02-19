@@ -2,15 +2,10 @@ package harmonised.pmmo.core.perks;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
-import harmonised.pmmo.client.utils.DP;
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -25,9 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;

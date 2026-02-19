@@ -10,7 +10,6 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;

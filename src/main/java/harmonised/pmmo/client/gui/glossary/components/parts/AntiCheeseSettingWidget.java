@@ -2,9 +2,7 @@ package harmonised.pmmo.client.gui.glossary.components.parts;
 
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.GuiEnumGroup;
-import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.client.types.PositionType;
-import harmonised.pmmo.api.client.types.SELECTION;
 import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.api.enums.EventType;
@@ -19,8 +17,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntitySpawnReason;
 
 import java.util.List;

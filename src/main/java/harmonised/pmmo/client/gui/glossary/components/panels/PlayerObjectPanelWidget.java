@@ -1,21 +1,16 @@
 package harmonised.pmmo.client.gui.glossary.components.panels;
 
 import harmonised.pmmo.api.client.types.OBJECT;
-import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.parts.DividerWidget;
 import harmonised.pmmo.client.gui.glossary.components.parts.EntityWidget;
 import harmonised.pmmo.client.gui.glossary.components.parts.PlayerXpMapWidget;
-import harmonised.pmmo.client.gui.glossary.components.parts.ReqSectionWidget;
-import harmonised.pmmo.client.gui.glossary.components.parts.XpSectionWidget;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.LogicalSide;
 

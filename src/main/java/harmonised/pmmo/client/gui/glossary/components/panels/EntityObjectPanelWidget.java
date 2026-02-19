@@ -11,7 +11,6 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.fml.LogicalSide;

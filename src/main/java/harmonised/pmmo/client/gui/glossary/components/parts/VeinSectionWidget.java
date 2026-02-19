@@ -3,7 +3,6 @@ package harmonised.pmmo.client.gui.glossary.components.parts;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
-import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import harmonised.pmmo.client.utils.DP;
@@ -13,10 +12,9 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.Component;
+
 import java.util.function.Consumer;
 
 public class VeinSectionWidget extends ReactiveWidget {

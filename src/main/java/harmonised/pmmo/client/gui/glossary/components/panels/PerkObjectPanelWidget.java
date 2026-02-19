@@ -1,44 +1,27 @@
 package harmonised.pmmo.client.gui.glossary.components.panels;
 
 import harmonised.pmmo.api.client.PanelWidget;
-import harmonised.pmmo.api.client.ResponsiveLayout;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.OBJECT;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.types.SELECTION;
-import harmonised.pmmo.api.client.wrappers.PositionConstraints;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.client.gui.glossary.components.parts.DividerWidget;
-import harmonised.pmmo.client.gui.glossary.components.parts.ItemStackWidget;
-import harmonised.pmmo.config.codecs.EnhancementsData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.registry.PerkRegistry;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.StringWidget;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.fml.LogicalSide;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 public class PerkObjectPanelWidget extends ObjectPanelWidget {
     private final EventType type;

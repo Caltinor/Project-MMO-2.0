@@ -22,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
