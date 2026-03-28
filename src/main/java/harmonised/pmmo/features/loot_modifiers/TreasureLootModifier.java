@@ -79,7 +79,7 @@ public class TreasureLootModifier extends LootModifier{
 			//Notify player that their skill awarded them an extra drop.
 			Entity breaker = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
 			if (breaker instanceof Player player) {
-				player.displayClientMessage(LangProvider.FOUND_TREASURE.asComponent(), false);
+				player.sendOverlayMessage(LangProvider.FOUND_TREASURE.asComponent());
 			}
 			generatedLoot.add(drop.get().copy());
 		}

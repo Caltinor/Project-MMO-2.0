@@ -61,7 +61,7 @@ public class PathReader {
 		else {
 			Tag value = nbt.get(rawNode(nodeEntry));
 			if (value != null)
-				list.add(value.asString().get());
+				list.add(value.asString().orElse(""));
 		}
 		
 		return list;

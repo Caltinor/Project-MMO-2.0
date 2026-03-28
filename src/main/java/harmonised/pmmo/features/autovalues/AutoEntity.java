@@ -32,35 +32,37 @@ public class AutoEntity {
 			return new HashMap<>();
 				
 		Map<String, Long> outMap = new HashMap<>();
-		EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.getValue(entityID);
-		switch (type) {
-		case RIDING: {
-			if (entityType.is(Reference.RIDEABLE_TAG)) {
-				outMap.putAll(getXpMap(entityID, type));
+		var reg = BuiltInRegistries.ENTITY_TYPE;
+		reg.get(entityID).ifPresent(entityType -> {
+			switch (type) {
+				case RIDING: {
+					if (entityType.is(Reference.RIDEABLE_TAG)) {
+						outMap.putAll(getXpMap(entityID, type));
+					}
+					break;
+				}
+				case DEATH:
+				case ENTITY:
+				case SHIELD_BLOCK: {
+					outMap.putAll(getXpMap(entityID, type));
+					break;
+				}
+				case BREED: {
+					if (entityType.is(Reference.BREEDABLE_TAG)) {
+						outMap.putAll(getXpMap(entityID, type));
+					}
+					break;
+				}
+				case TAMING: {
+					if (entityType.is(Reference.TAMABLE_TAG)) {
+						outMap.putAll(getXpMap(entityID, type));
+					}
+					break;
+				}
+				default:
 			}
-			break;
-		}
-		case DEATH:		
-		case ENTITY:			
-		case SHIELD_BLOCK:		
-		{
-			outMap.putAll(getXpMap(entityID, type));
-			break;
-		}
-		case BREED: {
-			if (entityType.is(Reference.BREEDABLE_TAG)) {
-				outMap.putAll(getXpMap(entityID, type));
-			}
-			break;
-		}
-		case TAMING: {
-			if (entityType.is(Reference.TAMABLE_TAG)) {
-				outMap.putAll(getXpMap(entityID, type));
-			}
-			break;
-		}
-		default: }
-		return outMap;	
+		});
+		return outMap;
 	}
 	
 	//========================GETTER METHODS==============================

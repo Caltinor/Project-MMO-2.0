@@ -1,8 +1,12 @@
 package harmonised.pmmo.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.CampfireBlockEntity;
@@ -19,9 +23,14 @@ public class CampfireMixin {
     @Inject(at=@At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/Containers;dropItemStack(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;)V"),
-    method = "cookTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/CampfireBlockEntity;)V",
-    locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void projectmmo$handleCampfireCook(Level p_155307_, BlockPos p_155308_, BlockState p_155309_, CampfireBlockEntity p_155310_, CallbackInfo ci, boolean flag, int i, ItemStack itemstack, SingleRecipeInput container, ItemStack itemstack1) {
-        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(itemstack, itemstack1, p_155307_, p_155308_));
+    method = "cookTick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/CampfireBlockEntity;Lnet/minecraft/world/item/crafting/RecipeManager$CachedCheck;)V")
+    private static void projectmmo$handleCampfireCook(ServerLevel level, BlockPos pos, BlockState state, CampfireBlockEntity campfire, RecipeManager.CachedCheck<SingleRecipeInput, CampfireCookingRecipe> recipeCache,
+          CallbackInfo ci,
+          @Local boolean changed,
+          @Local int slot,
+          @Local(ordinal = 0) ItemStack itemstack,
+          @Local SingleRecipeInput input,
+          @Local(ordinal = 1) ItemStack result) {
+        NeoForge.EVENT_BUS.post(new FurnaceBurnEvent(itemstack, result, level, pos));
     }
 }

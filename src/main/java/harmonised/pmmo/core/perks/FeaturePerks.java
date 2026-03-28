@@ -207,7 +207,7 @@ public class FeaturePerks {
 				int perLevel = Math.max(1, (int)((double)nbt.getIntOr(APIUtils.SKILL_LEVEL, 0) * nbt.getDoubleOr(APIUtils.PER_LEVEL, 0d))) + nbt.getIntOr(APIUtils.BASE, 0);
 				perLevel = Math.min(nbt.getIntOr(APIUtils.MAX_BOOST, Integer.MAX_VALUE), perLevel);
 				player.setAirSupply(player.getAirSupply() + perLevel);
-				player.displayClientMessage(LangProvider.PERK_BREATH_REFRESH.asComponent(), true);
+				player.sendOverlayMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
 				return NONE;
 			}).build();
 	//</editor-fold>
@@ -259,7 +259,7 @@ public class FeaturePerks {
 				boolean weaponMatch = type.isEmpty() || type.stream().anyMatch(key -> {
 					if (key.startsWith("#") && RegistryUtil.isInTag(player.level().registryAccess(), Registries.ITEM, RegistryUtil.getId(player.level().registryAccess(), player.getMainHandItem()), key.substring(1)))
 						return true;
-					else if (key.endsWith(":*") && RegistryUtil.getId(player.getMainHandItem().getItemHolder()).getNamespace().equals(key.replace(":*","")))
+					else if (key.endsWith(":*") && RegistryUtil.getId(player.registryAccess(), player.getMainHandItem().getItem()).getNamespace().equals(key.replace(":*","")))
 						return true;
 					else return key.equals(RegistryUtil.getId(player.level().registryAccess(), player.getMainHandItem()).toString());
 				});
@@ -315,7 +315,7 @@ public class FeaturePerks {
 				int villagerID = nbt.getIntOr(APIUtils.ENTITY_ID, 0);
 				Villager villager = (Villager) player.level().getEntity(villagerID);
 				villager.onReputationEventFrom(ReputationEventType.ZOMBIE_VILLAGER_CURED, player);
-				player.displayClientMessage(LangProvider.PERK_VILLAGE_FEEDBACK.asComponent(), true);
+				player.sendOverlayMessage(LangProvider.PERK_VILLAGE_FEEDBACK.asComponent());
 				return NONE;
 			}).build();
 	//</editor-fold>

@@ -11,7 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -35,7 +35,7 @@ public class TutorialOverlayGUI implements GuiLayer {
 	private BlockHitResult bhr;
 
 	@Override
-	public void render(GuiGraphics guiGraphics, DeltaTracker partialTick) {
+	public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker partialTick) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (!(mc.hitResult instanceof BlockHitResult))
@@ -69,7 +69,7 @@ public class TutorialOverlayGUI implements GuiLayer {
 //			guiGraphics.pose().pushPose();
 //			RenderSystem.enableBlend();
 			if (!lines.isEmpty()) {
-				guiGraphics.renderTooltip(mc.font, lines, renderLeft, renderTop, (sw, sh, mx, my, tw, th) -> new Vector2i(renderLeft, renderTop), null);
+				guiGraphics.tooltip(mc.font, lines, renderLeft, renderTop, (sw, sh, mx, my, tw, th) -> new Vector2i(renderLeft, renderTop), null);
 //				int i = 0;
 //				int j = lines.size() == 1 ? -2 : 0;
 //

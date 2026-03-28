@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public abstract class AbstractFurnaceTileEntityShrinkMixin {
     @Invoker("canBurn")
-    public static boolean invokingCanBurn(RegistryAccess access, RecipeHolder<? extends AbstractCookingRecipe> recipe, SingleRecipeInput recipeInput, NonNullList<ItemStack> items, int maxStackSize) {
+    public static boolean invokingCanBurn(NonNullList<ItemStack> items, int maxStackSize, ItemStack burnResult) {
         throw new AssertionError();
     }
 

@@ -3,11 +3,12 @@ package harmonised.pmmo.client.gui.glossary.components.parts;
 import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -42,21 +43,21 @@ public class PlayerSkillWidget extends PanelWidget {
     @Override public void resize() {setHeight(24);}
 
     @Override
-    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BACKGROUND_SPRITES.get(this.isActive(), this.isFocused()), this.getX(), this.getY(), this.width, this.height);
         graphics.blit(RenderPipelines.GUI_TEXTURED, skillData.getIcon(), this.getX() + 3, this.getY() + 3, 0, 0, 18, 18, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
 
         renderProgressBar(graphics);
-        graphics.drawString(font, skillName, this.getX() + 24, this.getY() + 5, skillColor.getRGB());
-        graphics.drawString(font, String.valueOf(xp.getLevel().getLevel()), (this.getX() + this.width - 5) - font.width(String.valueOf(xp.getLevel().getLevel())), this.getY() + 5, skillColor.getRGB());
+        graphics.textRenderer().accept(this.getX() + 24, this.getY() + 5, LangProvider.skill(skillName).withColor(skillColor.getRGB()));
+        graphics.textRenderer().accept((this.getX() + this.width - 5) - font.width(String.valueOf(xp.getLevel().getLevel())), this.getY() + 5, Component.literal(String.valueOf(xp.getLevel().getLevel())).withColor(skillColor.getRGB()));
     }
 
-    public void renderProgressBar(GuiGraphics graphics) {
+    public void renderProgressBar(GuiGraphicsExtractor graphics) {
         int renderX = this.getX() + 24;
         int renderY = this.getY() + (font.lineHeight + 6);
         if (this.isFocused()) {
             MutableComponent text = Component.literal("%s => %s".formatted(xpToNext(), this.xp.getLevel().getLevel() +1));
-            graphics.drawString(font, text, renderX, renderY-1, this.skillColor.getRGB());
+            graphics.textRenderer().accept(renderX, renderY-1, text.withColor(this.skillColor.getRGB()));
         }
         else {
             graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION, renderX, renderY, 0, 217, 94, 5, 102, 5, 256, 256);

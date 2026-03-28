@@ -88,7 +88,7 @@ public record Perk(
 		if (src.contains(APIUtils.COOLDOWN) && !Core.get(player.level()).getPerkRegistry().isPerkCooledDown(player, src))
 			return false;
 		boolean chanceSucceed = false;
-		if (src.contains(APIUtils.CHANCE) && src.getDoubleOr(APIUtils.CHANCE, 0d) < player.level().random.nextDouble())
+		if (src.contains(APIUtils.CHANCE) && src.getDoubleOr(APIUtils.CHANCE, 0d) < player.level().getRandom().nextDouble())
 			return false;
 		else if (src.contains(APIUtils.CHANCE)) chanceSucceed = true;
 		if (src.contains(APIUtils.SKILLNAME)) {
@@ -115,7 +115,7 @@ public record Perk(
 		}
 		if (chanceSucceed && src.contains(APIUtils.CHANCE_SUCCESS_MSG)) {
 			String msg = src.getString(APIUtils.CHANCE_SUCCESS_MSG).get();
-			player.displayClientMessage(Component.literal(msg), false);
+			player.sendOverlayMessage(Component.literal(msg));
 		}
 		return true;
 	};

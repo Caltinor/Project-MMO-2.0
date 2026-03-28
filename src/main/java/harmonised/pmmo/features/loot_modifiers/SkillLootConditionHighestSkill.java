@@ -8,7 +8,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import java.util.List;
 
@@ -40,10 +39,9 @@ public class SkillLootConditionHighestSkill implements LootItemCondition{
 	public String getTargetSkill() {return targetSkill;}
 
 	public List<String> getComparables() {return comparables;}
+
 	@Override
-	public LootItemConditionType getType() {
-		return GLMRegistry.HIGHEST_SKILL.get();
-	}
+	public MapCodec<SkillLootConditionHighestSkill> codec() {return CODEC;}
 
 	public static final MapCodec<SkillLootConditionHighestSkill> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.STRING.fieldOf("target_skill").forGetter(SkillLootConditionHighestSkill::getTargetSkill),

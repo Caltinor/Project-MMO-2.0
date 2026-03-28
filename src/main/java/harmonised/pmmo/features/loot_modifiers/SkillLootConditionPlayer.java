@@ -8,7 +8,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class SkillLootConditionPlayer implements LootItemCondition{
 	public String skill;
@@ -35,10 +34,9 @@ public class SkillLootConditionPlayer implements LootItemCondition{
 	public Integer getLevelMin() {return levelMin;}
 
 	public Integer getLevelMax() {return levelMax;}
+
 	@Override
-	public LootItemConditionType getType() {
-		return GLMRegistry.SKILL_PLAYER.get();
-	}
+	public MapCodec<? extends LootItemCondition> codec() {return CODEC;}
 
 	public static final MapCodec<SkillLootConditionPlayer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.INT.fieldOf("level_min").forGetter(SkillLootConditionPlayer::getLevelMin),

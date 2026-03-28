@@ -106,17 +106,16 @@ public class ClientUtils {
 		Map<ReqType, List<Component>> reqMap = cache.getOrDefault(skill, new HashMap<>()).getOrDefault(level, new HashMap<>());
 		boolean isEmpty = reqMap.entrySet().stream().allMatch(entry -> entry.getValue().isEmpty());
 		if (isEmpty && Config.SKILLUP_UNLOCKS_STRICT.get()) return;
-		player.displayClientMessage(isEmpty
+		player.sendOverlayMessage(isEmpty
 				? LangProvider.LEVEL_UP_HEADER.asComponent(level, Component.translatable("pmmo."+skill))
-				: LangProvider.LEVEL_UP_HEADER_WITH_UNLOCKS.asComponent(level, Component.translatable("pmmo."+skill)),
-				false);
+				: LangProvider.LEVEL_UP_HEADER_WITH_UNLOCKS.asComponent(level, Component.translatable("pmmo."+skill)));
 		reqMap.entrySet().stream()
 				.filter(entry -> Config.server().requirements().isEnabled(entry.getKey()) && !entry.getValue().isEmpty())
 				.forEach(entry -> {
 					MutableComponent header = Component.translatable("pmmo.enum." + entry.getKey().name());
 					header.setStyle(Style.EMPTY.applyFormats(ChatFormatting.GOLD, ChatFormatting.BOLD));
-					player.displayClientMessage(header, false);
-					entry.getValue().forEach(val -> player.displayClientMessage(val, false));
+					player.sendOverlayMessage(header);
+					entry.getValue().forEach(val -> player.sendOverlayMessage(val));
 				});
 	}
 }

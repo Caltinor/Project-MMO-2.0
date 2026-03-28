@@ -11,5 +11,5 @@ public class Messenger {
 		MutableComponent text = Component.translatable("pmmo.msg.denial."+type.name().toLowerCase(), name);
 		send(text, player);
 	}
-	private static void send(Component text, Player player) {player.displayClientMessage(text, true);}
+	private static void send(Component text, Player player) {player.sendOverlayMessage(text);}
 }

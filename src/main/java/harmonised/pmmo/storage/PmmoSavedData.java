@@ -16,6 +16,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 
 public class PmmoSavedData extends SavedData implements IDataStorage{
 	
-	private static final String NAME = Reference.MOD_ID;
+	private static final Identifier NAME = Reference.rl("skill_data");
 	private static final String XP_KEY = "xp_data";
 	private static final String SCHEDULED_KEY = "scheduled_xp";
 	
@@ -51,7 +52,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 				XP_CODEC.fieldOf(SCHEDULED_KEY).forGetter(PmmoSavedData::getScheduledXP)
 		).apply(instance, PmmoSavedData::new))
 	);
-	
+	//region
 	//===========================GETTERS AND SETTERS================
 	@Override
 	public long getXp(UUID playerID, String skillName) {
@@ -146,6 +147,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			Networking.sendToClient(new CP_UpdateExperience(skill, xp.get(playerID).get(skill), 0), player);
 		}
 	}
+	//endregion
 	//===========================CORE WSD LOGIC=====================
 	public PmmoSavedData() {}
 	public PmmoSavedData(ServerLevel level) {}

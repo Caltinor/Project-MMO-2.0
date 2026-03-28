@@ -4,7 +4,7 @@ import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.gui.GuiLayer;
@@ -15,7 +15,7 @@ public class IndicatorsOverlayGUI implements GuiLayer {
 	private BlockHitResult bhr;
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, DeltaTracker partialTick) {
+	public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker partialTick) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (!(mc.hitResult instanceof BlockHitResult))

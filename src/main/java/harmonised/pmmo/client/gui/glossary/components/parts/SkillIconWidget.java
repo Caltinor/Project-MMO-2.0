@@ -1,6 +1,6 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -17,7 +17,7 @@ public class SkillIconWidget extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v) {
+    protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int i, int i1, float v) {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, icon, this.getX() + 3, this.getY() + 3,  0, 0,18, 18, iconSize, iconSize, iconSize, iconSize);
     }
 

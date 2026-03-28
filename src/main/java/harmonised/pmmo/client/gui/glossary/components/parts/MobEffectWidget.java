@@ -1,6 +1,6 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -20,7 +20,7 @@ public class MobEffectWidget extends AbstractWidget{
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, sprite, this.getX(), this.getY(), 0, 0, this.width, this.height, 18, 18, 18, 18);
     }
 

@@ -8,7 +8,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class SkillLootConditionKill implements LootItemCondition{
 	public String skill;
@@ -37,9 +36,7 @@ public class SkillLootConditionKill implements LootItemCondition{
 	public Integer getLevelMax() {return levelMax;}
 
 	@Override
-	public LootItemConditionType getType() {
-		return GLMRegistry.SKILL_KILL.get();
-	}
+	public MapCodec<SkillLootConditionKill> codec() {return CODEC;}
 
 	public static final MapCodec<SkillLootConditionKill> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.INT.fieldOf("level_min").forGetter(SkillLootConditionKill::getLevelMin),

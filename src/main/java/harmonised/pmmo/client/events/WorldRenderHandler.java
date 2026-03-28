@@ -16,7 +16,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 public class WorldRenderHandler {
 
 	@SubscribeEvent
-	public static void onWorldRender(RenderLevelStageEvent.AfterTripwireBlocks event) {
+	public static void onWorldRender(RenderLevelStageEvent.AfterTranslucentBlocks event) {
 		Minecraft mc = Minecraft.getInstance();
 
 		if (Config.server().veinMiner().enabled()

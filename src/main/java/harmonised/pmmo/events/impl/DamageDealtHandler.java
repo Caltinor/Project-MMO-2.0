@@ -111,7 +111,7 @@ public class DamageDealtHandler {
 		/* if the target entity is in the no xp tag, skip all calculations, including
 		 * those for the item and projectile.  This is for a special use case involving
 		 * entities that cannot die being a source of infinite XP.*/
-		if (target.getType().is(Reference.NO_XP_DAMAGE_DEALT))
+		if (target.is(Reference.NO_XP_DAMAGE_DEALT))
 			return mapOut;
 		float ultimateDamage = Math.min(damage, target.getHealth());
 		ItemStack weapon = player.getMainHandItem();

@@ -2,7 +2,7 @@ package harmonised.pmmo.api.client;
 
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 
 public class PanelWidget extends ReactiveWidget {
@@ -15,9 +15,9 @@ public class PanelWidget extends ReactiveWidget {
     @Override public DisplayType getDisplayType() {return DisplayType.INLINE;}
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), color);
-        super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+        super.extractWidgetRenderState(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     @Override protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {}

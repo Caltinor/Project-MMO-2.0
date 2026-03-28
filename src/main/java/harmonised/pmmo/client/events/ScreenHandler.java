@@ -30,7 +30,7 @@ public class ScreenHandler {
                     .max(Integer::compareTo).orElse(0);
             CollapsingPanel panel = new CollapsingPanel(0, y, 130, screen.height, false);
             DetailScroll scroll = new DetailScroll(0, 0, 103, screen.height) {
-                @Override protected boolean scrollbarVisible() {return false;}
+                @Override public int scrollbarWidth() {return 0;}
                 @Override public boolean updateScrolling(MouseButtonEvent event) {
                     this.scrolling = true;
                     return true;

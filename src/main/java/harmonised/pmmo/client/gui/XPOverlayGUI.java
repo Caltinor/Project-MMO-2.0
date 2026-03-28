@@ -15,7 +15,7 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -36,7 +36,7 @@ public class XPOverlayGUI implements GuiLayer {
 	private Font fontRenderer;
 
 	@Override
-	public void render(GuiGraphics guiGraphics, DeltaTracker partialTick) {
+	public void render(GuiGraphicsExtractor guiGraphics, DeltaTracker partialTick) {
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)
@@ -63,7 +63,7 @@ public class XPOverlayGUI implements GuiLayer {
 	private Map<String, Double> modifiers = new HashMap<>();
 	private final LinkedHashMap<String, SkillLine> lineRenderers = new LinkedHashMap<>();
 
-	private void renderSkillList(GuiGraphics graphics, double skillListX, double skillListY) {
+	private void renderSkillList(GuiGraphicsExtractor graphics, double skillListX, double skillListY) {
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * skillListX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* skillListY);
 		if (ClientTickHandler.isRefreshTick()) {
@@ -96,7 +96,7 @@ public class XPOverlayGUI implements GuiLayer {
 	private int maxCharge = 0;
 	private int currentCharge = 0;
 	
-	private void renderVeinGauge(GuiGraphics graphics, double gaugeX, double gaugeY) {
+	private void renderVeinGauge(GuiGraphicsExtractor graphics, double gaugeX, double gaugeY) {
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * gaugeX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* gaugeY);
 		if (ClientTickHandler.isRefreshTick()) {
@@ -105,17 +105,17 @@ public class XPOverlayGUI implements GuiLayer {
 				currentCharge = (int)mc.player.getAttribute(CommonSetup.VEIN_AMOUNT).getValue();
 		}
 		if (currentCharge > 0) {
-			graphics.drawString(fontRenderer, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()), renderX, renderY-11, 0xFFFFFFFF);
-			graphics.drawString(fontRenderer, LangProvider.VEIN_CHARGE.asComponent(currentCharge, maxCharge), renderX, renderY, 0xFFFFFFFF);
+			graphics.textRenderer().accept(renderX, renderY-11, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()).withColor(0xFFFFFFFF));
+			graphics.textRenderer().accept(renderX, renderY, LangProvider.VEIN_CHARGE.asComponent(currentCharge, maxCharge).withColor(0xFFFFFFFF));
 		}
 	}
 	
-	private void renderGains(GuiGraphics graphics, double listX, double listY) {
+	private void renderGains(GuiGraphicsExtractor graphics, double listX, double listY) {
 		final int renderX = (int)((double)mc.getWindow().getGuiScaledWidth() * listX);
 		final int renderY = (int)((double)mc.getWindow().getGuiScaledHeight()* listY);
 		for (int i = 0; i < ClientTickHandler.xpGains.size(); i++) {
 			ClientTickHandler.GainEntry entry = ClientTickHandler.xpGains.get(i);
-			graphics.drawString(fontRenderer, entry.display(), renderX, 3+renderY+ (i*9), entry.getColor());
+			graphics.textRenderer().accept(renderX, 3+renderY+ (i*9), entry.display().copy().withColor(entry.getColor()));
 		}
 	}
 	
@@ -153,17 +153,17 @@ public class XPOverlayGUI implements GuiLayer {
 			else return "";
 		}
 		
-		public void render(GuiGraphics graphics, int skillListX, int skillListY, Font fontRenderer) {
+		public void render(GuiGraphicsExtractor graphics, int skillListX, int skillListY, Font fontRenderer) {
 			int levelGap = fontRenderer.width(xpRaw());
-			graphics.drawString(fontRenderer, xpRaw(), skillListX, skillListY + 3 + yOffset(), color());
+			graphics.textRenderer().accept(skillListX, skillListY + 3 + yOffset(), Component.literal(xpRaw()).withColor(color()));
 			if (Config.SKILL_LIST_USE_ICONS.get())
 				graphics.blit(icon(),
 						skillListX + levelGap + 2,  skillListY + 3 + yOffset(),
 						skillListX + levelGap + 11, skillListY + 12 + yOffset(),
 						0, 1,0, 1);
 			else
-				graphics.drawString(fontRenderer, " | " + skillName.getString(), skillListX + levelGap, skillListY + 3 + yOffset(), color());
-			graphics.drawString(fontRenderer, bonusLine, skillListX + levelGap + (Config.SKILL_LIST_USE_ICONS.get() ? 6 : skillGap()) + 9, skillListY + 3 + yOffset(), color());
+				graphics.textRenderer().accept(skillListX + levelGap, skillListY + 3 + yOffset(), Component.literal(" | " + skillName.getString()).withColor(color()));
+			graphics.textRenderer().accept(skillListX + levelGap + (Config.SKILL_LIST_USE_ICONS.get() ? 6 : skillGap()) + 9, skillListY + 3 + yOffset(), Component.literal(bonusLine).withColor(color()));
 		}
 	}
 }

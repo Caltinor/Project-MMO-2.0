@@ -110,11 +110,11 @@ public class CodecTypes {
 	public static final PrimitiveCodec<ChunkPos> CHUNKPOS_CODEC = new PrimitiveCodec<>() {
 		@Override
 		public <T> DataResult<ChunkPos> read(DynamicOps<T> ops, T input) {
-			return DataResult.success(new ChunkPos(ops.getNumberValue(input).map(Number::longValue).getOrThrow()));
+			return DataResult.success(ChunkPos.unpack(ops.getNumberValue(input).map(Number::longValue).getOrThrow()));
 		}
 		@Override
 		public <T> T write(DynamicOps<T> ops, ChunkPos value) {
-			return ops.createLong(value.toLong());
+			return ops.createLong(value.pack());
 		}
 		@Override
 		public String toString() { return "chunkpos";}

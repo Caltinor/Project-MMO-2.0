@@ -2,8 +2,10 @@ package harmonised.pmmo.client.gui.component;
 
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.TextAlignment;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -48,7 +50,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     }
 
     @Override
-    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
 //        graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
 //        RenderSystem.enableBlend();
 //        RenderSystem.enableDepthTest();
@@ -60,7 +62,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
             selected.render(graphics, getX(), getY(), width, false, getFGColor(), alpha);
         else {
             graphics.enableScissor(this.getX(), this.getY(), this.getRight(), this.getBottom());
-            graphics.drawString(font, title, getX() + 6, getY() + (height - 8) / 2, getFGColor() | Mth.ceil(alpha * 255.0F) << 24);
+            graphics.textRenderer().accept(TextAlignment.LEFT,getX() + 6, getY() + (height - 8) / 2, title.copy().withColor(getFGColor() | Mth.ceil(alpha * 255.0F) << 24));
             graphics.disableScissor();
         }
 
@@ -183,7 +185,6 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) { }
 
     public static class SelectionEntry<T> implements GuiEventListener {
-    	private Font font = Minecraft.getInstance().font;
         public final Component message;
         public T reference;
 
@@ -192,12 +193,11 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
         	this.reference = reference;
         }
 
-        public void render(GuiGraphics graphics, int x, int y, int width, boolean hovered, int fgColor, float alpha) {
+        public void render(GuiGraphicsExtractor graphics, int x, int y, int width, boolean hovered, int fgColor, float alpha) {
             if (hovered)
                 graphics.fill(RenderPipelines.GUI, x, y, x + width, y + ENTRY_HEIGHT, 0xFFA0A0A0);
 
-            FormattedCharSequence text = Language.getInstance().getVisualOrder(FormattedText.composite(font.substrByWidth(message, width - 12)));
-            graphics.drawString(font, text, x + 6, y + 6, fgColor | Mth.ceil(alpha * 255.0F) << 24);
+            graphics.textRenderer().accept(TextAlignment.LEFT, x + 6, y + 6, message.copy().withColor(fgColor | Mth.ceil(alpha * 255.0F) << 24));
         }
 
 		@Override

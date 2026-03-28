@@ -5,7 +5,7 @@ import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.wrappers.BoxDimensions;
 import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.input.CharacterEvent;
@@ -22,6 +22,7 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     protected static final SizeConstraints textConstraint = SizeConstraints.builder().absoluteHeight(12).build();
     private final List<Positioner<?>> children = new ArrayList<>();
     BoxDimensions margin, padding;
+    double scale;
 
     protected ReactiveWidget(int x, int y, int width, int height) {
         super(x, y, width, height, Component.literal("container"));
@@ -42,12 +43,13 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     }
 
     public ResponsiveLayout setPadding(int left, int top, int right, int bottom, double scale) {
+        this.scale = scale;
         this.setPadding(left, top, right, bottom);
-//        Double scaledLeft = (double)left / scale;
-//        Double scaledTop = (double)top / scale;
-//        Double scaledBottom = (double)bottom / scale;
-//        Double scaledRight = (double)right / scale;
-//        this.setPadding(scaledLeft.intValue(), scaledTop.intValue(), scaledRight.intValue(), scaledBottom.intValue());
+        Double scaledLeft = (double)left / scale;
+        Double scaledTop = (double)top / scale;
+        Double scaledBottom = (double)bottom / scale;
+        Double scaledRight = (double)right / scale;
+        this.setPadding(scaledLeft.intValue(), scaledTop.intValue(), scaledRight.intValue(), scaledBottom.intValue());
         return this;
     }
 
@@ -77,10 +79,10 @@ public abstract class ReactiveWidget extends AbstractWidget implements GlossaryF
     public void addChild(Positioner<?> child) {children.add(child);}
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractWidgetRenderState(GuiGraphicsExtractor GuiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
         this.arrangeElements();
         resize();
-        widgets().forEach(widget -> widget.render(guiGraphics, mouseX, mouseY, partialTick));
+        widgets().forEach(widget -> widget.extractRenderState(GuiGraphicsExtractor, mouseX, mouseY, partialTick));
     }
 
     protected List<AbstractWidget> widgets() {

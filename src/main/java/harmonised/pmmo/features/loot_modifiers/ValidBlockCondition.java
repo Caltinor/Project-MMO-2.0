@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import java.util.Optional;
 
@@ -46,9 +45,7 @@ public class ValidBlockCondition implements LootItemCondition{
 	}
 
 	@Override
-	public LootItemConditionType getType() {
-		return GLMRegistry.VALID_BLOCK.get();
-	}
+	public MapCodec<ValidBlockCondition> codec() {return CODEC;}
 
 	public static final MapCodec<ValidBlockCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.STRING.optionalFieldOf("tag")

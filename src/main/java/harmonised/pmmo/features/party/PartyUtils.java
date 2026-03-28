@@ -50,7 +50,7 @@ public class PartyUtils {
 		MutableComponent accept = LangProvider.PARTY_ACCEPT.asComponent().withStyle(acceptStyle);
 		Style declineStyle = Style.EMPTY.withClickEvent(new ClickEvent.RunCommand("/pmmo party decline "+requestID.toString())).withBold(true).withColor(ChatFormatting.RED).withUnderlined(true);
 		MutableComponent decline = LangProvider.PARTY_DECLINE_INVITE.asComponent().withStyle(declineStyle);
-		invitee.displayClientMessage(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline), false);
+		invitee.sendOverlayMessage(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline));
 		
 		invites.put(requestID, new Invite(member.getTeam(), invitee.getUUID()));
 	}

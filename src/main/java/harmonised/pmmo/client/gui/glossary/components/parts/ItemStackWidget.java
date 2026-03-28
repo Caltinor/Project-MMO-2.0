@@ -1,7 +1,7 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -21,13 +21,10 @@ public class ItemStackWidget extends AbstractWidget{
     }
 
     @Override
-    protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.renderItem(stack, this.getX() + 1, this.getY() +1);
-        if (mouseX > this.getX()+1 && mouseX <= this.getX()+17 && mouseY > this.getY()+1 && mouseY <= this.getY()+17) {
-            //for the record i absolutely hate this implementation of renderTooltip.  tf Mojang?!
-            var lines = stack.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), Minecraft.getInstance().player, TooltipFlag.NORMAL).stream()
-                    .map(c -> ClientTooltipComponent.create(c.getVisualOrderText())).toList();
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null, stack);
+    protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        guiGraphics.item(stack, this.getX() + 1, this.getY() +1);
+        if (this.isMouseOver(mouseX, mouseY)) {
+            guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, stack, this.getX() + 20, 100);
         }
     }
 

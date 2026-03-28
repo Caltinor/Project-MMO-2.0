@@ -3,7 +3,7 @@ package harmonised.pmmo.client.gui.glossary.components;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -42,17 +42,17 @@ public class CollapsingPanel extends ReactiveWidget {
     @Override public void resize() {} //Panel does not adjust height beyond parent size constraints
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.enableScissor(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION, this.getX(), this.getY(), collapsed() ? 140 : 0, 0,
+    public void extractWidgetRenderState(GuiGraphicsExtractor GuiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
+        GuiGraphicsExtractor.enableScissor(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_LOCATION, this.getX(), this.getY(), collapsed() ? 140 : 0, 0,
                 this.getWidth(), this.getHeight(), collapsed() ? 7 : 147, 165, 256, 256);
         int offset = (int) (28d / scale);
         int hScaled = (int) (80d / scale);
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, collapsed() ? RIGHT : LEFT, this.getX()+this.width-offset,
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, collapsed() ? RIGHT : LEFT, this.getX()+this.width-offset,
                 this.getY()+ (this.height/2) - (hScaled/2) - 1,
                 0, 0, offset, hScaled, 7, 20, 7, 20);
-        super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.disableScissor();
+        super.extractWidgetRenderState(GuiGraphicsExtractor, mouseX, mouseY, partialTick);
+        GuiGraphicsExtractor.disableScissor();
     }
 
     @Override

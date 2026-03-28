@@ -48,7 +48,7 @@ public class MobAttributeHandler {
 	public static void onBossAdd(MobSpawnEvent.PositionCheck event) {
 		if (!Config.server().mobScaling().enabled())
 			return;
-		if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)
+		if (event.getEntity().is(Tags.EntityTypes.BOSSES)
 				&& event.getEntity() instanceof LivingEntity entity
 				&& event.getLevel() instanceof ServerLevel level) {
 			handle(entity, level
@@ -61,7 +61,7 @@ public class MobAttributeHandler {
 	public static void onMobSpawn(MobSpawnEvent.PositionCheck event) {
 		if (!Config.server().mobScaling().enabled())
 			return;
-		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
+		if (event.getEntity().is(Reference.MOB_TAG)) {
 			handle(event.getEntity(), event.getLevel().getLevel()
 					, new Vec3(event.getX(), event.getY(), event.getZ())
 					, event.getLevel().getDifficulty().getId());
@@ -85,7 +85,7 @@ public class MobAttributeHandler {
 		var globalBioMods = bioData.globalModifiers();
 		var mergedModifiers = mergeModifiers(Stream.of(dimMods, bioMods, globalDimMods, globalBioMods).collect(Collectors.toList()));
 
-		final float bossMultiplier = entity.getType().is(Tags.EntityTypes.BOSSES) ? Config.server().mobScaling().bossScaling().floatValue() : 1f;
+		final float bossMultiplier = entity.is(Tags.EntityTypes.BOSSES) ? Config.server().mobScaling().bossScaling().floatValue() : 1f;
 
 		computeAndApplyModifiers(entity, mergedModifiers, nearbyPlayers, diffScale, bossMultiplier);
 

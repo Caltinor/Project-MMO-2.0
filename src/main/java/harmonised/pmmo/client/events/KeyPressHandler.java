@@ -55,15 +55,14 @@ public class KeyPressHandler {
 	            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));
             	}
             	else
-            		mc.player.displayClientMessage(LangProvider.VEIN_BLACKLIST.asComponent(), false);
+            		mc.player.sendOverlayMessage(LangProvider.VEIN_BLACKLIST.asComponent());
             }
 			if (ClientSetup.TOGGLE_BRKSPD.isDown()) {
 				Config.BREAK_SPEED_PERKS.set(!Config.BREAK_SPEED_PERKS.get());
 				Networking.sendToServer(new SP_ToggleBreakSpeed(Config.BREAK_SPEED_PERKS.get()));
-				mc.player.displayClientMessage(Config.BREAK_SPEED_PERKS.get()
+				mc.player.sendOverlayMessage(Config.BREAK_SPEED_PERKS.get()
 						? LangProvider.TOGGLE_BRKSPD_ENABLED.asComponent()
-						: LangProvider.TOGGLE_BRKSPD_DISABLED.asComponent()
-				, false);
+						: LangProvider.TOGGLE_BRKSPD_DISABLED.asComponent());
 			}
             if (ClientSetup.SHOW_LIST.isDown()) {
             	Config.SKILL_LIST_DISPLAY.set(!Config.SKILL_LIST_DISPLAY.get());
@@ -81,7 +80,7 @@ public class KeyPressHandler {
             }
             if (ClientSetup.CYCLE_VEIN.isDown()) {
             	VeinTracker.nextMode();
-            	mc.player.displayClientMessage(LangProvider.VEIN_SHAPE.asComponent(VeinTracker.mode.name()), false);
+            	mc.player.sendOverlayMessage(LangProvider.VEIN_SHAPE.asComponent(VeinTracker.mode.name()));
             	Networking.sendToServer(new SP_SetVeinShape(VeinTracker.mode));
             }
             if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {

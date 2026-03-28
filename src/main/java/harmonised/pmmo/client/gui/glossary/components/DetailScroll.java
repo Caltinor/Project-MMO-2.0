@@ -6,7 +6,7 @@ import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.wrappers.BoxDimensions;
 import harmonised.pmmo.api.client.wrappers.Positioner;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractTextAreaWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -21,7 +21,7 @@ public class DetailScroll extends AbstractTextAreaWidget implements GlossaryFilt
 	private BoxDimensions margin, padding;
 
 	public DetailScroll(int x, int y, int width, int height) {
-		super(x, y, width, height, Component.literal("Panel Scroll Widget"));
+		super(x, y, width, height, Component.literal("Panel Scroll Widget"), defaultSettings(50));
 		setMargin(0, 0, 0, 0);
 		setPadding(0, 0, 0, 0);
 	}
@@ -70,14 +70,14 @@ public class DetailScroll extends AbstractTextAreaWidget implements GlossaryFilt
 	}
 
 	@Override
-	protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+	protected void extractContents(GuiGraphicsExtractor GuiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
 		setPadding(padding.left(), -(int)scrollAmount(), padding.right(), padding.bottom());
 		arrangeElements();
 		visibleChildren().forEach(poser -> {
 			AbstractWidget widget = ((AbstractWidget)poser.get());
 			if (isInFrame(widget)) {
 				widget.setFocused(widget.isMouseOver(mouseX, mouseY + scrollAmount()));
-				widget.render(guiGraphics, mouseX, mouseY, partialTick);
+				widget.extractRenderState(GuiGraphicsExtractor, mouseX, mouseY + (int)scrollAmount(), partialTick);
 			}
 		});
 	}

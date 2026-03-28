@@ -1,6 +1,6 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.layouts.LayoutElement;
@@ -17,8 +17,8 @@ public class ItemComponent implements Renderable, LayoutElement {
     public ItemComponent(ItemStack stack) {this.stack = stack;}
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.renderItem(stack, x, y);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        guiGraphics.item(stack, x, y);
     }
 
     @Override public void setX(int x) {this.x = x;}

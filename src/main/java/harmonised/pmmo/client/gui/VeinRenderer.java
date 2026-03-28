@@ -2,6 +2,8 @@ package harmonised.pmmo.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -9,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
+import java.awt.*;
 import java.util.Set;
 
 public class VeinRenderer {
@@ -35,10 +38,16 @@ public class VeinRenderer {
     {
         stack.pushPose();
         Matrix4f matrix4f = stack.last().pose();
-        int red = 255;
-        int green = 0;
-        int blue = 255;
-        int alpha = 255;
+        Color color = new Color(0xFFFF00FF);
+        try {
+            color = new Color(Integer.parseUnsignedInt(Config.VEIN_COLOR.get(), 16));
+        } catch (Exception ignored) {
+            MsLoggy.ERROR.log(MsLoggy.LOG_CODE.GUI, "Vein color in client config invalid.  defaulting to PMMO purple");
+        }
+        int red = color.getRed();
+        int green = color.getGreen();
+        int blue = color.getBlue();
+        int alpha = color.getAlpha();
 
         for(int i = 0; i < 12; i++)
         {
@@ -47,18 +56,18 @@ public class VeinRenderer {
             switch(mode)
             {
                 case 0:
-                    builder.addVertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ()).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(2);
-                    builder.addVertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() + 1).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(2);
+                    builder.addVertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ()).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(3);
+                    builder.addVertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() + 1).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(3);
                     break;
 
                 case 1:
-                    builder.addVertex(matrix4f, pos.getX(), pos.getY() + modulus, pos.getZ() + divide).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(2);
-                    builder.addVertex(matrix4f, pos.getX() + 1, pos.getY() + modulus, pos.getZ() + divide).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(2);
+                    builder.addVertex(matrix4f, pos.getX(), pos.getY() + modulus, pos.getZ() + divide).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(3);
+                    builder.addVertex(matrix4f, pos.getX() + 1, pos.getY() + modulus, pos.getZ() + divide).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(3);
                     break;
 
                 case 2:
-                    builder.addVertex(matrix4f, pos.getX() + divide, pos.getY(), pos.getZ() + modulus).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(2);
-                    builder.addVertex(matrix4f, pos.getX() + divide, pos.getY() + 1, pos.getZ() + modulus).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(2);
+                    builder.addVertex(matrix4f, pos.getX() + divide, pos.getY(), pos.getZ() + modulus).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(3);
+                    builder.addVertex(matrix4f, pos.getX() + divide, pos.getY() + 1, pos.getZ() + modulus).setColor(red, green, blue, alpha).setNormal(0, 0, 0).setLineWidth(3);
                     break;
             }
         }
