@@ -11,6 +11,7 @@ import harmonised.pmmo.util.TagUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -23,27 +24,26 @@ import java.util.Optional;
 public class RareDropModifier extends LootModifier{
 	
 	public static final MapCodec<RareDropModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(instance.group(
-			ItemStack.CODEC.fieldOf("item").forGetter(tlm -> tlm.drop),
-			Codec.INT.fieldOf("count").forGetter(tlm -> tlm.drop.getCount()),
+			ItemStackTemplate.CODEC.fieldOf("item").forGetter(tlm -> tlm.drop),
+			Codec.INT.fieldOf("count").forGetter(tlm -> tlm.drop.count()),
 			Codec.DOUBLE.fieldOf("chance").forGetter(tlm -> tlm.chance),
 			Codec.BOOL.optionalFieldOf("per_level").forGetter(tlm -> Optional.of(tlm.perLevel)),
 			Codec.STRING.optionalFieldOf("skill").forGetter(tlm -> Optional.of(tlm.skill))
 			)).apply(instance, RareDropModifier::new));
 
-	public ItemStack drop;
+	public ItemStackTemplate drop;
 	public double chance;
 	public boolean perLevel;
 	public String skill;
 
-	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStack lootItem, int count, double chance) {
+	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStackTemplate lootItem, int count, double chance) {
 		this(conditionsIn, lootItem, count, chance, Optional.of(false), Optional.empty());
 	}
-	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStack lootItem, int count, double chance,
+	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStackTemplate lootItem, int count, double chance,
 							Optional<Boolean> perLevel, Optional<String> skill) {
 		super(conditionsIn);
 		this.chance = chance;
-		this.drop = lootItem;
-		this.drop.setCount(count);
+		this.drop = lootItem.withCount(count);
 		this.perLevel = perLevel.orElse(false);
 		this.skill = skill.orElse("");
 	}
@@ -61,9 +61,9 @@ public class RareDropModifier extends LootModifier{
 		if (perLevel && context.getParameter(LootContextParams.THIS_ENTITY) instanceof Player player) {
 			chance *= Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 		}
-		double rand = MsLoggy.DEBUG.logAndReturn(context.getRandom().nextDouble(), LOG_CODE.FEATURE, "Rand: {} as test for "+ TagUtils.stackTag(drop, context.getLevel()));
+		double rand = MsLoggy.DEBUG.logAndReturn(context.getRandom().nextDouble(), LOG_CODE.FEATURE, "Rand: {} as test for "+ TagUtils.stackTag(drop.create(), context.getLevel()));
 		if (rand <= chance) {
-			generatedLoot.add(drop.copy());
+			generatedLoot.add(drop.create());
 		}
 		return generatedLoot;
 	}

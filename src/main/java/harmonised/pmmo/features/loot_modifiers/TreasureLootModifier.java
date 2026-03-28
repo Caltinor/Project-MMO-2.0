@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -25,29 +26,27 @@ public class TreasureLootModifier extends LootModifier{
 
 	
 	public static final MapCodec<TreasureLootModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(instance.group(
-			ItemStack.CODEC.optionalFieldOf("item").forGetter(tlm -> tlm.drop),
+			ItemStackTemplate.CODEC.optionalFieldOf("item").forGetter(tlm -> tlm.drop),
 			Codec.INT.fieldOf("count").forGetter(tlm -> tlm.count),
 			Codec.DOUBLE.fieldOf("chance").forGetter(tlm -> tlm.chance),
 			Codec.BOOL.optionalFieldOf("per_level").forGetter(tlm -> Optional.of(tlm.perLevel)),
 			Codec.STRING.optionalFieldOf("skill").forGetter(tlm -> Optional.of(tlm.skill))
 			)).apply(instance, TreasureLootModifier::new));
 
-	public Optional<ItemStack> drop;
+	public Optional<ItemStackTemplate> drop;
 	public final int count;
 	public double chance;
 	public boolean perLevel;
 	public String skill;
 
-	public TreasureLootModifier(LootItemCondition[] conditionsIn, Optional<ItemStack> lootItem, int count, double chance) {
+	public TreasureLootModifier(LootItemCondition[] conditionsIn, Optional<ItemStackTemplate> lootItem, int count, double chance) {
 		this(conditionsIn, lootItem, count, chance, Optional.of(false), Optional.empty());
 	}
-	public TreasureLootModifier(LootItemCondition[] conditionsIn, Optional<ItemStack> lootItem, int count,
+	public TreasureLootModifier(LootItemCondition[] conditionsIn, Optional<ItemStackTemplate> lootItem, int count,
 								double chance, Optional<Boolean> perLevel, Optional<String> skill) {
 		super(conditionsIn);
 		this.chance = chance;
-		this.drop = lootItem;
-		if (drop.isPresent())
-			this.drop.get().setCount(count);
+		this.drop = lootItem.map(ist -> ist.withCount(count));
 		this.count = count;
 		this.perLevel = perLevel.orElse(false);
 		this.skill = skill.orElse("");
@@ -72,8 +71,8 @@ public class TreasureLootModifier extends LootModifier{
 			//being broken.  this is the logic for Extra Drops
 			BlockState state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
 			if (state != null && drop.isEmpty()) {
-				drop = Optional.of(state.getDrops(builderFromContext(context)).get(0));
-				drop.get().setCount(count);
+				drop = Optional.of(ItemStackTemplate.fromNonEmptyStack(state.getDrops(builderFromContext(context)).get(0)));
+				drop.get().create().setCount(count);
 			}
 			
 			//Notify player that their skill awarded them an extra drop.
@@ -81,7 +80,7 @@ public class TreasureLootModifier extends LootModifier{
 			if (breaker instanceof Player player) {
 				player.sendOverlayMessage(LangProvider.FOUND_TREASURE.asComponent());
 			}
-			generatedLoot.add(drop.get().copy());
+			generatedLoot.add(drop.get().create());
 		}
 		return generatedLoot;
 	}

@@ -15,7 +15,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -38,24 +38,30 @@ public class EasyItemConfigProvider extends PmmoDataProvider<ObjectData> {
         data.forEach((id, builder) -> this.add(id, builder.end()));
     }
 
+    private boolean isDamageableItem(ItemStackTemplate stack) {
+        return stack.components().getPatch(DataComponents.MAX_DAMAGE) != null
+                && stack.components().getPatch(DataComponents.UNBREAKABLE) == null
+                && stack.components().getPatch(DataComponents.DAMAGE) != null;
+    }
+
     private void populateData() {
         //====FOOD============
         BuiltInRegistries.ITEM.stream()
-                .filter(item -> new ItemStack(item).has(DataComponents.FOOD))
-                .map(ItemStack::new).forEach(item -> {
+                .filter(item -> item != Items.AIR && new ItemStackTemplate(item).components().getPatch(DataComponents.FOOD) != null)
+                .map(ItemStackTemplate::new).forEach(item -> {
             FoodProperties props = item.get(DataComponents.FOOD);
             long xp = (props.nutrition() * 10L) +
                     (long)(props.saturation() * 100f);
-            this.get(item.getItem()).addXpValues(EventType.CONSUME, Map.of("endurance", xp));
-            this.get(item.getItem()).addXpValues(EventType.CRAFT, Map.of("cooking", xp));
-            this.get(item.getItem()).addXpValues(EventType.SMELT, Map.of("cooking", xp));
+            this.get(item.item().value()).addXpValues(EventType.CONSUME, Map.of("endurance", xp));
+            this.get(item.item().value()).addXpValues(EventType.CRAFT, Map.of("cooking", xp));
+            this.get(item.item().value()).addXpValues(EventType.SMELT, Map.of("cooking", xp));
         });
         //====REPAIRING======
         BuiltInRegistries.ITEM.stream()
-                .filter(item -> new ItemStack(item).isDamageableItem())
-                .map(ItemStack::new).forEach(item -> {
-            long xp = (item.getMaxDamage() / 4) * 100L;
-            this.get(item.getItem()).addXpValues(EventType.ANVIL_REPAIR, Map.of("smithing", xp));
+                .filter(item ->  item != Items.AIR && this.isDamageableItem(new ItemStackTemplate(item)))
+                .map(ItemStackTemplate::new).forEach(item -> {
+            long xp = (item.getOrDefault(DataComponents.MAX_DAMAGE, 0) / 4) * 100L;
+            this.get(item.item().value()).addXpValues(EventType.ANVIL_REPAIR, Map.of("smithing", xp));
         });
 
         var logic = new LogicEntry(BehaviorToPrevious.ADD_TO, false, List.of(

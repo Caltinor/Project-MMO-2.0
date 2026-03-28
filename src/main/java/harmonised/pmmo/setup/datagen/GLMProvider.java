@@ -18,6 +18,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -60,7 +61,7 @@ public abstract class GLMProvider implements DataProvider {
 				new LootItemCondition[] {
 					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
 					new ValidBlockCondition(validBlocks)
-				}, Optional.of(drop.getDefaultInstance()), count, chance);
+				}, Optional.of(new ItemStackTemplate(drop)), count, chance);
 	}
 
 	public TreasureLootModifier of(Block validBlocks, Item drop, int count, double chance, String skill, int minLevel) {
@@ -68,7 +69,7 @@ public abstract class GLMProvider implements DataProvider {
 				new LootItemCondition[] {
 					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
 					new ValidBlockCondition(validBlocks)
-				}, Optional.of(drop.getDefaultInstance()), count, chance);
+				}, Optional.of(new ItemStackTemplate(drop)), count, chance);
 	}
 
 	/**Used to specify that a tag member should drop extra of itself.
@@ -95,7 +96,7 @@ public abstract class GLMProvider implements DataProvider {
 				new LootItemCondition[] {
 						LootTableIdCondition.builder(BuiltInLootTables.FISHING.identifier()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
-				}, drop.getDefaultInstance(), count, chance);
+				}, new ItemStackTemplate(drop), count, chance);
 	}
 
 	public RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel) {
@@ -108,7 +109,7 @@ public abstract class GLMProvider implements DataProvider {
 						LootItemKilledByPlayerCondition.killedByPlayer().build(),
 						LootTableIdCondition.builder(mob.getDefaultLootTable().get().identifier()).build(),
 						new SkillLootConditionKill(minLevel, maxLevel, skill)
-				}, drop.getDefaultInstance(), count, chance);
+				}, new ItemStackTemplate(drop), count, chance);
 	}
 	
 	public RareDropModifier mob(EntityType<?> mob, Item drop, int count, double chance, String skill, int minLevel) {
@@ -117,7 +118,7 @@ public abstract class GLMProvider implements DataProvider {
 
 	@Override
 	public final CompletableFuture<?> run(CachedOutput cache) {
-		return this.registries.thenCompose(registries -> this.run(cache, registries));
+		return this.registries.thenCompose(registry -> this.run(cache, registry));
 	}
 	public CompletableFuture<?> run(CachedOutput cache, HolderLookup.Provider registries) {
 		start();

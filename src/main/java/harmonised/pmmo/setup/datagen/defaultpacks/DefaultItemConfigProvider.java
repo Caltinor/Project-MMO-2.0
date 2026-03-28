@@ -21,7 +21,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -83,15 +83,15 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
 
         //====FOOD============
         BuiltInRegistries.ITEM.stream()
-                .filter(item -> new ItemStack(item).has(DataComponents.FOOD))
-                .map(ItemStack::new).forEach(item -> {
+                .filter(item ->  item != Items.AIR && new ItemStackTemplate(item).components().getPatch(DataComponents.FOOD) != null)
+                .map(ItemStackTemplate::new).forEach(item -> {
                     FoodProperties props = item.get(DataComponents.FOOD);
                     long xp = (props.nutrition() * 5L) +
                             (long)(props.saturation() * 50f);
-                    this.get(item.getItem()).addXpValues(EventType.CONSUME, Map.of("endurance", xp));
-                    this.get(item.getItem()).addXpValues(EventType.CRAFT, Map.of("cooking", xp));
-                    this.get(item.getItem()).addXpValues(EventType.SMELT, Map.of("cooking", xp));
-                    this.get(item.getItem()).addXpValues(EventType.FISH, Map.of("fishing", xp*2));
+                    this.get(item.item().value()).addXpValues(EventType.CONSUME, Map.of("endurance", xp));
+                    this.get(item.item().value()).addXpValues(EventType.CRAFT, Map.of("cooking", xp));
+                    this.get(item.item().value()).addXpValues(EventType.SMELT, Map.of("cooking", xp));
+                    this.get(item.item().value()).addXpValues(EventType.FISH, Map.of("fishing", xp*2));
                 });
         get(Items.ENCHANTED_GOLDEN_APPLE).addBonus(ModifierDataType.HELD, Map.of("magic", 2.0));
         get(Items.GOLDEN_APPLE).addBonus(ModifierDataType.HELD, Map.of("magic", 1.5));
@@ -99,10 +99,10 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
 
         //====REPAIRING======
         BuiltInRegistries.ITEM.stream()
-                .filter(item -> new ItemStack(item).isDamageableItem())
-                .map(ItemStack::new).forEach(item -> {
-                    long xp = (item.getMaxDamage() / 4) * 10L;
-                    this.get(item.getItem()).addXpValues(EventType.ANVIL_REPAIR, Map.of("smithing", xp));
+                .filter(item -> item != Items.AIR && this.isDamageableItem(new ItemStackTemplate(item)))
+                .map(ItemStackTemplate::new).forEach(item -> {
+                    long xp = (item.getOrDefault(DataComponents.MAX_DAMAGE, 0) / 4) * 10L;
+                    this.get(item.item().value()).addXpValues(EventType.ANVIL_REPAIR, Map.of("smithing", xp));
                 });
         
         //POTIONS
@@ -860,6 +860,12 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
     
     protected ObjectData.Builder toolReq(Item tool, long asTool, long asWeapon, String skill) {
         return get(tool).addReq(ReqType.TOOL, Map.of(skill, asTool)).addReq(ReqType.WEAR, Map.of(skill, asTool)).addReq(ReqType.WEAPON, Map.of("combat", asWeapon));
+    }
+
+    private boolean isDamageableItem(ItemStackTemplate stack) {
+        return stack.components().getPatch(DataComponents.MAX_DAMAGE) != null
+                && stack.components().getPatch(DataComponents.UNBREAKABLE) == null
+                && stack.components().getPatch(DataComponents.DAMAGE) != null;
     }
 
     @Override

@@ -19,6 +19,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.fml.LogicalSide;
@@ -83,23 +84,23 @@ public class DataMirror implements IDataStorage{
 	public IDataStorage get() {return this;}
 
 	//GLM clones
-	public record GLM(Component header, ItemStack drop, int count, double chance, boolean perLevel, String skill, LootItemCondition[] conditions) {
+	public record GLM(Component header, ItemStackTemplate drop, int count, double chance, boolean perLevel, String skill, LootItemCondition[] conditions) {
 		public static void add(RareDropModifier modifier) {
 			DataMirror data = (DataMirror) Core.get(LogicalSide.CLIENT).getData();
-			data.lootModifiers.add(new GLM(LangProvider.GLM_HEADER_RARE.asComponent().withStyle(ChatFormatting.BOLD), modifier.drop, modifier.drop.getCount(),
+			data.lootModifiers.add(new GLM(LangProvider.GLM_HEADER_RARE.asComponent().withStyle(ChatFormatting.BOLD), modifier.drop, modifier.drop.count(),
 					modifier.chance, modifier.perLevel, modifier.skill, modifier.getConditions()));
 		}
 
 		public static void add(TreasureLootModifier modifier) {
 			DataMirror data = (DataMirror) Core.get(LogicalSide.CLIENT).getData();
-			data.lootModifiers.add(new GLM(LangProvider.GLM_HEADER_TREASURE.asComponent().withStyle(ChatFormatting.BOLD), modifier.drop.orElse(ItemStack.EMPTY), modifier.count,
+			data.lootModifiers.add(new GLM(LangProvider.GLM_HEADER_TREASURE.asComponent().withStyle(ChatFormatting.BOLD), modifier.drop.orElse(null), modifier.count,
 					modifier.chance, modifier.perLevel, modifier.skill, modifier.getConditions()));
 		}
 
 		public List<Component> getGUILines(Core core) {
 			List<Component> linesOut = new ArrayList<>();
 			linesOut.add(header);
-			Component dropText = drop.is(Items.AIR) ? Component.literal("itself") : drop.getDisplayName();
+			Component dropText = drop.is(Items.AIR) ? Component.literal("itself") : drop.create().getDisplayName();
 			linesOut.add(LangProvider.GLM_DROP_ITEM.asComponent(count, dropText));
 			double actualChance = chance * (perLevel ? core.getData().getLevel(skill, null) : 1d);
 			String actualChanceFormated = String.valueOf(actualChance * 100d);
