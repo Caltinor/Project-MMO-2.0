@@ -55,7 +55,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Generate Data
-        run: ./gradlew rundata
+        run: ./gradlew :runClientData
       - name: Build
         run: ./gradlew :build
       - name: Cache
