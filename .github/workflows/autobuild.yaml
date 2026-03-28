@@ -94,8 +94,8 @@ jobs:
           loaders: |
             neoforge
           game-versions: |
-            1.21
-            1.21.1
+            26.1
+            26.1.0
           java: |
             ${{ needs.setup.outputs.java_version }}
       - name: Upload to Modrinth
@@ -114,8 +114,8 @@ jobs:
           loaders: |
             neoforge
           game-versions: |
-            1.21
-            1.21.1
+            26.1
+            26.1.0
           java: |
             ${{ needs.setup.outputs.java_version }}
   message:
