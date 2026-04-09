@@ -3,10 +3,10 @@ package harmonised.pmmo.features.loot_modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.core.Core;
-import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.criterion.SimpleCriterionTrigger;
+import net.minecraft.advancements.criterion.ContextAwarePredicate;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.LogicalSide;
 
@@ -37,12 +37,18 @@ public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.Trigge
 
 	public record Longs(Optional<Long> min, Optional<Long> max) implements MinMaxBounds<Long> {
 		public static final Longs ANY = new Longs(Optional.empty(), Optional.empty());
-		public static Codec<Longs> CODEC = MinMaxBounds.createCodec(Codec.LONG, Longs::new);
+		public static Codec<Longs> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.LONG.optionalFieldOf("min").forGetter(Longs::min),
+				Codec.LONG.optionalFieldOf("max").forGetter(Longs::max)
+		).apply(instance, Longs::new));
 
 		public boolean matches(long value) {
 			return value <= max.orElse(Long.MAX_VALUE) && value >= min.orElse(0L);
 		}
 
 		public static Longs between(long min, long max) {return new Longs(Optional.of(min), Optional.of(max));}
+
+		@Override
+		public Bounds<Long> bounds() {return new Bounds<>(min, max);}
 	}
 }
