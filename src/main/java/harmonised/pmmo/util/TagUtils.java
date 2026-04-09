@@ -92,7 +92,13 @@ public class TagUtils {
 	  */
 	public static CompoundTag entityTag(Entity entity) {
 		TagValueOutput output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, HolderLookup.Provider.create(entity.registryAccess().listRegistries()));
-		entity.saveWithoutId(output);
+		try {
+			entity.saveWithoutId(output);
+		} catch (Exception _) {
+			MsLoggy.WARN.log(MsLoggy.LOG_CODE.DATA,
+					"Entity {} could not be serialized on the client.  Some NBT behavior may not work correctly.",
+					entity.getDisplayName().toString());
+		}
 		return output.buildResult();
 	}
 	
