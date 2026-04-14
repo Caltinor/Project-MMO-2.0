@@ -77,9 +77,14 @@ public class PlayerTickHandler {
 		else if (player.isCrouching())
 			processEvent(EventType.CROUCH, core, event);
 		
-		//update tracker variables
-		healthLast.put(player.getUUID(), player.getHealth());
-		moveLast.put(player.getUUID(), player.position());
+		//update tracker variables. Gate to server-side: these static maps are shared
+		//across sides on an integrated server, and letting the client thread write to
+		//them clobbers the snapshot the server's next 10-tick cycle reads, yielding
+		//magnitude=0 / healthDiff=0 on the next server tick for this player.
+		if (player instanceof ServerPlayer) {
+			healthLast.put(player.getUUID(), player.getHealth());
+			moveLast.put(player.getUUID(), player.position());
+		}
 	}
 	
 	private static void processEvent(EventType type, Core core, PlayerTickEvent event) {
@@ -138,9 +143,9 @@ public class PlayerTickHandler {
 			}
 			
 			CheeseTracker.applyAntiCheese(type, source, event.getEntity(), xpAward);
-			
+
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
-			core.awardXP(partyMembersInRange, xpAward);	
+			core.awardXP(partyMembersInRange, xpAward);
 		}
 	}
 
