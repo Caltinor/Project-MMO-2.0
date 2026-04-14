@@ -110,6 +110,8 @@ public class Experience {
 
         public XpLevel merge(XpLevel other) {
             level += other.getLevel();
+            xpToNext = getXpForNextLevel(level);
+            xpToGain = level > 0L ? getXpForNextLevel(level - 1L) : 0L;
             return this;
         }
 

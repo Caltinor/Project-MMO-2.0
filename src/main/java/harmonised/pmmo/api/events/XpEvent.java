@@ -25,7 +25,7 @@ public class XpEvent extends PlayerEvent implements ICancellableEvent {
     }
 
     public long endLevel() {
-        Experience newXp = new Experience().merge(ogXp);
+        Experience newXp = new Experience(new Experience.XpLevel(ogXp.getLevel().getLevel()), ogXp.getXp());
         newXp.addXp(amountAwarded);
         return newXp.getLevel().getLevel();
     }
