@@ -1,7 +1,7 @@
 # Changelog
 
-## [1.21.1-2.8.40] - 2026-02-14
+## [1.21.1-2.8.41] - 2026-04-13
 ### Bugfixes/Tweaks-
-- Fixed Glossary lag (filtering recommendation from last version no longer necessary)
-- Fixed all biome/dimension textures defaulting to overworld/plains regardless of texture presence
+- Fixed XpEvent firing levelup erroneously with static levels
+- Fixed Health and sprint XP calculation errors on integrated servers
 
