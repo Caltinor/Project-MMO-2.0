@@ -47,11 +47,11 @@ public enum EventType implements StringRepresentable, GuiEnumGroup {
 	SKILL_UP(false, false, false, "", LangProvider.ENUM_SKILL_UP),
 	SKILL_DOWN(false, false, false, "", LangProvider.ENUM_SKILL_DOWN),
 	SPRINTING(false, false, true, "agility", LangProvider.ENUM_SPRINTING),
-		SUBMERGED(false, false, true, "swimming", LangProvider.ENUM_SUBMERGED),
+	SUBMERGED(false, false, true, "swimming", LangProvider.ENUM_SUBMERGED),
 		SWIMMING(false, false, true, "swimming", LangProvider.ENUM_SWIMMING),
 		DIVING(false, false, true, "swimming", LangProvider.ENUM_DIVING),
 		SURFACING(false, false, true, "swimming", LangProvider.ENUM_SURFACING),
-	SWIM_SPRINTING(false, false, true, "swimming", LangProvider.ENUM_SWIM_SPRINTING),
+		SWIM_SPRINTING(false, false, true, "swimming", LangProvider.ENUM_SWIM_SPRINTING),
 	TAMING(false, false, true, "taming", LangProvider.ENUM_TAMING);
 	
 	public final boolean itemApplicable;
