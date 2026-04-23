@@ -29,6 +29,10 @@ public class EventTriggerRegistry {
 		Preconditions.checkNotNull(listenerID);
 		eventListeners.get(eventType).add(Pair.of(listenerID, executeOnTrigger));
 	}
+
+	public boolean hasListener(EventType eventType) {
+		return eventListeners.containsKey(eventType) && !eventListeners.get(eventType).isEmpty();
+	}
 	
 	public CompoundTag executeEventListeners(EventType eventType, Event event, CompoundTag dataIn) {
 		List<Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> listeners = eventListeners.get(eventType);

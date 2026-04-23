@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
@@ -14,13 +13,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -250,7 +248,7 @@ public class CheeseTracker {
 				)));
 		
 		public void applyAFK(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
-			AFKTracker afkData = AFK_DATA.computeIfAbsent(player.getUUID(), p -> new HashMap<>())
+			AFKTracker afkData = AFK_DATA.computeIfAbsent(player.getUUID(), p -> new EnumMap<>(EventType.class))
 					.computeIfAbsent(event, e -> new AFKTracker(player, minTime(), cooloff(), toleranceFlat(), strictTolerance())).update(player);
 			if ((this.source().isEmpty() || this.source().contains(source.toString())) && afkData.isAFK()) {
 				awardIn.keySet().forEach(skill -> {
@@ -265,7 +263,7 @@ public class CheeseTracker {
 			}
 		}
 		public void applyDiminuation(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
-			var tracker = DIMINISH_DATA.computeIfAbsent(player.getUUID(), p -> new HashMap<>()).computeIfAbsent(event, e -> new DiminishTracker(retention));
+			var tracker = DIMINISH_DATA.computeIfAbsent(player.getUUID(), p -> new EnumMap<>(EventType.class)).computeIfAbsent(event, e -> new DiminishTracker(retention));
 			if (this.source().isEmpty() || this.source().contains(source.toString())) {				
 				tracker.diminish();
 				awardIn.keySet().forEach(skill -> {
@@ -276,7 +274,7 @@ public class CheeseTracker {
 		}
 		public void applyNormalization(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {			
 			if (this.source().isEmpty() || this.source().contains(source.toString())) {
-				NormTracker norms = NORMALIZED_DATA.computeIfAbsent(player.getUUID(), p -> new HashMap<>()).computeIfAbsent(event, e -> new NormTracker(retention));
+				NormTracker norms = NORMALIZED_DATA.computeIfAbsent(player.getUUID(), p -> new EnumMap<>(EventType.class)).computeIfAbsent(event, e -> new NormTracker(retention));
 				norms.retainTimeRemaining = retention;
 				awardIn.forEach((skill, value) -> {
 					long norm = norms.norms.computeIfAbsent(skill, s -> value);

@@ -57,22 +57,31 @@ public class PerkRegistry {
 
 	public CompoundTag getDefaults(ResourceLocation id) {return perks.getOrDefault(id, Perk.empty()).propertyDefaults().copy();}
 	
+	public boolean hasPerk(EventType cause) {
+		List<CompoundTag> list = Config.perks().perks().get(cause);
+		return list != null && !list.isEmpty();
+	}
+
 	public CompoundTag executePerk(EventType cause, Player player, @NotNull CompoundTag dataIn) {
 		if (player == null) return new CompoundTag();
 		CompoundTag output = new CompoundTag();
-		Config.perks().perks().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
+		List<CompoundTag> list = Config.perks().perks().get(cause);
+		if (list == null || list.isEmpty()) return output;
+		for (CompoundTag src : list) {
 			output.merge(processPerk(src, output, player, dataIn));
-		});
+		}
 		return output;
 	}
 
 	public CompoundTag executePerkFiltered(EventType cause, Player player, String filterTag, String filterValue, @NotNull CompoundTag dataIn) {
 		if (player == null) return new CompoundTag();
 		CompoundTag output = new CompoundTag();
-		Config.perks().perks().getOrDefault(cause, new ArrayList<>()).stream()
-		.filter(tag -> tag.getString(filterTag).equals(filterValue)).toList().forEach(src -> {
+		List<CompoundTag> list = Config.perks().perks().get(cause);
+		if (list == null || list.isEmpty()) return output;
+		for (CompoundTag src : list) {
+			if (!src.getString(filterTag).equals(filterValue)) continue;
 			output.merge(processPerk(src, output, player, dataIn));
-		});
+		}
 		return output;
 	}
 

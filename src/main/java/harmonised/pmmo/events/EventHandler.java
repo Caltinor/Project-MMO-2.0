@@ -95,6 +95,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
 		Core.get(event.getEntity().level()).invalidateModifierCache(event.getEntity().getUUID());
+		harmonised.pmmo.events.impl.PlayerTickHandler.clearPlayer(event.getEntity().getUUID());
 	}
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerEvent.PlayerChangeGameModeEvent event) {

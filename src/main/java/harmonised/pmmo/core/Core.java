@@ -219,7 +219,7 @@ public class Core {
 		CheeseTracker.applyAntiCheese(type, source, player, xpGains);
 
 		loggables[3] = MsLoggy.mapToString(xpGains);
-		MsLoggy.INFO.log(LOG_CODE.XP, "XP: {} base:{}, afterBonus:{}, afterAntiCheese:{}", loggables);
+		MsLoggy.INFO.log(LOG_CODE.XP, "XP: {} base:{}, afterBonus:{}, afterAntiCheese:{}", (Object[]) loggables);
 
 		return xpGains;
 	}	

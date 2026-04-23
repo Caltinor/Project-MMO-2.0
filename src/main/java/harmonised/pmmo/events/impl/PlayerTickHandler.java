@@ -29,6 +29,16 @@ import java.util.UUID;
 public class PlayerTickHandler {
 	private static final Map<UUID, Float> healthLast = new HashMap<>();
 	private static final Map<UUID, Vec3> moveLast = new HashMap<>();
+	//Per-player, per-skill fractional XP carry. Small per-tick awards (e.g. 0.1 swim XP)
+	//would otherwise truncate to 0 every cycle via (long)value. We accumulate the remainder
+	//and flush integer portions whenever they cross a whole unit.
+	private static final Map<UUID, Map<String, Double>> xpFractions = new HashMap<>();
+
+	public static void clearPlayer(UUID uuid) {
+		healthLast.remove(uuid);
+		moveLast.remove(uuid);
+		xpFractions.remove(uuid);
+	}
 
 	public static void handle(PlayerTickEvent.Post event) {
 		//execute only on every 10th tick
@@ -47,7 +57,7 @@ public class PlayerTickHandler {
 		//Compute tick-scoped data once: party membership doesn't change within a tick, and
 		//Core.getConsolidatedModifierMap is cached per (uuid, tickCount) so repeat calls are O(1).
 		TickContext ctx = new TickContext(core, event, player instanceof ServerPlayer sp
-				? PartyUtils.getPartyMembersInRange(sp) : List.of());
+				? PartyUtils.getPartyMembersInRange(sp) : List.of(), new HashMap<>());
 
 		if (!healthLast.containsKey(player.getUUID()))
 			healthLast.put(player.getUUID(), player.getHealth());
@@ -81,32 +91,43 @@ public class PlayerTickHandler {
 			processEvent(EventType.SPRINTING, ctx);
 		else if (player.isCrouching())
 			processEvent(EventType.CROUCH, ctx);
-		
+
 		//update tracker variables. Gate to server-side: these static maps are shared
 		//across sides on an integrated server, and letting the client thread write to
 		//them clobbers the snapshot the server's next 10-tick cycle reads, yielding
 		//magnitude=0 / healthDiff=0 on the next server tick for this player.
 		if (player instanceof ServerPlayer) {
+			//Batch all XP awarded this tick into a single awardXP call.
+			if (!ctx.batchedAwards().isEmpty())
+				core.awardXP(ctx.partyMembers(), ctx.batchedAwards());
 			healthLast.put(player.getUUID(), player.getHealth());
 			moveLast.put(player.getUUID(), player.position());
 		}
 	}
-	
-	private record TickContext(Core core, PlayerTickEvent event, List<ServerPlayer> partyMembers) {
+
+	private record TickContext(Core core, PlayerTickEvent event, List<ServerPlayer> partyMembers, Map<String, Long> batchedAwards) {
 		Player player() {return event.getEntity();}
 	}
 
 	private static void processEvent(EventType type, TickContext ctx) {
 		Core core = ctx.core();
 		Player player = ctx.player();
-		CompoundTag eventHookOutput = new CompoundTag();
 		boolean serverSide = core.getSide().equals(LogicalSide.SERVER);
+		//Early-out: if no XP config, no listeners, and no perks are interested
+		//in this event, skip the entire allocation-heavy pipeline.
+		Map<String, Double> ratio = serverSide ? Config.server().xpGains().playerXp(type) : Map.of();
+		if (serverSide
+				&& (ratio == null || ratio.isEmpty())
+				&& !core.getEventTriggerRegistry().hasListener(type)
+				&& !core.getPerkRegistry().hasPerk(type)) {
+			return;
+		}
+		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, ctx.event(), new CompoundTag());
 		}
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, eventHookOutput));
 		if (serverSide) {
-			Map<String, Double> ratio = Config.server().xpGains().playerXp(type);
 			ResourceLocation source = Reference.mc("player");
 			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP)
 					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
@@ -134,33 +155,40 @@ public class PlayerTickHandler {
 				Vec3 old = moveLast.getOrDefault(player.getUUID(), vec);
 				double dx = vec.x() - old.x(), dy = vec.y() - old.y(), dz = vec.z() - old.z();
 				double magnitude = Math.sqrt(dx * dx + dy * dy + dz * dz);
-				scaleByMagnitude(ratio, modifiers, magnitude, xpAward);
+				scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
 			}
 			case SUBMERGED -> {
-				ratio.forEach((skill, value) -> xpAward.put(skill, value.longValue()));
+				scaleByMagnitude(ratio, modifiers, 1d, xpAward, player.getUUID());
 			}
 			case SWIMMING, DIVING, SURFACING, SWIM_SPRINTING -> {
 				Vec3 vec = player.getDeltaMovement();
 				double magnitude = Math.sqrt(vec.x() * vec.x() + vec.y() * vec.y() + vec.z() * vec.z());
-				scaleByMagnitude(ratio, modifiers, magnitude, xpAward);
+				scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
 			}
 			default -> {}
 			}
 
 			CheeseTracker.applyAntiCheese(type, source, player, xpAward);
-			core.awardXP(ctx.partyMembers(), xpAward);
+			//Merge into the tick-scoped batch rather than calling awardXP per event.
+			xpAward.forEach((skill, value) -> ctx.batchedAwards().merge(skill, value, Long::sum));
 		}
 	}
 
-	private static void scaleByMagnitude(Map<String, Double> ratio, Map<String, Double> modifiers, double magnitude, Map<String, Long> xpAward) {
+	private static void scaleByMagnitude(Map<String, Double> ratio, Map<String, Double> modifiers, double magnitude, Map<String, Long> xpAward, UUID uuid) {
+		if (ratio == null || ratio.isEmpty()) return;
+		Map<String, Double> frac = xpFractions.computeIfAbsent(uuid, k -> new HashMap<>());
 		ratio.forEach((skill, r) -> {
 			double value = r * magnitude * modifiers.getOrDefault(skill, 1d);
-			xpAward.put(skill, (long) value);
+			double acc = frac.getOrDefault(skill, 0d) + value;
+			long whole = (long) acc;
+			frac.put(skill, acc - whole);
+			if (whole != 0L)
+				xpAward.merge(skill, whole, Long::sum);
 		});
 	}
 
 	private static void processHealthChange(Map<String, Double> ratio, Map<String, Double> modifiers, Player player, Map<String, Long> xpAward) {
 		float diff = Math.abs(healthLast.getOrDefault(player.getUUID(), 0f) - player.getHealth());
-		scaleByMagnitude(ratio, modifiers, diff, xpAward);
+		scaleByMagnitude(ratio, modifiers, diff, xpAward, player.getUUID());
 	}
 }
