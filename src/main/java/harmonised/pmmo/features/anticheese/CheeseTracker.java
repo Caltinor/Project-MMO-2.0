@@ -61,14 +61,6 @@ public class CheeseTracker {
 		NORMALIZED_DATA.forEach((uuid, map) -> map.forEach((type, tracker) -> tracker.retainTimeRemaining--));
 	}
 
-	@SubscribeEvent
-	public static void onPlayerLeave(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
-		UUID uuid = event.getEntity().getUUID();
-		AFK_DATA.remove(uuid);
-		DIMINISH_DATA.remove(uuid);
-		NORMALIZED_DATA.remove(uuid);
-	}
-
 	private static final Map<UUID, Map<EventType, AFKTracker>> AFK_DATA = new HashMap<>();
 	private static final Map<UUID, Map<EventType, DiminishTracker>> DIMINISH_DATA = new HashMap<>();
 	private static final Map<UUID, Map<EventType, NormTracker>> NORMALIZED_DATA = new HashMap<>();
