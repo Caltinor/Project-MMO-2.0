@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 /**The intent behind this feature is to implement countermeasures to obvious and universal means of abusing
  * the XP system.  Things like being AFK and getting a steady stream of XP were one aspect of this feature.
@@ -50,17 +51,29 @@ public class CheeseTracker {
 	
 	@SubscribeEvent
 	public static void playerWatcher(ServerTickEvent.Pre event) {
-		AFK_DATA.forEach((player, map) -> map.forEach((type, tracker) -> {
-			if (player != null && !tracker.meetsAFKCriteria(player))
-				tracker.cooldown();
-		}));
-		DIMINISH_DATA.forEach((player, map) -> map.forEach((type, tracker) -> tracker.cooloff()));
-		NORMALIZED_DATA.forEach((player, map) -> map.forEach((type, tracker) -> tracker.retainTimeRemaining--));
+		AFK_DATA.forEach((uuid, map) -> {
+			ServerPlayer player = event.getServer().getPlayerList().getPlayer(uuid);
+			if (player == null) return;
+			map.forEach((type, tracker) -> {
+				if (!tracker.meetsAFKCriteria(player))
+					tracker.cooldown();
+			});
+		});
+		DIMINISH_DATA.forEach((uuid, map) -> map.forEach((type, tracker) -> tracker.cooloff()));
+		NORMALIZED_DATA.forEach((uuid, map) -> map.forEach((type, tracker) -> tracker.retainTimeRemaining--));
 	}
-	
-	private static final Map<Player, Map<EventType, AFKTracker>> AFK_DATA = new HashMap<>();
-	private static final Map<Player, Map<EventType, DiminishTracker>> DIMINISH_DATA = new HashMap<>();
-	private static final Map<Player, Map<EventType, NormTracker>> NORMALIZED_DATA = new HashMap<>();
+
+	@SubscribeEvent
+	public static void onPlayerLeave(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
+		UUID uuid = event.getEntity().getUUID();
+		AFK_DATA.remove(uuid);
+		DIMINISH_DATA.remove(uuid);
+		NORMALIZED_DATA.remove(uuid);
+	}
+
+	private static final Map<UUID, Map<EventType, AFKTracker>> AFK_DATA = new HashMap<>();
+	private static final Map<UUID, Map<EventType, DiminishTracker>> DIMINISH_DATA = new HashMap<>();
+	private static final Map<UUID, Map<EventType, NormTracker>> NORMALIZED_DATA = new HashMap<>();
 	
 	private static class AFKTracker {
 		int durationAFK = 0, minDuration = 0, cooldownBy = 1, tolerance = 0;
@@ -237,7 +250,7 @@ public class CheeseTracker {
 				)));
 		
 		public void applyAFK(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
-			AFKTracker afkData = AFK_DATA.computeIfAbsent(player, p -> new HashMap<>())
+			AFKTracker afkData = AFK_DATA.computeIfAbsent(player.getUUID(), p -> new HashMap<>())
 					.computeIfAbsent(event, e -> new AFKTracker(player, minTime(), cooloff(), toleranceFlat(), strictTolerance())).update(player);
 			if ((this.source().isEmpty() || this.source().contains(source.toString())) && afkData.isAFK()) {
 				awardIn.keySet().forEach(skill -> {
@@ -252,7 +265,7 @@ public class CheeseTracker {
 			}
 		}
 		public void applyDiminuation(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {
-			var tracker = DIMINISH_DATA.computeIfAbsent(player, p -> new HashMap<>()).computeIfAbsent(event, e -> new DiminishTracker(retention));
+			var tracker = DIMINISH_DATA.computeIfAbsent(player.getUUID(), p -> new HashMap<>()).computeIfAbsent(event, e -> new DiminishTracker(retention));
 			if (this.source().isEmpty() || this.source().contains(source.toString())) {				
 				tracker.diminish();
 				awardIn.keySet().forEach(skill -> {
@@ -263,7 +276,7 @@ public class CheeseTracker {
 		}
 		public void applyNormalization(EventType event, ResourceLocation source, Player player, Map<String, Long> awardIn) {			
 			if (this.source().isEmpty() || this.source().contains(source.toString())) {
-				NormTracker norms = NORMALIZED_DATA.computeIfAbsent(player, p -> new HashMap<>()).computeIfAbsent(event, e -> new NormTracker(retention));
+				NormTracker norms = NORMALIZED_DATA.computeIfAbsent(player.getUUID(), p -> new HashMap<>()).computeIfAbsent(event, e -> new NormTracker(retention));
 				norms.retainTimeRemaining = retention;
 				awardIn.forEach((skill, value) -> {
 					long norm = norms.norms.computeIfAbsent(skill, s -> value);

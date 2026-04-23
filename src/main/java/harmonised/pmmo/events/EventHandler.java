@@ -93,6 +93,10 @@ public class EventHandler {
 		LoginHandler.handle(event);
 	}
 	@SubscribeEvent
+	public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
+		Core.get(event.getEntity().level()).invalidateModifierCache(event.getEntity().getUUID());
+	}
+	@SubscribeEvent
 	public static void onGamemodeChange(PlayerEvent.PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
 			AttributeInstance reachAttribute = event.getEntity().getAttribute(Attributes.BLOCK_INTERACTION_RANGE);

@@ -82,7 +82,10 @@ public class Core {
 	private final LevelRegistry lvlProvider;
 	private final IDataStorage data;
 	private final LogicalSide side;
-	  
+	private final Map<UUID, CachedModifiers> modifierCache = new HashMap<>();
+
+	private record CachedModifiers(int tick, Map<String, Double> map) {}
+
 	private Core(LogicalSide side) {
 		this.loader = new CoreLoader();
 	    this.predicates = new PredicateRegistry();
@@ -231,9 +234,23 @@ public class Core {
 		return new HashMap<>(data != null ? data.getBonuses(modifierType, tag) : new HashMap<>());
 	}
 	public Map<String, Double> getConsolidatedModifierMap(Player player) {
+		UUID uuid = player.getUUID();
+		int tick = player.tickCount;
+		CachedModifiers cached = modifierCache.get(uuid);
+		if (cached != null && cached.tick == tick) return cached.map;
+		Map<String, Double> fresh = computeConsolidatedModifierMap(player);
+		modifierCache.put(uuid, new CachedModifiers(tick, fresh));
+		return fresh;
+	}
+
+	public void invalidateModifierCache(UUID uuid) {
+		modifierCache.remove(uuid);
+	}
+
+	private Map<String, Double> computeConsolidatedModifierMap(Player player) {
 		Map<String, Double> mapOut = new HashMap<>();
-		if (player instanceof FakePlayer) return mapOut;		
-		
+		if (player instanceof FakePlayer) return mapOut;
+
 		//BIOME Modification
 		ResourceLocation biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()));
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {

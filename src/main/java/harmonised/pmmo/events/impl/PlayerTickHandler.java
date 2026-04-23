@@ -44,38 +44,43 @@ public class PlayerTickHandler {
 			EffectManager.applyEffects(core, player);
 		}
 
+		//Compute tick-scoped data once: party membership doesn't change within a tick, and
+		//Core.getConsolidatedModifierMap is cached per (uuid, tickCount) so repeat calls are O(1).
+		TickContext ctx = new TickContext(core, event, player instanceof ServerPlayer sp
+				? PartyUtils.getPartyMembersInRange(sp) : List.of());
+
 		if (!healthLast.containsKey(player.getUUID()))
 			healthLast.put(player.getUUID(), player.getHealth());
 
 		float healthDiff = player.getHealth() - healthLast.getOrDefault(player.getUUID(), 0f);
 		if (Math.abs(healthDiff) >= 0.01) {
-			processEvent(healthDiff > 0 ? EventType.HEALTH_INCREASE : EventType.HEALTH_DECREASE, core, event);
+			processEvent(healthDiff > 0 ? EventType.HEALTH_INCREASE : EventType.HEALTH_DECREASE, ctx);
 		}
 		if (player.isPassenger())
-			processEvent(EventType.RIDING, core, event);
+			processEvent(EventType.RIDING, ctx);
 		if (!player.getActiveEffects().isEmpty())
-			processEvent(EventType.EFFECT, core, event);
-		
+			processEvent(EventType.EFFECT, ctx);
+
 		if (player.isUnderWater()) {
-			processEvent(EventType.SUBMERGED, core, event);
+			processEvent(EventType.SUBMERGED, ctx);
 			Vec3 vec = player.getDeltaMovement();
 			if (player.isSprinting())
-				processEvent(EventType.SWIM_SPRINTING, core, event); 
+				processEvent(EventType.SWIM_SPRINTING, ctx);
 			//The value of -0.005 is a constant "sinking" rate that entities have even when
 			//standing on blocks underwater. This variable captures the threshold above that
 			//so that the Submerged event can actually fire.
 			double sinkingRate = 0.01;
 			if (vec.y() > sinkingRate)
-				processEvent(EventType.SURFACING, core, event);
+				processEvent(EventType.SURFACING, ctx);
 			else if (vec.y() < -sinkingRate)
-				processEvent(EventType.DIVING, core, event);
+				processEvent(EventType.DIVING, ctx);
 		}
 		else if (player.isInWater())
-			processEvent(EventType.SWIMMING, core, event); 
+			processEvent(EventType.SWIMMING, ctx);
 		else if (player.isSprinting())
-			processEvent(EventType.SPRINTING, core, event);
+			processEvent(EventType.SPRINTING, ctx);
 		else if (player.isCrouching())
-			processEvent(EventType.CROUCH, core, event);
+			processEvent(EventType.CROUCH, ctx);
 		
 		//update tracker variables. Gate to server-side: these static maps are shared
 		//across sides on an integrated server, and letting the client thread write to
@@ -87,73 +92,75 @@ public class PlayerTickHandler {
 		}
 	}
 	
-	private static void processEvent(EventType type, Core core, PlayerTickEvent event) {
+	private record TickContext(Core core, PlayerTickEvent event, List<ServerPlayer> partyMembers) {
+		Player player() {return event.getEntity();}
+	}
+
+	private static void processEvent(EventType type, TickContext ctx) {
+		Core core = ctx.core();
+		Player player = ctx.player();
 		CompoundTag eventHookOutput = new CompoundTag();
 		boolean serverSide = core.getSide().equals(LogicalSide.SERVER);
-		if (serverSide){			
-			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
+		if (serverSide){
+			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, ctx.event(), new CompoundTag());
 		}
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.getEntity(), eventHookOutput));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, eventHookOutput));
 		if (serverSide) {
 			Map<String, Double> ratio = Config.server().xpGains().playerXp(type);
 			ResourceLocation source = Reference.mc("player");
-			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
+			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP)
 					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
 					: new HashMap<>();
+			//Hoist the modifier map out of the per-skill loop. The Core cache ensures repeat calls
+			//across events in the same tick share one computation, but fetching once per event also
+			//avoids the per-skill lookup cost.
+			final Map<String, Double> modifiers = core.getConsolidatedModifierMap(player);
 			switch (type) {
 			case HEALTH_INCREASE, HEALTH_DECREASE -> {
-				processHealthChange(ratio, core, event.getEntity(), xpAward);
+				processHealthChange(ratio, modifiers, player, xpAward);
 			}
 			case RIDING -> {
-				source = RegistryUtil.getId(event.getEntity().getVehicle());
-				xpAward.putAll(core.getExperienceAwards(type, event.getEntity().getVehicle(), event.getEntity(), perkOutput));
+				source = RegistryUtil.getId(player.getVehicle());
+				xpAward.putAll(core.getExperienceAwards(type, player.getVehicle(), player, perkOutput));
 			}
 			case EFFECT -> {
-				for (MobEffectInstance mei : event.getEntity().getActiveEffects()) {	
+				for (MobEffectInstance mei : player.getActiveEffects()) {
 					source = mei.getEffect().unwrapKey().get().location();
-					xpAward.putAll(core.getExperienceAwards(mei, event.getEntity(), perkOutput));
+					xpAward.putAll(core.getExperienceAwards(mei, player, perkOutput));
 				}
 			}
 			case SPRINTING -> {
-				Vec3 vec = event.getEntity().position();
-				Vec3 old = moveLast.getOrDefault(event.getEntity().getUUID(), vec);
-				double magnitude = Math.sqrt(
-						Math.pow(Math.abs(vec.x()-old.x()), 2) +
-						Math.pow(Math.abs(vec.y()-old.y()), 2) +
-						Math.pow(Math.abs(vec.z()-old.z()), 2));
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.getEntity()).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
+				Vec3 vec = player.position();
+				Vec3 old = moveLast.getOrDefault(player.getUUID(), vec);
+				double dx = vec.x() - old.x(), dy = vec.y() - old.y(), dz = vec.z() - old.z();
+				double magnitude = Math.sqrt(dx * dx + dy * dy + dz * dz);
+				scaleByMagnitude(ratio, modifiers, magnitude, xpAward);
 			}
 			case SUBMERGED -> {
-				ratio.keySet().forEach((skill) -> {
-					xpAward.put(skill, ratio.getOrDefault(skill, 0d).longValue());
-				});
+				ratio.forEach((skill, value) -> xpAward.put(skill, value.longValue()));
 			}
 			case SWIMMING, DIVING, SURFACING, SWIM_SPRINTING -> {
-				Vec3 vec = event.getEntity().getDeltaMovement();
-				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.getEntity()).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
+				Vec3 vec = player.getDeltaMovement();
+				double magnitude = Math.sqrt(vec.x() * vec.x() + vec.y() * vec.y() + vec.z() * vec.z());
+				scaleByMagnitude(ratio, modifiers, magnitude, xpAward);
 			}
-                default -> {}
+			default -> {}
 			}
-			
-			CheeseTracker.applyAntiCheese(type, source, event.getEntity(), xpAward);
 
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
-			core.awardXP(partyMembersInRange, xpAward);
+			CheeseTracker.applyAntiCheese(type, source, player, xpAward);
+			core.awardXP(ctx.partyMembers(), xpAward);
 		}
 	}
 
-	private static void processHealthChange(Map<String, Double> ratio, Core core, Player player, Map<String, Long> xpAward) {
-		float diff = Math.abs(healthLast.getOrDefault(player.getUUID(), 0f) - player.getHealth());
-		ratio.keySet().forEach((skill) -> {
-			Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
-			xpAward.put(skill, value.longValue());
+	private static void scaleByMagnitude(Map<String, Double> ratio, Map<String, Double> modifiers, double magnitude, Map<String, Long> xpAward) {
+		ratio.forEach((skill, r) -> {
+			double value = r * magnitude * modifiers.getOrDefault(skill, 1d);
+			xpAward.put(skill, (long) value);
 		});
+	}
+
+	private static void processHealthChange(Map<String, Double> ratio, Map<String, Double> modifiers, Player player, Map<String, Long> xpAward) {
+		float diff = Math.abs(healthLast.getOrDefault(player.getUUID(), 0f) - player.getHealth());
+		scaleByMagnitude(ratio, modifiers, diff, xpAward);
 	}
 }
