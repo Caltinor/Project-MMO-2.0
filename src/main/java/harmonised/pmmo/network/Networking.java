@@ -45,7 +45,7 @@ public class Networking {
 		.playToClient(CP_ResetXP.TYPE, StreamCodec.unit(new CP_ResetXP()), CP_ResetXP::handle)
 		.playToClient(CP_SyncConfig.TYPE, CP_SyncConfig.STREAM_CODEC, CP_SyncConfig::handle)
 		.playToClient(CP_GLMRareSync.TYPE, CP_GLMRareSync.STREAM_CODEC, CP_GLMRareSync::handle)
-		.playToClient(CP_GLMTreasureSync.TYPE, CP_GLMTreasureSync.STREAM_COODEC, CP_GLMTreasureSync::handle)
+		.playToClient(CP_GLMTreasureSync.TYPE, CP_GLMTreasureSync.STREAM_CODEC, CP_GLMTreasureSync::handle)
 		//SERVER BOUND PACKETS
 		.playToServer(SP_GLMRequest.TYPE, SP_GLMRequest.STREAM_CODEC, SP_GLMRequest::handle)
 		.playToServer(SP_UpdateVeinTarget.TYPE, SP_UpdateVeinTarget.STREAM_CODEC, SP_UpdateVeinTarget::handle)

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PerkRegistry {
@@ -147,6 +148,17 @@ public class PerkRegistry {
 
 	public boolean isPerkCooledDown(Player player, CompoundTag src) {
 		ResourceLocation perkID = Reference.of(src.getString("perk"));
-		return coolTracker.stream().noneMatch(cd -> cd.player().equals(player) && cd.perkID().equals(perkID));
+		//Compare by UUID rather than Player object identity. The player instance changes on
+		//respawn / dimension travel, and identity-equality would let the same logical player
+		//accumulate duplicate cooldown entries.
+		UUID uuid = player.getUUID();
+		return coolTracker.stream().noneMatch(cd -> cd.player().getUUID().equals(uuid) && cd.perkID().equals(perkID));
+	}
+
+	//Drop any tracked perk ticks/cooldowns for this player. Called on logout so the
+	//tick and cooldown lists don't retain dead Player references indefinitely.
+	public void clearPlayer(UUID uuid) {
+		tickTracker.removeIf(t -> t.player().getUUID().equals(uuid));
+		coolTracker.removeIf(c -> c.player().getUUID().equals(uuid));
 	}
 }

@@ -3,6 +3,7 @@ package harmonised.pmmo.network.clientpackets;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.features.loot_modifiers.RareDropModifier;
 import harmonised.pmmo.util.Reference;
+import io.netty.handler.codec.DecoderException;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -17,7 +18,10 @@ public record CP_GLMRareSync(RareDropModifier modifier) implements CustomPacketP
         buf.writeNbt(RareDropModifier.CODEC.codec().encodeStart(NbtOps.INSTANCE, modifier).getOrThrow());
     }
     public static RareDropModifier decode(FriendlyByteBuf buf) {
-        return RareDropModifier.CODEC.codec().parse(NbtOps.INSTANCE, buf.readNbt()).getOrThrow();
+        //Surface malformed NBT as a DecoderException so the netty pipeline rejects the
+        //packet cleanly instead of crashing the handler with an unchecked IllegalStateException.
+        return RareDropModifier.CODEC.codec().parse(NbtOps.INSTANCE, buf.readNbt())
+                .getOrThrow(DecoderException::new);
     }
 
     public static final Type<CP_GLMRareSync> TYPE = new Type(Reference.rl("cp_glm_rare_sync"));
