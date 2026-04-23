@@ -37,7 +37,6 @@ import harmonised.pmmo.events.impl.SleepHandler;
 import harmonised.pmmo.events.impl.StatsHandler;
 import harmonised.pmmo.events.impl.TameHandler;
 import harmonised.pmmo.events.impl.TradeHandler;
-import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -92,15 +91,6 @@ public class EventHandler {
 	@SubscribeEvent(priority= EventPriority.LOW)
 	public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		LoginHandler.handle(event);
-	}
-	@SubscribeEvent
-	public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
-		java.util.UUID uuid = event.getEntity().getUUID();
-		Core core = Core.get(event.getEntity().level());
-		core.invalidateModifierCache(uuid);
-		core.getPerkRegistry().clearPlayer(uuid);
-		harmonised.pmmo.events.impl.PlayerTickHandler.clearPlayer(uuid);
-		VeinMiningLogic.clearPlayer(uuid);
 	}
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerEvent.PlayerChangeGameModeEvent event) {

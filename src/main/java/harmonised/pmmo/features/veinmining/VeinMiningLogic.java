@@ -29,11 +29,6 @@ public class VeinMiningLogic {
 	public static final Map<UUID, Integer> maxBlocksPerPlayer = new HashMap<>();
 	public static final Map<UUID, ShapeType> shapePerPlayer = new HashMap<>();
 
-	public static void clearPlayer(UUID uuid) {
-		maxBlocksPerPlayer.remove(uuid);
-		shapePerPlayer.remove(uuid);
-	}
-
 	/**This executes the actual break logic.  This should only be called
 	 * on the server.
 	 * 

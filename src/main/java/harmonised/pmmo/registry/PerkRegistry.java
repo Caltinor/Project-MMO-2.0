@@ -154,11 +154,4 @@ public class PerkRegistry {
 		UUID uuid = player.getUUID();
 		return coolTracker.stream().noneMatch(cd -> cd.player().getUUID().equals(uuid) && cd.perkID().equals(perkID));
 	}
-
-	//Drop any tracked perk ticks/cooldowns for this player. Called on logout so the
-	//tick and cooldown lists don't retain dead Player references indefinitely.
-	public void clearPlayer(UUID uuid) {
-		tickTracker.removeIf(t -> t.player().getUUID().equals(uuid));
-		coolTracker.removeIf(c -> c.player().getUUID().equals(uuid));
-	}
 }

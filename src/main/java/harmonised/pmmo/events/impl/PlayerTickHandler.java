@@ -34,12 +34,6 @@ public class PlayerTickHandler {
 	//and flush integer portions whenever they cross a whole unit.
 	private static final Map<UUID, Map<String, Double>> xpFractions = new HashMap<>();
 
-	public static void clearPlayer(UUID uuid) {
-		healthLast.remove(uuid);
-		moveLast.remove(uuid);
-		xpFractions.remove(uuid);
-	}
-
 	public static void handle(PlayerTickEvent.Post event) {
 		//execute only on every 10th tick
 		if ((event.getEntity().tickCount % 10) != 0) return;
@@ -54,8 +48,7 @@ public class PlayerTickHandler {
 			EffectManager.applyEffects(core, player);
 		}
 
-		//Compute tick-scoped data once: party membership doesn't change within a tick, and
-		//Core.getConsolidatedModifierMap is cached per (uuid, tickCount) so repeat calls are O(1).
+		//Compute tick-scoped data once: party membership doesn't change within a tick.
 		//Sample positional delta over the 10-tick window once and share via context.
 		//Instantaneous player.getDeltaMovement() is unreliable for swim XP — post-drag
 		//velocity jitters per-axis and the swim-sprint vector follows look direction, so
@@ -133,8 +126,7 @@ public class PlayerTickHandler {
 		Map<String, Double> ratio = serverSide ? Config.server().xpGains().playerXp(type) : Map.of();
 		if (serverSide
 				&& (ratio == null || ratio.isEmpty())
-				&& !core.getEventTriggerRegistry().hasListener(type)
-				&& !core.getPerkRegistry().hasPerk(type)) {
+				&& !core.getEventTriggerRegistry().hasListener(type)) {
 			return;
 		}
 		CompoundTag eventHookOutput = new CompoundTag();
@@ -165,9 +157,9 @@ public class PlayerTickHandler {
 					xpAward.putAll(core.getExperienceAwards(mei, player, perkOutput));
 				}
 			}
-			case SPRINTING -> {
-				double magnitude = Math.sqrt(ctx.dx() * ctx.dx() + ctx.dy() * ctx.dy() + ctx.dz() * ctx.dz());
-				scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
+			case SPRINTING, SWIM_SPRINTING -> {
+			double magnitude = Math.sqrt(ctx.dx() * ctx.dx() + ctx.dy() * ctx.dy() + ctx.dz() * ctx.dz());
+			scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
 			}
 			case SUBMERGED -> {
 				scaleByMagnitude(ratio, modifiers, 1d, xpAward, player.getUUID());
@@ -186,10 +178,6 @@ public class PlayerTickHandler {
 			}
 			case DIVING -> {
 				scaleByMagnitude(ratio, modifiers, Math.max(0d, -ctx.dy()), xpAward, player.getUUID());
-			}
-			case SWIM_SPRINTING -> {
-				double magnitude = Math.sqrt(ctx.dx() * ctx.dx() + ctx.dy() * ctx.dy() + ctx.dz() * ctx.dz());
-				scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
 			}
 			default -> {}
 			}
