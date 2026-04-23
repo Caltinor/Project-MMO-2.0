@@ -56,8 +56,18 @@ public class PlayerTickHandler {
 
 		//Compute tick-scoped data once: party membership doesn't change within a tick, and
 		//Core.getConsolidatedModifierMap is cached per (uuid, tickCount) so repeat calls are O(1).
+		//Sample positional delta over the 10-tick window once and share via context.
+		//Instantaneous player.getDeltaMovement() is unreliable for swim XP — post-drag
+		//velocity jitters per-axis and the swim-sprint vector follows look direction, so
+		//horizontal swims sampled 2–4 and vertical swims sampled 1000s with identical config.
+		//Positional delta captures actual distance traveled on each axis.
+		Vec3 pos = player.position();
+		Vec3 oldPos = moveLast.getOrDefault(player.getUUID(), pos);
+		double dx = pos.x() - oldPos.x();
+		double dy = pos.y() - oldPos.y();
+		double dz = pos.z() - oldPos.z();
 		TickContext ctx = new TickContext(core, event, player instanceof ServerPlayer sp
-				? PartyUtils.getPartyMembersInRange(sp) : List.of(), new HashMap<>());
+				? PartyUtils.getPartyMembersInRange(sp) : List.of(), new HashMap<>(), dx, dy, dz);
 
 		if (!healthLast.containsKey(player.getUUID()))
 			healthLast.put(player.getUUID(), player.getHealth());
@@ -73,17 +83,21 @@ public class PlayerTickHandler {
 
 		if (player.isUnderWater()) {
 			processEvent(EventType.SUBMERGED, ctx);
-			Vec3 vec = player.getDeltaMovement();
+			//Threshold is positional distance over 10 ticks, not instantaneous velocity.
+			//At 10 ticks the player has moved measurably; anything below 0.01 blocks is noise.
+			double threshold = 0.01;
+			//SURFACING/DIVING fire on sustained vertical motion. Positional dy smooths out
+			//the single-tick sign flips that caused DIVING to keep firing while swimming up.
+			if (dy > threshold)
+				processEvent(EventType.SURFACING, ctx);
+			else if (dy < -threshold)
+				processEvent(EventType.DIVING, ctx);
+			//Swim/swim-sprint fire in addition to SURFACING/DIVING — axis stacking so a
+			//diagonal swim credits both vertical and horizontal motion.
 			if (player.isSprinting())
 				processEvent(EventType.SWIM_SPRINTING, ctx);
-			//The value of -0.005 is a constant "sinking" rate that entities have even when
-			//standing on blocks underwater. This variable captures the threshold above that
-			//so that the Submerged event can actually fire.
-			double sinkingRate = 0.01;
-			if (vec.y() > sinkingRate)
-				processEvent(EventType.SURFACING, ctx);
-			else if (vec.y() < -sinkingRate)
-				processEvent(EventType.DIVING, ctx);
+			else if (dx * dx + dz * dz > threshold * threshold)
+				processEvent(EventType.SWIMMING, ctx);
 		}
 		else if (player.isInWater())
 			processEvent(EventType.SWIMMING, ctx);
@@ -105,7 +119,8 @@ public class PlayerTickHandler {
 		}
 	}
 
-	private record TickContext(Core core, PlayerTickEvent event, List<ServerPlayer> partyMembers, Map<String, Long> batchedAwards) {
+	private record TickContext(Core core, PlayerTickEvent event, List<ServerPlayer> partyMembers,
+							   Map<String, Long> batchedAwards, double dx, double dy, double dz) {
 		Player player() {return event.getEntity();}
 	}
 
@@ -151,18 +166,29 @@ public class PlayerTickHandler {
 				}
 			}
 			case SPRINTING -> {
-				Vec3 vec = player.position();
-				Vec3 old = moveLast.getOrDefault(player.getUUID(), vec);
-				double dx = vec.x() - old.x(), dy = vec.y() - old.y(), dz = vec.z() - old.z();
-				double magnitude = Math.sqrt(dx * dx + dy * dy + dz * dz);
+				double magnitude = Math.sqrt(ctx.dx() * ctx.dx() + ctx.dy() * ctx.dy() + ctx.dz() * ctx.dz());
 				scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
 			}
 			case SUBMERGED -> {
 				scaleByMagnitude(ratio, modifiers, 1d, xpAward, player.getUUID());
 			}
-			case SWIMMING, DIVING, SURFACING, SWIM_SPRINTING -> {
-				Vec3 vec = player.getDeltaMovement();
-				double magnitude = Math.sqrt(vec.x() * vec.x() + vec.y() * vec.y() + vec.z() * vec.z());
+			//Axis-semantic magnitudes: each event credits only the motion it represents.
+			//Horizontal swim uses 2D horizontal distance; SURFACING/DIVING use signed
+			//vertical distance (clamped to 0 so a downward wobble during surfacing can't
+			//negate the award). SWIM_SPRINTING uses full 3D magnitude to preserve the
+			//"sprint is faster so awards more" feel regardless of look direction.
+			case SWIMMING -> {
+				double magnitude = Math.sqrt(ctx.dx() * ctx.dx() + ctx.dz() * ctx.dz());
+				scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
+			}
+			case SURFACING -> {
+				scaleByMagnitude(ratio, modifiers, Math.max(0d, ctx.dy()), xpAward, player.getUUID());
+			}
+			case DIVING -> {
+				scaleByMagnitude(ratio, modifiers, Math.max(0d, -ctx.dy()), xpAward, player.getUUID());
+			}
+			case SWIM_SPRINTING -> {
+				double magnitude = Math.sqrt(ctx.dx() * ctx.dx() + ctx.dy() * ctx.dy() + ctx.dz() * ctx.dz());
 				scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
 			}
 			default -> {}
