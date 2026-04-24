@@ -29,6 +29,10 @@ public class EventTriggerRegistry {
 		Preconditions.checkNotNull(listenerID);
 		eventListeners.get(eventType).add(Pair.of(listenerID, executeOnTrigger));
 	}
+
+	public boolean hasListener(EventType eventType) {
+		return eventListeners.containsKey(eventType) && !eventListeners.get(eventType).isEmpty();
+	}
 	
 	public CompoundTag executeEventListeners(EventType eventType, Event event, CompoundTag dataIn) {
 		List<Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> listeners = eventListeners.get(eventType);
@@ -50,9 +54,9 @@ public class EventTriggerRegistry {
 	}
 	
 	private void removeInvalidListeners(EventType eventType, List<Integer> removals) {
-		for (int i = removals.size()-1; i == 0; i--) {
+		for (int i = removals.size()-1; i >= 0; i--) {
 			MsLoggy.WARN.log(LOG_CODE.API, "Event Listener: [" + eventListeners.get(eventType).get(removals.get(i)).getFirst().toString() +"] did not return a cancel status and was removed.");
-			eventListeners.get(eventType).remove((int)removals.get(i));				
+			eventListeners.get(eventType).remove((int)removals.get(i));
 		}
 	}
 }

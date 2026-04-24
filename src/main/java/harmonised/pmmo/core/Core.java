@@ -82,7 +82,7 @@ public class Core {
 	private final LevelRegistry lvlProvider;
 	private final IDataStorage data;
 	private final LogicalSide side;
-	  
+
 	private Core(LogicalSide side) {
 		this.loader = new CoreLoader();
 	    this.predicates = new PredicateRegistry();
@@ -216,7 +216,7 @@ public class Core {
 		CheeseTracker.applyAntiCheese(type, source, player, xpGains);
 
 		loggables[3] = MsLoggy.mapToString(xpGains);
-		MsLoggy.INFO.log(LOG_CODE.XP, "XP: {} base:{}, afterBonus:{}, afterAntiCheese:{}", loggables);
+		MsLoggy.INFO.log(LOG_CODE.XP, "XP: {} base:{}, afterBonus:{}, afterAntiCheese:{}", (Object[]) loggables);
 
 		return xpGains;
 	}	
@@ -232,8 +232,8 @@ public class Core {
 	}
 	public Map<String, Double> getConsolidatedModifierMap(Player player) {
 		Map<String, Double> mapOut = new HashMap<>();
-		if (player instanceof FakePlayer) return mapOut;		
-		
+		if (player instanceof FakePlayer) return mapOut;
+
 		//BIOME Modification
 		ResourceLocation biomeID = RegistryUtil.getId(player.level().getBiome(player.blockPosition()));
 		for (Map.Entry<String, Double> modMap : getObjectModifierMap(ObjectType.BIOME, biomeID, ModifierDataType.BIOME, new CompoundTag()).entrySet()) {

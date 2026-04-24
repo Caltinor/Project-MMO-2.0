@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PerkRegistry {
@@ -57,22 +58,31 @@ public class PerkRegistry {
 
 	public CompoundTag getDefaults(ResourceLocation id) {return perks.getOrDefault(id, Perk.empty()).propertyDefaults().copy();}
 	
+	public boolean hasPerk(EventType cause) {
+		List<CompoundTag> list = Config.perks().perks().get(cause);
+		return list != null && !list.isEmpty();
+	}
+
 	public CompoundTag executePerk(EventType cause, Player player, @NotNull CompoundTag dataIn) {
 		if (player == null) return new CompoundTag();
 		CompoundTag output = new CompoundTag();
-		Config.perks().perks().getOrDefault(cause, new ArrayList<>()).forEach(src -> {
+		List<CompoundTag> list = Config.perks().perks().get(cause);
+		if (list == null || list.isEmpty()) return output;
+		for (CompoundTag src : list) {
 			output.merge(processPerk(src, output, player, dataIn));
-		});
+		}
 		return output;
 	}
 
 	public CompoundTag executePerkFiltered(EventType cause, Player player, String filterTag, String filterValue, @NotNull CompoundTag dataIn) {
 		if (player == null) return new CompoundTag();
 		CompoundTag output = new CompoundTag();
-		Config.perks().perks().getOrDefault(cause, new ArrayList<>()).stream()
-		.filter(tag -> tag.getString(filterTag).equals(filterValue)).toList().forEach(src -> {
+		List<CompoundTag> list = Config.perks().perks().get(cause);
+		if (list == null || list.isEmpty()) return output;
+		for (CompoundTag src : list) {
+			if (!src.getString(filterTag).equals(filterValue)) continue;
 			output.merge(processPerk(src, output, player, dataIn));
-		});
+		}
 		return output;
 	}
 
@@ -138,6 +148,10 @@ public class PerkRegistry {
 
 	public boolean isPerkCooledDown(Player player, CompoundTag src) {
 		ResourceLocation perkID = Reference.of(src.getString("perk"));
-		return coolTracker.stream().noneMatch(cd -> cd.player().equals(player) && cd.perkID().equals(perkID));
+		//Compare by UUID rather than Player object identity. The player instance changes on
+		//respawn / dimension travel, and identity-equality would let the same logical player
+		//accumulate duplicate cooldown entries.
+		UUID uuid = player.getUUID();
+		return coolTracker.stream().noneMatch(cd -> cd.player().getUUID().equals(uuid) && cd.perkID().equals(perkID));
 	}
 }

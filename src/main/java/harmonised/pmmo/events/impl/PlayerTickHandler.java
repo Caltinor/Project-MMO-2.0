@@ -29,6 +29,10 @@ import java.util.UUID;
 public class PlayerTickHandler {
 	private static final Map<UUID, Float> healthLast = new HashMap<>();
 	private static final Map<UUID, Vec3> moveLast = new HashMap<>();
+	//Per-player, per-skill fractional XP carry. Small per-tick awards (e.g. 0.1 swim XP)
+	//would otherwise truncate to 0 every cycle via (long)value. We accumulate the remainder
+	//and flush integer portions whenever they cross a whole unit.
+	private static final Map<UUID, Map<String, Double>> xpFractions = new HashMap<>();
 
 	public static void handle(PlayerTickEvent.Post event) {
 		//execute only on every 10th tick
@@ -44,116 +48,161 @@ public class PlayerTickHandler {
 			EffectManager.applyEffects(core, player);
 		}
 
+		//Compute tick-scoped data once: party membership doesn't change within a tick.
+		//Sample positional delta over the 10-tick window once and share via context.
+		//Instantaneous player.getDeltaMovement() is unreliable for swim XP — post-drag
+		//velocity jitters per-axis and the swim-sprint vector follows look direction, so
+		//horizontal swims sampled 2–4 and vertical swims sampled 1000s with identical config.
+		//Positional delta captures actual distance traveled on each axis.
+		Vec3 pos = player.position();
+		Vec3 oldPos = moveLast.getOrDefault(player.getUUID(), pos);
+		double dx = pos.x() - oldPos.x();
+		double dy = pos.y() - oldPos.y();
+		double dz = pos.z() - oldPos.z();
+		TickContext ctx = new TickContext(core, event, player instanceof ServerPlayer sp
+				? PartyUtils.getPartyMembersInRange(sp) : List.of(), new HashMap<>(), dx, dy, dz);
+
 		if (!healthLast.containsKey(player.getUUID()))
 			healthLast.put(player.getUUID(), player.getHealth());
 
 		float healthDiff = player.getHealth() - healthLast.getOrDefault(player.getUUID(), 0f);
 		if (Math.abs(healthDiff) >= 0.01) {
-			processEvent(healthDiff > 0 ? EventType.HEALTH_INCREASE : EventType.HEALTH_DECREASE, core, event);
+			processEvent(healthDiff > 0 ? EventType.HEALTH_INCREASE : EventType.HEALTH_DECREASE, ctx);
 		}
 		if (player.isPassenger())
-			processEvent(EventType.RIDING, core, event);
+			processEvent(EventType.RIDING, ctx);
 		if (!player.getActiveEffects().isEmpty())
-			processEvent(EventType.EFFECT, core, event);
-		
+			processEvent(EventType.EFFECT, ctx);
+
 		if (player.isUnderWater()) {
-			processEvent(EventType.SUBMERGED, core, event);
-			Vec3 vec = player.getDeltaMovement();
+			processEvent(EventType.SUBMERGED, ctx);
+			//Threshold is positional distance over 10 ticks, not instantaneous velocity.
+			//At 10 ticks the player has moved measurably; anything below 0.01 blocks is noise.
+			double threshold = 0.01;
+			//SURFACING/DIVING fire on sustained vertical motion. Positional dy smooths out
+			//the single-tick sign flips that caused DIVING to keep firing while swimming up.
+			if (dy > threshold)
+				processEvent(EventType.SURFACING, ctx);
+			else if (dy < -threshold)
+				processEvent(EventType.DIVING, ctx);
+			//Swim/swim-sprint fire in addition to SURFACING/DIVING — axis stacking so a
+			//diagonal swim credits both vertical and horizontal motion.
 			if (player.isSprinting())
-				processEvent(EventType.SWIM_SPRINTING, core, event); 
-			//The value of -0.005 is a constant "sinking" rate that entities have even when
-			//standing on blocks underwater. This variable captures the threshold above that
-			//so that the Submerged event can actually fire.
-			double sinkingRate = 0.01;
-			if (vec.y() > sinkingRate)
-				processEvent(EventType.SURFACING, core, event);
-			else if (vec.y() < -sinkingRate)
-				processEvent(EventType.DIVING, core, event);
+				processEvent(EventType.SWIM_SPRINTING, ctx);
+			else if (dx * dx + dz * dz > threshold * threshold)
+				processEvent(EventType.SWIMMING, ctx);
 		}
 		else if (player.isInWater())
-			processEvent(EventType.SWIMMING, core, event); 
+			processEvent(EventType.SWIMMING, ctx);
 		else if (player.isSprinting())
-			processEvent(EventType.SPRINTING, core, event);
+			processEvent(EventType.SPRINTING, ctx);
 		else if (player.isCrouching())
-			processEvent(EventType.CROUCH, core, event);
-		
+			processEvent(EventType.CROUCH, ctx);
+
 		//update tracker variables. Gate to server-side: these static maps are shared
 		//across sides on an integrated server, and letting the client thread write to
 		//them clobbers the snapshot the server's next 10-tick cycle reads, yielding
 		//magnitude=0 / healthDiff=0 on the next server tick for this player.
 		if (player instanceof ServerPlayer) {
+			//Batch all XP awarded this tick into a single awardXP call.
+			if (!ctx.batchedAwards().isEmpty())
+				core.awardXP(ctx.partyMembers(), ctx.batchedAwards());
 			healthLast.put(player.getUUID(), player.getHealth());
 			moveLast.put(player.getUUID(), player.position());
 		}
 	}
-	
-	private static void processEvent(EventType type, Core core, PlayerTickEvent event) {
-		CompoundTag eventHookOutput = new CompoundTag();
+
+	private record TickContext(Core core, PlayerTickEvent event, List<ServerPlayer> partyMembers,
+							   Map<String, Long> batchedAwards, double dx, double dy, double dz) {
+		Player player() {return event.getEntity();}
+	}
+
+	private static void processEvent(EventType type, TickContext ctx) {
+		Core core = ctx.core();
+		Player player = ctx.player();
 		boolean serverSide = core.getSide().equals(LogicalSide.SERVER);
-		if (serverSide){			
-			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
+		//Early-out: if no XP config, no listeners, and no perks are interested
+		//in this event, skip the entire allocation-heavy pipeline.
+		Map<String, Double> ratio = serverSide ? Config.server().xpGains().playerXp(type) : Map.of();
+		if (serverSide
+				&& (ratio == null || ratio.isEmpty())
+				&& !core.getEventTriggerRegistry().hasListener(type)) {
+			return;
 		}
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, event.getEntity(), eventHookOutput));
+		CompoundTag eventHookOutput = new CompoundTag();
+		if (serverSide){
+			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, ctx.event(), new CompoundTag());
+		}
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, eventHookOutput));
 		if (serverSide) {
-			Map<String, Double> ratio = Config.server().xpGains().playerXp(type);
 			ResourceLocation source = Reference.mc("player");
-			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP) 
+			final Map<String, Long> xpAward = perkOutput.contains(APIUtils.SERIALIZED_AWARD_MAP)
 					? CoreUtils.deserializeAwardMap(perkOutput.getCompound(APIUtils.SERIALIZED_AWARD_MAP))
 					: new HashMap<>();
+			//Hoist the modifier map out of the per-skill loop. The Core cache ensures repeat calls
+			//across events in the same tick share one computation, but fetching once per event also
+			//avoids the per-skill lookup cost.
+			final Map<String, Double> modifiers = core.getConsolidatedModifierMap(player);
 			switch (type) {
 			case HEALTH_INCREASE, HEALTH_DECREASE -> {
-				processHealthChange(ratio, core, event.getEntity(), xpAward);
+				processHealthChange(ratio, modifiers, player, xpAward);
 			}
 			case RIDING -> {
-				source = RegistryUtil.getId(event.getEntity().getVehicle());
-				xpAward.putAll(core.getExperienceAwards(type, event.getEntity().getVehicle(), event.getEntity(), perkOutput));
+				source = RegistryUtil.getId(player.getVehicle());
+				xpAward.putAll(core.getExperienceAwards(type, player.getVehicle(), player, perkOutput));
 			}
 			case EFFECT -> {
-				for (MobEffectInstance mei : event.getEntity().getActiveEffects()) {	
+				for (MobEffectInstance mei : player.getActiveEffects()) {
 					source = mei.getEffect().unwrapKey().get().location();
-					xpAward.putAll(core.getExperienceAwards(mei, event.getEntity(), perkOutput));
+					xpAward.putAll(core.getExperienceAwards(mei, player, perkOutput));
 				}
 			}
-			case SPRINTING -> {
-				Vec3 vec = event.getEntity().position();
-				Vec3 old = moveLast.getOrDefault(event.getEntity().getUUID(), vec);
-				double magnitude = Math.sqrt(
-						Math.pow(Math.abs(vec.x()-old.x()), 2) +
-						Math.pow(Math.abs(vec.y()-old.y()), 2) +
-						Math.pow(Math.abs(vec.z()-old.z()), 2));
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.getEntity()).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
+			case SPRINTING, SWIM_SPRINTING -> {
+			double magnitude = Math.sqrt(ctx.dx() * ctx.dx() + ctx.dy() * ctx.dy() + ctx.dz() * ctx.dz());
+			scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
 			}
 			case SUBMERGED -> {
-				ratio.keySet().forEach((skill) -> {
-					xpAward.put(skill, ratio.getOrDefault(skill, 0d).longValue());
-				});
+				scaleByMagnitude(ratio, modifiers, 1d, xpAward, player.getUUID());
 			}
-			case SWIMMING, DIVING, SURFACING, SWIM_SPRINTING -> {
-				Vec3 vec = event.getEntity().getDeltaMovement();
-				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
-				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.getEntity()).getOrDefault(skill, 1d);
-					xpAward.put(skill, value.longValue());
-				});
+			//Axis-semantic magnitudes: each event credits only the motion it represents.
+			//Horizontal swim uses 2D horizontal distance; SURFACING/DIVING use signed
+			//vertical distance (clamped to 0 so a downward wobble during surfacing can't
+			//negate the award). SWIM_SPRINTING uses full 3D magnitude to preserve the
+			//"sprint is faster so awards more" feel regardless of look direction.
+			case SWIMMING -> {
+				double magnitude = Math.sqrt(ctx.dx() * ctx.dx() + ctx.dz() * ctx.dz());
+				scaleByMagnitude(ratio, modifiers, magnitude, xpAward, player.getUUID());
 			}
-                default -> {}
+			case SURFACING -> {
+				scaleByMagnitude(ratio, modifiers, Math.max(0d, ctx.dy()), xpAward, player.getUUID());
 			}
-			
-			CheeseTracker.applyAntiCheese(type, source, event.getEntity(), xpAward);
+			case DIVING -> {
+				scaleByMagnitude(ratio, modifiers, Math.max(0d, -ctx.dy()), xpAward, player.getUUID());
+			}
+			default -> {}
+			}
 
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
-			core.awardXP(partyMembersInRange, xpAward);
+			CheeseTracker.applyAntiCheese(type, source, player, xpAward);
+			//Merge into the tick-scoped batch rather than calling awardXP per event.
+			xpAward.forEach((skill, value) -> ctx.batchedAwards().merge(skill, value, Long::sum));
 		}
 	}
 
-	private static void processHealthChange(Map<String, Double> ratio, Core core, Player player, Map<String, Long> xpAward) {
-		float diff = Math.abs(healthLast.getOrDefault(player.getUUID(), 0f) - player.getHealth());
-		ratio.keySet().forEach((skill) -> {
-			Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
-			xpAward.put(skill, value.longValue());
+	private static void scaleByMagnitude(Map<String, Double> ratio, Map<String, Double> modifiers, double magnitude, Map<String, Long> xpAward, UUID uuid) {
+		if (ratio == null || ratio.isEmpty()) return;
+		Map<String, Double> frac = xpFractions.computeIfAbsent(uuid, k -> new HashMap<>());
+		ratio.forEach((skill, r) -> {
+			double value = r * magnitude * modifiers.getOrDefault(skill, 1d);
+			double acc = frac.getOrDefault(skill, 0d) + value;
+			long whole = (long) acc;
+			frac.put(skill, acc - whole);
+			if (whole != 0L)
+				xpAward.merge(skill, whole, Long::sum);
 		});
+	}
+
+	private static void processHealthChange(Map<String, Double> ratio, Map<String, Double> modifiers, Player player, Map<String, Long> xpAward) {
+		float diff = Math.abs(healthLast.getOrDefault(player.getUUID(), 0f) - player.getHealth());
+		scaleByMagnitude(ratio, modifiers, diff, xpAward, player.getUUID());
 	}
 }
