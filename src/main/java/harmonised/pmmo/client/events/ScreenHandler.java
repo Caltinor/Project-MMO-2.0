@@ -21,6 +21,6 @@ public class ScreenHandler {
                 .max(Integer::compareTo).orElse(0);
         int panelHeight = Math.max(0, screen.height - y);
 
-        event.addListener(new SkillsSidePanel(1, y, panelHeight));
+        event.addListener(new SkillsSidePanel(0, y, panelHeight));
     }
 }
