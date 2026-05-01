@@ -12,6 +12,7 @@ import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.codecs.SkillTypeData;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -63,6 +64,14 @@ public class ScreenHandler {
 
         CollapsingPanel panel = new CollapsingPanel(0, y, PANEL_WIDTH, panelHeight, false);
         EditBox searchBar = new EditBox(Minecraft.getInstance().font, 0, 0, ROW_WIDTH, SEARCH_HEIGHT, Component.literal("Search")) {
+            private static final int CLEAR_BTN_SIZE = 8;
+            private int clearBtnLeft() { return this.getX() + this.width - CLEAR_BTN_SIZE - 2; }
+            private boolean overClearBtn(double mx, double my) {
+                if (this.getValue().isEmpty()) return false;
+                int top = this.getY() + (this.height - CLEAR_BTN_SIZE) / 2;
+                return mx >= clearBtnLeft() && mx < clearBtnLeft() + CLEAR_BTN_SIZE
+                        && my >= top && my < top + CLEAR_BTN_SIZE;
+            }
             @Override
             public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                 boolean handled = super.keyPressed(keyCode, scanCode, modifiers);
@@ -72,6 +81,23 @@ public class ScreenHandler {
                     return true;
                 }
                 return handled;
+            }
+            @Override
+            public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+                super.renderWidget(graphics, mouseX, mouseY, partialTick);
+                if (this.getValue().isEmpty()) return;
+                int color = overClearBtn(mouseX, mouseY) ? 0xFFFFFFFF : 0xFFAAAAAA;
+                int textY = this.getY() + (this.height - 8) / 2;
+                graphics.drawString(Minecraft.getInstance().font, "×", clearBtnLeft() + 1, textY, color, false);
+            }
+            @Override
+            public boolean mouseClicked(double mouseX, double mouseY, int button) {
+                if (overClearBtn(mouseX, mouseY)) {
+                    this.setValue("");
+                    this.setFocused(true);
+                    return true;
+                }
+                return super.mouseClicked(mouseX, mouseY, button);
             }
         };
         searchBar.setHint(Component.literal("Search..."));
