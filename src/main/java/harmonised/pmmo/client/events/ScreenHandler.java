@@ -85,13 +85,32 @@ public class ScreenHandler {
         populateSkillList(scroll);
         scroll.arrangeElements();
 
-        searchBar.setResponder(text -> scroll.applyFilter(new GlossaryFilter.Filter(text == null ? "" : text)));
+        searchBar.setResponder(text -> {
+            scroll.applyFilter(new GlossaryFilter.Filter(text == null ? "" : text));
+            recomputeGroupEdges(scroll);
+        });
 
         panel.addChild(searchBar, PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(SEARCH_HEIGHT).minWidthPercent(1.0).build());
         panel.addChild((AbstractWidget) scroll, PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(scrollHeight).minWidthPercent(1.0).build());
         panel.arrangeElements();
 
         event.addListener(panel);
+    }
+
+    private static void recomputeGroupEdges(DetailScroll scroll) {
+        List<AbstractWidget> visibleChildren = new ArrayList<>();
+        scroll.getChildren().forEach(poser -> {
+            if (poser.get() instanceof AbstractWidget w && w.visible) visibleChildren.add(w);
+        });
+        for (int i = 0; i < visibleChildren.size(); i++) {
+            if (!(visibleChildren.get(i) instanceof PlayerSkillWidget current)) continue;
+            if (current.getAccentColor() == null) continue;
+            AbstractWidget next = i + 1 < visibleChildren.size() ? visibleChildren.get(i + 1) : null;
+            boolean isLastInGroup = !(next instanceof PlayerSkillWidget nextSkill)
+                    || nextSkill.getAccentColor() == null
+                    || !current.getAccentColor().equals(nextSkill.getAccentColor());
+            current.setCloseBottom(isLastInGroup);
+        }
     }
 
     private static void populateSkillList(DetailScroll scroll) {

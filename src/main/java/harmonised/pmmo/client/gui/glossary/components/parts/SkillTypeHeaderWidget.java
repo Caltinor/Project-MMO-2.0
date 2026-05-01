@@ -33,9 +33,7 @@ public class SkillTypeHeaderWidget extends PanelWidget {
         String text = filter.getTextFilter();
         if (text == null || text.isEmpty()) return false;
         String lower = text.toLowerCase();
-        return skillKeys.stream().noneMatch(key ->
-                Component.translatable("pmmo." + key).getString().toLowerCase().contains(lower)
-                        || key.toLowerCase().contains(lower));
+        return skillKeys.stream().noneMatch(key -> PlayerSkillWidget.matchesSearch(key, lower));
     }
 
     @Override public void resize() {setHeight(HEIGHT);}

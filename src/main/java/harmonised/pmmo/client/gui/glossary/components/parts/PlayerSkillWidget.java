@@ -55,6 +55,14 @@ public class PlayerSkillWidget extends PanelWidget {
         return this;
     }
 
+    public void setCloseBottom(boolean closeBottom) {
+        this.drawBottom = closeBottom;
+    }
+
+    public Integer getAccentColor() {
+        return accentColor;
+    }
+
     private int contentInset() {return accentColor == null ? 0 : ACCENT_INSET;}
 
     @Override public void resize() {setHeight(24);}
@@ -63,9 +71,15 @@ public class PlayerSkillWidget extends PanelWidget {
     public boolean applyFilter(GlossaryFilter.Filter filter) {
         String text = filter.getTextFilter();
         if (text == null || text.isEmpty()) return false;
-        String lower = text.toLowerCase();
-        return !Component.translatable("pmmo." + skillName).getString().toLowerCase().contains(lower)
-                && !skillName.toLowerCase().contains(lower);
+        return !matchesSearch(skillName, text.toLowerCase());
+    }
+
+    public static boolean matchesSearch(String skillKey, String lowerQuery) {
+        if (skillKey.toLowerCase().contains(lowerQuery)) return true;
+        String translationKey = "pmmo." + skillKey;
+        String translated = Component.translatable(translationKey).getString();
+        if (translated.equals(translationKey)) return false; // no real translation, avoid matching the literal key
+        return translated.toLowerCase().contains(lowerQuery);
     }
 
     @Override
