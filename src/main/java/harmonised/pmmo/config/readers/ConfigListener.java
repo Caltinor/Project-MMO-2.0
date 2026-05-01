@@ -8,6 +8,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;
+import harmonised.pmmo.config.SkillTypesConfig;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.ServerData;
@@ -45,6 +46,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
         SERVER(ServerData.CODEC, "server", ServerData::new),
         AUTOVALUES(AutoValueConfig.CODEC, "autovalues", AutoValueConfig::new),
         SKILLS(SkillsConfig.CODEC, "skills", SkillsConfig::new),
+        SKILLTYPES(SkillTypesConfig.CODEC, "skilltypes", SkillTypesConfig::new),
         PERKS(PerksConfig.CODEC, "perks", PerksConfig::new),
         GLOBALS(GlobalsConfig.CODEC, "globals", GlobalsConfig::new),
         ANTICHEESE(AntiCheeseConfig.CODEC, "anticheese", AntiCheeseConfig::new);
@@ -83,6 +85,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
     public GlobalsConfig globals() {return (GlobalsConfig) configs.computeIfAbsent(ServerConfigs.GLOBALS, a -> a.defaultSupplier.get());}
     public PerksConfig perks() {return (PerksConfig) configs.computeIfAbsent(ServerConfigs.PERKS, a -> a.defaultSupplier.get());}
     public SkillsConfig skills() {return (SkillsConfig) configs.computeIfAbsent(ServerConfigs.SKILLS, a -> a.defaultSupplier.get());}
+    public SkillTypesConfig skillTypes() {return (SkillTypesConfig) configs.computeIfAbsent(ServerConfigs.SKILLTYPES, a -> a.defaultSupplier.get());}
     public AntiCheeseConfig anticheese() {return (AntiCheeseConfig) configs.computeIfAbsent(ServerConfigs.ANTICHEESE, a -> a.defaultSupplier.get());}
     public ConfigListener() {}
 

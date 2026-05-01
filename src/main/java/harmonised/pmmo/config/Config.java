@@ -24,6 +24,7 @@ public class Config {
     public static GlobalsConfig globals() {return CONFIG.globals();}
     public static PerksConfig perks() {return CONFIG.perks();}
     public static SkillsConfig skills() {return CONFIG.skills();}
+    public static SkillTypesConfig skillTypes() {return CONFIG.skillTypes();}
     public static AntiCheeseConfig anticheese() {return CONFIG.anticheese();}
 
     public static ModConfigSpec CLIENT_CONFIG;
