@@ -1,6 +1,7 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
 import harmonised.pmmo.api.client.PanelWidget;
+import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.storage.Experience;
@@ -57,6 +58,15 @@ public class PlayerSkillWidget extends PanelWidget {
     private int contentInset() {return accentColor == null ? 0 : ACCENT_INSET;}
 
     @Override public void resize() {setHeight(24);}
+
+    @Override
+    public boolean applyFilter(GlossaryFilter.Filter filter) {
+        String text = filter.getTextFilter();
+        if (text == null || text.isEmpty()) return false;
+        String lower = text.toLowerCase();
+        return !Component.translatable("pmmo." + skillName).getString().toLowerCase().contains(lower)
+                && !skillName.toLowerCase().contains(lower);
+    }
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {

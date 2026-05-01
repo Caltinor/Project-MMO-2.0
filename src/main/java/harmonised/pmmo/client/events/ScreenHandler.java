@@ -1,5 +1,6 @@
 package harmonised.pmmo.client.events;
 
+import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.CollapsingPanel;
@@ -10,9 +11,13 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.codecs.SkillTypeData;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
+import org.lwjgl.glfw.GLFW;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -27,6 +32,17 @@ import java.util.Set;
 
 @EventBusSubscriber(modid = Reference.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ScreenHandler {
+    private static EditBox currentSearchBar;
+
+    @SubscribeEvent
+    public static void onMouseClick(ScreenEvent.MouseButtonPressed.Pre event) {
+        if (!(event.getScreen() instanceof InventoryScreen)) return;
+        EditBox bar = currentSearchBar;
+        if (bar == null || !bar.isFocused()) return;
+        if (!bar.isMouseOver(event.getMouseX(), event.getMouseY())) {
+            bar.setFocused(false);
+        }
+    }
 
     @SubscribeEvent
     public static void onScreenInit(ScreenEvent.Init.Post event) {
@@ -38,15 +54,35 @@ public class ScreenHandler {
                     .map(gel -> gel.getRectangle().bottom())
                     .max(Integer::compareTo).orElse(0);
             int panelHeight = Math.max(0, screen.height - y);
+            int searchHeight = 14;
+            int scrollHeight = Math.max(0, panelHeight - searchHeight - 12); // 12 = panel top+bottom padding
             CollapsingPanel panel = new CollapsingPanel(0, y, 130, panelHeight, false);
-            DetailScroll scroll = new DetailScroll(0, 0, 103, panelHeight) {
+            EditBox searchBar = new EditBox(Minecraft.getInstance().font, 0, 0, 100, searchHeight, Component.literal("Search")) {
+                @Override
+                public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+                    boolean handled = super.keyPressed(keyCode, scanCode, modifiers);
+                    if (!handled && this.isFocused()
+                            && keyCode != GLFW.GLFW_KEY_ESCAPE
+                            && keyCode != GLFW.GLFW_KEY_TAB) {
+                        return true;
+                    }
+                    return handled;
+                }
+            };
+            searchBar.setHint(Component.literal("Search..."));
+            searchBar.setBordered(true);
+            currentSearchBar = searchBar;
+            DetailScroll scroll = new DetailScroll(0, 0, 103, scrollHeight) {
                 @Override protected boolean scrollbarVisible() {return false;}
             };
 
             populateSkillList(scroll);
             scroll.arrangeElements();
 
-            panel.addChild((AbstractWidget) scroll, PositionType.STATIC.constraint, SizeConstraints.builder().minHeightPercent(1.0).minWidthPercent(1.0).build());
+            searchBar.setResponder(text -> scroll.applyFilter(new GlossaryFilter.Filter(text == null ? "" : text)));
+
+            panel.addChild(searchBar, PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(searchHeight).minWidthPercent(1.0).build());
+            panel.addChild((AbstractWidget) scroll, PositionType.STATIC.constraint, SizeConstraints.builder().absoluteHeight(scrollHeight).minWidthPercent(1.0).build());
             panel.arrangeElements();
 
             event.addListener(panel);
@@ -94,7 +130,7 @@ public class ScreenHandler {
             if (groupSkills.isEmpty()) continue;
 
             scroll.addChild(
-                    (AbstractWidget) new SkillTypeHeaderWidget(100, typeKey, typeData),
+                    (AbstractWidget) new SkillTypeHeaderWidget(100, typeKey, typeData, groupSkills),
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()
             );
