@@ -1498,7 +1498,21 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "Exploration").build();
 	public static final Translation SKILL_CHARISMA = Translation.Builder.start("pmmo.charisma")
 		.addLocale(Locale.EN_US, "Charisma").build();
-	
+
+	//=========SKILL TYPES=====================
+	public static final Translation TYPE_WARFARE = Translation.Builder.start("pmmo.type.warfare")
+		.addLocale(Locale.EN_US, "Warfare").build();
+	public static final Translation TYPE_ATHLETICS = Translation.Builder.start("pmmo.type.athletics")
+		.addLocale(Locale.EN_US, "Athletics").build();
+	public static final Translation TYPE_HARVESTING = Translation.Builder.start("pmmo.type.harvesting")
+		.addLocale(Locale.EN_US, "Harvesting").build();
+	public static final Translation TYPE_ARTISANRY = Translation.Builder.start("pmmo.type.artisanry")
+		.addLocale(Locale.EN_US, "Artisanry").build();
+	public static final Translation TYPE_ARCANA = Translation.Builder.start("pmmo.type.arcana")
+		.addLocale(Locale.EN_US, "Arcana").build();
+	public static final Translation TYPE_SOCIAL = Translation.Builder.start("pmmo.type.social")
+		.addLocale(Locale.EN_US, "Social").build();
+
 	//=========ENUM VALUES=====================
 	public static final Translation ENUM_ANVIL_REPAIR = Translation.Builder.start("pmmo.enum.ANVIL_REPAIR")
 		.addLocale(Locale.EN_US, "Anvil Repair").build();

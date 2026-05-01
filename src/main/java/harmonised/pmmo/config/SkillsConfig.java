@@ -20,7 +20,6 @@ public record SkillsConfig(Map<String, SkillData> skills, Map<String, SkillTypeD
 	private static final String TYPE_FLAG = "skillType";
 
 	public SkillsConfig() {this(generateDefaults(), generateDefaultTypes());}
-	public SkillsConfig(Map<String, SkillData> skills) {this(skills, new HashMap<>());}
 
 	public static final MapCodec<SkillsConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.unboundedMap(Codec.STRING, SkillData.CODEC).fieldOf("skills").forGetter(SkillsConfig::skills),
@@ -28,8 +27,6 @@ public record SkillsConfig(Map<String, SkillData> skills, Map<String, SkillTypeD
 	).apply(instance, SkillsConfig::new));
 
 	public SkillData get(String skill) {return skills().getOrDefault(skill, SkillData.Builder.getDefault());}
-
-	public SkillTypeData getType(String key) {return types().getOrDefault(key, SkillTypeData.Builder.start().build());}
 
 	private static Map<String, SkillData> generateDefaults() {
 		Map<String, SkillData> defaultSkills = new HashMap<>();
