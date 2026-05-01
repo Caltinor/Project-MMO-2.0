@@ -36,8 +36,9 @@ public class ScreenHandler {
                     .filter(listener -> listener.getRectangle().left() < 130)
                     .map(gel -> gel.getRectangle().bottom())
                     .max(Integer::compareTo).orElse(0);
-            CollapsingPanel panel = new CollapsingPanel(0, y, 130, screen.height, false);
-            DetailScroll scroll = new DetailScroll(0, 0, 103, screen.height) {
+            int panelHeight = Math.max(0, screen.height - y);
+            CollapsingPanel panel = new CollapsingPanel(0, y, 130, panelHeight, false);
+            DetailScroll scroll = new DetailScroll(0, 0, 103, panelHeight) {
                 @Override protected boolean scrollbarVisible() {return false;}
             };
 
@@ -92,23 +93,26 @@ public class ScreenHandler {
                     PositionType.STATIC.constraint,
                     SizeConstraints.builder().internalHeight().build()
             );
-            for (String skill : groupSkills) {
+            for (int i = 0; i < groupSkills.size(); i++) {
+                String skill = groupSkills.get(i);
+                PlayerSkillWidget widget = new PlayerSkillWidget(100, skill, allSkills.get(skill)).withAccent(typeData.getColor());
+                if (i == groupSkills.size() - 1) widget.closeBottom();
                 scroll.addChild(
-                        (AbstractWidget) new PlayerSkillWidget(100, skill, allSkills.get(skill)).withAccent(typeData.getColor()),
+                        (AbstractWidget) widget,
                         PositionType.STATIC.constraint,
                         SizeConstraints.builder().internalHeight().build()
                 );
             }
         }
 
-        for (Map.Entry<String, Boolean> e : placed.entrySet()) {
-            if (e.getValue()) continue;
-            String skill = e.getKey();
-            scroll.addChild(
-                    (AbstractWidget) new PlayerSkillWidget(100, skill, allSkills.get(skill)),
-                    PositionType.STATIC.constraint,
-                    SizeConstraints.builder().internalHeight().build()
-            );
-        }
+        placed.entrySet().stream()
+                .filter(e -> !Boolean.TRUE.equals(e.getValue()))
+                .map(Map.Entry::getKey)
+                .sorted()
+                .forEach(skill -> scroll.addChild(
+                        (AbstractWidget) new PlayerSkillWidget(100, skill, allSkills.get(skill)),
+                        PositionType.STATIC.constraint,
+                        SizeConstraints.builder().internalHeight().build()
+                ));
     }
 }

@@ -25,11 +25,14 @@ public class PlayerSkillWidget extends PanelWidget {
     private static final int ACCENT_BAR_WIDTH = 3;
     private static final int ACCENT_INSET = 5;
 
+    private static final int LEVEL_RIGHT_PAD = 7;
+
     private final SkillData skillData;
     private final Color skillColor;
     private final String skillName;
     private final Experience xp;
     private Integer accentColor = null;
+    private boolean drawBottom = false;
     Font font = Minecraft.getInstance().font;
 
     public PlayerSkillWidget(int width, String skillName, SkillData data) {
@@ -46,6 +49,11 @@ public class PlayerSkillWidget extends PanelWidget {
         return this;
     }
 
+    public PlayerSkillWidget closeBottom() {
+        this.drawBottom = true;
+        return this;
+    }
+
     private int contentInset() {return accentColor == null ? 0 : ACCENT_INSET;}
 
     @Override public void resize() {setHeight(24);}
@@ -55,16 +63,24 @@ public class PlayerSkillWidget extends PanelWidget {
         graphics.blitSprite(BACKGROUND_SPRITES.get(this.isActive(), this.isFocused()), this.getX(), this.getY(), this.width, this.height);
         if (accentColor != null) {
             int argb = 0xFF000000 | accentColor;
+            int tintArgb = 0x26000000 | (accentColor & 0x00FFFFFF);
+            graphics.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), tintArgb);
             graphics.fill(this.getX(), this.getY(), this.getX() + ACCENT_BAR_WIDTH, this.getBottom(), argb);
-            graphics.fill(this.getX(), this.getY(), this.getRight(), this.getY() + 1, argb);
-            graphics.fill(this.getX(), this.getBottom() - 1, this.getRight(), this.getBottom(), argb);
+            if (drawBottom) {
+                graphics.fill(this.getX(), this.getBottom() - 2, this.getRight(), this.getBottom(), argb);
+            }
         }
         int inset = contentInset();
         graphics.blit(skillData.getIcon(), this.getX() + 3 + inset, this.getY() + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
 
         renderProgressBar(graphics);
-        graphics.drawString(font, Component.translatable("pmmo." + skillName), this.getX() + 24 + inset, this.getY() + 5, skillColor.getRGB());
-        graphics.drawString(font, String.valueOf(xp.getLevel().getLevel()), (this.getX() + this.width - 5) - font.width(String.valueOf(xp.getLevel().getLevel())), this.getY() + 5, skillColor.getRGB());
+        float nameScale = 0.85f;
+        graphics.pose().pushPose();
+        graphics.pose().translate(this.getX() + 24 + inset, this.getY() + 5, 0);
+        graphics.pose().scale(nameScale, nameScale, 1.0f);
+        graphics.drawString(font, Component.translatable("pmmo." + skillName), 0, 0, skillColor.getRGB());
+        graphics.pose().popPose();
+        graphics.drawString(font, String.valueOf(xp.getLevel().getLevel()), (this.getX() + this.width - LEVEL_RIGHT_PAD) - font.width(String.valueOf(xp.getLevel().getLevel())), this.getY() + 5, skillColor.getRGB());
     }
 
     public void renderProgressBar(GuiGraphics graphics) {
@@ -73,8 +89,8 @@ public class PlayerSkillWidget extends PanelWidget {
         int renderY = this.getY() + (font.lineHeight + 6);
         int barWidth = 94 - inset;
         if (this.isFocused()) {
-            MutableComponent text = Component.literal("%s xp to level %s".formatted(xpToNext(), this.xp.getLevel().getLevel() + 1));
-            float scale = 0.75f;
+            MutableComponent text = Component.literal("Next lvl: %s xp".formatted(xpToNext()));
+            float scale = 0.60f;
             graphics.pose().pushPose();
             graphics.pose().translate(renderX, renderY - 1, 0);
             graphics.pose().scale(scale, scale, 1.0f);
@@ -85,9 +101,9 @@ public class PlayerSkillWidget extends PanelWidget {
             graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
             graphics.blit(TEXTURE_LOCATION, renderX, renderY, barWidth, 5, 0.0F, 217.0F, 102, 5, 256, 256);
 
-            float percent = 100.0f / xpToNext();
-            int xp = (int) Math.min(Math.floor(percent * this.xp.getXp()), barWidth);
-            graphics.blit(TEXTURE_LOCATION, renderX, renderY, xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
+            long threshold = this.xp.getLevel().getXpToNext();
+            int fillWidth = threshold <= 0 ? 0 : (int) Math.min((this.xp.getXp() * (long) barWidth) / threshold, (long) barWidth);
+            graphics.blit(TEXTURE_LOCATION, renderX, renderY, fillWidth, 5, 0.0F, 223.0F, 102, 5, 256, 256);
 
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
