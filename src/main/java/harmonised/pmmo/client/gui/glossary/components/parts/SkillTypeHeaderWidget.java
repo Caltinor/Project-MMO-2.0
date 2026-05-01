@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public class SkillTypeHeaderWidget extends PanelWidget {
+    private static final int HEIGHT = 11;
     private static final int ACCENT_BAR_WIDTH = 3;
     private static final int TEXT_INSET = 5;
 
@@ -18,8 +19,6 @@ public class SkillTypeHeaderWidget extends PanelWidget {
     private final int accentColor;
     private final List<String> skillKeys;
     private final Font font = Minecraft.getInstance().font;
-
-    private static final int HEIGHT = 11;
 
     public SkillTypeHeaderWidget(int width, String typeKey, SkillTypeData data, List<String> skillKeys) {
         super(0x40000000, width);

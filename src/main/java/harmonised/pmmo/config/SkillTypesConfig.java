@@ -7,6 +7,7 @@ import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.SkillTypeData;
 import harmonised.pmmo.config.readers.ConfigListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,16 +17,16 @@ import java.util.Optional;
 import java.util.Set;
 
 public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes, Optional<List<String>> hidden) implements ConfigData<SkillTypesConfig> {
-	// Reserved key in `.pmmo` scripts: `set(hiddenSkills).skills(a,b,c);` populates the hidden list.
-	// In JSON, just use the top-level `"hiddenSkills": [...]` field directly.
-	public static final String HIDDEN_KEY = "hiddenSkills";
+	// Reserved param key in `.pmmo` scripts: `set(hiddenSkills).skills(a,b);` populates the hidden list
+	// rather than registering a skill type with that name.
+	private static final String HIDDEN_KEY = "hiddenSkills";
 	private static final String SKILLS_PARAM = "skills";
 
 	public SkillTypesConfig() {this(generateDefaults(), Optional.of(generateDefaultHidden()));}
 	public SkillTypesConfig(Map<String, SkillTypeData> skillTypes) {this(skillTypes, Optional.empty());}
 
 	private static List<String> generateDefaultHidden() {
-		return new java.util.ArrayList<>(List.of("fightgroup"));
+		return new ArrayList<>(List.of("fightgroup"));
 	}
 
 	private static Map<String, SkillTypeData> generateDefaults() {
@@ -64,12 +65,6 @@ public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes, Optional<L
 		return new HashSet<>(hidden.orElse(List.of()));
 	}
 
-	public Map<String, String> skillToType() {
-		Map<String, String> out = new HashMap<>();
-		skillTypes.forEach((typeKey, data) -> data.getSkills().forEach(skill -> out.putIfAbsent(skill, typeKey)));
-		return out;
-	}
-
 	@Override
 	public MapCodec<SkillTypesConfig> getCodec() {return CODEC;}
 
@@ -79,8 +74,7 @@ public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes, Optional<L
 	@Override
 	public ConfigData<SkillTypesConfig> getFromScripting(String param, Map<String, String> value) {
 		if (HIDDEN_KEY.equals(param)) {
-			List<String> existing = this.hidden().orElse(List.of());
-			List<String> merged = new java.util.ArrayList<>(existing);
+			List<String> merged = new ArrayList<>(this.hidden().orElse(List.of()));
 			if (value.containsKey(SKILLS_PARAM)) {
 				Arrays.stream(value.get(SKILLS_PARAM).split(","))
 						.map(String::trim)
