@@ -5,10 +5,12 @@ import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.CollapsingPanel;
 import harmonised.pmmo.client.gui.glossary.components.DetailScroll;
 import harmonised.pmmo.client.gui.glossary.components.parts.PlayerSkillWidget;
+import harmonised.pmmo.client.gui.glossary.components.parts.SkillTypeHeaderWidget;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.config.codecs.SkillTypeData;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.neoforged.api.distmarker.Dist;
@@ -16,9 +18,15 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 @EventBusSubscriber(modid = Reference.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ScreenHandler {
-    
+
     @SubscribeEvent
     public static void onScreenInit(ScreenEvent.Init.Post event) {
         Screen screen = event.getScreen();
@@ -33,17 +41,74 @@ public class ScreenHandler {
                 @Override protected boolean scrollbarVisible() {return false;}
             };
 
-            Config.skills().skills().forEach((skill, data) -> scroll.addChild(
-                    (AbstractWidget) new PlayerSkillWidget(100, skill, data),
-                    PositionType.STATIC.constraint,
-                    SizeConstraints.builder().internalHeight().build()
-            ));
+            populateSkillList(scroll);
             scroll.arrangeElements();
 
             panel.addChild((AbstractWidget) scroll, PositionType.STATIC.constraint, SizeConstraints.builder().minHeightPercent(1.0).minWidthPercent(1.0).build());
             panel.arrangeElements();
 
             event.addListener(panel);
+        }
+    }
+
+    // TODO: add a per-type "hideUnlearned" flag on SkillTypeData. When true, skip
+    // any skill in that type whose player XP is 0; if every skill in the type is
+    // skipped, also skip the type's header row entirely.
+    //
+    // TODO: add an option to hide skill groups (skills whose SkillData.isSkillGroup()
+    // returns true, i.e. groupFor parents like "fightgroup"). Likely shapes:
+    //   - global flag (Config.HIDE_SKILL_GROUPS) hiding all groups everywhere
+    //   - per-type flag on SkillTypeData (e.g. "hideGroups") for finer control
+    //   - or just rely on the per-skill "hidden" flag once that lands and let
+    //     users opt-out individually.
+    // Decide before seeding default skill types so the warfare default can either
+    // include "fightgroup" or rely on the global toggle to hide it.
+    private static void populateSkillList(DetailScroll scroll) {
+        Map<String, SkillData> allSkills = Config.skills().skills();
+        Map<String, SkillTypeData> typesMap = Config.skillTypes().skillTypes();
+
+        List<Map.Entry<String, SkillTypeData>> orderedTypes = typesMap.entrySet().stream()
+                .sorted(Comparator.comparingInt((Map.Entry<String, SkillTypeData> e) -> e.getValue().getOrder())
+                        .thenComparing(Map.Entry::getKey))
+                .toList();
+
+        Map<String, Boolean> placed = new LinkedHashMap<>();
+        allSkills.keySet().forEach(s -> placed.put(s, false));
+
+        for (Map.Entry<String, SkillTypeData> entry : orderedTypes) {
+            String typeKey = entry.getKey();
+            SkillTypeData typeData = entry.getValue();
+            List<String> groupSkills = new ArrayList<>();
+            for (String skill : typeData.getSkills()) {
+                if (!allSkills.containsKey(skill)) continue;
+                if (Boolean.TRUE.equals(placed.get(skill))) continue;
+                groupSkills.add(skill);
+                placed.put(skill, true);
+            }
+            if (groupSkills.isEmpty()) continue;
+
+            scroll.addChild(
+                    (AbstractWidget) new SkillTypeHeaderWidget(100, typeKey, typeData),
+                    PositionType.STATIC.constraint,
+                    SizeConstraints.builder().internalHeight().build()
+            );
+            for (String skill : groupSkills) {
+                scroll.addChild(
+                        (AbstractWidget) new PlayerSkillWidget(100, skill, allSkills.get(skill)).withAccent(typeData.getColor()),
+                        PositionType.STATIC.constraint,
+                        SizeConstraints.builder().internalHeight().build()
+                );
+            }
+        }
+
+        for (Map.Entry<String, Boolean> e : placed.entrySet()) {
+            if (e.getValue()) continue;
+            String skill = e.getKey();
+            scroll.addChild(
+                    (AbstractWidget) new PlayerSkillWidget(100, skill, allSkills.get(skill)),
+                    PositionType.STATIC.constraint,
+                    SizeConstraints.builder().internalHeight().build()
+            );
         }
     }
 }

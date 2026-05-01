@@ -11,6 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes) implements ConfigData<SkillTypesConfig> {
+	// TODO: seed default skill types for PMMO's built-in skills (mirroring SkillsConfig.generateDefaults).
+	// Proposed groupings:
+	//   warfare:    combat, slayer, hunter, archery, gunslinging  (fightgroup excluded — it's a groupFor parent, see hide-groups TODO in ScreenHandler)
+	//   athletics:  endurance, agility, swimming, flying, sailing
+	//   harvesting: mining, woodcutting, excavation, farming, fishing
+	//   artisanry:  smithing, crafting, building, engineering, cooking, alchemy
+	//   arcana:     magic, alchemy (decide whether alchemy lives here or in artisanry)
+	//   social:     charisma, taming
 	public SkillTypesConfig() {this(new HashMap<>());}
 	public static final MapCodec<SkillTypesConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.unboundedMap(Codec.STRING, SkillTypeData.CODEC).fieldOf("skillTypes").forGetter(SkillTypesConfig::skillTypes)
