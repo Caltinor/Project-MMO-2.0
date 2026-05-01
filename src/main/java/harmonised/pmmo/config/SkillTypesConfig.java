@@ -21,16 +21,35 @@ public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes, Optional<L
 	public static final String HIDDEN_KEY = "hiddenSkills";
 	private static final String SKILLS_PARAM = "skills";
 
-	// TODO: seed default skill types for PMMO's built-in skills (mirroring SkillsConfig.generateDefaults).
-	// Proposed groupings:
-	//   warfare:    combat, slayer, hunter, archery, gunslinging  (fightgroup excluded — it's a groupFor parent, see hide-groups TODO in ScreenHandler)
-	//   athletics:  endurance, agility, swimming, flying, sailing
-	//   harvesting: mining, woodcutting, excavation, farming, fishing
-	//   artisanry:  smithing, crafting, building, engineering, cooking, alchemy
-	//   arcana:     magic, alchemy (decide whether alchemy lives here or in artisanry)
-	//   social:     charisma, taming
-	public SkillTypesConfig() {this(new HashMap<>(), Optional.empty());}
+	public SkillTypesConfig() {this(generateDefaults(), Optional.of(generateDefaultHidden()));}
 	public SkillTypesConfig(Map<String, SkillTypeData> skillTypes) {this(skillTypes, Optional.empty());}
+
+	private static List<String> generateDefaultHidden() {
+		return new java.util.ArrayList<>(List.of("fightgroup"));
+	}
+
+	private static Map<String, SkillTypeData> generateDefaults() {
+		Map<String, SkillTypeData> map = new HashMap<>();
+		map.put("warfare", SkillTypeData.Builder.start()
+				.withDisplayName("Warfare").withOrder(0).withColor(0xCC3333)
+				.withSkills(List.of("combat", "slayer", "hunter", "archery", "gunslinging")).build());
+		map.put("athletics", SkillTypeData.Builder.start()
+				.withDisplayName("Athletics").withOrder(1).withColor(0x66CC66)
+				.withSkills(List.of("endurance", "agility", "swimming", "flying", "sailing")).build());
+		map.put("harvesting", SkillTypeData.Builder.start()
+				.withDisplayName("Harvesting").withOrder(2).withColor(0xCC9933)
+				.withSkills(List.of("mining", "woodcutting", "excavation", "farming", "fishing")).build());
+		map.put("artisanry", SkillTypeData.Builder.start()
+				.withDisplayName("Artisanry").withOrder(3).withColor(0xCC6633)
+				.withSkills(List.of("smithing", "crafting", "building", "engineering", "cooking", "alchemy")).build());
+		map.put("arcana", SkillTypeData.Builder.start()
+				.withDisplayName("Arcana").withOrder(4).withColor(0x9933CC)
+				.withSkills(List.of("magic")).build());
+		map.put("social", SkillTypeData.Builder.start()
+				.withDisplayName("Social").withOrder(5).withColor(0xFFD700)
+				.withSkills(List.of("charisma", "taming")).build());
+		return map;
+	}
 
 	public static final MapCodec<SkillTypesConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.unboundedMap(Codec.STRING, SkillTypeData.CODEC).fieldOf("skillTypes").forGetter(SkillTypesConfig::skillTypes),
