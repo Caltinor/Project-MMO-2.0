@@ -7,10 +7,20 @@ import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.SkillTypeData;
 import harmonised.pmmo.config.readers.ConfigListener;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes) implements ConfigData<SkillTypesConfig> {
+public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes, Optional<List<String>> hidden) implements ConfigData<SkillTypesConfig> {
+	// Reserved key in `.pmmo` scripts: `set(hiddenSkills).skills(a,b,c);` populates the hidden list.
+	// In JSON, just use the top-level `"hiddenSkills": [...]` field directly.
+	public static final String HIDDEN_KEY = "hiddenSkills";
+	private static final String SKILLS_PARAM = "skills";
+
 	// TODO: seed default skill types for PMMO's built-in skills (mirroring SkillsConfig.generateDefaults).
 	// Proposed groupings:
 	//   warfare:    combat, slayer, hunter, archery, gunslinging  (fightgroup excluded — it's a groupFor parent, see hide-groups TODO in ScreenHandler)
@@ -19,13 +29,20 @@ public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes) implements
 	//   artisanry:  smithing, crafting, building, engineering, cooking, alchemy
 	//   arcana:     magic, alchemy (decide whether alchemy lives here or in artisanry)
 	//   social:     charisma, taming
-	public SkillTypesConfig() {this(new HashMap<>());}
+	public SkillTypesConfig() {this(new HashMap<>(), Optional.empty());}
+	public SkillTypesConfig(Map<String, SkillTypeData> skillTypes) {this(skillTypes, Optional.empty());}
+
 	public static final MapCodec<SkillTypesConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			Codec.unboundedMap(Codec.STRING, SkillTypeData.CODEC).fieldOf("skillTypes").forGetter(SkillTypesConfig::skillTypes)
+			Codec.unboundedMap(Codec.STRING, SkillTypeData.CODEC).fieldOf("skillTypes").forGetter(SkillTypesConfig::skillTypes),
+			Codec.STRING.listOf().optionalFieldOf("hiddenSkills").forGetter(SkillTypesConfig::hidden)
 	).apply(instance, SkillTypesConfig::new));
 
 	public SkillTypeData get(String key) {
 		return skillTypes.getOrDefault(key, SkillTypeData.Builder.start().build());
+	}
+
+	public Set<String> hiddenSkills() {
+		return new HashSet<>(hidden.orElse(List.of()));
 	}
 
 	public Map<String, String> skillToType() {
@@ -42,14 +59,25 @@ public record SkillTypesConfig(Map<String, SkillTypeData> skillTypes) implements
 
 	@Override
 	public ConfigData<SkillTypesConfig> getFromScripting(String param, Map<String, String> value) {
+		if (HIDDEN_KEY.equals(param)) {
+			List<String> existing = this.hidden().orElse(List.of());
+			List<String> merged = new java.util.ArrayList<>(existing);
+			if (value.containsKey(SKILLS_PARAM)) {
+				Arrays.stream(value.get(SKILLS_PARAM).split(","))
+						.map(String::trim)
+						.filter(s -> !s.isEmpty())
+						.forEach(s -> {if (!merged.contains(s)) merged.add(s);});
+			}
+			return new SkillTypesConfig(this.skillTypes(), merged.isEmpty() ? Optional.empty() : Optional.of(merged));
+		}
 		Map<String, SkillTypeData> map = new HashMap<>(this.skillTypes());
 		map.put(param, SkillTypeData.Builder.start().fromScripting(value));
-		return new SkillTypesConfig(map);
+		return new SkillTypesConfig(map, this.hidden());
 	}
 
 	@Override
 	public SkillTypesConfig combine(SkillTypesConfig two) {return two;}
 
 	@Override
-	public boolean isUnconfigured() {return skillTypes.isEmpty();}
+	public boolean isUnconfigured() {return skillTypes.isEmpty() && hidden.isEmpty();}
 }

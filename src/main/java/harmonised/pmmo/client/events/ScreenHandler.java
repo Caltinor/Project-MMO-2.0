@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @EventBusSubscriber(modid = Reference.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ScreenHandler {
@@ -65,7 +66,11 @@ public class ScreenHandler {
     // Decide before seeding default skill types so the warfare default can either
     // include "fightgroup" or rely on the global toggle to hide it.
     private static void populateSkillList(DetailScroll scroll) {
-        Map<String, SkillData> allSkills = Config.skills().skills();
+        Set<String> hidden = Config.skillTypes().hiddenSkills();
+        Map<String, SkillData> allSkills = new LinkedHashMap<>();
+        Config.skills().skills().forEach((key, data) -> {
+            if (!hidden.contains(key)) allSkills.put(key, data);
+        });
         Map<String, SkillTypeData> typesMap = Config.skillTypes().skillTypes();
 
         List<Map.Entry<String, SkillTypeData>> orderedTypes = typesMap.entrySet().stream()
