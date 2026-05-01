@@ -5,19 +5,32 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.config.codecs.SkillTypeData;
 import harmonised.pmmo.config.readers.ConfigListener;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<SkillsConfig> {
-	public SkillsConfig() {this(generateDefaults());}
+public record SkillsConfig(Map<String, SkillData> skills, Map<String, SkillTypeData> types) implements ConfigData<SkillsConfig> {
+	// In `.pmmo` scripts, `set(name).skillType()...` dispatches to the type-update
+	// path rather than the skill-update path. The keyword's value is ignored — its
+	// presence in the value map is the trigger.
+	private static final String TYPE_FLAG = "skillType";
+
+	public SkillsConfig() {this(generateDefaults(), generateDefaultTypes());}
+	public SkillsConfig(Map<String, SkillData> skills) {this(skills, new HashMap<>());}
+
 	public static final MapCodec<SkillsConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-			Codec.unboundedMap(Codec.STRING, SkillData.CODEC).fieldOf("skills").forGetter(SkillsConfig::skills)
+			Codec.unboundedMap(Codec.STRING, SkillData.CODEC).fieldOf("skills").forGetter(SkillsConfig::skills),
+			Codec.unboundedMap(Codec.STRING, SkillTypeData.CODEC).optionalFieldOf("types", new HashMap<>()).forGetter(SkillsConfig::types)
 	).apply(instance, SkillsConfig::new));
+
 	public SkillData get(String skill) {return skills().getOrDefault(skill, SkillData.Builder.getDefault());}
+
+	public SkillTypeData getType(String key) {return types().getOrDefault(key, SkillTypeData.Builder.start().build());}
+
 	private static Map<String, SkillData> generateDefaults() {
 		Map<String, SkillData> defaultSkills = new HashMap<>();
 		defaultSkills.put("mining", 	SkillData.Builder.start().withColor(0x00ffff).withIcon(Reference.mc("textures/mob_effect/haste.png")).build());
@@ -47,9 +60,33 @@ public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<
 				"combat", 0.5,
 				"endurance", 0.3,
 				"archery", 0.2))
+				.withShowInList(false)
 				.build());
 		defaultSkills.put("charisma", SkillData.Builder.start().withIcon(Reference.mc("textures/item/emerald.png")).withIconSize(16).build());
 		return defaultSkills;
+	}
+
+	private static Map<String, SkillTypeData> generateDefaultTypes() {
+		Map<String, SkillTypeData> map = new HashMap<>();
+		map.put("warfare", SkillTypeData.Builder.start()
+				.withOrder(0).withColor(0xCC3333)
+				.withSkills(List.of("combat", "slayer", "hunter", "archery", "gunslinging")).build());
+		map.put("athletics", SkillTypeData.Builder.start()
+				.withOrder(1).withColor(0x66CC66)
+				.withSkills(List.of("endurance", "agility", "swimming", "flying", "sailing")).build());
+		map.put("harvesting", SkillTypeData.Builder.start()
+				.withOrder(2).withColor(0xCC9933)
+				.withSkills(List.of("mining", "woodcutting", "excavation", "farming", "fishing")).build());
+		map.put("artisanry", SkillTypeData.Builder.start()
+				.withOrder(3).withColor(0xCC6633)
+				.withSkills(List.of("smithing", "crafting", "building", "engineering", "cooking", "alchemy")).build());
+		map.put("arcana", SkillTypeData.Builder.start()
+				.withOrder(4).withColor(0x9933CC)
+				.withSkills(List.of("magic")).build());
+		map.put("social", SkillTypeData.Builder.start()
+				.withOrder(5).withColor(0xFFD700)
+				.withSkills(List.of("charisma", "taming")).build());
+		return map;
 	}
 
 	@Override
@@ -60,9 +97,14 @@ public record SkillsConfig(Map<String, SkillData> skills) implements ConfigData<
 
 	@Override
 	public ConfigData<SkillsConfig> getFromScripting(String param, Map<String, String> value) {
+		if (value.containsKey(TYPE_FLAG)) {
+			Map<String, SkillTypeData> typesMap = new HashMap<>(this.types());
+			typesMap.put(param, SkillTypeData.Builder.start().fromScripting(value));
+			return new SkillsConfig(this.skills(), typesMap);
+		}
 		Map<String, SkillData> skills = new HashMap<>(this.skills());
 		skills.put(param, SkillData.Builder.start().fromScripting(value));
-		return new SkillsConfig(skills);
+		return new SkillsConfig(skills, this.types());
 	}
 
 	@Override

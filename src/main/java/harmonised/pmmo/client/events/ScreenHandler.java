@@ -28,7 +28,6 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @EventBusSubscriber(modid = Reference.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ScreenHandler {
@@ -114,13 +113,12 @@ public class ScreenHandler {
     }
 
     private static void populateSkillList(DetailScroll scroll) {
-        Set<String> hidden = Config.skillTypes().hiddenSkills();
         Map<String, SkillData> allSkills = new LinkedHashMap<>();
         Config.skills().skills().forEach((key, data) -> {
-            if (!hidden.contains(key)) allSkills.put(key, data);
+            if (data.getShowInList()) allSkills.put(key, data);
         });
 
-        List<Map.Entry<String, SkillTypeData>> orderedTypes = Config.skillTypes().skillTypes().entrySet().stream()
+        List<Map.Entry<String, SkillTypeData>> orderedTypes = Config.skills().types().entrySet().stream()
                 .sorted(Comparator.comparingInt((Map.Entry<String, SkillTypeData> e) -> e.getValue().getOrder())
                         .thenComparing(Map.Entry::getKey))
                 .toList();
