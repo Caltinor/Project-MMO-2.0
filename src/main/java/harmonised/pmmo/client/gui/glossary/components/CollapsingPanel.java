@@ -37,7 +37,7 @@ public class CollapsingPanel extends ReactiveWidget {
         return this;
     }
 
-    @Override public void resize() {}  //Panel does not adjust height beyond parent size constraints
+    @Override public void resize() {} //Panel does not adjust height beyond parent size constraints
 
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
