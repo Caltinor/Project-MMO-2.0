@@ -20,7 +20,6 @@ public record SkillsConfig(Map<String, SkillData> skills, Map<String, SkillTypeD
 
 	public static final MapCodec<SkillsConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			Codec.unboundedMap(Codec.STRING, SkillData.CODEC).fieldOf("skills").forGetter(SkillsConfig::skills),
-			// `types` is optional in JSON; missing field → empty map (no grouping).
 			Codec.unboundedMap(Codec.STRING, SkillTypeData.CODEC).optionalFieldOf("types", new HashMap<>()).forGetter(SkillsConfig::types)
 	).apply(instance, SkillsConfig::new));
 
