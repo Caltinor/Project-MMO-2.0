@@ -17,6 +17,15 @@ import net.neoforged.fml.LogicalSide;
 
 import java.awt.Color;
 
+/**
+ * One row in the inventory skill panel — the visual stack is:
+ *   [icon] [skill name] [level number]
+ *                       [progress bar / hover-text]
+ * <p>
+ * The row knows nothing about whether it belongs to a typed group; the parent
+ * {@link SkillTypeHeaderWidget} handles all framing (left bar, tint, bottom edge)
+ * around its child rows.
+ */
 public class PlayerSkillWidget extends PanelWidget {
     protected static final ResourceLocation TEXTURE_LOCATION = Reference.rl("textures/gui/player_stats.png");
     private static final WidgetSprites BACKGROUND_SPRITES = new WidgetSprites(
@@ -31,10 +40,6 @@ public class PlayerSkillWidget extends PanelWidget {
     private static final int LEVEL_RIGHT_PAD = 7;
     private static final int PROGRESS_BAR_FULL_WIDTH = 94;
     private static final int PROGRESS_BAR_HEIGHT = 5;
-    private static final int ACCENT_BAR_WIDTH = 3;
-    private static final int ACCENT_INSET = 5;
-    private static final int ACCENT_BOTTOM_THICKNESS = 2;
-    private static final int ACCENT_TINT_ALPHA = 0x26;
     private static final float NAME_SCALE = 0.85f;
     private static final float HOVER_TEXT_SCALE = 0.60f;
 
@@ -43,9 +48,6 @@ public class PlayerSkillWidget extends PanelWidget {
     private final String skillName;
     private final Experience xp;
     private final Font font = Minecraft.getInstance().font;
-
-    private Integer accentColor = null;
-    private boolean drawBottom = false;
 
     public PlayerSkillWidget(int width, String skillName, SkillData data) {
         super(data.getColor(), width);
@@ -56,116 +58,70 @@ public class PlayerSkillWidget extends PanelWidget {
         this.xp = Core.get(LogicalSide.CLIENT).getData().getXpMap(null).getOrDefault(skillName, new Experience());
     }
 
-    public PlayerSkillWidget withAccent(int color) {
-        this.accentColor = color;
-        return this;
-    }
-
-    public PlayerSkillWidget withCloseBottom(boolean closeBottom) {
-        this.drawBottom = closeBottom;
-        return this;
-    }
-
-    public Integer getAccentColor() {
-        return accentColor;
-    }
-
     @Override public void resize() {setHeight(HEIGHT);}
 
+    /**
+     * Hidden when the search query is non-empty AND matches neither the raw skill key
+     * nor the translated display name. The translation match is skipped when no lang
+     * entry is registered (in which case {@code Component.translatable(...).getString()}
+     * returns the literal key like "pmmo.mining" and would falsely match queries like "pmmo").
+     */
     @Override
     public boolean applyFilter(GlossaryFilter.Filter filter) {
         String text = filter.getTextFilter();
         if (text == null || text.isEmpty()) return false;
-        return !matchesSearch(skillName, text.toLowerCase());
-    }
-
-    public static boolean matchesSearch(String skillKey, String lowerQuery) {
-        if (skillKey.toLowerCase().contains(lowerQuery)) return true;
-        String translationKey = "pmmo." + skillKey;
+        String query = text.toLowerCase();
+        if (skillName.toLowerCase().contains(query)) return false;
+        String translationKey = "pmmo." + skillName;
         String translated = Component.translatable(translationKey).getString();
-        if (translated.equals(translationKey)) return false; // no real translation, avoid matching the literal key
-        return translated.toLowerCase().contains(lowerQuery);
+        if (translated.equals(translationKey)) return true;
+        return !translated.toLowerCase().contains(query);
     }
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(graphics);
-        renderAccent(graphics);
-        renderIcon(graphics);
-        renderProgressBar(graphics);
-        renderSkillName(graphics);
-        renderLevel(graphics);
-    }
-
-    private void renderBackground(GuiGraphics graphics) {
         graphics.blitSprite(BACKGROUND_SPRITES.get(this.isActive(), this.isFocused()), this.getX(), this.getY(), this.width, this.height);
-    }
 
-    private void renderAccent(GuiGraphics graphics) {
-        if (accentColor == null) return;
-        int argb = 0xFF000000 | accentColor;
-        int tintArgb = (ACCENT_TINT_ALPHA << 24) | (accentColor & 0x00FFFFFF);
-        graphics.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), tintArgb);
-        graphics.fill(this.getX(), this.getY(), this.getX() + ACCENT_BAR_WIDTH, this.getBottom(), argb);
-        if (drawBottom) {
-            graphics.fill(this.getX(), this.getBottom() - ACCENT_BOTTOM_THICKNESS, this.getRight(), this.getBottom(), argb);
-        }
-    }
+        int iconSourceSize = skillData.getIconSize();
+        graphics.blit(skillData.getIcon(), this.getX() + ICON_LEFT_PAD, this.getY() + ICON_LEFT_PAD,
+                ICON_SIZE, ICON_SIZE, 0, 0, iconSourceSize, iconSourceSize, iconSourceSize, iconSourceSize);
 
-    private void renderIcon(GuiGraphics graphics) {
-        int iconSize = skillData.getIconSize();
-        graphics.blit(skillData.getIcon(), this.getX() + ICON_LEFT_PAD + contentInset(), this.getY() + ICON_LEFT_PAD,
-                ICON_SIZE, ICON_SIZE, 0, 0, iconSize, iconSize, iconSize, iconSize);
-    }
+        renderProgressBar(graphics);
 
-    private void renderSkillName(GuiGraphics graphics) {
+        // Skill name, scaled to 85% via PoseStack so it fits next to the level number.
         graphics.pose().pushPose();
-        graphics.pose().translate(this.getX() + CONTENT_LEFT_PAD + contentInset(), this.getY() + 5, 0);
+        graphics.pose().translate(this.getX() + CONTENT_LEFT_PAD, this.getY() + 5, 0);
         graphics.pose().scale(NAME_SCALE, NAME_SCALE, 1.0f);
         graphics.drawString(font, Component.translatable("pmmo." + skillName), 0, 0, skillColor.getRGB());
         graphics.pose().popPose();
-    }
 
-    private void renderLevel(GuiGraphics graphics) {
+        // Right-aligned level number.
         String level = String.valueOf(xp.getLevel().getLevel());
-        int x = this.getX() + this.width - LEVEL_RIGHT_PAD - font.width(level);
-        graphics.drawString(font, level, x, this.getY() + 5, skillColor.getRGB());
+        graphics.drawString(font, level, this.getX() + this.width - LEVEL_RIGHT_PAD - font.width(level), this.getY() + 5, skillColor.getRGB());
     }
 
+    /**
+     * Bottom slot beneath the skill name. Shows a colored progress bar by default;
+     * while focused (hover) it switches to a small "Next lvl: X xp" readout.
+     */
     private void renderProgressBar(GuiGraphics graphics) {
-        int renderX = this.getX() + CONTENT_LEFT_PAD + contentInset();
+        int renderX = this.getX() + CONTENT_LEFT_PAD;
         int renderY = this.getY() + (font.lineHeight + 6);
-        int barWidth = PROGRESS_BAR_FULL_WIDTH - contentInset();
         if (this.isFocused()) {
-            renderHoverText(graphics, renderX, renderY);
-        } else {
-            renderProgressFill(graphics, renderX, renderY, barWidth);
+            MutableComponent text = Component.literal("Next lvl: %s xp".formatted(xp.getLevel().getXpToNext() - xp.getXp()));
+            graphics.pose().pushPose();
+            graphics.pose().translate(renderX, renderY - 1, 0);
+            graphics.pose().scale(HOVER_TEXT_SCALE, HOVER_TEXT_SCALE, 1.0f);
+            graphics.drawString(font, text, 0, 0, skillColor.getRGB());
+            graphics.pose().popPose();
+            return;
         }
-    }
-
-    private void renderHoverText(GuiGraphics graphics, int x, int y) {
-        MutableComponent text = Component.literal("Next lvl: %s xp".formatted(xpToNext()));
-        graphics.pose().pushPose();
-        graphics.pose().translate(x, y - 1, 0);
-        graphics.pose().scale(HOVER_TEXT_SCALE, HOVER_TEXT_SCALE, 1.0f);
-        graphics.drawString(font, text, 0, 0, skillColor.getRGB());
-        graphics.pose().popPose();
-    }
-
-    private void renderProgressFill(GuiGraphics graphics, int x, int y, int barWidth) {
         graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
-        graphics.blit(TEXTURE_LOCATION, x, y, barWidth, PROGRESS_BAR_HEIGHT, 0.0F, 217.0F, 102, 5, 256, 256);
+        graphics.blit(TEXTURE_LOCATION, renderX, renderY, PROGRESS_BAR_FULL_WIDTH, PROGRESS_BAR_HEIGHT, 0.0F, 217.0F, 102, 5, 256, 256);
+
         long threshold = xp.getLevel().getXpToNext();
-        int fillWidth = threshold <= 0 ? 0 : (int) Math.min((xp.getXp() * (long) barWidth) / threshold, (long) barWidth);
-        graphics.blit(TEXTURE_LOCATION, x, y, fillWidth, PROGRESS_BAR_HEIGHT, 0.0F, 223.0F, 102, 5, 256, 256);
+        int fillWidth = threshold <= 0 ? 0 : (int) Math.min((xp.getXp() * (long) PROGRESS_BAR_FULL_WIDTH) / threshold, (long) PROGRESS_BAR_FULL_WIDTH);
+        graphics.blit(TEXTURE_LOCATION, renderX, renderY, fillWidth, PROGRESS_BAR_HEIGHT, 0.0F, 223.0F, 102, 5, 256, 256);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    private int contentInset() {
-        return accentColor == null ? 0 : ACCENT_INSET;
-    }
-
-    private long xpToNext() {
-        return xp.getLevel().getXpToNext() - xp.getXp();
     }
 }

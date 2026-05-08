@@ -1,0 +1,106 @@
+package harmonised.pmmo.client.gui.skill_side_panel;
+
+import harmonised.pmmo.api.client.types.GlossaryFilter;
+import harmonised.pmmo.api.client.types.PositionType;
+import harmonised.pmmo.api.client.wrappers.SizeConstraints;
+import harmonised.pmmo.client.gui.glossary.components.CollapsingPanel;
+import harmonised.pmmo.client.gui.glossary.components.DetailScroll;
+import harmonised.pmmo.client.gui.glossary.components.parts.PlayerSkillWidget;
+import harmonised.pmmo.client.gui.glossary.components.parts.SkillTypeHeaderWidget;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.config.codecs.SkillTypeData;
+import net.minecraft.client.gui.components.AbstractWidget;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * The collapsible skills panel attached to the left side of the inventory screen.
+ * <p>
+ * Layout (top to bottom):
+ *   - search bar (filters the list as the user types)
+ *   - scrolling list of {@link SkillTypeHeaderWidget} groups, then any untyped
+ *     {@link PlayerSkillWidget} rows alphabetically at the end.
+ * <p>
+ * Skills with {@code showInList=false} never appear. Each header widget owns its
+ * skill rows as nested children, so group framing, edge tracking, and filter
+ * cascade live there rather than being inferred at this level.
+ */
+public class SkillsSidePanel extends CollapsingPanel {
+    public static final int PANEL_WIDTH = 130;
+    private static final int SCROLL_WIDTH = 103;
+    private static final int ROW_WIDTH = 100;
+    private static final int SEARCH_HEIGHT = 14;
+    /** Combined top + bottom padding inherited from {@link CollapsingPanel} (5 + 7). */
+    private static final int VERTICAL_PADDING = 12;
+
+    private final DetailScroll scroll;
+
+    public SkillsSidePanel(int x, int y, int height) {
+        super(x, y, PANEL_WIDTH, height, Config.SKILL_PANEL_OPEN_BY_DEFAULT.get());
+        int scrollHeight = Math.max(0, height - SEARCH_HEIGHT - VERTICAL_PADDING);
+
+        SkillSearchBox searchBar = new SkillSearchBox(ROW_WIDTH, SEARCH_HEIGHT);
+        scroll = new DetailScroll(0, 0, SCROLL_WIDTH, scrollHeight) {
+            @Override protected boolean scrollbarVisible() {return false;}
+        };
+        populate();
+
+        // Filter cascade is structural: each header forwards to its rows and
+        // hides itself when none survive. No post-pass needed.
+        searchBar.setResponder(text -> scroll.applyFilter(new GlossaryFilter.Filter(text == null ? "" : text)));
+
+        addChild(searchBar, PositionType.STATIC.constraint, fixedRow(SEARCH_HEIGHT));
+        addChild((AbstractWidget) scroll, PositionType.STATIC.constraint, fixedRow(scrollHeight));
+        arrangeElements();
+    }
+
+    private static SizeConstraints fixedRow(int height) {
+        return SizeConstraints.builder().absoluteHeight(height).minWidthPercent(1.0).build();
+    }
+
+    private void addScrollRow(AbstractWidget widget) {
+        scroll.addChild(widget, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
+    }
+
+    /**
+     * Builds the body of the scroll: type headers (each owning its skill rows) in
+     * configured order, then any leftover untyped skills sorted alphabetically.
+     */
+    private void populate() {
+        Map<String, SkillData> visibleSkills = new LinkedHashMap<>();
+        Config.skills().skills().forEach((skillKey, skillData) -> {
+            if (skillData.getShowInList()) visibleSkills.put(skillKey, skillData);
+        });
+
+        // Tracks skills already claimed by a type so duplicates across types render only once.
+        Set<String> placedSkills = new HashSet<>();
+
+        Config.skills().types().entrySet().stream()
+                .sorted(Comparator.comparingInt((Map.Entry<String, SkillTypeData> entry) -> entry.getValue().getOrder())
+                        .thenComparing(Map.Entry::getKey))
+                .forEach(typeEntry -> {
+                    String typeKey = typeEntry.getKey();
+                    SkillTypeData typeData = typeEntry.getValue();
+                    List<PlayerSkillWidget> rows = new ArrayList<>();
+                    for (String skillKey : typeData.getSkills()) {
+                        // Set.add returns false if already present — doubles as dedupe.
+                        if (!visibleSkills.containsKey(skillKey) || !placedSkills.add(skillKey)) continue;
+                        rows.add(new PlayerSkillWidget(ROW_WIDTH, skillKey, visibleSkills.get(skillKey)));
+                    }
+                    if (!rows.isEmpty()) addScrollRow(new SkillTypeHeaderWidget(ROW_WIDTH, typeKey, typeData, rows));
+                });
+
+        // Untyped skills: anything visible that no type claimed, alphabetized.
+        visibleSkills.entrySet().stream()
+                .filter(entry -> !placedSkills.contains(entry.getKey()))
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> addScrollRow(new PlayerSkillWidget(ROW_WIDTH, entry.getKey(), entry.getValue())));
+    }
+}
