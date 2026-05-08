@@ -1,4 +1,4 @@
-package harmonised.pmmo.client.gui.skill_side_panel;
+package harmonised.pmmo.client.gui.glossary.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -7,21 +7,23 @@ import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 /**
- * EditBox tailored for the side panel:
+ * EditBox suitable for embedding inside another screen (especially container
+ * screens like the player inventory) where the host's hotkeys would otherwise
+ * intercept letter keys.
  *   <ul>
- *     <li>{@code keyPressed} consumes any key while focused (except ESC/TAB) so inventory hotkeys
- *         like 'e' don't close the screen mid-search.</li>
+ *     <li>{@code keyPressed} consumes any key while focused (except ESC/TAB) so host hotkeys
+ *         like the inventory's 'e' don't close the screen mid-search.</li>
  *     <li>Renders a clear (×) glyph at the right edge whenever there's text.</li>
  *     <li>Clicking the × empties the field and keeps the box focused for further input.</li>
  *   </ul>
  */
-public class SkillSearchBox extends EditBox {
+public class SearchBox extends EditBox {
     private static final int CLEAR_GLYPH_SIZE = 8;
     private static final int CLEAR_GLYPH_RIGHT_MARGIN = 2;
     private static final int CLEAR_COLOR_DEFAULT = 0xFFAAAAAA;
     private static final int CLEAR_COLOR_HOVER = 0xFFFFFFFF;
 
-    SkillSearchBox(int width, int height) {
+    public SearchBox(int width, int height) {
         super(Minecraft.getInstance().font, 0, 0, width, height, Component.literal("Search"));
         setHint(Component.literal("Search..."));
         setBordered(true);
@@ -50,7 +52,7 @@ public class SkillSearchBox extends EditBox {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         boolean handled = super.keyPressed(keyCode, scanCode, modifiers);
         // Vanilla EditBox.keyPressed only handles control keys (arrows, backspace, etc).
-        // Letter keys fall through and would reach the InventoryScreen — which closes on 'e'.
+        // Letter keys fall through and would reach the host screen — which closes on its hotkey.
         // While focused, claim every key we don't pass back through (ESC and TAB still bubble
         // so the user can close the screen or move focus normally).
         if (handled || !isFocused()) return handled;

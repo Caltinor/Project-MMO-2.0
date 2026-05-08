@@ -5,6 +5,7 @@ import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.client.gui.glossary.components.CollapsingPanel;
 import harmonised.pmmo.client.gui.glossary.components.DetailScroll;
+import harmonised.pmmo.client.gui.glossary.components.SearchBox;
 import harmonised.pmmo.client.gui.glossary.components.parts.PlayerSkillWidget;
 import harmonised.pmmo.client.gui.glossary.components.parts.SkillTypeHeaderWidget;
 import harmonised.pmmo.config.Config;
@@ -38,7 +39,7 @@ public class SkillsSidePanel extends CollapsingPanel {
         super(x, y, PANEL_WIDTH, height, Config.SKILL_PANEL_OPEN_BY_DEFAULT.get());
         int scrollHeight = Math.max(0, height - SEARCH_HEIGHT - VERTICAL_PADDING);
 
-        SkillSearchBox searchBar = new SkillSearchBox(ROW_WIDTH, SEARCH_HEIGHT);
+        SearchBox searchBar = new SearchBox(ROW_WIDTH, SEARCH_HEIGHT);
         detailScroll = new DetailScroll(0, 0, SCROLL_WIDTH, scrollHeight) {
             @Override protected boolean scrollbarVisible() {return false;}
         };
