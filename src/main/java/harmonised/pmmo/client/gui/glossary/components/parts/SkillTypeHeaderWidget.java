@@ -57,7 +57,9 @@ public class SkillTypeHeaderWidget extends PanelWidget {
         for (AbstractWidget child : widgets()) {
             boolean hide = child instanceof GlossaryFilter filterable && filterable.applyFilter(filter);
             child.visible = !hide;
-            if (!hide) anyVisible = true;
+            if (!hide) {
+                anyVisible = true;
+            }
         }
         resize();
         return !anyVisible;

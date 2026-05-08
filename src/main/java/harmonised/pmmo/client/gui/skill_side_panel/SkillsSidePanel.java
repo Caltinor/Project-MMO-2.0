@@ -69,8 +69,11 @@ public class SkillsSidePanel extends CollapsingPanel {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         boolean handled = super.mouseClicked(mouseX, mouseY, button);
-        if (handled) defocusChildrenExceptAt(mouseX, mouseY);
-        else defocusAllChildren();
+        if (handled) {
+            defocusChildrenExceptAt(mouseX, mouseY);
+        } else {
+            defocusAllChildren();
+        }
         return handled;
     }
 
@@ -87,7 +90,9 @@ public class SkillsSidePanel extends CollapsingPanel {
 
     private void defocusAllChildren() {
         for (AbstractWidget child : widgets()) {
-            if (child.isFocused()) child.setFocused(false);
+            if (child.isFocused()) {
+                child.setFocused(false);
+            }
         }
     }
 
@@ -121,9 +126,12 @@ public class SkillsSidePanel extends CollapsingPanel {
             for (String skillKey : typeData.getSkills()) {
                 // Set.add returns false if already present — doubles as dedupe.
                 if (!visibleSkills.containsKey(skillKey) || !placedSkills.add(skillKey)) continue;
+
                 rows.add(new PlayerSkillWidget(ROW_WIDTH, skillKey, visibleSkills.get(skillKey)));
             }
-            if (!rows.isEmpty()) addScrollRow(new SkillTypeHeaderWidget(ROW_WIDTH, typeKey, typeData, rows));
+            if (!rows.isEmpty()) {
+                addScrollRow(new SkillTypeHeaderWidget(ROW_WIDTH, typeKey, typeData, rows));
+            }
         }
 
         // Untyped skills: anything visible that no type claimed, alphabetized.
