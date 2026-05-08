@@ -77,17 +77,6 @@ public class SkillsSidePanel extends CollapsingPanel {
         return handled;
     }
 
-    /**
-     * When the screen moves focus away from this panel (e.g. the player clicks an
-     * inventory slot), cascade-defocus the children so a still-focused search bar
-     * doesn't keep eating keystrokes.
-     */
-    @Override
-    public void setFocused(boolean focused) {
-        super.setFocused(focused);
-        if (!focused) defocusAllChildren();
-    }
-
     private void defocusAllChildren() {
         for (AbstractWidget child : widgets()) {
             if (child.isFocused()) {

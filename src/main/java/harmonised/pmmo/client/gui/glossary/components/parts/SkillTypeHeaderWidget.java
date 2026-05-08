@@ -4,6 +4,7 @@ import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.types.PositionType;
+import harmonised.pmmo.api.client.wrappers.Positioner;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
 import harmonised.pmmo.config.codecs.SkillTypeData;
 import net.minecraft.client.Minecraft;
@@ -17,12 +18,14 @@ import java.util.List;
 public class SkillTypeHeaderWidget extends PanelWidget {
     private static final int HEADER_BAND_HEIGHT = 11;
     private static final int ACCENT_BAR_WIDTH = 3;
-    private static final int ACCENT_INSET = 5;
+    private static final int ACCENT_INSET = 4;
+    private static final int ROW_RIGHT_PAD = 1;
     private static final int ACCENT_BOTTOM_THICKNESS = 2;
     private static final int ACCENT_TINT_ALPHA = 0x19;
     private static final int TEXT_INSET = 5;
     private static final int TEXT_TOP_OFFSET = 2;
     private static final int BAND_BACKGROUND = 0x40000000;
+    private static final int ROW_BOTTOM_GAP = 1;
 
     private final Component label;
     private final int accentColor;
@@ -34,7 +37,7 @@ public class SkillTypeHeaderWidget extends PanelWidget {
         this.accentColor = data.getColor();
         // Children stack vertically. Top padding reserves space for the header band;
         // left padding shifts rows right of the colored bar.
-        setPadding(ACCENT_INSET, HEADER_BAND_HEIGHT, 0, 0);
+        setPadding(ACCENT_INSET, HEADER_BAND_HEIGHT, ROW_RIGHT_PAD, 0);
         for (PlayerSkillWidget row : rows) {
             addChild((AbstractWidget) row, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
         }
@@ -44,11 +47,18 @@ public class SkillTypeHeaderWidget extends PanelWidget {
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
 
     @Override
+    public List<Positioner<?>> visibleChildren() {
+        return getChildren().stream()
+                .filter(positioner -> positioner.get() instanceof AbstractWidget widget && widget.visible)
+                .toList();
+    }
+
+    @Override
     public void resize() {
         int rowsHeight = visibleChildren().stream()
                 .mapToInt(positioner -> positioner.get().getHeight())
                 .sum();
-        setHeight(HEADER_BAND_HEIGHT + rowsHeight);
+        setHeight(HEADER_BAND_HEIGHT + rowsHeight + ROW_BOTTOM_GAP + ACCENT_BOTTOM_THICKNESS);
     }
 
     @Override

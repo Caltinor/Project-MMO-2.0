@@ -29,7 +29,7 @@ public class PlayerSkillWidget extends PanelWidget {
     private static final int ICON_LEFT_PAD = 3;
     private static final int CONTENT_LEFT_PAD = 24;
     private static final int LEVEL_RIGHT_PAD = 7;
-    private static final int PROGRESS_BAR_FULL_WIDTH = 94;
+    private static final int PROGRESS_BAR_RIGHT_MARGIN = 3;
     private static final int PROGRESS_BAR_HEIGHT = 5;
     private static final float NAME_SCALE = 0.85f;
     private static final float HOVER_TEXT_SCALE = 0.60f;
@@ -107,11 +107,12 @@ public class PlayerSkillWidget extends PanelWidget {
             graphics.pose().popPose();
             return;
         }
+        int barWidth = this.width - CONTENT_LEFT_PAD - PROGRESS_BAR_RIGHT_MARGIN;
         graphics.setColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
-        graphics.blit(TEXTURE_LOCATION, renderX, renderY, PROGRESS_BAR_FULL_WIDTH, PROGRESS_BAR_HEIGHT, 0.0F, 217.0F, 102, 5, 256, 256);
+        graphics.blit(TEXTURE_LOCATION, renderX, renderY, barWidth, PROGRESS_BAR_HEIGHT, 0.0F, 217.0F, 102, 5, 256, 256);
 
         long threshold = xp.getLevel().getXpToNext();
-        int fillWidth = threshold <= 0 ? 0 : (int) Math.min((xp.getXp() * (long) PROGRESS_BAR_FULL_WIDTH) / threshold, (long) PROGRESS_BAR_FULL_WIDTH);
+        int fillWidth = threshold <= 0 ? 0 : (int) Math.min((xp.getXp() * (long) barWidth) / threshold, (long) barWidth);
         graphics.blit(TEXTURE_LOCATION, renderX, renderY, fillWidth, PROGRESS_BAR_HEIGHT, 0.0F, 223.0F, 102, 5, 256, 256);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
