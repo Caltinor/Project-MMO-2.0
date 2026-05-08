@@ -4,7 +4,6 @@ import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.resources.ResourceLocation;
 
@@ -61,20 +60,7 @@ public class CollapsingPanel extends ReactiveWidget {
             if (this.callback != null) callback.accept(this);
             return true;
         }
-
-        boolean handled = super.mouseClicked(mouseX, mouseY, button);
-        if (handled) {
-            defocusChildrenExceptAt(mouseX, mouseY);
-        } else {
-            defocusAllChildren();
-        }
-        return handled;
-    }
-
-    @Override
-    public void setFocused(boolean focused) {
-        super.setFocused(focused);
-        if (!focused) defocusAllChildren();
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     private boolean clickedToggleArrow(double mouseX, double mouseY) {
@@ -84,19 +70,6 @@ public class CollapsingPanel extends ReactiveWidget {
 
     private int collapsedWidth() {
         return (int) (20d / scale);
-    }
-
-    private void defocusAllChildren() {
-        for (AbstractWidget child : widgets()) {
-            if (child.isFocused()) child.setFocused(false);
-        }
-    }
-
-    private void defocusChildrenExceptAt(double mouseX, double mouseY) {
-        for (AbstractWidget child : widgets()) {
-            if (!child.isFocused() || child.isMouseOver(mouseX, mouseY)) continue;
-            child.setFocused(false);
-        }
     }
 
     @Override

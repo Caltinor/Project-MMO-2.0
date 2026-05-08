@@ -60,6 +60,44 @@ public class SkillsSidePanel extends CollapsingPanel {
     }
 
     /**
+     * After a click is routed through this panel, drop focus on every child that
+     * wasn't the one clicked — and on every child if the click missed all of them.
+     * Keeps the search bar from holding stale focus when the user clicks a skill row
+     * or empty panel space.
+     */
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        boolean handled = super.mouseClicked(mouseX, mouseY, button);
+        if (handled) defocusChildrenExceptAt(mouseX, mouseY);
+        else defocusAllChildren();
+        return handled;
+    }
+
+    /**
+     * When the screen moves focus away from this panel (e.g. the player clicks an
+     * inventory slot), cascade-defocus the children so a still-focused search bar
+     * doesn't keep eating keystrokes.
+     */
+    @Override
+    public void setFocused(boolean focused) {
+        super.setFocused(focused);
+        if (!focused) defocusAllChildren();
+    }
+
+    private void defocusAllChildren() {
+        for (AbstractWidget child : widgets()) {
+            if (child.isFocused()) child.setFocused(false);
+        }
+    }
+
+    private void defocusChildrenExceptAt(double mouseX, double mouseY) {
+        for (AbstractWidget child : widgets()) {
+            if (!child.isFocused() || child.isMouseOver(mouseX, mouseY)) continue;
+            child.setFocused(false);
+        }
+    }
+
+    /**
      * Builds the body of the scroll: type headers (each owning its skill rows) in
      * configured order, then any leftover untyped skills sorted alphabetically.
      */
