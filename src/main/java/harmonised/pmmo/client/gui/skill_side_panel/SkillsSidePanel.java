@@ -40,24 +40,22 @@ public class SkillsSidePanel extends CollapsingPanel {
     /** Combined top + bottom padding inherited from {@link CollapsingPanel} (5 + 7). */
     private static final int VERTICAL_PADDING = 12;
 
-    private final DetailScroll scroll;
+    private final DetailScroll detailScroll;
 
     public SkillsSidePanel(int x, int y, int height) {
         super(x, y, PANEL_WIDTH, height, Config.SKILL_PANEL_OPEN_BY_DEFAULT.get());
         int scrollHeight = Math.max(0, height - SEARCH_HEIGHT - VERTICAL_PADDING);
 
         SkillSearchBox searchBar = new SkillSearchBox(ROW_WIDTH, SEARCH_HEIGHT);
-        scroll = new DetailScroll(0, 0, SCROLL_WIDTH, scrollHeight) {
+        detailScroll = new DetailScroll(0, 0, SCROLL_WIDTH, scrollHeight) {
             @Override protected boolean scrollbarVisible() {return false;}
         };
         populate();
 
-        // Filter cascade is structural: each header forwards to its rows and
-        // hides itself when none survive. No post-pass needed.
-        searchBar.setResponder(text -> scroll.applyFilter(new GlossaryFilter.Filter(text == null ? "" : text)));
+        searchBar.setResponder(text -> detailScroll.applyFilter(new GlossaryFilter.Filter(text == null ? "" : text)));
 
         addChild(searchBar, PositionType.STATIC.constraint, fixedRow(SEARCH_HEIGHT));
-        addChild((AbstractWidget) scroll, PositionType.STATIC.constraint, fixedRow(scrollHeight));
+        addChild((AbstractWidget) detailScroll, PositionType.STATIC.constraint, fixedRow(scrollHeight));
         arrangeElements();
     }
 
@@ -66,7 +64,7 @@ public class SkillsSidePanel extends CollapsingPanel {
     }
 
     private void addScrollRow(AbstractWidget widget) {
-        scroll.addChild(widget, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
+        detailScroll.addChild(widget, PositionType.STATIC.constraint, SizeConstraints.builder().internalHeight().build());
     }
 
     /**

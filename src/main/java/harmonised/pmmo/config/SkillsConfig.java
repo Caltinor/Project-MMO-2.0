@@ -13,23 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Combined config of all skills and their optional groupings (types).
- * <p>
- * Loaded from {@code data/<ns>/config/skills.json} on the server side and synced to
- * clients. The {@code types} map is optional in the JSON; if absent, every skill
- * renders untyped.
- */
 public record SkillsConfig(Map<String, SkillData> skills, Map<String, SkillTypeData> types) implements ConfigData<SkillsConfig> {
-	/**
-	 * Reserved param key in {@code .pmmo} scripts. Writing
-	 * {@code set(name).skillType()...} dispatches to the type-update path; without
-	 * this flag, {@code set(name)...} updates a skill instead. The flag's value is
-	 * ignored — only its presence matters.
-	 */
 	private static final String TYPE_FLAG = "skillType";
 
-	/** No-arg default used by {@link ConfigListener} when no datapack ships a skills config. */
 	public SkillsConfig() {this(generateDefaults(), generateDefaultTypes());}
 
 	public static final MapCodec<SkillsConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -38,7 +24,6 @@ public record SkillsConfig(Map<String, SkillData> skills, Map<String, SkillTypeD
 			Codec.unboundedMap(Codec.STRING, SkillTypeData.CODEC).optionalFieldOf("types", new HashMap<>()).forGetter(SkillsConfig::types)
 	).apply(instance, SkillsConfig::new));
 
-	/** Lookup with fallback to a builder default — never returns null. */
 	public SkillData get(String skill) {return skills().getOrDefault(skill, SkillData.Builder.getDefault());}
 
 	private static Map<String, SkillData> generateDefaults() {
@@ -76,11 +61,6 @@ public record SkillsConfig(Map<String, SkillData> skills, Map<String, SkillTypeD
 		return defaultSkills;
 	}
 
-	/**
-	 * Default skill-type groupings shipped with PMMO. Each type's {@code skills}
-	 * list controls which skills appear under it in the inventory panel; the
-	 * {@code order} field controls the vertical sort.
-	 */
 	private static Map<String, SkillTypeData> generateDefaultTypes() {
 		Map<String, SkillTypeData> map = new HashMap<>();
 		map.put("warfare", SkillTypeData.Builder.start()
@@ -110,12 +90,6 @@ public record SkillsConfig(Map<String, SkillData> skills, Map<String, SkillTypeD
 	@Override
 	public ConfigListener.ServerConfigs getType() {return ConfigListener.ServerConfigs.SKILLS;}
 
-	/**
-	 * Called by the {@code .pmmo} scripting layer for each {@code set(...)} expression.
-	 * Returns a new {@code SkillsConfig} with the entry added/replaced. The
-	 * {@link #TYPE_FLAG} key on {@code value} chooses whether the param key
-	 * is treated as a skill name or a skill-type name.
-	 */
 	@Override
 	public ConfigData<SkillsConfig> getFromScripting(String param, Map<String, String> value) {
 		if (value.containsKey(TYPE_FLAG)) {
