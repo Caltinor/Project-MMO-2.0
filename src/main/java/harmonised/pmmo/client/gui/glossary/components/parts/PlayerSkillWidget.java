@@ -17,15 +17,6 @@ import net.neoforged.fml.LogicalSide;
 
 import java.awt.Color;
 
-/**
- * One row in the inventory skill panel — the visual stack is:
- *   [icon] [skill name] [level number]
- *                       [progress bar / hover-text]
- * <p>
- * The row knows nothing about whether it belongs to a typed group; the parent
- * {@link SkillTypeHeaderWidget} handles all framing (left bar, tint, bottom edge)
- * around its child rows.
- */
 public class PlayerSkillWidget extends PanelWidget {
     protected static final ResourceLocation TEXTURE_LOCATION = Reference.rl("textures/gui/player_stats.png");
     private static final WidgetSprites BACKGROUND_SPRITES = new WidgetSprites(

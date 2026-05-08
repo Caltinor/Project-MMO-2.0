@@ -20,24 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * The collapsible skills panel attached to the left side of the inventory screen.
- * <p>
- * Layout (top to bottom):
- *   - search bar (filters the list as the user types)
- *   - scrolling list of {@link SkillTypeHeaderWidget} groups, then any untyped
- *     {@link PlayerSkillWidget} rows alphabetically at the end.
- * <p>
- * Skills with {@code showInList=false} never appear. Each header widget owns its
- * skill rows as nested children, so group framing, edge tracking, and filter
- * cascade live there rather than being inferred at this level.
- */
 public class SkillsSidePanel extends CollapsingPanel {
     public static final int PANEL_WIDTH = 130;
     private static final int SCROLL_WIDTH = 103;
     private static final int ROW_WIDTH = 100;
     private static final int SEARCH_HEIGHT = 14;
-    /** Combined top + bottom padding inherited from {@link CollapsingPanel} (5 + 7). */
     private static final int VERTICAL_PADDING = 12;
 
     private final DetailScroll detailScroll;
@@ -80,20 +67,21 @@ public class SkillsSidePanel extends CollapsingPanel {
         // Tracks skills already claimed by a type so duplicates across types render only once.
         Set<String> placedSkills = new HashSet<>();
 
-        Config.skills().types().entrySet().stream()
+        List<Map.Entry<String, SkillTypeData>> orderedTypes = Config.skills().types().entrySet().stream()
                 .sorted(Comparator.comparingInt((Map.Entry<String, SkillTypeData> entry) -> entry.getValue().getOrder())
                         .thenComparing(Map.Entry::getKey))
-                .forEach(typeEntry -> {
-                    String typeKey = typeEntry.getKey();
-                    SkillTypeData typeData = typeEntry.getValue();
-                    List<PlayerSkillWidget> rows = new ArrayList<>();
-                    for (String skillKey : typeData.getSkills()) {
-                        // Set.add returns false if already present — doubles as dedupe.
-                        if (!visibleSkills.containsKey(skillKey) || !placedSkills.add(skillKey)) continue;
-                        rows.add(new PlayerSkillWidget(ROW_WIDTH, skillKey, visibleSkills.get(skillKey)));
-                    }
-                    if (!rows.isEmpty()) addScrollRow(new SkillTypeHeaderWidget(ROW_WIDTH, typeKey, typeData, rows));
-                });
+                .toList();
+        for (Map.Entry<String, SkillTypeData> typeEntry : orderedTypes) {
+            String typeKey = typeEntry.getKey();
+            SkillTypeData typeData = typeEntry.getValue();
+            List<PlayerSkillWidget> rows = new ArrayList<>();
+            for (String skillKey : typeData.getSkills()) {
+                // Set.add returns false if already present — doubles as dedupe.
+                if (!visibleSkills.containsKey(skillKey) || !placedSkills.add(skillKey)) continue;
+                rows.add(new PlayerSkillWidget(ROW_WIDTH, skillKey, visibleSkills.get(skillKey)));
+            }
+            if (!rows.isEmpty()) addScrollRow(new SkillTypeHeaderWidget(ROW_WIDTH, typeKey, typeData, rows));
+        }
 
         // Untyped skills: anything visible that no type claimed, alphabetized.
         visibleSkills.entrySet().stream()

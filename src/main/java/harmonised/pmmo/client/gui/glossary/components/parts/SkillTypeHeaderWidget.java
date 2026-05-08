@@ -1,31 +1,21 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
-import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
+import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import harmonised.pmmo.config.codecs.SkillTypeData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-/**
- * A container that owns a typed group of skill rows. The header band sits on top
- * (translucent strip with the type's display label), the child rows render
- * beneath it in their declared order, and a colored frame (left bar + top edge +
- * bottom edge) wraps the whole composite.
- * <p>
- * Membership is structural — rows are children of this widget. Filter cascade,
- * height resizing, and frame closing all follow from that relationship: hide a
- * row and the header naturally reflows; hide them all and the header itself
- * reports {@link #applyFilter} = true so {@code DetailScroll} marks it invisible.
- */
-public class SkillTypeHeaderWidget extends PanelWidget {
+public class SkillTypeHeaderWidget extends ReactiveWidget {
     private static final int HEADER_BAND_HEIGHT = 11;
     private static final int ACCENT_BAR_WIDTH = 3;
     private static final int ACCENT_INSET = 5;
@@ -40,7 +30,7 @@ public class SkillTypeHeaderWidget extends PanelWidget {
     private final Font font = Minecraft.getInstance().font;
 
     public SkillTypeHeaderWidget(int width, String typeKey, SkillTypeData data, List<PlayerSkillWidget> rows) {
-        super(0, width);
+        super(0, 0, width, 0);
         this.label = data.getDisplayName(typeKey);
         this.accentColor = data.getColor();
         // Children stack vertically. Top padding reserves space for the header band;
@@ -54,7 +44,8 @@ public class SkillTypeHeaderWidget extends PanelWidget {
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
 
-    /** Total height = header band + sum of currently-visible row heights. */
+    @Override protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {}
+
     @Override
     public void resize() {
         int rowsHeight = visibleChildren().stream()
@@ -63,11 +54,6 @@ public class SkillTypeHeaderWidget extends PanelWidget {
         setHeight(HEADER_BAND_HEIGHT + rowsHeight);
     }
 
-    /**
-     * Cascades the filter to each row, toggling its visibility, then reports
-     * "filter me out" only if every row is now hidden. Resizing happens here too
-     * so subsequent layout passes see the new height immediately.
-     */
     @Override
     public boolean applyFilter(GlossaryFilter.Filter filter) {
         boolean anyVisible = false;

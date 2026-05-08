@@ -38,7 +38,7 @@ public class CollapsingPanel extends ReactiveWidget {
         return this;
     }
 
-    @Override public void resize() {} //Panel does not adjust height beyond parent size constraints
+    @Override public void resize() {}
 
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -56,52 +56,45 @@ public class CollapsingPanel extends ReactiveWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        // The right-edge arrow tab toggles between collapsed and expanded width.
         if (clickedToggleArrow(mouseX, mouseY)) {
             this.setWidth(collapsed() ? this.expandedWidth : collapsedWidth());
             if (this.callback != null) callback.accept(this);
             return true;
         }
-        // Otherwise let ReactiveWidget route the click to the appropriate child,
-        // then drop focus on any child that wasn't the one clicked. This makes
-        // clicks elsewhere inside the panel (e.g. on a skill row) defocus a
-        // previously-focused search bar.
+
         boolean handled = super.mouseClicked(mouseX, mouseY, button);
-        defocusUnclickedChildren(mouseX, mouseY, handled);
+        if (handled) {
+            defocusChildrenExceptAt(mouseX, mouseY);
+        } else {
+            defocusAllChildren();
+        }
         return handled;
     }
 
-    /**
-     * When the screen moves focus away from this panel (e.g. user clicks an inventory slot),
-     * vanilla calls {@code setFocused(false)}. Cascade that to defocus any focused child
-     * widget so a still-focused search box doesn't keep eating keystrokes.
-     */
     @Override
     public void setFocused(boolean focused) {
         super.setFocused(focused);
-        if (!focused) defocusUnclickedChildren(0, 0, false);
+        if (!focused) defocusAllChildren();
     }
 
-    /** True when the cursor is on the thin arrow strip on the panel's right edge that toggles open/closed. */
     private boolean clickedToggleArrow(double mouseX, double mouseY) {
         return mouseY > this.getY() && mouseY < this.getY() + this.getHeight()
                 && mouseX > this.getRight() - (20 / scale) && mouseX < this.getX() + this.getRight();
     }
 
-    /** Width of the panel when collapsed — only enough for the arrow tab to show. */
     private int collapsedWidth() {
         return (int) (20d / scale);
     }
 
-    /**
-     * Defocuses every focused child except the one the click landed on. With
-     * {@code clickHandled=false} (call from setFocused) all focused children are
-     * cleared regardless of cursor position.
-     */
-    private void defocusUnclickedChildren(double mouseX, double mouseY, boolean clickHandled) {
+    private void defocusAllChildren() {
         for (AbstractWidget child : widgets()) {
-            if (!child.isFocused()) continue;
-            if (clickHandled && child.isMouseOver(mouseX, mouseY)) continue;
+            if (child.isFocused()) child.setFocused(false);
+        }
+    }
+
+    private void defocusChildrenExceptAt(double mouseX, double mouseY) {
+        for (AbstractWidget child : widgets()) {
+            if (!child.isFocused() || child.isMouseOver(mouseX, mouseY)) continue;
             child.setFocused(false);
         }
     }
