@@ -27,6 +27,11 @@ public class SkillsSidePanel extends CollapsingPanel {
     private static final int SEARCH_HEIGHT = 14;
     private static final int VERTICAL_PADDING = 12;
 
+    /** Sorts type entries by their declared {@code order} field, alphabetically by key for ties. */
+    private static final Comparator<Map.Entry<String, SkillTypeData>> BY_TYPE_ORDER =
+            Comparator.<Map.Entry<String, SkillTypeData>>comparingInt(entry -> entry.getValue().getOrder())
+                    .thenComparing(Map.Entry::getKey);
+
     private final DetailScroll detailScroll;
 
     public SkillsSidePanel(int x, int y, int height) {
@@ -60,16 +65,15 @@ public class SkillsSidePanel extends CollapsingPanel {
      */
     private void populate() {
         Map<String, SkillData> visibleSkills = new LinkedHashMap<>();
-        Config.skills().skills().forEach((skillKey, skillData) -> {
-            if (skillData.getShowInList()) visibleSkills.put(skillKey, skillData);
-        });
+        for (Map.Entry<String, SkillData> entry : Config.skills().skills().entrySet()) {
+            if (entry.getValue().getShowInList()) visibleSkills.put(entry.getKey(), entry.getValue());
+        }
 
         // Tracks skills already claimed by a type so duplicates across types render only once.
         Set<String> placedSkills = new HashSet<>();
 
         List<Map.Entry<String, SkillTypeData>> orderedTypes = Config.skills().types().entrySet().stream()
-                .sorted(Comparator.comparingInt((Map.Entry<String, SkillTypeData> entry) -> entry.getValue().getOrder())
-                        .thenComparing(Map.Entry::getKey))
+                .sorted(BY_TYPE_ORDER)
                 .toList();
         for (Map.Entry<String, SkillTypeData> typeEntry : orderedTypes) {
             String typeKey = typeEntry.getKey();
@@ -84,9 +88,12 @@ public class SkillsSidePanel extends CollapsingPanel {
         }
 
         // Untyped skills: anything visible that no type claimed, alphabetized.
-        visibleSkills.entrySet().stream()
+        List<Map.Entry<String, SkillData>> untyped = visibleSkills.entrySet().stream()
                 .filter(entry -> !placedSkills.contains(entry.getKey()))
                 .sorted(Map.Entry.comparingByKey())
-                .forEach(entry -> addScrollRow(new PlayerSkillWidget(ROW_WIDTH, entry.getKey(), entry.getValue())));
+                .toList();
+        for (Map.Entry<String, SkillData> entry : untyped) {
+            addScrollRow(new PlayerSkillWidget(ROW_WIDTH, entry.getKey(), entry.getValue()));
+        }
     }
 }
