@@ -1,21 +1,20 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
+import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.types.DisplayType;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.api.client.types.PositionType;
 import harmonised.pmmo.api.client.wrappers.SizeConstraints;
-import harmonised.pmmo.client.gui.glossary.components.ReactiveWidget;
 import harmonised.pmmo.config.codecs.SkillTypeData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class SkillTypeHeaderWidget extends ReactiveWidget {
+public class SkillTypeHeaderWidget extends PanelWidget {
     private static final int HEADER_BAND_HEIGHT = 11;
     private static final int ACCENT_BAR_WIDTH = 3;
     private static final int ACCENT_INSET = 5;
@@ -23,14 +22,14 @@ public class SkillTypeHeaderWidget extends ReactiveWidget {
     private static final int ACCENT_TINT_ALPHA = 0x19;
     private static final int TEXT_INSET = 5;
     private static final int TEXT_TOP_OFFSET = 2;
-    private static final int HEADER_BACKGROUND = 0x40000000;
+    private static final int BAND_BACKGROUND = 0x40000000;
 
     private final Component label;
     private final int accentColor;
     private final Font font = Minecraft.getInstance().font;
 
     public SkillTypeHeaderWidget(int width, String typeKey, SkillTypeData data, List<PlayerSkillWidget> rows) {
-        super(0, 0, width, 0);
+        super(0, width);
         this.label = data.getDisplayName(typeKey);
         this.accentColor = data.getColor();
         // Children stack vertically. Top padding reserves space for the header band;
@@ -43,8 +42,6 @@ public class SkillTypeHeaderWidget extends ReactiveWidget {
     }
 
     @Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
-
-    @Override protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {}
 
     @Override
     public void resize() {
@@ -71,8 +68,11 @@ public class SkillTypeHeaderWidget extends ReactiveWidget {
         arrangeElements();
         resize();
 
+        // Strip any incoming alpha so the tint and frame both build their ARGB from a clean RGB.
+        int rgb = accentColor & 0x00FFFFFF;
+
         // Translucent band fill behind the label, only over the band area.
-        graphics.fill(this.getX(), this.getY(), this.getRight(), this.getY() + HEADER_BAND_HEIGHT, HEADER_BACKGROUND);
+        graphics.fill(this.getX(), this.getY(), this.getRight(), this.getY() + HEADER_BAND_HEIGHT, BAND_BACKGROUND);
 
         // mouseY arrives in screen-space; the parent scroll has pushed a vertical
         // translate so we undo it here to know which row the cursor is over.
@@ -87,11 +87,11 @@ public class SkillTypeHeaderWidget extends ReactiveWidget {
 
         // Faint accent tint over the rows area, drawn after rows so it alpha-blends
         // on top of their opaque background sprites.
-        int tintArgb = (ACCENT_TINT_ALPHA << 24) | (accentColor & 0x00FFFFFF);
+        int tintArgb = (ACCENT_TINT_ALPHA << 24) | rgb;
         graphics.fill(this.getX(), this.getY() + HEADER_BAND_HEIGHT, this.getRight(), this.getBottom(), tintArgb);
 
         // Colored frame, drawn on top so it overlays the row backgrounds at the edges.
-        int solidArgb = 0xFF000000 | accentColor;
+        int solidArgb = 0xFF000000 | rgb;
         graphics.fill(this.getX(), this.getY(), this.getX() + ACCENT_BAR_WIDTH, this.getBottom(), solidArgb);
         graphics.fill(this.getX(), this.getY(), this.getRight(), this.getY() + 1, solidArgb);
         graphics.fill(this.getX(), this.getBottom() - ACCENT_BOTTOM_THICKNESS, this.getRight(), this.getBottom(), solidArgb);
