@@ -4,6 +4,7 @@ import harmonised.pmmo.api.client.PanelWidget;
 import harmonised.pmmo.api.client.types.GlossaryFilter;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.Experience;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
@@ -52,21 +53,14 @@ public class PlayerSkillWidget extends PanelWidget {
     @Override public void resize() {setHeight(HEIGHT);}
 
     /**
-     * Hidden when the search query is non-empty AND matches neither the raw skill key
-     * nor the translated display name. The translation match is skipped when no lang
-     * entry is registered (in which case {@code Component.translatable(...).getString()}
-     * returns the literal key like "pmmo.mining" and would falsely match queries like "pmmo").
+     * Hidden when the search query doesn't match the skill's translated display name.
+     * Searching against the rendered name (rather than the raw key) keeps results
+     * consistent with what the player sees in their current language.
+     * The filter text is expected to already be lowercased by the caller.
      */
     @Override
     public boolean applyFilter(GlossaryFilter.Filter filter) {
-        String text = filter.getTextFilter();
-        if (text == null || text.isEmpty()) return false;
-        String query = text.toLowerCase();
-        if (skillName.toLowerCase().contains(query)) return false;
-        String translationKey = "pmmo." + skillName;
-        String translated = Component.translatable(translationKey).getString();
-        if (translated.equals(translationKey)) return true;
-        return !translated.toLowerCase().contains(query);
+        return !filter.matchesTextFilter(LangProvider.skill(skillName).getString().toLowerCase());
     }
 
     @Override

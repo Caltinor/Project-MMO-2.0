@@ -45,7 +45,7 @@ public class SkillsSidePanel extends CollapsingPanel {
         };
         populate();
 
-        searchBar.setResponder(text -> detailScroll.applyFilter(new GlossaryFilter.Filter(text == null ? "" : text)));
+        searchBar.setResponder(text -> detailScroll.applyFilter(new GlossaryFilter.Filter(text == null ? "" : text.toLowerCase())));
 
         addChild(searchBar, PositionType.STATIC.constraint, fixedRow(SEARCH_HEIGHT));
         addChild((AbstractWidget) detailScroll, PositionType.STATIC.constraint, fixedRow(scrollHeight));
