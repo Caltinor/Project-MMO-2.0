@@ -1498,7 +1498,21 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "Exploration").build();
 	public static final Translation SKILL_CHARISMA = Translation.Builder.start("pmmo.charisma")
 		.addLocale(Locale.EN_US, "Charisma").build();
-	
+
+	//=========SKILL TYPES=====================
+	public static final Translation TYPE_WARFARE = Translation.Builder.start("pmmo.type.warfare")
+		.addLocale(Locale.EN_US, "Warfare").build();
+	public static final Translation TYPE_ATHLETICS = Translation.Builder.start("pmmo.type.athletics")
+		.addLocale(Locale.EN_US, "Athletics").build();
+	public static final Translation TYPE_HARVESTING = Translation.Builder.start("pmmo.type.harvesting")
+		.addLocale(Locale.EN_US, "Harvesting").build();
+	public static final Translation TYPE_ARTISANRY = Translation.Builder.start("pmmo.type.artisanry")
+		.addLocale(Locale.EN_US, "Artisanry").build();
+	public static final Translation TYPE_ARCANA = Translation.Builder.start("pmmo.type.arcana")
+		.addLocale(Locale.EN_US, "Arcana").build();
+	public static final Translation TYPE_SOCIAL = Translation.Builder.start("pmmo.type.social")
+		.addLocale(Locale.EN_US, "Social").build();
+
 	//=========ENUM VALUES=====================
 	public static final Translation ENUM_ANVIL_REPAIR = Translation.Builder.start("pmmo.enum.ANVIL_REPAIR")
 		.addLocale(Locale.EN_US, "Anvil Repair").build();
@@ -2137,7 +2151,10 @@ public class LangProvider extends LanguageProvider {
 			.addLocale(Locale.EN_US, "When %s is the highest skill of %s").build();
 	public static final Translation GLM_LOOT_TABLE = Translation.Builder.start("pmmo.gui.statscroll.glm.loot_table")
 			.addLocale(Locale.EN_US, "When loot drops from: '%s'").build();
-	
+
+	public static final Translation SKILL_NEXT_LEVEL_XP = Translation.Builder.start("pmmo.gui.skill_panel.next_level_xp")
+			.addLocale(Locale.EN_US, "Next lvl: %s xp").build();
+
 	//=========GLOSSARY SELECT SCREEN=============
 	public static final Translation GLOSSARY_DEFAULT_SECTION = Translation.Builder.start("pmmo.gui.glossary.default_section")
 		.addLocale(Locale.EN_US, "Choose Section").build();

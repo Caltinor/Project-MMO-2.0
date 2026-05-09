@@ -72,6 +72,7 @@ public class Config {
     public static ModConfigSpec.ConfigValue<Integer> SKILL_BUTTON_Y;
     public static ModConfigSpec.BooleanValue SKILLUP_UNLOCKS;
     public static ModConfigSpec.BooleanValue SKILLUP_UNLOCKS_STRICT;
+    public static ModConfigSpec.BooleanValue SKILL_PANEL_OPEN_BY_DEFAULT;
 
     private static void buildGUI(ModConfigSpec.Builder builder) {
         builder.comment("Configuration settings for the guis").push("GUI");
@@ -114,6 +115,8 @@ public class Config {
                 .define("skillup_unlocks", true);
         SKILLUP_UNLOCKS_STRICT = builder.comment("should skillups only show in chat if content is actually unlocked.")
                 .define("strict_skillup_unlocks", true);
+        SKILL_PANEL_OPEN_BY_DEFAULT = builder.comment("if true, the skills side panel on the inventory screen starts expanded instead of collapsed.")
+                .define("skill_panel_open_by_default", false);
 
         builder.pop();
     }
