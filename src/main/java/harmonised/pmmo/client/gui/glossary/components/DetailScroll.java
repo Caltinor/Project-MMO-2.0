@@ -26,6 +26,9 @@ public class DetailScroll extends AbstractScrollWidget implements GlossaryFilter
 		setPadding(0, 0, 0, 0);
 	}
 	@Override public DisplayType getDisplayType() {return DisplayType.BLOCK;}
+
+	/** Resets scroll position to the top — useful when the visible content set changes (e.g. after a filter pass). */
+	public void scrollToTop() {setScrollAmount(0);}
 	@Override public List<Positioner<?>> getChildren() {return children;}
 	@Override public void addChild(Positioner<?> child) {children.add(child);}
 	@Override public BoxDimensions getMargin() {return margin;}
