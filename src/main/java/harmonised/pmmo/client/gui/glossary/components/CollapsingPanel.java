@@ -55,7 +55,7 @@ public class CollapsingPanel extends ReactiveWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (clickedToggleArrow(mouseX, mouseY)) {
+        if (clickedRightPanelEdge(mouseX, mouseY)) {
             this.setWidth(collapsed() ? this.expandedWidth : collapsedWidth());
             if (this.callback != null) callback.accept(this);
             return true;
@@ -63,7 +63,7 @@ public class CollapsingPanel extends ReactiveWidget {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    private boolean clickedToggleArrow(double mouseX, double mouseY) {
+    private boolean clickedRightPanelEdge(double mouseX, double mouseY) {
         return mouseY > this.getY() && mouseY < this.getY() + this.getHeight()
                 && mouseX > this.getRight() - collapsedWidth() && mouseX < this.getX() + this.getRight();
     }
