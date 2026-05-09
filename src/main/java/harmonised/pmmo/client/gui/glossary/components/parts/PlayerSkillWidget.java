@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.LogicalSide;
@@ -77,7 +76,7 @@ public class PlayerSkillWidget extends PanelWidget {
         graphics.pose().pushPose();
         graphics.pose().translate(this.getX() + CONTENT_LEFT_PAD, this.getY() + 5, 0);
         graphics.pose().scale(NAME_SCALE, NAME_SCALE, 1.0f);
-        graphics.drawString(font, Component.translatable("pmmo." + skillName), 0, 0, skillColor.getRGB());
+        graphics.drawString(font, LangProvider.skill(skillName), 0, 0, skillColor.getRGB());
         graphics.pose().popPose();
 
         // Right-aligned level number.
@@ -93,7 +92,7 @@ public class PlayerSkillWidget extends PanelWidget {
         int renderX = this.getX() + CONTENT_LEFT_PAD;
         int renderY = this.getY() + (font.lineHeight + 6);
         if (this.isFocused()) {
-            MutableComponent text = Component.literal("Next lvl: %s xp".formatted(xp.getLevel().getXpToNext() - xp.getXp()));
+            MutableComponent text = LangProvider.SKILL_NEXT_LEVEL_XP.asComponent(xp.getLevel().getXpToNext() - xp.getXp());
             graphics.pose().pushPose();
             graphics.pose().translate(renderX, renderY - 1, 0);
             graphics.pose().scale(HOVER_TEXT_SCALE, HOVER_TEXT_SCALE, 1.0f);
