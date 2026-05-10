@@ -1,7 +1,6 @@
 package harmonised.pmmo.client.events;
 
 import harmonised.pmmo.client.gui.skill_side_panel.SkillsSidePanel;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.neoforged.api.distmarker.Dist;
@@ -16,13 +15,13 @@ public class ScreenHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onScreenInit(ScreenEvent.Init.Post event) {
         if (!(event.getScreen() instanceof InventoryScreen screen)) return;
-        int detectedTop = event.getListenersList().stream()
+
+        int anchorY = event.getListenersList().stream()
                 .filter(listener -> listener.getRectangle().left() < SkillsSidePanel.PANEL_WIDTH)
-                .map(gel -> gel.getRectangle().bottom())
+                .map(listener -> listener.getRectangle().bottom())
                 .max(Integer::compareTo).orElse(0);
-        int top = detectedTop + Math.max(0, Config.SKILL_PANEL_TOP_MARGIN.get());
-        int bottomMargin = Math.max(0, Config.SKILL_PANEL_BOTTOM_MARGIN.get());
-        int height = Math.max(0, screen.height - top - bottomMargin);
-        event.addListener(new SkillsSidePanel(0, top, height));
+        int panelHeight = Math.max(0, screen.height - anchorY);
+
+        event.addListener(new SkillsSidePanel(0, anchorY, panelHeight));
     }
 }

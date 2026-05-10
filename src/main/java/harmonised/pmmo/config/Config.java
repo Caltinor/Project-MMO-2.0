@@ -73,8 +73,6 @@ public class Config {
     public static ModConfigSpec.BooleanValue SKILLUP_UNLOCKS;
     public static ModConfigSpec.BooleanValue SKILLUP_UNLOCKS_STRICT;
     public static ModConfigSpec.BooleanValue SKILL_PANEL_OPEN_BY_DEFAULT;
-    public static ModConfigSpec.ConfigValue<Integer> SKILL_PANEL_TOP_MARGIN;
-    public static ModConfigSpec.ConfigValue<Integer> SKILL_PANEL_BOTTOM_MARGIN;
 
     private static void buildGUI(ModConfigSpec.Builder builder) {
         builder.comment("Configuration settings for the guis").push("GUI");
@@ -119,10 +117,6 @@ public class Config {
                 .define("strict_skillup_unlocks", true);
         SKILL_PANEL_OPEN_BY_DEFAULT = builder.comment("if true, the skills side panel on the inventory screen starts expanded instead of collapsed.")
                 .define("skill_panel_open_by_default", false);
-        SKILL_PANEL_TOP_MARGIN = builder.comment("extra pixels to push the top of the skills side panel down. Useful when an overlay mod (e.g. EMI) does not register its widgets on the screen and the panel cannot detect them automatically.")
-                .define("skill_panel_top_margin", 0);
-        SKILL_PANEL_BOTTOM_MARGIN = builder.comment("extra pixels to lift the bottom of the skills side panel up. Useful when an overlay mod (e.g. EMI) does not register its widgets on the screen and the panel cannot detect them automatically.")
-                .define("skill_panel_bottom_margin", 0);
 
         builder.pop();
     }
