@@ -4,7 +4,6 @@ import harmonised.pmmo.client.gui.skill_side_panel.SkillsSidePanel;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ScreenEvent;
@@ -12,16 +11,13 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 @EventBusSubscriber(modid = Reference.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ScreenHandler {
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent
     public static void onScreenInit(ScreenEvent.Init.Post event) {
         if (!(event.getScreen() instanceof InventoryScreen screen)) return;
-
-        int anchorY = event.getListenersList().stream()
+        int y = event.getListenersList().stream()
                 .filter(listener -> listener.getRectangle().left() < SkillsSidePanel.PANEL_WIDTH)
-                .map(listener -> listener.getRectangle().bottom())
+                .map(gel -> gel.getRectangle().bottom())
                 .max(Integer::compareTo).orElse(0);
-        int panelHeight = Math.max(0, screen.height - anchorY);
-
-        event.addListener(new SkillsSidePanel(0, anchorY, panelHeight));
+        event.addListener(new SkillsSidePanel(0, y, screen.height - y));
     }
 }

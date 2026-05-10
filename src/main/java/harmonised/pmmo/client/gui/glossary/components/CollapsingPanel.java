@@ -41,7 +41,7 @@ public class CollapsingPanel extends ReactiveWidget {
 
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.enableScissor(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        guiGraphics.enableScissor(this.getX(), this.getY(), this.getRight(), this.getBottom());
         guiGraphics.blit(TEXTURE_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(),
                 collapsed() ? 140 : 0, 0, collapsed() ? 7 : 147, 165, 256, 256);
         int offset = (int) (28d / scale);
