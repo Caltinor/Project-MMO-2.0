@@ -37,11 +37,11 @@ public class RareDropModifier extends LootModifier{
 	public String skill;
 
 	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStackTemplate lootItem, int count, double chance) {
-		this(conditionsIn, lootItem, count, chance, Optional.of(false), Optional.empty());
+		this(conditionsIn, 0, lootItem, count, chance, Optional.of(false), Optional.empty());
 	}
-	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStackTemplate lootItem, int count, double chance,
+	public RareDropModifier(LootItemCondition[] conditionsIn, int priority, ItemStackTemplate lootItem, int count, double chance,
 							Optional<Boolean> perLevel, Optional<String> skill) {
-		super(conditionsIn);
+		super(conditionsIn, priority);
 		this.chance = chance;
 		this.drop = lootItem.withCount(count);
 		this.perLevel = perLevel.orElse(false);

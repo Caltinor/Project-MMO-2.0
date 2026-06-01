@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -47,7 +48,7 @@ public class ServerLevelMixin {
 			UUID playerID = breakMap.get(neighbor);
 			Player player;
 			if (playerID != null && (player = level.getServer().getPlayerList().getPlayer(playerID)) != null) {
-				NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
+				NeoForge.EVENT_BUS.post(new BreakBlockEvent(level, pos, state, player));
 				breakMap.put(neighbor, playerID);
 				level.getChunkAt(pos).markUnsaved();
 				break;

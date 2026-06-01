@@ -40,11 +40,11 @@ public class TreasureLootModifier extends LootModifier{
 	public String skill;
 
 	public TreasureLootModifier(LootItemCondition[] conditionsIn, Optional<ItemStackTemplate> lootItem, int count, double chance) {
-		this(conditionsIn, lootItem, count, chance, Optional.of(false), Optional.empty());
+		this(conditionsIn, 0, lootItem, count, chance, Optional.of(false), Optional.empty());
 	}
-	public TreasureLootModifier(LootItemCondition[] conditionsIn, Optional<ItemStackTemplate> lootItem, int count,
+	public TreasureLootModifier(LootItemCondition[] conditionsIn, int priority, Optional<ItemStackTemplate> lootItem, int count,
 								double chance, Optional<Boolean> perLevel, Optional<String> skill) {
-		super(conditionsIn);
+		super(conditionsIn, priority);
 		this.chance = chance;
 		this.drop = lootItem.map(ist -> ist.withCount(count));
 		this.count = count;

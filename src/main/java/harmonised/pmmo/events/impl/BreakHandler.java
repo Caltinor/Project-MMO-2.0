@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.Map;
 public class BreakHandler {
 	
 	@SuppressWarnings("resource")
-	public static void handle(BlockEvent.BreakEvent event) {
+	public static void handle(BreakBlockEvent event) {
 		Core core = Core.get(event.getPlayer().level());
 		boolean serverSide = !event.getPlayer().level().isClientSide();
 		if (!core.isActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
@@ -69,7 +70,7 @@ public class BreakHandler {
 		}
 	}
 	
-	private static Map<String, Long> calculateXpAward(Core core, BlockEvent.BreakEvent event, CompoundTag dataIn) {
+	private static Map<String, Long> calculateXpAward(Core core, BreakBlockEvent event, CompoundTag dataIn) {
 		Map<String, Long> outMap = core.getExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getLevel(), event.getPlayer(), dataIn); 
 		LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
 		var placeMap = chunk.getData(DataAttachmentTypes.PLACED_MAP);

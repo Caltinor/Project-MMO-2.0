@@ -71,6 +71,7 @@ import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.PistonEvent;
 import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -136,7 +137,7 @@ public class EventHandler {
 	//                 GAMEPLAY EVENTS
 	//==========================================================
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onBlockBreak(BlockEvent.BreakEvent event) {
+	public static void onBlockBreak(BreakBlockEvent event) {
 		if (event.isCanceled())
 			return;
 		//NOTE Fires only on server

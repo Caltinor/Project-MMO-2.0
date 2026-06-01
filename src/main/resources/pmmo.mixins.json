@@ -6,7 +6,6 @@
   "mixins": [
     "AbstractFurnaceTileEntityShrinkMixin",
     "LootTableConditionMixin",
-    "NeoEventHandlerMixin",
     "ServerLevelMixin"
   ],
   "server": [
