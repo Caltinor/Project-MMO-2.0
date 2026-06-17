@@ -42,6 +42,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -191,7 +192,7 @@ public class Core {
 		return getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, dataIn);
 	}
 	public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
-		Identifier entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
+		Identifier entityID = entity.getType().equals(EntityTypes.PLAYER) ? playerID : RegistryUtil.getId(entity);
 		dataIn.merge(TagUtils.entityTag(entity));
 		  
 		Map<String, Long> xpGains = tooltips.xpGainTooltipExists(entityID, type)
@@ -319,7 +320,7 @@ public class Core {
 		if (player instanceof FakePlayer
 				|| !Config.server().requirements().isEnabled(type)
 				|| getLoader().PLAYER_LOADER.getData(Reference.mc(player.getUUID().toString())).ignoreReq()) return true;
-		Identifier entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
+		Identifier entityID = entity.getType().equals(EntityTypes.PLAYER) ? playerID : RegistryUtil.getId(entity);
 		return (predicates.predicateExists(entityID, type))
 			? predicates.checkPredicateReq(player, entity, type)
 			: doesPlayerMeetReq(player.getUUID(), getReqMap(type, entity));
@@ -387,7 +388,7 @@ public class Core {
 		return outMap;
 	}
 	public Map<String, Long> getReqMap(ReqType reqType, Entity entity) {
-		Identifier entityID = entity.getType().equals(EntityType.PLAYER) ? Reference.mc("player") : RegistryUtil.getId(entity);
+		Identifier entityID = entity.getType().equals(EntityTypes.PLAYER) ? Reference.mc("player") : RegistryUtil.getId(entity);
 		Map<String, Long> reqMap = tooltips.requirementTooltipExists(entityID, reqType)
 			? tooltips.getEntityRequirementTooltipData(entityID, reqType, entity)
 			: new HashMap<>();

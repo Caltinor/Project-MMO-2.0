@@ -31,6 +31,7 @@ public class DetailScroll extends AbstractTextAreaWidget implements GlossaryFilt
 	@Override public BoxDimensions getMargin() {return margin;}
 	@Override public BoxDimensions getPadding() {return padding;}
 	@Override public int getInternalHeight() {return Integer.MAX_VALUE;}
+	@Override public void removeChildren() {this.children.clear();}
 
 	@Override
 	public ResponsiveLayout setMargin(int left, int top, int right, int bottom) {

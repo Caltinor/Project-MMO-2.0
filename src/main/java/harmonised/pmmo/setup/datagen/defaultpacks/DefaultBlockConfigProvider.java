@@ -8,6 +8,7 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -81,7 +82,7 @@ public class DefaultBlockConfigProvider extends PmmoDataProvider<ObjectData> {
                 .addXpValues(EventType.BLOCK_PLACE, Map.of("building", 10L))
                 .addReq(ReqType.BREAK, Map.of("woodcutting", 0L))
                 .addReq(ReqType.PLACE, Map.of("woodcutting", 0L));
-        tagGet(BlockTags.SAPLINGS)
+        tagGet(BlockItemTags.SAPLINGS.block())
                 .addXpValues(EventType.GROW, Map.of("farming", 300L))
                 .addReq(ReqType.PLACE, Map.of("farming", 5L, "woodcutting", 10L));
         tagGet(Tags.Blocks.BOOKSHELVES).addXpValues(EventType.BLOCK_BREAK, Map.of("woodcutting", 500L));

@@ -83,14 +83,14 @@ public class KeyPressHandler {
             	mc.player.sendOverlayMessage(LangProvider.VEIN_SHAPE.asComponent(VeinTracker.mode.name()));
             	Networking.sendToServer(new SP_SetVeinShape(VeinTracker.mode));
             }
-            if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {
+            if (mc.gui.screen() == null && ClientSetup.OPEN_MENU.isDown()) {
             	if (mc.hitResult != null && !mc.player.isCrouching()) {
             		if (mc.hitResult.getType().equals(Type.BLOCK)) {
 						BlockHitResult bhr = (BlockHitResult) mc.hitResult;
 						BlockState state = mc.level.getBlockState(bhr.getBlockPos());
 						BlockEntity be = mc.level.getBlockEntity(bhr.getBlockPos());
 						PanelWidget widget = new BlockObjectPanelWidget(0x88394045, 400, state.getBlock(), be);
-						mc.setScreen(new GlossaryLoadingScreen(widget));
+						mc.gui.setScreen(new GlossaryLoadingScreen(widget));
 					}
             		else if (mc.hitResult.getType().equals(Type.ENTITY)) {
             			EntityHitResult ehr = (EntityHitResult) mc.hitResult;
@@ -101,14 +101,14 @@ public class KeyPressHandler {
 						}
 						else
 							widget = new EntityObjectPanelWidget(0x88394045, 400, ehr.getEntity());
-            			mc.setScreen(new GlossaryLoadingScreen(widget));
+            			mc.gui.setScreen(new GlossaryLoadingScreen(widget));
             		}
             		else if (mc.hitResult.getType().equals(Type.MISS))
-            			mc.setScreen(new GlossaryLoadingScreen(null));
+            			mc.gui.setScreen(new GlossaryLoadingScreen(null));
             	}
             	else if (mc.player.isCrouching()) {
 					PanelWidget widget = new BiomeObjectPanelWidget(0x88394045, 400, mc.level.getBiome(mc.player.blockPosition()));
-					mc.setScreen(new GlossaryLoadingScreen(widget));
+					mc.gui.setScreen(new GlossaryLoadingScreen(widget));
 				}
             }
         }

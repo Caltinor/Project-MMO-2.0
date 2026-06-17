@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
@@ -120,11 +121,11 @@ public class EasyGLMProvider extends GLMProvider {
         add("fish_wood_sword", fish(Items.WOODEN_SWORD, 1, 0.001, "fishing", 0, 150));
 
         //===========RARE MOB DROPS==================
-        add("mob_chicken", mob(EntityType.CHICKEN, Items.EGG, 1, 0.1, "combat", 100));
-        add("mob_dragon_head", mob(EntityType.ENDER_DRAGON, Items.DRAGON_HEAD, 1, 1.0, "combat", 5000));
-        add("mob_dragon_egg", mob(EntityType.ENDER_DRAGON, Items.DRAGON_EGG, 1, 1.0, "combat", 5000));
-        add("mob_sheep", mob(EntityType.SHEEP, Items.STRING, 1, 0.1, "farming", 100));
-        add("mob_slime", mob(EntityType.SLIME, Items.SLIME_BLOCK, 1, 1, "combat", 300));
-        add("mob_zombie", mob(EntityType.ZOMBIE, Items.BEETROOT, 1, 0.4, "combat", 200));
+        add("mob_chicken", mob(EntityTypes.CHICKEN, Items.EGG, 1, 0.1, "combat", 100));
+        add("mob_dragon_head", mob(EntityTypes.ENDER_DRAGON, Items.DRAGON_HEAD, 1, 1.0, "combat", 5000));
+        add("mob_dragon_egg", mob(EntityTypes.ENDER_DRAGON, Items.DRAGON_EGG, 1, 1.0, "combat", 5000));
+        add("mob_sheep", mob(EntityTypes.SHEEP, Items.STRING, 1, 0.1, "farming", 100));
+        add("mob_slime", mob(EntityTypes.SLIME, Items.SLIME_BLOCK, 1, 1, "combat", 300));
+        add("mob_zombie", mob(EntityTypes.ZOMBIE, Items.BEETROOT, 1, 0.4, "combat", 200));
     }
 }

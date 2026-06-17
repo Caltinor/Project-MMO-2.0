@@ -74,7 +74,7 @@ public interface ResponsiveLayout extends Layout {
         @Override public BoxDimensions getPadding() {return padding;}
         @Override public DisplayType getDisplayType() {return displayType;}
         @Override public List<Positioner<?>> getChildren() {return children;}
-
+        @Override public void removeChildren() {this.children.clear();}
     }
 
     DisplayType getDisplayType();

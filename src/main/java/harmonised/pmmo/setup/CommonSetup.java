@@ -31,7 +31,7 @@ import harmonised.pmmo.setup.datagen.defaultpacks.HardcoreGLMProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,6 +39,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -53,6 +54,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.resource.ContextAwareReloadListener;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -86,9 +88,9 @@ public class CommonSetup {
 	}
 
 	public static void addAttributes(final EntityAttributeModificationEvent event) {
-		event.add(EntityType.PLAYER, VEIN_AMOUNT);
-		event.add(EntityType.PLAYER, VEIN_CAPACITY);
-		event.add(EntityType.PLAYER, VEIN_RECHARGE);
+		event.add(EntityTypes.PLAYER, VEIN_AMOUNT);
+		event.add(EntityTypes.PLAYER, VEIN_CAPACITY);
+		event.add(EntityTypes.PLAYER, VEIN_RECHARGE);
 	}
 	
 	@SubscribeEvent

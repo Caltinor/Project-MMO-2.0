@@ -3,6 +3,8 @@ package harmonised.pmmo.setup.datagen;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.references.BlockIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -18,42 +20,41 @@ public class BlockTagProvider extends BlockTagsProvider{
 	@Override
 	protected void addTags(Provider pProvider) {
 		tag(Reference.CASCADING_BREAKABLES)
-			.add(Blocks.SUGAR_CANE)
-			.add(Blocks.BAMBOO)
-			.add(Blocks.CACTUS)
-			.add(Blocks.CHORUS_PLANT)
-			.add(Blocks.POINTED_DRIPSTONE)
-			.add(Blocks.KELP)
-			.add(Blocks.KELP_PLANT)
-			.add(Blocks.TWISTING_VINES)
-			.add(Blocks.TWISTING_VINES_PLANT)
-			.add(Blocks.WEEPING_VINES)
-			.add(Blocks.WEEPING_VINES_PLANT)
-			.add(Blocks.CAVE_VINES)
-			.add(Blocks.CAVE_VINES_PLANT);
+			.add(BlockItemIds.SUGAR_CANE.block())
+			.add(BlockItemIds.BAMBOO.block())
+			.add(BlockItemIds.CACTUS.block())
+			.add(BlockItemIds.CHORUS_PLANT.block())
+			.add(BlockItemIds.POINTED_DRIPSTONE.block())
+			.add(BlockItemIds.KELP.block())
+			.add(BlockIds.KELP_PLANT)
+			.add(BlockItemIds.TWISTING_VINES.block())
+			.add(BlockIds.TWISTING_VINES_PLANT)
+			.add(BlockItemIds.WEEPING_VINES.block())
+			.add(BlockIds.WEEPING_VINES_PLANT)
+			.add(BlockIds.CAVE_VINES_PLANT)
+			.add(BlockIds.CAVE_VINES_PLANT);
 		
 		tag(Reference.CROPS)
 			.addTag(BlockTags.CROPS)
-			.add(Blocks.MELON)
-			.add(Blocks.PUMPKIN)
-			.add(Blocks.BAMBOO)
-			.add(Blocks.COCOA)
-			.add(Blocks.SUGAR_CANE)
-			.add(Blocks.SWEET_BERRY_BUSH)
-			.add(Blocks.CACTUS)
-			.add(Blocks.RED_MUSHROOM)
-			.add(Blocks.BROWN_MUSHROOM)
-			.add(Blocks.KELP)
-			.add(Blocks.KELP_PLANT)
-			.add(Blocks.NETHER_WART)
-			.add(Blocks.SEA_PICKLE)
-			.add(Blocks.CHORUS_PLANT)
-			.add(Blocks.TWISTING_VINES)
-			.add(Blocks.TWISTING_VINES_PLANT)
-			.add(Blocks.WEEPING_VINES)
-			.add(Blocks.WEEPING_VINES_PLANT)
-			.add(Blocks.CAVE_VINES)
-			.add(Blocks.CAVE_VINES_PLANT);		
+			.add(BlockItemIds.MELON.block())
+			.add(BlockItemIds.PUMPKIN.block())
+			.add(BlockItemIds.BAMBOO.block())
+			.add(BlockItemIds.COCOA_CROP.block())
+			.add(BlockItemIds.SUGAR_CANE.block())
+			.add(BlockItemIds.SWEET_BERRY_CROP.block())
+			.add(BlockItemIds.CACTUS.block())
+			.add(BlockItemIds.RED_MUSHROOM.block())
+			.add(BlockItemIds.BROWN_MUSHROOM.block())
+			.add(BlockItemIds.KELP.block())
+			.add(BlockIds.KELP_PLANT)
+			.add(BlockItemIds.NETHER_WART.block())
+			.add(BlockItemIds.SEA_PICKLE.block())
+			.add(BlockItemIds.CHORUS_PLANT.block())
+			.add(BlockItemIds.TWISTING_VINES.block())
+			.add(BlockIds.TWISTING_VINES_PLANT)
+			.add(BlockItemIds.WEEPING_VINES.block())
+			.add(BlockIds.WEEPING_VINES_PLANT)
+			.add(BlockIds.CAVE_VINES_PLANT);
 	}
 
 }

@@ -3,16 +3,16 @@ package harmonised.pmmo.features.loot_modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.core.Core;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.advancements.criterion.SimpleCriterionTrigger;
-import net.minecraft.advancements.criterion.ContextAwarePredicate;
+import net.minecraft.advancements.predicates.ContextAwarePredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.LogicalSide;
 
 import java.util.Optional;
 
-public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.TriggerInstance>{
+public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.TriggerInstance> {
 	public static final SkillUpTrigger SKILL_UP = new SkillUpTrigger();
 
 	@Override

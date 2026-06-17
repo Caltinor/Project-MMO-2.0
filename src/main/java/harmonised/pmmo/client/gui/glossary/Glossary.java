@@ -128,7 +128,7 @@ public class Glossary extends Screen {
                 .addChild(objectWidget, PositionType.STATIC.constraint, buttonConstraints)
                 .addChild(skillWidget, PositionType.STATIC.constraint, buttonConstraints)
                 .addChild(enumWidget, PositionType.STATIC.constraint, buttonConstraints)
-                .addChild(new Button.Builder(Component.literal("Exit"), button -> Minecraft.getInstance().setScreen(priorScreen))
+                .addChild(new Button.Builder(Component.literal("Exit"), button -> Minecraft.getInstance().gui.setScreen(priorScreen))
                         .bounds(8, this.height-29, selectionWidth, 18)
                         .build(), PositionType.STATIC.constraint, buttonConstraints)
                 ;

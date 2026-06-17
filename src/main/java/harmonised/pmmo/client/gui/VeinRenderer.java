@@ -1,12 +1,16 @@
 package harmonised.pmmo.client.gui;
 
+import com.mojang.blaze3d.PrimitiveTopology;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.StagedVertexBuffer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -22,16 +26,18 @@ public class VeinRenderer {
         Vec3 cameraPos = mc.getEntityRenderDispatcher().camera.position();
         stack.pushPose();
         stack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
-        MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
-        VertexConsumer builder = buffer.getBuffer(RenderTypes.lines());
+//        MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
+//        VertexConsumer builder = buffer.getBuffer(RenderTypes.lines());
+        VertexConsumer builder = new BufferBuilder(
+                ByteBufferBuilder.exactlySized(36000 * vein.size()),
+                PrimitiveTopology.LINES,
+                DefaultVertexFormat.POSITION_COLOR);
 
         for(BlockPos pos : vein) {
             drawBoxHighlight(stack, builder, pos);
         }
         
         stack.popPose();
-//        RenderSystem.disableDepthTest();
-        buffer.endBatch();
     }
 
     public static void drawBoxHighlight(PoseStack stack, VertexConsumer builder, BlockPos pos)

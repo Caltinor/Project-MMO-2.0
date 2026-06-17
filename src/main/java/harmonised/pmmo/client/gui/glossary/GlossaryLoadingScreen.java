@@ -46,7 +46,7 @@ public class GlossaryLoadingScreen extends Screen {
     public void tick() {
         super.tick();
         if (ClientUtils.glossary != null) {
-            Minecraft.getInstance().setScreen(ClientUtils.glossary);
+            Minecraft.getInstance().gui.setScreen(ClientUtils.glossary);
         }
     }
 }
