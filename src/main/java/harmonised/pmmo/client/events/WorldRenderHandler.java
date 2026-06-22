@@ -9,21 +9,21 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.event.ExtractBlockOutlineRenderStateEvent;
 
 
 @EventBusSubscriber(modid=Reference.MOD_ID, value= Dist.CLIENT)
 public class WorldRenderHandler {
 
 	@SubscribeEvent
-	public static void onWorldRender(RenderLevelStageEvent.AfterTranslucentBlocks event) {
+	public static void onBlockOutline(ExtractBlockOutlineRenderStateEvent event) {
 		Minecraft mc = Minecraft.getInstance();
 
 		if (Config.server().veinMiner().enabled()
 				&& VeinTracker.isLookingAtVeinTarget(mc.hitResult)
 				&& !mc.player.level().getBlockState(((BlockHitResult)mc.hitResult).getBlockPos()).isAir()) {
 			VeinTracker.updateVein(mc.player);
-			VeinRenderer.drawBoxHighlights(event.getPoseStack(), VeinTracker.getVein());
+			event.addCustomRenderer(new VeinRenderer(VeinTracker.getVein(), event.getBlockPos()));
 		}
 	}
 }
