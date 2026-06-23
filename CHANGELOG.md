@@ -1,5 +1,5 @@
 # Changelog
 
-## [1.20.1-1.7.40] - 2026-02-05
+## [1.20.1-1.7.41] - 2026-06-22
 ### Bugfixes / Tweaks
-- Fixed Salvage failing to drop full counts at high max count
+- Fixed Treasure compounding chances on subsequent loot procs when using per_level loot
