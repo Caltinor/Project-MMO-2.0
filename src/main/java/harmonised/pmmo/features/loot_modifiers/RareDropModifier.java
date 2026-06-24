@@ -58,11 +58,12 @@ public class RareDropModifier extends LootModifier{
 	@Override
 	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
 		if (!Config.server().general().treasureEnabled()) return generatedLoot;
+		double baseChance = chance;
 		if (perLevel && context.getParameter(LootContextParams.THIS_ENTITY) instanceof Player player) {
-			chance *= Core.get(player.level()).getData().getLevel(skill, player.getUUID());
+			baseChance *= Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 		}
 		double rand = MsLoggy.DEBUG.logAndReturn(context.getRandom().nextDouble(), LOG_CODE.FEATURE, "Rand: {} as test for "+ TagUtils.stackTag(drop.create(), context.getLevel()));
-		if (rand <= chance) {
+		if (rand <= baseChance) {
 			generatedLoot.add(drop.create());
 		}
 		return generatedLoot;
