@@ -181,7 +181,7 @@ public class Core {
 		return getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, dataIn);
 	}
 	public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
-		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
+		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(player.level().registryAccess(), entity);
 		dataIn.merge(TagUtils.entityTag(entity));
 		  
 		Map<String, Long> xpGains = tooltips.xpGainTooltipExists(entityID, type)

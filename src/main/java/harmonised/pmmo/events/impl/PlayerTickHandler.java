@@ -9,6 +9,7 @@ import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.features.penalties.EffectManager;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
@@ -121,14 +122,7 @@ public class PlayerTickHandler {
 		Core core = ctx.core();
 		Player player = ctx.player();
 		boolean serverSide = core.getSide().equals(LogicalSide.SERVER);
-		//Early-out: if no XP config, no listeners, and no perks are interested
-		//in this event, skip the entire allocation-heavy pipeline.
 		Map<String, Double> ratio = serverSide ? Config.server().xpGains().playerXp(type) : Map.of();
-		if (serverSide
-				&& (ratio == null || ratio.isEmpty())
-				&& !core.getEventTriggerRegistry().hasListener(type)) {
-			return;
-		}
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, ctx.event(), new CompoundTag());
@@ -148,7 +142,7 @@ public class PlayerTickHandler {
 				processHealthChange(ratio, modifiers, player, xpAward);
 			}
 			case RIDING -> {
-				source = RegistryUtil.getId(player.getVehicle());
+				source = RegistryUtil.getId(player.level().registryAccess(), player.getVehicle());
 				xpAward.putAll(core.getExperienceAwards(type, player.getVehicle(), player, perkOutput));
 			}
 			case EFFECT -> {
