@@ -44,9 +44,11 @@ public class PerksImpl {
 				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
 				if (speedBonus == 0) return NONE;
 
-				float existingSpeedModification = nbt.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE).get();
-				float speedModification = Math.max(0, nbt.getInt(APIUtils.SKILL_LEVEL).get() * speedBonus) + existingSpeedModification;
-				speedModification = Math.min(nbt.getInt(APIUtils.MAX_BOOST).get(), speedModification);
+				float existingSpeedModification = nbt.contains(APIUtils.BREAK_SPEED_OUTPUT_VALUE)
+						? nbt.getFloatOr(APIUtils.BREAK_SPEED_OUTPUT_VALUE, 0f)
+						: nbt.getFloatOr(APIUtils.BREAK_SPEED_INPUT_VALUE, 0f);
+				float speedModification = Math.max(0, nbt.getIntOr(APIUtils.SKILL_LEVEL, 0) * speedBonus) + existingSpeedModification;
+				speedModification = Math.min(nbt.getIntOr(APIUtils.MAX_BOOST, 0), speedModification);
 				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			}).build();
 	
@@ -54,7 +56,7 @@ public class PerksImpl {
 		float ratio = 0f;
 		for (ItemAbility action : DIG_ACTIONS) {
 			if (tool.canPerformAction(action))
-				ratio += nbt.getFloat(action.name()).get();
+				ratio += nbt.getFloatOr(action.name(), 0);
 		}
 		return ratio;
 	}
