@@ -1,8 +1,7 @@
 # Changelog
 
-## [26.2.0-2.7.35] - 2026-06-23
+## [26.2.0-2.7.36] - 2026-07-03
 ### Bugfixes/Tweaks
-- Fixed treasure chances compounding when per_level is true
-- Added Treasure back to default pack
+- Fixed crash when digging with shears
 
 
