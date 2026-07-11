@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.21.1-2.10.45] - 2026-06-26
-### Bugfixes/Tweaks-
-- Fixed Riding XP not firing at all
+## [1.21.1-2.10.46] - 2026-07-11
+### Bugfixes/Tweaks
+- Fixed crash from loading damage data from two sources using isTagFor
  
