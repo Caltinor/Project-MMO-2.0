@@ -160,6 +160,20 @@ public record ObjectData(
 						DataSource.clearEmptyValues(salvage.orElse(new HashMap<>())),
 						vein.orElse(VeinData.EMPTY))
 				));
+
+		private <K,V> void deepCopy(Map<K,V> source, Map<K,V> target) {
+			source.forEach((k,v) -> {
+				if (v instanceof Map<?,?> map) {
+					target.put(k, (V) new HashMap<>(map));
+				}
+				else if (v instanceof List<?> list) {
+					target.put(k, (V) new ArrayList<>(list));
+				}
+				else {
+					target.put(k, v);
+				}
+			});
+		}
 		
 		@Override
 		public ObjectData combine(ObjectData two) {
@@ -178,24 +192,29 @@ public record ObjectData(
 			
 			BiConsumer<ObjectData, ObjectData> bothOrNeither = (o, t) -> {
 				//combine NBT settings
-				nbtXp.putAll(o.nbtXpValues());
+				deepCopy(o.nbtXpValues(), nbtXp);
 				t.nbtXpValues().forEach((event, logic) -> nbtXp.merge(event, logic, (a, b) -> {var list = new ArrayList<>(a); list.addAll(b); return list;}));
-				nbtDamageXP.putAll(o.nbtDamageValues());
+				o.nbtDamageValues().forEach((event, map) ->
+					map.forEach((dmg, logic) ->
+						nbtDamageXP.computeIfAbsent(event, e -> new HashMap<>()).merge(dmg, logic, (oLogic, nLogic) ->
+							{var list = new ArrayList<>(oLogic); list.addAll(nLogic); return list;})
+					)
+				);
 				t.nbtDamageValues().forEach((event, map) ->
 					map.forEach((dmg, logic) ->
 						nbtDamageXP.computeIfAbsent(event, e -> new HashMap<>()).merge(dmg, logic, (oLogic, nLogic) ->
 							{var list = new ArrayList<>(oLogic); list.addAll(nLogic); return list;})
 					)
 				);
-				nbtBonus.putAll(o.nbtBonuses());
+				deepCopy(o.nbtBonuses(), nbtBonus);
 				t.nbtBonuses().forEach((modifier, logic) -> nbtBonus.merge(modifier, logic, (a, b) -> {var list = new ArrayList<>(a); list.addAll(b); return list;}));
-				nbtReq.putAll(o.nbtReqs());
+				deepCopy(o.nbtReqs(), nbtReq);
 				t.nbtReqs().forEach((req, logic) -> nbtReq.merge(req, logic, (a, b) -> {var list = new ArrayList<>(a); list.addAll(b); return list;}));
 
 				//merge all other settings
 				tagValues.addAll(o.tagValues());
                 tagValues.addAll(t.tagValues());
-				xpValues.putAll(o.xpValues());
+				deepCopy(o.xpValues(), xpValues);
 				t.xpValues().forEach((event, map) -> {
 					xpValues.merge(event, map, (oMap, nMap) -> {
 						Map<String, Long> mergedMap = new HashMap<>(oMap);
@@ -203,7 +222,7 @@ public record ObjectData(
 						return mergedMap;
 					});
 				});
-				damageXP.putAll(o.damageXpValues());
+				deepCopy(o.damageXpValues(), damageXP);
 				t.damageXpValues().forEach((event, map) -> {
 					map.forEach((dmg, xp) -> {
 						damageXP.computeIfAbsent(event, e -> new HashMap<>()).merge(dmg, xp, (oMap, nMap) -> {
@@ -213,7 +232,7 @@ public record ObjectData(
 						});
 					});
 				});
-				bonuses.putAll(o.bonuses());	
+				deepCopy(o.bonuses(), bonuses);
 				t.bonuses().forEach((event, map) -> {
 					bonuses.merge(event, map, (oMap, nMap) -> {
 						Map<String, Double> mergedMap = new HashMap<>(oMap);
@@ -221,7 +240,7 @@ public record ObjectData(
 						return mergedMap;
 					});
 				});
-				reqs.putAll(o.reqs());	
+				deepCopy(o.reqs(), reqs);
 				t.reqs().forEach((event, map) -> {
 					reqs.merge(event, map, (oMap, nMap) -> {
 						Map<String, Long> mergedMap = new HashMap<>(oMap);
@@ -229,11 +248,11 @@ public record ObjectData(
 						return mergedMap;
 					});
 				});
-				reqEffects.putAll(o.negativeEffects());	
+				deepCopy(o.negativeEffects(), reqEffects);
 				t.negativeEffects().forEach((skill, level) -> {
 					reqEffects.merge(skill, level, Integer::max);
 				});
-				salvage.putAll(o.salvage());
+				deepCopy(o.salvage(), salvage);
 				t.salvage().forEach((rl, data) -> {
 					salvage.merge(rl, data, (oD, nD) -> {
 						return SalvageData.combine(oD, nD, o.override(), t.override());
