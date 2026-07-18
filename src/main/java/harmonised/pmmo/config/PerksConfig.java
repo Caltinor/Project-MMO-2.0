@@ -68,11 +68,7 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 		)));
 		bodyList.add(breakSpeed("farming", Map.of(
 				ItemTags.SWORDS, Map.of(BlockTags.SWORD_INSTANTLY_MINES, 0.005F, BlockTags.SWORD_EFFICIENT, 0.005F),
-				ItemTags.HOES, Map.of(BlockTags.MINEABLE_WITH_HOE, 0.005F),
-				Tags.Items.TOOLS_SHEAR, Map.of(
-						BlockTags.SHEARS_EXTREME_BREAKING_SPEED, 0.005F,
-						BlockTags.SHEARS_MAJOR_BREAKING_SPEED, 0.005F,
-						BlockTags.SHEARS_MINOR_BREAKING_SPEED, 0.005F)
+				ItemTags.HOES, Map.of(BlockTags.MINEABLE_WITH_HOE, 0.005F)
 		)));
 		defaultSettings.put(EventType.BREAK_SPEED, new ArrayList<>(bodyList));
 		bodyList.clear();
