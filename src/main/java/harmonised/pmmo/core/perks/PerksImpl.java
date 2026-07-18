@@ -4,10 +4,16 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.perks.Perk;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -16,7 +22,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 
@@ -26,22 +35,15 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PerksImpl {
-	public static Set<ItemAbility> DIG_ACTIONS = Set.of(
-			//TODO find a replacement for this logic
-//			ItemAbilities.PICKAXE_DIG,
-//			ItemAbilities.AXE_DIG,
-//			ItemAbilities.SHOVEL_DIG,
-//			ItemAbilities.HOE_DIG,
-			ItemAbilities.SHEARS_DIG
-//			ItemAbilities.SWORD_DIG
-			);
 	private static final CompoundTag NONE = new CompoundTag();
 	public static final Map<Player, Boolean> breakSpeedEnabled = new HashMap<>();
 	public static Perk BREAK_SPEED = Perk.begin()
 			.addConditions((p,t) -> breakSpeedEnabled.getOrDefault(p, true))
 			.addDefaults(getDefaults())
 			.setStart((player, nbt) -> {
-				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
+				BlockPos pos = BlockPos.of(nbt.getLongOr(APIUtils.BLOCK_POS, new BlockPos(0,0,0).asLong()));
+				BlockState state = player.level().getBlockState(pos);
+				float speedBonus = getRatioForTool(player.getMainHandItem(), nbt, state);
 				if (speedBonus == 0) return NONE;
 
 				float existingSpeedModification = nbt.contains(APIUtils.BREAK_SPEED_OUTPUT_VALUE)
@@ -51,12 +53,25 @@ public class PerksImpl {
 				speedModification = Math.min(nbt.getIntOr(APIUtils.MAX_BOOST, 0), speedModification);
 				return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, speedModification).build();
 			}).build();
-	
-	private static float getRatioForTool(ItemStack tool, CompoundTag nbt) {
+
+	/*
+		{"ratios": {
+			"minecraft:pickaxe": {
+				"minecraft:mineable_with_pickaxe": 0.005
+			}
+		}}
+	 */
+	private static float getRatioForTool(ItemStack tool, CompoundTag nbt, BlockState state) {
 		float ratio = 0f;
-		for (ItemAbility action : DIG_ACTIONS) {
-			if (tool.canPerformAction(action))
-				ratio += nbt.getFloatOr(action.name(), 0);
+		CompoundTag ratios = nbt.getCompoundOrEmpty("ratios");
+		for (String toolTag : ratios.keySet()) {
+			if (tool.is(TagKey.create(Registries.ITEM, Reference.of(toolTag)))) {
+				CompoundTag blockTags = ratios.getCompoundOrEmpty(toolTag);
+				for (String blockTag : blockTags.keySet()) {
+					if (state.is(TagKey.create(Registries.BLOCK, Reference.of(blockTag))))
+						ratio += blockTags.getFloatOr(blockTag, 0f);
+				}
+			}
 		}
 		return ratio;
 	}
@@ -64,9 +79,7 @@ public class PerksImpl {
 	public static CompoundTag getDefaults() {
 		TagBuilder builder = TagBuilder.start();
 		builder.withInt(APIUtils.MAX_BOOST, Integer.MAX_VALUE);
-		for (ItemAbility action : DIG_ACTIONS) {
-			builder.withFloat(action.name(), 0f);
-		}
+		builder.with("ratios", new CompoundTag());
 		return builder.build();
 	}
 	
