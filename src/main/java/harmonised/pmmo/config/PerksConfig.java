@@ -16,7 +16,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,15 +37,43 @@ public record PerksConfig(Map<EventType, List<CompoundTag>> perks) implements Co
 			Codec.unboundedMap(EventType.CODEC, CompoundTag.CODEC.listOf()).fieldOf("perks").forGetter(PerksConfig::perks)
 	).apply(instance, PerksConfig::new));
 
+	private static CompoundTag breakSpeed(String skill, Map<TagKey<Item>, Map<TagKey<Block>, Float>> ratios) {
+		TagBuilder builder = TagBuilder.start()
+				.withString("perk", "pmmo:break_speed")
+				.withString(APIUtils.SKILLNAME, skill);
+		CompoundTag ratioTag = new CompoundTag();
+		for (var tool : ratios.entrySet()) {
+			CompoundTag ratioMap = new CompoundTag();
+			for (var ratio : tool.getValue().entrySet()) {
+				ratioMap.putFloat(ratio.getKey().location().toString(), ratio.getValue());
+			}
+			ratioTag.put(tool.getKey().location().toString(), ratioMap);
+		}
+		return builder.with("ratios", ratioTag).build();
+	}
+
 	private static Map<EventType, List<CompoundTag>> generateDefaults() {
 		Map<EventType, List<CompoundTag>> defaultSettings = new HashMap<>();
 		List<CompoundTag> bodyList = new ArrayList<>();
 		
 		//====================BREAK SPEED DEFAULTS========================
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "mining").withDouble("pickaxe_dig", 0.005).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "excavation").withDouble("shovel_dig", 0.005).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "woodcutting").withDouble("axe_dig", 0.005).build());
-		bodyList.add(TagBuilder.start().withString("perk", "pmmo:break_speed").withString(APIUtils.SKILLNAME, "farming").withDouble("sword_dig", 0.005).withDouble("hoe_dig", 0.005).withDouble("shears_dig", 0.005).build());
+		bodyList.add(breakSpeed("mining", Map.of(
+				ItemTags.PICKAXES, Map.of(BlockTags.MINEABLE_WITH_PICKAXE, 0.005F)
+		)));
+		bodyList.add(breakSpeed("excavation", Map.of(
+				ItemTags.SHOVELS, Map.of(BlockTags.MINEABLE_WITH_SHOVEL, 0.005F)
+		)));
+		bodyList.add(breakSpeed("woodcutting", Map.of(
+				ItemTags.AXES, Map.of(BlockTags.MINEABLE_WITH_AXE, 0.005F)
+		)));
+		bodyList.add(breakSpeed("farming", Map.of(
+				ItemTags.SWORDS, Map.of(BlockTags.SWORD_INSTANTLY_MINES, 0.005F, BlockTags.SWORD_EFFICIENT, 0.005F),
+				ItemTags.HOES, Map.of(BlockTags.MINEABLE_WITH_HOE, 0.005F),
+				Tags.Items.TOOLS_SHEAR, Map.of(
+						BlockTags.SHEARS_EXTREME_BREAKING_SPEED, 0.005F,
+						BlockTags.SHEARS_MAJOR_BREAKING_SPEED, 0.005F,
+						BlockTags.SHEARS_MINOR_BREAKING_SPEED, 0.005F)
+		)));
 		defaultSettings.put(EventType.BREAK_SPEED, new ArrayList<>(bodyList));
 		bodyList.clear();
 		//====================SKILL_UP DEFAULTS==========================

@@ -56,7 +56,11 @@ public class LangProvider extends LanguageProvider {
 	public static final Translation PERK_BREAK_SPEED_DESC = Translation.Builder.start("perk.pmmo.break_speed.description")
 		.addLocale(Locale.EN_US, "Increases how fast you can break blocks when using the correct tool.").build();
 	public static final Translation PERK_BREAK_SPEED_STATUS_1 = Translation.Builder.start("perk.pmmo.break_speed.status1")
-		.addLocale(Locale.EN_US, "%s speed +%s (+%s per level)").build();
+		.addLocale(Locale.EN_US, "When tool is in tag %s").build();
+	public static final Translation PERK_BREAK_SPEED_STATUS_2 = Translation.Builder.start("perk.pmmo.break_speed.status2")
+			.addLocale(Locale.EN_US, "and block is in tag %s").build();
+	public static final Translation PERK_BREAK_SPEED_STATUS_3 = Translation.Builder.start("perk.pmmo.break_speed.status3")
+			.addLocale(Locale.EN_US, "speed +%s (+%s per level in %s)").build();
 	public static final Translation PERK_FIREWORK = Translation.Builder.start("perk.pmmo.fireworks")
 		.addLocale(Locale.EN_US, "Firework").build();
 	public static final Translation PERK_FIREWORK_DESC = Translation.Builder.start("perk.pmmo.fireworks.description")

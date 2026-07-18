@@ -61,4 +61,9 @@ public class TagBuilder {
 		nbt.putLong(key, value);
 		return this;
 	}
+
+	public TagBuilder with(@NonNull String key, @NonNull CompoundTag tag) {
+		nbt.put(key, tag);
+		return this;
+	}
 }

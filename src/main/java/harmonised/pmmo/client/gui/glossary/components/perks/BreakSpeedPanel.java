@@ -32,11 +32,16 @@ public class BreakSpeedPanel extends PanelWidget {
         addString(title.withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD), PositionType.STATIC.constraint, textConstraint);
         addString(descr.withStyle(ChatFormatting.GRAY), PositionType.STATIC.constraint, textConstraint);
 
-        PerksImpl.DIG_ACTIONS.stream()
-                .filter(action -> config.getFloatOr(action.name(), 0f) > 0)
-                .forEach(action ->
-                        addString(LangProvider.PERK_BREAK_SPEED_STATUS_1.asComponent(action.name(), config.getFloatOr(action.name(), 0f) * skillLevel, config.getFloatOr(action.name(), 0)),
-                                PositionConstraints.offset(10, 0), textConstraint));
+        CompoundTag ratios = config.getCompoundOrEmpty("ratios");
+        for (var toolEntry : ratios.entrySet()) {
+            addString(LangProvider.PERK_BREAK_SPEED_STATUS_1.asComponent(toolEntry.getKey()), PositionConstraints.offset(10, 0), textConstraint);
+            CompoundTag blocks = ratios.getCompoundOrEmpty(toolEntry.getKey());
+            for (String blockTag : blocks.keySet()) {
+                addString(LangProvider.PERK_BREAK_SPEED_STATUS_2.asComponent(blockTag), PositionConstraints.offset(20, 0), textConstraint);
+                float rate = blocks.getFloatOr(blockTag, 0F);
+                addString(LangProvider.PERK_BREAK_SPEED_STATUS_3.asComponent(rate * skillLevel, rate, skill), PositionConstraints.offset(30, 0), textConstraint);
+            }
+        }
 
         PerkRenderer.commonElements(this, config);
         addChild(new DividerWidget(200, 2, 0xFF000000), PositionType.STATIC.constraint, SizeConstraints.builder()
