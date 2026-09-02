@@ -20,9 +20,10 @@ import net.minecraftforge.fml.ModList;
 
 public class CmdPmmoRoot {
 	
-	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) throws CommandSyntaxException {
 		dispatcher.register(Commands.literal("pmmo")
 				.then(CmdNodeAdmin.register(dispatcher))
+				.then(CmdNodeConfig.CONFIG())
 				.then(CmdNodeParty.register(dispatcher))					
 				.then(Commands.literal("genData")
 						.requires(ctx -> ctx.hasPermission(2))

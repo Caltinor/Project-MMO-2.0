@@ -506,6 +506,22 @@ public class APIUtils {
 		/**@return a new salvage builder
 		 */
 		public static SalvageBuilder start() {return new SalvageBuilder();}
+
+		/**Creates a salvage builder from existing SalvageData
+		 *
+		 * @param original the starting data
+		 * @return a builder replica of the original data
+		 */
+		public static SalvageBuilder from(SalvageData original) {
+			if (original == null) return start();
+			return new SalvageBuilder()
+					.setChancePerLevel(new HashMap<>(original.chancePerLevel()))
+					.setLevelReq(new HashMap<>(original.levelReq()))
+					.setXpAward(new HashMap<>(original.xpAward()))
+					.setSalvageMax(original.salvageMax())
+					.setBaseChance(original.baseChance())
+					.setMaxChance(original.maxChance());
+		}
 		/**A map of skill names and chances.  Salvage logic will take the chance
 		 * value and multiply it by the player's level in the skill used in the key
 		 * to increase the player's odds.  This is done for all pairs in the map.

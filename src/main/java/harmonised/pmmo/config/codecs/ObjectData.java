@@ -60,6 +60,8 @@ public record ObjectData(
 					.filter(entry -> !ForgeRegistries.ITEMS.getValue(entry.getKey()).equals(Items.AIR))
 					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		}
+		public Map<ResourceLocation, SalvageData> salvageRaw() {return salvage;}
+
 		@Override
 		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
 			if (nbtXpValues().get(type) == null)
@@ -145,8 +147,8 @@ public record ObjectData(
 						DataSource.clearEmptyValues(nbtreqs.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(effects.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(xp.orElse(new HashMap<>())),
-						Map.of(EventType.DEAL_DAMAGE, DataSource.clearEmptyValues(dealt.orElse(new HashMap<>())),
-								EventType.RECEIVE_DAMAGE, DataSource.clearEmptyValues(received.orElse(new HashMap<>()))),
+						new HashMap<>(Map.of(EventType.DEAL_DAMAGE, DataSource.clearEmptyValues(dealt.orElse(new HashMap<>())),
+								EventType.RECEIVE_DAMAGE, DataSource.clearEmptyValues(received.orElse(new HashMap<>())))),
 						DataSource.clearEmptyValues(nbtXp.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(bonus.orElse(new HashMap<>())),
 						DataSource.clearEmptyValues(nbtbonus.orElse(new HashMap<>())),
