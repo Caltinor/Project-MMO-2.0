@@ -66,7 +66,7 @@ public class PackGenerator {
 	public static List<String> namespaceFilter = new ArrayList<>();
 	public static Set<ServerPlayer> players = new HashSet<>();
 	
-	private enum Category {
+	public enum Category {
 		@SuppressWarnings("unchecked")
 		ITEMS("pmmo/items", server -> BuiltInRegistries.ITEM.keySet(), (id) -> {
 			Core core = Core.get(LogicalSide.SERVER);
@@ -388,7 +388,7 @@ public class PackGenerator {
 				Filter.CODEC.optionalFieldOf("filter").forGetter(McMeta::filter)
 				).apply(instance, McMeta::new));
 	}
-	private static JsonElement getPackObject(boolean isDisabler) {
+	public static JsonElement getPackObject(boolean isDisabler) {
 		McMeta pack = new McMeta(
 				new Pack(isDisabler 
 					? "Generated Resources including a disabler filter for PMMO's defaults"

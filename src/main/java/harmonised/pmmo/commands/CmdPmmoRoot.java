@@ -22,9 +22,10 @@ import java.net.URI;
 
 public class CmdPmmoRoot {
 	
-	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) throws CommandSyntaxException {
 		dispatcher.register(Commands.literal("pmmo")
 				.then(CmdNodeAdmin.register(dispatcher))
+				.then(CmdNodeConfig.CONFIG())
 				.then(CmdNodeParty.register(dispatcher))					
 				.then(Commands.literal("genData")
 						.requires(ctx -> ctx.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
