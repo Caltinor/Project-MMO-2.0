@@ -59,6 +59,8 @@ public record ObjectData(
 					.filter(entry -> !BuiltInRegistries.ITEM.get(entry.getKey()).equals(Items.AIR))
 					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		}
+		public Map<Identifier, SalvageData> salvageRaw() {return salvage;}
+
 		@Override
 		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
 			boolean isDamage = EventType.is(EventType.DAMAGE_TYPES, type);

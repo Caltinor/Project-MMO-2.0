@@ -1,5 +1,6 @@
 package harmonised.pmmo.setup;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.curios.CuriosCompat;
@@ -99,7 +100,7 @@ public class CommonSetup {
 	}
 	
 	@SubscribeEvent
-	public static void onCommandRegister(RegisterCommandsEvent event) {
+	public static void onCommandRegister(RegisterCommandsEvent event) throws CommandSyntaxException {
 		CmdPmmoRoot.register(event.getDispatcher());
 	}
 	
