@@ -33,29 +33,26 @@ import harmonised.pmmo.network.clientpackets.CP_SyncData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.IdentifierArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.permissions.Permissions;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.flag.FeatureElement;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.server.command.EnumArgument;
-import org.apache.commons.lang3.function.TriFunction;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.security.Permissions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -92,7 +89,7 @@ public class CmdNodeConfig {
 
     public static ArgumentBuilder<CommandSourceStack, ?> CONFIG() throws CommandSyntaxException {
         return Commands.literal("config")
-                .requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
+                .requires(p -> p.hasPermission(2))
                 .then(object("item", Registries.ITEM, Options.ITEM, ObjectType.ITEM))
                 .then(object("block", Registries.BLOCK, Options.BLOCK, ObjectType.BLOCK))
                 .then(object("entity", Registries.ENTITY_TYPE, Options.ENTITY, ObjectType.ENTITY))
@@ -103,11 +100,11 @@ public class CmdNodeConfig {
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> object(String literal, ResourceKey<? extends Registry<?>> registry, Options[] opts, ObjectType objType) throws CommandSyntaxException {
-        var regKey = ResourceKey.createRegistryKey(objType.key.identifier());
+        var regKey = ResourceKey.createRegistryKey(objType.key.location());
         var IdArg = Commands.argument("id", ResourceOrTagKeyArgument.resourceOrTagKey(regKey))
                 .suggests((c,b) -> {
                     var reg = c.getSource().registryAccess().lookupOrThrow(registry);
-                    List<String> values = new ArrayList<>(reg.keySet().stream().map(Identifier::toString).toList());
+                    List<String> values = new ArrayList<>(reg.listElementIds().map(key -> key.location().toString()).toList());
                     values.addAll(reg.listTagIds().map(key -> "#" + key.location()).toList());
                     return SharedSuggestionProvider.suggest(values, b);
                 });
@@ -136,9 +133,9 @@ public class CmdNodeConfig {
                             ReqType type = ReqType.byName(StringArgumentType.getString(ctx, "type"));
                             String skill = StringArgumentType.getString(ctx, "skill");
                             long value = LongArgumentType.getLong(ctx, "value");
-                            List<Identifier> ids = new ArrayList<>();
-                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                            for (Identifier id : ids) {
+                            List<ResourceLocation> ids = new ArrayList<>();
+                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                            for (ResourceLocation id : ids) {
                                 DataSource<?> src = loader.getData(id);
                                 src.setReqs(type, Map.of(skill, value));
                                 commit(objType, id, src, ctx);
@@ -150,9 +147,9 @@ public class CmdNodeConfig {
                             ReqType type = ReqType.byName(StringArgumentType.getString(ctx, "type"));
                             String skill = StringArgumentType.getString(ctx, "skill");
                             long value = LongArgumentType.getLong(ctx, "value");
-                            List<Identifier> ids = new ArrayList<>();
-                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                            for (Identifier id : ids) {
+                            List<ResourceLocation> ids = new ArrayList<>();
+                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                            for (ResourceLocation id : ids) {
                                 DataSource<?> src = loader.getData(id);
                                 Map<String, Long> map = new HashMap<>(src.getReqs(type, new CompoundTag()));
                                 map.put(skill, value);
@@ -164,9 +161,9 @@ public class CmdNodeConfig {
                         .then(Commands.literal("clear").executes(ctx -> {
                             var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objectType);
                             ReqType type = ReqType.byName(StringArgumentType.getString(ctx, "type"));
-                            List<Identifier> ids = new ArrayList<>();
-                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                            for (Identifier id : ids) {
+                            List<ResourceLocation> ids = new ArrayList<>();
+                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                            for (ResourceLocation id : ids) {
                                 DataSource<?> src = loader.getData(id);
                                 src.setReqs(type, Map.of());
                                 commit(objectType, id, src, ctx);
@@ -192,9 +189,9 @@ public class CmdNodeConfig {
                                 EventType type = EventType.byName(StringArgumentType.getString(ctx, "type"));
                                 String skill = StringArgumentType.getString(ctx, "skill");
                                 long value = LongArgumentType.getLong(ctx, "value");
-                                List<Identifier> ids = new ArrayList<>();
-                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                for (Identifier id : ids) {
+                                List<ResourceLocation> ids = new ArrayList<>();
+                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                for (ResourceLocation id : ids) {
                                     DataSource<?> src = loader.getData(id);
                                     src.setXpValues(type, Map.of(skill, value));
                                     commit(objType, id, src, ctx);
@@ -206,9 +203,9 @@ public class CmdNodeConfig {
                                 EventType type = EventType.byName(StringArgumentType.getString(ctx, "type"));
                                 String skill = StringArgumentType.getString(ctx, "skill");
                                 long value = LongArgumentType.getLong(ctx, "value");
-                                List<Identifier> ids = new ArrayList<>();
-                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                for (Identifier id : ids) {
+                                List<ResourceLocation> ids = new ArrayList<>();
+                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                for (ResourceLocation id : ids) {
                                     DataSource<?> src = loader.getData(id);
                                     Map<String, Long> map = new HashMap<>(src.getXpValues(type, new CompoundTag()));
                                     map.put(skill, value);
@@ -219,10 +216,10 @@ public class CmdNodeConfig {
                             }))
                         .then(Commands.literal("clear").executes(ctx -> {
                                 var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objectType);
-                                List<Identifier> ids = new ArrayList<>();
+                                List<ResourceLocation> ids = new ArrayList<>();
                                 EventType type = EventType.byName(StringArgumentType.getString(ctx, "type"));
-                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                for (Identifier id : ids) {
+                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                for (ResourceLocation id : ids) {
                                     DataSource<?> src = loader.getData(id);
                                     src.setXpValues(type, Map.of());
                                     commit(objectType, id, src, ctx);
@@ -250,9 +247,9 @@ public class CmdNodeConfig {
                             ModifierDataType type = ModifierDataType.byName(StringArgumentType.getString(ctx, "type"));
                             String skill = StringArgumentType.getString(ctx, "skill");
                             double value = DoubleArgumentType.getDouble(ctx, "value");
-                            List<Identifier> ids = new ArrayList<>();
-                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                            for (Identifier id : ids) {
+                            List<ResourceLocation> ids = new ArrayList<>();
+                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                            for (ResourceLocation id : ids) {
                                 DataSource<?> src = loader.getData(id);
                                 src.setBonuses(type, Map.of(skill, value));
                                 commit(objType, id, src, ctx);
@@ -264,9 +261,9 @@ public class CmdNodeConfig {
                             ModifierDataType type = ModifierDataType.byName(StringArgumentType.getString(ctx, "type"));
                             String skill = StringArgumentType.getString(ctx, "skill");
                             double value = DoubleArgumentType.getDouble(ctx, "value");
-                            List<Identifier> ids = new ArrayList<>();
-                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                            for (Identifier id : ids) {
+                            List<ResourceLocation> ids = new ArrayList<>();
+                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                            for (ResourceLocation id : ids) {
                                 DataSource<?> src = loader.getData(id);
                                 Map<String, Double> map = new HashMap<>(src.getBonuses(type, new CompoundTag()));
                                 map.put(skill, value);
@@ -278,9 +275,9 @@ public class CmdNodeConfig {
                         .then(Commands.literal("clear").executes(ctx -> {
                             var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objectType);
                             ModifierDataType type = ModifierDataType.byName(StringArgumentType.getString(ctx, "type"));
-                            List<Identifier> ids = new ArrayList<>();
-                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                            for (Identifier id : ids) {
+                            List<ResourceLocation> ids = new ArrayList<>();
+                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                            for (ResourceLocation id : ids) {
                                 DataSource<?> src = loader.getData(id);
                                 src.setBonuses(type, Map.of());
                                 commit(objectType, id, src, ctx);
@@ -296,15 +293,15 @@ public class CmdNodeConfig {
                     .then(Commands.argument("effect", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.MOB_EFFECT))
                         .suggests((c,b) -> SharedSuggestionProvider.suggest(c.getSource().registryAccess()
                                 .lookupOrThrow(Registries.MOB_EFFECT)
-                                .keySet().stream().map(Identifier::toString).toList(), b))
+                                .listElementIds().map(key -> key.location().toString()).toList(), b))
                         .then(Commands.argument("level", IntegerArgumentType.integer(0))
                                 .executes(ctx -> {
                                     var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objectType);
-                                    Identifier effect = IdentifierArgument.getId(ctx, "effect");
+                                    ResourceLocation effect = ResourceLocationArgument.getId(ctx, "effect");
                                     int value = IntegerArgumentType.getInteger(ctx, "level");
-                                    List<Identifier> ids = new ArrayList<>();
-                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                    for (Identifier id : ids) {
+                                    List<ResourceLocation> ids = new ArrayList<>();
+                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                    for (ResourceLocation id : ids) {
                                         DataSource<?> src = loader.getData(id);
                                         var currentEffects = new HashMap<>(src.getPositiveEffect());
                                         currentEffects.put(effect, value);
@@ -318,9 +315,9 @@ public class CmdNodeConfig {
                 )
                 .then(Commands.literal("clear").executes(ctx -> {
                     var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objectType);
-                    List<Identifier> ids = new ArrayList<>();
-                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                    for (Identifier id : ids) {
+                    List<ResourceLocation> ids = new ArrayList<>();
+                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                    for (ResourceLocation id : ids) {
                         DataSource<?> src = loader.getData(id);
                         src.setPositiveEffects(Map.of());
                         commit(objectType, id, src, ctx);
@@ -332,18 +329,18 @@ public class CmdNodeConfig {
         //region NEG_EFFECT
         NEG_EFFECT((objectType) -> Commands.literal("neg_effect")
                 .then(Commands.literal("set")
-                        .then(Commands.argument("effect", IdentifierArgument.id())
+                        .then(Commands.argument("effect", ResourceLocationArgument.id())
                                 .suggests((c,b) -> SharedSuggestionProvider.suggest(c.getSource().registryAccess()
                                         .lookupOrThrow(Registries.MOB_EFFECT)
-                                        .keySet().stream().map(Identifier::toString).toList(), b))
+                                        .listElementIds().map(key -> key.location().toString()).toList(), b))
                                 .then(Commands.argument("level", IntegerArgumentType.integer(0))
                                         .executes(ctx -> {
                                             var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objectType);
-                                            Identifier effect = IdentifierArgument.getId(ctx, "effect");
+                                            ResourceLocation effect = ResourceLocationArgument.getId(ctx, "effect");
                                             int value = IntegerArgumentType.getInteger(ctx, "level");
-                                            List<Identifier> ids = new ArrayList<>();
-                                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                            for (Identifier id : ids) {
+                                            List<ResourceLocation> ids = new ArrayList<>();
+                                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                            for (ResourceLocation id : ids) {
                                                 DataSource<?> src = loader.getData(id);
                                                 var currentEffects = new HashMap<>(src.getNegativeEffect());
                                                 currentEffects.put(effect, value);
@@ -357,9 +354,9 @@ public class CmdNodeConfig {
                 )
                 .then(Commands.literal("clear").executes(ctx -> {
                     var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objectType);
-                    List<Identifier> ids = new ArrayList<>();
-                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                    for (Identifier id : ids) {
+                    List<ResourceLocation> ids = new ArrayList<>();
+                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                    for (ResourceLocation id : ids) {
                         DataSource<?> src = loader.getData(id);
                         src.setNegativeEffects(Map.of());
                         commit(objectType, id, src, ctx);
@@ -372,20 +369,20 @@ public class CmdNodeConfig {
         DAMAGE_XP((objectType) -> Commands.literal("damage_xp")
                 .then(Commands.argument("type", StringArgumentType.word())
                         .suggests((c,b) -> enumSuggestion(EventType.DAMAGE_TYPES, b))
-                        .then(Commands.argument("damage_type", IdentifierArgument.id())
+                        .then(Commands.argument("damage_type", ResourceLocationArgument.id())
                                 .suggests((c,b) -> SharedSuggestionProvider.suggest(c.getSource().registryAccess()
                                             .lookupOrThrow(Registries.DAMAGE_TYPE)
-                                            .keySet().stream().map(Identifier::toString).toList(), b)
+                                            .listElementIds().map(key -> key.location().toString()).toList(), b)
                                 )
                                 .then(CMD_SKILL_LONG("set", objectType, (objType, ctx) -> {
                                     var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objType);
-                                    String dmgType = IdentifierArgument.getId(ctx, "damage_type").toString();
+                                    String dmgType = ResourceLocationArgument.getId(ctx, "damage_type").toString();
                                     EventType type = EventType.byName(StringArgumentType.getString(ctx, "type"));
                                     String skill = StringArgumentType.getString(ctx, "skill");
                                     long value = LongArgumentType.getLong(ctx, "value");
-                                    List<Identifier> ids = new ArrayList<>();
-                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                    for (Identifier id : ids) {
+                                    List<ResourceLocation> ids = new ArrayList<>();
+                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                    for (ResourceLocation id : ids) {
                                         ObjectData src = (ObjectData) loader.getData(id);
                                         Map<String, Map<String, Long>> map = new HashMap<>(src.damageXpValues().getOrDefault(type, new HashMap<>()));
                                         map.put(dmgType, Map.of(skill, value));
@@ -396,13 +393,13 @@ public class CmdNodeConfig {
                                 }))
                                 .then(CMD_SKILL_LONG("add", objectType, (objType, ctx) -> {
                                     var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objType);
-                                    String dmgType = IdentifierArgument.getId(ctx, "damage_type").toString();
+                                    String dmgType = ResourceLocationArgument.getId(ctx, "damage_type").toString();
                                     EventType type = EventType.byName(StringArgumentType.getString(ctx, "type"));
                                     String skill = StringArgumentType.getString(ctx, "skill");
                                     long value = LongArgumentType.getLong(ctx, "value");
-                                    List<Identifier> ids = new ArrayList<>();
-                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                    for (Identifier id : ids) {
+                                    List<ResourceLocation> ids = new ArrayList<>();
+                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                    for (ResourceLocation id : ids) {
                                         ObjectData src = (ObjectData) loader.getData(id);
                                         Map<String, Map<String, Long>> map = new HashMap<>(src.damageXpValues().getOrDefault(type, new HashMap<>()));
                                         Map<String, Long> inner = new HashMap<>(map.getOrDefault(dmgType, new HashMap<>()));
@@ -415,11 +412,11 @@ public class CmdNodeConfig {
                                 }))
                                 .then(Commands.literal("clear").executes(ctx -> {
                                     var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objectType);
-                                    String dmgType = IdentifierArgument.getId(ctx, "damage_type").toString();
+                                    String dmgType = ResourceLocationArgument.getId(ctx, "damage_type").toString();
                                     EventType type = EventType.byName(StringArgumentType.getString(ctx, "type"));
-                                    List<Identifier> ids = new ArrayList<>();
-                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                    for (Identifier id : ids) {
+                                    List<ResourceLocation> ids = new ArrayList<>();
+                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                    for (ResourceLocation id : ids) {
                                         ObjectData src = (ObjectData) loader.getData(id);
                                         Map<String, Map<String, Long>> map = new HashMap<>(src.damageXpValues().getOrDefault(type, new HashMap<>()));
                                         map.remove(dmgType);
@@ -435,19 +432,19 @@ public class CmdNodeConfig {
         //region SALVAGE
         SALVAGE((objectType) -> Commands.literal("salvage")
                 .then(Commands.literal("set")
-                        .then(Commands.argument("drop", IdentifierArgument.id())
+                        .then(Commands.argument("drop", ResourceLocationArgument.id())
                                 .suggests((ctx, b) -> SharedSuggestionProvider.suggest(ctx.getSource().registryAccess()
-                                        .lookupOrThrow(Registries.ITEM).keySet().stream().map(Identifier::toString).toList(), b)
+                                        .lookupOrThrow(Registries.ITEM).listElementIds().map(key -> key.location().toString()).toList(), b)
                                 )
                                 .then(Commands.literal("chance_per_level")
                                         .then(CMD_SKILL_DOUBLE("set", objectType, (objType, ctx) -> {
                                                 var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                 String skill = StringArgumentType.getString(ctx, "skill");
                                                 double value = DoubleArgumentType.getDouble(ctx, "value");
-                                                List<Identifier> ids = new ArrayList<>();
-                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                for (Identifier id : ids) {
+                                                List<ResourceLocation> ids = new ArrayList<>();
+                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                for (ResourceLocation id : ids) {
                                                     ObjectData src = loader.getData(id);
                                                     CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(src.salvage().get(drop))
                                                             .setChancePerLevel(Map.of(skill, value)).build();
@@ -458,12 +455,12 @@ public class CmdNodeConfig {
                                             }))
                                         .then(CMD_SKILL_DOUBLE("add", objectType, (objType, ctx) -> {
                                                 var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                 String skill = StringArgumentType.getString(ctx, "skill");
                                                 double value = DoubleArgumentType.getDouble(ctx, "value");
-                                                List<Identifier> ids = new ArrayList<>();
-                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                for (Identifier id : ids) {
+                                                List<ResourceLocation> ids = new ArrayList<>();
+                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                for (ResourceLocation id : ids) {
                                                     ObjectData src = loader.getData(id);
                                                     CodecTypes.SalvageData data = src.salvage().getOrDefault(drop, APIUtils.SalvageBuilder.start().build());
                                                     data.chancePerLevel().put(skill, value);
@@ -474,10 +471,10 @@ public class CmdNodeConfig {
                                             }))
                                         .then(Commands.literal("clear").executes(ctx -> {
                                             var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                            Identifier drop = IdentifierArgument.getId(ctx, "drop");
-                                            List<Identifier> ids = new ArrayList<>();
-                                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                            for (Identifier id : ids) {
+                                            ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
+                                            List<ResourceLocation> ids = new ArrayList<>();
+                                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                            for (ResourceLocation id : ids) {
                                                 ObjectData src = loader.getData(id);
                                                 CodecTypes.SalvageData original = src.salvage().getOrDefault(drop, APIUtils.SalvageBuilder.start().build());
                                                 CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(original)
@@ -491,12 +488,12 @@ public class CmdNodeConfig {
                                 .then(Commands.literal("requirement")
                                         .then(CMD_SKILL_LONG("set", objectType, (objType, ctx) -> {
                                                 var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                 String skill = StringArgumentType.getString(ctx, "skill");
                                                 long value = LongArgumentType.getLong(ctx, "value");
-                                                List<Identifier> ids = new ArrayList<>();
-                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                for (Identifier id : ids) {
+                                                List<ResourceLocation> ids = new ArrayList<>();
+                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                for (ResourceLocation id : ids) {
                                                     ObjectData src = loader.getData(id);
                                                     CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(src.salvage().get(drop))
                                                             .setLevelReq(Map.of(skill, value)).build();
@@ -507,12 +504,12 @@ public class CmdNodeConfig {
                                             }))
                                         .then(CMD_SKILL_LONG("add", objectType, (objType, ctx) -> {
                                                 var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                 String skill = StringArgumentType.getString(ctx, "skill");
                                                 long value = LongArgumentType.getLong(ctx, "value");
-                                                List<Identifier> ids = new ArrayList<>();
-                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                for (Identifier id : ids) {
+                                                List<ResourceLocation> ids = new ArrayList<>();
+                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                for (ResourceLocation id : ids) {
                                                     ObjectData src = loader.getData(id);
                                                     CodecTypes.SalvageData data = src.salvage().getOrDefault(drop, APIUtils.SalvageBuilder.start().build());
                                                     data.levelReq().put(skill, value);
@@ -523,10 +520,10 @@ public class CmdNodeConfig {
                                             }))
                                         .then(Commands.literal("clear").executes(ctx -> {
                                             var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                            Identifier drop = IdentifierArgument.getId(ctx, "drop");
-                                            List<Identifier> ids = new ArrayList<>();
-                                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                            for (Identifier id : ids) {
+                                            ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
+                                            List<ResourceLocation> ids = new ArrayList<>();
+                                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                            for (ResourceLocation id : ids) {
                                                 ObjectData src = loader.getData(id);
                                                 CodecTypes.SalvageData original = src.salvage().getOrDefault(drop, APIUtils.SalvageBuilder.start().build());
                                                 CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(original)
@@ -540,12 +537,12 @@ public class CmdNodeConfig {
                                 .then(Commands.literal("xp")
                                         .then(CMD_SKILL_LONG("set", objectType, (objType, ctx) -> {
                                                 var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                 String skill = StringArgumentType.getString(ctx, "skill");
                                                 long value = LongArgumentType.getLong(ctx, "value");
-                                                List<Identifier> ids = new ArrayList<>();
-                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                for (Identifier id : ids) {
+                                                List<ResourceLocation> ids = new ArrayList<>();
+                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                for (ResourceLocation id : ids) {
                                                     ObjectData src = loader.getData(id);
                                                     CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(src.salvage().get(drop))
                                                             .setXpAward(Map.of(skill, value)).build();
@@ -556,12 +553,12 @@ public class CmdNodeConfig {
                                             }))
                                         .then(CMD_SKILL_LONG("add", objectType, (objType, ctx) -> {
                                                 var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                 String skill = StringArgumentType.getString(ctx, "skill");
                                                 long value = LongArgumentType.getLong(ctx, "value");
-                                                List<Identifier> ids = new ArrayList<>();
-                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                for (Identifier id : ids) {
+                                                List<ResourceLocation> ids = new ArrayList<>();
+                                                try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                for (ResourceLocation id : ids) {
                                                     ObjectData src = loader.getData(id);
                                                     CodecTypes.SalvageData data = src.salvage().getOrDefault(drop, APIUtils.SalvageBuilder.start().build());
                                                     data.xpAward().put(skill, value);
@@ -572,10 +569,10 @@ public class CmdNodeConfig {
                                             }))
                                         .then(Commands.literal("clear").executes(ctx -> {
                                             var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                            Identifier drop = IdentifierArgument.getId(ctx, "drop");
-                                            List<Identifier> ids = new ArrayList<>();
-                                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                            for (Identifier id : ids) {
+                                            ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
+                                            List<ResourceLocation> ids = new ArrayList<>();
+                                            try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                            for (ResourceLocation id : ids) {
                                                 ObjectData src = loader.getData(id);
                                                 CodecTypes.SalvageData original = src.salvage().getOrDefault(drop, APIUtils.SalvageBuilder.start().build());
                                                 CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(original)
@@ -590,11 +587,11 @@ public class CmdNodeConfig {
                                         .then(Commands.argument("value", IntegerArgumentType.integer(0))
                                                 .executes(ctx -> {
                                                     var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                    Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                    ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                     int value = IntegerArgumentType.getInteger(ctx, "value");
-                                                    List<Identifier> ids = new ArrayList<>();
-                                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                    for (Identifier id : ids) {
+                                                    List<ResourceLocation> ids = new ArrayList<>();
+                                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                    for (ResourceLocation id : ids) {
                                                         ObjectData src = loader.getData(id);
                                                         CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(src.salvage().get(drop))
                                                                 .setSalvageMax(value).build();
@@ -609,11 +606,11 @@ public class CmdNodeConfig {
                                         .then(Commands.argument("value", DoubleArgumentType.doubleArg(0))
                                                 .executes(ctx -> {
                                                     var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                    Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                    ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                     double value = DoubleArgumentType.getDouble(ctx, "value");
-                                                    List<Identifier> ids = new ArrayList<>();
-                                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                    for (Identifier id : ids) {
+                                                    List<ResourceLocation> ids = new ArrayList<>();
+                                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                    for (ResourceLocation id : ids) {
                                                         ObjectData src = loader.getData(id);
                                                         CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(src.salvage().get(drop))
                                                                 .setBaseChance(value).build();
@@ -628,11 +625,11 @@ public class CmdNodeConfig {
                                         .then(Commands.argument("value", DoubleArgumentType.doubleArg(0, 1.0))
                                                 .executes(ctx -> {
                                                     var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
-                                                    Identifier drop = IdentifierArgument.getId(ctx, "drop");
+                                                    ResourceLocation drop = ResourceLocationArgument.getId(ctx, "drop");
                                                     double value = DoubleArgumentType.getDouble(ctx, "value");
-                                                    List<Identifier> ids = new ArrayList<>();
-                                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException _) {}
-                                                    for (Identifier id : ids) {
+                                                    List<ResourceLocation> ids = new ArrayList<>();
+                                                    try {ids = readIDs(ctx, objectType);} catch(CommandSyntaxException e) {}
+                                                    for (ResourceLocation id : ids) {
                                                         ObjectData src = loader.getData(id);
                                                         CodecTypes.SalvageData data = APIUtils.SalvageBuilder.from(src.salvage().get(drop))
                                                                 .setMaxChance(value).build();
@@ -659,9 +656,9 @@ public class CmdNodeConfig {
                                     .executes(ctx -> {
                                         var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
                                         double rate = DoubleArgumentType.getDouble(ctx, "rate");
-                                        List<Identifier> ids = new ArrayList<>();
-                                        try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException _) {}
-                                        for (Identifier id : ids) {
+                                        List<ResourceLocation> ids = new ArrayList<>();
+                                        try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException e) {}
+                                        for (ResourceLocation id : ids) {
                                             ObjectData src = loader.getData(id);
                                             src.veinData().replaceWith(new VeinData(src.veinData().chargeCap, Optional.of(rate), Optional.empty()));
                                             commit(objType, id, src, ctx);
@@ -675,9 +672,9 @@ public class CmdNodeConfig {
                                     .executes(ctx -> {
                                         var loader = Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER;
                                         int cap = IntegerArgumentType.getInteger(ctx, "cap");
-                                        List<Identifier> ids = new ArrayList<>();
-                                        try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException _) {}
-                                        for (Identifier id : ids) {
+                                        List<ResourceLocation> ids = new ArrayList<>();
+                                        try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException e) {}
+                                        for (ResourceLocation id : ids) {
                                             ObjectData src = loader.getData(id);
                                             src.veinData().replaceWith(new VeinData(Optional.of(cap), src.veinData().chargeRate, Optional.empty()));
                                             commit(objType, id, src, ctx);
@@ -691,9 +688,9 @@ public class CmdNodeConfig {
                     root.then(Commands.argument("consume_amount", IntegerArgumentType.integer(1)).executes(ctx -> {
                         var loader = Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER;
                         int consumeAmount = IntegerArgumentType.getInteger(ctx, "consume_amount");
-                        List<Identifier> ids = new ArrayList<>();
-                        try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException _) {}
-                        for (Identifier id : ids) {
+                        List<ResourceLocation> ids = new ArrayList<>();
+                        try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException e) {}
+                        for (ResourceLocation id : ids) {
                             ObjectData src = loader.getData(id);
                             src.veinData().replaceWith(new VeinData(Optional.empty(), Optional.empty(), Optional.of(consumeAmount)));
                             commit(objType, id, src, ctx);
@@ -712,9 +709,9 @@ public class CmdNodeConfig {
                         .then(Commands.literal("clear")
                                 .executes(ctx -> {
                                     var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objType);
-                                    List<Identifier> ids = new ArrayList<>();
-                                    try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException _) {}
-                                    for (Identifier id : ids) {
+                                    List<ResourceLocation> ids = new ArrayList<>();
+                                    try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException e) {}
+                                    for (ResourceLocation id : ids) {
                                         LocationData src = (LocationData) loader.getData(id);
                                         src.globalModifiers().clear();
                                         commit(objType, id, src, ctx);
@@ -723,23 +720,23 @@ public class CmdNodeConfig {
                                 })
                         )
                         .then(Commands.literal("add")
-                                .then(Commands.argument("attribute", IdentifierArgument.id())
-                                    .suggests((c,b) -> SharedSuggestionProvider.suggest(c.getSource().registryAccess().lookupOrThrow(Registries.ATTRIBUTE).keySet().stream().map(Identifier::toString).toList(), b))
+                                .then(Commands.argument("attribute", ResourceLocationArgument.id())
+                                    .suggests((c,b) -> SharedSuggestionProvider.suggest(c.getSource().registryAccess().lookupOrThrow(Registries.ATTRIBUTE).listElementIds().map(key -> key.location().toString()).toList(), b))
                                     .then(Commands.argument("amount", DoubleArgumentType.doubleArg())
                                             .then(Commands.argument("operation", StringArgumentType.word())
                                                     .suggests((c,b) -> SharedSuggestionProvider.suggest(Arrays.stream(AttributeModifier.Operation.values()).map(AttributeModifier.Operation::getSerializedName).toList(), b))
                                                     .executes(ctx -> {
                                                         var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objType);
-                                                        Identifier attribute = IdentifierArgument.getId(ctx, "attribute");
+                                                        ResourceLocation attribute = ResourceLocationArgument.getId(ctx, "attribute");
                                                         double amount = DoubleArgumentType.getDouble(ctx, "amount");
                                                         AttributeModifier.Operation operation = switch (StringArgumentType.getString(ctx, "operation")) {
                                                             case "add_multiplied_base" -> AttributeModifier.Operation.ADD_MULTIPLIED_BASE;
                                                             case "add_multiplied_total" -> AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL;
                                                             default -> AttributeModifier.Operation.ADD_VALUE;
                                                         };
-                                                        List<Identifier> ids = new ArrayList<>();
-                                                        try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException _) {}
-                                                        for (Identifier id : ids) {
+                                                        List<ResourceLocation> ids = new ArrayList<>();
+                                                        try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException e) {}
+                                                        for (ResourceLocation id : ids) {
                                                             LocationData src = (LocationData) loader.getData(id);
                                                             src.globalModifiers().add(new MobModifier(attribute, amount, operation));
                                                             commit(objType, id, src, ctx);
@@ -754,9 +751,9 @@ public class CmdNodeConfig {
                 .then(Commands.literal("specific")
                         .then(Commands.literal("clear").executes(ctx -> {
                             var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objType);
-                            List<Identifier> ids = new ArrayList<>();
-                            try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException _) {}
-                            for (Identifier id : ids) {
+                            List<ResourceLocation> ids = new ArrayList<>();
+                            try {ids = readIDs(ctx, objType);} catch(CommandSyntaxException e) {}
+                            for (ResourceLocation id : ids) {
                                 LocationData src = (LocationData) loader.getData(id);
                                 src.mobModifiers().clear();
                                 commit(objType, id, src, ctx);
@@ -768,34 +765,34 @@ public class CmdNodeConfig {
                             .then(Commands.argument("entity", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.ENTITY_TYPE))
                                     .suggests((c,b) -> {
                                         var reg = c.getSource().registryAccess().lookupOrThrow(Registries.ENTITY_TYPE);
-                                        List<String> values = new ArrayList<>(reg.keySet().stream().map(Identifier::toString).toList());
+                                        List<String> values = new ArrayList<>(reg.listElementIds().map(key -> key.location().toString()).toList());
                                         values.addAll(reg.listTagIds().map(key -> "#" + key.location()).toList());
                                         return SharedSuggestionProvider.suggest(values, b);
                                     })
                                     .then(Commands.literal("add")
-                                        .then(Commands.argument("attribute", IdentifierArgument.id())
-                                                .suggests((c,b) -> SharedSuggestionProvider.suggest(c.getSource().registryAccess().lookupOrThrow(Registries.ATTRIBUTE).keySet().stream().map(Identifier::toString).toList(), b))
+                                        .then(Commands.argument("attribute", ResourceLocationArgument.id())
+                                                .suggests((c,b) -> SharedSuggestionProvider.suggest(c.getSource().registryAccess().lookupOrThrow(Registries.ATTRIBUTE).listElementIds().map(key -> key.location().toString()).toList(), b))
                                                 .then(Commands.argument("amount", DoubleArgumentType.doubleArg())
                                                         .then(Commands.argument("operation", StringArgumentType.word())
                                                                 .suggests((c,b) -> SharedSuggestionProvider.suggest(Arrays.stream(AttributeModifier.Operation.values()).map(AttributeModifier.Operation::getSerializedName).toList(), b))
                                                                 .executes(ctx -> {
                                                                     var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objType);
-                                                                    Identifier attribute = IdentifierArgument.getId(ctx, "attribute");
+                                                                    ResourceLocation attribute = ResourceLocationArgument.getId(ctx, "attribute");
                                                                     double amount = DoubleArgumentType.getDouble(ctx, "amount");
                                                                     AttributeModifier.Operation operation = switch (StringArgumentType.getString(ctx, "operation")) {
                                                                         case "add_multiplied_base" -> AttributeModifier.Operation.ADD_MULTIPLIED_BASE;
                                                                         case "add_multiplied_total" -> AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL;
                                                                         default -> AttributeModifier.Operation.ADD_VALUE;
                                                                     };
-                                                                    List<Identifier> ids = new ArrayList<>();
-                                                                    List<Identifier> mobs = new ArrayList<>();
+                                                                    List<ResourceLocation> ids = new ArrayList<>();
+                                                                    List<ResourceLocation> mobs = new ArrayList<>();
                                                                     try {
                                                                         ids = readIDs(ctx, objType);
                                                                         mobs = readWithTags("entity", ctx, ObjectType.ENTITY);
-                                                                    } catch(CommandSyntaxException _) {}
-                                                                    for (Identifier id : ids) {
+                                                                    } catch(CommandSyntaxException e) {}
+                                                                    for (ResourceLocation id : ids) {
                                                                         LocationData src = (LocationData) loader.getData(id);
-                                                                        for (Identifier entity : mobs) {
+                                                                        for (ResourceLocation entity : mobs) {
                                                                             List<MobModifier> currentMods = new ArrayList<>(src.mobModifiers().getOrDefault(entity, new ArrayList<>()));
                                                                             currentMods.add(new MobModifier(attribute, amount, operation));
                                                                             src.mobModifiers().put(entity, currentMods);
@@ -810,15 +807,15 @@ public class CmdNodeConfig {
                                     )
                                     .then(Commands.literal("clear").executes(ctx -> {
                                         var loader = Core.get(LogicalSide.SERVER).getLoader().getLoader(objType);
-                                        List<Identifier> ids = new ArrayList<>();
-                                        List<Identifier> mobs = new ArrayList<>();
+                                        List<ResourceLocation> ids = new ArrayList<>();
+                                        List<ResourceLocation> mobs = new ArrayList<>();
                                         try {
                                             ids = readIDs(ctx, objType);
                                             mobs = readWithTags("entity", ctx, ObjectType.ENTITY);
-                                        } catch(CommandSyntaxException _) {}
-                                        for (Identifier id : ids) {
+                                        } catch(CommandSyntaxException e) {}
+                                        for (ResourceLocation id : ids) {
                                             LocationData src = (LocationData) loader.getData(id);
-                                            for (Identifier entity : mobs) {
+                                            for (ResourceLocation entity : mobs) {
                                                 src.mobModifiers().getOrDefault(entity, new ArrayList<>()).clear();
                                                 commit(objType, id, src, ctx);
                                             }
@@ -841,7 +838,7 @@ public class CmdNodeConfig {
         public static final Options[] ENHANCES = new Options[]{XP};
     }
 
-    private static void commit(ObjectType objType, Identifier id, DataSource<?> src, CommandContext<CommandSourceStack> ctx) {
+    private static void commit(ObjectType objType, ResourceLocation id, DataSource<?> src, CommandContext<CommandSourceStack> ctx) {
         Networking.sendToClient(new CP_SyncData(objType, Map.of(id, src)), ctx.getSource().getPlayer());
         writeFile(ctx.getSource().getServer(), src, id, objType);
     }
@@ -850,11 +847,11 @@ public class CmdNodeConfig {
         return SharedSuggestionProvider.suggest(Arrays.stream(src).map(Enum::toString), builder);
     }
 
-    private static List<Identifier> readIDs(CommandContext<CommandSourceStack> ctx, ObjectType objectType) throws CommandSyntaxException {
+    private static List<ResourceLocation> readIDs(CommandContext<CommandSourceStack> ctx, ObjectType objectType) throws CommandSyntaxException {
         return readWithTags("id", ctx, objectType);
     }
-    private static List<Identifier> readWithTags(String id, CommandContext<CommandSourceStack> ctx, ObjectType objectType) throws CommandSyntaxException {
-        List<Identifier> ids = new ArrayList<>();
+    private static List<ResourceLocation> readWithTags(String id, CommandContext<CommandSourceStack> ctx, ObjectType objectType) throws CommandSyntaxException {
+        List<ResourceLocation> ids = new ArrayList<>();
         var error = new DynamicCommandExceptionType(err -> Component.literal("Invalid argument id/tag in command: ").append(err.toString()));
         String rawID = switch (objectType) {
             case ITEM -> ResourceOrTagKeyArgument.getResourceOrTagKey(ctx, id, Registries.ITEM, error).asPrintable();
@@ -867,17 +864,17 @@ public class CmdNodeConfig {
         };
         if (rawID.startsWith("#")) {
             String key = rawID.substring(1);
-            TagKey<?> tagKey = TagKey.create(ResourceKey.createRegistryKey(objectType.key.identifier()), Identifier.parse(key));
+            TagKey<?> tagKey = TagKey.create(ResourceKey.createRegistryKey(objectType.key.location()), ResourceLocation.parse(key));
             ctx.getSource().registryAccess().lookupOrThrow(objectType.key)
-                    .getTagOrEmpty((TagKey<Object>) tagKey)
-                    .forEach(holder -> ids.add(holder.getKey().identifier()));
+                    .get((TagKey<Object>) tagKey).get()
+                    .forEach(holder -> ids.add(holder.getKey().location()));
         }
         else
-            ids.add(Identifier.parse(rawID));
+            ids.add(ResourceLocation.parse(rawID));
         return ids;
     }
 
-    private static void writeFile(MinecraftServer server, DataSource<?> src, Identifier id, ObjectType type) {
+    private static void writeFile(MinecraftServer server, DataSource<?> src, ResourceLocation id, ObjectType type) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         //Create base pack if not exists
         Path packPath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve("command_pack").resolve("pack.mcmeta");

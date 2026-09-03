@@ -59,7 +59,7 @@ public record ObjectData(
 					.filter(entry -> !BuiltInRegistries.ITEM.get(entry.getKey()).equals(Items.AIR))
 					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		}
-		public Map<Identifier, SalvageData> salvageRaw() {return salvage;}
+		public Map<ResourceLocation, SalvageData> salvageRaw() {return salvage;}
 
 		@Override
 		public Map<String, Long> getXpValues(EventType type, CompoundTag nbt) {
@@ -117,7 +117,7 @@ public record ObjectData(
 		public static final MapCodec<ObjectData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.BOOL.optionalFieldOf("override").forGetter(od -> Optional.of(od.override())),
 				Codec.STRING.listOf().optionalFieldOf("isTagFor").forGetter(od -> Optional.of(new ArrayList<>(od.tagValues))),
-				Codec.optionalField("requirements", 
+				Codec.optionalField("requirements",
 					Codec.simpleMap(ReqType.CODEC, CodecTypes.LONG_CODEC, StringRepresentable.keys(ReqType.values())).codec(), false)
 					.forGetter(od -> Optional.of(od.reqs())),
 				Codec.optionalField("nbt_requirements",
