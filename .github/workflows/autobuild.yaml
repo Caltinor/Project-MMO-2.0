@@ -94,8 +94,8 @@ jobs:
           loaders: |
             forge
           game-versions: |
-            ${{ needs.setup.outputs.mc_minor_version }}
-            ${{ needs.setup.outputs.mc_patch_version }}
+            '1.20.1'
+            '1.20'
           java: |
             ${{ needs.setup.outputs.java_version }}
       - name: Upload to Modrinth
@@ -114,8 +114,8 @@ jobs:
           loaders: |
             forge
           game-versions: |
-            ${{ needs.setup.outputs.mc_minor_version }}
-            ${{ needs.setup.outputs.mc_patch_version }}
+            '1.20.1'
+            '1.20'
           java: |
             ${{ needs.setup.outputs.java_version }}
   message:
