@@ -11,6 +11,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,10 +68,10 @@ public record ServerData(
             boolean brewingTracked) {
         public static final General DEFAULT = new General(50d, Reference.mc("smithing_table"),true, true);
         
-        private static final String CREATIVE_REACH = "creative_reach";
-        private static final String SALVAGE_BLOCK = "salvage_block";
-        private static final String TREASURE = "treasure_enabled";
-        private static final String BREWING = "brewing_tracked";
+        public static final String CREATIVE_REACH = "creative_reach";
+        public static final String SALVAGE_BLOCK = "salvage_block";
+        public static final String TREASURE = "treasure_enabled";
+        public static final String BREWING = "brewing_tracked";
         //Scripting Builder
         public static General build(String param, Map<String, String> value, ServerData current) {
             double creativeReach = param.equals(CREATIVE_REACH) ? Functions.getDouble(value) : current.general().creativeReach();;
@@ -110,15 +111,15 @@ public record ServerData(
                 1.025,
                 1.1);
 
-        private static final String MAX_LEVEL = "max_level";
-        private static final String STATIC_LVLS = "static_levels";
-        private static final String LOSS_DEATH = "loss_on_death";
-        private static final String LOSE_EXCESS = "lose_only_excess";
-        private static final String GLOBAL_MODIFIER = "global_modifier";
-        private static final String SKILL_MODIFIER = "skill_modifiers";
-        private static final String XP_MIN = "xp_min";
-        private static final String XP_BASE = "xp_base";
-        private static final String PER_LEVEL = "per_level";
+        public static final String MAX_LEVEL = "max_level";
+        public static final String STATIC_LVLS = "static_levels";
+        public static final String LOSS_DEATH = "loss_on_death";
+        public static final String LOSE_EXCESS = "lose_only_excess";
+        public static final String GLOBAL_MODIFIER = "global_modifier";
+        public static final String SKILL_MODIFIER = "skill_modifiers";
+        public static final String XP_MIN = "xp_min";
+        public static final String XP_BASE = "xp_base";
+        public static final String PER_LEVEL = "xp_per_level";
 
         //Scripting Builder
         public static Levels build(String param, Map<String, String> value, ServerData current) {
@@ -151,7 +152,7 @@ public record ServerData(
     public record Requirements(Map<ReqType, Boolean> enabled) {
         public static final Requirements DEFAULT = new Requirements(Arrays.stream(ReqType.values()).collect(Collectors.toMap(a -> a, a -> true)));
 
-        private static final String DISABLE = "disable_req";
+        public static final String DISABLE = "disable_req";
         public static Requirements build(String param, Map<String, String> value, ServerData current) {
             Map<ReqType, Boolean> enables = new HashMap<>(current.requirements.enabled());
             if (param.equals(DISABLE)) {
@@ -203,14 +204,14 @@ public record ServerData(
                         )
                 ));
 
-        private static final String REUSE = "reuse_penalty";
-        private static final String PERKSPLUS = "perks_plus_config";
-        private static final String PLAYERACTIONS = "player_actions";
-        private static final String DAMAGE_DEALT = "damage_dealt";
-        private static final String DAMAGE_MITIGATED = "mitigated_damage";
-        private static final String DAMAGE_RECEIVED = "damage_received";
-        private static final String EVENT = "event";
-        private static final String DAMAGE_TYPE = "type";
+        public static final String REUSE = "reuse_penalty";
+        public static final String PERKSPLUS = "perks_plus_config";
+        public static final String PLAYERACTIONS = "player_actions";
+        public static final String DAMAGE_DEALT = "damage_dealt";
+        public static final String DAMAGE_MITIGATED = "mitigated_damage";
+        public static final String DAMAGE_RECEIVED = "damage_received";
+        public static final String EVENT = "event";
+        public static final String DAMAGE_TYPE = "type";
 
         public static XpGains build(String param, Map<String, String> value, ServerData current) {
             double reusePenalty = param.equals(REUSE) ? Functions.getDouble(value) : current.xpGains().reusePenalty();
@@ -272,8 +273,8 @@ public record ServerData(
     public record Party(int range, Map<String, Double> bonus) {
         public static final Party DEFAULT = new Party(50, Map.of("combat", 1.05, "endurance", 1.1));
 
-        private static final String PARTY_RANGE = "party_range";
-        private static final String PARTY_BONUS = "party_bonus";
+        public static final String PARTY_RANGE = "party_range";
+        public static final String PARTY_BONUS = "party_bonus";
         public static Party build(String param, Map<String, String> value, ServerData current) {
             int range = param.equals(PARTY_RANGE) ? Functions.getInt(value) : current.party().range();
             Map<String, Double> bonus = param.equals(PARTY_BONUS)
@@ -309,20 +310,20 @@ public record ServerData(
                 1.0,
                 1.104088404342588d,
                 Map.of(
-                        Reference.mc("generic.max_health"), Map.of("combat", 0.001),
-                        Reference.mc("generic.attack_damage"), Map.of("combat", 0.0001),
-                        Reference.mc("generic.movement_speed"), Map.of("combat", 0.000001)
+                        Attributes.MAX_HEALTH.unwrapKey().get().identifier(), Map.of("combat", 0.001),
+                        Attributes.ATTACK_DAMAGE.unwrapKey().get().identifier(), Map.of("combat", 0.0001),
+                        Attributes.MOVEMENT_SPEED.unwrapKey().get().identifier(), Map.of("combat", 0.000001)
                 ));
 
-        private static final String ENABLED = "enabled";
-        private static final String AOE = "scaling_aoe";
-        private static final String BASE_LVL = "base_level";
-        private static final String BOSS_SCALE = "boss_scaling";
-        private static final String USE_EXPONENT = "use_exponential_formula";
-        private static final String PER_LEVEL = "per_level";
-        private static final String POWER_BASE = "power_base";
-        private static final String RATIOS = "ratios";
-        private static final String ATTRIBUTE_ID = "attribute";
+        public static final String ENABLED = "mob_scale_enabled";
+        public static final String AOE = "scaling_aoe";
+        public static final String BASE_LVL = "mob_scale_base_level";
+        public static final String BOSS_SCALE = "boss_scaling";
+        public static final String USE_EXPONENT = "use_exponential_formula";
+        public static final String PER_LEVEL = "mob_scale_per_level";
+        public static final String POWER_BASE = "mob_scale_power_base";
+        public static final String RATIOS = "ratios";
+        public static final String ATTRIBUTE_ID = "attribute";
 
         public static MobScaling build(String param, Map<String, String> value, ServerData current) {
             boolean enabled = param.equals("mob_scaling_"+ENABLED) ? Functions.getBool(value) : current.mobScaling().enabled();
@@ -370,14 +371,14 @@ public record ServerData(
                 1.0,
                 List.of(Reference.of("silentgear:saw")));
 
-        private static final String ENABLED = "enabled";
-        private static final String REQUIRE = "require_settings";
-        private static final String DEFAULT_CONSUME = "default_consume";
-        private static final String CHARGE_MODIFIER = "charge_modifier";
-        private static final String BLACKLIST = "blacklist";
+        public static final String ENABLED = "vein_enabled";
+        public static final String REQUIRE = "require_settings";
+        public static final String DEFAULT_CONSUME = "default_consume";
+        public static final String CHARGE_MODIFIER = "charge_modifier";
+        public static final String BLACKLIST = "blacklist";
 
         public static VeinMiner build(String param, Map<String, String> value, ServerData current) {
-            boolean enabled = param.equals("vein_"+ENABLED) ? Functions.getBool(value) : current.veinMiner().enabled();
+            boolean enabled = param.equals(ENABLED) ? Functions.getBool(value) : current.veinMiner().enabled();
             boolean require = param.equals(REQUIRE) ? Functions.getBool(value) : current.veinMiner().requireSettings();
             int defaultConsume = param.equals(DEFAULT_CONSUME) ? Functions.getInt(value) : current.veinMiner().defaultConsume();
             double chargeMod = param.equals(CHARGE_MODIFIER) ? Functions.getDouble(value) : current.veinMiner().chargeModifier();
