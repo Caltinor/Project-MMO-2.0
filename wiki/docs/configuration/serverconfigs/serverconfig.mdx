@@ -18,7 +18,7 @@ WITH config(server)
     set(skill_modifiers).value(example_skill,1.0);
     set(xp_min).value(200);
     set(xp_base).value(1.025);
-    set(per_level).value(1.1);
+    set(xp_per_level).value(1.1);
     
     //Requirements settings
     //requirements are true by default.  the script explicitly disables them.  omission implies enabled.
@@ -39,11 +39,11 @@ WITH config(server)
     //Mob Scaling Settings
     set(mob_scaling_enabled).value(false);
     set(scaling_aoe).value(150);
-    set(base_level).value(0);
+    set(mob_scale_base_level).value(0);
     set(boss_scaling).value(1.1);
     set(use_exponential_formula).value(true);
-    set(per_level).value(1.0);
-    set(power_base).value(1.104088404342588);
+    set(mob_scale_per_level).value(1.0);
+    set(mob_scale_power_base).value(1.104088404342588);
     set(ratios).mob(minecraft:generic.max_health).value(combat,0.001);
     
     //Vein Miner Settings
@@ -144,8 +144,8 @@ END
   },
   "mob_scaling": {
     "use_exponential_formula": true,
-    "per_level": 1.0,
-    "power_base": 1.104088404342588,
+    "mob_scale_per_level": 1.0,
+    "mob_scale_power_base": 1.104088404342588,
     "ratios": {
       "minecraft:generic.attack_damage": {
         "combat": 1.0E-4
@@ -159,7 +159,7 @@ END
     },
     "enabled": false,
     "scaling_aoe": 150,
-    "base_level": 0,
+    "mob_scale_base_level": 0,
     "boss_scaling": 1.1
   },
   "vein_miner": {
@@ -168,7 +168,7 @@ END
     "blacklist": [
       "silentgear:saw"
     ],
-    "enabled": true,
+    "vein_enabled": true,
     "require_settings": false
   },
   "general": {
@@ -180,7 +180,7 @@ END
   "levels": {
     "xp_min": 200,
     "xp_base": 1.025,
-    "per_level": 1.1,
+    "xp_per_level": 1.1,
     "global_modifier": 1.0,
     "skill_modifiers": {
       "example_skill": 1.0
@@ -231,7 +231,7 @@ Most configurations use a combination of `set(config_keyword).value(some_value);
 |     `skill_modifiers`     | adjusts xp gains like global modifier but only for specific skills                                                                                       |                                                                                                                                                                                                                   | values are skills followed by decimal numbers separated by commas. for example `value(combat,1.5,endurance,0.5)` results in 50% increase to combat and 50% decrease to endurance.  default none                                |
 |         `xp_min`          | sets the value of the same name in the formula `xp_min + xp_base^(level * per_level)`                                                                    |                                                                                                                                                                                                                   | whole number.  default `value(200)`                                                                                                                                                                                            |
 |         `xp_base`         | sets the value of the same name in the formula `xp_min + xp_base^(level * per_level)`                                                                    |                                                                                                                                                                                                                   | decimal value.  default `value(1.025)`                                                                                                                                                                                         |
-|        `per_level`        | sets the value of the same name in the formula `xp_min + xp_base^(level * per_level)`                                                                    |                                                                                                                                                                                                                   | decimal vale. default `value(1.1)`                                                                                                                                                                                             |
+|        `xp_per_level`        | sets the value of the same name in the formula `xp_min + xp_base^(level * per_level)`                                                                    |                                                                                                                                                                                                                   | decimal vale. default `value(1.1)`                                                                                                                                                                                             |
 |       `disable_req`       | since all reqs are enabled by default, this operation disables specific reqs.                                                                            |                                                                                                                                                                                                                   | any of `WEAR`, `USE_ENCHANTMENT`, `TOOL`, `WEAPON`, `USE`, `PLACE`, `BREAK`, `KILL`, `TRAVEL`, `RIDE`, `TAME`, `BREED`, `INTERACT`, `ENTITY_INTERACT`.  no defaults                                                            |
 |      `reuse_penalty`      | how much xp percentage should breaking blocks placed by the player award.                                                                                |                                                                                                                                                                                                                   | decimal value. default `value(0.0)`                                                                                                                                                                                            |
 |    `perks_plus_config`    | for perks that award XP, if this is true, the perk XP will combine with the configured XP                                                                |                                                                                                                                                                                                                   | true/false.  default `value(false)`                                                                                                                                                                                            |
@@ -242,11 +242,11 @@ Most configurations use a combination of `set(config_keyword).value(some_value);
 |       `party_bonus`       | how much extra xp is awarded to players in parties based on the skill                                                                                    |                                                                                                                                                                                                                   | a list of skills and decimal values.  default `value(combat,1.05,endurance,1.1)`                                                                                                                                               |
 |   `mob_scaling_enabled`   | is mob scaling enabled.                                                                                                                                  |                                                                                                                                                                                                                   | true/false. default `value(false)`                                                                                                                                                                                             |
 |       `scaling_aoe`       | all players within this range of a spawning mob will contribute to the scaling values                                                                    |                                                                                                                                                                                                                   | whole number. default `value(150)`                                                                                                                                                                                             |
-|       `base_level`        | the minimum level in the skill a player must be to contribute to scaling                                                                                 |                                                                                                                                                                                                                   | whole number. defaule `value(0)`                                                                                                                                                                                               |
+|       `mob_scale_base_level`        | the minimum level in the skill a player must be to contribute to scaling                                                                                 |                                                                                                                                                                                                                   | whole number. defaule `value(0)`                                                                                                                                                                                               |
 |      `boss_scaling`       | a modifier on top of regular scaling applied to bosses                                                                                                   |                                                                                                                                                                                                                   | decimal number, default `value(1.1)`                                                                                                                                                                                           |
 | `use_exponential_formula` | if false, use a linear formula for scaling attributes                                                                                                    |                                                                                                                                                                                                                   | true/false, default `value(true)`                                                                                                                                                                                              |
-|        `per_level`        | the value in the formulas for linear (`(playerLevels - base_level) * per_level`) or exponential (`power_base^(per_level * (playerLevels - base_level))`) |                                                                                                                                                                                                                   | decimal number. default `value(1.0)`                                                                                                                                                                                           |
-|       `power_base`        | see above                                                                                                                                                |                                                                                                                                                                                                                   | decimal value. default `value(1.104088404342588)`                                                                                                                                                                              |
+|        `mob_scale_per_level`        | the value in the formulas for linear (`(playerLevels - base_level) * per_level`) or exponential (`power_base^(per_level * (playerLevels - base_level))`) |                                                                                                                                                                                                                   | decimal number. default `value(1.0)`                                                                                                                                                                                           |
+|       `mob_scale_power_base`        | see above                                                                                                                                                |                                                                                                                                                                                                                   | decimal value. default `value(1.104088404342588)`                                                                                                                                                                              |
 |         `ratios`          | which skills should be used to scale which attributes.                                                                                                   | `attribute()` accepts the attribute ID being scaled                                                                                                                                                               | a list of skills and ratios separated by commas. example `value(combat,0.001,archery,0.003)`                                                                                                                                   |
 |      `vein_enabled`       | should vein miner features be enabled                                                                                                                    |                                                                                                                                                                                                                   | true/false. default `value(true)`                                                                                                                                                                                              |
 |    `require_settings`     | if true, requires that automatic break values be ignored                                                                                                 |                                                                                                                                                                                                                   | true/false. default `value(false)`                                                                                                                                                                                             |

@@ -93,6 +93,7 @@ public class CmdNodeConfig {
     public static ArgumentBuilder<CommandSourceStack, ?> CONFIG() throws CommandSyntaxException {
         return Commands.literal("config")
                 .requires(p -> p.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
+                .then(CmdNodeServerConfigs.SERVERCONFIGS())
                 .then(object("item", Registries.ITEM, Options.ITEM, ObjectType.ITEM))
                 .then(object("block", Registries.BLOCK, Options.BLOCK, ObjectType.BLOCK))
                 .then(object("entity", Registries.ENTITY_TYPE, Options.ENTITY, ObjectType.ENTITY))
@@ -846,7 +847,7 @@ public class CmdNodeConfig {
         writeFile(ctx.getSource().getServer(), src, id, objType);
     }
 
-    private static CompletableFuture<Suggestions> enumSuggestion(Enum<?>[] src, SuggestionsBuilder builder) {
+    public static CompletableFuture<Suggestions> enumSuggestion(Enum<?>[] src, SuggestionsBuilder builder) {
         return SharedSuggestionProvider.suggest(Arrays.stream(src).map(Enum::toString), builder);
     }
 
@@ -901,7 +902,7 @@ public class CmdNodeConfig {
         } catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
     }
 
-    private static void generatePack(MinecraftServer server, Gson gson) {
+    public static void generatePack(MinecraftServer server, Gson gson) {
         Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve("command_pack");
         filepath.toFile().mkdirs();
         Path packPath = filepath.resolve("pack.mcmeta");
