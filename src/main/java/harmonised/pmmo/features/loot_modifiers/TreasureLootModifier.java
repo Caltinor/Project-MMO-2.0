@@ -7,6 +7,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -39,10 +40,10 @@ public class TreasureLootModifier extends LootModifier{
 	public boolean perLevel;
 	public String skill;
 
-	public TreasureLootModifier(LootItemCondition[] conditionsIn, Optional<ItemStackTemplate> lootItem, int count, double chance) {
+	public TreasureLootModifier(Optional<Holder<LootItemCondition>> conditionsIn, Optional<ItemStackTemplate> lootItem, int count, double chance) {
 		this(conditionsIn, 0, lootItem, count, chance, Optional.of(false), Optional.empty());
 	}
-	public TreasureLootModifier(LootItemCondition[] conditionsIn, int priority, Optional<ItemStackTemplate> lootItem, int count,
+	public TreasureLootModifier(Optional<Holder<LootItemCondition>> conditionsIn, int priority, Optional<ItemStackTemplate> lootItem, int count,
 								double chance, Optional<Boolean> perLevel, Optional<String> skill) {
 		super(conditionsIn, priority);
 		this.chance = chance;
@@ -52,7 +53,7 @@ public class TreasureLootModifier extends LootModifier{
 		this.skill = skill.orElse("");
 	}
 
-	public LootItemCondition[] getConditions() {return this.conditions;}
+	public Optional<Holder<LootItemCondition>> getConditions() {return this.condition;}
 
 	@Override
 	public MapCodec<? extends IGlobalLootModifier> codec() {
@@ -63,21 +64,21 @@ public class TreasureLootModifier extends LootModifier{
 	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,	LootContext context) {
 		if (!Config.server().general().treasureEnabled()) return generatedLoot;
 		double baseChance = chance;
-		if (perLevel && context.getParameter(LootContextParams.THIS_ENTITY) instanceof Player player) {
+		if (perLevel && context.getOptional(LootContextParams.THIS_ENTITY) instanceof Player player) {
 			baseChance *= Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 		}
 		if (context.getRandom().nextDouble() <= baseChance) {
 			
 			//this section checks if the drop is air and replaces it with the block
 			//being broken.  this is the logic for Extra Drops
-			BlockState state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
+			BlockState state = context.getOptional(LootContextParams.BLOCK_STATE);
 			if (state != null && drop.isEmpty()) {
 				drop = Optional.of(ItemStackTemplate.fromNonEmptyStack(state.getDrops(builderFromContext(context)).get(0)));
 				drop.get().create().setCount(count);
 			}
 			
 			//Notify player that their skill awarded them an extra drop.
-			Entity breaker = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
+			Entity breaker = context.getOptional(LootContextParams.THIS_ENTITY);
 			if (breaker instanceof Player player) {
 				player.sendOverlayMessage(LangProvider.FOUND_TREASURE.asComponent());
 			}
@@ -88,7 +89,7 @@ public class TreasureLootModifier extends LootModifier{
 
 	private LootParams.Builder builderFromContext(LootContext context) {
 		return new LootParams.Builder(context.getLevel())
-				.withParameter(LootContextParams.ORIGIN, context.getParameter(LootContextParams.ORIGIN))
-				.withParameter(LootContextParams.TOOL, context.getParameter(LootContextParams.TOOL));
+				.withOptionalParameter(LootContextParams.ORIGIN, context.getOptional(LootContextParams.ORIGIN))
+				.withOptionalParameter(LootContextParams.TOOL, context.getOptional(LootContextParams.TOOL));
 	}
 }

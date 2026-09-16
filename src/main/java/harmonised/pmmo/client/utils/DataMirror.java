@@ -17,6 +17,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -84,7 +86,7 @@ public class DataMirror implements IDataStorage{
 	public IDataStorage get() {return this;}
 
 	//GLM clones
-	public record GLM(Component header, ItemStackTemplate drop, int count, double chance, boolean perLevel, String skill, LootItemCondition[] conditions) {
+	public record GLM(Component header, ItemStackTemplate drop, int count, double chance, boolean perLevel, String skill, Optional<Holder<LootItemCondition>> conditions) {
 		public static void add(RareDropModifier modifier) {
 			DataMirror data = (DataMirror) Core.get(LogicalSide.CLIENT).getData();
 			data.lootModifiers.add(new GLM(LangProvider.GLM_HEADER_RARE.asComponent().withStyle(ChatFormatting.BOLD), modifier.drop, modifier.drop.count(),
@@ -109,33 +111,31 @@ public class DataMirror implements IDataStorage{
 					: LangProvider.GLM_DROP_CHANCE.asComponent(actualChanceFormated)
 			);
 			int otherConditions = 0;
-			for (LootItemCondition condition : conditions) {
-				if (condition instanceof LootTableConditionMixin lootCondition) {
-					linesOut.add(LangProvider.GLM_LOOT_TABLE.asComponent(lootCondition.getTargetLootTableId().getPath()));
+			if (conditions.get() instanceof LootTableConditionMixin lootCondition) {
+				linesOut.add(LangProvider.GLM_LOOT_TABLE.asComponent(lootCondition.getTargetLootTableId().getPath()));
+			}
+			else if (conditions.get() instanceof SkillLootConditionPlayer playerSkillCondition) {
+				long maxLevel = Math.min(playerSkillCondition.levelMax, Config.skills().skills().getOrDefault(playerSkillCondition.skill, SkillData.Builder.getDefault()).getMaxLevel());
+				linesOut.add(LangProvider.GLM_SKILL_RANGE.asComponent(LangProvider.skill(playerSkillCondition.skill),
+						playerSkillCondition.levelMin, maxLevel));
+			}
+			else if (conditions.get() instanceof SkillLootConditionHighestSkill highSkillCondition) {
+				String skills = highSkillCondition.comparables.stream().map(str -> LangProvider.skill(str).toString()).collect(Collectors.joining(", "));
+				linesOut.add(LangProvider.GLM_HIGHEST_SKILL.asComponent(LangProvider.skill(highSkillCondition.targetSkill), skills));
+			}
+			else if (!(conditions.get() instanceof SkillLootConditionKill killCondition)) {
+				if (conditions.get() instanceof ValidBlockCondition blockCondition) {
+					Component target = blockCondition.tag.isEmpty()
+							? blockCondition.block.get().getName()
+							: Component.literal(blockCondition.tag.get().location().toString());
+					linesOut.add(LangProvider.GLM_VALID_BLOCK.asComponent(target));
 				}
-				else if (condition instanceof SkillLootConditionPlayer playerSkillCondition) {
-					long maxLevel = Math.min(playerSkillCondition.levelMax, Config.skills().skills().getOrDefault(playerSkillCondition.skill, SkillData.Builder.getDefault()).getMaxLevel());
-					linesOut.add(LangProvider.GLM_SKILL_RANGE.asComponent(LangProvider.skill(playerSkillCondition.skill),
-							playerSkillCondition.levelMin, maxLevel));
-				}
-				else if (condition instanceof SkillLootConditionHighestSkill highSkillCondition) {
-					String skills = highSkillCondition.comparables.stream().map(str -> LangProvider.skill(str).toString()).collect(Collectors.joining(", "));
-					linesOut.add(LangProvider.GLM_HIGHEST_SKILL.asComponent(LangProvider.skill(highSkillCondition.targetSkill), skills));
-				}
-				else if (!(condition instanceof SkillLootConditionKill killCondition)) {
-                    if (condition instanceof ValidBlockCondition blockCondition) {
-                        Component target = blockCondition.tag.isEmpty()
-                                ? blockCondition.block.get().getName()
-                                : Component.literal(blockCondition.tag.get().location().toString());
-                        linesOut.add(LangProvider.GLM_VALID_BLOCK.asComponent(target));
-                    }
-                    else otherConditions++;
-                } else {
-                    long maxLevel = Math.min(killCondition.levelMax, Config.skills().skills().getOrDefault(killCondition.skill, SkillData.Builder.getDefault()).getMaxLevel());
-                    linesOut.add(LangProvider.GLM_SKILL_RANGE.asComponent(LangProvider.skill(killCondition.skill),
-                            killCondition.levelMin, maxLevel));
-                }
-            }
+				else otherConditions++;
+			} else {
+				long maxLevel = Math.min(killCondition.levelMax, Config.skills().skills().getOrDefault(killCondition.skill, SkillData.Builder.getDefault()).getMaxLevel());
+				linesOut.add(LangProvider.GLM_SKILL_RANGE.asComponent(LangProvider.skill(killCondition.skill),
+						killCondition.levelMin, maxLevel));
+			}
 			if (otherConditions > 0) linesOut.add(LangProvider.GLM_OTHER_CONDITIONS.asComponent(otherConditions));
 			return linesOut;
 		}

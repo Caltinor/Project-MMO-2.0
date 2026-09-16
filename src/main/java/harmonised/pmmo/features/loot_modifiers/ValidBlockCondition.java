@@ -32,9 +32,9 @@ public class ValidBlockCondition implements LootItemCondition{
 
 	@Override
 	public boolean test(LootContext t) {
-		if (t.getOptionalParameter(LootContextParams.THIS_ENTITY) == null)
+		if (t.getOptional(LootContextParams.THIS_ENTITY) == null)
 			return false;
-		BlockState brokenBlock = t.getOptionalParameter(LootContextParams.BLOCK_STATE);
+		BlockState brokenBlock = t.getOptional(LootContextParams.BLOCK_STATE);
 		if (brokenBlock != null) {
 			if (tag.isPresent())
 				return brokenBlock.is(tag.get());

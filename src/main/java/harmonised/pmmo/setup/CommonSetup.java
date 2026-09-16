@@ -124,7 +124,7 @@ public class CommonSetup {
 	
 	public static void gatherData(GatherDataEvent.Client event) {
 		DataGenerator generator = event.getGenerator();
-		CompletableFuture<HolderLookup.Provider> reg = event.getLookupProvider();
+		CompletableFuture<HolderLookup.Provider> reg = event.getWorldLookupProvider();
 		//CLIENT RESOURCES
 		for (Locale locale : LangProvider.Locale.values()) {
 			generator.addProvider(true, new LangProvider(generator.getPackOutput(), locale.str));

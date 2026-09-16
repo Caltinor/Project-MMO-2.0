@@ -9,6 +9,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.TagUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -36,11 +37,11 @@ public class RareDropModifier extends LootModifier{
 	public boolean perLevel;
 	public String skill;
 
-	public RareDropModifier(LootItemCondition[] conditionsIn, ItemStackTemplate lootItem, int count, double chance) {
+	public RareDropModifier(Optional<Holder<LootItemCondition>> conditionsIn, ItemStackTemplate lootItem, int count, double chance) {
 		this(conditionsIn, 0, lootItem, count, chance, Optional.of(false), Optional.empty());
 	}
-	public RareDropModifier(LootItemCondition[] conditionsIn, int priority, ItemStackTemplate lootItem, int count, double chance,
-							Optional<Boolean> perLevel, Optional<String> skill) {
+	public RareDropModifier(Optional<Holder<LootItemCondition>> conditionsIn, int priority, ItemStackTemplate lootItem, int count, double chance,
+                            Optional<Boolean> perLevel, Optional<String> skill) {
 		super(conditionsIn, priority);
 		this.chance = chance;
 		this.drop = lootItem.withCount(count);
@@ -48,7 +49,7 @@ public class RareDropModifier extends LootModifier{
 		this.skill = skill.orElse("");
 	}
 
-	public LootItemCondition[] getConditions() {return this.conditions;}
+	public Optional<Holder<LootItemCondition>> getConditions() {return this.condition;}
 
 	@Override
 	public MapCodec<? extends IGlobalLootModifier> codec() {
@@ -59,7 +60,7 @@ public class RareDropModifier extends LootModifier{
 	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
 		if (!Config.server().general().treasureEnabled()) return generatedLoot;
 		double baseChance = chance;
-		if (perLevel && context.getParameter(LootContextParams.THIS_ENTITY) instanceof Player player) {
+		if (perLevel && context.getOptional(LootContextParams.THIS_ENTITY) instanceof Player player) {
 			baseChance *= Core.get(player.level()).getData().getLevel(skill, player.getUUID());
 		}
 		double rand = MsLoggy.DEBUG.logAndReturn(context.getRandom().nextDouble(), LOG_CODE.FEATURE, "Rand: {} as test for "+ TagUtils.stackTag(drop.create(), context.getLevel()));

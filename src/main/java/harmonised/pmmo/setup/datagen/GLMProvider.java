@@ -10,7 +10,9 @@ import harmonised.pmmo.features.loot_modifiers.SkillLootConditionPlayer;
 import harmonised.pmmo.features.loot_modifiers.TreasureLootModifier;
 import harmonised.pmmo.features.loot_modifiers.ValidBlockCondition;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -21,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -58,18 +61,21 @@ public abstract class GLMProvider implements DataProvider {
 
 	public TreasureLootModifier of(TagKey<Block> validBlocks, Item drop, int count, double chance, String skill, int minLevel) {
 		return new TreasureLootModifier(
-				new LootItemCondition[] {
-					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
-					new ValidBlockCondition(validBlocks)
-				}, Optional.of(new ItemStackTemplate(drop)), count, chance);
+				Optional.of(Holder.direct(AllOfCondition.allOf(HolderSet.direct(
+					Holder.direct(new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill)),
+					Holder.direct(new ValidBlockCondition(validBlocks))
+				)))),
+				Optional.of(new ItemStackTemplate(drop)),
+				count,
+				chance);
 	}
 
 	public TreasureLootModifier of(Block validBlocks, Item drop, int count, double chance, String skill, int minLevel) {
 		return new TreasureLootModifier(
-				new LootItemCondition[] {
-					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
-					new ValidBlockCondition(validBlocks)
-				}, Optional.of(new ItemStackTemplate(drop)), count, chance);
+				Optional.of(Holder.direct(AllOfCondition.allOf(HolderSet.direct(
+					Holder.direct(new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill)),
+					Holder.direct(new ValidBlockCondition(validBlocks))
+				)))), Optional.of(new ItemStackTemplate(drop)), count, chance);
 	}
 
 	/**Used to specify that a tag member should drop extra of itself.
@@ -85,18 +91,18 @@ public abstract class GLMProvider implements DataProvider {
 	 */
 	public TreasureLootModifier extra(TagKey<Block> validBlocks, int count, double chance, String skill, int minLevel) {
 		return new TreasureLootModifier(
-				new LootItemCondition[] {
-					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
-					new ValidBlockCondition(validBlocks)
-				}, Optional.empty(), count, chance);
+				Optional.of(Holder.direct(AllOfCondition.allOf(HolderSet.direct(
+					Holder.direct(new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill)),
+					Holder.direct(new ValidBlockCondition(validBlocks))
+				)))), Optional.empty(), count, chance);
 	}
 
 	public RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel, int maxLevel) {
 		return new RareDropModifier(
-				new LootItemCondition[] {
-						LootTableIdCondition.builder(BuiltInLootTables.FISHING.identifier()).build(),
-						new SkillLootConditionKill(minLevel, maxLevel, skill)
-				}, new ItemStackTemplate(drop), count, chance);
+				Optional.of(Holder.direct(AllOfCondition.allOf(HolderSet.direct(
+					Holder.direct(LootTableIdCondition.builder(BuiltInLootTables.FISHING.identifier()).build()),
+					Holder.direct(new SkillLootConditionKill(minLevel, maxLevel, skill))
+				)))), new ItemStackTemplate(drop), count, chance);
 	}
 
 	public RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel) {
@@ -105,11 +111,11 @@ public abstract class GLMProvider implements DataProvider {
 
 	public RareDropModifier mob(EntityType<?> mob, Item drop, int count, double chance, String skill, int minLevel, int maxLevel) {
 		return new RareDropModifier(
-				new LootItemCondition[] {
-						LootItemKilledByPlayerCondition.killedByPlayer().build(),
-						LootTableIdCondition.builder(mob.getDefaultLootTable().get().identifier()).build(),
-						new SkillLootConditionKill(minLevel, maxLevel, skill)
-				}, new ItemStackTemplate(drop), count, chance);
+				Optional.of(Holder.direct(AllOfCondition.allOf(HolderSet.direct(
+					Holder.direct(LootItemKilledByPlayerCondition.killedByPlayer().build()),
+					Holder.direct(LootTableIdCondition.builder(mob.getDefaultLootTable().get().identifier()).build()),
+					Holder.direct(new SkillLootConditionKill(minLevel, maxLevel, skill))
+				)))), new ItemStackTemplate(drop), count, chance);
 	}
 	
 	public RareDropModifier mob(EntityType<?> mob, Item drop, int count, double chance, String skill, int minLevel) {

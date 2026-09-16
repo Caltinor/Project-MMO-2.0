@@ -39,6 +39,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -470,7 +471,7 @@ public class Core {
 			//conduct random check for the total count possible and add each succcess to the output
 			for (int i = 0; i < result.getValue().salvageMax(); i++) {
 				if (player.getRandom().nextDouble() < Math.min(max, base + bonus)) {
-					player.drop(new ItemStack(BuiltInRegistries.ITEM.getValue(result.getKey())), false, true);
+					player.drop(new ItemStack(BuiltInRegistries.ITEM.getValue(result.getKey())), false, Prediction.PREDICTED);
 					for (Map.Entry<String, Long> award : result.getValue().xpAward().entrySet()) {
 						xpAwards.merge(award.getKey(), award.getValue(), (o, n) -> o + n);
 					}

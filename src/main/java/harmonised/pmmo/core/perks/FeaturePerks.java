@@ -184,7 +184,7 @@ public class FeaturePerks {
 		.setStart((player, nbt) -> {
 	        double jumpBoost = Math.min(nbt.getDoubleOr(APIUtils.MAX_BOOST, 0), -0.011 + nbt.getIntOr(APIUtils.SKILL_LEVEL, 0) * nbt.getDoubleOr(APIUtils.PER_LEVEL, 0d)) + nbt.getDoubleOr(APIUtils.BASE, 0d);
 	        player.setDeltaMovement(player.getDeltaMovement().add(0, jumpBoost, 0));
-	        player.hurtMarked = true; 
+			player.needsSync = true;
 	        return NONE;
 		}).build();
 	

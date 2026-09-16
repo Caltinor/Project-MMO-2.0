@@ -21,7 +21,7 @@ public class SkillLootConditionKill implements LootItemCondition{
 	
 	@Override
 	public boolean test(LootContext t) {
-		Entity player = t.getOptionalParameter(LootContextParams.ATTACKING_ENTITY);
+		Entity player = t.getOptional(LootContextParams.ATTACKING_ENTITY);
 		if (player == null || skill == null) return false;
 		
 		long actualLevel = Core.get(player.level()).getData().getLevel(skill, player.getUUID());

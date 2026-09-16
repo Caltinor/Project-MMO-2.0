@@ -3,11 +3,12 @@ package harmonised.pmmo.features.loot_modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.core.Core;
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.fml.LogicalSide;
 
 import java.util.Optional;
@@ -27,9 +28,9 @@ public class SkillUpTrigger extends SimpleCriterionTrigger<SkillUpTrigger.Trigge
 			return ti.level.matches(level);
 		});
 	}
-	public record TriggerInstance(Optional<ContextAwarePredicate> player, Longs level, String skill) implements SimpleCriterionTrigger.SimpleInstance {
+	public record TriggerInstance(Optional<Holder<LootItemCondition>> player, Longs level, String skill) implements SimpleCriterionTrigger.SimpleInstance {
 		public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
+				LootItemCondition.CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
 				Longs.CODEC.optionalFieldOf("level").forGetter(ti -> Optional.of(ti.level())),
 				Codec.STRING.fieldOf("skill").forGetter(TriggerInstance::skill)
 		).apply(instance, (p,l,s) -> new TriggerInstance(p, l.orElse(Longs.ANY), s)));
