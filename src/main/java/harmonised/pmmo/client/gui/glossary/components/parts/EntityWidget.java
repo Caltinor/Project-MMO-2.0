@@ -1,12 +1,17 @@
 package harmonised.pmmo.client.gui.glossary.components.parts;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class EntityWidget extends AbstractWidget{
     private final Entity entity;
@@ -18,11 +23,24 @@ public class EntityWidget extends AbstractWidget{
 
     @Override
     protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
-        if (entity instanceof LivingEntity living) {
-            int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
-            InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphicsExtractor, this.getX(), this.getY(), this.getRight(), this.getBottom(),
-                    scale, 0, 0.5f, -0.5f, living);
-        }
+        //TODO reimplement entity rendering
+//        try {
+////            if (entity instanceof LivingEntity living) {
+//                int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
+//                EntityRenderer<? super Entity, ?> renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
+//                EntityRenderState renderstate = renderer.createRenderState();
+//                guiGraphicsExtractor.entity(renderstate, scale,
+//                        new Vector3f(0.0F, renderstate.boundingBoxHeight / 2.0F, 0.0F),
+//                        (new Quaternionf()).rotateZ((float)Math.PI),
+//                        null,
+//                        this.getX(),
+//                        this.getY(),
+//                        this.getRight(),
+//                        this.getBottom());
+////                InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphicsExtractor, this.getX(), this.getY(), this.getRight(), this.getBottom(),
+////                        scale, 0, 0.5f, -0.5f, living);
+////            }
+//        } catch (NullPointerException e) {System.out.println(entity.getType().getDescription());}
     }
 
     @Override

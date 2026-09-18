@@ -82,28 +82,28 @@ public class DefaultItemConfigProvider extends PmmoDataProvider<ObjectData> {
         miningBreak(Blocks.ANCIENT_DEBRIS, 1500L);
 
         //====FOOD============
-        BuiltInRegistries.ITEM.stream()
-                .filter(item ->  item != Items.AIR && new ItemStackTemplate(item).components().getPatch(DataComponents.FOOD) != null)
-                .map(ItemStackTemplate::new).forEach(item -> {
-                    FoodProperties props = item.get(DataComponents.FOOD);
-                    long xp = (props.nutrition() * 5L) +
-                            (long)(props.saturation() * 50f);
-                    this.get(item.item().value()).addXpValues(EventType.CONSUME, Map.of("endurance", xp));
-                    this.get(item.item().value()).addXpValues(EventType.CRAFT, Map.of("cooking", xp));
-                    this.get(item.item().value()).addXpValues(EventType.SMELT, Map.of("cooking", xp));
-                    this.get(item.item().value()).addXpValues(EventType.FISH, Map.of("fishing", xp*2));
-                });
+//        BuiltInRegistries.ITEM.stream()
+//                .filter(item ->  item != Items.AIR && new ItemStackTemplate(item).components().getPatch(DataComponents.FOOD) != null)
+//                .map(ItemStackTemplate::new).forEach(item -> {
+//                    FoodProperties props = item.get(DataComponents.FOOD);
+//                    long xp = (props.nutrition() * 5L) +
+//                            (long)(props.saturation() * 50f);
+//                    this.get(item.item().value()).addXpValues(EventType.CONSUME, Map.of("endurance", xp));
+//                    this.get(item.item().value()).addXpValues(EventType.CRAFT, Map.of("cooking", xp));
+//                    this.get(item.item().value()).addXpValues(EventType.SMELT, Map.of("cooking", xp));
+//                    this.get(item.item().value()).addXpValues(EventType.FISH, Map.of("fishing", xp*2));
+//                });
         get(Items.ENCHANTED_GOLDEN_APPLE).addBonus(ModifierDataType.HELD, Map.of("magic", 2.0));
         get(Items.GOLDEN_APPLE).addBonus(ModifierDataType.HELD, Map.of("magic", 1.5));
         get(Items.GOLDEN_CARROT).addBonus(ModifierDataType.HELD, Map.of("magic", 1.5));
 
         //====REPAIRING======
-        BuiltInRegistries.ITEM.stream()
-                .filter(item -> item != Items.AIR && this.isDamageableItem(new ItemStackTemplate(item)))
-                .map(ItemStackTemplate::new).forEach(item -> {
-                    long xp = (item.getOrDefault(DataComponents.MAX_DAMAGE, 0) / 4) * 10L;
-                    this.get(item.item().value()).addXpValues(EventType.ANVIL_REPAIR, Map.of("smithing", xp));
-                });
+//        BuiltInRegistries.ITEM.stream()
+//                .filter(item -> item != Items.AIR && this.isDamageableItem(new ItemStackTemplate(item)))
+//                .map(ItemStackTemplate::new).forEach(item -> {
+//                    long xp = (item.getOrDefault(DataComponents.MAX_DAMAGE, 0) / 4) * 10L;
+//                    this.get(item.item().value()).addXpValues(EventType.ANVIL_REPAIR, Map.of("smithing", xp));
+//                });
         
         //POTIONS
         var logic = new LogicEntry(BehaviorToPrevious.ADD_TO, false, List.of(
