@@ -18,11 +18,11 @@ public class EntityWidget extends AbstractWidget{
 
     @Override
     protected void extractWidgetRenderState(GuiGraphicsExtractor guiGraphicsExtractor, int mouseX, int mouseY, float partialTick) {
-        if (entity instanceof LivingEntity living) {
-            int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
-            InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphicsExtractor, this.getX(), this.getY(), this.getRight(), this.getBottom(),
-                    scale, 0, 0.5f, -0.5f, living);
-        }
+//        if (entity instanceof LivingEntity living) {
+//            int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
+//            InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphicsExtractor, this.getX(), this.getY(), this.getRight(), this.getBottom(),
+//                    scale, 0, 0.5f, -0.5f, living);
+//        }
     }
 
     @Override
