@@ -47,12 +47,14 @@ public class ServerLevelMixin {
 		level.getChunkAt(pos).getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
 			for (BlockPos neighbor : getNeighbors(pos)) {
 				UUID playerID = cap.getBreaker(neighbor);
-				if (playerID != null) {
-					Player player = level.getServer().getPlayerList().getPlayer(playerID);
-					MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
-					cap.setBreaker(pos, playerID);
-					break;
-				}
+				if (playerID == null) continue;
+
+				Player player = level.getServer().getPlayerList().getPlayer(playerID);
+				if (player == null) continue;
+
+				MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player));
+				cap.setBreaker(pos, playerID);
+				break;				
 			}		
 		});
 	}
