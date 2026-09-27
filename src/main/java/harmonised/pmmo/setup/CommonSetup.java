@@ -108,7 +108,7 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddServerReloadListenersEvent event) {
-		Core.get(LogicalSide.SERVER).getLoader().RELOADER = new ExecutableListener(event.getRegistryAccess(), CoreLoader.RELOADER_FUNCTION);
+		Core.get(LogicalSide.SERVER).getLoader().RELOADER = new ExecutableListener(event.getServerResources().getRegistryLookup(), CoreLoader.RELOADER_FUNCTION);
 		event.addListener(Reference.rl("reloader"), Core.get(LogicalSide.SERVER).getLoader().RELOADER);
 		event.addListener(Reference.rl("items"), Core.get(LogicalSide.SERVER).getLoader().ITEM_LOADER);
 		event.addListener(Reference.rl("blocks"), Core.get(LogicalSide.SERVER).getLoader().BLOCK_LOADER);

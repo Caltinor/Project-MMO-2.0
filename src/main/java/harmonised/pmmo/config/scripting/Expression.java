@@ -3,6 +3,7 @@ package harmonised.pmmo.config.scripting;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -22,7 +23,7 @@ public record Expression(
         List<Node> features) {
     public record Node(String param, NodeConsumer consumer) {@Override public String toString() {return param;}}
 
-    public static List<Expression> create(RegistryAccess access, String str) {
+    public static List<Expression> create(HolderGetter.Provider access, String str) {
         MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.DATA, "Raw Script Line: {}", str);
         List<Expression> expressions = new ArrayList<>();
         String[] nodes = str.replace(";", "").split("\\)\\.");
@@ -60,7 +61,7 @@ public record Expression(
         features.forEach(c -> c.consumer().consume(c.param(), targetID, targetType, value));
     }
 
-    public static List<Identifier> parseIDs(String raw, ObjectType type, RegistryAccess access) {
+    public static List<Identifier> parseIDs(String raw, ObjectType type, HolderGetter.Provider access) {
         List<Identifier> ids = new ArrayList<>();
         String[] rawSplit = raw.split(",");
         for (String str : rawSplit) {
@@ -77,7 +78,7 @@ public record Expression(
         return ids;
     }
 
-    private static List<Identifier> getMembers(boolean isTag, Identifier tagID, RegistryAccess access, ObjectType type) {
+    private static List<Identifier> getMembers(boolean isTag, Identifier tagID, HolderGetter.Provider access, ObjectType type) {
         return switch (type) {
             case ITEM -> readRegistry(isTag, access, Registries.ITEM, tagID);
             case BLOCK -> readRegistry(isTag, access, Registries.BLOCK, tagID);
@@ -88,8 +89,8 @@ public record Expression(
         };
     }
 
-    private static <T> List<Identifier> readRegistry(boolean forTags, RegistryAccess access, ResourceKey<Registry<T>> registry, Identifier tagID) {
-        var reg = access.lookupOrThrow(registry);
+    private static <T> List<Identifier> readRegistry(boolean forTags, HolderGetter.Provider access, ResourceKey<Registry<T>> registry, Identifier tagID) {
+        var reg = access.getOrThrow(registry).value();
         return forTags
                 ? reg.get(TagKey.create(registry, tagID))
                 .map(named -> named.stream().map(holder -> holder.unwrapKey().get().identifier()).toList())

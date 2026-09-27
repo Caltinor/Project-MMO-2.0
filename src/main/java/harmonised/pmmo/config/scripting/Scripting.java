@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.scripting;
 
 import harmonised.pmmo.util.MsLoggy;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
 import net.neoforged.fml.loading.FMLPaths;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Scripting {
-    public static void readFiles(RegistryAccess access) {
+    public static void readFiles(HolderGetter.Provider access) {
         Path filePath = FMLPaths.CONFIGDIR.get();
 
         try (Stream<Path> stream = Files.walk(filePath)) {
@@ -23,11 +24,11 @@ public class Scripting {
         } catch (IOException e) {e.printStackTrace();}
     }
 
-    public static void read(RegistryAccess access, String rawString) {
+    public static void read(HolderGetter.Provider access, String rawString) {
         read(access, rawString.lines().filter(str -> !str.startsWith("//")).toList());
     }
 
-    public static void read(RegistryAccess access, List<String> lines) {
+    public static void read(HolderGetter.Provider access, List<String> lines) {
         String currentNode = "";
         StringBuilder multiLine = new StringBuilder();
         List<Expression> builders = new ArrayList<>();

@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.scripting;
 
 import harmonised.pmmo.api.enums.ObjectType;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 
@@ -10,5 +11,5 @@ import java.util.List;
 public interface TargetSelector {
     record Selection(ObjectType type, List<Identifier> IDs) {}
 
-    Selection read(String node, RegistryAccess access);
+    Selection read(String node, HolderGetter.Provider access);
 }

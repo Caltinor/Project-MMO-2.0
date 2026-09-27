@@ -174,7 +174,7 @@ public class Functions {
             }
             final Pair<Float, Float> values = Pair.of(nutVal, satVal);
             final Pair<Operator, Operator> ops = Pair.of(nutOp, satOp);
-            List<Identifier> food = access.lookupOrThrow(Registries.ITEM).entrySet().stream()
+            List<Identifier> food = access.getOrThrow(Registries.ITEM).value().entrySet().stream()
                 .filter(entry -> entry.getValue().components().get(DataComponents.FOOD) instanceof FoodProperties props
                         && ops.getFirst().evaluation.test(Integer.valueOf(props.nutrition()).floatValue(), values.getFirst())
                         && ops.getSecond().evaluation.test(props.saturation(), values.getSecond()))
@@ -185,7 +185,7 @@ public class Functions {
         TARGETORS.put("tool", (param, access) -> {
             List<Identifier>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
+                tools.addAll(access.getOrThrow(Registries.ITEM).value().entrySet().stream()
                     .filter(entry -> entry.getValue().components().has(DataComponents.TOOL))
                     .map(entry -> entry.getKey().identifier())
                     .toList());
@@ -198,7 +198,7 @@ public class Functions {
         TARGETORS.put("armor", (param, access) -> {
             List<Identifier>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
+                tools.addAll(access.getOrThrow(Registries.ITEM).value().entrySet().stream()
                         .filter(entry -> entry.getValue().components().has(DataComponents.EQUIPPABLE))
                         .map(entry -> entry.getKey().identifier())
                         .toList());
@@ -211,7 +211,7 @@ public class Functions {
         TARGETORS.put("weapon", (param, access) -> {
             List<Identifier>  tools = new ArrayList<>();
             if (param.isEmpty())
-                tools.addAll(access.lookupOrThrow(Registries.ITEM).entrySet().stream()
+                tools.addAll(access.getOrThrow(Registries.ITEM).value().entrySet().stream()
                         .filter(entry -> entry.getValue().components().has(DataComponents.DAMAGE))
                         .map(entry -> entry.getKey().identifier())
                         .toList());

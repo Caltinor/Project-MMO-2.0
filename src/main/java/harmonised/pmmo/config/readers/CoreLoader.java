@@ -13,6 +13,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -42,13 +43,13 @@ public class CoreLoader {
 	
 	@SubscribeEvent
 	public static void onTagLoad(TagsUpdatedEvent event) {
-		Core core = Core.get(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED ? LogicalSide.CLIENT : LogicalSide.SERVER);
-		core.getLoader().ITEM_LOADER.postProcess(event.getLookupProvider());
-		core.getLoader().BLOCK_LOADER.postProcess(event.getLookupProvider());
-		core.getLoader().ENTITY_LOADER.postProcess(event.getLookupProvider());
+		Core core = Core.get(event instanceof TagsUpdatedEvent.ClientPacketReceived ? LogicalSide.CLIENT : LogicalSide.SERVER);
+		core.getLoader().ITEM_LOADER.postProcess(event.getRegistries());
+		core.getLoader().BLOCK_LOADER.postProcess(event.getRegistries());
+		core.getLoader().ENTITY_LOADER.postProcess(event.getRegistries());
 		//Until dimensions are stored as a client registry, this must remain commented.
 		//core.getLoader().DIMENSION_LOADER.postProcess(event.getRegistryAccess());
-		core.getLoader().BIOME_LOADER.postProcess(event.getLookupProvider());
+		core.getLoader().BIOME_LOADER.postProcess(event.getRegistries());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -88,7 +89,7 @@ public class CoreLoader {
 	}
 
 	public ExecutableListener RELOADER;
-	public static final Consumer<RegistryAccess> RELOADER_FUNCTION = access -> {
+	public static final Consumer<HolderGetter.Provider> RELOADER_FUNCTION = access -> {
 		Core.get(LogicalSide.SERVER).getLoader().resetData();
 		NeoForge.EVENT_BUS.post(new PMMORegistrationEvent());
 		Scripting.readFiles(access);

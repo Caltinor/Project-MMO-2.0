@@ -1,5 +1,7 @@
 package harmonised.pmmo.config.readers;
 
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,10 +16,10 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ExecutableListener extends SimplePreparableReloadListener<Boolean> {
-	private final Consumer<RegistryAccess> executor;
-	private final RegistryAccess access;
+	private final Consumer<HolderGetter.Provider> executor;
+	private final HolderGetter.Provider access;
 	
-	public ExecutableListener(RegistryAccess access, Consumer<RegistryAccess> executor) {
+	public ExecutableListener(HolderGetter.Provider access, Consumer<HolderGetter.Provider> executor) {
 		this.access = access;
 		this.executor = executor;
 	}

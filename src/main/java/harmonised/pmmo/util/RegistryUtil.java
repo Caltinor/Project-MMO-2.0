@@ -1,6 +1,7 @@
 package harmonised.pmmo.util;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -82,9 +83,9 @@ public class RegistryUtil {
 		return holders;
 	}
 
-	public static <T> List<Identifier> getTagMemberIds(RegistryAccess access, ResourceKey<Registry<T>> reg, TagKey<T> tag) {
+	public static <T> List<Identifier> getTagMemberIds(HolderGetter.Provider access, ResourceKey<Registry<T>> reg, TagKey<T> tag) {
 		List<Identifier> members = new ArrayList<>();
-		access.lookupOrThrow(reg).getTagOrEmpty(tag).iterator().forEachRemaining(i -> members.add(i.unwrapKey().get().identifier()));
+		access.getOrThrow(reg).value().getTagOrEmpty(tag).iterator().forEachRemaining(i -> members.add(i.unwrapKey().get().identifier()));
 		return members;
 	}
 }
