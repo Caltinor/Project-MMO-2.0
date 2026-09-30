@@ -13,6 +13,7 @@ import harmonised.pmmo.config.codecs.ConfigData;
 import harmonised.pmmo.config.codecs.ServerData;
 import harmonised.pmmo.features.anticheese.AntiCheeseConfig;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
+import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.network.clientpackets.CP_SyncConfig;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -119,6 +120,7 @@ public class ConfigListener extends SimplePreparableReloadListener<ConfigData<?>
             ServerPlayer player = event.getPlayer();
             List<CustomPacketPayload> packets = new ArrayList<>();
             this.configs.forEach((key, value) -> packets.add(new CP_SyncConfig(key, value)));
+            AutoValues.resetCache();
 
             if (player == null)
                 packets.forEach(PacketDistributor::sendToAllPlayers);

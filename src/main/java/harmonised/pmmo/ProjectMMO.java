@@ -28,8 +28,7 @@ import java.util.Optional;
 public class ProjectMMO {
     public ProjectMMO(IEventBus modbus, ModContainer container) {
     	ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
-    	ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
-		modbus.addListener(this::onConfigReload);
+    	ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.LOCAL, Config.COMMON_CONFIG);
 		modbus.addListener(this::onPackFind);
 		modbus.addListener(Networking::registerMessages);
     	
@@ -51,7 +50,7 @@ public class ProjectMMO {
 //						.build())
 //				.build().create(); // Build and store the InternalTestFramework. We use the "internal" version because we want to access methods not usually exposed, like the init method
 
-		// Initialise this framework, using the mod event bus of the currently loading mod, and the container of the currently loading mod.
+		// Initialize this framework, using the mod event bus of the currently loading mod, and the container of the currently loading mod.
 		// The container is used for collecting annotations.
 		// This method will collect and register tests, structure templates, group data, and will fire init listeners.
 //		framework.init(modbus, container);
@@ -63,14 +62,6 @@ public class ProjectMMO {
 //			event.getDispatcher().register(node);
 //		});
     }
-
-	@SubscribeEvent
-	public void onConfigReload(ModConfigEvent.Reloading event) {
-		if (event.getConfig().getType().equals(ModConfig.Type.SERVER)) {
-			if (event.getConfig().getFileName().equalsIgnoreCase("pmmo-autovalues.toml"))
-				AutoValues.resetCache();
-		}
-	}
 
 	@SubscribeEvent
 	public void onPackFind(AddPackFindersEvent event) {
