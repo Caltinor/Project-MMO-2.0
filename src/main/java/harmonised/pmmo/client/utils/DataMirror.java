@@ -114,17 +114,17 @@ public class DataMirror implements IDataStorage{
 			if (conditions.get() instanceof LootTableConditionMixin lootCondition) {
 				linesOut.add(LangProvider.GLM_LOOT_TABLE.asComponent(lootCondition.getTargetLootTableId().getPath()));
 			}
-			else if (conditions.get() instanceof SkillLootConditionPlayer playerSkillCondition) {
+			else if (conditions.get().value() instanceof SkillLootConditionPlayer playerSkillCondition) {
 				long maxLevel = Math.min(playerSkillCondition.levelMax, Config.skills().skills().getOrDefault(playerSkillCondition.skill, SkillData.Builder.getDefault()).getMaxLevel());
 				linesOut.add(LangProvider.GLM_SKILL_RANGE.asComponent(LangProvider.skill(playerSkillCondition.skill),
 						playerSkillCondition.levelMin, maxLevel));
 			}
-			else if (conditions.get() instanceof SkillLootConditionHighestSkill highSkillCondition) {
+			else if (conditions.get().value() instanceof SkillLootConditionHighestSkill highSkillCondition) {
 				String skills = highSkillCondition.comparables.stream().map(str -> LangProvider.skill(str).toString()).collect(Collectors.joining(", "));
 				linesOut.add(LangProvider.GLM_HIGHEST_SKILL.asComponent(LangProvider.skill(highSkillCondition.targetSkill), skills));
 			}
-			else if (!(conditions.get() instanceof SkillLootConditionKill killCondition)) {
-				if (conditions.get() instanceof ValidBlockCondition blockCondition) {
+			else if (!(conditions.get().value() instanceof SkillLootConditionKill killCondition)) {
+				if (conditions.get().value() instanceof ValidBlockCondition blockCondition) {
 					Component target = blockCondition.tag.isEmpty()
 							? blockCondition.block.get().getName()
 							: Component.literal(blockCondition.tag.get().location().toString());
