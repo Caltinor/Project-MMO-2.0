@@ -5,8 +5,10 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.OutgoingChatMessage;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -44,13 +46,17 @@ public class PartyUtils {
 				.filter(Objects::nonNull).toList();
 	}
 	
-	public static void inviteToParty(ServerPlayer member, Player invitee) {
+	public static void inviteToParty(ServerPlayer member, ServerPlayer invitee) {
 		UUID requestID = UUID.randomUUID();
 		Style acceptStyle = Style.EMPTY.withClickEvent(new ClickEvent.RunCommand("/pmmo party accept "+requestID.toString())).withBold(true).withColor(ChatFormatting.GREEN).withUnderlined(true);
 		MutableComponent accept = LangProvider.PARTY_ACCEPT.asComponent().withStyle(acceptStyle);
 		Style declineStyle = Style.EMPTY.withClickEvent(new ClickEvent.RunCommand("/pmmo party decline "+requestID.toString())).withBold(true).withColor(ChatFormatting.RED).withUnderlined(true);
 		MutableComponent decline = LangProvider.PARTY_DECLINE_INVITE.asComponent().withStyle(declineStyle);
-		invitee.sendOverlayMessage(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline));
+		var bound = ChatType.bind(ChatType.MSG_COMMAND_OUTGOING, member).withTargetName(invitee.getDisplayName());
+		invitee.sendChatMessage(
+				new OutgoingChatMessage.Disguised(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline)),
+				false,
+				bound);
 		
 		invites.put(requestID, new Invite(member.getTeam(), invitee.getUUID()));
 	}
