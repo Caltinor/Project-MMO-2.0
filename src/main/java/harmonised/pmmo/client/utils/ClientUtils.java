@@ -35,10 +35,14 @@ public class ClientUtils {
 		return mc.font.split(component, width).stream().map(fcs -> ClientTooltipComponent.create(fcs)).toList();
 	}
 	private static Map<String, Map<Long, Map<ReqType, List<Component>>>> cache = new HashMap<>();
-	public static void invalidateUnlocksCache() {cache.clear();}
+	// Tracked separately from cache.isEmpty(): when nothing has requirements the cache stays
+	// empty, which would otherwise rebuild it (a full item/block/entity scan) on every level-up.
+	private static boolean cacheBuilt = false;
+	public static void invalidateUnlocksCache() {cache.clear(); cacheBuilt = false;}
 	public static Glossary glossary = null;
 
 	private static void cacheUnlocks() {
+		cacheBuilt = true;
 		LocalPlayer player = mc.player;
 		Core core = Core.get(LogicalSide.CLIENT);
 		Arrays.stream(ReqType.values()).forEach(reqType -> {
@@ -101,7 +105,7 @@ public class ClientUtils {
 	public static void sendLevelUpUnlocks(String skill, long oldLevel, long level) {
 		if (!Config.SKILLUP_UNLOCKS.get())
 			return;
-		if (cache.isEmpty()) cacheUnlocks();
+		if (!cacheBuilt) cacheUnlocks();
 		LocalPlayer player = mc.player;
 		Map<ReqType, List<Component>> reqMap = cache.getOrDefault(skill, new HashMap<>()).getOrDefault(level, new HashMap<>());
 		boolean isEmpty = reqMap.entrySet().stream().allMatch(entry -> entry.getValue().isEmpty());
