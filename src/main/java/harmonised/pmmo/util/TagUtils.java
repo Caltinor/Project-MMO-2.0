@@ -86,7 +86,16 @@ public class TagUtils {
 	  */
 	public static CompoundTag entityTag(Entity entity) {
 		CompoundTag data = new CompoundTag();
-		return entity == null ? data : entity.saveWithoutId(data);
+		if (entity == null) return data;
+		try {
+			return entity.saveWithoutId(data);
+		} catch (Exception e) {
+			// Some modded entities can't be saved unless fully initialized (e.g. a freshly
+			// created Create ControlledContraptionEntity has no controllerPos). Don't let one
+			// entity break requirement lookups such as the level-up unlock cache.
+			MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.REQ, "Could not save NBT for entity type {}: {}", entity.getType(), e.toString());
+			return new CompoundTag();
+		}
 	}
 	
 	/**safely obtain the NBT tag or get a new instance
