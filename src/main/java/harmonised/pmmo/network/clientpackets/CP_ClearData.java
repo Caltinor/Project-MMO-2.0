@@ -15,6 +15,7 @@ public record CP_ClearData() implements CustomPacketPayload {
 			Core.get(LogicalSide.CLIENT).getLoader().resetData();
 			Core.get(LogicalSide.CLIENT).getTooltipRegistry().clearRegistry();
 			ClientUtils.glossary = null;
+			ClientUtils.invalidateUnlocksCache();
 		});
 	}
 
